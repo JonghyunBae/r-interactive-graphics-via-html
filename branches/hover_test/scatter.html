@@ -6,9 +6,12 @@
  	<link rel="stylesheet" href="scatter.css"> 
  
  	<DIV ID="dek"></DIV>
-
-<script src="tooltip.js"> </script>
-<script src="scatter.js"> </script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="tooltip.js"> </script>
+<script type="text/javascript" src="plot.js"> </script>
+<script type="text/javascript" src="color.js"> </script>
+<script type="text/javascript" src="hist.js"> </script>
+ <!--  <script type="text/javascript" src="hist.js"> </script>--->
 
 
 </head>
@@ -20,8 +23,9 @@
       Theoph
     </p>
 
- <canvas id="cvs" width="800" height="800" id="cvs" width="800" height="800">[No canvas support]</canvas>
- <!-- canvas 크기 동적 변형 공부---> <!-- canvas 크기 동적 변형 공부   ONMOUSEOVER="popup('Website Abstraction, the definitive JavaScript site on the net.','lightgreen')"; ONMOUSEOUT="kill()" --->
+ <canvas id="canvasPlot" width="800" height="800">[No canvas support]</canvas>
+ <canvas id="canvasHist" width="800" height="800">[No canvas support]</canvas>
+ <!-- canvas 크기 동적 변형 공부---> <!-- canvas 크기 동적 변형 공부 --->
 
 
 </body>

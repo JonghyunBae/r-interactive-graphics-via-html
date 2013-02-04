@@ -1,9 +1,9 @@
-var filePath = "file:///home/paplp15/workspace/scatter/Theoph-from-R.csv";
+var filePath = "file:///home/paplp11/workspace/scatter/Theoph-from-R.csv";
 xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET",filePath,false);
 xmlhttp.send(null);
 var fileContent = xmlhttp.responseText;
-//var array = fileContent.split('\n');
+//var fileArray = fileContent.split('\n');
 /*
 for(var i=0; i<fileArray.length; i++){
 	document.write("a("+i+") is : "+fileArray[i]+"<br>");
@@ -46,15 +46,15 @@ for(var j=1; j<array.length; j++) //1부터 시작할지 0부터 시직할지는
 	TimeArr[j]=parseFloat(tmp_array[3]);
 	concArr[j]=parseFloat(tmp_array[4]);
 }
-/*
-for(var i=0; i<SubjectArr.length; i++){ //just print for test
-	document.write("SubjectArr["+i+"] is : "+SubjectArr[i]+"<br>");
-	document.write("WtArr["+i+"] is : "+WtArr[i]+"<br>");
-	document.write("DoseArr["+i+"] is : "+DoseArr[i]+"<br>");
-	document.write("TimetArr["+i+"] is : "+TimeArr[i]+"<br>");
-	document.write("concArr["+i+"] is : "+concArr[i]+"<br>");
-}
-*/
+
+//for(var i=0; i<SubjectArr.length; i++){ //just print for test
+//	document.write("SubjectArr["+i+"] is : "+SubjectArr[i]+"<br>");
+//	document.write("WtArr["+i+"] is : "+WtArr[i]+"<br>");
+//	document.write("DoseArr["+i+"] is : "+DoseArr[i]+"<br>");
+//	document.write("TimetArr["+i+"] is : "+TimeArr[i]+"<br>");
+//	document.write("concArr["+i+"] is : "+concArr[i]+"<br>");
+//}
+
 function csv2array(data, delimeter) {
 	  // Retrieve the delimeter
 	  if (delimeter == undefined) 
@@ -155,43 +155,62 @@ window.onload = function ()
 	var canvas = document.getElementById("cvs");
 	var context = canvas.getContext("2d");
 
+	
+	var xMax=findMaxValue(TimeArr); //나중에 max함수 추가해서 5단위로 잡게 만들기.
+	var yMax=findMaxValue(concArr);
+	var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
+	var yDiff=parseInt(yMax/6);
+	var plotWidth=500;
+	var plotHeight=500;
+	var plotXmargin=150;
+	var plotYmargin=50;
+ //document.write(xMax+' '+yMax);
+    canvas.addEventListener('mousemove', function(evt) {
+      var mousePos = getMousePos(canvas, evt);
+      var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+      writeMessage(canvas, message);
+    }, false);
 
-	var xMax=25; //나중에 max함수 추가해서 5단위로 잡게 만들기.
-	var yMax=12;
-	var xDiff=5;//나중에 자동으로 잡아주기.
-	var yDiff=2;
-	
-	
+   
 //	drawPlot(150,50,650,550,13); //안쪽 사각형;
-	drawPlot(150-10,50-30,650+50,550+10,TimeArr,concArr, 0); //바깥 쪽 사각형; (나중에 지워도 무방, 색을 흰 색으로 바꿔도 되고..
+	drawPlot(plotXmargin-10,plotYmargin-30,plotWidth+plotXmargin+50,plotHeight+plotYmargin+10,TimeArr,concArr, 0); //바깥 쪽 사각형; (나중에 지워도 무방, 색을 흰 색으로 바꿔도 되고..
 	drawLegend(SubjectArr);
-	//context.save();
+	
+	context.save();
+	
 	context.translate(0 , canvas.height );
 	context.scale(1, -1); //reverse했으니, 나중에 하버링 시  좌 표 주 의!
-	//context.restore();
-	
 	plot(TimeArr, concArr);
+	 
+	context.restore();
+	
+//	plot(TimeArr, concArr);
  
 	//plot(WtArr, concArr);
 	
-	
-	
-		/*scatter.canvas.onmousemove = function (e)
+		function findMaxValue(Data)
 		{
-			var obj   = e.target.__object__;
-			var shape = obj.getShape(e);
-
-			if (!shape) {
-			    RGraph.HideTooltip();
-			    RGraph.Redraw();
+			var maxValue=Data[1];
+			for(var i=2; i<Data.length; i++){
+				if(Data[i]>maxValue){
+					maxValue=Data[i];
+					
+				}
+				//document.write('max: ' + maxValue+'  data[i]: '+Data[i]+'  data[i-1]: '+ Data[i-1]+'<br>');
 			}
-		}*/
+			return parseInt(maxValue+1);
+		}
+		
+		
+    
 		function plot(xData,yData)
 		{
-			var xCanvasWidth = 150;
-			var yCanvasHeight = 250;
-			var xScale=500/xMax;
-			var yScale=500/yMax;
+			var xCanvasWidth = plotXmargin;
+			var yCanvasHeight = canvas.height-plotYmargin-plotHeight; 
+			var xScale=plotWidth/xMax;
+			var yScale=plotHeight/yMax;
+
+			
 			for( var i = 0 ; i < xData.length; i++)
 			{	
 				drawDot(xData[i]*xScale+xCanvasWidth,yData[i]*yScale+yCanvasHeight,SubjectArr[i]); //canvas 크기에 따라 
@@ -227,28 +246,26 @@ window.onload = function ()
 			context.lineTo(x2,y2);
 			color(c);
 			context.stroke(); 
-			context.closePath();
 		}
 		function drawPlot(x1,y1,x2,y2,xData,yData,c) //( x1, y1 )= left top, ( x2, y2 ) = right bottom
 		{
 			color(c);
 			context.strokeRect(x1,y1,x2-x1,y2-y1);
-		
-			
+
 			var length=20;
 			for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
-				drawLine(150-length/2, 550-i*500/(yMax/yDiff) , 150-length,550-i*500/(yMax/yDiff) ,0);				
+				drawLine(plotXmargin-length/2, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-length,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) ,0);				
 				context.strokeStyle = "#000000";	
 			 	context.fillStyle = "#000000"; 				
 				context.font="bold 15px verdana, sans-serif";
-				context.fillText( i*yDiff  ,150-length*2 ,550-i*500/(yMax/yDiff));
+				context.fillText( i*yDiff  ,plotXmargin-length*2 ,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff));
 			}
 			for(var i=0; i<(xMax/xDiff)+1; i++){
-				drawLine(150+i*500/(xMax/xDiff) , 550+length/2, 150+i*500/(xMax/xDiff),550+length ,0);			
+				drawLine(plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+length/2, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length ,0);			
 				context.strokeStyle = "#000000";	
 			 	context.fillStyle = "#000000"; 				
 				context.font="bold 15px verdana, sans-serif";
-				context.fillText(i*xDiff,150+i*500/(xMax/xDiff),550+length*2);
+				context.fillText(i*xDiff,plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length*2);
 			}
 			
 			context.fillText(xData[0],400,620);//xLabel
@@ -265,7 +282,7 @@ window.onload = function ()
 					
 					context.save();				
 					context.beginPath();
-					context.arc(670,cnt*13+30, scale, (Math.PI/180)*0, (Math.PI/180)*360, false);
+					context.arc(plotXmargin+plotWidth+20,cnt*13+30, scale, (Math.PI/180)*0, (Math.PI/180)*360, false);
 					color(Data[i]);					
 					context.fill();
 					context.stroke(); 
@@ -275,13 +292,14 @@ window.onload = function ()
 					context.strokeStyle = "#000000";	
 				 	context.fillStyle = "#000000"; 				
 					context.font="bold 11px verdana, sans-serif";
-					context.fillText(Data[i],680,cnt*13+35);
+					context.fillText(Data[i],plotXmargin+plotWidth+30,cnt*13+35);
 					
+				
 					
 					cnt++;
 				}
 			}
-			context.strokeRect(660,20, 700-660 , (cnt*13+35) - 20);
+			context.strokeRect(plotXmargin+plotWidth+10 ,20, 700-660 , (cnt*13+35) - 20);
 		}
 		function color(c)
 		{
@@ -352,6 +370,25 @@ window.onload = function ()
 		        	context.fillStyle = "#000000"; 
 			}
 		}
+		
+		 function writeMessage(canvas, message) {
+		     //   var context = canvas.getContext('2d');
+		        context.clearRect(0, 650, 800, 100);
+		        context.font = '18pt Calibri';
+		        context.fillStyle = 'black';
+		        context.fillText(message, 10, 700);
+		        
+		 }
+		      function getMousePos(canvas, evt) {
+		        var rect = canvas.getBoundingClientRect();
+		        return {
+		          x: xMax/plotWidth*(evt.clientX - rect.left - plotXmargin),
+		          y: -yMax/plotHeight*(  evt.clientY - rect.top - (plotYmargin+plotHeight))
+		        };
+		      }
+		 //     var canvas = document.getElementById('myCanvas');
+		   //   var context = canvas.getContext('2d');
+
 }
 
 

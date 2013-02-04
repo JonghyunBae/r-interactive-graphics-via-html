@@ -10,14 +10,14 @@ var old,skn,iex=(document.all),yyy=-1000;
 
 var ns4=document.layers
 var ns6=document.getElementById&&!document.all
-//var ie4=document.all
+var ie4=document.all
 
-//if (ns4)
-//skn=document.dek
-//else if (ns6)
+if (ns4)
+skn=document.dek
+else if (ns6)
 skn=document.getElementById("dek").style
-//else if (ie4)
-//skn=document.all.dek.style
+else if (ie4)
+skn=document.all.dek.style
 if(ns4)document.captureEvents(Event.MOUSEMOVE);
 else{
 skn.visibility="visible"
@@ -29,9 +29,9 @@ function popup(msg,bak){
 var content="<TABLE  WIDTH=150 BORDER=1 BORDERCOLOR=black CELLPADDING=2 CELLSPACING=0 "+
 "BGCOLOR="+bak+"><TD ALIGN=center><FONT COLOR=black SIZE=2>"+msg+"</FONT></TD></TABLE>";
 yyy=Yoffset;
- //if(ns4){skn.document.write(content);skn.document.close();skn.visibility="visible"}
+if(ns4){skn.document.write(content);skn.document.close();skn.visibility="visible"}
  if(ns6){document.getElementById("dek").innerHTML=content;skn.display=''}
- //if(ie4){document.all("dek").innerHTML=content;skn.display=''}
+if(ie4){document.all("dek").innerHTML=content;skn.display=''}
 }
 
 function get_mouse(e){

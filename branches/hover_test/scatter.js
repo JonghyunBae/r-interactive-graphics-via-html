@@ -1,4 +1,4 @@
-var filePath = "file:///home/paplp11/workspace/scatter/Theoph-from-R.csv";
+var filePath = "file:///home/paplp15/r-interactive/branches/hover_test/Theoph-from-R.csv";
 xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET",filePath,false);
 xmlhttp.send(null);
@@ -169,6 +169,14 @@ window.onload = function ()
       var mousePos = getMousePos(canvas, evt);
       var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
       writeMessage(canvas, message);
+      var search_result = search_range(mousePos.x,mousePos.y);
+      if(search_result.y == true ){
+        	  popup('Subject : ' + SubjectArr[search_result.x] + "<br>" + 'Conc : ' + concArr[search_result.x] + "<br>" + 'Time : ' + TimeArr[search_result.x], 'lightyellow');
+       }
+      else{
+    	  kill();
+      }
+      
     }, false);
 
    
@@ -386,6 +394,20 @@ window.onload = function ()
 		          y: -yMax/plotHeight*(  evt.clientY - rect.top - (plotYmargin+plotHeight))
 		        };
 		      }
+		  function search_range(x, y){					 
+			  for( var i = 1 ; i < array.length; i++){ 
+				  if((concArr[i] - 0.1 < y) && (concArr[i] + 0.1 > y) && (TimeArr[i] - 0.1 < x) && (TimeArr[i] + 0.1 >x)  ){
+					  return{
+						  x: i,
+						  y: true
+					  };
+				  }	
+			}	  
+			  return{
+				  x: i,
+				  y: false
+			  };
+		  }
 		 //     var canvas = document.getElementById('myCanvas');
 		   //   var context = canvas.getContext('2d');
 

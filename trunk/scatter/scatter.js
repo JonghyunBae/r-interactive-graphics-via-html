@@ -1,4 +1,4 @@
-var filePath = "file:///home/paplp11/workspace/scatter/Theoph-from-R.csv";
+var filePath = "file:///home/paplp11/r-interactive/trunk/scatter/Theoph-from-R.csv";
 xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET",filePath,false);
 xmlhttp.send(null);

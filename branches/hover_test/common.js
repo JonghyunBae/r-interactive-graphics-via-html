@@ -5,7 +5,11 @@ xmlhttp.open("GET",filePath,false);
 xmlhttp.send(null);
 var fileContent = xmlhttp.responseText;
 var array = csv2array(fileContent);
+/*for(var i=0; i<array.length; i++){
+	document.write("a("+i+") is : "+array[i]+"<br>");
+}*/
 
+//var array = fileContent.split(',');
 //////////////// Common Data Structure //////////////
 function ObjTemp()
 {
@@ -57,9 +61,42 @@ var plotYmargin=90;
 
 
 //////////////////Common Using Functions ////////////////
-// Each function description yet.
+// Each description of function yet.
 ///////////////////////////////////////////////////////
-function csv2array(data, delimeter) {
+
+
+function csv2array(data, liveChar)
+{	
+	var i = 0;
+	var eof = '';
+	var cursor = data.charAt(i);
+	var result_array = new Array();
+	var result_row = "";
+	var line = 0;
+	while(cursor != eof)
+	{
+		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ') ){
+//			document.write("ddddddddddddddddddd" + "<br>");
+		}else if( cursor == "\n" ){
+//			document.write("dttttttt" + "<br>");
+			result_row += cursor;
+			if (result_array.length <= line)
+			{
+				result_array.push(new Array());
+				result_array[line].push(result_row);
+				result_row = "";
+				line++;
+			}
+		}else{
+//			document.write("a("+i+") is : "+ cursor+"<br>");
+			result_row += cursor;
+		}
+			
+		cursor = data.charAt(i++);
+	}
+	return result_array;
+}
+/*function csv2array(data, delimeter) {
 
 	  // Retrieve the delimeter
 	  if (delimeter == undefined) 
@@ -79,7 +116,7 @@ function csv2array(data, delimeter) {
 	  while (c != eof) {
 	    // skip whitespaces
 	    while (c == ' ' || c == '\t' || c == '\r') {
-	      c = data.charAt(++i); // read next char
+	      c = data.charAt(i++); // read next char
 	    }
 	    
 	    // get value
@@ -154,6 +191,8 @@ function csv2array(data, delimeter) {
 	  
 	  return array;
 	}
+*/
+
 
 function getMousePos(xMax, yMax, canvas, evt) {
     var rect = canvas.getBoundingClientRect();

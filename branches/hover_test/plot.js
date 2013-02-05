@@ -1,3 +1,9 @@
+var filePath = "Theoph-from-R.csv";
+xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET",filePath,false);
+xmlhttp.send(null);
+var fileContent = xmlhttp.responseText;
+var radius_scale = 3;
 //var fileArray = fileContent.split('\n');
 /*
 for(var i=0; i<fileArray.length; i++){

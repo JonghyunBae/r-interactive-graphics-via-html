@@ -3,11 +3,11 @@ $(document).ready(function()
 	var canvas = document.getElementById("canvasHist");
 	var context = canvas.getContext("2d");
 
-	
+	var diff =2;
 	var xMax=findMaxValue(theophArr.time); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-	var yMax=findMaxValue(theophArr.conc);
+	var yMax=findMaxValueHist(theophArr.time,diff);
 	var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
-	var yDiff=parseInt(yMax/6);
+	var yDiff=parseInt(yMax/5);
 	var plotWidth=500;
 	var plotHeight=500;
 	var plotXmargin=150;
@@ -26,11 +26,9 @@ $(document).ready(function()
       }      
     }, false);
 
-   
-//	drawPlot(150,50,650,550,13); //안쪽 사각형;
-	drawPlot(plotXmargin-10,plotYmargin-30,plotWidth+plotXmargin+50,plotHeight+plotYmargin+10,'Theoph','Time','conc', 0); //바깥 쪽 사각형; (나중에 지워도 무방, 색을 흰 색으로 바꿔도 되고..
+	drawPlot(plotXmargin-10,plotYmargin-30,plotWidth+plotXmargin+50,plotHeight+plotYmargin+10,'Histogram of Thoph$Time','Theoph$Time','Frequency', 0); 
 
-	drawLegend('topright',theophArr.subject);	
+//	drawLegend('topright',theophArr.subject);	
 //	drawLegend('topleft',theophArr.subject);
 //	drawLegend('bottomright',theophArr.subject);
 //	drawLegend('bottomleft',theophArr.subject);
@@ -38,7 +36,7 @@ $(document).ready(function()
 	context.save();	
 	context.translate(0 , canvas.height );
 	context.scale(1, -1); //reverse했으니, 나중에 하버링 시  좌 표 주 의!
-	plot(theophArr.time, theophArr.conc);
+	histPlot(theophArr.time, diff);
 	 
 	context.restore();
 	
@@ -49,28 +47,104 @@ $(document).ready(function()
 		function findMaxValue(Data)
 		{
 			var maxValue=Data[1];
+			var returnValue;
 			for(var i=2; i<Data.length; i++){
 				if(Data[i]>maxValue){
 					maxValue=Data[i];					
 				}
 				//document.write('max: ' + maxValue+'  data[i]: '+Data[i]+'  data[i-1]: '+ Data[i-1]+'<br>');
 			}
-			return parseInt(maxValue+1);
+			returnValue=parseInt(maxValue+1);
+			
+			for(var i=0; i<diff; i++){
+				returnValue=returnValue+i;
+				if( ( returnValue% diff ) == 0 )
+				{
+					break;
+				}				
+			}
+			
+			return returnValue;
+		}
+		function findMaxValueHist(xData,xDiff)
+		{
+			var maxValue=0;
+			var tmpHistArr = new Array();
+			var cnt=0;
+			for (var i=0; i<parseInt(xMax/xDiff +1); i++)//tmpHistArr initialization
+			{
+				tmpHistArr[i]=0;
+			}			
+			for(cnt=0; cnt< parseInt(xMax/xDiff +1); cnt++)
+			{
+				for( var i = 0 ; i < xData.length; i++)
+				{	
+					if(xData[i]>=cnt*xDiff && xData[i]<(cnt+1)*xDiff)
+					{
+						tmpHistArr[cnt]++;
+					}
+				}
+			}
+			for(var i=0; i<parseInt(xMax/xDiff +1); i++)
+			{
+				if(tmpHistArr[i]>maxValue)
+				{
+					maxValue=tmpHistArr[i];					
+				}
+			}	
+			return maxValue;
 		}
 		    
-		function plot(xData,yData)
+		function histPlot(xData,xDiff)
 		{
+		
+		//	document.write('max: ' + xMax+'<br>');
+			var tmpHistArr = new Array();
+			var cnt=0;
+			for (var i=0; i<parseInt(xMax/xDiff ); i++)//tmpHistArr initialization
+			{
+				tmpHistArr[i]=0;
+			}			
+			for(cnt=0; cnt< parseInt(xMax/xDiff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
+			{
+				for( var i = 0 ; i < xData.length; i++)
+				{	
+					if(xData[i]>=cnt*diff && xData[i]<(cnt+1)*xDiff)
+					{
+						tmpHistArr[cnt]++;
+					}
+				}
+			}			
+			for(var i=0; i< parseInt(xMax/xDiff ) ; i++)//draw rectangular 
+			{
+				context.beginPath();
+				context.strokeRect(plotXmargin +  i * plotWidth / parseInt(xMax/xDiff)  , canvas.height-plotYmargin-plotHeight  ,  plotWidth / parseInt(xMax/xDiff) , tmpHistArr[i] * plotHeight / yMax );
+				context.stroke();
+				context.closePath();
+			}
+			//document.write('max: ' + yMax+'<br>');
+		
+	/*	for (var i=0; i<parseInt(xMax/diff +1); i++)//tmpHistArr initialization
+			{
+				document.write('tmpHistArr['+i+']: ' + tmpHistArr[i]+'<br>');
+			}	*/
+		   
+		
+			/*
 			var xCanvasWidth = plotXmargin;
 			var yCanvasHeight = canvas.height-plotYmargin-plotHeight; 
 			var xScale=plotWidth/xMax;
 			var yScale=plotHeight/yMax;
-
+			var cnt=0;
 			
 			for( var i = 0 ; i < xData.length; i++)
 			{	
+				if(xData[i]>=cnt*diff && xData[i]<(cnt+1)*diff){
+					cnt=1;
+				}
 				drawDot(xData[i]*xScale+xCanvasWidth,yData[i]*yScale+yCanvasHeight,theophArr.subject[i]); //canvas 크기에 따라 
 			}
-			
+			*/
 		}
 		function drawDot(x,y,c)
 		{
@@ -94,8 +168,6 @@ $(document).ready(function()
 		function drawPlot(x1,y1,x2,y2,main,xLable,yLable,c) //( x1, y1 )= left top, ( x2, y2 ) = right bottom
 		{
 			color(c);
-			context.strokeRect(x1,y1,x2-x1,y2-y1);
-
 			var length=20;
 			for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
 				drawLine(plotXmargin-length/2, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-length,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) ,0);				
@@ -103,8 +175,9 @@ $(document).ready(function()
 			 	context.fillStyle = "#000000"; 				
 				context.font="bold 15px verdana, sans-serif";
 				context.fillText( i*yDiff  ,plotXmargin-length*2 ,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff));
+				
 			}
-			for(var i=0; i<(xMax/xDiff)+1; i++)
+			for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
 			{
 				drawLine(plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+length/2, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length ,0);			
 				context.strokeStyle = "#000000";	
@@ -112,6 +185,10 @@ $(document).ready(function()
 				context.font="bold 15px verdana, sans-serif";
 				context.fillText(i*xDiff,plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length*2);
 			}			
+
+			drawLine(x1,  plotYmargin+plotHeight-parseInt(yMax/yDiff)*plotHeight/(yMax/yDiff) , x1,  plotYmargin+plotHeight  );
+			drawLine(plotXmargin , y2 ,plotXmargin+parseInt(xMax/xDiff)*plotWidth/(xMax/xDiff), y2 );
+			
 			context.save();
 			context.textAlign = "center";
 			context.fillText(xLable,plotXmargin+plotWidth/2,plotYmargin+plotHeight+80);//xLabel
@@ -123,62 +200,7 @@ $(document).ready(function()
 			}
 			context.restore();
 		}
-		function drawLegend(Location,Data)
-		{
-			var scale=3;
-			var cnt=1;
-			var x1,y1,x2,y2;   // if data is not sorted, this code can't work. data should be sorted (from R or top of the code)
-			cnt = Data[Data.length-1];
-			if (Location == 'topright' || Location == undefined)	{
-				x1 = plotXmargin+plotWidth+10;
-				y1 = plotYmargin-30;
-				x2 = x1+40;
-				y2 = (cnt*13+35);
-			}else if(Location == 'topleft'){
-				x1 = plotXmargin-10;
-				y1 = plotYmargin-30;
-				x2 = x1 + 40;
-				y2 = (cnt*13+35);
-			}else if(Location == 'bottomright'){
-				x1 = plotXmargin+plotWidth+10;
-				x2 = x1 +40;
-				y2 = (cnt*13+35);
-				y1 = plotYmargin + plotHeight - y2 + 10;
-			}else if(Location == 'bottomleft'){
-				x1 = plotXmargin-10;
-				x2 = x1 + 40;
-				y2 = (cnt*13+35);
-				y1 =plotYmargin + plotHeight - y2 + 10;
-			}else{						// default is topright
-				x1 = plotXmargin+plotWidth+10;
-				y1 = plotYmargin-30;
-				x2 = x1+40;
-				y2 = (cnt*13+35);
-			}
-			cnt = 1;
-			for( var i = 1 ; i < Data.length; i++)
-			{	
-				if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  //subject 체크 한 후에 같은 거면 index추가 안함.		
-				{		
-					
-					context.save();				
-					context.beginPath();
-					context.arc(x1+10,cnt*13 + y1 + 10, scale, (Math.PI/180)*0, (Math.PI/180)*360, false);
-					color(Data[i]);					
-					context.fill();
-					context.stroke(); 
-					context.closePath();				
-					context.restore();
-					
-					context.strokeStyle = "#000000";	
-				 	context.fillStyle = "#000000"; 				
-					context.font="bold 11px verdana, sans-serif";
-					context.fillText(Data[i],x1+20,cnt*13 + y1 + 15);
-					cnt++;
-				}
-			}
-			context.strokeRect(x1 ,y1, x2-x1 , y2);
-		}
+		
 		
 		function color(c)
 		{

@@ -1,9 +1,3 @@
-var filePath = "Theoph-from-R.csv";
-xmlhttp = new XMLHttpRequest();
-xmlhttp.open("GET",filePath,false);
-xmlhttp.send(null);
-var fileContent = xmlhttp.responseText;
-var radius_scale = 3;
 //var fileArray = fileContent.split('\n');
 /*
 for(var i=0; i<fileArray.length; i++){
@@ -30,7 +24,7 @@ $(document).ready(function()
 	var j = 1;
 	var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");	
-    canvas.addEventListener('mousemove', function(evt) {
+    canvas.addEventListener("mousemove", function(evt) {
       var mousePos = getMousePos(canvas, evt);
       var message = 'Mouse position: ' + parseFloat(mousePos.x).toFixed(3) + ',' + parseFloat(mousePos.y).toFixed(3);
       writeMessage(canvas, message,1);
@@ -71,7 +65,7 @@ function drawPlot(x1,y1,x2,y2,main,xLable,yLable,c,name) //( x1, y1 )= left top,
 				context.font="bold 15px verdana, sans-serif";
 				context.fillText( i*yDiff  ,plotXmargin-length*2 ,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff));
 			}
-			for(var i=0; i<(xMax/xDiff)+1; i++)
+			for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
 			{
 				drawLine(plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+length/2, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length ,0,1);			
 				context.strokeStyle = "#000000";	

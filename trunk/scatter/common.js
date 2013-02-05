@@ -5,7 +5,11 @@ xmlhttp.open("GET",filePath,false);
 xmlhttp.send(null);
 var fileContent = xmlhttp.responseText;
 var array = csv2array(fileContent);
+/*for(var i=0; i<array.length; i++){
+	document.write("a("+i+") is : "+array[i]+"<br>");
+}*/
 
+//var array = fileContent.split(',');
 //////////////// Common Data Structure //////////////
 function ObjTemp()
 {
@@ -50,10 +54,6 @@ for(var j=1; j<array.length; j++) //1부터 시작할지 0부터 시직할지는
 
 ////////////////////Common Using Variable //////////////
 var radius_scale = 3; /// Dot radius
-var xMax=findMaxValue(theophArr.time); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-var yMax=findMaxValue(theophArr.conc);
-var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
-var yDiff=parseInt(yMax/6);
 var plotWidth=500;
 var plotHeight=500;
 var plotXmargin=150;
@@ -61,105 +61,43 @@ var plotYmargin=90;
 
 
 //////////////////Common Using Functions ////////////////
-// Each function description yet.
+// Each description of function yet.
 ///////////////////////////////////////////////////////
-function csv2array(data, delimeter) {
 
-	  // Retrieve the delimeter
-	  if (delimeter == undefined) 
-	    delimeter = ',';
-	  if (delimeter && delimeter.length > 1)
-	    delimeter = ',';
 
-	  // initialize variables
-	  var newline = '\n';
-	  var eof = '';
-	  var i = 0;
-	  var c = data.charAt(i);
-	  var row = 0;
-	  var col = 0;
-	  var array = new Array();
-
-	  while (c != eof) {
-	    // skip whitespaces
-	    while (c == ' ' || c == '\t' || c == '\r') {
-	      c = data.charAt(++i); // read next char
-	    }
-	    
-	    // get value
-	    var value = "";
-	    if (c == '\"') {
-	      // value enclosed by double-quotes
-	      c = data.charAt(++i);
-	      
-	      do {
-	        if (c != '\"') {
-	          // read a regular character and go to the next character
-	          value += c;
-	          c = data.charAt(++i);
-	        }
-	        
-	        if (c == '\"') {
-	          // check for escaped double-quote
-	          var cnext = data.charAt(i+1);
-	          if (cnext == '\"') {
-	            // this is an escaped double-quote. 
-	            // Add a double-quote to the value, and move two characters ahead.
-	            value += '\"';
-	            i += 2;
-	            c = data.charAt(i);
-	          }
-	        }
-	      }
-	      while (c != eof && c != '\"');
-	      
-	      if (c == eof) {
-	        throw "Unexpected end of data, double-quote expected";
-	      }
-
-	      c = data.charAt(++i);
-	    }
-	    else {
-	      // value without quotes
-	      while (c != eof && c != delimeter && c!= newline && c != ' ' && c != '\t' && c != '\r') {
-	        value += c;
-	        c = data.charAt(++i);
-	      }
-	    }
-
-	    // add the value to the array
-	    if (array.length <= row) 
-	      array.push(new Array());
-	    array[row].push(value);
-	    
-	    // skip whitespaces
-	    while (c == ' ' || c == '\t' || c == '\r') {
-	      c = data.charAt(++i);
-	    }
-
-	    // go to the next row or column
-	    if (c == delimeter) {
-	      // to the next column
-	      col++;
-	    }
-	    else if (c == newline) {
-	      // to the next row
-	      col = 0;
-	      row++;
-	    }
-	    else if (c != eof) {
-	      // unexpected character
-	      throw "Delimiter expected after character " + i;
-	    }
-	    
-	    // go to the next character
-	    c = data.charAt(++i);
-	  }  
-	  
-	  return array;
+function csv2array(data, liveChar)
+{	
+	var i = 0;
+	var eof = '';
+	var cursor = data.charAt(i);
+	var result_array = new Array();
+	var result_row = "";
+	var line = 0;
+	while(cursor != eof)
+	{
+		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ') ){
+//			document.write("ddddddddddddddddddd" + "<br>");
+		}else if( cursor == "\n" ){
+//			document.write("dttttttt" + "<br>");
+			result_row += cursor;
+			if (result_array.length <= line)
+			{
+				result_array.push(new Array());
+				result_array[line].push(result_row);
+				result_row = "";
+				line++;
+			}
+		}else{
+//			document.write("a("+i+") is : "+ cursor+"<br>");
+			result_row += cursor;
+		}
+			
+		cursor = data.charAt(i++);
 	}
+	return result_array;
+}
 
-function getMousePos(canvas, evt) {
+function getMousePos(xMax, yMax, canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
       x: xMax/plotWidth*(evt.clientX - rect.left - plotXmargin),
@@ -212,35 +150,34 @@ function drawLine(x1,y1,x2,y2,c,name)
 	context.beginPath();
 	context.moveTo(x1,y1);			
 	context.lineTo(x2,y2);
-	color(c,1);
+	color(c,name);
 	context.stroke(); 
 }
 
-function plot(xData,yData,name)
-{
-	var canvas = document.getElementById("canvas" + name);
-	var context = canvas.getContext("2d");
-	
-	var xCanvasWidth = plotXmargin;
-	var yCanvasHeight = canvas.height-plotYmargin-plotHeight; 
-	var xScale=plotWidth/xMax;
-	var yScale=plotHeight/yMax;
-	for( var i = 0 ; i < xData.length; i++)
-	{	
-		drawDot(xData[i]*xScale+xCanvasWidth,yData[i]*yScale+yCanvasHeight,theophArr.subject[i],1); //canvas 크기에 따라 
-	}		
-}
 
 
-function findMaxValue(Data)
+
+function findMaxValue(Data,diff)
 {
 	var maxValue=Data[1];
+	var returnValue;
 	for(var i=2; i<Data.length; i++){
 		if(Data[i]>maxValue){
 			maxValue=Data[i];					
 		}
+		//document.write('max: ' + maxValue+'  data[i]: '+Data[i]+'  data[i-1]: '+ Data[i-1]+'<br>');
 	}
-	return parseInt(maxValue+1);
+	returnValue=parseInt(maxValue+1);
+	
+	for(var i=0; i<diff; i++){
+		returnValue=returnValue+i;
+		if( ( returnValue% diff ) == 0 )
+		{
+			break;
+		}				
+	}
+	
+	return returnValue;
 }
 
 function color(c, name)

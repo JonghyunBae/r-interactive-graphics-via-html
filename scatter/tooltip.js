@@ -1,7 +1,7 @@
 
-//Pop up information box II (Mike McGrath (mike_mcgrath@lineone.net,  http://website.lineone.net/~mike_mcgrath))
-//Permission granted to Dynamicdrive.com to include script in archive
-//For this and 100's more DHTML scripts, visit http://dynamicdrive.com
+/////////////////////////////////////////////////////////////
+////////Later, we will fix this code to optimize and for not copy soon
+//////////////////////////////////////////////////////
 
 Xoffset= 10;    // modify these values to ...
 Yoffset= -60;    // change the popup position.

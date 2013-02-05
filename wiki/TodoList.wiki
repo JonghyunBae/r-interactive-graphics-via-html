@@ -4,7 +4,7 @@
 * [John Doe] indicates "assigned to John Doe"
 }}}
 
-= Short Term =
+=== Short Term ===
 
   * [TJ, CH] Tool-tip
   * [TJ, CH] Selection of multiple points by shift/ctrl + click (you probably need, for instance, isSelected column in your data structure)
@@ -13,7 +13,7 @@
   * Identifying the biggest problem the prototype can comfortably handle
   * User-specified details of the points selected. For Theoph example, it will list Subject, Dose, Time, and conc (but not Wt) of the selected points. The table should support left-right (for many columns) and top-down scrolling. 
 
-= Longer Term =
+=== Longer Term ===
 
   * R interface & code generation
   * Server offloading

@@ -50,10 +50,6 @@ for(var j=1; j<array.length; j++) //1부터 시작할지 0부터 시직할지는
 
 ////////////////////Common Using Variable //////////////
 var radius_scale = 3; /// Dot radius
-var xMax=findMaxValue(theophArr.time); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-var yMax=findMaxValue(theophArr.conc);
-var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
-var yDiff=parseInt(yMax/6);
 var plotWidth=500;
 var plotHeight=500;
 var plotXmargin=150;
@@ -159,7 +155,7 @@ function csv2array(data, delimeter) {
 	  return array;
 	}
 
-function getMousePos(canvas, evt) {
+function getMousePos(xMax, yMax, canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
       x: xMax/plotWidth*(evt.clientX - rect.left - plotXmargin),
@@ -212,35 +208,34 @@ function drawLine(x1,y1,x2,y2,c,name)
 	context.beginPath();
 	context.moveTo(x1,y1);			
 	context.lineTo(x2,y2);
-	color(c,1);
+	color(c,name);
 	context.stroke(); 
 }
 
-function plot(xData,yData,name)
-{
-	var canvas = document.getElementById("canvas" + name);
-	var context = canvas.getContext("2d");
-	
-	var xCanvasWidth = plotXmargin;
-	var yCanvasHeight = canvas.height-plotYmargin-plotHeight; 
-	var xScale=plotWidth/xMax;
-	var yScale=plotHeight/yMax;
-	for( var i = 0 ; i < xData.length; i++)
-	{	
-		drawDot(xData[i]*xScale+xCanvasWidth,yData[i]*yScale+yCanvasHeight,theophArr.subject[i],1); //canvas 크기에 따라 
-	}		
-}
 
 
-function findMaxValue(Data)
+
+function findMaxValue(Data,diff)
 {
 	var maxValue=Data[1];
+	var returnValue;
 	for(var i=2; i<Data.length; i++){
 		if(Data[i]>maxValue){
 			maxValue=Data[i];					
 		}
+		//document.write('max: ' + maxValue+'  data[i]: '+Data[i]+'  data[i-1]: '+ Data[i-1]+'<br>');
 	}
-	return parseInt(maxValue+1);
+	returnValue=parseInt(maxValue+1);
+	
+	for(var i=0; i<diff; i++){
+		returnValue=returnValue+i;
+		if( ( returnValue% diff ) == 0 )
+		{
+			break;
+		}				
+	}
+	
+	return returnValue;
 }
 
 function color(c, name)

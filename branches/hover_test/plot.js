@@ -1,4 +1,4 @@
-var filePath = "file:///home/paplp15/r-interactive/branches/hover_test/Theoph-from-R.csv";
+var filePath = "Theoph-from-R.csv";
 xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET",filePath,false);
 xmlhttp.send(null);

@@ -3,7 +3,7 @@ $(document).ready(function()
 	var canvas = document.getElementById("canvas2");
 	var context = canvas.getContext("2d");
 
-	var diff =3;
+	var diff = 3;
 	var xMax=findMaxValue(theophArr.time,diff); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 	var yMax=findMaxValueHist(xMax,theophArr.time,diff);
 	var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
@@ -14,7 +14,6 @@ $(document).ready(function()
       var message = 'Mouse position: ' + parseFloat(mousePos.x).toFixed(3) + ',' + parseFloat(mousePos.y).toFixed(3);
       writeMessage(canvas, message,2);      
     }, false);
-
     drawAxisHist(xMax, yMax, xDiff, yDiff, plotXmargin-10,plotYmargin-30,plotWidth+plotXmargin+50,plotHeight+plotYmargin+10,'Histogram of Thoph$Time','Theoph$Time','Frequency', 0,2); 
     context.save();	
 	context.translate(0 , canvas.height );

@@ -222,13 +222,13 @@ function findMaxValue(Data,diff)
 	      {
 	    	if(n==1 ||  ( (n!=1) && (theophArr.subject[n] != theophArr.subject[n-1]) ) ) {
 		        var x = myLegend.x+10;
-		        var y = myLegend.y+plotLength+1.3*n-5;
+		        var y = myLegend.y+plotLength+1.18*n-5;
 		 
 		        legendData.push({
 		          x: x,
 		          y: y,
 		          id: n,
-		          color: colors[theophArr.subject[n]]
+		          color: colors[theophArr.subject[n]-1]
 		        });
 		     }
 	      }
@@ -287,7 +287,7 @@ function findMaxValue(Data,diff)
 	          name: theophArr.subject[n]+','+theophArr.wt[n]+','+theophArr.dose[n]+','+theophArr.time[n]+','+theophArr.conc[n], //does not work yet..
 	       //   'Subject : ' + theophArr.subject[search_result.x] + "<br>" + 'Wt : ' + theophArr.wt[search_result.x] + "<br>" + 'Dose : ' + theophArr.dose[search_result.x] + "<br>" + 'Conc : ' + theophArr.conc[search_result.x] + "<br>" + 'Time : ' + theophArr.time[search_result.x], 'lightyellow'
 	          
-	          color: colors[theophArr.subject[n]]
+	          color: colors[theophArr.subject[n]-1]
 	        });
 	  //      document.write("n is : "+n+"<br>");
 

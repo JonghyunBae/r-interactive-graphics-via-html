@@ -118,9 +118,14 @@ function findMaxValue(Data,diff)
 }
 
 
-for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+") is : "+theophArr.time[i]+"<br>"); }
+//for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+") is : "+theophArr.time[i]+"<br>"); }
 
 
+	  var stage = new Kinetic.Stage({
+	    container: 'container',
+	    width: 800,
+	    height: 800
+	  });
 
 	function addNode(obj, layer) {
 		        var node = new Kinetic.Circle({
@@ -128,17 +133,113 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 		          y: obj.y,
 		          radius: 4,
 		          fill: obj.color,
+		          name: obj.name,
 		          id: obj.id,
 		          draggable: true
-		        });
-		
+		        });		
 		        layer.add(node);
 	  }
-	  var stage = new Kinetic.Stage({
-	    container: 'container',
-	    width: 800,
-	    height: 800
+
+	///////////////////////////Legend Layer Start///////////////////////////////
+	  var legendLayer = new Kinetic.Layer({draggable:true});
+	  
+	function addNodeLegend(obj, layer) {
+		        var node = new Kinetic.Circle({
+		          x: obj.x,
+		          y: obj.y,
+		          radius: 4,
+		          fill: obj.color,
+		          id: obj.id
+		        });		
+		        legendLayer.add(node);
+		   //     return node;
+	  }
+
+	  var legendText = new Kinetic.Text({
+		text: '',
+		fontFamily: 'Calibri',
+		fontSize: 13,
+		padding: 5,
+		fill: 'black',
+		align:'center'
 	  });
+	
+	  var legendRect= new Kinetic.Rect({
+		   	stroke: 'black',
+		    fill: 'white'
+	  });
+	 
+	  function drawLegend(Location, Data){
+		  var tmpText='';	 
+		 
+		  for( var i = 1 ; i < Data.length; i++)
+		  {	
+			  if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  //subject 체크 한 후에 같은 거면 index추가 안함.		
+				{		
+				    tmpText=tmpText + '     '+ Data[i] +"\r\n";
+				}
+		  }
+		  
+		  if (Location == 'topright' || Location == undefined)	{
+				x = plotXmargin+plotWidth-27;
+				y = plotYmargin-plotLength;
+			}else if(Location == 'topleft'){
+				x = plotXmargin-plotLength;
+				y = plotYmargin-plotLength;
+			}else if(Location == 'bottomright'){
+				x = plotXmargin+plotWidth-27;
+				y = plotYmargin+plotHeight-tmpText.length*1.53; //check later
+			}else if(Location == 'bottomleft'){
+				x = plotXmargin-plotLength;
+				y = plotYmargin+plotHeight-tmpText.length*1.53;//check later
+			}else{						// default is topright
+				x = plotXmargin+plotWidth-27;
+				y = plotYmargin-plotLength;
+			}
+		  
+		  return {
+			  	'x': x,
+		        'y': y,
+		        'text': tmpText
+		    };
+	  }
+	  var myLegend= drawLegend("topright",theophArr.subject);
+
+	  legendRect.setPosition(myLegend.x, myLegend.y);
+	  legendText.setPosition(myLegend.x, myLegend.y);
+	  legendText.setText(myLegend.text); 
+		legendRect.setAttrs({
+	    	width: legendText.getWidth(),
+	    	height: legendText.getHeight()
+	    });
+   legendLayer.add(legendRect);
+   legendLayer.add(legendText);
+
+	    var legendData = [];
+	    var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
+	    
+	    for(var n = 1; n < theophArr.subject.length ; n++)
+	      {
+	    	if(n==1 ||  ( (n!=1) && (theophArr.subject[n] != theophArr.subject[n-1]) ) ) {
+		        var x = myLegend.x+10;
+		        var y = myLegend.y+plotLength+1.3*n-5;
+		 
+		        legendData.push({
+		          x: x,
+		          y: y,
+		          id: n,
+		          color: colors[theophArr.subject[n]]
+		        });
+		     }
+	      }
+	    var layer = new Kinetic.Layer();
+	    for(var n = 0; n < legendData.length; n++) 
+		  {
+	    	addNodeLegend(legendData[n], layer);
+		  
+		  }
+		  stage.add(legendLayer);
+///////////////////////////Legend Layer End///////////////////////////////   
 	
 	  var tooltipLayer = new Kinetic.Layer();
 	  var tooltip = new Kinetic.Group({
@@ -150,7 +251,8 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 		fontFamily: 'Calibri',
 		fontSize: 18,
 		padding: 5,
-		fill: 'white'
+		fill: 'white',
+		align:'center'
 	  });
 	  
 	  var tooltipRect = new Kinetic.Rect({
@@ -169,8 +271,8 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 	  //a=(theophArr.time[n]*xScale+xCanvasWidth-plotYmargin);
 	  
 	  var data = [];
-	  var width = stage.getWidth();
-	  var height = stage.getHeight();
+	 // var width = stage.getWidth();
+	  //var height = stage.getHeight();
 	  var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
 	      for(var n = 1; n < theophArr.time.length ; n++)
 	      {
@@ -182,13 +284,15 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 	          x: x,
 	          y: y,
 	          id: n,
-	          Subject: theophArr.subject[n] , //does not work yet..
+	          name: theophArr.subject[n]+','+theophArr.wt[n]+','+theophArr.dose[n]+','+theophArr.time[n]+','+theophArr.conc[n], //does not work yet..
 	       //   'Subject : ' + theophArr.subject[search_result.x] + "<br>" + 'Wt : ' + theophArr.wt[search_result.x] + "<br>" + 'Dose : ' + theophArr.dose[search_result.x] + "<br>" + 'Conc : ' + theophArr.conc[search_result.x] + "<br>" + 'Time : ' + theophArr.time[search_result.x], 'lightyellow'
 	          
 	          color: colors[theophArr.subject[n]]
 	        });
+	  //      document.write("n is : "+n+"<br>");
+
 	      }
-	    
+	   //   document.write("theophArr.time("+i+") is : "+theophArr.time.length+"<br>");
 
 	  // render data
 	  var nodeCount = 0;
@@ -211,14 +315,17 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 		var node = evt.shape;
 		// update tooltip
 		var mousePos = node.getStage().getMousePosition();
+		var nameArr = new Array();
+		nameArr = node.getName().split(',');		
+		
 		tooltip.setPosition(mousePos.x + 8, mousePos.y + 8);
-		tooltipText.setText("node: " + node.getId() + ", Subject: " + theophArr.suject + ", color: " + node.getFill());
-		    tooltipRect.setAttrs({
-		    	width: tooltipText.getWidth(),
-		    	height: tooltipText.getHeight()
-		    });
-		    tooltip.show();
-		    tooltipLayer.draw();
+		tooltipText.setText("node: " + node.getId() +"\r\n"+"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"+ "color: " + node.getFill()); //naem split?
+		tooltipRect.setAttrs({
+	    	width: tooltipText.getWidth(),
+	    	height: tooltipText.getHeight()
+	    });
+	    tooltip.show();
+	    tooltipLayer.draw();
 	  }); 
 	
 	  stage.on('mouseout', function(evt) {
@@ -226,7 +333,10 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 	    tooltipLayer.draw();
 	  });
 	 
+	  
+	  var layer = new Kinetic.Layer();
 	      // dashed line
+	  /*
 	   var rect = new Kinetic.Rect({
 	        x: plotXmargin-plotLength,
 	        y: plotYmargin-plotLength,
@@ -236,23 +346,15 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 	        stroke: 'black',
 	        strokeWidth: 2
 	      });
-	 /*  
-	   for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
-			drawLine(plotXmargin-length/2, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-length,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) ,0,1);				
-			context.strokeStyle = "#000000";	
-		 	context.fillStyle = "#000000"; 				
-			context.font="bold 15px verdana, sans-serif";
-			context.fillText( i*yDiff  ,plotXmargin-length*2 ,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff));
-		}
-		for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
-		{
-			drawLine(plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+length/2, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length ,0,1);			
-			context.strokeStyle = "#000000";	
-		 	context.fillStyle = "#000000"; 				
-			context.font="bold 15px verdana, sans-serif";
-			context.fillText(i*xDiff,plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length*2);
-		}			
 		*/
+	   var rect = new Kinetic.Line({
+		   points: [plotXmargin-plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin-plotLength],
+	        stroke: 'black',
+	        strokeWidth: 2,		     
+	      });
+	  
+	     layer.add(rect);
+	  
 		
 		for(var i=0; i<parseInt(xMax/xDiff)+1; i++){
 			var xLine = new Kinetic.Line({
@@ -328,18 +430,4 @@ for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+"
 	        align: 'center'
 	      });		   
 	   layer.add(main);
-	   
-	   /*
-	   context.fillText(xLable,plotXmargin+plotWidth/2,plotYmargin+plotHeight+80);//xLabel
-		context.fillText(yLable,plotXmargin-100,plotYmargin+plotHeight/2);//yLabel		
-		if(main != undefined)
-		{
-			context.font="bold 30px verdana, sans-serif";
-			context.fillText(main, plotXmargin+plotWidth/2, plotYmargin - 50);				
-			
-			*/
-			
-	      // add the shape to the layer
-			
-	      layer.add(rect);
-	      stage.add(layer);
+	   stage.add(layer);

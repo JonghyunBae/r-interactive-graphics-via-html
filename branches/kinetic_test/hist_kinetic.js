@@ -1,4 +1,4 @@
-	var diff = 2;
+	var diff = 3;
 	var xMax=findMaxValue(theophArr.time,diff); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 	var yMax=findMaxValueHist(xMax,theophArr.time,diff);
 	var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.

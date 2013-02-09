@@ -33,45 +33,6 @@
 			context.closePath();
 		}
 	}
-/*
-	function drawAxisHist(xMax, yMax, xDiff, yDiff, x1,y1,x2,y2,main,xLable,yLable,c,name) //( x1, y1 )= left top, ( x2, y2 ) = right bottom
-	{
-		var canvas = document.getElementById("canvas" + name);
-		var context = canvas.getContext("2d");
-		color(c,2);
-		var length=20;
-		for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
-			drawLine(plotXmargin-length/2, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-length,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) ,0,2);				
-			context.strokeStyle = "#000000";	
-		 	context.fillStyle = "#000000"; 				
-			context.font="bold 15px verdana, sans-serif";
-			context.fillText( i*yDiff  ,plotXmargin-length*2 ,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff));
-			
-		}
-		for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
-		{
-			drawLine(plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+length/2, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length ,0,2);			
-			context.strokeStyle = "#000000";	
-		 	context.fillStyle = "#000000"; 				
-			context.font="bold 15px verdana, sans-serif";
-			context.fillText(i*xDiff,plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+length*2);
-		}			
-
-		drawLine(x1,  plotYmargin+plotHeight-parseInt(yMax/yDiff)*plotHeight/(yMax/yDiff) , x1,  plotYmargin+plotHeight,0,2);
-		drawLine(plotXmargin , y2 ,plotXmargin+parseInt(xMax/xDiff)*plotWidth/(xMax/xDiff), y2 ,0,2);
-		
-		context.save();
-		context.textAlign = "center";
-		context.fillText(xLable,plotXmargin+plotWidth/2,plotYmargin+plotHeight+80);//xLabel
-		context.fillText(yLable,plotXmargin-100,plotYmargin+plotHeight/2);//yLabel		
-		if(main != undefined)
-		{
-			context.font="bold 30px verdana, sans-serif";
-			context.fillText(main, plotXmargin+plotWidth/2, plotYmargin - 50);				
-		}
-		context.restore();
-	}
-*/
 	function findMaxValueHist(xMax, xData,diff)
 	{
 		var maxValue=0;

@@ -120,7 +120,7 @@ function findMaxValue(Data,diff)
 
 //for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+") is : "+theophArr.time[i]+"<br>"); }
 
-
+//////////////////////////////stage start//////////////////////////
 	  var stage = new Kinetic.Stage({
 	    container: 'container',
 	    width: 800,
@@ -135,7 +135,7 @@ function findMaxValue(Data,diff)
 		          fill: obj.color,
 		          name: obj.name,
 		          id: obj.id,
-		          draggable: true
+		          draggable: false
 		        });		
 		        layer.add(node);
 	  }
@@ -151,7 +151,7 @@ function findMaxValue(Data,diff)
 		          fill: obj.color,
 		          id: obj.id
 		        });		
-		        legendLayer.add(node);
+		        layer.add(node);
 		   //     return node;
 	  }
 
@@ -235,7 +235,7 @@ function findMaxValue(Data,diff)
 	    var layer = new Kinetic.Layer();
 	    for(var n = 0; n < legendData.length; n++) 
 		  {
-	    	addNodeLegend(legendData[n], layer);
+	    	addNodeLegend(legendData[n], legendLayer);
 		  
 		  }
 		  stage.add(legendLayer);
@@ -329,12 +329,38 @@ function findMaxValue(Data,diff)
 	  }); 
 	
 	  stage.on('mouseout', function(evt) {
-	    tooltip.hide();
-	    tooltipLayer.draw();
+		    tooltip.hide();
+		    tooltipLayer.draw();
 	  });
+	  
+	  //////////////////////////////////////Selection Start//////////////////////////////////////
+
+	  var selectLayer = new Kinetic.Layer();
 	 
 	  
-	  var layer = new Kinetic.Layer();
+	  function addNodeSelect(obj, layer) {
+	        var node = new Kinetic.Circle({
+	          x: obj.x,
+	          y: obj.y,
+	          radius: 8,
+	          stroke: 'red',
+	          fillEnabled: false,
+	          opacity: 0.8,
+	          draggable: true
+	        });		
+	        layer.add(node);
+	  }
+	  
+	  stage.on('click', function(evt){
+		  var node = evt.shape;
+		  var mousePos = node.getStage().getMousePosition();
+		  
+		  addNodeSelect(mousePos, selectLayer)		
+		  
+		  stage.add(selectLayer);
+	  });
+	  //////////////////////////////////////Selection End//////////////////////////////////////
+	//  var layer = new Kinetic.Layer();
 	      // dashed line
 	  /*
 	   var rect = new Kinetic.Rect({

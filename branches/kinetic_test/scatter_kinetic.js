@@ -126,13 +126,11 @@ function findMaxValue(Data,diff)
 	    width: 800,
 	    height: 800
 	  });
-	 var layer = new Kinetic.Layer();
-
 	function addNode(obj, layer) {
 		        var node = new Kinetic.Circle({
 		          x: obj.x,
 		          y: obj.y,
-		          radius: 4,
+		          radius: 3,
 		          fill: obj.color,
 		          name: obj.name,
 		          id: obj.id,
@@ -140,7 +138,44 @@ function findMaxValue(Data,diff)
 		        });		
 		        layer.add(node);
 	  }
+	  // build data
+	  var xScale=plotWidth/xMax;//added by us
+	  var yScale=plotHeight/yMax; //added by us
+	  var data = [];
+	  var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
+	      for(var n = 1; n < theophArr.time.length ; n++)
+	      {
+	        var x = theophArr.time[n]*xScale+plotXmargin;
+	        var y = theophArr.conc[n]*yScale+plotYmargin;
+	        var tmp=plotHeight/2+plotYmargin-y; 
+	        y=y+2*tmp; //since (0,0) of canvas is top-left, so we need to change it into bottom-left.
+	        data.push({
+	          x: x,
+	          y: y,
+	          id: n,
+	          name: theophArr.subject[n]+','+theophArr.wt[n]+','+theophArr.dose[n]+','+theophArr.time[n]+','+theophArr.conc[n], //does not work yet..
+	          color: colors[theophArr.subject[n]-1]
+	        });
+	   // document.write("n is : "+n+"<br>");
+	      }
+	   //   document.write("theophArr.time("+i+") is : "+theophArr.time.length+"<br>");
 
+	  // render data
+	  var nodeCount = 0;
+	  var dataLayer= new Kinetic.Layer();
+	  for(var n = 0; n < data.length; n++) 
+	  {
+	    addNode(data[n], dataLayer);
+	    nodeCount++;
+	    if(nodeCount >= 100)// IMPORTANT
+	    {
+	      nodeCount = 0;
+	     stage.add(dataLayer);
+	  //   layerData = new Kinetic.Layer();
+	    }
+	  }
+	  stage.add(dataLayer);
+	  
 //////////////////////////////////////Tooltip Start//////////////////////////////////////
 	  var tooltipLayer = new Kinetic.Layer();
 	  var tooltip = new Kinetic.Group({
@@ -154,63 +189,17 @@ function findMaxValue(Data,diff)
 		padding: 5,
 		fill: 'white',
 		align:'center'
-	  });
-	  
+	  });	  
 	  var tooltipRect = new Kinetic.Rect({
 	    fill: 'black'
 	  });
 	  
+
 	  tooltip.add(tooltipRect).add(tooltipText);
-	  tooltipLayer.add(tooltip);
-	  
-	  // build data
-	  var xCanvasWidth = plotXmargin;//added by us
-	  var yCanvasHeight = stage.height-plotYmargin-plotHeight; //added by us
-	  var xScale=plotWidth/xMax;//added by us
-	  var yScale=plotHeight/yMax; //added by us
-	  var data = [];
-	 // var width = stage.getWidth();
-	  //var height = stage.getHeight();
-	  var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
-	      for(var n = 1; n < theophArr.time.length ; n++)
-	      {
-	        var x = theophArr.time[n]*xScale+xCanvasWidth;
-	        var y = theophArr.conc[n]*yScale+plotYmargin;
-	        var tmp=plotHeight/2+plotYmargin-y; 
-	       y=y+2*tmp; //since (0,0) of canvas is top-left, so we need to change it into bottom-left.
-	        data.push({
-	          x: x,
-	          y: y,
-	          id: n,
-	          name: theophArr.subject[n]+','+theophArr.wt[n]+','+theophArr.dose[n]+','+theophArr.time[n]+','+theophArr.conc[n], //does not work yet..
-	       //   'Subject : ' + theophArr.subject[search_result.x] + "<br>" + 'Wt : ' + theophArr.wt[search_result.x] + "<br>" + 'Dose : ' + theophArr.dose[search_result.x] + "<br>" + 'Conc : ' + theophArr.conc[search_result.x] + "<br>" + 'Time : ' + theophArr.time[search_result.x], 'lightyellow'
-	          
-	          color: colors[theophArr.subject[n]-1]
-	        });
-	  //      document.write("n is : "+n+"<br>");
-
-	      }
-	   //   document.write("theophArr.time("+i+") is : "+theophArr.time.length+"<br>");
-
-	  // render data
-	  var nodeCount = 0;
-	  var layer = new Kinetic.Layer();
-	  for(var n = 0; n < data.length; n++) 
-	  {
-	    addNode(data[n], layer);
-	    nodeCount++;
-	    if(nodeCount >= 100)// IMPORTANT
-	    {
-	      nodeCount = 0;
-	   //  stage.add(layer);
-	     // layer = new Kinetic.Layer();
-	    }
-	  }
-	//  stage.add(layer);
-	
+	  tooltipLayer.add(tooltip);	  
 	  stage.add(tooltipLayer);
 	
-	  stage.on('mouseover mousemove dragmove', function(evt){
+	  dataLayer.on('mouseover mousemove dragmove', function(evt){
 		var node = evt.shape;
 		// update tooltip
 		var mousePos = node.getStage().getMousePosition();
@@ -227,22 +216,25 @@ function findMaxValue(Data,diff)
 	    tooltipLayer.draw();
 	  }); 
 	
-	  stage.on('mouseout', function(evt) {
+	  dataLayer.on('mouseout', function(evt) {
 		    tooltip.hide();
 		    tooltipLayer.draw();
-	  });
+	  });	  
+
 //////////////////////////////////////Tooltip End//////////////////////////////////////
  
 //////////////////////////////////////Selection Start//////////////////////////////////////
 
 	  var selectLayer = new Kinetic.Layer();
-	 
+
+	  var selectedList = new LinkedList(); 
+	  
 	  
 	  function addNodeSelect(obj, layer) {
 	        var node = new Kinetic.Circle({
 	          x: obj.x,
 	          y: obj.y,
-	          radius: 8,
+	          radius: 5,
 	          stroke: 'red',
 	          fillEnabled: false,
 	          opacity: 0.8,
@@ -250,132 +242,199 @@ function findMaxValue(Data,diff)
 	        });		
 	        layer.add(node);
 	  }
+	 
+	  function inRange(node){
+		  
+		  var returnValue=false;
+		  if(selectedList._length ==0 ){
+			  returnValue=true;
+		  }else{
+			  for(var i=0; i< selectedList._length; i++)
+			  {
+				  if(node.getId()==selectedList.item(i).id){
+					  returnValue=false;
+					  break;
+				  }else{
+					  returnValue=true;
+				  }
+			  }			  
+		  }	  
+		  return returnValue;
+	  }
 	  
-	  stage.on('click', function(evt){
+	  dataLayer.on('click', function(evt){
 		  var node = evt.shape;
-		  var mousePos = node.getStage().getMousePosition();
+		  var mousePos = {x: node.getX(), y:node.getY()};
+		  var selectedListLength = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
 		  
-		  addNodeSelect(mousePos, selectLayer)		
+		//  document.write("node.level is : "+node.getId()+"<br>");		  
+		//  node.remove();
+		  node.getId().destroy();
 		  
-		  stage.add(selectLayer);
+		  if( inRange(node) && selectedListLength){
+			  	
+			  
+			  addNodeSelect(mousePos, selectLayer);		
+			  stage.add(selectLayer);
+			  //select(node, ....)
+			  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), id: selectedList.length });   		  
+			//  document.write("selectedList("+0+").x is : "+selectedList.item(0).x+"<br>");
+		//	  document.write("selectedList("+0+").y is : "+selectedList.item(0).y+"<br>");		  
+			//  document.write("selectedList("+0+").id is : "+selectedList.item(0).id+"<br>");		  
+			//  document.write("selectLayer.id is : "+selectLayer.getLevel()+"<br>");		  
+			  
+			  
+		  }
+		 
+		 /* 
+		  else if(찍혀였으면 ){
+			  
+			  //deselect(node,...)
+		  }		  
+		  */
+		  
 	  });
+	  selectLayer.on('click', function(evt){
+		  var node = evt.shape;
+		  var mousePos = {x: node.getX(), y:node.getY()};
+		  var selectedListLength = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
+		 // document.write("selectLayer.id is : "+3+"<br>");		  
+		  
+		  if( 1 ){			  	
+			  
+			  selectedList.remove(id);
+			  
+			  selectLayer.remove();
+		  }
+		 /* 
+		  else if(찍혀였으면 ){
+			  
+			  //deselect(node,...)
+		  }		  
+		  */
+		  
+	  });
+	  
+	  
+	  
 //////////////////////////////////////Selection End//////////////////////////////////////
 
 //////////////////////////////////////Legend Start//////////////////////////////////////
-var legendLayer = new Kinetic.Layer({draggable:true});
-
-function addNodeLegend(obj, layer) {
-var node = new Kinetic.Circle({
-x: obj.x,
-y: obj.y,
-radius: 4,
-fill: obj.color,
-id: obj.id
-});		
-layer.add(node);
-//     return node;
-}
-
-var legendText = new Kinetic.Text({
-text: '',
-fontFamily: 'Calibri',
-fontSize: 13,
-padding: 5,
-fill: 'black',
-align:'center'
-});
-
-var legendRect= new Kinetic.Rect({
-stroke: 'black',
-fill: 'white'
-});
-
-function drawLegend(Location, Data){
-var tmpText='';	 
-
-for( var i = 1 ; i < Data.length; i++)
-{	
-if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  //subject 체크 한 후에 같은 거면 index추가 안함.		
-{		
-tmpText=tmpText + '     '+ Data[i] +"\r\n";
-}
-}
-
-if (Location == 'topright' || Location == undefined)	{
-x = plotXmargin+plotWidth-27;
-y = plotYmargin-plotLength;
-}else if(Location == 'topleft'){
-x = plotXmargin-plotLength;
-y = plotYmargin-plotLength;
-}else if(Location == 'bottomright'){
-x = plotXmargin+plotWidth-27;
-y = plotYmargin+plotHeight-tmpText.length*1.53; //check later
-}else if(Location == 'bottomleft'){
-x = plotXmargin-plotLength;
-y = plotYmargin+plotHeight-tmpText.length*1.53;//check later
-}else{						// default is topright
-x = plotXmargin+plotWidth-27;
-y = plotYmargin-plotLength;
-}
-
-return {
-'x': x,
-'y': y,
-'text': tmpText
-};
-}
-var myLegend= drawLegend("topright",theophArr.subject);
-
-legendRect.setPosition(myLegend.x, myLegend.y);
-legendText.setPosition(myLegend.x, myLegend.y);
-legendText.setText(myLegend.text); 
-legendRect.setAttrs({
-width: legendText.getWidth(),
-height: legendText.getHeight()
-});
-legendLayer.add(legendRect);
-legendLayer.add(legendText);
-
-var legendData = [];
-var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
-
-for(var n = 1; n < theophArr.subject.length ; n++)
-{
-if(n==1 ||  ( (n!=1) && (theophArr.subject[n] != theophArr.subject[n-1]) ) ) {
-var x = myLegend.x+10;
-var y = myLegend.y+plotLength+1.18*n-5;
-
-legendData.push({
-x: x,
-y: y,
-id: n,
-color: colors[theophArr.subject[n]-1]
-});
-}
-}
-for(var n = 0; n < legendData.length; n++) 
-{
-addNodeLegend(legendData[n], legendLayer);
-
-}
-stage.add(legendLayer);
+	var legendLayer = new Kinetic.Layer({draggable:true});
+	
+	function addNodeLegend(obj, layer) {
+		var node = new Kinetic.Circle({
+			x: obj.x,
+			y: obj.y,
+			radius: 3,
+			fill: obj.color,
+			id: obj.id
+		});		
+		layer.add(node);
+		//     return node;
+	}
+	
+	var legendText = new Kinetic.Text({
+		text: '',
+		fontFamily: 'Calibri',
+		fontSize: 13,
+		padding: 5,
+		fill: 'black',
+		align:'center'
+	});
+	
+	var legendRect= new Kinetic.Rect({
+		stroke: 'black',
+		fill: 'white'
+	});
+	
+	function drawLegend(Location, Data){
+		var tmpText='';	 
+		
+		for( var i = 1 ; i < Data.length; i++)
+		{	
+			if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  //subject 체크 한 후에 같은 거면 index추가 안함.		
+			{		
+				tmpText=tmpText + '     '+ Data[i] +"\r\n";
+			}
+		}
+		
+		if (Location == 'topright' || Location == undefined)	{
+			x = plotXmargin+plotWidth-27;
+			y = plotYmargin-plotLength;
+		}else if(Location == 'topleft'){
+			x = plotXmargin-plotLength;
+			y = plotYmargin-plotLength;
+		}else if(Location == 'bottomright'){
+			x = plotXmargin+plotWidth-27;
+			y = plotYmargin+plotHeight-tmpText.length*1.53; //check later
+		}else if(Location == 'bottomleft'){
+			x = plotXmargin-plotLength;
+			y = plotYmargin+plotHeight-tmpText.length*1.53;//check later
+		}else{						// default is topright
+			x = plotXmargin+plotWidth-27;
+			y = plotYmargin-plotLength;
+			}
+		
+		return {
+			'x': x,
+			'y': y,
+			'text': tmpText
+		};
+	}
+	var myLegend= drawLegend("topright",theophArr.subject);
+	
+	legendRect.setPosition(myLegend.x, myLegend.y);
+	legendText.setPosition(myLegend.x, myLegend.y);
+	legendText.setText(myLegend.text); 
+	legendRect.setAttrs({
+		width: legendText.getWidth(),
+		height: legendText.getHeight()
+	});
+	legendLayer.add(legendRect);
+	legendLayer.add(legendText);
+	
+	var legendData = [];
+	var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
+	
+	for(var n = 1; n < theophArr.subject.length ; n++)
+	{
+		if(n==1 ||  ( (n!=1) && (theophArr.subject[n] != theophArr.subject[n-1]) ) ) {
+			var x = myLegend.x+10;
+			var y = myLegend.y+plotLength+1.18*n-5;
+			
+			legendData.push({
+				x: x,
+				y: y,
+				id: n,
+				color: colors[theophArr.subject[n]-1]
+			});
+		}
+	}
+	for(var n = 0; n < legendData.length; n++) 
+	{
+		addNodeLegend(legendData[n], legendLayer);	
+	}
+	stage.add(legendLayer);
 //////////////////////////////////////Legend End//////////////////////////////////////
 
 //////////////////////////////////////Drawing Plot Start//////////////////////////////////////
-	   var plotRect = new Kinetic.Line({
+	
+	var layerPlot= new Kinetic.Layer();  
+	var plotRect = new Kinetic.Line({
 		   points: [plotXmargin-plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin-plotLength],
 	        stroke: 'black',
 	        strokeWidth: 2,		     
 	      });
 	  
-	     layer.add(plotRect);
+	layerPlot.add(plotRect);
 		for(var i=0; i<parseInt(xMax/xDiff)+1; i++){
 			var xLine = new Kinetic.Line({
 		        points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
 		        stroke: 'black',
 		        strokeWidth: 2,		     
 		      });
-			layer.add(xLine);	   		
+			layerPlot.add(xLine);	   		
 			var xText = new Kinetic.Text({
 		        x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
 		        y: plotYmargin+plotHeight+plotLength*2,
@@ -386,7 +445,7 @@ stage.add(legendLayer);
 		        width: 20,
 				align: 'center'	
 		      });		   
-		   layer.add(xText);			
+			layerPlot.add(xText);			
 		}
 		for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
 			var yLine = new Kinetic.Line({
@@ -394,7 +453,7 @@ stage.add(legendLayer);
 		        stroke: 'black',
 		        strokeWidth: 2,		     
 		      });
-			layer.add(yLine);	   
+			layerPlot.add(yLine);	   
 			yText = new Kinetic.Text({
 		        x: plotXmargin-plotLength*2-15,
 		        y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
@@ -406,7 +465,7 @@ stage.add(legendLayer);
 		        align: 'center',
 		        rotation: (Math.PI)*3/2
 		      });		   
-		   layer.add(yText);		
+			layerPlot.add(yText);		
 		}		
 		xLabel = new Kinetic.Text({
 	        x: plotXmargin+plotWidth/2,
@@ -418,7 +477,7 @@ stage.add(legendLayer);
 	  //      width: plotWidth*0.8,
 	        align: 'center'
 	      });		   
-	   layer.add(xLabel);		
+		layerPlot.add(xLabel);		
 		yLabel = new Kinetic.Text({
 	        x: plotXmargin-5*plotLength,
 	        y: plotYmargin+plotHeight/2,
@@ -430,7 +489,7 @@ stage.add(legendLayer);
 	        align: 'center',
 	       	rotation: (Math.PI)*3/2
 	      });		   
-	   layer.add(yLabel);	
+		layerPlot.add(yLabel);	
 	   main = new Kinetic.Text({
 	        x: plotXmargin+plotWidth/2-60, 
 	        y: plotYmargin *0.5 ,
@@ -442,6 +501,6 @@ stage.add(legendLayer);
 	      //  width: plotWidth*0.8,
 	        align: 'center'
 	      });		   
-	   layer.add(main);
+	   layerPlot.add(main);
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
-	   stage.add(layer);
+	   stage.add(layerPlot);

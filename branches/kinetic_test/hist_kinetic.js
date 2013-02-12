@@ -149,7 +149,7 @@
 	  
 	  //a=(theophArr.time[n]*xScale+xCanvasWidth-plotYmargin);
 	  
-	  var data = [];
+	  var dataHist = [];
 //	  var width = stage1.getWidth();
 //	  var height = stage1.getHeight();
 //	  var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
@@ -165,7 +165,7 @@
 	        var y = plotYmargin + plotHeight - height;
 	     //   var tmp=plotHeight/2+plotYmargin-y; 	        
 	    //    y=y+2*tmp; //since (0,0) of canvas is top-left, so we need to change it into bottom-left.
-	        data.push({
+	        dataHist.push({
 	          x: x,
 	          y: y,
 	          width: width,
@@ -182,9 +182,9 @@
 	  // render data
 	  var nodeCount = 0;
 	  var layer1 = new Kinetic.Layer();
-	  for(var n = 0; n < data.length; n++) 
+	  for(var n = 0; n < dataHist.length; n++) 
 	  {
-	    addNode(data[n], layer1);
+	    addNode(dataHist[n], layer1);
 	    nodeCount++;
 	    if(nodeCount >= 1)// IMPORTANT
 	    {

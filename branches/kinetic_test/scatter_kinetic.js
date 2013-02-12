@@ -120,6 +120,56 @@ function findMaxValue(Data,diff)
 
 //for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+") is : "+theophArr.time[i]+"<br>"); }
 
+
+//////////////////////////////////////Chk key evnet Start//////////////////////////////////////   
+
+	window.addEventListener('keydown',this.checkKeyDown,false);	
+	window.addEventListener('keyup',this.checkKeyUp,false);	
+	var ctrlPressed = false;
+	var shiftPressed = false;
+	var aPressed = false;
+	function checkKeyDown(e) {
+		//alert(e.keyCode);
+		//17 || 25 = ctrl, shift = 16, a=65
+		if(e.keyCode == 17 || e.keyCode == 25){
+			ctrlPressed = true;
+		}
+		if(e.keyCode == 16){
+			shiftPressed = true;
+		}
+		if(e.keyCode == 65){
+			aPressed = true;
+		}
+	}	
+	function checkKeyUp(e) {
+	//	alert(e.keyCode);
+		//17 || 25 = ctrl, shift = 16
+		if(ctrlPressed = true){
+			ctrlPressed = false;
+		}
+		if(shiftPressed = true){
+			shiftPressed = false;
+		}
+		if(aPressed = true){
+			aPressed = false;
+		}
+	}	
+	/*
+	function check(e) {
+	var code = e.keyCode;
+	switch (code) {
+	case 37: alert("Left"); break; //Left key
+	case 38: alert("Up"); break; //Up key
+	case 39: alert("Right"); break; //Right key
+	case 40: alert("Down"); break; //Down key
+	default: alert(code); //Everything else
+	}
+	}*/
+
+
+//////////////////////////////////////Chk key evnet End//////////////////////////////////////   
+
+
 //////////////////////////////////////Stage Start//////////////////////////////////////
 	  var stage = new Kinetic.Stage({
 	    container: 'container',
@@ -160,6 +210,8 @@ function findMaxValue(Data,diff)
 	      }
 	   //   document.write("theophArr.time("+i+") is : "+theophArr.time.length+"<br>");
 
+	      
+
 	  // render data
 	  var nodeCount = 0;
 	  var dataLayer= new Kinetic.Layer();
@@ -170,12 +222,12 @@ function findMaxValue(Data,diff)
 	    if(nodeCount >= 100)// IMPORTANT
 	    {
 	      nodeCount = 0;
-	     stage.add(dataLayer);
-	  //   layerData = new Kinetic.Layer();
+	    stage.add(dataLayer);
+	   //  dataLayer = new Kinetic.Layer();
 	    }
 	  }
 	  stage.add(dataLayer);
-	  
+
 //////////////////////////////////////Tooltip Start//////////////////////////////////////
 	  var tooltipLayer = new Kinetic.Layer();
 	  var tooltip = new Kinetic.Group({
@@ -199,7 +251,15 @@ function findMaxValue(Data,diff)
 	  tooltipLayer.add(tooltip);	  
 	  stage.add(tooltipLayer);
 	
+	  dataLayer.on('mouseover', function(){
+		  document.body.style.cursor = "pointer";
+		  
+		  
+	  });
+	  
 	  dataLayer.on('mouseover mousemove dragmove', function(evt){
+		  
+		  
 		var node = evt.shape;
 		// update tooltip
 		var mousePos = node.getStage().getMousePosition();
@@ -214,13 +274,38 @@ function findMaxValue(Data,diff)
 	    });
 	    tooltip.show();
 	    tooltipLayer.draw();
+	    
+
+		  var shapes = stage.get('#'+node.getId());
+		  shapes.apply('transitionTo', {
+	          scale: {
+	            x:  1.5,
+	            y:  1.5
+	          },
+	          duration: 1,
+	          easing: 'elastic-ease-out'
+	        });
+		  
+	    
 	  }); 
 	
 	  dataLayer.on('mouseout', function(evt) {
+		  var node = evt.shape;
+		  document.body.style.cursor = "default";
+		  
 		    tooltip.hide();
 		    tooltipLayer.draw();
+		    
+		    var shapes = stage.get('#'+node.getId());
+			  shapes.apply('transitionTo', {
+		          scale: {
+		            x:  1,
+		            y:  1
+		          },
+		          duration: 1,
+		          easing: 'elastic-ease-out'
+		        });
 	  });	  
-
 //////////////////////////////////////Tooltip End//////////////////////////////////////
  
 //////////////////////////////////////Selection Start//////////////////////////////////////
@@ -234,7 +319,7 @@ function findMaxValue(Data,diff)
 	        var node = new Kinetic.Circle({
 	          x: obj.x,
 	          y: obj.y,
-	          radius: 5,
+	          radius: 8,
 	          stroke: 'red',
 	          fillEnabled: false,
 	          opacity: 0.8,
@@ -251,7 +336,7 @@ function findMaxValue(Data,diff)
 		  }else{
 			  for(var i=0; i< selectedList._length; i++)
 			  {
-				  if(node.getId()==selectedList.item(i).id){
+				  if(node.getId()==selectedList.item(i).nodeId){
 					  returnValue=false;
 					  break;
 				  }else{
@@ -261,51 +346,116 @@ function findMaxValue(Data,diff)
 		  }	  
 		  return returnValue;
 	  }
-	  
-	  dataLayer.on('click', function(evt){
+		document.write("data length is : "+data.length+"<br>");		  
+
+	  dataLayer.on('click', function(evt){  
 		  var node = evt.shape;
 		  var mousePos = {x: node.getX(), y:node.getY()};
-		  var selectedListLength = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
+		  var selectedListLengthChk = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
+		  var nameArr = new Array();
+		  nameArr = node.getName().split(',');		
 		  
-		//  document.write("node.level is : "+node.getId()+"<br>");		  
-		//  node.remove();
-		  node.getId().destroy();
-		  
-		  if( inRange(node) && selectedListLength){
-			  	
-			  
-			  addNodeSelect(mousePos, selectLayer);		
-			  stage.add(selectLayer);
-			  //select(node, ....)
-			  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), id: selectedList.length });   		  
-			//  document.write("selectedList("+0+").x is : "+selectedList.item(0).x+"<br>");
-		//	  document.write("selectedList("+0+").y is : "+selectedList.item(0).y+"<br>");		  
-			//  document.write("selectedList("+0+").id is : "+selectedList.item(0).id+"<br>");		  
-			//  document.write("selectLayer.id is : "+selectLayer.getLevel()+"<br>");		  
-			  
+		  if( inRange(node) && selectedListLengthChk){
+			 
+			  if(aPressed){ //select ALL
+				  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
+				  	  selectedList.remove(i);
+				  }
+				  for(var i=0; i<data.length; i++){
+							  var tmpMousePos = {x: data[i].x, y: data[i].y}
+							  addNodeSelect(tmpMousePos, selectLayer);		
+							  stage.add(selectLayer);
+							  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name, id: selectedList._length });   	
+				  }
+				  
+			  }else if(ctrlPressed){ //select every node whose subject is the same
+				 
+				  /*
+				  for(var i=0; i<selectedList._length; i++){
+					  
+					  var tmpNodeNameArr = new Array();
+					  tmpNodeNameArr = selectedList.item(i).nodeName.split(',');		
+					  for(var j=0; j<data.length; j++){
+						  var tmpNameArr = new Array();
+						  tmpNameArr = data[i].name.split(',');		
+						  if(nameArr[0]==tmpNodeNameArr[0]){
+							  selectedList.remove(i);
+
+							  
+						  }
+					  }
+				  }*/
+				  
+				  
+				  for(var i=0; i<data.length; i++){
+					  var preSelected=false;
+					  var tmpNameArr = new Array();
+					  tmpNameArr = data[i].name.split(',');		
+			//		document.write("datalength is : "+data.length+"<br>");							  
+			/*		  for(var j=0; j<selectedList._length; j++)
+					  {
+						  var tmpNodeNameArr = new Array();
+						  tmpNodeNameArr = selectedList.item(j).nodeName.split(',');
+											
+						  if(tmpNameArr[0] == tmpNodeNameArr[0]){
+							  var preSelected=true;
+						  }						  
+					  }
+			*/		  
+					if( nameArr[0] == tmpNameArr[0] && !preSelected )
+					{						  
+						  var tmpMousePos = {x: data[i].x, y: data[i].y}
+						  addNodeSelect(tmpMousePos, selectLayer);		
+						  stage.add(selectLayer);
+						  
+							 //selectLayer.moveToBottom();
+							  //plotLayer.moveToBottom();
+						  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name,  id: selectedList._length });   	  			  						  
+					}
+				  }
+			  }else{
+				  addNodeSelect(mousePos, selectLayer);		
+				  stage.add(selectLayer);
+				 //selectLayer.moveToBottom();
+				  //plotLayer.moveToBottom();
+				  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   		  
+			  }
 			  
 		  }
-		 
-		 /* 
-		  else if(찍혀였으면 ){
-			  
-			  //deselect(node,...)
-		  }		  
-		  */
 		  
+
+		  var shapes = stage.get('#'+node.getId());
+		  shapes.apply('transitionTo', {
+	          scale: {
+	            x:  2,
+	            y:  2
+	          },
+	          duration: 1,
+	          easing: 'elastic-ease-out'
+	        });
 	  });
+	  selectLayer.on('mouseover', function(){
+		  document.body.style.cursor = "pointer";
+	  });
+	  selectLayer.on('mouseout', function(){
+		  document.body.style.cursor = "default";
+	  });	  
 	  selectLayer.on('click', function(evt){
 		  var node = evt.shape;
 		  var mousePos = {x: node.getX(), y:node.getY()};
-		  var selectedListLength = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
-		 // document.write("selectLayer.id is : "+3+"<br>");		  
-		  
-		  if( 1 ){			  	
-			  
-			  selectedList.remove(id);
-			  
-			  selectLayer.remove();
+	//	  var selectedListLength = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
+	//	  document.write("selectLayer.id is : "+mousePos.x+" "+mousePos.y+"<br>");		  
+		
+		  for(var i=0; i<selectedList._length; i++){
+			  if(mousePos.x==selectedList.item(i).x && mousePos.y==selectedList.item(i).y){
+				  selectedList.remove(i);
+			  }
 		  }
+		  
+		  node.hide();			  
+		  selectLayer.draw();
+		  node.destroy();
+	
 		 /* 
 		  else if(찍혀였으면 ){
 			  
@@ -420,21 +570,21 @@ function findMaxValue(Data,diff)
 
 //////////////////////////////////////Drawing Plot Start//////////////////////////////////////
 	
-	var layerPlot= new Kinetic.Layer();  
+	var plotLayer= new Kinetic.Layer();  
 	var plotRect = new Kinetic.Line({
 		   points: [plotXmargin-plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin-plotLength],
 	        stroke: 'black',
 	        strokeWidth: 2,		     
 	      });
 	  
-	layerPlot.add(plotRect);
+	plotLayer.add(plotRect);
 		for(var i=0; i<parseInt(xMax/xDiff)+1; i++){
 			var xLine = new Kinetic.Line({
 		        points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
 		        stroke: 'black',
 		        strokeWidth: 2,		     
 		      });
-			layerPlot.add(xLine);	   		
+			plotLayer.add(xLine);	   		
 			var xText = new Kinetic.Text({
 		        x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
 		        y: plotYmargin+plotHeight+plotLength*2,
@@ -445,7 +595,7 @@ function findMaxValue(Data,diff)
 		        width: 20,
 				align: 'center'	
 		      });		   
-			layerPlot.add(xText);			
+			plotLayer.add(xText);			
 		}
 		for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
 			var yLine = new Kinetic.Line({
@@ -453,7 +603,7 @@ function findMaxValue(Data,diff)
 		        stroke: 'black',
 		        strokeWidth: 2,		     
 		      });
-			layerPlot.add(yLine);	   
+			plotLayer.add(yLine);	   
 			yText = new Kinetic.Text({
 		        x: plotXmargin-plotLength*2-15,
 		        y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
@@ -465,7 +615,7 @@ function findMaxValue(Data,diff)
 		        align: 'center',
 		        rotation: (Math.PI)*3/2
 		      });		   
-			layerPlot.add(yText);		
+			plotLayer.add(yText);		
 		}		
 		xLabel = new Kinetic.Text({
 	        x: plotXmargin+plotWidth/2,
@@ -477,7 +627,7 @@ function findMaxValue(Data,diff)
 	  //      width: plotWidth*0.8,
 	        align: 'center'
 	      });		   
-		layerPlot.add(xLabel);		
+		plotLayer.add(xLabel);		
 		yLabel = new Kinetic.Text({
 	        x: plotXmargin-5*plotLength,
 	        y: plotYmargin+plotHeight/2,
@@ -489,7 +639,7 @@ function findMaxValue(Data,diff)
 	        align: 'center',
 	       	rotation: (Math.PI)*3/2
 	      });		   
-		layerPlot.add(yLabel);	
+		plotLayer.add(yLabel);	
 	   main = new Kinetic.Text({
 	        x: plotXmargin+plotWidth/2-60, 
 	        y: plotYmargin *0.5 ,
@@ -501,6 +651,47 @@ function findMaxValue(Data,diff)
 	      //  width: plotWidth*0.8,
 	        align: 'center'
 	      });		   
-	   layerPlot.add(main);
+	   plotLayer.add(main);
+	   	   stage.add(plotLayer);
+	   
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
-	   stage.add(layerPlot);
+
+
+
+	   
+	   
+//////////////////////////////////////Chk Start//////////////////////////////////////   
+	var chkLayer= new Kinetic.Layer();  
+	chkMsg = new Kinetic.Text({
+        x: 30,
+        y: 30,
+        text: 'View selectedList',
+        fontSize: 15,
+        fontFamily: 'Calibri',
+        fill: 'black',
+        align: 'center'
+      });		   
+	chkLayer.add(chkMsg);
+	stage.add(chkLayer);
+	chkLayer.on('mouseover', function(evt){
+		document.body.style.cursor = "pointer";
+	});
+	chkLayer.on('mouseout', function(evt){
+		document.body.style.cursor = "default";
+	 });
+	chkLayer.on('click', function(evt){
+	//	  var node = evt.shape;
+	//  var mousePos = {x: node.getX(), y:node.getY()};
+		for(var i=0; selectedList._length; i++){
+			  document.write("selectedList("+i+").x is : "+selectedList.item(i).x+"<br>");
+			  document.write("selectedList("+i+").y is : "+selectedList.item(i).y+"<br>");		  
+			  document.write("selectedList("+i+").nodeId is : "+selectedList.item(i).nodeId+"<br>");		  
+
+			  document.write("selectedList("+i+").nodeName is : "+selectedList.item(i).nodeName+"<br>");		
+			  document.write("selectedList("+i+").id is : "+selectedList.item(i).id+"<br>");		  
+		  }
+	 });
+	   
+//////////////////////////////////////Chk End//////////////////////////////////////   
+	
+	

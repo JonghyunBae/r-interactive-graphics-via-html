@@ -128,9 +128,10 @@ function findMaxValue(Data,diff)
 	var ctrlPressed = false;
 	var shiftPressed = false;
 	var aPressed = false;
+	var gPressed = false;
 	function checkKeyDown(e) {
 		//alert(e.keyCode);
-		//17 || 25 = ctrl, shift = 16, a=65
+		//17 || 25 = ctrl, shift = 16, a=65, g= 71
 		if(e.keyCode == 17 || e.keyCode == 25){
 			ctrlPressed = true;
 		}
@@ -139,6 +140,9 @@ function findMaxValue(Data,diff)
 		}
 		if(e.keyCode == 65){
 			aPressed = true;
+		}
+		if(e.keyCode == 71){
+			gPressed = true;
 		}
 	}	
 	function checkKeyUp(e) {
@@ -152,6 +156,9 @@ function findMaxValue(Data,diff)
 		}
 		if(aPressed = true){
 			aPressed = false;
+		}
+		if(gPressed == true){
+			gPressed = false;
 		}
 	}	
 	/*
@@ -176,6 +183,110 @@ function findMaxValue(Data,diff)
 	    width: 800,
 	    height: 800
 	  });
+	  
+
+//////////////////////////////////////Drawing Plot Start//////////////////////////////////////
+
+var plotLayer= new Kinetic.Layer();  
+var plotRect = new Kinetic.Rect({
+x: plotXmargin-plotLength,
+y: plotYmargin-plotLength,
+width: plotWidth+2*plotLength,
+height: plotHeight+2*plotLength,
+//     fill: 'green',
+stroke: 'black',
+strokeWidth: 2
+});
+/*
+var plotRect = new Kinetic.Line({
+points: [plotXmargin-plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin-plotLength],
+stroke: 'black',
+strokeWidth: 2,		     
+});
+
+*/	  
+plotLayer.add(plotRect);
+
+for(var i=0; i<parseInt(xMax/xDiff)+1; i++){
+var xLine = new Kinetic.Line({
+points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
+stroke: 'black',
+strokeWidth: 2,		     
+});
+plotLayer.add(xLine);	   		
+var xText = new Kinetic.Text({
+x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
+y: plotYmargin+plotHeight+plotLength*2,
+text: i*xDiff,
+fontSize: 15,
+fontFamily: 'Calibri',
+fill: 'black',
+width: 20,
+align: 'center'	
+});		   
+plotLayer.add(xText);			
+}
+for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
+var yLine = new Kinetic.Line({
+points: [plotXmargin-plotLength, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-2*plotLength,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)],
+stroke: 'black',
+strokeWidth: 2,		     
+});
+plotLayer.add(yLine);	   
+yText = new Kinetic.Text({
+x: plotXmargin-plotLength*2-15,
+y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
+text: i*yDiff,
+fontSize: 15,
+fontFamily: 'Calibri',
+fill: 'black',
+width: 20,
+align: 'center',
+rotation: (Math.PI)*3/2
+});		   
+plotLayer.add(yText);		
+}		
+xLabel = new Kinetic.Text({
+x: plotXmargin+plotWidth/2,
+y: plotYmargin+plotHeight+4*plotLength,
+text: 'Time',
+fontSize: 15,
+fontFamily: 'Calibri',
+fill: 'black',
+//      width: plotWidth*0.8,
+align: 'center'
+});		   
+plotLayer.add(xLabel);		
+yLabel = new Kinetic.Text({
+x: plotXmargin-5*plotLength,
+y: plotYmargin+plotHeight/2,
+text: 'conc',
+fontSize: 15,
+fontFamily: 'Calibri',
+fill: 'black',
+//   width: plotHeight*0.8,
+align: 'center',
+rotation: (Math.PI)*3/2
+});		   
+plotLayer.add(yLabel);	
+main = new Kinetic.Text({
+x: plotXmargin+plotWidth/2-60, 
+y: plotYmargin *0.5 ,
+text: 'Theoph Scatter',
+fontSize: 20,
+fontStyle: 'bold',
+fontFamily: 'Calibri',
+fill: 'black',
+//  width: plotWidth*0.8,
+align: 'center'
+});		   
+plotLayer.add(main);
+stage.add(plotLayer);
+
+//////////////////////////////////////Drawing Plot End//////////////////////////////////////
+  
+	  
+	  
 	function addNode(obj, layer) {
 		        var node = new Kinetic.Circle({
 		          x: obj.x,
@@ -348,6 +459,25 @@ function findMaxValue(Data,diff)
 	  }
 		document.write("data length is : "+data.length+"<br>");		  
 
+		
+		
+		plotLayer.on('click', function(evt){  
+			  var node = evt.shape;
+			  
+			  //document.write("data length is : "+data.length+"<br>");		  
+		//	  selectLayer.remove();
+			  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
+			  	  selectedList.remove(i);
+			  }
+			  selectLayer.destroy();
+		//	  selectLayer.show();				
+			  
+		});
+		
+		
+		
+		
+		
 	  dataLayer.on('click', function(evt){  
 		  var node = evt.shape;
 		  var mousePos = {x: node.getX(), y:node.getY()};
@@ -368,8 +498,15 @@ function findMaxValue(Data,diff)
 							  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name, id: selectedList._length });   	
 				  }
 				  
-			  }else if(ctrlPressed){ //select every node whose subject is the same
-				 
+			  }else if(ctrlPressed){ //select mutiple node one by one.
+				  addNodeSelect(mousePos, selectLayer);		
+				  stage.add(selectLayer);
+				 //selectLayer.moveToBottom();
+				  //plotLayer.moveToBottom();
+				  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   
+				  
+			  }else if(gPressed){ //select by Group, (select every node whose subject is the same)
+					 
 				  /*
 				  for(var i=0; i<selectedList._length; i++){
 					  
@@ -413,7 +550,13 @@ function findMaxValue(Data,diff)
 						  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name,  id: selectedList._length });   	  			  						  
 					}
 				  }
-			  }else{
+			  }else{//select another one and remove other nodes.
+			 
+				  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
+				  	  selectedList.remove(i);
+				  }
+				  selectLayer.destroy();
+				  
 				  addNodeSelect(mousePos, selectLayer);		
 				  stage.add(selectLayer);
 				 //selectLayer.moveToBottom();
@@ -445,17 +588,32 @@ function findMaxValue(Data,diff)
 		  var mousePos = {x: node.getX(), y:node.getY()};
 	//	  var selectedListLength = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
 	//	  document.write("selectLayer.id is : "+mousePos.x+" "+mousePos.y+"<br>");		  
-		
-		  for(var i=0; i<selectedList._length; i++){
-			  if(mousePos.x==selectedList.item(i).x && mousePos.y==selectedList.item(i).y){
-				  selectedList.remove(i);
+		  if(ctrlPressed){
+			  for(var i=0; i<selectedList._length; i++){
+				  if(mousePos.x==selectedList.item(i).x && mousePos.y==selectedList.item(i).y){
+					  selectedList.remove(i);
+				  }
 			  }
+			  
+			  node.hide();			  
+			  selectLayer.draw();
+			  node.destroy();
+		  }else{
+			  
+			  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
+			  	  selectedList.remove(i);
+			  }
+			  selectLayer.destroy();
+			  
+			  addNodeSelect(mousePos, selectLayer);		
+			  stage.add(selectLayer);
+			 //selectLayer.moveToBottom();
+			  //plotLayer.moveToBottom();
+			  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   		
+			  
 		  }
 		  
-		  node.hide();			  
-		  selectLayer.draw();
-		  node.destroy();
-	
+		  
 		 /* 
 		  else if(찍혀였으면 ){
 			  
@@ -567,94 +725,6 @@ function findMaxValue(Data,diff)
 	}
 	stage.add(legendLayer);
 //////////////////////////////////////Legend End//////////////////////////////////////
-
-//////////////////////////////////////Drawing Plot Start//////////////////////////////////////
-	
-	var plotLayer= new Kinetic.Layer();  
-	var plotRect = new Kinetic.Line({
-		   points: [plotXmargin-plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin+plotHeight+plotLength, plotXmargin+plotWidth+plotLength, plotYmargin-plotLength,plotXmargin-plotLength, plotYmargin-plotLength],
-	        stroke: 'black',
-	        strokeWidth: 2,		     
-	      });
-	  
-	plotLayer.add(plotRect);
-		for(var i=0; i<parseInt(xMax/xDiff)+1; i++){
-			var xLine = new Kinetic.Line({
-		        points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
-		        stroke: 'black',
-		        strokeWidth: 2,		     
-		      });
-			plotLayer.add(xLine);	   		
-			var xText = new Kinetic.Text({
-		        x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
-		        y: plotYmargin+plotHeight+plotLength*2,
-		        text: i*xDiff,
-		        fontSize: 15,
-		        fontFamily: 'Calibri',
-		        fill: 'black',
-		        width: 20,
-				align: 'center'	
-		      });		   
-			plotLayer.add(xText);			
-		}
-		for(var i=0; i<parseInt(yMax/yDiff)+1; i++){
-			var yLine = new Kinetic.Line({
-		        points: [plotXmargin-plotLength, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-2*plotLength,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)],
-		        stroke: 'black',
-		        strokeWidth: 2,		     
-		      });
-			plotLayer.add(yLine);	   
-			yText = new Kinetic.Text({
-		        x: plotXmargin-plotLength*2-15,
-		        y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
-		        text: i*yDiff,
-		        fontSize: 15,
-		        fontFamily: 'Calibri',
-		        fill: 'black',
-		        width: 20,
-		        align: 'center',
-		        rotation: (Math.PI)*3/2
-		      });		   
-			plotLayer.add(yText);		
-		}		
-		xLabel = new Kinetic.Text({
-	        x: plotXmargin+plotWidth/2,
-	        y: plotYmargin+plotHeight+4*plotLength,
-	        text: 'Time',
-	        fontSize: 15,
-	        fontFamily: 'Calibri',
-	        fill: 'black',
-	  //      width: plotWidth*0.8,
-	        align: 'center'
-	      });		   
-		plotLayer.add(xLabel);		
-		yLabel = new Kinetic.Text({
-	        x: plotXmargin-5*plotLength,
-	        y: plotYmargin+plotHeight/2,
-	        text: 'conc',
-	        fontSize: 15,
-	        fontFamily: 'Calibri',
-	        fill: 'black',
-	     //   width: plotHeight*0.8,
-	        align: 'center',
-	       	rotation: (Math.PI)*3/2
-	      });		   
-		plotLayer.add(yLabel);	
-	   main = new Kinetic.Text({
-	        x: plotXmargin+plotWidth/2-60, 
-	        y: plotYmargin *0.5 ,
-	        text: 'Theoph Scatter',
-	        fontSize: 20,
-	        fontStyle: 'bold',
-	        fontFamily: 'Calibri',
-	        fill: 'black',
-	      //  width: plotWidth*0.8,
-	        align: 'center'
-	      });		   
-	   plotLayer.add(main);
-	   	   stage.add(plotLayer);
-	   
-//////////////////////////////////////Drawing Plot End//////////////////////////////////////
 
 
 

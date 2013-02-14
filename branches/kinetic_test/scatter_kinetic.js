@@ -390,8 +390,7 @@ dataLayer.on('mouseover mousemove dragmove', function(evt){
 	tooltip.show();
 	tooltipLayer.draw();
 	
-	
-	  var shapes = stage.get('.'+node.getName());
+	var shapes = stage.get('.'+node.getName());
 	  shapes.apply('transitionTo', {
 		  scale: {
 		    x:  1.5,
@@ -450,7 +449,7 @@ plotLayer.on('click', function(evt){
 plotLayer.on('mouseover mousemove dragmove', function(evt){  
 	document.body.style.cursor = "default";
 });
-
+var preMousePos;
 dataLayer.on('click', function(evt){  
 	var node = evt.shape;
 	var mousePos = {x: node.getX(), y:node.getY()};
@@ -490,6 +489,62 @@ dataLayer.on('click', function(evt){
 				theophArr.selected[data[i].id]=true;
 			}
 		}
+	}else if(shiftPressed){
+		if(preMousePos.x < mousePos.x)
+		{
+			if(preMousePos.y < mousePos.y)	{
+				for(var i=0; i<data.length; i++){
+					if(preMousePos.x <= data[i].x && data[i].x <= mousePos.x && preMousePos.y <= data[i].y && data[i].y <= mousePos.y )
+					{
+						var tmpMousePos = {x: data[i].x, y: data[i].y}
+						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						stage.add(selectLayer);
+						//selectLayer.moveToBottom();
+						//plotLayer.moveToBottom();
+						theophArr.selected[data[i].id]=true;
+					}
+				}
+			}else if(mousePos.y < preMousePos.y){
+				for(var i=0; i<data.length; i++){
+					if(preMousePos.x <= data[i].x && data[i].x <= mousePos.x && mousePos.y <= data[i].y && data[i].y <= preMousePos.y )
+					{
+						var tmpMousePos = {x: data[i].x, y: data[i].y}
+						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						stage.add(selectLayer);
+						//selectLayer.moveToBottom();
+						//plotLayer.moveToBottom();
+						theophArr.selected[data[i].id]=true;
+					}
+				}
+			}
+		}else if(preMousePos.x > mousePos.x)
+		{
+			if(preMousePos.y < mousePos.y)	{
+				for(var i=0; i<data.length; i++){
+					if(mousePos.x <= data[i].x && data[i].x <= preMousePos.x  && preMousePos.y <= data[i].y && data[i].y <= mousePos.y )
+					{
+						var tmpMousePos = {x: data[i].x, y: data[i].y}
+						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						stage.add(selectLayer);
+						//selectLayer.moveToBottom();
+						//plotLayer.moveToBottom();
+						theophArr.selected[data[i].id]=true;
+					}
+				}
+			}else if(mousePos.y < preMousePos.y){
+				for(var i=0; i<data.length; i++){
+					if(mousePos.x <= data[i].x && data[i].x <= preMousePos.x && mousePos.y  <= data[i].y && data[i].y <= preMousePos.y  )
+					{
+						var tmpMousePos = {x: data[i].x, y: data[i].y}
+						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						stage.add(selectLayer);
+						//selectLayer.moveToBottom();
+						//plotLayer.moveToBottom();
+						theophArr.selected[data[i].id]=true;
+					}
+				}
+			}
+		}	
 	}else{//select another one and remove other nodes.
 		for(var i=0; i<theophArr.selected.length; i++){//remove all linkedList 
 			theophArr.selected[i]=false;
@@ -501,6 +556,10 @@ dataLayer.on('click', function(evt){
 	  //plotLayer.moveToBottom();
 		theophArr.selected[node.getId()]=true;
 	}
+	
+	preMousePos = mousePos;
+	
+	
 	
 	var shapes = stage.get('.'+node.getName());
 	shapes.apply('transitionTo', {

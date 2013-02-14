@@ -49,6 +49,7 @@ function ObjTemp()
   this.dose = '';
   this.time = '';
   this.conc = '';
+  this.selected = false;
 };
 
 // ///////////////// Common Array ///////////////
@@ -58,19 +59,22 @@ theophArr.wt = new Array();
 theophArr.dose = new Array();
 theophArr.time = new Array();
 theophArr.conc = new Array();
+theophArr.selected = new Array();
 
 ///////////////// Get Data Name /////////////////
+/*
 var tmp_array0 = array[0].toString().split(',');	
 theophArr.subject[0]=tmp_array0[0];
 theophArr.wt[0]=tmp_array0[1];
 theophArr.dose[0]=tmp_array0[2];
 theophArr.time[0]=tmp_array0[3];
 theophArr.conc[0]=tmp_array0[4];
+*/
 
 //////////////// Split & Save Data //////////////////
-for(var j=1; j<array.length; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
+for(var j=0; j<array.length-1; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
 {	
-	var tmp_array = array[j].toString().split(',');	
+	var tmp_array = array[j+1].toString().split(',');	
 /*
 * document.write("tmp Array Length = "+tmp_array.length+"<br>"); for(var i=0;
 * i<tmp_array.length; i++){ document.write("temp_a("+i+") is :
@@ -81,6 +85,7 @@ for(var j=1; j<array.length; j++) // 1부터 시작할지 0부터 시직할지�
 	theophArr.dose[j]=parseFloat(tmp_array[2]);
 	theophArr.time[j]=parseFloat(tmp_array[3]);
 	theophArr.conc[j]=parseFloat(tmp_array[4]);
+	theophArr.selected[j]=false;
 }
 var radius_scale = 3; // / Dot radius
 var plotWidth=500;
@@ -118,8 +123,7 @@ function findMaxValue(Data,diff)
 }
 
 
-//for(var i=0; i<theophArr.time.length; i++){ document.write("theophArr.time("+i+") is : "+theophArr.time[i]+"<br>"); }
-
+//for(var i=0; i<theophArr.selected.length; i++){ document.write("theophArr.selected("+i+") is : "+theophArr.selected[i]+"<br>"); }
 
 //////////////////////////////////////Chk key evnet Start//////////////////////////////////////   
 
@@ -181,7 +185,7 @@ function findMaxValue(Data,diff)
 	  var stage = new Kinetic.Stage({
 	    container: 'container',
 	    width: 800,
-	    height: 800
+	    height: 2000
 	  });
 	  
 
@@ -304,7 +308,7 @@ stage.add(plotLayer);
 	  var yScale=plotHeight/yMax; //added by us
 	  var data = [];
 	  var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
-	      for(var n = 1; n < theophArr.time.length ; n++)
+	      for(var n = 0; n < theophArr.time.length ; n++)
 	      {
 	        var x = theophArr.time[n]*xScale+plotXmargin;
 	        var y = theophArr.conc[n]*yScale+plotYmargin;
@@ -387,7 +391,7 @@ stage.add(plotLayer);
 	    tooltipLayer.draw();
 	    
 
-		  var shapes = stage.get('#'+node.getId());
+		  var shapes = stage.get('.'+node.getName());
 		  shapes.apply('transitionTo', {
 	          scale: {
 	            x:  1.5,
@@ -407,7 +411,7 @@ stage.add(plotLayer);
 		    tooltip.hide();
 		    tooltipLayer.draw();
 		    
-		    var shapes = stage.get('#'+node.getId());
+		    var shapes = stage.get('.'+node.getName());
 			  shapes.apply('transitionTo', {
 		          scale: {
 		            x:  1,
@@ -420,17 +424,15 @@ stage.add(plotLayer);
 //////////////////////////////////////Tooltip End//////////////////////////////////////
  
 //////////////////////////////////////Selection Start//////////////////////////////////////
-
 	  var selectLayer = new Kinetic.Layer();
-
 	  var selectedList = new LinkedList(); 
-	  
 	  
 	  function addNodeSelect(obj, layer) {
 	        var node = new Kinetic.Circle({
 	          x: obj.x,
 	          y: obj.y,
-	          radius: 8,
+	          id: obj.id,
+	          radius: 8,	          
 	          stroke: 'red',
 	          fillEnabled: false,
 	          opacity: 0.8,
@@ -459,52 +461,57 @@ stage.add(plotLayer);
 	  }
 		document.write("data length is : "+data.length+"<br>");		  
 
-		
-		
 		plotLayer.on('click', function(evt){  
+			
 			  var node = evt.shape;
 			  
 			  //document.write("data length is : "+data.length+"<br>");		  
 		//	  selectLayer.remove();
-			  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
-			  	  selectedList.remove(i);
+			  for(var i=0; i<theophArr.selected.length; i++){//remove all linkedList 
+				  theophArr.selected[i]=false;
 			  }
+			 
+			  
 			  selectLayer.destroy();
-		//	  selectLayer.show();				
+		//	  selectLayer.show();			
+			  writeMessage(messageLayer);
 			  
 		});
+		plotLayer.on('mouseover mousemove dragmove', function(evt){  
+			 document.body.style.cursor = "default";
+	
 		
-		
-		
-		
-		
+		});
 	  dataLayer.on('click', function(evt){  
+		  
 		  var node = evt.shape;
 		  var mousePos = {x: node.getX(), y:node.getY()};
 		  var selectedListLengthChk = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
 		  var nameArr = new Array();
 		  nameArr = node.getName().split(',');		
 		  
-		  if( inRange(node) && selectedListLengthChk){
+		  if( 1){
 			 
 			  if(aPressed){ //select ALL
-				  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
-				  	  selectedList.remove(i);
-				  }
+				  for(var i=0; i<theophArr.selected.length; i++){//remove all linkedList 
+					  theophArr.selected[i]=false;
+				  }			  
+				  selectLayer.destroy();
 				  for(var i=0; i<data.length; i++){
 							  var tmpMousePos = {x: data[i].x, y: data[i].y}
-							  addNodeSelect(tmpMousePos, selectLayer);		
+							  addNodeSelect({x:tmpMousePos.x, y: tmpMousePos.y, id: data[i].id}, selectLayer);		
 							  stage.add(selectLayer);
-							  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name, id: selectedList._length });   	
+					//		  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name, id: selectedList._length }); 
+							  theophArr.selected[data[i].id]=true; 
 				  }
 				  
 			  }else if(ctrlPressed){ //select mutiple node one by one.
-				  addNodeSelect(mousePos, selectLayer);		
+				  addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);		
 				  stage.add(selectLayer);
 				 //selectLayer.moveToBottom();
 				  //plotLayer.moveToBottom();
-				  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   
-				  
+				 // selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   
+				  theophArr.selected[node.getId()]=true; 
 			  }else if(gPressed){ //select by Group, (select every node whose subject is the same)
 					 
 				  /*
@@ -542,32 +549,35 @@ stage.add(plotLayer);
 					if( nameArr[0] == tmpNameArr[0] && !preSelected )
 					{						  
 						  var tmpMousePos = {x: data[i].x, y: data[i].y}
-						  addNodeSelect(tmpMousePos, selectLayer);		
+						  addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
 						  stage.add(selectLayer);
 						  
 							 //selectLayer.moveToBottom();
 							  //plotLayer.moveToBottom();
-						  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name,  id: selectedList._length });   	  			  						  
+						//  selectedList.add({x : tmpMousePos.x, y: tmpMousePos.y, nodeId: data[i].id, nodeName: data[i].name,  id: selectedList._length });   	  	
+						  theophArr.selected[data[i].id]=true;
 					}
 				  }
 			  }else{//select another one and remove other nodes.
 			 
-				  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
-				  	  selectedList.remove(i);
-				  }
+				  for(var i=0; i<theophArr.selected.length; i++){//remove all linkedList 
+					  theophArr.selected[i]=false;
+				  }			  
 				  selectLayer.destroy();
 				  
-				  addNodeSelect(mousePos, selectLayer);		
+				  addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);		
 				  stage.add(selectLayer);
 				 //selectLayer.moveToBottom();
 				  //plotLayer.moveToBottom();
-				  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   		  
+				//  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });
+				  theophArr.selected[node.getId()]=true;
+				//document.write("theophArr.selected("+node.getId()+") is : "+theophArr.selected[node.getId()]+"<br>");
 			  }
 			  
 		  }
 		  
 
-		  var shapes = stage.get('#'+node.getId());
+		  var shapes = stage.get('.'+node.getName());
 		  shapes.apply('transitionTo', {
 	          scale: {
 	            x:  2,
@@ -576,12 +586,14 @@ stage.add(plotLayer);
 	          duration: 1,
 	          easing: 'elastic-ease-out'
 	        });
+		  writeMessage(messageLayer);
+		  
 	  });
 	  selectLayer.on('mouseover', function(){
 		  document.body.style.cursor = "pointer";
 	  });
 	  selectLayer.on('mouseout', function(){
-		  document.body.style.cursor = "default";
+				  document.body.style.cursor = "default";
 	  });	  
 	  selectLayer.on('click', function(evt){
 		  var node = evt.shape;
@@ -589,27 +601,31 @@ stage.add(plotLayer);
 	//	  var selectedListLength = selectedList._length >=0 && selectedList._length < theophArr.subject.length;
 	//	  document.write("selectLayer.id is : "+mousePos.x+" "+mousePos.y+"<br>");		  
 		  if(ctrlPressed){
+			  /*
 			  for(var i=0; i<selectedList._length; i++){
 				  if(mousePos.x==selectedList.item(i).x && mousePos.y==selectedList.item(i).y){
 					  selectedList.remove(i);
 				  }
-			  }
-			  
+			  }*/
+			  theophArr.selected[node.getId()]=false;
+			//  document.write("theophArr.selected("+node.getId()+") is : "+theophArr.selected[node.getId()]+"<br>");
 			  node.hide();			  
 			  selectLayer.draw();
 			  node.destroy();
 		  }else{
 			  
-			  for(var i=0; i<selectedList._length; i++){//remove all linkedList 
-			  	  selectedList.remove(i);
-			  }
+			  for(var i=0; i<theophArr.selected.length; i++){//remove all linkedList 
+				  theophArr.selected[i]=false;
+			  }			  
 			  selectLayer.destroy();
 			  
-			  addNodeSelect(mousePos, selectLayer);		
+			  addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);	
+			//  document.write("theophArr.selected("+node.getId()+") is : "+theophArr.selected[node.getId()]+"<br>");
 			  stage.add(selectLayer);
 			 //selectLayer.moveToBottom();
 			  //plotLayer.moveToBottom();
-			  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   		
+			  theophArr.selected[node.getId()]=true;
+		//	  selectedList.add({x : mousePos.x, y: mousePos.y, nodeId: node.getId(), nodeName: node.getName(),  id: selectedList._length });   		
 			  
 		  }
 		  
@@ -620,11 +636,9 @@ stage.add(plotLayer);
 			  //deselect(node,...)
 		  }		  
 		  */
-		  
-	  });
-	  
-	  
-	  
+
+		  writeMessage(messageLayer);
+	  });	  
 //////////////////////////////////////Selection End//////////////////////////////////////
 
 //////////////////////////////////////Legend Start//////////////////////////////////////
@@ -731,11 +745,14 @@ stage.add(plotLayer);
 	   
 	   
 //////////////////////////////////////Chk Start//////////////////////////////////////   
+	 var messageLayer = new Kinetic.Layer();
+	 stage.add(messageLayer);
+	/* 
 	var chkLayer= new Kinetic.Layer();  
 	chkMsg = new Kinetic.Text({
         x: 30,
         y: 30,
-        text: 'View selectedList',
+        text: 'View selected list',
         fontSize: 15,
         fontFamily: 'Calibri',
         fill: 'black',
@@ -752,6 +769,7 @@ stage.add(plotLayer);
 	chkLayer.on('click', function(evt){
 	//	  var node = evt.shape;
 	//  var mousePos = {x: node.getX(), y:node.getY()};
+		/*
 		for(var i=0; selectedList._length; i++){
 			  document.write("selectedList("+i+").x is : "+selectedList.item(i).x+"<br>");
 			  document.write("selectedList("+i+").y is : "+selectedList.item(i).y+"<br>");		  
@@ -759,9 +777,36 @@ stage.add(plotLayer);
 
 			  document.write("selectedList("+i+").nodeName is : "+selectedList.item(i).nodeName+"<br>");		
 			  document.write("selectedList("+i+").id is : "+selectedList.item(i).id+"<br>");		  
-		  }
+		 
+		writeMessage(messageLayer);
 	 });
-	   
+*/
+	
 //////////////////////////////////////Chk End//////////////////////////////////////   
+function writeMessage(messageLayer){
+	var context = messageLayer.getContext();
+    messageLayer.clear();
+    var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
 	
+	context.font = "12pt Calibri";
+    context.fillStyle = "black";	    
+    context.fillText("Selected", 10, 15);
+    var cnt=0;
+    var cnt2=0;
+	for(var i=0; i<theophArr.selected.length; i++){
+		if(theophArr.selected[i]==true){
+			if(cnt>49){
+				cnt=0;
+				cnt2=cnt2+20;
+			}
+			cnt++;
+			context.font = "8pt Calibri";
+		    context.fillStyle = colors[theophArr.subject[i]-1];	
+		    context.fillText(i, 10+cnt2, 10*cnt+20);
+		//document.write("selected("+i+") is : "+theophArr.selected[i]+"<br>");
+		}
+	}
 	
+}
+
+

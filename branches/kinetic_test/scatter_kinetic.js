@@ -451,6 +451,7 @@ plotLayer.on('mouseover mousemove dragmove', function(evt){
 });
 var preMousePos;
 var tmpShift = false;
+
 dataLayer.on('click', function(evt){  
 	var node = evt.shape;
 	var mousePos = {x: node.getX(), y:node.getY()};

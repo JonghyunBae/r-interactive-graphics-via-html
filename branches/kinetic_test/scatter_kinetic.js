@@ -45,11 +45,11 @@ var array = csv2array(fileContent);
 function ObjTemp()
 {
 	this.subject='';
-  this.wt = '';
-  this.dose = '';
-  this.time = '';
-  this.conc = '';
-  this.selected = false;
+	this.wt = '';
+	this.dose = '';
+	this.time = '';
+	this.conc = '';
+	this.selected = false;
 };
 
 // ///////////////// Common Array ///////////////
@@ -125,7 +125,7 @@ function findMaxValue(Data,diff)
 
 //for(var i=0; i<theophArr.selected.length; i++){ document.write("theophArr.selected("+i+") is : "+theophArr.selected[i]+"<br>"); }
 
-//////////////////////////////////////Chk key evnet Start//////////////////////////////////////   
+//////////////////////////////////////Chk key event Start//////////////////////////////////////   
 
 	window.addEventListener('keydown',this.checkKeyDown,false);	
 	window.addEventListener('keyup',this.checkKeyUp,false);	
@@ -178,7 +178,7 @@ function findMaxValue(Data,diff)
 	}*/
 
 
-//////////////////////////////////////Chk key evnet End//////////////////////////////////////   
+//////////////////////////////////////Chk key event End//////////////////////////////////////   
 
 
 //////////////////////////////////////Stage Start//////////////////////////////////////
@@ -437,12 +437,9 @@ function addNodeSelect(obj, layer) {
 }
 
 plotLayer.on('click', function(evt){
-	var node = evt.shape;
-	for(var i=0; i<theophArr.selected.length; i++)//remove all selected items
-	{
-		theophArr.selected[i]=false;
-	}
-	selectLayer.destroy();
+	//var node = evt.shape;		
+	scatterAllDeselect();
+	histAllDeselect();
 	writeMessage(messageLayer);
 });
 		
@@ -459,24 +456,16 @@ dataLayer.on('click', function(evt){
 	nameArr = node.getName().split(',');		
 	
 	if(aPressed){ //select ALL
-		for(var i=0; i<theophArr.selected.length; i++){//remove all selected items
-			theophArr.selected[i]=false;
-		}			  
-		selectLayer.destroy();
-		for(var i=0; i<data.length; i++)
-		{
-			var tmpMousePos = {x: data[i].x, y: data[i].y}
-			addNodeSelect({x:tmpMousePos.x, y: tmpMousePos.y, id: data[i].id}, selectLayer);		
-			stage.add(selectLayer);
-			theophArr.selected[data[i].id]=true; 
-		}
-		tmpShift = false;
+		histAllSelect(); //과부하로 인한 보류
+  		scatterAllSelect();
+  		tmpShift = false;  
 	}else if(ctrlPressed){ //select mutiple node one by one.
 		addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);		
 		stage.add(selectLayer);
 		//selectLayer.moveToBottom();
 		//plotLayer.moveToBottom();
 		theophArr.selected[node.getId()]=true; 
+		histUpdate(theophArr.time[node.getId()], 0);
 		tmpShift = false;
 	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
 		for(var i=0; i<data.length; i++){
@@ -490,16 +479,15 @@ dataLayer.on('click', function(evt){
 				stage.add(selectLayer);
 				//selectLayer.moveToBottom();
 				//plotLayer.moveToBottom();
-				theophArr.selected[data[i].id]=true;
+				theophArr.selected[data[i].id]=true; 
+		//		histUpdate(theophArr.time[data[i].id], 0);  //과부하로 인한 보류
 			}
 		}
 		tmpShift = false;
 	}else if(shiftPressed){
 		tmpShift = true;
-		for(var i=0; i<theophArr.selected.length; i++){//remove all selected items
-			theophArr.selected[i]=false;
-		}			  
-		selectLayer.destroy();
+		scatterAllDeselect();
+		histAllDeselect();
 		if(preMousePos.x < mousePos.x)
 		{
 			if(preMousePos.y < mousePos.y)	{
@@ -512,6 +500,7 @@ dataLayer.on('click', function(evt){
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
 						theophArr.selected[data[i].id]=true;
+						histUpdate(theophArr.time[data[i].id], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -524,6 +513,7 @@ dataLayer.on('click', function(evt){
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
 						theophArr.selected[data[i].id]=true;
+						histUpdate(theophArr.time[data[i].id], 0);
 					}
 				}
 			}
@@ -539,6 +529,7 @@ dataLayer.on('click', function(evt){
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
 						theophArr.selected[data[i].id]=true;
+						histUpdate(theophArr.time[data[i].id], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -551,21 +542,21 @@ dataLayer.on('click', function(evt){
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
 						theophArr.selected[data[i].id]=true;
+						histUpdate(theophArr.time[data[i].id], 0);
 					}
 				}
 			}
 		}	
 	}else{//select another one and remove other nodes.
 		tmpShift = false;
-		for(var i=0; i<theophArr.selected.length; i++){//remove all linkedList 
-			theophArr.selected[i]=false;
-		}			  
-		selectLayer.destroy();
+		scatterAllDeselect();
+		histAllDeselect();
 		addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);		
 		stage.add(selectLayer);
 	 //selectLayer.moveToBottom();
 	  //plotLayer.moveToBottom();
 		theophArr.selected[node.getId()]=true;
+		histUpdate(theophArr.time[node.getId()], 0);
 	}
 	if(tmpShift == false)
 	{
@@ -600,20 +591,24 @@ selectLayer.on('click', function(evt){
 	var mousePos = {x: node.getX(), y:node.getY()};
 	if(ctrlPressed){
 		theophArr.selected[node.getId()]=false;
-		node.hide();			  
-		selectLayer.draw();
+		histUpdate(theophArr.time[node.getId()],1);
+		//node.hide()
 		node.destroy();
+		selectLayer.draw();
 	}else{
-		  for(var i=0; i<theophArr.selected.length; i++)//remove all selected items
+/*		  for(var i=0; i<theophArr.selected.length; i++)//remove all selected items
 		  {
 			  theophArr.selected[i]=false;
 		  }			  
-		  selectLayer.destroy();
-		  addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);	
-		  stage.add(selectLayer);
+		  selectLayer.destroy();*/
+		scatterAllDeselect();
+		histAllDeselect();
+		addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);	
+		stage.add(selectLayer);		  
 		 //selectLayer.moveToBottom();
 		  //plotLayer.moveToBottom();
 		  theophArr.selected[node.getId()]=true;
+		  histUpdate(theophArr.time[node.getId()],0);
 	}
 		  writeMessage(messageLayer);
 });	  
@@ -772,4 +767,43 @@ function writeMessage(messageLayer){
 		}
 	}
 }
-//////////////////////////////////////Chk End//////////////////////////////////////   
+//////////////////////////////////////Chk End//////////////////////////////////////
+
+function scatterUpdate(rectId, eraseOn)
+{
+	var node;
+	if(eraseOn == 0)	{
+		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
+		{
+			addNodeSelect({x: data[histHasArr[rectId][i]].x, y: data[histHasArr[rectId][i]].y, id: data[histHasArr[rectId][i]].id}, selectLayer);		
+			stage.add(selectLayer);
+			theophArr.selected[data[histHasArr[rectId][i]].id]=true;			
+		}
+	}else if(eraseOn == 1){ //////////////!!!!!!!!!!!!!!!!!!!! 수 정 요 망 !!!!!!!!!!!!!!!!!!!!!/////////////////////////////////
+		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
+		{
+			node = stage.get("#"+ histHasArr[rectId][i] );
+	//		document.write(node);
+			theophArr.selected[data[histHasArr[rectId][i]].id]=false;
+			node.destroy();
+		}
+		selectLayer.draw();
+	}
+}
+function scatterAllSelect()
+{
+	for(var i=0; i<data.length; i++)
+	{
+		var tmpMousePos = {x: data[i].x, y: data[i].y}
+		addNodeSelect({x:tmpMousePos.x, y: tmpMousePos.y, id: data[i].id}, selectLayer);		
+		stage.add(selectLayer);
+		theophArr.selected[data[i].id]=true; 
+	}
+}
+function scatterAllDeselect()
+{
+	for(var i=0; i<theophArr.selected.length; i++){//remove all selected items
+		theophArr.selected[i]=false;
+	}
+	selectLayer.destroy();
+}

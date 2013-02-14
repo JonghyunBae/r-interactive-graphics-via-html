@@ -1,38 +1,20 @@
-var diff = 2;
+var diff = 3;
 var xMax=findMaxValue(theophArr.time,diff); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 var yMax=findMaxValueHist(xMax,theophArr.time,diff);
 var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
 var yDiff=parseInt(yMax/5);
+var histHasArr;
 
-function drawDataHist(xMax,yMax,xData,diff,name)
-{
-	var canvas = document.getElementById("canvas" + name);
-	var context = canvas.getContext("2d");
-	
-	var tmpHistArr = new Array();
-	var cnt=0;
-	for (var i=0; i<parseInt(xMax/diff ); i++)//tmpHistArr initialization
-	{
-		tmpHistArr[i]=0;
-	}			
-	for(cnt=0; cnt< parseInt(xMax/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
-	{
-		for( var i = 0 ; i < xData.length; i++)
-		{	
-			if(xData[i]>=cnt*diff && xData[i]<(cnt+1)*diff)
-			{
-				tmpHistArr[cnt]++;
-			}
-		}
-	}			
-	for(var i=0; i< parseInt(xMax/diff ) ; i++)//draw rectangular 
-	{
-		context.beginPath();
-		context.strokeRect(plotXmargin +  i * plotWidth / parseInt(xMax/diff)  , canvas.height-plotYmargin-plotHeight  ,  plotWidth / parseInt(xMax/diff) , tmpHistArr[i] * plotHeight / yMax );
-		context.stroke();
-		context.closePath();
-	}
+
+
+function make2DArr(rows) {
+	  var Arr = [];
+	  for (var i=0;i<rows;i++) {
+		  Arr[i] = [];
+	  }
+	  return Arr;
 }
+
 function findMaxValueHist(xMax, xData,diff)
 {
 	var maxValue=0;
@@ -61,19 +43,20 @@ function findMaxValueHist(xMax, xData,diff)
 	}	
 	return maxValue;
 }
-
 var histArr = new Array();
 histArr = drawDataHist(xMax,yMax,theophArr.time, diff);	 
 
 //for(var i=0; i<histArr.length; i++){ document.write("histArr("+i+") is : "+histArr[i]+"<br>"); }
-function addRectSelect()
-{
-	
-}
+
+
+
 function drawDataHist(xMax,yMax,xData,diff)
 {
 	var tmpHistArr = new Array();
 	var cnt=0;
+	var col = 0;
+	histHasArr=make2DArr(parseInt(xMax/diff +1) );
+	
 	for (var i=0; i<parseInt(xMax/diff ); i++)//tmpHistArr initialization
 	{
 		tmpHistArr[i]=0;
@@ -85,10 +68,22 @@ function drawDataHist(xMax,yMax,xData,diff)
 			if(xData[i]>=cnt*diff && xData[i]<(cnt+1)*diff)
 			{
 				tmpHistArr[cnt]++;
+				histHasArr[cnt][col] = i;
+				col++;
 			}
 		}
+		col = 0;
 	}			
 	return tmpHistArr;
+/*	for(cnt=0; cnt< parseInt(xMax/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
+	{
+		for( var i = 0 ; i < histHasArr[cnt].length; i++)
+		{
+				document.write(histHasArr[cnt][i] + ",");
+		}
+		document.write("<br>");
+	} */
+	
 /*	for(var i=0; i< parseInt(xMax/diff ) ; i++)//draw rectangular 
 	{
 		context.beginPath();
@@ -105,10 +100,20 @@ function drawDataHist(xMax,yMax,xData,diff)
     height: 800
   });
   
-
 //////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
 
 var histPlotLayer = new Kinetic.Layer();
+
+//Draw Rectangle
+var histplotRect = new Kinetic.Rect({
+	x: plotXmargin-plotLength,
+	y: plotYmargin-plotLength,
+	width: plotWidth+2*plotLength,
+	height: plotHeight+2*plotLength,
+	stroke: 'white',
+	strokeWidth: 2
+}); 
+histPlotLayer.add(histplotRect);
 // dashed line
 /*
 var rect = new Kinetic.Rect({
@@ -224,9 +229,12 @@ histPlotLayer.on('mouseover mousemove dragmove', function(evt){
 });
 
 //////////////////////////////////////Drawing histPlot End//////////////////////////////////////
-  
+ 
+
+
 //add node function.
-function histAddNode(obj, layer) {
+function histAddNode(obj, layer) 
+{
 	        var node = new Kinetic.Rect({
 	          x: obj.x,
 	          y: obj.y, 
@@ -238,6 +246,7 @@ function histAddNode(obj, layer) {
 	          id: obj.id,
 	          opacity : 0.5,
 	          draggable: false,
+	          selected : 0,
 	          offset: obj.offset
 	        });
 	
@@ -262,8 +271,9 @@ function histAddNode(obj, layer) {
           width: width,
           height: height,	        
           id: n,
-          name: histArr[n] ,//does not work yet..
+          name: 0 ,
        //   'Subject : ' + theophArr.subject[search_result.x] + "<br>" + 'Wt : ' + theophArr.wt[search_result.x] + "<br>" + 'Dose : ' + theophArr.dose[search_result.x] + "<br>" + 'Conc : ' + theophArr.conc[search_result.x] + "<br>" + 'Time : ' + theophArr.time[search_result.x], 'lightyellow'
+          selected : 0, // 0 means : unselected ,  0 < means : selected
           stroke: 'black',
           color: 'green',
           offset: {x: width/2, y: height/2}
@@ -324,7 +334,7 @@ function histAddNode(obj, layer) {
     });
     histTooltip.show();
     histTooltipLayer.draw();
-	var node = evt.shape;
+//	var node = evt.shape;
 	node.moveUp();
 	var shapes = stage1.get('#'+node.getId());
     shapes.apply('transitionTo', {
@@ -340,7 +350,8 @@ function histAddNode(obj, layer) {
   	  easing: 'elastic-ease-out'
     });    
   }); 	    
-  
+ var tmp2 = 0;
+ 
   histDataLayer.on('mouseout', function(evt) {
 	  var node = evt.shape;
 	  node.moveDown();
@@ -348,19 +359,217 @@ function histAddNode(obj, layer) {
 	  histTooltip.hide();
 	  histTooltipLayer.draw();
 	  var shapes = stage1.get('#'+node.getId());
+	  
+	//	document.write(node.getName() + " ,"+2 );
+		
+	  if(histData[node.getId()].selected > 0){//selected
 	    shapes.apply('transitionTo', {
 	    //  stroke: 'green',
-	    	opacity: 0.5,
-	      scale: {
-	  	    x:  1,
-	  	    y:  1
-	  	  },
+	    	opacity: 1,
+	    	scale:{
+	    		x:  1,
+		  	    y:  1
+	    	},
 	  	  duration: 1,
 	  	  easing: 'elastic-ease-out'
 	   });
+	  }else{		  //unselected
+		  shapes.apply('transitionTo', {
+			  opacity: 0.5,
+		      scale: {
+		  	    x:  1,
+		  	    y:  1
+		  	  },
+		  	  duration: 1,
+		  	  easing: 'elastic-ease-out'
+		   });
+	  }
+	  writeMessage1(messageLayer1);
   });	 
 //////////////////////////////////////hist Tooltip End//////////////////////////////////////
+  
+//////////////////////////////////////Selection Start//////////////////////////////////////
+histPlotLayer.on('click', function(evt){
+	scatterAllDeselect();
+	histAllDeselect();
+	writeMessage(messageLayer);
+});
+histDataLayer.on('click', function(evt){
+  	var node = evt.shape;
+  	var shapes = stage1.get('#'+node.getId());
+  	var semiNode;
+ // node.name = 1;  
+ // 	node.setName(1);
+ // 	document.write(	histData[node.getId()].selected + " ,");
+//  	document.write(node.getName() + " ,");
+  	if(aPressed){	//select ALL
+  		histAllSelect();
+  		scatterAllSelect();
+  		tmpShift = false;
+  	}else if(ctrlPressed){ //select mutiple node one by one.
+  		if(histData[node.getId()].selected > 0){ // pre pressed state -> deselect rect & scatter
+  			histData[node.getId()].selected = 0;
+  			scatterUpdate(node.getId(), 1);
+  		}else if(histData[node.getId()].selected == 0){ // unselected -> selected
+  			histData[node.getId()].selected=histArr[node.getId()];
+  			scatterUpdate(node.getId(), 0);
+  		}
+  		tmpShift = false;
+  	}else if(shiftPressed){
+  		tmpShift = true;
+  		scatterAllDeselect();
+		histAllDeselect();
+		if(preId > node.getId()){
+			for(var i = node.getId() ; i < preId + 1 ; i++)
+			{
+				semiNode = stage1.get("#"+ i );
+				semiNode.apply('transitionTo', {
+					  opacity: 1,
+				      duration: 1,
+				  	  easing: 'elastic-ease-out'
+				   });
+				histData[i].selected =histArr[i];
+				scatterUpdate(i, 0);
+			}
+		}else if(preId < node.getId()){
+			for(var i = preId  ; i < node.getId() + 1 ; i++)
+			{
+				semiNode = stage1.get("#"+ i );
+				semiNode.apply('transitionTo', {
+					  opacity: 1,
+				      duration: 1,
+				  	  easing: 'elastic-ease-out'
+				   });
+				histData[i].selected =histArr[i];
+				scatterUpdate(i, 0);
+			}
+		} 
+	}else{ 	// just one click
+  		histAllDeselect();
+  		scatterAllDeselect();
+  		histData[node.getId()].selected=histArr[node.getId()];
+		scatterUpdate(node.getId(), 0);
+  	}
+  	
+  	if(tmpShift == false)
+	{
+		preId = node.getId();
+	}
+//   scatterUpdate(node.getId(), 0);
+  	writeMessage1(messageLayer1);
+ // 	histAllDeselect();
+  	
+}); 
 
+function histUpdate(xData, eraseOn)
+{
+	var histId = parseInt(xData/diff);
+	var node = stage1.get("#"+ histId );
+	if(eraseOn == 0)	{
+		
+		histData[histId].selected = histData[histId].selected + 1;
+		node.apply('transitionTo', {
+			  opacity: 1,
+		      duration: 1,
+		  	  easing: 'elastic-ease-out'
+		   });
+	}else if(eraseOn == 1){  // ctrl press - erase
+		histData[histId].selected = histData[histId].selected - 1;
+		if(histData[histId].selected == 0)
+		{
+			node.apply('transitionTo', {
+				  opacity: 0.5,
+			      duration: 1,
+			  	  easing: 'elastic-ease-out'
+			   });
+		}
+	}
+}
+function histAllSelect()
+{
+	var node;
+	for(var i = 0; i <histArr.length ; i ++)
+	{
+		node = stage1.get("#"+ i );
+		histData[i].selected=histArr[i]; // should be number of scatters
+ 		node.apply('transitionTo', {
+			  opacity: 1,
+		      duration: 1,
+		  	  easing: 'elastic-ease-out'
+		   });		
+	}
+}
+
+function histAllDeselect()
+{
+	var node;
+	for(var i = 0; i <histArr.length ; i ++)
+	{
+		node = stage1.get("#"+ i );
+		histData[i].selected=0;
+ 		node.apply('transitionTo', {
+			  opacity: 0.5,
+		      duration: 1,
+		  	  easing: 'elastic-ease-out'
+		   });		
+	}
+}
+
+  //////////////////////////////////////Selection End//////////////////////////////////////
  
+
+//////////////////////////////////////Chk Start//////////////////////////////////////   
+var messageLayer1 = new Kinetic.Layer();
+stage1.add(messageLayer1);
+/* 
+var chkLayer= new Kinetic.Layer();  
+chkMsg = new Kinetic.Text({
+x: 30,
+y: 30,
+text: 'View selected list',
+fontSize: 15,
+fontFamily: 'Calibri',
+fill: 'black',
+align: 'center'
+});		   
+chkLayer.add(chkMsg);
+stage.add(chkLayer);
+chkLayer.on('mouseover', function(evt){
+document.body.style.cursor = "pointer";
+});
+chkLayer.on('mouseout', function(evt){
+document.body.style.cursor = "default";
+});
+chkLayer.on('click', function(evt){
+//	  var node = evt.shape;
+//  var mousePos = {x: node.getX(), y:node.getY()};
+
+writeMessage(messageLayer);
+});
+*/
+var cnt2=0;
+function writeMessage1(messageLayer){
+	var context = messageLayer1.getContext();
+	messageLayer.clear();
+	
+	context.font = "12pt Calibri";
+	context.fillStyle = "black";	    
+	context.fillText("Hist Name", 10, 15);
+	var cnt=0;
+	
+	for(var i=0; i<histData.length; i++){
+		if(cnt2>5){
+			cnt2=0;
+		}
+		context.font = "10pt Calibri";
+		context.fillText( i+' : '+histData[i].selected, 10+10*cnt2, 13*cnt+30);
+		//document.write("selected("+i+") is : "+theophArr.selected[i]+"<br>");
+		cnt++;
+		
+	}
+	cnt2++;
+
+}
+//////////////////////////////////////Chk End//////////////////////////////////////   
   
   

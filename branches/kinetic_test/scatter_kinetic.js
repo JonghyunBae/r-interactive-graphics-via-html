@@ -450,6 +450,7 @@ plotLayer.on('mouseover mousemove dragmove', function(evt){
 	document.body.style.cursor = "default";
 });
 var preMousePos;
+var tmpShift = false;
 dataLayer.on('click', function(evt){  
 	var node = evt.shape;
 	var mousePos = {x: node.getX(), y:node.getY()};
@@ -468,12 +469,14 @@ dataLayer.on('click', function(evt){
 			stage.add(selectLayer);
 			theophArr.selected[data[i].id]=true; 
 		}
+		tmpShift = false;
 	}else if(ctrlPressed){ //select mutiple node one by one.
 		addNodeSelect({x:mousePos.x, y:mousePos.y, id: node.getId()}, selectLayer);		
 		stage.add(selectLayer);
 		//selectLayer.moveToBottom();
 		//plotLayer.moveToBottom();
 		theophArr.selected[node.getId()]=true; 
+		tmpShift = false;
 	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
 		for(var i=0; i<data.length; i++){
 			var preSelected=false;
@@ -489,7 +492,13 @@ dataLayer.on('click', function(evt){
 				theophArr.selected[data[i].id]=true;
 			}
 		}
+		tmpShift = false;
 	}else if(shiftPressed){
+		tmpShift = true;
+		for(var i=0; i<theophArr.selected.length; i++){//remove all selected items
+			theophArr.selected[i]=false;
+		}			  
+		selectLayer.destroy();
 		if(preMousePos.x < mousePos.x)
 		{
 			if(preMousePos.y < mousePos.y)	{
@@ -546,6 +555,7 @@ dataLayer.on('click', function(evt){
 			}
 		}	
 	}else{//select another one and remove other nodes.
+		tmpShift = false;
 		for(var i=0; i<theophArr.selected.length; i++){//remove all linkedList 
 			theophArr.selected[i]=false;
 		}			  
@@ -556,8 +566,11 @@ dataLayer.on('click', function(evt){
 	  //plotLayer.moveToBottom();
 		theophArr.selected[node.getId()]=true;
 	}
-	
-	preMousePos = mousePos;
+	if(tmpShift == false)
+	{
+		preMousePos = mousePos;
+	}
+		
 	
 	
 	

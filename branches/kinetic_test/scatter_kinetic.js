@@ -480,7 +480,7 @@ dataLayer.on('click', function(evt){
 				//selectLayer.moveToBottom();
 				//plotLayer.moveToBottom();
 				theophArr.selected[data[i].id]=true; 
-		//		histUpdate(theophArr.time[data[i].id], 0);  //과부하로 인한 보류
+				histUpdate(theophArr.time[data[i].id], 0);  //과부하로 인한 보류
 			}
 		}
 		tmpShift = false;

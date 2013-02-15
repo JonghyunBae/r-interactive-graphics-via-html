@@ -1,10 +1,9 @@
-var diff = 3;
+var diff = 1;
 var xMax=findMaxValue(theophArr.time,diff); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 var yMax=findMaxValueHist(xMax,theophArr.time,diff);
 var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
 var yDiff=parseInt(yMax/5);
 var histHasArr;
-
 
 
 function make2DArr(rows) {
@@ -271,7 +270,7 @@ function histAddNode(obj, layer)
           width: width,
           height: height,	        
           id: n,
-          name: 0 ,
+          name: histArr[n] , //frequency
        //   'Subject : ' + theophArr.subject[search_result.x] + "<br>" + 'Wt : ' + theophArr.wt[search_result.x] + "<br>" + 'Dose : ' + theophArr.dose[search_result.x] + "<br>" + 'Conc : ' + theophArr.conc[search_result.x] + "<br>" + 'Time : ' + theophArr.time[search_result.x], 'lightyellow'
           selected : 0, // 0 means : unselected ,  0 < means : selected
           stroke: 'black',

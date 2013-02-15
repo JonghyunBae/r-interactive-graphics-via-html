@@ -384,6 +384,7 @@ function histAddNode(obj, layer)
 		  	  easing: 'elastic-ease-out'
 		   });
 	  }
+	  writeMessage(messageLayer);
 	  writeMessage1(messageLayer1);
   });	 
 //////////////////////////////////////hist Tooltip End//////////////////////////////////////
@@ -393,6 +394,7 @@ histPlotLayer.on('click', function(evt){
 	scatterAllDeselect();
 	histAllDeselect();
 	writeMessage(messageLayer);
+	writeMessage1(messageLayer1);
 });
 histDataLayer.on('click', function(evt){
   	var node = evt.shape;
@@ -456,6 +458,7 @@ histDataLayer.on('click', function(evt){
 		preId = node.getId();
 	}
 //   scatterUpdate(node.getId(), 0);
+  	writeMessage(messageLayer);
   	writeMessage1(messageLayer1);
  // 	histAllDeselect();
   	
@@ -521,53 +524,24 @@ function histAllDeselect()
 //////////////////////////////////////Chk Start//////////////////////////////////////   
 var messageLayer1 = new Kinetic.Layer();
 stage1.add(messageLayer1);
-/* 
-var chkLayer= new Kinetic.Layer();  
-chkMsg = new Kinetic.Text({
-x: 30,
-y: 30,
-text: 'View selected list',
-fontSize: 15,
-fontFamily: 'Calibri',
-fill: 'black',
-align: 'center'
-});		   
-chkLayer.add(chkMsg);
-stage.add(chkLayer);
-chkLayer.on('mouseover', function(evt){
-document.body.style.cursor = "pointer";
-});
-chkLayer.on('mouseout', function(evt){
-document.body.style.cursor = "default";
-});
-chkLayer.on('click', function(evt){
-//	  var node = evt.shape;
-//  var mousePos = {x: node.getX(), y:node.getY()};
 
-writeMessage(messageLayer);
-});
-*/
-var cnt2=0;
 function writeMessage1(messageLayer){
 	var context = messageLayer1.getContext();
 	messageLayer.clear();
 	
 	context.font = "12pt Calibri";
 	context.fillStyle = "black";	    
-	context.fillText("Hist Name", 10, 15);
+	context.fillText("# of Selected", 10, 15);
 	var cnt=0;
 	
 	for(var i=0; i<histData.length; i++){
-		if(cnt2>5){
-			cnt2=0;
-		}
+		
 		context.font = "10pt Calibri";
-		context.fillText( i+' : '+histData[i].selected, 10+10*cnt2, 13*cnt+30);
+		context.fillText( i+' : '+histData[i].selected, 10, 13*cnt+30);
 		//document.write("selected("+i+") is : "+theophArr.selected[i]+"<br>");
 		cnt++;
 		
 	}
-	cnt2++;
 
 }
 //////////////////////////////////////Chk End//////////////////////////////////////   

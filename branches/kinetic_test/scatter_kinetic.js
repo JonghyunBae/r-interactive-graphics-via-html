@@ -441,6 +441,7 @@ plotLayer.on('click', function(evt){
 	scatterAllDeselect();
 	histAllDeselect();
 	writeMessage(messageLayer);
+	writeMessage1(messageLayer1);
 });
 		
 plotLayer.on('mouseover mousemove dragmove', function(evt){  
@@ -474,8 +475,7 @@ dataLayer.on('click', function(evt){
 			tmpNameArr = data[i].name.split(',');		
 			if( nameArr[0] == tmpNameArr[0] && !preSelected)
 			{						  
-				var tmpMousePos = {x: data[i].x, y: data[i].y}
-				addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+				addNodeSelect({x:data[i].x, y:data[i].y, id: data[i].id},selectLayer);		
 				stage.add(selectLayer);
 				//selectLayer.moveToBottom();
 				//plotLayer.moveToBottom();
@@ -494,8 +494,7 @@ dataLayer.on('click', function(evt){
 				for(var i=0; i<data.length; i++){
 					if(preMousePos.x <= data[i].x && data[i].x <= mousePos.x && preMousePos.y <= data[i].y && data[i].y <= mousePos.y )
 					{
-						var tmpMousePos = {x: data[i].x, y: data[i].y}
-						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						addNodeSelect({x:data[i].x, y:data[i].y, id: data[i].id},selectLayer);		
 						stage.add(selectLayer);
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
@@ -507,8 +506,7 @@ dataLayer.on('click', function(evt){
 				for(var i=0; i<data.length; i++){
 					if(preMousePos.x <= data[i].x && data[i].x <= mousePos.x && mousePos.y <= data[i].y && data[i].y <= preMousePos.y )
 					{
-						var tmpMousePos = {x: data[i].x, y: data[i].y}
-						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						addNodeSelect({x:data[i].x, y:data[i].y, id: data[i].id},selectLayer);		
 						stage.add(selectLayer);
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
@@ -523,8 +521,7 @@ dataLayer.on('click', function(evt){
 				for(var i=0; i<data.length; i++){
 					if(mousePos.x <= data[i].x && data[i].x <= preMousePos.x  && preMousePos.y <= data[i].y && data[i].y <= mousePos.y )
 					{
-						var tmpMousePos = {x: data[i].x, y: data[i].y}
-						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						addNodeSelect({x:data[i].x, y:data[i].y, id: data[i].id},selectLayer);		
 						stage.add(selectLayer);
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
@@ -536,8 +533,7 @@ dataLayer.on('click', function(evt){
 				for(var i=0; i<data.length; i++){
 					if(mousePos.x <= data[i].x && data[i].x <= preMousePos.x && mousePos.y  <= data[i].y && data[i].y <= preMousePos.y  )
 					{
-						var tmpMousePos = {x: data[i].x, y: data[i].y}
-						addNodeSelect({x:tmpMousePos.x, y:tmpMousePos.y, id: data[i].id},selectLayer);		
+						addNodeSelect({x:data[i].x, y:data[i].y, id: data[i].id},selectLayer);		
 						stage.add(selectLayer);
 						//selectLayer.moveToBottom();
 						//plotLayer.moveToBottom();
@@ -562,9 +558,6 @@ dataLayer.on('click', function(evt){
 	{
 		preMousePos = mousePos;
 	}
-		
-	
-	
 	
 	var shapes = stage.get('.'+node.getName());
 	shapes.apply('transitionTo', {
@@ -575,7 +568,8 @@ dataLayer.on('click', function(evt){
 		  duration: 1,
 		  easing: 'elastic-ease-out'
 	});
-	writeMessage(messageLayer);		  
+	writeMessage(messageLayer);	
+	writeMessage1(messageLayer1);	
 });
 	
 selectLayer.on('mouseover', function(){
@@ -592,6 +586,9 @@ selectLayer.on('click', function(evt){
 	if(ctrlPressed){
 		theophArr.selected[node.getId()]=false;
 		histUpdate(theophArr.time[node.getId()],1);
+		//document.write(node+'aaaaaa');
+	//	document.write(node.getName()+'bbbbbb');
+		//document.write(node.getId()+'cccccc');
 		//node.hide()
 		node.destroy();
 		selectLayer.draw();
@@ -610,7 +607,9 @@ selectLayer.on('click', function(evt){
 		  theophArr.selected[node.getId()]=true;
 		  histUpdate(theophArr.time[node.getId()],0);
 	}
-		  writeMessage(messageLayer);
+	  writeMessage(messageLayer);
+	  writeMessage1(messageLayer1);
+
 });	  
 //////////////////////////////////////Selection End//////////////////////////////////////
 
@@ -750,7 +749,7 @@ function writeMessage(messageLayer){
 	
 	context.font = "12pt Calibri";
     context.fillStyle = "black";	    
-    context.fillText("Selected", 10, 15);
+    context.fillText("Selected Node", 10, 15);
     var cnt=0;
     var cnt2=0;
 	for(var i=0; i<theophArr.selected.length; i++){
@@ -779,11 +778,10 @@ function scatterUpdate(rectId, eraseOn)
 			stage.add(selectLayer);
 			theophArr.selected[data[histHasArr[rectId][i]].id]=true;			
 		}
-	}else if(eraseOn == 1){ //////////////!!!!!!!!!!!!!!!!!!!! 수 정 요 망 !!!!!!!!!!!!!!!!!!!!!/////////////////////////////////
+	}else if(eraseOn == 1){ 
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
 		{
-			node = stage.get("#"+ histHasArr[rectId][i] );
-	//		document.write(node);
+			node = selectLayer.get("#"+ histHasArr[rectId][i])[0];
 			theophArr.selected[data[histHasArr[rectId][i]].id]=false;
 			node.destroy();
 		}

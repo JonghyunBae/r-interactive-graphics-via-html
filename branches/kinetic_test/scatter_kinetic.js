@@ -338,12 +338,12 @@ for(var n = 0; n < data.length; n++)
 {
 	addNode(data[n], dataLayer);
 	nodeCount++;
-	if(nodeCount >= 100)// IMPORTANT
+/*	if(nodeCount >= 134)// IMPORTANT
 	{
 	    nodeCount = 0;
 	    stage.add(dataLayer);
-	   // dataLayer = new Kinetic.Layer();
-	}
+	    dataLayer = new Kinetic.Layer();
+	} */
 }
 stage.add(dataLayer);
 
@@ -781,12 +781,16 @@ function scatterUpdate(rectId, eraseOn)
 	}else if(eraseOn == 1){ 
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
 		{
-			node = selectLayer.get("#"+ histHasArr[rectId][i])[0];
-			theophArr.selected[data[histHasArr[rectId][i]].id]=false;
-			node.destroy();
+			if(theophArr.selected[data[histHasArr[rectId][i]].id] == true)
+			{
+				node = selectLayer.get("#"+ histHasArr[rectId][i])[0];
+				theophArr.selected[data[histHasArr[rectId][i]].id]=false;
+				node.destroy();
+			}			
 		}
 		selectLayer.draw();
 	}
+
 }
 function scatterAllSelect()
 {

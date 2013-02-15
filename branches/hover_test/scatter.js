@@ -1,24 +1,3 @@
-//var fileArray = fileContent.split('\n');
-/*
-for(var i=0; i<fileArray.length; i++){
-	document.write("a("+i+") is : "+fileArray[i]+"<br>");
-}
-*/
-
-//document.write("array Length = "+array.length+"<br>");
-/*
- for(var i=0; i<array.length; i++){
-	document.write("a("+i+") is : "+array[i]+"<br>");
-}
-*/
-//document.write("array("+0+") is : "+array[0]+"<br>");
-//for(var i=0; i<theophArr.subject.length; i++){ //just print for test
-//	document.write("theophArr.subject["+i+"] is : "+theophArr.subject[i]+"<br>");
-//	document.write("theophArr.wt["+i+"] is : "+theophArr.wt[i]+"<br>");
-//	document.write("theophArr.dose["+i+"] is : "+theophArr.dose[i]+"<br>");
-//	document.write("TimetArr["+i+"] is : "+theophArr.time[i]+"<br>");
-//	document.write("theophArr.conc["+i+"] is : "+theophArr.conc[i]+"<br>");
-//}
 $(document).ready(function()
 {	
 
@@ -42,7 +21,6 @@ $(document).ready(function()
     	  kill();
       }      
     }, false);
-   // window.addEventListener("")
     drawAxisScatter(xMax, yMax, xDiff, yDiff, plotXmargin-10,plotYmargin-30,plotWidth+plotXmargin+50,plotHeight+plotYmargin+10,'Theoph','Time','conc', 0,1); //바깥 쪽 사각형; (나중에 지워도 무방, 색을 흰 색으로 바꿔도 되고..
 	drawLegend('topright',theophArr.subject,1);	
 //	drawLegend('topleft',theophArr.subject,1);

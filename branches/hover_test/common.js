@@ -5,13 +5,12 @@ xmlhttp.open("GET",filePath,false);
 xmlhttp.send(null);
 var fileContent = xmlhttp.responseText;
 var array = csv2array(fileContent);
-/*
- * for(var i=0; i<array.length; i++){ document.write("a("+i+") is :
- * "+array[i]+"<br>"); }
- */
+/*for(var i=0; i<array.length; i++){
+	document.write("a("+i+") is : "+array[i]+"<br>");
+}*/
 
-// var array = fileContent.split(',');
-// ////////////// Common Data Structure //////////////
+//var array = fileContent.split(',');
+//////////////// Common Data Structure //////////////
 function ObjTemp()
 {
 	this.subject='';
@@ -21,7 +20,7 @@ function ObjTemp()
     this.conc = '';
 };
 
- // ///////////////// Common Array ///////////////
+ ///////////////////  Common Array  ///////////////
 var theophArr = new ObjTemp();
 theophArr.subject = new Array();
 theophArr.wt = new Array();
@@ -29,7 +28,7 @@ theophArr.dose = new Array();
 theophArr.time = new Array();
 theophArr.conc = new Array();
 
-// /////////////// Get Data Name /////////////////
+///////////////// Get Data Name /////////////////
 var tmp_array0 = array[0].toString().split(',');	
 theophArr.subject[0]=tmp_array0[0];
 theophArr.wt[0]=tmp_array0[1];
@@ -37,15 +36,15 @@ theophArr.dose[0]=tmp_array0[2];
 theophArr.time[0]=tmp_array0[3];
 theophArr.conc[0]=tmp_array0[4];
 
-// ////////////// Split & Save Data //////////////////
-for(var j=1; j<array.length; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
+////////////////  Split & Save Data //////////////////
+for(var j=1; j<array.length; j++) //1부터 시작할지 0부터 시직할지는 나중에 결정 
 {	
 	var tmp_array = array[j].toString().split(',');	
-/*
- * document.write("tmp Array Length = "+tmp_array.length+"<br>"); for(var i=0;
- * i<tmp_array.length; i++){ document.write("temp_a("+i+") is :
- * "+tmp_array[i]+"<br>"); }
- */	
+/*	document.write("tmp Array Length = "+tmp_array.length+"<br>");
+	for(var i=0; i<tmp_array.length; i++){
+		document.write("temp_a("+i+") is : "+tmp_array[i]+"<br>");
+	}
+	*/	
 	theophArr.subject[j]=parseFloat(tmp_array[0]);
 	theophArr.wt[j]=parseFloat(tmp_array[1]);
 	theophArr.dose[j]=parseFloat(tmp_array[2]);
@@ -53,17 +52,17 @@ for(var j=1; j<array.length; j++) // 1부터 시작할지 0부터 시직할지�
 	theophArr.conc[j]=parseFloat(tmp_array[4]);
 }
 
-// //////////////////Common Using Variable //////////////
-var radius_scale = 3; // / Dot radius
+////////////////////Common Using Variable //////////////
+var radius_scale = 3; /// Dot radius
 var plotWidth=500;
 var plotHeight=500;
 var plotXmargin=150;
 var plotYmargin=90; 
 
 
-// ////////////////Common Using Functions ////////////////
+//////////////////Common Using Functions ////////////////
 // Each description of function yet.
-// /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 
 
 function csv2array(data, liveChar)
@@ -77,9 +76,9 @@ function csv2array(data, liveChar)
 	while(cursor != eof)
 	{
 		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ') ){
-// document.write("ddddddddddddddddddd" + "<br>");
+//			document.write("ddddddddddddddddddd" + "<br>");
 		}else if( cursor == "\n" ){
-// document.write("dttttttt" + "<br>");
+//			document.write("dttttttt" + "<br>");
 			result_row += cursor;
 			if (result_array.length <= line)
 			{
@@ -89,7 +88,7 @@ function csv2array(data, liveChar)
 				line++;
 			}
 		}else{
-// document.write("a("+i+") is : "+ cursor+"<br>");
+//			document.write("a("+i+") is : "+ cursor+"<br>");
 			result_row += cursor;
 		}
 			
@@ -97,44 +96,6 @@ function csv2array(data, liveChar)
 	}
 	return result_array;
 }
-/*
- * function csv2array(data, delimeter) {
- *  // Retrieve the delimeter if (delimeter == undefined) delimeter = ','; if
- * (delimeter && delimeter.length > 1) delimeter = ',';
- *  // initialize variables var newline = '\n'; var eof = ''; var i = 0; var c =
- * data.charAt(i); var row = 0; var col = 0; var array = new Array();
- * 
- * while (c != eof) { // skip whitespaces while (c == ' ' || c == '\t' || c ==
- * '\r') { c = data.charAt(i++); // read next char }
- *  // get value var value = ""; if (c == '\"') { // value enclosed by
- * double-quotes c = data.charAt(++i);
- * 
- * do { if (c != '\"') { // read a regular character and go to the next
- * character value += c; c = data.charAt(++i); }
- * 
- * if (c == '\"') { // check for escaped double-quote var cnext =
- * data.charAt(i+1); if (cnext == '\"') { // this is an escaped double-quote. //
- * Add a double-quote to the value, and move two characters ahead. value +=
- * '\"'; i += 2; c = data.charAt(i); } } } while (c != eof && c != '\"');
- * 
- * if (c == eof) { throw "Unexpected end of data, double-quote expected"; }
- * 
- * c = data.charAt(++i); } else { // value without quotes while (c != eof && c !=
- * delimeter && c!= newline && c != ' ' && c != '\t' && c != '\r') { value += c;
- * c = data.charAt(++i); } }
- *  // add the value to the array if (array.length <= row) array.push(new
- * Array()); array[row].push(value);
- *  // skip whitespaces while (c == ' ' || c == '\t' || c == '\r') { c =
- * data.charAt(++i); }
- *  // go to the next row or column if (c == delimeter) { // to the next column
- * col++; } else if (c == newline) { // to the next row col = 0; row++; } else
- * if (c != eof) { // unexpected character throw "Delimiter expected after
- * character " + i; }
- *  // go to the next character c = data.charAt(++i); }
- * 
- * return array; }
- */
-
 
 function getMousePos(xMax, yMax, canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -168,19 +129,15 @@ function writeMessage(canvas, message, name)
 
 function search_range(x, y){
 	  var offset_scale = radius_scale/20;
-	  for( var i = 1 ; i < array.length; i++)
-	  { 
-		  if((theophArr.conc[i] - offset_scale < y) && (theophArr.conc[i] + offset_scale > y) && (theophArr.time[i] - offset_scale < x) && (theophArr.time[i] + offset_scale >x)  )
-		  {
-			  return
-			  {
+	  for( var i = 1 ; i < array.length; i++){ 
+		  if((theophArr.conc[i] - offset_scale < y) && (theophArr.conc[i] + offset_scale > y) && (theophArr.time[i] - offset_scale < x) && (theophArr.time[i] + offset_scale >x)  ){
+			  return{
 				  x: i,
 				  y: true
 			  };
 		  }	
-	  }	  
-	  return
-	  {
+	}	  
+	  return{
 		  x: i,
 		  y: false
 	  };
@@ -208,8 +165,7 @@ function findMaxValue(Data,diff)
 		if(Data[i]>maxValue){
 			maxValue=Data[i];					
 		}
-		// document.write('max: ' + maxValue+' data[i]: '+Data[i]+' data[i-1]:
-		// '+ Data[i-1]+'<br>');
+		//document.write('max: ' + maxValue+'  data[i]: '+Data[i]+'  data[i-1]: '+ Data[i-1]+'<br>');
 	}
 	returnValue=parseInt(maxValue+1);
 	
@@ -230,67 +186,67 @@ function color(c, name)
 	var context = canvas.getContext("2d");
 		switch(c)
 		{
-	        case 0 : // Black
+	        case 0 : //Black
 	        	context.strokeStyle = "#000000";	
 	        	context.fillStyle = "#000000"; 
 	        	break;
-	        case 1 : // Green
+	        case 1 : //Green
 	        	context.strokeStyle = "#008000";	
 	        	context.fillStyle = "#008000"; 
 	        	break;
-	        case 2 : // Silver
+	        case 2 : //Silver
 	        	context.strokeStyle = "#C0C0C0";	
 	        	context.fillStyle = "#C0C0C0"; 
 	        	break;
-	        case 3 : // Lime
+	        case 3 : //Lime
 	        	context.strokeStyle = "#00FF00";	
 	        	context.fillStyle = "#00FF00"; 
 	        	break;
-	        case 4 : // Gray
+	        case 4 : //Gray
 	        	context.strokeStyle = "#808080";	
 	        	context.fillStyle = "#808080"; 
 	        	break;
-	        case 5 : // Olive
+	        case 5 : //Olive
 	          	context.strokeStyle = "#808000";	
 	        	context.fillStyle = "#808000"; 
 	        	break;
-	        case 6 : // Yellow
+	        case 6 : //Yellow
 	        	context.strokeStyle = "#FFFF00";	
 	        	context.fillStyle = "#FFFF00"; 
 	        	break;
-	        case 7 : // Maroon
+	        case 7 : //Maroon
 	        	context.strokeStyle = "#800000";	
 	        	context.fillStyle = "#800000"; 
 	        	break;
-	        case 8 : // Navy
+	        case 8 : //Navy
 	        	context.strokeStyle = "#000080";	
 	        	context.fillStyle = "#000080"; 
 	        	break;
-	        case 9 : // Red
+	        case 9 : //Red
 	        	context.strokeStyle = "#FF0000";	
 	        	context.fillStyle = "#FF0000"; 
 	        	break;
-	        case 10 : // Blue
+	        case 10 : //Blue
 	        	context.strokeStyle = "#0000FF";	
 	        	context.fillStyle = "#0000FF"; 
 	        	break;
-	        case 11 : // Purple
+	        case 11 : //Purple
 	        	context.strokeStyle = "#800080";	
 	        	context.fillStyle = "#800080"; 
 	        	break;
-	        case 12 : // Teal
+	        case 12 : //Teal
 	        	context.strokeStyle = "#008080";	
 	        	context.fillStyle = "#008080"; 
 	        	break;
-	        case 13 : // Fuchsia
+	        case 13 : //Fuchsia
 	        	context.strokeStyle = "#FF00FF";	
 	        	context.fillStyle = "#FF00FF"; 
 	        	break;
-	        case 14 : // Aqua
+	        case 14 : //Aqua
 	        	context.strokeStyle = "#00FFFF";	
 	        	context.fillStyle = "#00FFFF"; 
 	        	break;
-	        default : // Black
+	        default : //Black
 	        	context.strokeStyle = "#000000";	
 	        	context.fillStyle = "#000000"; 
 		}
@@ -302,8 +258,7 @@ function drawLegend(Location,Data,name)
 	var context = canvas.getContext("2d");
 	var scale=3;
 	var cnt=1;
-	var x1,y1,x2,y2;   // if data is not sorted, this code can't work. data
-						// should be sorted (from R or top of the code)
+	var x1,y1,x2,y2;   // if data is not sorted, this code can't work. data should be sorted (from R or top of the code)
 	cnt = Data[Data.length-1];
 	if (Location == 'topright' || Location == undefined)	{
 		x1 = plotXmargin+plotWidth+10;
@@ -334,8 +289,7 @@ function drawLegend(Location,Data,name)
 	cnt = 1;
 	for( var i = 1 ; i < Data.length; i++)
 	{	
-		if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  // subject 체크 한 후에
-															// 같은 거면 index추가 안함.
+		if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  //subject 체크 한 후에 같은 거면 index추가 안함.		
 		{		
 			context.save();				
 			context.beginPath();

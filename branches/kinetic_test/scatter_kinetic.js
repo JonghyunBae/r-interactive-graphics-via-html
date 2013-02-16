@@ -1,67 +1,5 @@
-/////////////// Get Data from csv File ////////////
-var filePath = "Theoph-from-R.csv";
-xmlhttp = new XMLHttpRequest();
-xmlhttp.open("GET",filePath,false);
-xmlhttp.send(null);
-var fileContent = xmlhttp.responseText;
-var array = csv2array(fileContent);
-
 // for(var i=0; i<array.length; i++){ document.write("a("+i+") is : "+array[i]+"<br>"); }
- 
-
- function csv2array(data, liveChar)
- {	
- 	var i = 0;
- 	var eof = '';
- 	var cursor = data.charAt(i);
- 	var result_array = new Array();
- 	var result_row = "";
- 	var line = 0;
- 	while(cursor != eof)
- 	{
- 		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ') ){
- // document.write("ddddddddddddddddddd" + "<br>");
- 		}else if( cursor == "\n" ){
- // document.write("dttttttt" + "<br>");
- 			result_row += cursor;
- 			if (result_array.length <= line)
- 			{
- 				result_array.push(new Array());
- 				result_array[line].push(result_row);
- 				result_row = "";
- 				line++;
- 			}
- 		}else{
- // document.write("a("+i+") is : "+ cursor+"<br>");
- 			result_row += cursor;
- 		}
- 			
- 		cursor = data.charAt(i++);
- 	}
- 	return result_array;
- }
-
-//////////////// Common Data Structure //////////////
-function ObjTemp()
-{
-	this.subject='';
-	this.wt = '';
-	this.dose = '';
-	this.time = '';
-	this.conc = '';
-	this.selected = false;
-};
-
-// ///////////////// Common Array ///////////////
-var theophArr = new ObjTemp();
-theophArr.subject = new Array();
-theophArr.wt = new Array();
-theophArr.dose = new Array();
-theophArr.time = new Array();
-theophArr.conc = new Array();
-theophArr.selected = new Array();
-
-///////////////// Get Data Name /////////////////
+ ///////////////// Get Data Name /////////////////
 /*
 var tmp_array0 = array[0].toString().split(',');	
 theophArr.subject[0]=tmp_array0[0];
@@ -71,32 +9,17 @@ theophArr.time[0]=tmp_array0[3];
 theophArr.conc[0]=tmp_array0[4];
 */
 
-//////////////// Split & Save Data //////////////////
-for(var j=0; j<array.length-1; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
-{	
-	var tmp_array = array[j+1].toString().split(',');	
-/*
-* document.write("tmp Array Length = "+tmp_array.length+"<br>"); for(var i=0;
-* i<tmp_array.length; i++){ document.write("temp_a("+i+") is :
-* "+tmp_array[i]+"<br>"); }
-*/	
-	theophArr.subject[j]=parseFloat(tmp_array[0]);
-	theophArr.wt[j]=parseFloat(tmp_array[1]);
-	theophArr.dose[j]=parseFloat(tmp_array[2]);
-	theophArr.time[j]=parseFloat(tmp_array[3]);
-	theophArr.conc[j]=parseFloat(tmp_array[4]);
-	theophArr.selected[j]=false;
-}
-var radius_scale = 3; // / Dot radius
-var plotWidth=500;
-var plotHeight=500;
-var plotXmargin=150;
-var plotYmargin=90; 
-var plotLength=15;
-var xMax=findMaxValue(theophArr.time,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-var yMax=findMaxValue(theophArr.conc,0);
-var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
-var yDiff=parseInt(yMax/6);
+    //////////variables for scatter chart//////////////// names are likely to change later
+    var radius_scale = 3; // / Dot radius
+    var plotWidth=500;
+    var plotHeight=500;
+    var plotXmargin=150;
+    var plotYmargin=90; 
+    var plotLength=15;
+    var xMax=findMaxValue(theophArr.time,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
+    var yMax=findMaxValue(theophArr.conc,0);
+    var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
+    var yDiff=parseInt(yMax/6);
 
 function findMaxValue(Data,diff)
 {
@@ -121,8 +44,6 @@ function findMaxValue(Data,diff)
 	
 	return returnValue;
 }
-
-
 //for(var i=0; i<theophArr.selected.length; i++){ document.write("theophArr.selected("+i+") is : "+theophArr.selected[i]+"<br>"); }
 
 //////////////////////////////////////Chk key event Start//////////////////////////////////////   
@@ -176,8 +97,6 @@ function findMaxValue(Data,diff)
 	default: alert(code); //Everything else
 	}
 	}*/
-
-
 //////////////////////////////////////Chk key event End//////////////////////////////////////   
 
 

@@ -1,9 +1,10 @@
-var diff = 2;
-var xMax=findMaxValue(theophArr.time,diff); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-var yMax=findMaxValueHist(xMax,theophArr.time,diff);
-var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
-var yDiff=parseInt(yMax/5);
-var histHasArr;
+    //////////variables for histogram chart//////////////// names are likely to change later
+
+    var xMaxHist=findMaxValue(theophArr.time,diff); //나중에 max함수 추가해서 5단위로 잡게 만들기.
+    var yMaxHist=findMaxValueHist(xMaxHist,theophArr.time,diff);
+    var xDiffHist=parseInt(xMaxHist/5);//나중에 자동으로 잡아주기.
+    var yDiffHist=parseInt(yMaxHist/5);
+    var histHasArr;
 
 
 function make2DArr(rows) {
@@ -14,16 +15,16 @@ function make2DArr(rows) {
 	  return Arr;
 }
 
-function findMaxValueHist(xMax, xData,diff)
+function findMaxValueHist(xMaxHist, xData,diff)
 {
 	var maxValue=0;
 	var tmpHistArr = new Array();
 	var cnt=0;
-	for (var i=0; i<parseInt(xMax/diff +1); i++)//tmpHistArr initialization
+	for (var i=0; i<parseInt(xMaxHist/diff +1); i++)//tmpHistArr initialization
 	{
 		tmpHistArr[i]=0;
 	}			
-	for(cnt=0; cnt< parseInt(xMax/diff +1); cnt++)
+	for(cnt=0; cnt< parseInt(xMaxHist/diff +1); cnt++)
 	{
 		for( var i = 0 ; i < xData.length; i++)
 		{	
@@ -33,7 +34,7 @@ function findMaxValueHist(xMax, xData,diff)
 			}
 		}
 	}
-	for(var i=0; i<parseInt(xMax/diff +1); i++)
+	for(var i=0; i<parseInt(xMaxHist/diff +1); i++)
 	{
 		if(tmpHistArr[i]>maxValue)
 		{
@@ -43,24 +44,24 @@ function findMaxValueHist(xMax, xData,diff)
 	return maxValue;
 }
 var histArr = new Array();
-histArr = drawDataHist(xMax,yMax,theophArr.time, diff);	 
+histArr = drawDataHist(xMaxHist,yMaxHist,theophArr.time, diff);	 
 
 //for(var i=0; i<histArr.length; i++){ document.write("histArr("+i+") is : "+histArr[i]+"<br>"); }
 
 
 
-function drawDataHist(xMax,yMax,xData,diff)
+function drawDataHist(xMaxHist,yMaxHist,xData,diff)
 {
 	var tmpHistArr = new Array();
 	var cnt=0;
 	var col = 0;
-	histHasArr=make2DArr(parseInt(xMax/diff +1) );
+	histHasArr=make2DArr(parseInt(xMaxHist/diff +1) );
 	
-	for (var i=0; i<parseInt(xMax/diff ); i++)//tmpHistArr initialization
+	for (var i=0; i<parseInt(xMaxHist/diff ); i++)//tmpHistArr initialization
 	{
 		tmpHistArr[i]=0;
 	}			
-	for(cnt=0; cnt< parseInt(xMax/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
+	for(cnt=0; cnt< parseInt(xMaxHist/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
 	{
 		for( var i = 0 ; i < xData.length; i++)
 		{	
@@ -74,7 +75,7 @@ function drawDataHist(xMax,yMax,xData,diff)
 		col = 0;
 	}			
 	return tmpHistArr;
-/*	for(cnt=0; cnt< parseInt(xMax/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
+/*	for(cnt=0; cnt< parseInt(xMaxHist/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
 	{
 		for( var i = 0 ; i < histHasArr[cnt].length; i++)
 		{
@@ -83,10 +84,10 @@ function drawDataHist(xMax,yMax,xData,diff)
 		document.write("<br>");
 	} */
 	
-/*	for(var i=0; i< parseInt(xMax/diff ) ; i++)//draw rectangular 
+/*	for(var i=0; i< parseInt(xMaxHist/diff ) ; i++)//draw rectangular 
 	{
 		context.beginPath();
-		context.strokeRect(plotXmargin +  i * plotWidth / parseInt(xMax/diff)  , canvas.height-plotYmargin-plotHeight  ,  plotWidth / parseInt(xMax/diff) , tmpHistArr[i] * plotHeight / yMax );
+		context.strokeRect(plotXmargin +  i * plotWidth / parseInt(xMaxHist/diff)  , canvas.height-plotYmargin-plotHeight  ,  plotWidth / parseInt(xMaxHist/diff) , tmpHistArr[i] * plotHeight / yMaxHist );
 		context.stroke();
 		context.closePath();
 	}*/
@@ -94,7 +95,7 @@ function drawDataHist(xMax,yMax,xData,diff)
 
 //////////////////////////////////////Stage1(hist) Start//////////////////////////////////////
   var stage1 = new Kinetic.Stage({
-    container: 'container',
+    container: 'container1',
     width: 800,
     height: 800
   });
@@ -126,30 +127,30 @@ strokeWidth: 2
 });
 */
 var rect = new Kinetic.Line({
-	points: [plotXmargin-plotLength, plotYmargin+plotHeight-parseInt(yMax/yDiff)*plotHeight/(yMax/yDiff) ,plotXmargin-plotLength,  plotYmargin+plotHeight],
+	points: [plotXmargin-plotLength, plotYmargin+plotHeight-parseInt(yMaxHist/yDiffHist)*plotHeight/(yMaxHist/yDiffHist) ,plotXmargin-plotLength,  plotYmargin+plotHeight],
 	stroke: 'black',
 	strokeWidth: 2,		     
 });
 var rect1 = new Kinetic.Line({
-	points: [plotXmargin, plotYmargin+plotHeight+plotLength, plotXmargin+parseInt(xMax/xDiff)*plotWidth/(xMax/xDiff),  plotYmargin+plotHeight+plotLength],
+	points: [plotXmargin, plotYmargin+plotHeight+plotLength, plotXmargin+parseInt(xMaxHist/xDiffHist)*plotWidth/(xMaxHist/xDiffHist),  plotYmargin+plotHeight+plotLength],
 	stroke: 'black',
 	strokeWidth: 2,		     
 });
 histPlotLayer.add(rect);
 histPlotLayer.add(rect1);
 
-for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
+for(var i=0; i<parseInt(xMaxHist/xDiffHist)+1; i++)
 {
 	var xLine = new Kinetic.Line({
-	points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
+	points: [plotXmargin+i*plotWidth/(xMaxHist/xDiffHist) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMaxHist/xDiffHist),plotYmargin+plotHeight+2*plotLength],
 	stroke: 'black',
 	strokeWidth: 2,		     
 	});
 	histPlotLayer.add(xLine);	   		
 	var xText = new Kinetic.Text({
-		x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
+		x: plotXmargin+i*plotWidth/(xMaxHist/xDiffHist)-10,
 		y: plotYmargin+plotHeight+plotLength*2,
-		text: i*xDiff,
+		text: i*xDiffHist,
 		fontSize: 15,
 		fontFamily: 'Calibri',
 		fill: 'black',
@@ -159,18 +160,18 @@ for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
 	histPlotLayer.add(xText);			
 }
 
-for(var i=0; i<parseInt(yMax/yDiff)+1; i++)
+for(var i=0; i<parseInt(yMaxHist/yDiffHist)+1; i++)
 {
 	var yLine = new Kinetic.Line({
-		points: [plotXmargin-plotLength, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-2*plotLength,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)],
+		points: [plotXmargin-plotLength, plotYmargin+plotHeight-i*plotHeight/(yMaxHist/yDiffHist) , plotXmargin-2*plotLength,plotYmargin+plotHeight-i*plotHeight/(yMaxHist/yDiffHist)],
 		stroke: 'black',
 		strokeWidth: 2,		     
 	});
 	histPlotLayer.add(yLine);	   
 	yText = new Kinetic.Text({
 		x: plotXmargin-plotLength*2-15,
-		y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
-		text: i*yDiff,
+		y: plotYmargin+plotHeight-i*plotHeight/(yMaxHist/yDiffHist)+10,
+		text: i*yDiffHist,
 		fontSize: 15,
 		fontFamily: 'Calibri',
 		fill: 'black',
@@ -255,14 +256,14 @@ function histAddNode(obj, layer)
   // build data
   var xCanvasWidth = plotXmargin;//added by us
   var yCanvasHeight = stage1.height-plotYmargin-plotHeight; //added by us
-  var xScale=plotWidth/xMax;//added by us
-  var yScale=plotHeight/yMax; //added by us
+  var xScale=plotWidth/xMaxHist;//added by us
+  var yScale=plotHeight/yMaxHist; //added by us
   var histData = [];
       for(var n = 0; n <histArr.length ; n++)
       {
-    	var width = plotWidth / parseInt(xMax/diff); 
-        var height = histArr[n] * plotHeight / yMax;
-        var x = plotXmargin +  n * plotWidth / parseInt(xMax/diff) + width/2;
+    	var width = plotWidth / parseInt(xMaxHist/diff); 
+        var height = histArr[n] * plotHeight / yMaxHist;
+        var x = plotXmargin +  n * plotWidth / parseInt(xMaxHist/diff) + width/2;
         var y = plotYmargin + plotHeight - height + height/2;
         histData.push({
           x: x,

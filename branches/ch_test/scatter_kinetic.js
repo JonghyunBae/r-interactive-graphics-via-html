@@ -1,37 +1,6 @@
-//////////variables for scatter chart//////////////// names are likely to change later
-var radius_scale = 3; // / Dot radius
-var plotWidth=500;
-var plotHeight=500;
-var plotXmargin=150;
-var plotYmargin=90; 
-var plotLength=15;
-var xMax=findMaxValue(theophArr.time,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-var yMax=findMaxValue(theophArr.conc,0);
-var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
-var yDiff=parseInt(yMax/6);
+var scatterIdStart = idCounter;
+var scatterIdEnd;
 
-function findMaxValue(Data,diff)
-{
-	var maxValue=Data[1];
-	var returnValue;
-	for(var i=2; i<Data.length; i++)
-	{
-		if(Data[i]>maxValue)
-		{
-			maxValue=Data[i];					
-		}
-	}
-	returnValue=parseInt(maxValue+1);	
-	for(var i=0; i<diff; i++)
-	{
-		returnValue=returnValue+i;
-		if((returnValue% diff) == 0)
-		{
-			break;
-		}				
-	}	
-	return returnValue;
-}
 //////////////////////////////////////Stage Start//////////////////////////////////////
   var stage = new Kinetic.Stage({
     container: 'container',
@@ -149,11 +118,11 @@ function scatterAddNode(obj, layer)
 		name: obj.name,
 		x: obj.x,
 		y: obj.y,
-		radius: 2.5,
+		radius: radius_scale,
 		fill: obj.color,
 		stroke : obj.stroke,
-		strokewidth : 0,
-		opacity : 0.5,		
+		strokeWidth : 0.1,
+		opacity : 1,		
 		draggable: false,
 		selected : obj.selected
 	});		
@@ -164,6 +133,7 @@ var xScale=plotWidth/xMax;//added by us
 var yScale=plotHeight/yMax; //added by us
 var scatterData = [];
 var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];     
+
 for(var n = 0; n < theophArr.time.length ; n++)
 {
 	var x = theophArr.time[n]*xScale+plotXmargin;
@@ -171,16 +141,17 @@ for(var n = 0; n < theophArr.time.length ; n++)
 	var tmp=plotHeight/2+plotYmargin-y; 
 	y=y+2*tmp; //since (0,0) of canvas is top-left, so we need to change it into bottom-left.
 	scatterData.push({
-		id: n,
+		id: idCounter,
 		name: theophArr.subject[n]+','+theophArr.wt[n]+','+theophArr.dose[n]+','+theophArr.time[n]+','+theophArr.conc[n], //does not work yet..
 		x: x,
 		y: y,		
 		color: colors[theophArr.subject[n]-1],
-		stroke : colors[theophArr.subject[n]-1],
+		stroke : 'black',
 		selected : 0 // 0 means : unselected ,  1 means : selected
 	});
+	idCounter++;
 }
-
+scatterIdEnd = idCounter - 1;
 //render data
 var scatterDataLayer= new Kinetic.Layer();
 for(var n = 0; n < scatterData.length; n++) 
@@ -192,10 +163,12 @@ stage.add(scatterDataLayer);
 //////////////////////////////////////Tooltip Start//////////////////////////////////////
 var scatterTooltipLayer = new Kinetic.Layer();
 var scatterTooltip = new Kinetic.Group({
+	id : -1,
 	opacity: 0.75,
 	visible: false
 });
 var scatterTooltipText = new Kinetic.Text({
+	id : -1,
 	text: '',
 	fontFamily: 'Calibri',
 	fontSize: 18,
@@ -204,6 +177,7 @@ var scatterTooltipText = new Kinetic.Text({
 	align:'center'
 });	  
 var scatterTooltipRect = new Kinetic.Rect({
+	id : -1,
 	fill: 'black'
 });  
 
@@ -218,7 +192,7 @@ scatterDataLayer.on('mouseover', function(evt){
 	scatterTooltip.setPosition(mousePos.x + 8, mousePos.y + 8);
 	var nameArr = new Array();
 	nameArr = node.getName().split(',');		
-	scatterTooltipText.setText("node: " + node.getId() +"\r\n"+"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"+ "color: " + node.getFill()); //naem split?
+	scatterTooltipText.setText("node: " + (node.getId() - scatterIdStart) +"\r\n"+"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"+ "color: " + node.getFill()); //naem split?
 	scatterTooltipRect.setAttrs({
 		width: scatterTooltipText.getWidth(),
 		height: scatterTooltipText.getHeight()
@@ -240,7 +214,7 @@ scatterDataLayer.on('mouseout', function(evt) {
 	scatterTooltip.hide();
 	scatterTooltipLayer.draw();	 
 	var shapes = stage.get('#'+node.getId());
-	if(scatterData[node.getId()].selected > 0){//selected
+	if(scatterData[node.getId() - scatterIdStart].selected > 0){//selected
 		shapes.apply('transitionTo', {
 			opacity: 1,
 			scale: { x : 1.3, y : 1.3 },
@@ -249,7 +223,7 @@ scatterDataLayer.on('mouseout', function(evt) {
 		});
 	}else{		  //unselected
 		shapes.apply('transitionTo', {
-			opacity: 0.5,
+			opacity: 1,
 			scale:{ x : 1, y : 1 },
 			duration: 1,
 			easing: 'elastic-ease-out'
@@ -259,15 +233,16 @@ scatterDataLayer.on('mouseout', function(evt) {
 //////////////////////////////////////Tooltip End//////////////////////////////////////
 
 //////////////////////////////////////Selection Start//////////////////////////////////////
+var preMousePos;
+
+
 scatterPlotLayer.on('click', function(evt){
 	scatterAllDeselect();
-//	histAllDeselect();
+	histAllDeselect();
 //	writeMessage1(messageLayer1);
 	 writeMessage(messageLayer);
+	 tmpShift = false;
 });
-
-var preMousePos;
-var tmpShift = false;
 
 scatterDataLayer.on('click', function(evt){
   	var node = evt.shape;
@@ -277,26 +252,28 @@ scatterDataLayer.on('click', function(evt){
   	var tmpNode;
   	
   	if(aPressed){	//select ALL
-  	//	histAllSelect();
+  		histAllSelect();
   		scatterAllSelect();
   		tmpShift = false;
   	}else if(ctrlPressed){ //select mutiple node one by one.
-  		if(scatterData[node.getId()].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			scatterSingleDeselect(shapes, node.getId());
-   		}else if(scatterData[node.getId()].selected == 0){ // unselected -> selected
-  			scatterSingleSelect(shapes, node.getId());
+  		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
+  			scatterSingleDeselect(shapes, node.getId() - scatterIdStart);
+  			histUpdate(theophArr.time[node.getId() - scatterIdStart],1);
+   		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
+  			scatterSingleSelect(shapes, node.getId() - scatterIdStart);
+  			histUpdate(theophArr.time[node.getId() - scatterIdStart],0);
   		}
   		tmpShift = false;
   	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
   		nameArr = node.getName().split(',');	
-		for(var i=0; i<scatterData.length; i++){
+  		for(var i = 0 ; i < scatterData.length ; i++){
 			var tmpNameArr = new Array();
 			tmpNameArr = scatterData[i].name.split(',');	
 			if(nameArr[0] == tmpNameArr[0])
 			{
-				tmpNode = stage.get("#"+ i );
+				tmpNode = stage.get("#"+ (i + scatterIdStart));
 				scatterSingleSelect(tmpNode, i);
-			//	histUpdate(theophArr.time[data[i].id], 0);  //과부하로 인한 보류
+				histUpdate(theophArr.time[i], 0);  //과부하로 인한 보류
 			}
 		}
 		tmpShift = false;
@@ -306,68 +283,82 @@ scatterDataLayer.on('click', function(evt){
 		if(preMousePos.x < mousePos.x)
 		{
 			if(preMousePos.y < mousePos.y)	{
-				for(var i=0; i<scatterData.length; i++){
+				for(var i = 0 ; i < scatterData.length ; i++){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
-						tmpNode = stage.get("#"+ i );
+						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-		//				histUpdate(theophArr.time[scatterData[i].id], 0);
+						histUpdate(theophArr.time[i], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
-				for(var i=0; i<scatterData.length; i++){
+				for(var i = 0 ; i < scatterData.length ; i++){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
 					{
-						tmpNode = stage.get("#"+ i );
+						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-		//				histUpdate(theophArr.time[scatterData[i].id], 0);
+						histUpdate(theophArr.time[i], 0);
 					}
 				}
 			}
 		}else if(preMousePos.x > mousePos.x)
 		{
 			if(preMousePos.y < mousePos.y)	{
-				for(var i=0; i<scatterData.length; i++){
+				for(var i = 0 ; i < scatterData.length ; i++){
 					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x  && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
-						tmpNode = stage.get("#"+ i );
+						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-	//					histUpdate(theophArr.time[scatterData[i].id], 0);
+						histUpdate(theophArr.time[i], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
-				for(var i=0; i<scatterData.length; i++){
+				for(var i = 0 ; i < scatterData.length ; i++){
 					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x && mousePos.y  <= scatterData[i].y && scatterData[i].y <= preMousePos.y  )
 					{
-						tmpNode = stage.get("#"+ i );
+						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-//						histUpdate(theophArr.time[scatterData[i].id], 0);
+						histUpdate(theophArr.time[i], 0);
 					}
 				}
 			}
 		}	
 	}else{
+		tmpShift = false;
   		scatterAllDeselect();
-  		scatterData[node.getId()].selected=1;
-  		tmpShift = false;
-  		shapes.apply('transitionTo', {
-			  opacity: 1,
-//			  stroke : 'black',
-//			  strokewidth : 0,
-			  scale: { x : 1.3, y : 1.3 },
-		      duration: 1,
-		  	  easing: 'elastic-ease-out'
-		});
-  	}
-  	
+  		histAllDeselect();
+  		scatterSingleSelect(shapes, node.getId() - scatterIdStart);
+  		//document.write(theophArr.time[node.getId() - scatterIdStart]);
+  		histUpdate(theophArr.time[node.getId() - scatterIdStart],0);
+  	}  	
   	if(tmpShift == false)
 	{
 		preMousePos = mousePos;
-	}
-  	
+	}  	
   	 writeMessage(messageLayer);
+  	writeMessage1(messageLayer1);
 }); 
 
+function scatterUpdate(rectId, eraseOn)
+{
+	var node;
+	if(eraseOn == 0)	{
+		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
+		{	
+			node = stage.get("#" + scatterData[histHasArr[rectId][i]].id);
+			scatterSingleSelect(node, histHasArr[rectId][i]);
+		}
+	}else if(eraseOn == 1){ 
+		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
+		{
+			node = stage.get("#" + scatterData[histHasArr[rectId][i]].id);
+			if(scatterData[histHasArr[rectId][i]].selected  == 1)
+			{
+				scatterSingleDeselect(node, histHasArr[rectId][i]);
+			}			
+		}
+	}
+}
 
 function scatterSingleSelect(node, id)
 {
@@ -376,7 +367,7 @@ function scatterSingleSelect(node, id)
 	node.apply('transitionTo', {
 		opacity: 1,
 		//stroke : 'black',
-		//	strokewidth : 0,
+		strokeWidth : 1,
 		scale: { x : 1.3, y : 1.3 },
 		duration: 1,
 		easing: 'elastic-ease-out'
@@ -387,9 +378,9 @@ function scatterSingleSelect(node, id)
 function scatterSingleDeselect(node, id)
 {
 	node.apply('transitionTo', {
-		opacity: 0.5,
+		opacity: 1,
 		//stroke : 'black',
-		//	strokewidth : 0,
+		strokeWidth : 0.1,
 		scale: { x : 1, y : 1 },
 		duration: 1,
 		easing: 'elastic-ease-out'
@@ -402,7 +393,7 @@ function scatterAllSelect()
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
 	{
-		node = stage.get("#"+ i );
+		node = stage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 0)
 		{
 			scatterSingleSelect(node, i);
@@ -415,9 +406,11 @@ function scatterAllDeselect()
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
 	{
-		node = stage.get("#"+ i );
+		node = stage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 1)
 		{
+		//	document.write(i +scatterIdStart );
+			
 			scatterSingleDeselect(node, i);
 		}
 	}

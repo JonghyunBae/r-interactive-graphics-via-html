@@ -1,71 +1,28 @@
-    //////////variables for histogram chart//////////////// names are likely to change later
 
-    var xMaxHist=findMaxValue(theophArr.time,diff); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-    var yMaxHist=findMaxValueHist(xMaxHist,theophArr.time,diff);
-    var xDiffHist=parseInt(xMaxHist/5);//나중에 자동으로 잡아주기.
-    var yDiffHist=parseInt(yMaxHist/5);
-    var histHasArr;
-
-
-function make2DArr(rows) {
-	  var Arr = [];
-	  for (var i=0;i<rows;i++) {
-		  Arr[i] = [];
-	  }
-	  return Arr;
-}
-
-function findMaxValueHist(xMaxHist, xData,diff)
-{
-	var maxValue=0;
-	var tmpHistArr = new Array();
-	var cnt=0;
-	for (var i=0; i<parseInt(xMaxHist/diff +1); i++)//tmpHistArr initialization
-	{
-		tmpHistArr[i]=0;
-	}			
-	for(cnt=0; cnt< parseInt(xMaxHist/diff +1); cnt++)
-	{
-		for( var i = 0 ; i < xData.length; i++)
-		{	
-			if(xData[i]>=cnt*diff && xData[i]<(cnt+1)*diff)
-			{
-				tmpHistArr[cnt]++;
-			}
-		}
-	}
-	for(var i=0; i<parseInt(xMaxHist/diff +1); i++)
-	{
-		if(tmpHistArr[i]>maxValue)
-		{
-			maxValue=tmpHistArr[i];					
-		}
-	}	
-	return maxValue;
-}
+var histHasArr;
+var histIdStart = idCounter;
+var histIdEnd;
 var histArr = new Array();
-histArr = drawDataHist(xMaxHist,yMaxHist,theophArr.time, diff);	 
+//document.write(histIdStart);
+histArr = drawDataHist(xMaxHist,yMaxHist,theophArr.time, diffHist);	 
 
-//for(var i=0; i<histArr.length; i++){ document.write("histArr("+i+") is : "+histArr[i]+"<br>"); }
-
-
-
-function drawDataHist(xMaxHist,yMaxHist,xData,diff)
+function drawDataHist(xMaxHist,yMaxHist,xData,a)
 {
 	var tmpHistArr = new Array();
 	var cnt=0;
 	var col = 0;
-	histHasArr=make2DArr(parseInt(xMaxHist/diff +1) );
+	histHasArr=make2DArr(parseInt(xMaxHist/a +1) );
 	
-	for (var i=0; i<parseInt(xMaxHist/diff ); i++)//tmpHistArr initialization
+	for (var i=0; i<parseInt(xMaxHist/a ); i++)//tmpHistArr initialization
 	{
 		tmpHistArr[i]=0;
 	}			
-	for(cnt=0; cnt< parseInt(xMaxHist/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
+	
+	for(cnt=0; cnt< parseInt(xMaxHist/a ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
 	{
 		for( var i = 0 ; i < xData.length; i++)
 		{	
-			if(xData[i]>=cnt*diff && xData[i]<(cnt+1)*diff)
+			if(xData[i]>=cnt*a && xData[i]<(cnt+1)*a)
 			{
 				tmpHistArr[cnt]++;
 				histHasArr[cnt][col] = i;
@@ -75,22 +32,6 @@ function drawDataHist(xMaxHist,yMaxHist,xData,diff)
 		col = 0;
 	}			
 	return tmpHistArr;
-/*	for(cnt=0; cnt< parseInt(xMaxHist/diff ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
-	{
-		for( var i = 0 ; i < histHasArr[cnt].length; i++)
-		{
-				document.write(histHasArr[cnt][i] + ",");
-		}
-		document.write("<br>");
-	} */
-	
-/*	for(var i=0; i< parseInt(xMaxHist/diff ) ; i++)//draw rectangular 
-	{
-		context.beginPath();
-		context.strokeRect(plotXmargin +  i * plotWidth / parseInt(xMaxHist/diff)  , canvas.height-plotYmargin-plotHeight  ,  plotWidth / parseInt(xMaxHist/diff) , tmpHistArr[i] * plotHeight / yMaxHist );
-		context.stroke();
-		context.closePath();
-	}*/
 }
 
 //////////////////////////////////////Stage1(hist) Start//////////////////////////////////////
@@ -101,7 +42,6 @@ function drawDataHist(xMaxHist,yMaxHist,xData,diff)
   });
   
 //////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
-
 var histPlotLayer = new Kinetic.Layer();
 
 //Draw Rectangle
@@ -114,18 +54,7 @@ var histplotRect = new Kinetic.Rect({
 	strokeWidth: 2
 }); 
 histPlotLayer.add(histplotRect);
-// dashed line
-/*
-var rect = new Kinetic.Rect({
-x: plotXmargin-plotLength,
-y: plotYmargin-plotLength,
-width: plotWidth+2*plotLength,
-height: plotHeight+2*plotLength,
-//     fill: 'green',
-stroke: 'black',
-strokeWidth: 2
-});
-*/
+
 var rect = new Kinetic.Line({
 	points: [plotXmargin-plotLength, plotYmargin+plotHeight-parseInt(yMaxHist/yDiffHist)*plotHeight/(yMaxHist/yDiffHist) ,plotXmargin-plotLength,  plotYmargin+plotHeight],
 	stroke: 'black',
@@ -256,14 +185,15 @@ var yCanvasHeight = stage1.height-plotYmargin-plotHeight; //added by us
 var xScale=plotWidth/xMaxHist;//added by us
 var yScale=plotHeight/yMaxHist; //added by us
 var histData = [];
+
 for(var n = 0; n <histArr.length ; n++)
 {
-	var width = plotWidth / parseInt(xMaxHist/diff); 
+	var width = plotWidth / parseInt(xMaxHist/diffHist); 
 	var height = histArr[n] * plotHeight / yMaxHist;
-	var x = plotXmargin +  n * plotWidth / parseInt(xMaxHist/diff) + width/2;
+	var x = plotXmargin +  n * plotWidth / parseInt(xMaxHist/diffHist) + width/2;
 	var y = plotYmargin + plotHeight - height + height/2;
 	histData.push({
-		id: n,
+		id: idCounter,
 		name: histArr[n] , //frequency
 		x: x,
 		y: y,
@@ -274,7 +204,9 @@ for(var n = 0; n <histArr.length ; n++)
 		offset: {x: width/2, y: height/2},
 		selected : 0 // 0 means : unselected ,  0 < means : selected
 	});
+	idCounter ++;
 }
+histIdEnd = idCounter - 1;
 
   // render data
 //  var histNodeCount = 0;
@@ -282,13 +214,6 @@ for(var n = 0; n <histArr.length ; n++)
   for(var n = 0; n < histData.length; n++) 
   {
     histAddNode(histData[n], histDataLayer);
- //   histNodeCount++;
- /*   if(histNodeCount >= 1)// IMPORTANT
-    {
-      histNodeCount = 0;
-      stage1.add(histDataLayer);
-     // histDataLayer = new Kinetic.Layer();
-    } */
   }
   stage1.add(histDataLayer);  
   
@@ -315,14 +240,14 @@ histTooltipLayer.add(histTooltip);
 stage1.add(histTooltipLayer);
   
  
-	  
+
 histDataLayer.on('mouseover', function(evt){
 	document.body.style.cursor = "pointer";
 	var node = evt.shape;
 // update tooltip
 	var mousePos = node.getStage().getMousePosition();
 	histTooltip.setPosition(mousePos.x + 8, mousePos.y + 8);
-	histTooltipText.setText("node: " + node.getId() + ", Frequency: " + node.getName()); //Name split?
+	histTooltipText.setText("node: " + (node.getId()-histIdStart) + ", Frequency: " + node.getName()); //Name split?
 	histTooltipRect.setAttrs({
 		width: histTooltipText.getWidth(),
 		height: histTooltipText.getHeight()
@@ -348,7 +273,7 @@ histDataLayer.on('mouseout', function(evt) {
 	histTooltipLayer.draw();
 	var shapes = stage1.get('#'+node.getId());  
 	//	document.write(node.getName() + " ,"+2 );	
-	if(histData[node.getId()].selected > 0){//selected
+	if(histData[node.getId() - histIdStart].selected > 0){//selected
 		shapes.apply('transitionTo', {
 			opacity: 1,
 			scale:{ x : 1, y : 1 },
@@ -369,6 +294,7 @@ histDataLayer.on('mouseout', function(evt) {
 //////////////////////////////////////hist Tooltip End//////////////////////////////////////
   
 //////////////////////////////////////Selection Start//////////////////////////////////////
+var preId;
 histPlotLayer.on('click', function(evt){
 	scatterAllDeselect();
 	histAllDeselect();
@@ -379,21 +305,19 @@ histDataLayer.on('click', function(evt){
   	var node = evt.shape;
   	var shapes = stage1.get('#'+node.getId());
   	var semiNode;
- // node.name = 1;  
- // 	node.setName(1);
- // 	document.write(	histData[node.getId()].selected + " ,");
-//  	document.write(node.getName() + " ,");
   	if(aPressed){	//select ALL
   		histAllSelect();
   		scatterAllSelect();
   		tmpShift = false;
   	}else if(ctrlPressed){ //select mutiple node one by one.
-  		if(histData[node.getId()].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			histData[node.getId()].selected = 0;
-//  			scatterUpdate(node.getId(), 1);
-  		}else if(histData[node.getId()].selected == 0){ // unselected -> selected
-  			histData[node.getId()].selected=histArr[node.getId()];
- // 			scatterUpdate(node.getId(), 0);
+  		if(histData[node.getId() - histIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
+  			histData[node.getId() - histIdStart].selected = 0;
+  			scatterUpdate(node.getId() - histIdStart, 1);
+  			histSingleDeselect(shapes);
+  		}else if(histData[node.getId() - histIdStart].selected == 0){ // unselected -> selected
+  			histData[node.getId() - histIdStart].selected=histArr[node.getId() - histIdStart];
+  			scatterUpdate(node.getId() - histIdStart, 0);
+  			histSingleSelect(shapes);
   		}
   		tmpShift = false;
   	}else if(shiftPressed){
@@ -401,84 +325,81 @@ histDataLayer.on('click', function(evt){
   		scatterAllDeselect();
 		histAllDeselect();
 		if(preId > node.getId()){
-			for(var i = node.getId() ; i < preId + 1 ; i++)
+			for(var i = node.getId() - histIdStart ; i < preId + 1 - histIdStart ; i++)
 			{
-				semiNode = stage1.get("#"+ i );
-				semiNode.apply('transitionTo', {
-					  opacity: 1,
-				      duration: 1,
-				  	  easing: 'elastic-ease-out'
-				   });
-				histData[i].selected =histArr[i];
-//				scatterUpdate(i, 0);
+				semiNode = stage1.get("#"+ (i + histIdStart));
+				histSingleSelect(semiNode);
+				histData[i].selected = histArr[i];
+				scatterUpdate(i, 0);
 			}
 		}else if(preId < node.getId()){
-			for(var i = preId  ; i < node.getId() + 1 ; i++)
+			for(var i = preId - histIdStart  ; i < node.getId() + 1 - histIdStart ; i++)
 			{
-				semiNode = stage1.get("#"+ i );
-				semiNode.apply('transitionTo', {
-					  opacity: 1,
-				      duration: 1,
-				  	  easing: 'elastic-ease-out'
-				   });
+				semiNode = stage1.get("#"+ (i + histIdStart));
+				histSingleSelect(semiNode);
 				histData[i].selected =histArr[i];
-	//			scatterUpdate(i, 0);
+				scatterUpdate(i, 0);
 			}
 		} 
 	}else{ 	// just one click
+		tmpShift = false;
   		histAllDeselect();
   		scatterAllDeselect();
-  		histData[node.getId()].selected=histArr[node.getId()];
-//		scatterUpdate(node.getId(), 0);
+  		histData[node.getId() - histIdStart].selected=histArr[node.getId() - histIdStart];
+  		histSingleSelect(shapes);
+		scatterUpdate(node.getId() - histIdStart, 0);		
   	}
   	
   	if(tmpShift == false)
 	{
 		preId = node.getId();
 	}
-//   scatterUpdate(node.getId(), 0);
   	writeMessage(messageLayer);
   	writeMessage1(messageLayer1);
- // 	histAllDeselect();
-  	
 }); 
 
 function histUpdate(xData, eraseOn)
 {
-	var histId = parseInt(xData/diff);
-	var node = stage1.get("#"+ histId );
-	if(eraseOn == 0)	{
-		
-		histData[histId].selected = histData[histId].selected + 1;
-		node.apply('transitionTo', {
-			  opacity: 1,
-		      duration: 1,
-		  	  easing: 'elastic-ease-out'
-		   });
+	var id = parseInt(xData/diffHist);
+//	document.write(id + histIdStart);
+	var node = stage1.get("#"+ (id + histIdStart));
+	
+	if(eraseOn == 0)	{		
+		histData[id].selected = histData[id].selected + 1;
+		histSingleSelect(node);
 	}else if(eraseOn == 1){  // ctrl press - erase
-		histData[histId].selected = histData[histId].selected - 1;
-		if(histData[histId].selected == 0)
+		histData[id].selected = histData[id].selected - 1;
+		if(histData[id].selected == 0)
 		{
-			node.apply('transitionTo', {
-				  opacity: 0.5,
-			      duration: 1,
-			  	  easing: 'elastic-ease-out'
-			   });
+			histSingleDeselect(node);
 		}
 	}
+}
+function histSingleSelect(node)
+{
+	//document.write("sdddddddd");
+	node.apply('transitionTo', {
+		opacity: 1,
+		duration: 1,
+		easing: 'elastic-ease-out'
+	});
+}
+function histSingleDeselect(node)
+{
+	node.apply('transitionTo', {
+		opacity: 0.5,
+		duration: 1,
+		easing: 'elastic-ease-out'
+	});
 }
 function histAllSelect()
 {
 	var node;
 	for(var i = 0; i <histArr.length ; i ++)
 	{
-		node = stage1.get("#"+ i );
+		node = stage1.get("#"+ (i + histIdStart));
 		histData[i].selected=histArr[i]; // should be number of scatters
- 		node.apply('transitionTo', {
-			  opacity: 1,
-		      duration: 1,
-		  	  easing: 'elastic-ease-out'
-		   });		
+		histSingleSelect(node);		
 	}
 }
 
@@ -487,23 +408,17 @@ function histAllDeselect()
 	var node;
 	for(var i = 0; i <histArr.length ; i ++)
 	{
-		node = stage1.get("#"+ i );
+		node = stage1.get("#"+ (i + histIdStart));
 		histData[i].selected=0;
- 		node.apply('transitionTo', {
-			  opacity: 0.5,
-		      duration: 1,
-		  	  easing: 'elastic-ease-out'
-		   });		
+		histSingleDeselect(node);
 	}
 }
-
   //////////////////////////////////////Selection End//////////////////////////////////////
  
 
 //////////////////////////////////////Chk Start//////////////////////////////////////   
 var messageLayer1 = new Kinetic.Layer();
 stage1.add(messageLayer1);
-
 function writeMessage1(messageLayer){
 	var context = messageLayer1.getContext();
 	messageLayer.clear();

@@ -1,3 +1,13 @@
+function getData(filename)
+{
+	var filePath = filename;
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET",filePath,false);
+	xmlhttp.send(null);
+	var fileContent = xmlhttp.responseText;
+	var returnArr = csv2array(fileContent);
+	return returnArr;
+}
 function csv2array(data, liveChar)
  {	
  	var i = 0;

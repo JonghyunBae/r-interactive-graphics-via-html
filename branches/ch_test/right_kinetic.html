@@ -15,12 +15,7 @@
     <script src="common.js"></script> 
     <script>
 /////////////// Get Data from csv File ///////////
-var filePath = "Theoph-from-R.csv";
-xmlhttp = new XMLHttpRequest();
-xmlhttp.open("GET",filePath,false);
-xmlhttp.send(null);
-var fileContent = xmlhttp.responseText;
-var array = csv2array(fileContent);
+var array = getData("Theoph-from-R.csv");
     
 ////////////////Common Data Structure //////////////
 function ObjTemp()

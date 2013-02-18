@@ -1,14 +1,36 @@
-function getData(filename)
+var mainArr; // array for all data.
+var labelArr; // character array for the column names.
+
+function createMainStructure(fileName)
 {
-	var filePath = filename;
-	xmlhttp = new XMLHttpRequest();
+	var tmpArr = getData(fileName);		
+	var dataArr=tmpArr.dataArr;
+	labelArr=tmpArr.labelArr;	
+	mainArr = make2DArr(labelArr.length);	
+	for(var j=0; j<dataArr.length; j++)
+	{
+		var tmpArr = dataArr[j].toString().split(',');	
+		for(var i = 0 ; i < labelArr.length ; i ++)
+		{
+			mainArr[i][j] = parseFloat(tmpArr[i]);
+		}	
+	}
+}
+function getData(fileName)
+{
+	var filePath = fileName;	
+	xmlhttp = new XMLHttpRequest();	
 	xmlhttp.open("GET",filePath,false);
 	xmlhttp.send(null);
 	var fileContent = xmlhttp.responseText;
-	var returnArr = csv2array(fileContent);
-	return returnArr;
+	var tempArr = csv2Arr(fileContent);
+	var returnLabelArr = tempArr[0].toString().split(',');	
+	tempArr.shift();
+	var returnDataArr = tempArr;
+	return { 'dataArr' : returnDataArr, 'labelArr' : returnLabelArr };	
 }
-function csv2array(data, liveChar)
+
+function csv2Arr(data, liveChar)
  {	
  	var i = 0;
  	var eof = '';
@@ -18,7 +40,7 @@ function csv2array(data, liveChar)
  	var line = 0;
  	while(cursor != eof)
  	{
- 		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ') ){
+ 		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ')){
  		}else if( cursor == "\n" ){
  			result_row += cursor;
  			if (result_array.length <= line)
@@ -89,19 +111,23 @@ default: alert(code); //Everything else
 }*/
 //////////////////////////////////////Chk key event End//////////////////////////////////////
 
-function scatterFindMaxValue(Data,diff)
+function findMaxValue(Data,diff) // if diff =0, for scatter.
 {
-	var maxValue=Data[1];
+	var maxValue=Data[0];
+
 	var returnValue;
-	for(var i=2; i<Data.length; i++)
+	for(var i=1; i<Data.length; i++)
 	{
+	//	document.write(maxValue + ", " +  Data[i] + "<br>");
 		if(Data[i]>maxValue)
 		{
+//			document.write("dddddddddddddd");
 			maxValue=Data[i];					
 		}
+//		document.write(maxValue + ", " +  Data[i] + "<br>");
 	}
 	returnValue=parseInt(maxValue+1);	
-	for(var i=0; i<diff; i++)
+	for(var i=0; i<diff; i++) //until mod ==0
 	{
 		returnValue=returnValue+i;
 		if((returnValue% diff) == 0)
@@ -139,6 +165,105 @@ function histFindMaxValue(xMaxHist, xData,diff)
 		}
 	}	
 	return maxValue;
+}
+
+function drawBaseRect(color, layer)//Put base layer
+{
+	var plotRect = new Kinetic.Rect({
+		x: plotXmargin-plotLength,
+		y: plotYmargin-plotLength,
+		width: plotWidth+2*plotLength,
+		height: plotHeight+2*plotLength,
+		stroke: color,
+		strokeWidth: 2
+	});
+	layer.add(plotRect);
+}
+
+
+function drawScale(xMax, xDiff, yMax, yDiff, layer){
+
+	for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
+	{
+		var xLine = new Kinetic.Line({
+		points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
+		stroke: 'black',
+		strokeWidth: 2,		     
+		});
+		layer.add(xLine);	   		
+		var xText = new Kinetic.Text({
+			x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
+			y: plotYmargin+plotHeight+plotLength*2,
+			text: i*xDiff,
+			fontSize: 15,
+			fontFamily: 'Calibri',
+			fill: 'black',
+			width: 20,
+			align: 'center'	
+		});		   
+		layer.add(xText);			
+	}
+	for(var i=0; i<parseInt(yMax/yDiff)+1; i++)
+	{
+		var yLine = new Kinetic.Line({
+			points: [plotXmargin-plotLength, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-2*plotLength,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)],
+			stroke: 'black',
+			strokeWidth: 2,		     
+		});
+		layer.add(yLine);	   
+		yText = new Kinetic.Text({
+			x: plotXmargin-plotLength*2-15,
+			y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
+			text: i*yDiff,
+			fontSize: 15,
+			fontFamily: 'Calibri',
+			fill: 'black',
+			width: 20,
+			align: 'center',
+			rotation: (Math.PI)*3/2
+		});		   
+		layer.add(yText);		
+	}			
+}
+function drawLabel(xLabelText, yLabelText, layer)//Draw xLabel, yLebel
+{
+	xLabel = new Kinetic.Text({
+		x: plotXmargin+plotWidth/2,
+		y: plotYmargin+plotHeight+4*plotLength,
+		offset : {x: xLabelText.length/2 * 10, y:0},
+		text: xLabelText,
+		fontSize: 15,
+		fontFamily: 'Calibri',
+		fill: 'black',
+	});				
+	yLabel = new Kinetic.Text({
+		x: plotXmargin-5*plotLength,
+		y: plotYmargin+plotHeight/2  - yLabelText.length/2 * 5,
+		offset : {x: yLabelText.length/2 * 10},
+		text: yLabelText,
+		fontSize: 15,
+		fontFamily: 'Calibri',
+		fill: 'black',
+		rotation: (Math.PI)*3/2
+	});		   
+	layer.add(xLabel);
+	layer.add(yLabel);	
+}
+
+function drawMainLabel(mainText, layer)//Draw main
+{	
+	main = new Kinetic.Text({
+		x: plotXmargin+plotWidth/2, 
+		y: plotYmargin *0.5 ,
+		offset : {x: mainText.length/2 * 10, y:0},
+		text: mainText,
+		fontSize: 20,
+		fontStyle: 'bold',
+		fontFamily: 'Calibri',
+		fill: 'black',
+	});		   
+	layer.add(main);
+	
 }
 
 

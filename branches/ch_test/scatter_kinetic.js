@@ -9,107 +9,13 @@ var scatterIdEnd;
   });
 //////////////////////////////////////Drawing Plot Start//////////////////////////////////////
 var scatterPlotLayer= new Kinetic.Layer();  
-
-//Draw Rectangle
-var plotRect = new Kinetic.Rect({
-	x: plotXmargin-plotLength,
-	y: plotYmargin-plotLength,
-	width: plotWidth+2*plotLength,
-	height: plotHeight+2*plotLength,
-	//     fill: 'green',
-	stroke: 'black',
-	strokeWidth: 2
-});
-scatterPlotLayer.add(plotRect);
-
-//Draw xText
-for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
-{
-	var xLine = new Kinetic.Line({
-		points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
-		stroke: 'black',
-		strokeWidth: 2,		     
-	});
-	scatterPlotLayer.add(xLine);	   		
-	var xText = new Kinetic.Text({
-		x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
-		y: plotYmargin+plotHeight+plotLength*2,
-		text: i*xDiff,
-		fontSize: 15,
-		fontFamily: 'Calibri',
-		fill: 'black',
-		width: 20,
-		align: 'center'	
-	});		   
-	scatterPlotLayer.add(xText);			
-}
-
-//Draw yText
-for(var i=0; i<parseInt(yMax/yDiff)+1; i++)
-{
-	var yLine = new Kinetic.Line({
-		points: [plotXmargin-plotLength, plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff) , plotXmargin-2*plotLength,plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)],
-		stroke: 'black',
-		strokeWidth: 2,		     
-	});
-	scatterPlotLayer.add(yLine);	   
-	yText = new Kinetic.Text({
-		x: plotXmargin-plotLength*2-15,
-		y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
-		text: i*yDiff,
-		fontSize: 15,
-		fontFamily: 'Calibri',
-		fill: 'black',
-		width: 20,
-		align: 'center',
-		rotation: (Math.PI)*3/2
-	});		   
-	scatterPlotLayer.add(yText);		
-}		
-
-//Draw xLabel
-xLabel = new Kinetic.Text({
-	x: plotXmargin+plotWidth/2,
-	y: plotYmargin+plotHeight+4*plotLength,
-	text: 'Time',
-	fontSize: 15,
-	fontFamily: 'Calibri',
-	fill: 'black',
-	//      width: plotWidth*0.8,
-	align: 'center'
-});		   
-scatterPlotLayer.add(xLabel);		
-
-//Draw yLabel
-yLabel = new Kinetic.Text({
-	x: plotXmargin-5*plotLength,
-	y: plotYmargin+plotHeight/2,
-	text: 'conc',
-	fontSize: 15,
-	fontFamily: 'Calibri',
-	fill: 'black',
-	//   width: plotHeight*0.8,
-	align: 'center',
-	rotation: (Math.PI)*3/2
-});		   
-scatterPlotLayer.add(yLabel);	
-
-//Draw main
-main = new Kinetic.Text({
-	x: plotXmargin+plotWidth/2-60, 
-	y: plotYmargin *0.5 ,
-	text: 'Theoph Scatter',
-	fontSize: 20,
-	fontStyle: 'bold',
-	fontFamily: 'Calibri',
-	fill: 'black',
-	//  width: plotWidth*0.8,
-	align: 'center'
-});		   
-scatterPlotLayer.add(main);
+drawBaseRect('black', scatterPlotLayer);
+drawScale(scatterXMax, scatterXDiff, scatterYMax, scatterYDiff, scatterPlotLayer);
+drawLabel('Time', 'conc', scatterPlotLayer);
+drawMainLabel('Theoph Scatter', scatterPlotLayer);
 stage.add(scatterPlotLayer);
-
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
+
 //add node function.
 function scatterAddNode(obj, layer) 
 {
@@ -121,7 +27,7 @@ function scatterAddNode(obj, layer)
 		radius: radius_scale,
 		fill: obj.color,
 		stroke : obj.stroke,
-		strokeWidth : 0.1,
+		strokeWidth : 0.01,
 		opacity : 1,		
 		draggable: false,
 		selected : obj.selected
@@ -129,23 +35,23 @@ function scatterAddNode(obj, layer)
 	layer.add(node);
 }
 //build data
-var xScale=plotWidth/xMax;//added by us
-var yScale=plotHeight/yMax; //added by us
+var xScale=plotWidth/scatterXMax;//added by us
+var yScale=plotHeight/scatterYMax; //added by us
 var scatterData = [];
 var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];     
 
-for(var n = 0; n < theophArr.time.length ; n++)
+for(var n = 0; n < scatterX.length ; n++)
 {
-	var x = theophArr.time[n]*xScale+plotXmargin;
-	var y = theophArr.conc[n]*yScale+plotYmargin;
+	var x = scatterX[n]*xScale+plotXmargin;
+	var y = scatterY[n]*yScale+plotYmargin;
 	var tmp=plotHeight/2+plotYmargin-y; 
 	y=y+2*tmp; //since (0,0) of canvas is top-left, so we need to change it into bottom-left.
 	scatterData.push({
 		id: idCounter,
-		name: theophArr.subject[n]+','+theophArr.wt[n]+','+theophArr.dose[n]+','+theophArr.time[n]+','+theophArr.conc[n], //does not work yet..
+		name: mainArr[0][n]+','+mainArr[1][n]+','+mainArr[2][n]+','+ mainArr[3][n]+','+ mainArr[4][n], //modify it using by for loop later.
 		x: x,
 		y: y,		
-		color: colors[theophArr.subject[n]-1],
+		color: colors[mainArr[0][n]-1],
 		stroke : 'black',
 		selected : 0 // 0 means : unselected ,  1 means : selected
 	});
@@ -255,15 +161,6 @@ scatterDataLayer.on('click', function(evt){
   		histAllSelect();
   		scatterAllSelect();
   		tmpShift = false;
-  	}else if(ctrlPressed){ //select mutiple node one by one.
-  		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			scatterSingleDeselect(shapes, node.getId() - scatterIdStart);
-  			histUpdate(theophArr.time[node.getId() - scatterIdStart],1);
-   		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
-  			scatterSingleSelect(shapes, node.getId() - scatterIdStart);
-  			histUpdate(theophArr.time[node.getId() - scatterIdStart],0);
-  		}
-  		tmpShift = false;
   	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
   		nameArr = node.getName().split(',');	
   		for(var i = 0 ; i < scatterData.length ; i++){
@@ -273,12 +170,13 @@ scatterDataLayer.on('click', function(evt){
 			{
 				tmpNode = stage.get("#"+ (i + scatterIdStart));
 				scatterSingleSelect(tmpNode, i);
-				histUpdate(theophArr.time[i], 0);  //과부하로 인한 보류
+				histUpdate(scatterX[i], 0);  //과부하로 인한 보류
 			}
 		}
 		tmpShift = false;
 	}else if(shiftPressed){
 		scatterAllDeselect();
+		histAllDeselect();
 		tmpShift = true;
 		if(preMousePos.x < mousePos.x)
 		{
@@ -288,7 +186,7 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(theophArr.time[i], 0);
+						histUpdate(scatterX[i], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -297,7 +195,7 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(theophArr.time[i], 0);
+						histUpdate(scatterX[i], 0);
 					}
 				}
 			}
@@ -309,7 +207,7 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(theophArr.time[i], 0);
+						histUpdate(scatterX[i], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -318,18 +216,27 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(theophArr.time[i], 0);
+						histUpdate(scatterX[i], 0);
 					}
 				}
 			}
 		}	
-	}else{
+	}else if(ctrlPressed){ //select mutiple node one by one.
+  		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
+  			scatterSingleDeselect(shapes, node.getId() - scatterIdStart);
+  			histUpdate(scatterX[node.getId() - scatterIdStart],1);
+   		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
+  			scatterSingleSelect(shapes, node.getId() - scatterIdStart);
+  			histUpdate(scatterX[node.getId() - scatterIdStart],0);
+  		}
+  		tmpShift = false;
+  	}else{
 		tmpShift = false;
   		scatterAllDeselect();
   		histAllDeselect();
   		scatterSingleSelect(shapes, node.getId() - scatterIdStart);
-  		//document.write(theophArr.time[node.getId() - scatterIdStart]);
-  		histUpdate(theophArr.time[node.getId() - scatterIdStart],0);
+  		//document.write(scatterX[node.getId() - scatterIdStart]);
+  		histUpdate(scatterX[node.getId() - scatterIdStart],0);
   	}  	
   	if(tmpShift == false)
 	{
@@ -380,7 +287,7 @@ function scatterSingleDeselect(node, id)
 	node.apply('transitionTo', {
 		opacity: 1,
 		//stroke : 'black',
-		strokeWidth : 0.1,
+		strokeWidth : 0.01,
 		scale: { x : 1, y : 1 },
 		duration: 1,
 		easing: 'elastic-ease-out'
@@ -483,7 +390,7 @@ function drawLegend(Location, Data){
 		'text': tmpText
 	};
 }
-var myLegend= drawLegend("topright",theophArr.subject);
+var myLegend= drawLegend("topright",mainArr[0]);
 
 legendRect.setPosition(myLegend.x, myLegend.y);
 legendText.setPosition(myLegend.x, myLegend.y);
@@ -498,9 +405,9 @@ legendLayer.add(legendText);
 var legendData = [];
 //var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
 
-for(var n = 1; n < theophArr.subject.length ; n++)
+for(var n = 1; n < mainArr[0].length ; n++)
 {
-	if(n==1 ||  ( (n!=1) && (theophArr.subject[n] != theophArr.subject[n-1]) ) ) {
+	if(n==1 ||  ( (n!=1) && (mainArr[0][n] != mainArr[0][n-1]) ) ) {
 		var x = myLegend.x+10;
 		var y = myLegend.y+plotLength+1.18*n-5;
 		
@@ -508,7 +415,7 @@ for(var n = 1; n < theophArr.subject.length ; n++)
 			x: x,
 			y: y,
 			id: -1,
-			color: colors[theophArr.subject[n]-1]
+			color: colors[mainArr[0][n]-1]
 		});
 	}
 }
@@ -542,7 +449,7 @@ function writeMessage(messageLayer){
 			}
 			cnt++;
 			context.font = "8pt Calibri";
-		    context.fillStyle = colors2[theophArr.subject[i]-1];	
+		    context.fillStyle = colors2[mainArr[0][i]-1];	
 		    context.fillText(i, 10+cnt2, 10*cnt+20);
 	//	document.write("selected("+i+") is : "+scatterData.selected[i]+"<br>");
 		}
@@ -551,5 +458,32 @@ function writeMessage(messageLayer){
 //////////////////////////////////////Chk End//////////////////////////////////////
 
 
-
-
+/*
+////////////////Common Data Structure //////////////
+function ObjTemp()
+{
+	this.subject='';
+	this.wt = '';
+	this.dose = '';
+	this.time = '';
+	this.conc = '';
+};    
+// ///////////////// Common Array ///////////////
+var theophArr = new ObjTemp();
+mainArr[0] = new Array();
+mainArr[1] = new Array();
+mainArr[2] = new Array();
+scatterX = new Array();
+scatterY = new Array();
+theophArr.selected = new Array();    
+////////////////Split & Save Data //////////////////
+for(var j=0; j<dataArr.length; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
+{	
+	var tmp_array = dataArr[j].toString().split(',');	
+	mainArr[0][j]=parseFloat(tmp_array[0]);
+	mainArr[1][j]=parseFloat(tmp_array[1]);
+	mainArr[2][j]=parseFloat(tmp_array[2]);
+	scatterX[j]=parseFloat(tmp_array[3]);
+	scatterY[j]=parseFloat(tmp_array[4]);
+}    
+*/

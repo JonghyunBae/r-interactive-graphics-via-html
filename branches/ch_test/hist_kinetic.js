@@ -4,21 +4,21 @@ var histIdStart = idCounter;
 var histIdEnd;
 var histArr = new Array();
 //document.write(histIdStart);
-histArr = drawDataHist(xMaxHist,yMaxHist,theophArr.time, diffHist);	 
+histArr = drawDataHist(histXMax,histYMax,histX, diffHist);	 
 
-function drawDataHist(xMaxHist,yMaxHist,xData,a)
+function drawDataHist(histXMax,histYMax,xData,a)
 {
 	var tmpHistArr = new Array();
 	var cnt=0;
 	var col = 0;
-	histHasArr=make2DArr(parseInt(xMaxHist/a +1) );
+	histHasArr=make2DArr(parseInt(histXMax/a +1) );
 	
-	for (var i=0; i<parseInt(xMaxHist/a ); i++)//tmpHistArr initialization
+	for (var i=0; i<parseInt(histXMax/a ); i++)//tmpHistArr initialization
 	{
 		tmpHistArr[i]=0;
 	}			
 	
-	for(cnt=0; cnt< parseInt(xMaxHist/a ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
+	for(cnt=0; cnt< parseInt(histXMax/a ); cnt++)//count how many data in certain range and save the value into tmpHistArr.
 	{
 		for( var i = 0 ; i < xData.length; i++)
 		{	
@@ -43,116 +43,23 @@ function drawDataHist(xMaxHist,yMaxHist,xData,a)
   
 //////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
 var histPlotLayer = new Kinetic.Layer();
-
-//Draw Rectangle
-var histplotRect = new Kinetic.Rect({
-	x: plotXmargin-plotLength,
-	y: plotYmargin-plotLength,
-	width: plotWidth+2*plotLength,
-	height: plotHeight+2*plotLength,
-	stroke: 'white',
-	strokeWidth: 2
-}); 
-histPlotLayer.add(histplotRect);
-
-var rect = new Kinetic.Line({
-	points: [plotXmargin-plotLength, plotYmargin+plotHeight-parseInt(yMaxHist/yDiffHist)*plotHeight/(yMaxHist/yDiffHist) ,plotXmargin-plotLength,  plotYmargin+plotHeight],
+drawBaseRect('white', histPlotLayer);
+var histXAxis = new Kinetic.Line({
+	points: [plotXmargin, plotYmargin+plotHeight+plotLength, plotXmargin+parseInt(histXMax/histXDiff)*plotWidth/(histXMax/histXDiff),  plotYmargin+plotHeight+plotLength],
 	stroke: 'black',
 	strokeWidth: 2,		     
 });
-var rect1 = new Kinetic.Line({
-	points: [plotXmargin, plotYmargin+plotHeight+plotLength, plotXmargin+parseInt(xMaxHist/xDiffHist)*plotWidth/(xMaxHist/xDiffHist),  plotYmargin+plotHeight+plotLength],
+var histYAxis = new Kinetic.Line({
+	points: [plotXmargin-plotLength, plotYmargin+plotHeight-parseInt(histYMax/histYDiff)*plotHeight/(histYMax/histYDiff) ,plotXmargin-plotLength,  plotYmargin+plotHeight],
 	stroke: 'black',
 	strokeWidth: 2,		     
 });
-histPlotLayer.add(rect);
-histPlotLayer.add(rect1);
-
-for(var i=0; i<parseInt(xMaxHist/xDiffHist)+1; i++)
-{
-	var xLine = new Kinetic.Line({
-	points: [plotXmargin+i*plotWidth/(xMaxHist/xDiffHist) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMaxHist/xDiffHist),plotYmargin+plotHeight+2*plotLength],
-	stroke: 'black',
-	strokeWidth: 2,		     
-	});
-	histPlotLayer.add(xLine);	   		
-	var xText = new Kinetic.Text({
-		x: plotXmargin+i*plotWidth/(xMaxHist/xDiffHist)-10,
-		y: plotYmargin+plotHeight+plotLength*2,
-		text: i*xDiffHist,
-		fontSize: 15,
-		fontFamily: 'Calibri',
-		fill: 'black',
-		width: 20,
-		align: 'center'	
-	});		   
-	histPlotLayer.add(xText);			
-}
-
-for(var i=0; i<parseInt(yMaxHist/yDiffHist)+1; i++)
-{
-	var yLine = new Kinetic.Line({
-		points: [plotXmargin-plotLength, plotYmargin+plotHeight-i*plotHeight/(yMaxHist/yDiffHist) , plotXmargin-2*plotLength,plotYmargin+plotHeight-i*plotHeight/(yMaxHist/yDiffHist)],
-		stroke: 'black',
-		strokeWidth: 2,		     
-	});
-	histPlotLayer.add(yLine);	   
-	yText = new Kinetic.Text({
-		x: plotXmargin-plotLength*2-15,
-		y: plotYmargin+plotHeight-i*plotHeight/(yMaxHist/yDiffHist)+10,
-		text: i*yDiffHist,
-		fontSize: 15,
-		fontFamily: 'Calibri',
-		fill: 'black',
-		width: 20,
-		align: 'center',
-		rotation: (Math.PI)*3/2
-	});		   
-	histPlotLayer.add(yText);		
-}		
-
-xLabel = new Kinetic.Text({
-	x: plotXmargin+plotWidth/2-40,
-	y: plotYmargin+plotHeight+4*plotLength,
-	text: 'Theoph$Time',
-	fontSize: 15,
-	fontFamily: 'Calibri',
-	fill: 'black',
-	//    width: 100,
-	align: 'center'
-});		   
-histPlotLayer.add(xLabel);		
-
-	
-yLabel = new Kinetic.Text({
-	x: plotXmargin-5*plotLength,
-	y: plotYmargin+plotHeight/2,
-	text: 'Frequency',
-	fontSize: 15,
-	fontFamily: 'Calibri',
-	fill: 'black',
-	//   width: plotHeight*0.8,
-	align: 'center',
-	rotation: (Math.PI)*3/2
-});		   
-histPlotLayer.add(yLabel);	
-
-//Draw main
-main = new Kinetic.Text({
-	x: plotXmargin+plotWidth/2-120, 
-	y: plotYmargin *0.5 ,
-	text: 'Histogram of Theoph$Time',
-	fontSize: 20,
-	fontStyle: 'bold',
-	fontFamily: 'Calibri',
-	fill: 'black',
-	//  width: plotWidth*0.8,
-	align: 'center'
-});		   
-histPlotLayer.add(main);
+histPlotLayer.add(histXAxis);
+histPlotLayer.add(histYAxis);
+drawScale(histXMax, histXDiff, histYMax, histYDiff, histPlotLayer);
+drawLabel('Theoph$Time', 'Frequency', histPlotLayer);
+drawMainLabel('Histogram of Theoph$Time', histPlotLayer);
 stage1.add(histPlotLayer);
-
-
 histPlotLayer.on('mouseover mousemove dragmove', function(evt){  
 	document.body.style.cursor = "default";
 });
@@ -182,15 +89,15 @@ function histAddNode(obj, layer)
   // build data
 var xCanvasWidth = plotXmargin;//added by us
 var yCanvasHeight = stage1.height-plotYmargin-plotHeight; //added by us
-var xScale=plotWidth/xMaxHist;//added by us
-var yScale=plotHeight/yMaxHist; //added by us
+var xScale=plotWidth/histXMax;//added by us
+var yScale=plotHeight/histYMax; //added by us
 var histData = [];
 
 for(var n = 0; n <histArr.length ; n++)
 {
-	var width = plotWidth / parseInt(xMaxHist/diffHist); 
-	var height = histArr[n] * plotHeight / yMaxHist;
-	var x = plotXmargin +  n * plotWidth / parseInt(xMaxHist/diffHist) + width/2;
+	var width = plotWidth / parseInt(histXMax/diffHist); 
+	var height = histArr[n] * plotHeight / histYMax;
+	var x = plotXmargin +  n * plotWidth / parseInt(histXMax/diffHist) + width/2;
 	var y = plotYmargin + plotHeight - height + height/2;
 	histData.push({
 		id: idCounter,
@@ -309,17 +216,6 @@ histDataLayer.on('click', function(evt){
   		histAllSelect();
   		scatterAllSelect();
   		tmpShift = false;
-  	}else if(ctrlPressed){ //select mutiple node one by one.
-  		if(histData[node.getId() - histIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			histData[node.getId() - histIdStart].selected = 0;
-  			scatterUpdate(node.getId() - histIdStart, 1);
-  			histSingleDeselect(shapes);
-  		}else if(histData[node.getId() - histIdStart].selected == 0){ // unselected -> selected
-  			histData[node.getId() - histIdStart].selected=histArr[node.getId() - histIdStart];
-  			scatterUpdate(node.getId() - histIdStart, 0);
-  			histSingleSelect(shapes);
-  		}
-  		tmpShift = false;
   	}else if(shiftPressed){
   		tmpShift = true;
   		scatterAllDeselect();
@@ -341,7 +237,18 @@ histDataLayer.on('click', function(evt){
 				scatterUpdate(i, 0);
 			}
 		} 
-	}else{ 	// just one click
+	}else if(ctrlPressed){ //select mutiple node one by one.
+  		if(histData[node.getId() - histIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
+  			histData[node.getId() - histIdStart].selected = 0;
+  			scatterUpdate(node.getId() - histIdStart, 1);
+  			histSingleDeselect(shapes);
+  		}else if(histData[node.getId() - histIdStart].selected == 0){ // unselected -> selected
+  			histData[node.getId() - histIdStart].selected=histArr[node.getId() - histIdStart];
+  			scatterUpdate(node.getId() - histIdStart, 0);
+  			histSingleSelect(shapes);
+  		}
+  		tmpShift = false;
+  	}else{ 	// just one click
 		tmpShift = false;
   		histAllDeselect();
   		scatterAllDeselect();
@@ -432,7 +339,6 @@ function writeMessage1(messageLayer){
 		
 		context.font = "10pt Calibri";
 		context.fillText( i+' : '+histData[i].selected, 10, 13*cnt+30);
-		//document.write("selected("+i+") is : "+theophArr.selected[i]+"<br>");
 		cnt++;
 		
 	}

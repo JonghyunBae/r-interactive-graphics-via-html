@@ -12,39 +12,13 @@
     <div id="container"></div>
     <div id="container1"></div>
     <script src="kinetic-v4.3.1.js"></script> 
-    <script src="common.js"></script> 
+    <script src="common.js"> </script> 
     <script>
-/////////////// Get Data from csv File ///////////
-var array = getData("Theoph-from-R.csv");
-    
-////////////////Common Data Structure //////////////
-function ObjTemp()
-{
-	this.subject='';
-	this.wt = '';
-	this.dose = '';
-	this.time = '';
-	this.conc = '';
-	this.selected = false;
-};    
-// ///////////////// Common Array ///////////////
-var theophArr = new ObjTemp();
-theophArr.subject = new Array();
-theophArr.wt = new Array();
-theophArr.dose = new Array();
-theophArr.time = new Array();
-theophArr.conc = new Array();
-theophArr.selected = new Array();    
-////////////////Split & Save Data //////////////////
-for(var j=0; j<array.length-1; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
-{	
-	var tmp_array = array[j+1].toString().split(',');	
-	theophArr.subject[j]=parseFloat(tmp_array[0]);
-	theophArr.wt[j]=parseFloat(tmp_array[1]);
-	theophArr.dose[j]=parseFloat(tmp_array[2]);
-	theophArr.time[j]=parseFloat(tmp_array[3]);
-	theophArr.conc[j]=parseFloat(tmp_array[4]);
-}    
+/////////////// Create Main structure from CSV file ///////////
+createMainStructure("Theoph-from-R.csv");
+ ///////////////////////////////////////////////////////
+ 
+
 //////////////////Common variables///////////////////////////
 var idCounter = 0;
 var plotWidth=500;
@@ -54,16 +28,19 @@ var plotYmargin=90;
 var plotLength=15;
 //////////variables for scatter chart//////////////// names are likely to change later
 var radius_scale = 3; // / Dot radius in scatter chart 
-var xMax=scatterFindMaxValue(theophArr.time,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-var yMax=scatterFindMaxValue(theophArr.conc,0);
-var xDiff=parseInt(xMax/5);//나중에 자동으로 잡아주기.
-var yDiff=parseInt(yMax/6);
+var scatterX = mainArr[3];
+var scatterY = mainArr[4];
+var scatterXMax=findMaxValue(scatterX,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
+var scatterYMax=findMaxValue(scatterY,0);
+var scatterXDiff=parseInt(scatterXMax/5);//나중에 자동으로 잡아주기.
+var scatterYDiff=parseInt(scatterYMax/6);
 //////////variables for histogram chart//////////////// names are likely to change later
+var histX = mainArr[3];
 var diffHist = 3;
-var xMaxHist=scatterFindMaxValue(theophArr.time,diffHist); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-var yMaxHist=histFindMaxValue(xMaxHist,theophArr.time,diffHist);
-var xDiffHist=parseInt(xMaxHist/5);//나중에 자동으로 잡아주기.
-var yDiffHist=parseInt(yMaxHist/5);   
+var histXMax=findMaxValue(histX,diffHist); //나중에 max함수 추가해서 5단위로 잡게 만들기.
+var histYMax=histFindMaxValue(histXMax,histX,diffHist);
+var histXDiff=parseInt(histXMax/5);//나중에 자동으로 잡아주기.
+var histYDiff=parseInt(histYMax/5);   
     </script>     
     
     <script src="scatter_kinetic.js"></script>

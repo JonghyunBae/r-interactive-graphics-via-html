@@ -11,7 +11,7 @@ var scatterIdEnd;
 var scatterPlotLayer= new Kinetic.Layer();  
 drawBaseRect('black', scatterPlotLayer);
 drawScale(scatterXMax, scatterXDiff, scatterYMax, scatterYDiff, scatterPlotLayer);
-drawLabel('Time', 'conc', scatterPlotLayer);
+drawLabel(scatterXLabel, scatterYLabel, scatterPlotLayer);
 drawMainLabel('Theoph Scatter', scatterPlotLayer);
 stage.add(scatterPlotLayer);
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
@@ -28,7 +28,7 @@ function scatterAddNode(obj, layer)
 		fill: obj.color,
 		stroke : obj.stroke,
 		strokeWidth : 0.01,
-		opacity : 1,		
+		opacity : 0.5,		
 		draggable: false,
 		selected : obj.selected
 	});		
@@ -39,10 +39,10 @@ var xScale=plotWidth/scatterXMax;//added by us
 var yScale=plotHeight/scatterYMax; //added by us
 var scatterData = [];
 
-for(var n = 0; n < scatterX.length ; n++)
+for(var n = 0; n < scatterXMain.length ; n++)
 {
-	var x = scatterX[n]*xScale+plotXmargin;
-	var y = scatterY[n]*yScale+plotYmargin;
+	var x = scatterXMain[n]*xScale+plotXmargin;
+	var y = scatterYMain[n]*yScale+plotYmargin;
 	var tmp=plotHeight/2+plotYmargin-y; 
 	y=y+2*tmp; //since (0,0) of canvas is top-left, so we need to change it into bottom-left.
 	scatterData.push({
@@ -91,13 +91,13 @@ scatterTooltipLayer.add(scatterTooltip);
 stage.add(scatterTooltipLayer);
 
 
-
 function tooltipTextGetName(arr){	//"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"
 	var name=labelArr[0]+" : " + arr[0]+ "\r\n" ;
-	for(var i=1; i<mainArr.length; i++){
+	for(var i=1; i< labelArr.length ; i++){
 		name=name+ labelArr[i].split('\n')[0]+" : " + arr[i]+ "\r\n" ; //-------------------------csv2Arr(data, liveChar) has bug.....last column data includes "\n", should be removed...!!!!!!!!!!!!
 	}//labelArr[i].split('\n')[0] is temp solution.
 	return name;	
+
 }
 
 scatterDataLayer.on('mouseover', function(evt){
@@ -107,21 +107,22 @@ scatterDataLayer.on('mouseover', function(evt){
 	scatterTooltip.setPosition(mousePos.x + 8, mousePos.y + 8);
 	var nameArr = new Array();
 	nameArr = node.getName().split(',');		
-	
+
 	
 	scatterTooltipText.setText("node : " + (node.getId() - scatterIdStart) +"\r\n"+ tooltipTextGetName(nameArr)+"color : " + node.getFill()); //naem split?
 	scatterTooltipRect.setAttrs({
 		width: scatterTooltipText.getWidth(),
 		height: scatterTooltipText.getHeight()
 	});
+
 	scatterTooltip.show();
 	scatterTooltipLayer.draw();
 	node.moveToTop();
 	var shapes = stage.get('#'+node.getId());
 	shapes.apply('transitionTo', {
 		scale: { x : 1.5, y : 1.5 },
-		duration: 1,
-		easing: 'elastic-ease-out'
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
 	});	
 });
 
@@ -135,15 +136,15 @@ scatterDataLayer.on('mouseout', function(evt) {
 		shapes.apply('transitionTo', {
 			opacity: 1,
 			scale: { x : 1.3, y : 1.3 },
-			duration: 1,
-			easing: 'elastic-ease-out'
+			duration: 0.1
+			//	easing: 'elastic-ease-out'
 		});
 	}else{		  //unselected
 		shapes.apply('transitionTo', {
-			opacity: 1,
+			opacity: 0.5,
 			scale:{ x : 1, y : 1 },
-			duration: 1,
-			easing: 'elastic-ease-out'
+			duration: 0.1
+			//	easing: 'elastic-ease-out'
 		});
 	}
 });	  
@@ -177,11 +178,11 @@ scatterDataLayer.on('click', function(evt){
   		for(var i = 0 ; i < scatterData.length ; i++){
 			var tmpNameArr = new Array();
 			tmpNameArr = scatterData[i].name.split(',');	
-			if(nameArr[0] == tmpNameArr[0])
+			if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
 			{
 				tmpNode = stage.get("#"+ (i + scatterIdStart));
 				scatterSingleSelect(tmpNode, i);
-				histUpdate(scatterX[i], 0);  //과부하로 인한 보류
+				histUpdate(scatterXMain[i], 0);  //과부하로 인한 보류
 			}
 		}
 		tmpShift = false;
@@ -197,7 +198,7 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(scatterX[i], 0);
+						histUpdate(scatterXMain[i], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -206,7 +207,7 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(scatterX[i], 0);
+						histUpdate(scatterXMain[i], 0);
 					}
 				}
 			}
@@ -218,7 +219,7 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(scatterX[i], 0);
+						histUpdate(scatterXMain[i], 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -227,7 +228,7 @@ scatterDataLayer.on('click', function(evt){
 					{
 						tmpNode = stage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
-						histUpdate(scatterX[i], 0);
+						histUpdate(scatterXMain[i], 0);
 					}
 				}
 			}
@@ -235,10 +236,10 @@ scatterDataLayer.on('click', function(evt){
 	}else if(ctrlPressed){ //select mutiple node one by one.
   		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
   			scatterSingleDeselect(shapes, node.getId() - scatterIdStart);
-  			histUpdate(scatterX[node.getId() - scatterIdStart],1);
+  			histUpdate(scatterXMain[node.getId() - scatterIdStart],1);
    		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
   			scatterSingleSelect(shapes, node.getId() - scatterIdStart);
-  			histUpdate(scatterX[node.getId() - scatterIdStart],0);
+  			histUpdate(scatterXMain[node.getId() - scatterIdStart],0);
   		}
   		tmpShift = false;
   	}else{
@@ -246,8 +247,8 @@ scatterDataLayer.on('click', function(evt){
   		scatterAllDeselect();
   		histAllDeselect();
   		scatterSingleSelect(shapes, node.getId() - scatterIdStart);
-  		//document.write(scatterX[node.getId() - scatterIdStart]);
-  		histUpdate(scatterX[node.getId() - scatterIdStart],0);
+  		//document.write(scatterXMain[node.getId() - scatterIdStart]);
+  		histUpdate(scatterXMain[node.getId() - scatterIdStart],0);
   	}  	
   	if(tmpShift == false)
 	{
@@ -287,8 +288,8 @@ function scatterSingleSelect(node, id)
 		//stroke : 'black',
 		strokeWidth : 1,
 		scale: { x : 1.3, y : 1.3 },
-		duration: 1,
-		easing: 'elastic-ease-out'
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
 	});
 	scatterData[id].selected=1;
 }
@@ -296,12 +297,12 @@ function scatterSingleSelect(node, id)
 function scatterSingleDeselect(node, id)
 {
 	node.apply('transitionTo', {
-		opacity: 1,
+		opacity: 0.5,
 		//stroke : 'black',
 		strokeWidth : 0.01,
 		scale: { x : 1, y : 1 },
-		duration: 1,
-		easing: 'elastic-ease-out'
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
 	});
 	scatterData[id].selected=0;
 }
@@ -395,8 +396,8 @@ var theophArr = new ObjTemp();
 mainArr[0] = new Array();
 mainArr[1] = new Array();
 mainArr[2] = new Array();
-scatterX = new Array();
-scatterY = new Array();
+scatterXMain = new Array();
+scatterYMain = new Array();
 theophArr.selected = new Array();    
 ////////////////Split & Save Data //////////////////
 for(var j=0; j<dataArr.length; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
@@ -405,7 +406,7 @@ for(var j=0; j<dataArr.length; j++) // 1부터 시작할지 0부터 시직할지
 	mainArr[0][j]=parseFloat(tmp_array[0]);
 	mainArr[1][j]=parseFloat(tmp_array[1]);
 	mainArr[2][j]=parseFloat(tmp_array[2]);
-	scatterX[j]=parseFloat(tmp_array[3]);
-	scatterY[j]=parseFloat(tmp_array[4]);
+	scatterXMain[j]=parseFloat(tmp_array[3]);
+	scatterYMain[j]=parseFloat(tmp_array[4]);
 }    
 */

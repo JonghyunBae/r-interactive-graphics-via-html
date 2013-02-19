@@ -37,8 +37,8 @@ function drawDataHist(histXMax,histYMax,xData,a)
 //////////////////////////////////////Stage1(hist) Start//////////////////////////////////////
   var stage1 = new Kinetic.Stage({
     container: 'container',
-    width: 800,
-    height: 800
+    width: plotWidth+plotXmargin*2,
+    height: plotHeight+plotYmargin*2
   });
   
 //////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
@@ -167,8 +167,8 @@ histDataLayer.on('mouseover', function(evt){
 	shapes.apply('transitionTo', {
 		opacity: 1,
 		scale: {	x : 1.15, y : 1.01 },
-		duration: 1,
-		easing: 'elastic-ease-out'
+		duration: 0.1
+	//	easing: 'elastic-ease-out'
 	});    
 }); 	    
 
@@ -184,17 +184,18 @@ histDataLayer.on('mouseout', function(evt) {
 		shapes.apply('transitionTo', {
 			opacity: 1,
 			scale:{ x : 1, y : 1 },
-			duration: 1,
-			easing: 'elastic-ease-out'
+			duration: 0.1
+			//	easing: 'elastic-ease-out'
 		});
 	}else{		  //unselected
 		shapes.apply('transitionTo', {
 			opacity: 0.5,
 			scale:{ x : 1, y : 1 },
-			duration: 1,
-			easing: 'elastic-ease-out'
+			duration: 0.1
+			//	easing: 'elastic-ease-out'
 		});
 	}
+   
 	writeMessage(messageLayer);
 	writeMessage1(messageLayer1);
 });	 
@@ -287,16 +288,16 @@ function histSingleSelect(node)
 	//document.write("sdddddddd");
 	node.apply('transitionTo', {
 		opacity: 1,
-		duration: 1,
-		easing: 'elastic-ease-out'
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
 	});
 }
 function histSingleDeselect(node)
 {
 	node.apply('transitionTo', {
 		opacity: 0.5,
-		duration: 1,
-		easing: 'elastic-ease-out'
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
 	});
 }
 function histAllSelect()

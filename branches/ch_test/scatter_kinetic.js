@@ -4,8 +4,8 @@ var scatterIdEnd;
 //////////////////////////////////////Stage Start//////////////////////////////////////
   var stage = new Kinetic.Stage({
     container: 'container',
-    width: 800,
-    height: 800
+    width: plotWidth+plotXmargin*2,
+    height: plotHeight+plotYmargin*2
   });
 //////////////////////////////////////Drawing Plot Start//////////////////////////////////////
 var scatterPlotLayer= new Kinetic.Layer();  
@@ -38,7 +38,6 @@ function scatterAddNode(obj, layer)
 var xScale=plotWidth/scatterXMax;//added by us
 var yScale=plotHeight/scatterYMax; //added by us
 var scatterData = [];
-var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];     
 
 for(var n = 0; n < scatterX.length ; n++)
 {
@@ -48,10 +47,10 @@ for(var n = 0; n < scatterX.length ; n++)
 	y=y+2*tmp; //since (0,0) of canvas is top-left, so we need to change it into bottom-left.
 	scatterData.push({
 		id: idCounter,
-		name: mainArr[0][n]+','+mainArr[1][n]+','+mainArr[2][n]+','+ mainArr[3][n]+','+ mainArr[4][n], //modify it using by for loop later.
+		name: dataGetName(n), //modify it using by for loop later.
 		x: x,
 		y: y,		
-		color: colors[mainArr[0][n]-1],
+		color: setColor(scatterColor,n), 
 		stroke : 'black',
 		selected : 0 // 0 means : unselected ,  1 means : selected
 	});
@@ -91,6 +90,16 @@ scatterTooltip.add(scatterTooltipRect).add(scatterTooltipText);
 scatterTooltipLayer.add(scatterTooltip);	  
 stage.add(scatterTooltipLayer);
 
+
+
+function tooltipTextGetName(arr){	//"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"
+	var name=labelArr[0]+" : " + arr[0]+ "\r\n" ;
+	for(var i=1; i<mainArr.length; i++){
+		name=name+ labelArr[i].split('\n')[0]+" : " + arr[i]+ "\r\n" ; //-------------------------csv2Arr(data, liveChar) has bug.....last column data includes "\n", should be removed...!!!!!!!!!!!!
+	}//labelArr[i].split('\n')[0] is temp solution.
+	return name;	
+}
+
 scatterDataLayer.on('mouseover', function(evt){
 	document.body.style.cursor = "pointer";
 	var node = evt.shape;
@@ -98,7 +107,9 @@ scatterDataLayer.on('mouseover', function(evt){
 	scatterTooltip.setPosition(mousePos.x + 8, mousePos.y + 8);
 	var nameArr = new Array();
 	nameArr = node.getName().split(',');		
-	scatterTooltipText.setText("node: " + (node.getId() - scatterIdStart) +"\r\n"+"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"+ "color: " + node.getFill()); //naem split?
+	
+	
+	scatterTooltipText.setText("node : " + (node.getId() - scatterIdStart) +"\r\n"+ tooltipTextGetName(nameArr)+"color : " + node.getFill()); //naem split?
 	scatterTooltipRect.setAttrs({
 		width: scatterTooltipText.getWidth(),
 		height: scatterTooltipText.getHeight()
@@ -327,120 +338,30 @@ function scatterAllDeselect()
 
 
 //////////////////////////////////////Legend Start//////////////////////////////////////
-var legendLayer = new Kinetic.Layer({draggable:true});
-
-function addNodeLegend(obj, layer) {
-	var node = new Kinetic.Circle({
-		x: obj.x,
-		y: obj.y,
-		radius: 3,
-		fill: obj.color,
-	//	opacity : 1,
-		id: obj.id
-	});		
-	layer.add(node);
-	//     return node;
-}
-
-var legendText = new Kinetic.Text({
-	text: '',
-	fontFamily: 'Calibri',
-	fontSize: 13,
-	padding: 5,
-	fill: 'black',
-	align:'center'
-});
-
-var legendRect= new Kinetic.Rect({
-	stroke: 'black',
-	fill: 'white'
-});
-
-function drawLegend(Location, Data){
-	var tmpText='';	 
-	
-	for( var i = 1 ; i < Data.length; i++)
-	{	
-		if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  //after cheking subject, if it is the same, there is no index addition.
-		{		
-			tmpText=tmpText + '     '+ Data[i] +"\r\n";
-		}
-	}
-	
-	if (Location == 'topright' || Location == undefined)	{
-		x = plotXmargin+plotWidth-27;
-		y = plotYmargin-plotLength;
-	}else if(Location == 'topleft'){
-		x = plotXmargin-plotLength;
-		y = plotYmargin-plotLength;
-	}else if(Location == 'bottomright'){
-		x = plotXmargin+plotWidth-27;
-		y = plotYmargin+plotHeight-tmpText.length*1.53; //check later
-	}else if(Location == 'bottomleft'){
-		x = plotXmargin-plotLength;
-		y = plotYmargin+plotHeight-tmpText.length*1.53;//check later
-	}else{						// default is topright
-		x = plotXmargin+plotWidth-27;
-		y = plotYmargin-plotLength;
-		}
-	
-	return {
-		'x': x,
-		'y': y,
-		'text': tmpText
-	};
-}
-var myLegend= drawLegend("topright",mainArr[0]);
-
-legendRect.setPosition(myLegend.x, myLegend.y);
-legendText.setPosition(myLegend.x, myLegend.y);
-legendText.setText(myLegend.text); 
-legendRect.setAttrs({
-	width: legendText.getWidth(),
-	height: legendText.getHeight()
-});
-legendLayer.add(legendRect);
-legendLayer.add(legendText);
-
-var legendData = [];
-//var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
-
-for(var n = 1; n < mainArr[0].length ; n++)
+if(legend ==true)
 {
-	if(n==1 ||  ( (n!=1) && (mainArr[0][n] != mainArr[0][n-1]) ) ) {
-		var x = myLegend.x+10;
-		var y = myLegend.y+plotLength+1.18*n-5;
-		
-		legendData.push({
-			x: x,
-			y: y,
-			id: -1,
-			color: colors[mainArr[0][n]-1]
-		});
-	}
+	drawLegend("topright",scatterColor);
 }
-for(var n = 0; n < legendData.length; n++) 
-{
-	addNodeLegend(legendData[n], legendLayer);	
-}
-stage.add(legendLayer);
 //////////////////////////////////////Legend End//////////////////////////////////////
-
 
 
 //////////////////////////////////////Chk Start//////////////////////////////////////   
 var messageLayer = new Kinetic.Layer();
 stage.add(messageLayer);
 function writeMessage(messageLayer){
+
+    
 	var context = messageLayer.getContext();
     messageLayer.clear();
-    var colors2 = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
-	
+//    var colors2 = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
+  //  document.write('a');
 	context.font = "12pt Calibri";
     context.fillStyle = "black";	    
     context.fillText("Selected Node", 10, 15);
+   
     var cnt=0;
     var cnt2=0;
+   // document.write('a');
 	for(var i=0; i<scatterData.length; i++){
 		if(scatterData[i].selected==1){
 			if(cnt>49){
@@ -449,7 +370,8 @@ function writeMessage(messageLayer){
 			}
 			cnt++;
 			context.font = "8pt Calibri";
-		    context.fillStyle = colors2[mainArr[0][i]-1];	
+	//	    context.fillStyle = colors2[mainArr[0][i]-1];	
+			context.fillStyle = setColor(scatterColor,i);
 		    context.fillText(i, 10+cnt2, 10*cnt+20);
 	//	document.write("selected("+i+") is : "+scatterData.selected[i]+"<br>");
 		}

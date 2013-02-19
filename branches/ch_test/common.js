@@ -265,7 +265,13 @@ function drawMainLabel(mainText, layer)//Draw main
 	layer.add(main);
 	
 }
-
+function dataGetName(n){
+	var name=mainArr[0][n];
+	for(var i=1; i<mainArr.length; i++){
+		name= name +','+ mainArr[i][n];
+	}
+	return name;	
+}
 
 function make2DArr(rows) {
 	  var Arr = [];
@@ -274,5 +280,129 @@ function make2DArr(rows) {
 	  }
 	  return Arr;
 }
+
+
+
+var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];     //-------------------------------------------should be flexible----------------------------------------------------!!
+
+function setColor(colorArr,n){
+	var tmpColor='green';
+	if(colorArr == 'default' ){//undefined로 수정 가능 ???
+		tmpColor='green';
+	}else{
+		tmpColor= colors[colorArr[n]-1];
+	}
+	return tmpColor;
+}
+
+function drawLegend(location, legendArr){
+
+	var legendLayer = new Kinetic.Layer({draggable:true});
+
+	function addNodeLegend(obj, layer) {
+		var node = new Kinetic.Circle({
+			x: obj.x,
+			y: obj.y,
+			radius: 3,
+			fill: obj.color,
+		//	opacity : 1,
+			id: obj.id
+		});		
+		layer.add(node);
+		//     return node;
+	}
+
+	var legendText = new Kinetic.Text({
+		text: '',
+		fontFamily: 'Calibri',
+		fontSize: 13,
+		padding: 5,
+		fill: 'black',
+		align:'center'
+	});
+
+	var legendRect= new Kinetic.Rect({
+		stroke: 'black',
+		fill: 'white'
+	});
+	
+
+	var myLegend= getMyLegend(location ,  legendArr); /////////------------------------------should be flexible..not just mainArr[0]
+
+	legendRect.setPosition(myLegend.x, myLegend.y);
+	legendText.setPosition(myLegend.x, myLegend.y);
+	legendText.setText(myLegend.text); 
+	legendRect.setAttrs({
+		width: legendText.getWidth(),
+		height: legendText.getHeight()
+	});
+	legendLayer.add(legendRect);
+	legendLayer.add(legendText);
+
+	var legendData = [];
+//	var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];//---------should be able to get more color flexible.
+
+	for(var n = 1; n < mainArr[0].length ; n++)
+	{
+		if(n==1 ||  ( (n!=1) && (mainArr[0][n] != mainArr[0][n-1]) ) ) {
+			var x = myLegend.x+10;
+			var y = myLegend.y+plotLength+1.18*n-5;
+			
+			legendData.push({
+				x: x,
+				y: y,
+				id: -1,
+				color: setColor(scatterColor,n)
+			//	color : 'black'
+			});
+		}
+	}
+	for(var n = 0; n < legendData.length; n++) 
+	{
+		addNodeLegend(legendData[n], legendLayer);	
+	}
+	stage.add(legendLayer);
+} 
+
+function getMyLegend(Location, Data){//only works for pre-sorted array....
+	var tmpText='';	 
+	
+	for( var i = 1 ; i < Data.length; i++)
+	{	
+		if(i==1 ||  ( (i!=1) && (Data[i] != Data[i-1]) ) )  //after cheking subject, if it is the same, there is no index addition.
+		{		
+			tmpText=tmpText + '     '+ Data[i] +"\r\n";
+		}
+	}
+	
+	if (Location == 'topright' || Location == undefined)	{
+		x = plotXmargin+plotWidth-27;
+		y = plotYmargin-plotLength;
+	}else if(Location == 'topleft'){
+		x = plotXmargin-plotLength;
+		y = plotYmargin-plotLength;
+	}else if(Location == 'bottomright'){
+		x = plotXmargin+plotWidth-27;
+		y = plotYmargin+plotHeight-tmpText.length*1.53; //check later
+	}else if(Location == 'bottomleft'){
+		x = plotXmargin-plotLength;
+		y = plotYmargin+plotHeight-tmpText.length*1.53;//check later
+	}else{						// default is topright
+		x = plotXmargin+plotWidth-27;
+		y = plotYmargin-plotLength;
+		}
+	
+	return {
+		'x': x,
+		'y': y,
+		'text': tmpText
+	};
+}
+
+
+
+
+
+
 
 

@@ -15,7 +15,9 @@
     <script src="common.js"> </script> 
     <script>
 /////////////// Create Main structure from CSV file ///////////
-createMainStructure("Theoph-from-R.csv");
+//createMainStructure("Theoph-from-R.csv");
+createMainStructure("ChickWeight-from-R.csv");
+
  ///////////////////////////////////////////////////////
  
 
@@ -28,14 +30,21 @@ var plotYmargin=90;
 var plotLength=15;
 //////////variables for scatter chart//////////////// names are likely to change later
 var radius_scale = 3; // / Dot radius in scatter chart 
-var scatterX = mainArr[3];
-var scatterY = mainArr[4];
+var scatterX = mainArr[1];
+var scatterY = mainArr[0];
+
+//var scatterColor = mainArr[0];
+//var legend = true;
+
+var scatterColor = 'default';
+var legend = false;
+
 var scatterXMax=findMaxValue(scatterX,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 var scatterYMax=findMaxValue(scatterY,0);
 var scatterXDiff=parseInt(scatterXMax/5);//나중에 자동으로 잡아주기.
 var scatterYDiff=parseInt(scatterYMax/6);
 //////////variables for histogram chart//////////////// names are likely to change later
-var histX = mainArr[3];
+var histX = mainArr[1];
 var diffHist = 3;
 var histXMax=findMaxValue(histX,diffHist); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 var histYMax=histFindMaxValue(histXMax,histX,diffHist);
@@ -45,6 +54,7 @@ var histYDiff=parseInt(histYMax/5);
     
     <script src="scatter_kinetic.js"></script>
     <script src="hist_kinetic.js"></script>
+    
      
      
       

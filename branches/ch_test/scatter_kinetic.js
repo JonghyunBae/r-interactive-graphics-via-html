@@ -12,7 +12,7 @@ var scatterPlotLayer= new Kinetic.Layer();
 drawBaseRect('black', scatterPlotLayer);
 drawScale(scatterXMax, scatterXDiff, scatterYMax, scatterYDiff, scatterPlotLayer);
 drawLabel(scatterXLabel, scatterYLabel, scatterPlotLayer);
-drawMainLabel('Theoph Scatter', scatterPlotLayer);
+drawMainLabel('Scatter of '+scatterXLabel+'&'+scatterYLabel, scatterPlotLayer);
 stage.add(scatterPlotLayer);
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
 
@@ -287,6 +287,7 @@ function scatterSingleSelect(node, id)
 		opacity: 1,
 		//stroke : 'black',
 		strokeWidth : 1,
+		//color : 'black',
 		scale: { x : 1.3, y : 1.3 },
 		duration: 0.1
 		//	easing: 'elastic-ease-out'

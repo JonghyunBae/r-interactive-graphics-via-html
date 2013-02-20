@@ -4,7 +4,7 @@ var histIdStart = idCounter;
 var histIdEnd;
 var histArr = new Array();
 //document.write(histIdStart);
-histArr = drawDataHist(histXMax,histYMax,histX, diffHist);	 
+histArr = drawDataHist(histXMax,histYMax,histXMain, diffHist);	 
 
 function drawDataHist(histXMax,histYMax,xData,a)
 {
@@ -57,8 +57,8 @@ var histYAxis = new Kinetic.Line({
 histPlotLayer.add(histXAxis);
 histPlotLayer.add(histYAxis);
 drawScale(histXMax, histXDiff, histYMax, histYDiff, histPlotLayer);
-drawLabel('Theoph$Time', 'Frequency', histPlotLayer);
-drawMainLabel('Histogram of Theoph$Time', histPlotLayer);
+drawLabel(histXLabel, 'Frequency', histPlotLayer);
+drawMainLabel('Histogram of ' + histXLabel, histPlotLayer);
 stage1.add(histPlotLayer);
 histPlotLayer.on('mouseover mousemove dragmove', function(evt){  
 	document.body.style.cursor = "default";

@@ -1,5 +1,6 @@
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
+var msgShow=false;
 
 function createMainStructure(fileName)
 {

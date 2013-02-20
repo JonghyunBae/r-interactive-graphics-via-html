@@ -157,8 +157,9 @@ var preMousePos;
 scatterPlotLayer.on('click', function(evt){
 	scatterAllDeselect();
 	histAllDeselect();
-//	writeMessage1(messageLayer1);
-	 writeMessage(messageLayer);
+	if(msgShow==true){
+		writeMsg(msgLayer);
+	}
 	 tmpShift = false;
 });
 
@@ -254,8 +255,9 @@ scatterDataLayer.on('click', function(evt){
 	{
 		preMousePos = mousePos;
 	}  	
-  	 writeMessage(messageLayer);
-  	writeMessage1(messageLayer1);
+  	if(msgShow==true){
+		writeMsg(msgLayer);
+	}
 }); 
 
 function scatterUpdate(rectId, eraseOn)
@@ -346,7 +348,7 @@ if(legend ==true)
 }
 //////////////////////////////////////Legend End//////////////////////////////////////
 
-
+/*
 //////////////////////////////////////Chk Start//////////////////////////////////////   
 var messageLayer = new Kinetic.Layer();
 stage.add(messageLayer);
@@ -380,7 +382,7 @@ function writeMessage(messageLayer){
 	}
 }
 //////////////////////////////////////Chk End//////////////////////////////////////
-
+*/
 
 /*
 ////////////////Common Data Structure //////////////

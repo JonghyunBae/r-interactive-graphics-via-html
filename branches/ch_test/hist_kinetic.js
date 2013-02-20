@@ -196,8 +196,9 @@ histDataLayer.on('mouseout', function(evt) {
 		});
 	}
    
-	writeMessage(messageLayer);
-	writeMessage1(messageLayer1);
+	if(msgShow==true){
+		writeMsg(msgLayer);
+	}
 });	 
 //////////////////////////////////////hist Tooltip End//////////////////////////////////////
   
@@ -206,8 +207,9 @@ var preId;
 histPlotLayer.on('click', function(evt){
 	scatterAllDeselect();
 	histAllDeselect();
-	writeMessage(messageLayer);
-	writeMessage1(messageLayer1);
+	if(msgShow==true){
+		writeMsg(msgLayer);
+	}
 });
 histDataLayer.on('click', function(evt){
   	var node = evt.shape;
@@ -262,8 +264,9 @@ histDataLayer.on('click', function(evt){
 	{
 		preId = node.getId();
 	}
-  	writeMessage(messageLayer);
-  	writeMessage1(messageLayer1);
+  	if(msgShow==true){
+		writeMsg(msgLayer);
+	}
 }); 
 
 function histUpdate(xData, eraseOn)
@@ -323,7 +326,7 @@ function histAllDeselect()
 }
   //////////////////////////////////////Selection End//////////////////////////////////////
  
-
+/*
 //////////////////////////////////////Chk Start//////////////////////////////////////   
 var messageLayer1 = new Kinetic.Layer();
 stage1.add(messageLayer1);
@@ -346,5 +349,5 @@ function writeMessage1(messageLayer){
 
 }
 //////////////////////////////////////Chk End//////////////////////////////////////   
-  
+  */
   

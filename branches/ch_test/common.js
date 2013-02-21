@@ -1,6 +1,6 @@
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
-var msgShow=false;
+var msgShow=true;
 
 function createMainStructure(fileName)
 {
@@ -193,13 +193,13 @@ function drawScale(xMax, xDiff, yMax, yDiff, layer){
 		});
 		layer.add(xLine);	   		
 		var xText = new Kinetic.Text({
-			x: plotXmargin+i*plotWidth/(xMax/xDiff)-10,
+			x: plotXmargin+i*plotWidth/(xMax/xDiff)-15,
 			y: plotYmargin+plotHeight+plotLength*2,
 			text: i*xDiff,
 			fontSize: 15,
 			fontFamily: 'Calibri',
 			fill: 'black',
-			width: 20,
+			width: 30,
 			align: 'center'	
 		});		   
 		layer.add(xText);			
@@ -214,12 +214,12 @@ function drawScale(xMax, xDiff, yMax, yDiff, layer){
 		layer.add(yLine);	   
 		yText = new Kinetic.Text({
 			x: plotXmargin-plotLength*2-15,
-			y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+10,
+			y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+15,
 			text: i*yDiff,
 			fontSize: 15,
 			fontFamily: 'Calibri',
 			fill: 'black',
-			width: 20,
+			width: 30,
 			align: 'center',
 			rotation: (Math.PI)*3/2
 		});		   

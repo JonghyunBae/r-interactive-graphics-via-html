@@ -170,6 +170,7 @@ histDataLayer.on('mouseover', function(evt){
 		duration: 0.1
 	//	easing: 'elastic-ease-out'
 	});    
+	
 }); 	    
 
 histDataLayer.on('mouseout', function(evt) {
@@ -210,6 +211,22 @@ histPlotLayer.on('click', function(evt){
 	if(msgShow==true){
 		writeMsg(msgLayer);
 	}
+	 var tmpNode = stage.get("#"+ (scatterIdStart));
+	 tmpNode.apply('transitionTo', {
+		 rotation : 0,
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
+	var tmpNode1 = stage1.get("#"+ (histIdStart));
+	 tmpNode1.apply('transitionTo', {
+		 rotation : 0,
+	//	stroke:'black',
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
+	 
 });
 histDataLayer.on('click', function(evt){
   	var node = evt.shape;
@@ -264,6 +281,22 @@ histDataLayer.on('click', function(evt){
 	{
 		preId = node.getId();
 	}
+
+ 	 var tmpNode = stage.get("#"+ (scatterIdStart));
+	 tmpNode.apply('transitionTo', {
+		rotation : 0,
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
+	var tmpNode1 = stage1.get("#"+ (histIdStart));
+	 tmpNode1.apply('transitionTo', {
+		 rotation : 0,
+	//	stroke:'black',
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
   	if(msgShow==true){
 		writeMsg(msgLayer);
 	}
@@ -289,17 +322,24 @@ function histUpdate(xData, eraseOn)
 function histSingleSelect(node)
 {
 	//document.write("sdddddddd");
-	node.apply('transitionTo', {
+	node.apply('setAttrs', {
 		opacity: 1,
-		duration: 0.1
+	//	strokeWidth : 2,
+	//	stroke : 'red',
+		scale: { x : 1.05, y : 1 },
+		//duration: 0.1
 		//	easing: 'elastic-ease-out'
 	});
 }
 function histSingleDeselect(node)
 {
-	node.apply('transitionTo', {
+	node.apply('setAttrs', {
 		opacity: 0.5,
-		duration: 0.1
+	//	strokeWidth : 1,
+		//	fill : 'green',
+	//	stoke : 'black',
+		scale: { x : 1, y : 1 },
+		//duration: 0.1
 		//	easing: 'elastic-ease-out'
 	});
 }

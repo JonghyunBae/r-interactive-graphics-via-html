@@ -155,12 +155,28 @@ var preMousePos;
 
 
 scatterPlotLayer.on('click', function(evt){
+	//var node = evt.shape;
 	scatterAllDeselect();
 	histAllDeselect();
 	if(msgShow==true){
 		writeMsg(msgLayer);
 	}
 	 tmpShift = false;
+	 var tmpNode = stage.get("#"+ (scatterIdStart));
+	 tmpNode.apply('transitionTo', {
+		 rotation : 0,
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
+	 var tmpNode1 = stage1.get("#"+ (histIdStart));
+	 tmpNode1.apply('transitionTo', {
+		 rotation : 0,
+	//	stroke:'black',
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
 });
 
 scatterDataLayer.on('click', function(evt){
@@ -258,6 +274,23 @@ scatterDataLayer.on('click', function(evt){
   	if(msgShow==true){
 		writeMsg(msgLayer);
 	}
+  	
+  	 var tmpNode = stage.get("#"+ (scatterIdStart));
+	 tmpNode.apply('transitionTo', {
+		rotation : 0,
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
+	var tmpNode1 = stage1.get("#"+ (histIdStart));
+	 tmpNode1.apply('transitionTo', {
+		 rotation : 0,
+	//	stroke:'black',
+	//	scale: { x : 1.3, y : 1.3 },
+		duration: 0.1
+		//	easing: 'elastic-ease-out'
+	});
+  	
 }); 
 
 function scatterUpdate(rectId, eraseOn)
@@ -285,13 +318,14 @@ function scatterSingleSelect(node, id)
 {
 //document.write(node + id);
 //	node = stage.get("#"+ id );
-	node.apply('transitionTo', {
+	node.apply('setAttrs', {
 		opacity: 1,
 		//stroke : 'black',
-		strokeWidth : 1,
-		//color : 'black',
+		strokeWidth : 2,
+		//fill : 'green',
+		stroke : 'red',
 		scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
+	//	duration: 0.1
 		//	easing: 'elastic-ease-out'
 	});
 	scatterData[id].selected=1;
@@ -299,12 +333,14 @@ function scatterSingleSelect(node, id)
 
 function scatterSingleDeselect(node, id)
 {
-	node.apply('transitionTo', {
+	node.apply('setAttrs', {
 		opacity: 0.5,
 		//stroke : 'black',
 		strokeWidth : 0.01,
+	//	fill : 'green',
+		stoke : 'green',
 		scale: { x : 1, y : 1 },
-		duration: 0.1
+	//	duration: 0.1
 		//	easing: 'elastic-ease-out'
 	});
 	scatterData[id].selected=0;
@@ -321,6 +357,7 @@ function scatterAllSelect()
 			scatterSingleSelect(node, i);
 		}
 	}
+	//scatterPlotLayer.draw();
 }
 
 function scatterAllDeselect()
@@ -336,6 +373,9 @@ function scatterAllDeselect()
 			scatterSingleDeselect(node, i);
 		}
 	}
+	
+	
+	//scatterPlotLayer.draw();
 }
 
 //////////////////////////////////////Selection End//////////////////////////////////////

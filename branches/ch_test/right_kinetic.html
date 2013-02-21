@@ -1,36 +1,52 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <link  rel="stylesheet" href="right_kinetic.css">  
+    <link  rel="stylesheet" href="right_kinetic.css"> 
   </head>
   <body>
+ 
+      <script src="kinetic-v4.3.1.js"></script>
+    <script src="common.js"> </script>
     <div id="container"></div>
     <div id="container1"></div>
-   	 <a id="save" href="#" class="myButton">Save as image</a>
+        <a id="save" href="#" class="myButton">Save as image</a>
     <a id="sendImg" href="#" class="myButton">Send an image to Email (not supported yet, just our idea.)</a><!-- not supported yet -->
     <a id="showSelected" href="#" class="myButton">Show selected items</a>
     <a id="hideSelected" href="#" class="myButton">Hide selected items</a>
-    <div id="msgContainer"></div>
-    
-    <script src="kinetic-v4.3.1.js"></script> 
-    <script src="common.js"> </script> 
+   
+   
+    <form name = "searchForm">
+        Search(Use the variables below only) :
+   <!--     <select name="select1" size = "1">
+            <option value ="0"> scatter </option>
+            <option value ="1"> hist </option>
+        </select>  -->
+         <input type="text" name = "searchId" value ="input boolean statement" width="100px" onFocus="if(this.value==this.defaultValue){this.value='';}" >
+        
+        <a id="searchStart" href="#" class="myButton" onClick ="booleanSearch(searchForm)">Search!</a>
+       
+    </form>
+   
+  
+   
+
     <script>
 /////////////// Create Main structure from CSV file ///////////
 //createMainStructure("Theoph-from-R.csv");
 createMainStructure("ChickWeight-from-R.csv");
 
  ///////////////////////////////////////////////////////
- 
+  
 
 //////////////////Common variables///////////////////////////
 var idCounter = 0;
 var plotWidth=500;
 var plotHeight=500;
 var plotXmargin=150;
-var plotYmargin=90; 
+var plotYmargin=90;
 var plotLength=15;
 //////////variables for scatter chart//////////////// names are likely to change later
-var radius_scale = 4; // / Dot radius in scatter chart 
+var radius_scale = 4; // / Dot radius in scatter chart
 var scatterX = 1;
 var scatterY = 0;
 var scatterXLabel = labelArr[scatterX];
@@ -57,12 +73,15 @@ var diffHist = 2;
 var histXMax=findMaxValue(histXMain,diffHist); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 var histYMax=histFindMaxValue(histXMax,histXMain,diffHist);
 var histXDiff=parseInt(histXMax/5);//나중에 자동으로 잡아주기.
-var histYDiff=parseInt(histYMax/5);   
-    </script>     
-    
+var histYDiff=parseInt(histYMax/5);  
+    </script>    
+   
+   
+   
     <script src="scatter_kinetic.js"></script>
     <script src="hist_kinetic.js"></script>
-    
+   
+   
     <script>
     document.getElementById('save').addEventListener('click', function() {
         /*
@@ -89,69 +108,196 @@ var histYDiff=parseInt(histYMax/5);
               window.open(dataUrl1);
             }
           });
-      }, false);    
+      }, false);   
     document.getElementById('showSelected').addEventListener('click', function() {
-    	 msgShow = true;
-      	 writeMsg(msgLayer);
-      }, false);    
-    
+         msgShow = true;
+           writeMsg(msgLayer);
+      }, false);   
+   
     document.getElementById('hideSelected').addEventListener('click', function() {
-    	msgShow = false;
-      	msgLayer.clear();
-     }, false);    
-    
+        msgShow = false;
+          msgLayer.clear();
+     }, false);   
+   
     </script>
+   
+   
+   
+  
+     <script>
+  //  document.write('1');
+          document.write("<table border=\"1\" >");
+          document.write("<tr>");
+        for(var i=0; i<labelArr.length; i++){
+        //    document.write("<tr>");	
+            document.write("<td width=\"100\" align=\"center\">");
+            document.write(labelArr[i]);
+            document.write("</td>");
+            //document.write("</tr>");                   
+        }
+        document.write("</tr>");     
+        document.write("</table>");
+        
+        
+
+        function add(text){
+     	    var textBox = document.getElementByName("searchId");
+     	    textBox.value = textBox.value + text;
+     	}
+        
+    </script> 
+  
+   
+  
+    <p><div id="msgContainer"></div>
+   
+   
+   
+   
+   
+   
      <script>
     var msgStage = new Kinetic.Stage({
         container: 'msgContainer',
         width: 500,
         height: 500
-      });      
+      });     
     var msgLayer = new Kinetic.Layer();
+   
+    var drawEdgeRect = new Kinetic.Rect({
+          x: 0,
+      y: 0,
+      width: 500,
+      height: 500,
+      fillEnabled: false,
+      stroke: 'black',
+      strokeWidth: 2 
+ });
+ msgLayer.add(drawEdgeRect);
+   
     msgStage.add(msgLayer);
-    function writeMsg(msgLayer){
-    	var context = msgLayer.getContext();
-    	msgLayer.clear();
-    	
-    	context.font = "12pt Calibri";
-    	context.fillStyle = "black";	    
-    	context.fillText("# of Selected for Hist", 300, 15);
-    	var cnt=0;    	
-    	for(var i=0; i<histData.length; i++){    		
-    		context.font = "10pt Calibri";
-    		context.fillText( i+' : '+histData[i].selected, 300, 13*cnt+30);
-    		cnt++;    		
-    	}
-    	
-    	context.font = "12pt Calibri";
-        context.fillStyle = "black";	    
-        context.fillText("Selected Items for Scatter", 10, 15);
+   
+    function writeMsg(layer){
        
+        var context = layer.getContext();
+        layer.clear();
+       
+        context.font = "12pt Calibri";
+        context.fillStyle = "black";       
+        context.fillText("# of Selected for Hist", 300, 15);
+        var cnt=0;       
+        for(var i=0; i<histData.length; i++){           
+            context.font = "10pt Calibri";
+            context.fillText( i+' : '+histData[i].selected, 300, 13*cnt+30);
+            cnt++;           
+        }
+       
+        context.font = "12pt Calibri";
+        context.fillStyle = "black";       
+        context.fillText("Selected Items for Scatter", 10, 15);
+      
         var cnt1=0;
         var cnt2=0;
        // document.write('a');
-    	for(var i=0; i<scatterData.length; i++){
-    		if(scatterData[i].selected==1){
-    			if(cnt1>49){
-    				cnt1=0;
-    				cnt2=cnt2+20;
-    			}
-    			cnt1++;
-    			context.font = "8pt Calibri";
-    	//	    context.fillStyle = colors2[mainArr[0][i]-1];	
-    			context.fillStyle = setColor(scatterColor,i);
-    		    context.fillText(i, 10+cnt2, 10*cnt1+20);
-    	//	document.write("selected("+i+") is : "+scatterData.selected[i]+"<br>");
-    		}
-    	}
-    	
+        for(var i=0; i<scatterData.length; i++){
+            if(scatterData[i].selected==1){
+                if(cnt1>49){
+                    cnt1=0;
+                    cnt2=cnt2+20;
+                }
+                cnt1++;
+                context.font = "8pt Calibri";
+        //        context.fillStyle = colors2[mainArr[0][i]-1];   
+                context.fillStyle = setColor(scatterColor,i);
+                context.fillText(i, 10+cnt2, 10*cnt1+20);
+        //    document.write("selected("+i+") is : "+scatterData.selected[i]+"<br>");
+            }
+        }
+       
+   
+       
     }
-    
+   
     </script>
-     
-      
     
+    
+    
+    
+      <script>
+      //try to "weight==113 || time<10 && diET <2 && chiCK <20 || wEight>200"
+      function booleanSearch(string)
+      {
+                 scatterAllDeselect();
+            histAllDeselect();
+          var inputStr = string.searchId.value;
+         
+    //      if(string.select1.value == 0){//scatter selected // can be removed later
+              if(1){
+                  /*if(inputString includes any other variables except given ones){
+                      alert("Please use given variables!");
+                  }*/
+                 
+                 
+                      
+              for(var i=0; i<labelArr.length; i++){
+
+                  var searchStr =new RegExp( labelArr[i].split('\n')[0] , 'gi'); // "g" means all search, "i" menas not-case-sensitive
+                   //-------------------------csv2Arr(data, liveChar) has bug.....last column data includes "\n", should be removed...!!!!!!!!!!!!
+              //    var newStr = mainArr[j][i].toString();
+                  inputStr = inputStr.replace(searchStr, "mainArr["+i+"][i]");
+                 
+              }
+              ////    document.write(labelArr[3]);
+              //    document.write(labelArr.length);
+                     
+      //    document.write(inputStr);
+             
+            //if "Time" is for "mainArr[1][i]" and "labelArr[1]"    
+              //for example, "8<= Time && Time <=10" will be "8<=mainArr[1][i] && mainArr[1][i] <=10"
+             
+             
+                  for(var i = 0 ; i < scatterData.length ; i++)
+                  {
+                      //    var tmpNameArr = new Array();
+                      //    tmpNameArr = scatterData[i].name.split(',');   
+                  //    alert("Please use given variables!");
+                      if(eval(inputStr))
+                    {
+                              tmpNode = stage.get("#"+ (i + scatterIdStart));
+                              scatterSingleSelect(tmpNode, i);
+                              histUpdate(scatterXMain[i], 0);  //과부하로 인한 보류
+                      }
+                  }
+                 
+                 
+                   var tmpNode = stage.get("#"+ (scatterIdStart));
+                   tmpNode.apply('transitionTo', {
+                       rotation : 0,
+                  //    scale: { x : 1.3, y : 1.3 },
+                      duration: 0.1
+                      //    easing: 'elastic-ease-out'
+                  });
+                  var tmpNode1 = stage1.get("#"+ (histIdStart));
+                   tmpNode1.apply('transitionTo', {
+                       rotation : 0,
+                  //    stroke:'black',
+                  //    scale: { x : 1.3, y : 1.3 },
+                      duration: 0.1
+                      //    easing: 'elastic-ease-out'
+                  });
+                 
+              }   
+  //        }else if(string.select1.value ==1){//hist selected
+             
+   //       }
+          if(msgShow==true){
+            writeMsg(msgLayer);
+        }
+         
+      }
+      </script>
+   
     <!-- <script src="hist_kinetic.js"></script> --!>
-    
+   
   </body>
 </html>

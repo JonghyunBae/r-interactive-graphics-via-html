@@ -1,9 +1,7 @@
-
 var histHasArr;
 var histIdStart = idCounter;
 var histIdEnd;
 var histArr = new Array();
-//document.write(histIdStart);
 histArr = drawDataHist(histXMax,histYMax,histXMain, diffHist);	 
 
 function drawDataHist(histXMax,histYMax,xData,a)
@@ -34,8 +32,8 @@ function drawDataHist(histXMax,histYMax,xData,a)
 	return tmpHistArr;
 }
 
-//////////////////////////////////////Stage1(hist) Start//////////////////////////////////////
-  var stage1 = new Kinetic.Stage({
+//////////////////////////////////////histStage Start//////////////////////////////////////
+  var histStage = new Kinetic.Stage({
     container: 'container',
     width: plotWidth+plotXmargin*2,
     height: plotHeight+plotYmargin*2
@@ -59,7 +57,7 @@ histPlotLayer.add(histYAxis);
 drawScale(histXMax, histXDiff, histYMax, histYDiff, histPlotLayer);
 drawLabel(histXLabel, 'Frequency', histPlotLayer);
 drawMainLabel('Histogram of ' + histXLabel, histPlotLayer);
-stage1.add(histPlotLayer);
+histStage.add(histPlotLayer);
 histPlotLayer.on('mouseover mousemove dragmove', function(evt){  
 	document.body.style.cursor = "default";
 });
@@ -88,7 +86,7 @@ function histAddNode(obj, layer)
 
   // build data
 var xCanvasWidth = plotXmargin;//added by us
-var yCanvasHeight = stage1.height-plotYmargin-plotHeight; //added by us
+var yCanvasHeight = histStage.height-plotYmargin-plotHeight; //added by us
 var xScale=plotWidth/histXMax;//added by us
 var yScale=plotHeight/histYMax; //added by us
 var histData = [];
@@ -122,7 +120,7 @@ histIdEnd = idCounter - 1;
   {
     histAddNode(histData[n], histDataLayer);
   }
-  stage1.add(histDataLayer);  
+  histStage.add(histDataLayer);  
   
 //////////////////////////////////////hist Tooltip Start//////////////////////////////////////
 
@@ -144,7 +142,7 @@ var histTooltipRect = new Kinetic.Rect({
   
 histTooltip.add(histTooltipRect).add(histTooltipText);
 histTooltipLayer.add(histTooltip);
-stage1.add(histTooltipLayer);
+histStage.add(histTooltipLayer);
   
  
 
@@ -161,16 +159,14 @@ histDataLayer.on('mouseover', function(evt){
 	});
 	histTooltip.show();
 	histTooltipLayer.draw();
-	//	var node = evt.shape;
 	node.moveUp();
-	var shapes = stage1.get('#'+node.getId());
+	var shapes = histStage.get('#'+node.getId());
 	shapes.apply('transitionTo', {
 		opacity: 1,
 		scale: {	x : 1.15, y : 1.01 },
-		duration: 0.1
-	//	easing: 'elastic-ease-out'
-	});    
-	
+		duration: 0.1,
+		easing: 'elastic-ease-out'
+	});    	
 }); 	    
 
 histDataLayer.on('mouseout', function(evt) {
@@ -179,21 +175,20 @@ histDataLayer.on('mouseout', function(evt) {
 	document.body.style.cursor = "default";
 	histTooltip.hide();
 	histTooltipLayer.draw();
-	var shapes = stage1.get('#'+node.getId());  
-	//	document.write(node.getName() + " ,"+2 );	
+	var shapes = histStage.get('#'+node.getId());  
 	if(histData[node.getId() - histIdStart].selected > 0){//selected
 		shapes.apply('transitionTo', {
 			opacity: 1,
 			scale:{ x : 1, y : 1 },
-			duration: 0.1
-			//	easing: 'elastic-ease-out'
+			duration: 0.1,
+			easing: 'elastic-ease-out'
 		});
 	}else{		  //unselected
 		shapes.apply('transitionTo', {
 			opacity: 0.5,
 			scale:{ x : 1, y : 1 },
-			duration: 0.1
-			//	easing: 'elastic-ease-out'
+			duration: 0.1,
+			easing: 'elastic-ease-out'
 		});
 	}
    
@@ -211,26 +206,11 @@ histPlotLayer.on('click', function(evt){
 	if(msgShow==true){
 		writeMsg(msgLayer);
 	}
-	 var tmpNode = stage.get("#"+ (scatterIdStart));
-	 tmpNode.apply('transitionTo', {
-		 rotation : 0,
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
-	var tmpNode1 = stage1.get("#"+ (histIdStart));
-	 tmpNode1.apply('transitionTo', {
-		 rotation : 0,
-	//	stroke:'black',
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
-	 
+	doRefresh();	 
 });
 histDataLayer.on('click', function(evt){
   	var node = evt.shape;
-  	var shapes = stage1.get('#'+node.getId());
+  	var shapes = histStage.get('#'+node.getId());
   	var semiNode;
   	if(aPressed){	//select ALL
   		histAllSelect();
@@ -243,7 +223,7 @@ histDataLayer.on('click', function(evt){
 		if(preId > node.getId()){
 			for(var i = node.getId() - histIdStart ; i < preId + 1 - histIdStart ; i++)
 			{
-				semiNode = stage1.get("#"+ (i + histIdStart));
+				semiNode = histStage.get("#"+ (i + histIdStart));
 				histSingleSelect(semiNode);
 				histData[i].selected = histArr[i];
 				scatterUpdate(i, 0);
@@ -251,7 +231,7 @@ histDataLayer.on('click', function(evt){
 		}else if(preId < node.getId()){
 			for(var i = preId - histIdStart  ; i < node.getId() + 1 - histIdStart ; i++)
 			{
-				semiNode = stage1.get("#"+ (i + histIdStart));
+				semiNode = histStage.get("#"+ (i + histIdStart));
 				histSingleSelect(semiNode);
 				histData[i].selected =histArr[i];
 				scatterUpdate(i, 0);
@@ -282,21 +262,8 @@ histDataLayer.on('click', function(evt){
 		preId = node.getId();
 	}
 
- 	 var tmpNode = stage.get("#"+ (scatterIdStart));
-	 tmpNode.apply('transitionTo', {
-		rotation : 0,
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
-	var tmpNode1 = stage1.get("#"+ (histIdStart));
-	 tmpNode1.apply('transitionTo', {
-		 rotation : 0,
-	//	stroke:'black',
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
+  	doRefresh();
+  	
   	if(msgShow==true){
 		writeMsg(msgLayer);
 	}
@@ -305,8 +272,7 @@ histDataLayer.on('click', function(evt){
 function histUpdate(xData, eraseOn)
 {
 	var id = parseInt(xData/diffHist);
-//	document.write(id + histIdStart);
-	var node = stage1.get("#"+ (id + histIdStart));
+	var node = histStage.get("#"+ (id + histIdStart));
 	
 	if(eraseOn == 0)	{		
 		histData[id].selected = histData[id].selected + 1;
@@ -319,36 +285,29 @@ function histUpdate(xData, eraseOn)
 		}
 	}
 }
+
 function histSingleSelect(node)
 {
-	//document.write("sdddddddd");
 	node.apply('setAttrs', {
 		opacity: 1,
-	//	strokeWidth : 2,
-	//	stroke : 'red',
-		scale: { x : 1.05, y : 1 },
-		//duration: 0.1
-		//	easing: 'elastic-ease-out'
+		scale: { x : 1.05, y : 1 }
 	});
 }
+
 function histSingleDeselect(node)
 {
 	node.apply('setAttrs', {
 		opacity: 0.5,
-	//	strokeWidth : 1,
-		//	fill : 'green',
-	//	stoke : 'black',
-		scale: { x : 1, y : 1 },
-		//duration: 0.1
-		//	easing: 'elastic-ease-out'
+		scale: { x : 1, y : 1 }
 	});
 }
+
 function histAllSelect()
 {
 	var node;
 	for(var i = 0; i <histArr.length ; i ++)
 	{
-		node = stage1.get("#"+ (i + histIdStart));
+		node = histStage.get("#"+ (i + histIdStart));
 		histData[i].selected=histArr[i]; // should be number of scatters
 		histSingleSelect(node);		
 	}
@@ -359,35 +318,10 @@ function histAllDeselect()
 	var node;
 	for(var i = 0; i <histArr.length ; i ++)
 	{
-		node = stage1.get("#"+ (i + histIdStart));
+		node = histStage.get("#"+ (i + histIdStart));
 		histData[i].selected=0;
 		histSingleDeselect(node);
 	}
 }
   //////////////////////////////////////Selection End//////////////////////////////////////
  
-/*
-//////////////////////////////////////Chk Start//////////////////////////////////////   
-var messageLayer1 = new Kinetic.Layer();
-stage1.add(messageLayer1);
-function writeMessage1(messageLayer){
-	var context = messageLayer1.getContext();
-	messageLayer.clear();
-	
-	context.font = "12pt Calibri";
-	context.fillStyle = "black";	    
-	context.fillText("# of Selected", 10, 15);
-	var cnt=0;
-	
-	for(var i=0; i<histData.length; i++){
-		
-		context.font = "10pt Calibri";
-		context.fillText( i+' : '+histData[i].selected, 10, 13*cnt+30);
-		cnt++;
-		
-	}
-
-}
-//////////////////////////////////////Chk End//////////////////////////////////////   
-  */
-  

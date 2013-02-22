@@ -180,3 +180,16 @@ input[type="button"]:active {
 	background: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(89,222,27)), color-stop(0.15, rgb(83,179,38)), color-stop(0.8, rgb(66,143,27)), color-stop(1, rgb(54,120,22)));
 	background: -moz-linear-gradient( center bottom, rgb(89,222,27) 0%, rgb(83,179,38) 15%, rgb(66,143,27) 80%, rgb(54,120,22) 100%);
 }
+
+
+
+    .note {
+        background-color: rgb(255, 240, 70);
+        height: 250px;
+        padding: 10px;
+        position: absolute;
+        width: 200px;
+        -webkit-box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+

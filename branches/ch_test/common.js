@@ -296,7 +296,7 @@ function setColor(colorArr,n){
 	return tmpColor;
 }
 
-function drawLegend(location, legendArr){
+function drawLegend(location, legendArr, stage){
 
 	var legendLayer = new Kinetic.Layer({draggable:true});
 
@@ -400,8 +400,23 @@ function getMyLegend(Location, Data){//only works for pre-sorted array....
 	};
 }
 
-
-
+function doRefresh(){
+	var tmpNode = scatterStage.get("#"+ (scatterIdStart));
+	tmpNode.apply('transitionTo', {
+	    rotation : 0,
+	//    scale: { x : 1.3, y : 1.3 },
+	   duration: 0.1
+	   //    easing: 'elastic-ease-out'
+	});
+	var tmpNode1 = histStage.get("#"+ (histIdStart));
+	tmpNode1.apply('transitionTo', {
+	    rotation : 0,
+	//    stroke:'black',
+	//    scale: { x : 1.3, y : 1.3 },
+	   duration: 0.1
+	   //    easing: 'elastic-ease-out'
+	});
+}
 
 
 

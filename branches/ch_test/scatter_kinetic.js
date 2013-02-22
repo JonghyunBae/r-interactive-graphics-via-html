@@ -1,8 +1,8 @@
 var scatterIdStart = idCounter;
 var scatterIdEnd;
 
-//////////////////////////////////////Stage Start//////////////////////////////////////
-  var stage = new Kinetic.Stage({
+//////////////////////////////////////scatterStage Start//////////////////////////////////////
+  var scatterStage = new Kinetic.Stage({
     container: 'container',
     width: plotWidth+plotXmargin*2,
     height: plotHeight+plotYmargin*2
@@ -13,7 +13,7 @@ drawBaseRect('black', scatterPlotLayer);
 drawScale(scatterXMax, scatterXDiff, scatterYMax, scatterYDiff, scatterPlotLayer);
 drawLabel(scatterXLabel, scatterYLabel, scatterPlotLayer);
 drawMainLabel('Scatter of '+scatterXLabel+'&'+scatterYLabel, scatterPlotLayer);
-stage.add(scatterPlotLayer);
+scatterStage.add(scatterPlotLayer);
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
 
 //add node function.
@@ -63,7 +63,7 @@ for(var n = 0; n < scatterData.length; n++)
 {
 	scatterAddNode(scatterData[n], scatterDataLayer);
 }
-stage.add(scatterDataLayer);
+scatterStage.add(scatterDataLayer);
 
 //////////////////////////////////////Tooltip Start//////////////////////////////////////
 var scatterTooltipLayer = new Kinetic.Layer();
@@ -88,7 +88,7 @@ var scatterTooltipRect = new Kinetic.Rect({
 
 scatterTooltip.add(scatterTooltipRect).add(scatterTooltipText);
 scatterTooltipLayer.add(scatterTooltip);	  
-stage.add(scatterTooltipLayer);
+scatterStage.add(scatterTooltipLayer);
 
 
 function tooltipTextGetName(arr){	//"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"
@@ -97,7 +97,6 @@ function tooltipTextGetName(arr){	//"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + n
 		name=name+ labelArr[i].split('\n')[0]+" : " + arr[i]+ "\r\n" ; //-------------------------csv2Arr(data, liveChar) has bug.....last column data includes "\n", should be removed...!!!!!!!!!!!!
 	}//labelArr[i].split('\n')[0] is temp solution.
 	return name;	
-
 }
 
 scatterDataLayer.on('mouseover', function(evt){
@@ -118,11 +117,11 @@ scatterDataLayer.on('mouseover', function(evt){
 	scatterTooltip.show();
 	scatterTooltipLayer.draw();
 	node.moveToTop();
-	var shapes = stage.get('#'+node.getId());
+	var shapes = scatterStage.get('#'+node.getId());
 	shapes.apply('transitionTo', {
 		scale: { x : 1.5, y : 1.5 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
+		duration: 0.1,
+		easing: 'elastic-ease-out'
 	});	
 });
 
@@ -131,20 +130,20 @@ scatterDataLayer.on('mouseout', function(evt) {
 	document.body.style.cursor = "default";
 	scatterTooltip.hide();
 	scatterTooltipLayer.draw();	 
-	var shapes = stage.get('#'+node.getId());
+	var shapes = scatterStage.get('#'+node.getId());
 	if(scatterData[node.getId() - scatterIdStart].selected > 0){//selected
 		shapes.apply('transitionTo', {
 			opacity: 1,
 			scale: { x : 1.3, y : 1.3 },
-			duration: 0.1
-			//	easing: 'elastic-ease-out'
+			duration: 0.1,
+			easing: 'elastic-ease-out'
 		});
 	}else{		  //unselected
 		shapes.apply('transitionTo', {
 			opacity: 0.75,
 			scale:{ x : 1, y : 1 },
-			duration: 0.1
-			//	easing: 'elastic-ease-out'
+			duration: 0.1,
+			easing: 'elastic-ease-out'
 		});
 	}
 });	  
@@ -162,26 +161,12 @@ scatterPlotLayer.on('click', function(evt){
 		writeMsg(msgLayer);
 	}
 	 tmpShift = false;
-	 var tmpNode = stage.get("#"+ (scatterIdStart));
-	 tmpNode.apply('transitionTo', {
-		 rotation : 0,
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
-	 var tmpNode1 = stage1.get("#"+ (histIdStart));
-	 tmpNode1.apply('transitionTo', {
-		 rotation : 0,
-	//	stroke:'black',
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
+	 doRefresh();
 });
 
 scatterDataLayer.on('click', function(evt){
   	var node = evt.shape;
-  	var shapes = stage.get('#'+node.getId());
+  	var shapes = scatterStage.get('#'+node.getId());
   	var semiNode;
   	var mousePos = {x: node.getX(), y:node.getY()};
   	var tmpNode;
@@ -191,15 +176,17 @@ scatterDataLayer.on('click', function(evt){
   		scatterAllSelect();
   		tmpShift = false;
   	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
+  		scatterAllDeselect();
+		histAllDeselect();
   		nameArr = node.getName().split(',');	
   		for(var i = 0 ; i < scatterData.length ; i++){
 			var tmpNameArr = new Array();
 			tmpNameArr = scatterData[i].name.split(',');	
 			if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
 			{
-				tmpNode = stage.get("#"+ (i + scatterIdStart));
+				tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
 				scatterSingleSelect(tmpNode, i);
-				histUpdate(scatterXMain[i], 0);  //과부하로 인한 보류
+				histUpdate(scatterXMain[i], 0);  
 			}
 		}
 		tmpShift = false;
@@ -213,7 +200,7 @@ scatterDataLayer.on('click', function(evt){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
-						tmpNode = stage.get("#"+ (i + scatterIdStart));
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
 						histUpdate(scatterXMain[i], 0);
 					}
@@ -222,7 +209,7 @@ scatterDataLayer.on('click', function(evt){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
 					{
-						tmpNode = stage.get("#"+ (i + scatterIdStart));
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
 						histUpdate(scatterXMain[i], 0);
 					}
@@ -234,7 +221,7 @@ scatterDataLayer.on('click', function(evt){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x  && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
-						tmpNode = stage.get("#"+ (i + scatterIdStart));
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
 						histUpdate(scatterXMain[i], 0);
 					}
@@ -243,7 +230,7 @@ scatterDataLayer.on('click', function(evt){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x && mousePos.y  <= scatterData[i].y && scatterData[i].y <= preMousePos.y  )
 					{
-						tmpNode = stage.get("#"+ (i + scatterIdStart));
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
 						scatterSingleSelect(tmpNode, i);
 						histUpdate(scatterXMain[i], 0);
 					}
@@ -264,7 +251,6 @@ scatterDataLayer.on('click', function(evt){
   		scatterAllDeselect();
   		histAllDeselect();
   		scatterSingleSelect(shapes, node.getId() - scatterIdStart);
-  		//document.write(scatterXMain[node.getId() - scatterIdStart]);
   		histUpdate(scatterXMain[node.getId() - scatterIdStart],0);
   	}  	
   	if(tmpShift == false)
@@ -275,21 +261,7 @@ scatterDataLayer.on('click', function(evt){
 		writeMsg(msgLayer);
 	}
   	
-  	 var tmpNode = stage.get("#"+ (scatterIdStart));
-	 tmpNode.apply('transitionTo', {
-		rotation : 0,
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
-	var tmpNode1 = stage1.get("#"+ (histIdStart));
-	 tmpNode1.apply('transitionTo', {
-		 rotation : 0,
-	//	stroke:'black',
-	//	scale: { x : 1.3, y : 1.3 },
-		duration: 0.1
-		//	easing: 'elastic-ease-out'
-	});
+  	doRefresh();
   	
 }); 
 
@@ -299,13 +271,13 @@ function scatterUpdate(rectId, eraseOn)
 	if(eraseOn == 0)	{
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
 		{	
-			node = stage.get("#" + scatterData[histHasArr[rectId][i]].id);
+			node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
 			scatterSingleSelect(node, histHasArr[rectId][i]);
 		}
 	}else if(eraseOn == 1){ 
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
 		{
-			node = stage.get("#" + scatterData[histHasArr[rectId][i]].id);
+			node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
 			if(scatterData[histHasArr[rectId][i]].selected  == 1)
 			{
 				scatterSingleDeselect(node, histHasArr[rectId][i]);
@@ -316,17 +288,11 @@ function scatterUpdate(rectId, eraseOn)
 
 function scatterSingleSelect(node, id)
 {
-//document.write(node + id);
-//	node = stage.get("#"+ id );
 	node.apply('setAttrs', {
 		opacity: 1,
-		//stroke : 'black',
 		strokeWidth : 2,
-		//fill : 'green',
 		stroke : 'red',
-		scale: { x : 1.3, y : 1.3 },
-	//	duration: 0.1
-		//	easing: 'elastic-ease-out'
+		scale: { x : 1.3, y : 1.3 }
 	});
 	scatterData[id].selected=1;
 }
@@ -335,13 +301,9 @@ function scatterSingleDeselect(node, id)
 {
 	node.apply('setAttrs', {
 		opacity: 0.75,
-		//stroke : 'black',
 		strokeWidth : 0.01,
-	//	fill : 'green',
 		stoke : 'green',
-		scale: { x : 1, y : 1 },
-	//	duration: 0.1
-		//	easing: 'elastic-ease-out'
+		scale: { x : 1, y : 1 }
 	});
 	scatterData[id].selected=0;
 }
@@ -351,13 +313,12 @@ function scatterAllSelect()
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
 	{
-		node = stage.get("#"+ (i + scatterIdStart));
+		node = scatterStage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 0)
 		{
 			scatterSingleSelect(node, i);
 		}
 	}
-	//scatterPlotLayer.draw();
 }
 
 function scatterAllDeselect()
@@ -365,17 +326,12 @@ function scatterAllDeselect()
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
 	{
-		node = stage.get("#"+ (i + scatterIdStart));
+		node = scatterStage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 1)
 		{
-		//	document.write(i +scatterIdStart );
-			
 			scatterSingleDeselect(node, i);
 		}
 	}
-	
-	
-	//scatterPlotLayer.draw();
 }
 
 //////////////////////////////////////Selection End//////////////////////////////////////
@@ -384,72 +340,7 @@ function scatterAllDeselect()
 //////////////////////////////////////Legend Start//////////////////////////////////////
 if(legend ==true)
 {
-	drawLegend("topright",scatterColor);
+	drawLegend("topright",scatterColor, scatterStage);
 }
 //////////////////////////////////////Legend End//////////////////////////////////////
 
-/*
-//////////////////////////////////////Chk Start//////////////////////////////////////   
-var messageLayer = new Kinetic.Layer();
-stage.add(messageLayer);
-function writeMessage(messageLayer){
-
-    
-	var context = messageLayer.getContext();
-    messageLayer.clear();
-//    var colors2 = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Navy' ,'Red','Blue' ,'Purple','Teal'];
-  //  document.write('a');
-	context.font = "12pt Calibri";
-    context.fillStyle = "black";	    
-    context.fillText("Selected Node", 10, 15);
-   
-    var cnt=0;
-    var cnt2=0;
-   // document.write('a');
-	for(var i=0; i<scatterData.length; i++){
-		if(scatterData[i].selected==1){
-			if(cnt>49){
-				cnt=0;
-				cnt2=cnt2+20;
-			}
-			cnt++;
-			context.font = "8pt Calibri";
-	//	    context.fillStyle = colors2[mainArr[0][i]-1];	
-			context.fillStyle = setColor(scatterColor,i);
-		    context.fillText(i, 10+cnt2, 10*cnt+20);
-	//	document.write("selected("+i+") is : "+scatterData.selected[i]+"<br>");
-		}
-	}
-}
-//////////////////////////////////////Chk End//////////////////////////////////////
-*/
-
-/*
-////////////////Common Data Structure //////////////
-function ObjTemp()
-{
-	this.subject='';
-	this.wt = '';
-	this.dose = '';
-	this.time = '';
-	this.conc = '';
-};    
-// ///////////////// Common Array ///////////////
-var theophArr = new ObjTemp();
-mainArr[0] = new Array();
-mainArr[1] = new Array();
-mainArr[2] = new Array();
-scatterXMain = new Array();
-scatterYMain = new Array();
-theophArr.selected = new Array();    
-////////////////Split & Save Data //////////////////
-for(var j=0; j<dataArr.length; j++) // 1부터 시작할지 0부터 시직할지는 나중에 결정
-{	
-	var tmp_array = dataArr[j].toString().split(',');	
-	mainArr[0][j]=parseFloat(tmp_array[0]);
-	mainArr[1][j]=parseFloat(tmp_array[1]);
-	mainArr[2][j]=parseFloat(tmp_array[2]);
-	scatterXMain[j]=parseFloat(tmp_array[3]);
-	scatterYMain[j]=parseFloat(tmp_array[4]);
-}    
-*/

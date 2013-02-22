@@ -28,7 +28,7 @@ function scatterAddNode(obj, layer)
 		fill: obj.color,
 		stroke : obj.stroke,
 		strokeWidth : 0.01,
-		opacity : 0.5,		
+		opacity : 0.75,		
 		draggable: false,
 		selected : obj.selected
 	});		
@@ -141,7 +141,7 @@ scatterDataLayer.on('mouseout', function(evt) {
 		});
 	}else{		  //unselected
 		shapes.apply('transitionTo', {
-			opacity: 0.5,
+			opacity: 0.75,
 			scale:{ x : 1, y : 1 },
 			duration: 0.1
 			//	easing: 'elastic-ease-out'
@@ -334,7 +334,7 @@ function scatterSingleSelect(node, id)
 function scatterSingleDeselect(node, id)
 {
 	node.apply('setAttrs', {
-		opacity: 0.5,
+		opacity: 0.75,
 		//stroke : 'black',
 		strokeWidth : 0.01,
 	//	fill : 'green',

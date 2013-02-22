@@ -1,39 +1,44 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <link  rel="stylesheet" href="right_kinetic.css"> 
-  </head>
-  <body>
- 
-      <script src="kinetic-v4.3.1.js"></script>
-    <script src="common.js"> </script>
-    <div id="container"></div>
-    <div id="container1"></div>
-        <a id="save" href="#" class="myButton">Save as image</a>
-    <a id="sendImg" href="#" class="myButton">Send an image to Email (not supported yet, just our idea.)</a><!-- not supported yet -->
-    <a id="showSelected" href="#" class="myButton">Show selected items</a>
-    <a id="hideSelected" href="#" class="myButton">Hide selected items</a>
-   
-   
-    <form name = "searchForm">
-        Search(Use the variables below only) :
-   <!--     <select name="select1" size = "1">
-            <option value ="0"> scatter </option>
-            <option value ="1"> hist </option>
-        </select>  -->
-         <input type="text" name = "searchId" value ="input boolean statement" width="100px" onFocus="if(this.value==this.defaultValue){this.value='';}" >
-        
-        <a id="searchStart" href="#" class="myButton" onClick ="booleanSearch(searchForm)">Search!</a>
-       
-    </form>
-   
-  
-   
-
-    <script>
+	<head>
+		<link  rel="stylesheet" href="right_kinetic.css"> 
+	</head>
+	<body>
+	
+		<script src="kinetic-v4.3.1.js"></script>
+		<script src="common.js"> </script>
+		<div id="container"></div>
+		<div id="container1"></div>
+	<!-- 	
+		<form name = "searchForm">
+		    Search(Use the variables below only) :
+			    <select name="select1" size = "1">
+		         <option value ="0"> scatter </option>
+		         <option value ="1"> hist </option>
+		     </select> 
+		<input type="text" id ="searchBox" name = "searchId" value ="input boolean statement" width="100px" onFocus="if(this.value==this.defaultValue){this.value='';}" >
+	
+		<a id="searchStart" href="#" class="myButton" onClick ="booleanSearch(searchForm)">Search!</a>
+	   
+		</form>
+	
+		<form id = "searchForm">
+  			<input type="text" size="40"  id ="searchBox" name = "searchId"  placeholder="Search..." onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm); return false;}};"/>
+  			<a id="searchBtn" href="#" class="myButton" onClick ="booleanSearch(searchForm)">Search!</a>
+		</form>
+		 		
+		<form id = "searchForm" class="searchform">
+			<input class="searchfield" type="text"  id ="searchBox" name = "searchId"  placeholder="Search..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm); return false;}};"/>
+			<input class="searchbutton" type="button" value="Search" id="searchBtn" href="#" onClick ="booleanSearch(searchForm)"/>
+		</form>
+		-->
+		
+		
+		
+		<script>
 /////////////// Create Main structure from CSV file ///////////
-//createMainStructure("Theoph-from-R.csv");
-createMainStructure("ChickWeight-from-R.csv");
+createMainStructure("Theoph-from-R.csv");
+//createMainStructure("ChickWeight-from-R.csv");
 
  ///////////////////////////////////////////////////////
   
@@ -47,25 +52,24 @@ var plotYmargin=90;
 var plotLength=15;
 //////////variables for scatter chart//////////////// names are likely to change later
 var radius_scale = 4; // / Dot radius in scatter chart
-var scatterX = 1;
-var scatterY = 0;
+var scatterX = 3;
+var scatterY = 4;
 var scatterXLabel = labelArr[scatterX];
 var scatterYLabel = labelArr[scatterY];
 var scatterXMain =  mainArr[scatterX];
 var scatterYMain = mainArr[scatterY];
 
-//var scatterColor = mainArr[0];
-//var legend = true;
-
-var scatterColor = 'default';
-var legend = false;
+var scatterColor = mainArr[0];
+var legend = true;
+//var scatterColor = 'default';
+//var legend = false;
 
 var scatterXMax=findMaxValue(scatterXMain,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 var scatterYMax=findMaxValue(scatterYMain,0);
 var scatterXDiff=parseInt(scatterXMax/5);//나중에 자동으로 잡아주기.
 var scatterYDiff=parseInt(scatterYMax/6);
 //////////variables for histogram chart//////////////// names are likely to change later
-var histX = 1;
+var histX = 3;
 var histXLabel = labelArr[histX ];
 var histXMain =  mainArr[histX ];
 
@@ -82,80 +86,85 @@ var histYDiff=parseInt(histYMax/5);
     <script src="hist_kinetic.js"></script>
    
    
-    <script>
-    document.getElementById('save').addEventListener('click', function() {
-        /*
-         * since the stage toDataURL() method is asynchronous, we need
-         * to provide a callback
-         */
-        stage.toDataURL({ //save stage
-          callback: function(dataUrl) {
-            /*
-             * here you can do anything you like with the data url.
-             * In this tutorial we'll just open the url with the browser
-             * so that you can see the result as an image
-             */
-            window.open(dataUrl);
-          }
-        });
-        stage1.toDataURL({ //save stage1
-            callback: function(dataUrl1) {
-              /*
-               * here you can do anything you like with the data url.
-               * In this tutorial we'll just open the url with the browser
-               * so that you can see the result as an image
-               */
-              window.open(dataUrl1);
-            }
-          });
-      }, false);   
-    document.getElementById('showSelected').addEventListener('click', function() {
-         msgShow = true;
-           writeMsg(msgLayer);
-      }, false);   
-   
-    document.getElementById('hideSelected').addEventListener('click', function() {
-        msgShow = false;
-          msgLayer.clear();
-     }, false);   
-   
-    </script>
-   
    
    
   
      <script>
-  //  document.write('1');
-          document.write("<table border=\"1\" >");
-          document.write("<tr>");
+  //  table example
+ 		document.write("<p>Use the variables below only, you can select one to add it into input box</p>");
+        document.write("<p>");
         for(var i=0; i<labelArr.length; i++){
-        //    document.write("<tr>");	
-            document.write("<td width=\"100\" align=\"center\">");
-            document.write(labelArr[i]);
-            document.write("</td>");
-            //document.write("</tr>");                   
-        }
-        document.write("</tr>");     
-        document.write("</table>");
-        
-        
 
-        function add(text){
-     	    var textBox = document.getElementByName("searchId");
-     	    textBox.value = textBox.value + text;
+                document.write("<a id=\"labelArr[");
+                document.write(i);
+                document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox(");
+                document.write(i);
+                document.write(")\">");
+                document.write(labelArr[i]);
+                document.write("</a>");
+      
+            }
+        document.write("</p>");
+  	//	document.write("<a id=\"clearSearchBoxId\" href=\"#\" class=\"variableButton\" onclick=\"clearSearchBox()\">Clear</a>");
+      
+       function clearSearchBox(){
+    	   var textBox = document.getElementById("searchBox");
+    	    	textBox.value = '';
+    	    	
+    	    	scatterAllDeselect();
+    	    	histAllDeselect();
+
+                var tmpNode = stage.get("#"+ (scatterIdStart));
+                tmpNode.apply('transitionTo', {
+                    rotation : 0,
+               //    scale: { x : 1.3, y : 1.3 },
+                   duration: 0.1
+                   //    easing: 'elastic-ease-out'
+               });
+               var tmpNode1 = stage1.get("#"+ (histIdStart));
+                tmpNode1.apply('transitionTo', {
+                    rotation : 0,
+               //    stroke:'black',
+               //    scale: { x : 1.3, y : 1.3 },
+                   duration: 0.1
+                   //    easing: 'elastic-ease-out'
+               });
+    	    	
+    	    	
+    	    	
+        }
+        function addValueToSearchBox(i){
+     	    var textBox = document.getElementById("searchBox");
+     	    if(textBox.value==textBox.defaultValue){
+     	    	textBox.value = '';
+     	    }
+     	    textBox.value = textBox.value + labelArr[i];
+     	    
+     	    
      	}
         
     </script> 
   
-   
+	<p>
+		<form id="searchForm">
+		  
+		 	<input type="text"  id ="searchBox" name = "searchId"  placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm); return false;}};"/>
+			<input type="button" value="Clear" id="clearBtn" href="#" onClick ="clearSearchBox()"/>		
+			<input type="button" value="Search" id="searchBtn" href="#" onClick ="booleanSearch(searchForm)"/>	
+		</form>		
+	</p>
+	<p>
+		<a id="showSelected" href="#" class="myButton">Show selected items</a>
+		<a id="hideSelected" href="#" class="myButton">Hide selected items</a>
+		<a id="save" href="#" class="myButton">Save as image</a>
+		<a id="sendImg" href="#" class="myButton">Send an image to Email (not supported yet)</a><!-- not supported yet -->
+	</p>
+	
+	<p><div id="msgContainer" class="variableButton"></div></p>
   
-    <p><div id="msgContainer"></div>
-   
-   
-   
-   
-   
-   
+	
+
+
      <script>
     var msgStage = new Kinetic.Stage({
         container: 'msgContainer',
@@ -163,7 +172,7 @@ var histYDiff=parseInt(histYMax/5);
         height: 500
       });     
     var msgLayer = new Kinetic.Layer();
-   
+   /*
     var drawEdgeRect = new Kinetic.Rect({
           x: 0,
       y: 0,
@@ -174,7 +183,7 @@ var histYDiff=parseInt(histYMax/5);
       strokeWidth: 2 
  });
  msgLayer.add(drawEdgeRect);
-   
+   */
     msgStage.add(msgLayer);
    
     function writeMsg(layer){
@@ -236,7 +245,7 @@ var histYDiff=parseInt(histYMax/5);
                   /*if(inputString includes any other variables except given ones){
                       alert("Please use given variables!");
                   }*/
-                 
+                 //if boolean expression is not logical, alert("Please use proper boolean expression!");
                  
                       
               for(var i=0; i<labelArr.length; i++){
@@ -297,7 +306,46 @@ var histYDiff=parseInt(histYMax/5);
       }
       </script>
    
-    <!-- <script src="hist_kinetic.js"></script> --!>
+    <script>
+    document.getElementById('save').addEventListener('click', function() {
+        /*
+         * since the stage toDataURL() method is asynchronous, we need
+         * to provide a callback
+         */
+        stage.toDataURL({ //save stage
+          callback: function(dataUrl) {
+            /*
+             * here you can do anything you like with the data url.
+             * In this tutorial we'll just open the url with the browser
+             * so that you can see the result as an image
+             */
+            window.open(dataUrl);
+          }
+        });
+        stage1.toDataURL({ //save stage1
+            callback: function(dataUrl1) {
+              /*
+               * here you can do anything you like with the data url.
+               * In this tutorial we'll just open the url with the browser
+               * so that you can see the result as an image
+               */
+              window.open(dataUrl1);
+            }
+          });
+      }, false);   
+    document.getElementById('showSelected').addEventListener('click', function() {
+      //   msgShow = true;
+        //   writeMsg(msgLayer);
+           document.getElementById('msgContainer').style.visibility = 'visible'; 
+      }, false);   
+   
+    document.getElementById('hideSelected').addEventListener('click', function() {
+   //     msgShow = false;
+    //      msgLayer.clear();
+          document.getElementById('msgContainer').style.visibility = 'hidden'; 
+     }, false);   
+   
+    </script>
    
   </body>
 </html>

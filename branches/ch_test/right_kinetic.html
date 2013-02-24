@@ -56,15 +56,15 @@
 		<p>
 			<form id="searchForm">
 			 	<input type="text"  id ="searchBox" name = "searchId"  placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm); return false;}};"/>
-				<input type="button" value="Clear" id="clearBtn" href="#" onClick ="clearSearchBox()"/>		
-				<input type="button" value="Search" id="searchBtn" href="#" onClick ="booleanSearch(searchForm)"/>	
+				<input type="button" value="Clear" id="clearBtn" href="#" onClick ="clearSearchBox(); return false;"/>		
+				<input type="button" value="Search" id="searchBtn" href="#" onClick ="booleanSearch(searchForm); return false;"/>	
 			</form>		
 		</p>
 		<p>
-			<a id="showSelected" href="#" class="myButton">Show Table</a>
-			<a id="hideSelected" href="#" class="myButton">Hide Table</a>
-			<a id="save" href="#" class="myButton">Save as image</a>
-			<a id="sendImg" href="#" class="myButton">Send an image to Email (not supported yet)</a><!-- not supported yet -->
+			<a id="showSelected" href="#" class="myButton" onClick =" return false;">Show Table</a>
+			<a id="hideSelected" href="#" class="myButton" onClick =" return false;">Hide Table</a>
+			<a id="save" href="#" class="myButton" onClick =" return false;">Save as image</a>
+			<a id="sendImg" href="#" class="myButton" onClick =" return false;">Send an image to Email (not supported yet)</a><!-- not supported yet -->
 		</p>		
 		<p><div id="msgContainer" class="myButton"></div></p>
  		<script src="msg.js"></script>

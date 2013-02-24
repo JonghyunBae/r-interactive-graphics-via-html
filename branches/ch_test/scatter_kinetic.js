@@ -157,9 +157,9 @@ scatterPlotLayer.on('click', function(evt){
 	//var node = evt.shape;
 	scatterAllDeselect();
 	histAllDeselect();
-	if(msgShow==true){
+	//if(msgShow==true){
 		writeMsg(msgLayer);
-	}
+//	}
 	 tmpShift = false;
 	 doRefresh();
 });
@@ -257,9 +257,9 @@ scatterDataLayer.on('click', function(evt){
 	{
 		preMousePos = mousePos;
 	}  	
-  	if(msgShow==true){
+  //	if(msgShow==true){
 		writeMsg(msgLayer);
-	}
+	//}
   	
   	doRefresh();
   	

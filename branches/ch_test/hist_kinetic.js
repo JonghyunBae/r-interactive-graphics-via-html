@@ -192,9 +192,9 @@ histDataLayer.on('mouseout', function(evt) {
 		});
 	}
    
-	if(msgShow==true){
+	//if(msgShow==true){
 		writeMsg(msgLayer);
-	}
+//	}
 });	 
 //////////////////////////////////////hist Tooltip End//////////////////////////////////////
   
@@ -203,9 +203,9 @@ var preId;
 histPlotLayer.on('click', function(evt){
 	scatterAllDeselect();
 	histAllDeselect();
-	if(msgShow==true){
+	//if(msgShow==true){
 		writeMsg(msgLayer);
-	}
+//	}
 	doRefresh();	 
 });
 histDataLayer.on('click', function(evt){
@@ -264,9 +264,9 @@ histDataLayer.on('click', function(evt){
 
   	doRefresh();
   	
-  	if(msgShow==true){
+  	//if(msgShow==true){
 		writeMsg(msgLayer);
-	}
+	//}
 }); 
 
 function histUpdate(xData, eraseOn)

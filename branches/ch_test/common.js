@@ -43,7 +43,6 @@ function csv2Arr(data, liveChar)
  	{
  		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ')){
  		}else if( cursor == "\n" ){
- 			result_row += cursor;
  			if (result_array.length <= line)
  			{
  				result_array.push(new Array());

@@ -51,7 +51,7 @@ function booleanSearch(string)
 	   //if boolean expression is not logical, alert("Please use proper boolean expression!");
     	for(var i=0; i<labelArr.length; i++)
 	    {
-    		var searchStr =new RegExp( labelArr[i].split('\n')[0] , 'gi'); // "g" means all search, "i" menas not-case-sensitive
+    		var searchStr =new RegExp( labelArr[i], 'gi'); // "g" means all search, "i" menas not-case-sensitive
     			//-------------------------csv2Arr(data, liveChar) has bug.....last column data includes "\n", should be removed...!!!!!!!!!!!!
     		//    var newStr = mainArr[j][i].toString();
     		inputStr = inputStr.replace(searchStr, "mainArr["+i+"][i]");
@@ -77,8 +77,7 @@ function booleanSearch(string)
 //        }else if(string.select1.value ==1){//hist selected
            
  //       }
-    if(msgShow==true)
-    {
+   
       writeMsg(msgLayer);
-    }
+    
 }

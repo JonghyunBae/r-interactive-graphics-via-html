@@ -94,8 +94,8 @@ scatterStage.add(scatterTooltipLayer);
 function tooltipTextGetName(arr){	//"Subject: " + nameArr[0] +"\r\n"+ "Wt: " + nameArr[1] + "\r\n"+"Does: " + nameArr[2] +"\r\n"+ "Time: " + nameArr[3] + "\r\n"+"conc: " + nameArr[4] +"\r\n"
 	var name=labelArr[0]+" : " + arr[0]+ "\r\n" ;
 	for(var i=1; i< labelArr.length ; i++){
-		name=name+ labelArr[i].split('\n')[0]+" : " + arr[i]+ "\r\n" ; //-------------------------csv2Arr(data, liveChar) has bug.....last column data includes "\n", should be removed...!!!!!!!!!!!!
-	}//labelArr[i].split('\n')[0] is temp solution.
+		name=name+ labelArr[i]+" : " + arr[i]+ "\r\n" ; //-------------------------csv2Arr(data, liveChar) has bug.....last column data includes "\n", should be removed...!!!!!!!!!!!!
+	}
 	return name;	
 }
 
@@ -155,13 +155,20 @@ var preMousePos;
 
 scatterPlotLayer.on('click', function(evt){
 	//var node = evt.shape;
-	scatterAllDeselect();
-	histAllDeselect();
-	//if(msgShow==true){
+//	alert(evt.button);
+	if(evt.button == 0)
+	{
+		scatterAllDeselect();
+		histAllDeselect();
 		writeMsg(msgLayer);
-//	}
-	 tmpShift = false;
-	 doRefresh();
+		 tmpShift = false;
+		 doRefresh();		
+	}
+	else if(evt.button == 2)
+	{
+		
+	}
+	
 });
 
 scatterDataLayer.on('click', function(evt){

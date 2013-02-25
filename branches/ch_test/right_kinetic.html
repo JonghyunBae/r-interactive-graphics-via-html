@@ -2,14 +2,64 @@
 <html>
 	<head>
 		<link  rel="stylesheet" href="right_kinetic.css"> 
+		<style>
+		
+    .ansButton {
+        
+        -moz-box-shadow:inset 0px 1px 0px 0px #f5978e;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #f5978e;
+        box-shadow:inset 0px 1px 0px 0px #f5978e;
+        
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24537), color-stop(1, #c62d1f));
+        background:-moz-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+        background:-webkit-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+        background:-o-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+        background:-ms-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+        background:linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#c62d1f',GradientType=0);
+        
+        background-color:#f24537;
+        
+        -moz-border-radius:6px;
+        -webkit-border-radius:6px;
+        border-radius:6px;
+        
+        border:1px solid #d02718;
+        
+        display:inline-block;
+        color:#ffffff;
+        font-family:arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        
+        text-shadow:0px 1px 0px #810e05;
+        
+    }
+    .ansButton:hover {
+        
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24537));
+        background:-moz-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+        background:-webkit-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+        background:-o-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+        background:-ms-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+        background:linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24537',GradientType=0);
+        
+        background-color:#c62d1f;
+    }
+    .ansButton:active {
+        position:relative;
+        top:1px;
+    }
+		
+		</style>
 	</head>
 	<body>
-		<div oncontextmenu = "popUpMenu(); return false;">adsfsdaf</div>
-		<script>
-			function popUpMenu(){
-				alert('aa');
-			}
-		</script>
+	
+		<input type="radio" value="2" name="ex" id="radio1" /><label for="radio1">IE, FF </label><br />
+		
 		<script src="kinetic-v4.3.1.js"></script>
 		<script src="common.js"> </script>
 		<div id="container"></div>
@@ -61,9 +111,9 @@
   	  	<script src="search.js"></script>
 		<p>
 			<form id="searchForm">
-			 	<input type="text"  id ="searchBox" name = "searchId"  placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm); return false;}};"/>
+			 	<input type="text"  id ="searchBox" name = "searchId"  placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm);  printAns(); return false;}};"/>
 				<input type="button" value="Clear" id="clearBtn" href="#" onClick ="clearSearchBox(); return false;"/>		
-				<input type="button" value="Search" id="searchBtn" href="#" onClick ="booleanSearch(searchForm); return false;"/>	
+				<input type="button" value="Search" id="searchBtn" href="#" onClick ="booleanSearch(searchForm); printAns(); return false;"/>	
 			</form>		
 		</p>
 		<p>

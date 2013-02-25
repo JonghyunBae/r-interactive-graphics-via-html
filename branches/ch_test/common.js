@@ -287,6 +287,8 @@ var colors = ['Green', 'Silver', 'Lime', 'Gray', 'Olive', 'Yellow','Maroon','Nav
 
 function setColor(colorArr,n){
 	var tmpColor='green';
+	
+//	if (scatterColor == undefined) {
 	if(colorArr == 'default' ){//undefined로 수정 가능 ???
 		tmpColor='green';
 	}else{

@@ -1,9 +1,13 @@
 var scatterIdStart = idCounter;
 var scatterIdEnd;
+var scatterX;
+var scatterY;
 
 //////////////////////////////////////scatterStage Start//////////////////////////////////////
   var scatterStage = new Kinetic.Stage({
     container: 'container',
+    x : 0,
+    y : 0,
     width: plotWidth+plotXmargin*2,
     height: plotHeight+plotYmargin*2
   });
@@ -150,7 +154,7 @@ scatterDataLayer.on('mouseout', function(evt) {
 //////////////////////////////////////Tooltip End//////////////////////////////////////
 
 //////////////////////////////////////Selection Start//////////////////////////////////////
-var preMousePos;
+
 
 
 scatterPlotLayer.on('click', function(evt){
@@ -170,6 +174,58 @@ scatterPlotLayer.on('click', function(evt){
 	}
 	
 });
+var preMousePos;
+var aftMousePos;
+var tmpMousePos;
+var rangeBox = new Kinetic.Rect({
+	x: 0,
+	y: 0, 
+	width : 0,
+	height : 0,
+	fill: "blue",
+	stroke: "blue",						
+	opacity : 0.3
+});
+var rangeBoxLayer = new Kinetic.Layer();
+scatterStage.add(rangeBoxLayer);
+rangeBoxLayer.add(rangeBox);
+var tmptmp = 0;
+
+
+scatterPlotLayer.on('mousedown touchstart', function(evt){
+	if(tmptmp == 1){
+		tmptmp = 0;
+		rangeBoxLayer.draw();
+	}else{
+		var mousePos = scatterStage.getMousePosition();		
+		rangeBox.setX(mousePos.x);
+		rangeBox.setY(mousePos.y);
+		rangeBox.setWidth(0);
+		rangeBox.setHeight(0);
+        tmptmp = 1;
+        rangeBoxLayer.drawScene();
+	}
+}); 
+scatterPlotLayer.on('mousemove touchmove', function(evt){
+	if(tmptmp == 1){
+		var mousePos = scatterStage.getMousePosition();
+        var x = mousePos.x;
+        var y = mousePos.y;
+        rangeBox.setWidth(mousePos.x - rangeBox.getX());
+        rangeBox.setHeight(mousePos.y - rangeBox.getY());
+        tmptmp = true;
+        rangeBoxLayer.drawScene();
+	}
+});
+scatterPlotLayer.on('mouseup touchend', function(evt){
+//	alert("dddddddd");
+	rangeBox.setWidth(0);
+	rangeBox.setHeight(0);
+	tmptmp = 0;
+	rangeBoxLayer.drawScene();	
+	
+});
+
 
 scatterDataLayer.on('click', function(evt){
   	var node = evt.shape;

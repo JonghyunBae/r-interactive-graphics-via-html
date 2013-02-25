@@ -416,7 +416,9 @@ function doRefresh(){
 	//    scale: { x : 1.3, y : 1.3 },
 	   duration: 0.1
 	   //    easing: 'elastic-ease-out'
-	});
+	}); 
+//	scatterPlotLayer.drawScene();
+//	histPlotLayer.drawScene();
 }
 
 

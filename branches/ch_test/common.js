@@ -1,3 +1,27 @@
+
+//////////////////Common variables///////////////////////////
+var asideWidth = 300;
+var headerHeight = 200;
+var scatterStageX = asideWidth;
+var scatterStageY =200;
+var histStageX =200;
+var histStageY =200;
+var idCounter = 0;
+var plotXmargin=100;
+var plotYmargin=100;
+var plotLength=15;
+var plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin;
+var plotHeight=400;
+
+var scatterIdStart = idCounter;
+var scatterIdEnd;
+//var scatterX;
+//var scatterY;
+
+var histHasArr;
+var histIdStart = idCounter;
+var histIdEnd;
+
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
 //var msgShow=true;
@@ -150,6 +174,151 @@ default: alert(code); //Everything else
 }*/
 //////////////////////////////////////Chk key event End//////////////////////////////////////
 
+
+var beforeInnerWidth = window.innerWidth; //window.innerWidth..., Does this variable respond when event occur?........
+containerSizeInit();
+function containerSizeInit()
+{
+	document.getElementById("scatterContainer").style.top = headerHeight+"px";
+	document.getElementById("scatterContainer").style.left = scatterStageX+"px";
+
+	document.getElementById("histContainer").style.top = headerHeight+"px";
+	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.35 +"px";
+	//scatterStage.setWidth(window.innerWidth*0.35);
+	//scatterStage.setHeight(window.innerWidth*0.2);
+}
+
+
+
+window.onresize = function(evt) {
+	   containerResize();
+	// window.innerWidth;
+} 
+
+function containerResize()
+{
+//	document.getElementById("scatterContainer").style.left = window.innerWidth*0.2+"px";
+	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.35 +"px";
+	scatterStage.setWidth((window.innerWidth-asideWidth)*0.35);
+	histStage.setWidth((window.innerWidth-asideWidth)*0.35);
+	plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin;
+	
+	redrawStage(scatterStage, scatterXMax, scatterXDiff);
+	redrawStage(histStage, histXMax, histXDiff);
+	
+	
+	
+	
+}
+
+function redrawStage(stage, xMax, xDiff){
+	var node = stage.get(".legendLayer");
+	node.apply('setAttrs', {
+		x : (window.innerWidth-asideWidth)*0.35 -  (beforeInnerWidth-asideWidth)*0.35
+	});	
+	node.apply('transitionTo', {
+		rotation:0,
+		duration:0.01
+	});
+	//redraw border
+	var node= stage.get(".rectBorder");
+	node.apply('setAttrs', {
+		width: stage.getWidth(),
+	});
+	node.apply('transitionTo', {
+		rotation:0,
+		duration:0.01
+	});
+	
+	
+	//redraw base rectangle
+	var node= stage.get(".baseRect");
+	node.apply('setAttrs', {
+		width: plotWidth+2*plotLength
+	});
+	node.apply('transitionTo', {
+		rotation:0,
+		duration:0.01
+	});
+	
+	for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
+	{
+		var node= stage.get(".xLine"+i);
+		node.apply('setAttrs', {
+			points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength]
+		});
+		node.apply('transitionTo', {
+			rotation:0,
+			duration:0.01
+		});
+		var node= stage.get(".xText"+i);
+		node.apply('setAttrs', {
+			x: plotXmargin+i*plotWidth/(xMax/xDiff)-15,		
+		});
+		node.apply('transitionTo', {
+			rotation:0,
+			duration:0.01
+		});
+	}
+	var node= stage.get(".xLabel");
+	node.apply('setAttrs', {
+		x: plotXmargin+plotWidth/2
+	});
+	node.apply('transitionTo', {
+		rotation:0,
+		duration:0.01
+	});
+	var node= stage.get(".mainLabel");
+	node.apply('setAttrs', {
+		x: plotXmargin+plotWidth/2
+	});
+	node.apply('transitionTo', {
+		rotation:0,
+		duration:0.01
+	});
+	if(stage==scatterStage){
+		for(var i = 0; i < scatterXMain.length ; i++)
+		{
+			var node = stage.get("#"+ (i + scatterIdStart));
+			node.apply('setAttrs', {
+				x : scatterXMain[i]*plotWidth/xMax+plotXmargin
+			});	
+		}
+	}
+	if(stage==histStage){
+		for(var i = 0; i < histXMain.length ; i++)
+		{
+			var node = stage.get("#"+ (i + histIdStart));
+			node.apply('setAttrs', {
+				x : plotXmargin +  i * plotWidth / parseInt(xMax/diffHist) + width/2,
+				width : plotWidth / parseInt(xMax/diffHist)
+			});	
+		}
+		var node= stage.get(".histXAxis");
+		node.apply('setAttrs', {
+			points: [plotXmargin, plotYmargin+plotHeight+plotLength, plotXmargin+parseInt(xMax/xDiff)*plotWidth/(xMax/xDiff),  plotYmargin+plotHeight+plotLength],
+		});
+		node.apply('transitionTo', {
+			rotation:0,
+			duration:0.01
+		});
+	}
+	
+	doRefresh();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 function findMaxValue(Data,diff) // if diff =0, for scatter.
 {
 	var maxValue=Data[0];
@@ -209,6 +378,7 @@ function histFindMaxValue(xMaxHist, xData,diff)
 function drawBaseRect(color, layer)//Put base layer
 {
 	var plotRect = new Kinetic.Rect({
+		name : "baseRect",
 		x: plotXmargin-plotLength,
 		y: plotYmargin-plotLength,
 		width: plotWidth+2*plotLength,
@@ -225,12 +395,14 @@ function drawScale(xMax, xDiff, yMax, yDiff, layer){
 	for(var i=0; i<parseInt(xMax/xDiff)+1; i++)
 	{
 		var xLine = new Kinetic.Line({
-		points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
-		stroke: 'black',
-		strokeWidth: 2,		     
+			name : "xLine"+i,
+			points: [plotXmargin+i*plotWidth/(xMax/xDiff) ,plotYmargin+plotHeight+plotLength, plotXmargin+i*plotWidth/(xMax/xDiff),plotYmargin+plotHeight+2*plotLength],
+			stroke: 'black',
+			strokeWidth: 2,		     
 		});
 		layer.add(xLine);	   		
 		var xText = new Kinetic.Text({
+			name : "xText"+i,
 			x: plotXmargin+i*plotWidth/(xMax/xDiff)-15,
 			y: plotYmargin+plotHeight+plotLength*2,
 			text: i*xDiff,
@@ -250,7 +422,7 @@ function drawScale(xMax, xDiff, yMax, yDiff, layer){
 			strokeWidth: 2,		     
 		});
 		layer.add(yLine);	   
-		yText = new Kinetic.Text({
+		var yText = new Kinetic.Text({
 			x: plotXmargin-plotLength*2-15,
 			y: plotYmargin+plotHeight-i*plotHeight/(yMax/yDiff)+15,
 			text: i*yDiff,
@@ -266,7 +438,8 @@ function drawScale(xMax, xDiff, yMax, yDiff, layer){
 }
 function drawLabel(xLabelText, yLabelText, layer)//Draw xLabel, yLebel
 {
-	xLabel = new Kinetic.Text({
+	var xLabel = new Kinetic.Text({
+		name : 'xLabel',
 		x: plotXmargin+plotWidth/2,
 		y: plotYmargin+plotHeight+4*plotLength,
 		offset : {x: xLabelText.length/2 * 10, y:0},
@@ -275,7 +448,7 @@ function drawLabel(xLabelText, yLabelText, layer)//Draw xLabel, yLebel
 		fontFamily: 'Calibri',
 		fill: 'black',
 	});				
-	yLabel = new Kinetic.Text({
+	var yLabel = new Kinetic.Text({
 		x: plotXmargin-5*plotLength,
 		y: plotYmargin+plotHeight/2  - yLabelText.length/2 * 5,
 		offset : {x: yLabelText.length/2 * 10},
@@ -292,6 +465,7 @@ function drawLabel(xLabelText, yLabelText, layer)//Draw xLabel, yLebel
 function drawMainLabel(mainText, layer)//Draw main
 {	
 	main = new Kinetic.Text({
+		name : 'mainLabel',
 		x: plotXmargin+plotWidth/2, 
 		y: plotYmargin *0.5 ,
 		offset : {x: mainText.length/2 * 10, y:0},
@@ -338,7 +512,7 @@ function setColor(colorArr,n){
 
 function drawLegend(location, legendArr, stage){
 
-	var legendLayer = new Kinetic.Layer({draggable:true});
+	var legendLayer = new Kinetic.Layer({name:'legendLayer', draggable:true});
 
 	function addNodeLegend(obj, layer) {
 		var node = new Kinetic.Circle({

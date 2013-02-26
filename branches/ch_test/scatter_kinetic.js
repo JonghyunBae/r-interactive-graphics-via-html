@@ -1,16 +1,31 @@
-var scatterIdStart = idCounter;
-var scatterIdEnd;
-var scatterX;
-var scatterY;
+scatterIdStart = idCounter;
+//var scatterIdEnd;
+//var scatterX;
+//var scatterY;
+
 
 //////////////////////////////////////scatterStage Start//////////////////////////////////////
-  var scatterStage = new Kinetic.Stage({
-    container: 'container',
-    x : 0,
-    y : 0,
-    width: plotWidth+plotXmargin*2,
-    height: plotHeight+plotYmargin*2
-  });
+var scatterStage = new Kinetic.Stage({
+	container: 'scatterContainer',
+	
+	width:   plotWidth+plotXmargin*2,
+	height: plotHeight+plotYmargin*2
+});
+
+//////////////////////////////////////scatterStage Border Start//////////////////////////////////////
+var scatterBorderLayer = new Kinetic.Layer();
+var scatterRectBorder = new Kinetic.Rect({
+	name: 'rectBorder',
+	x: 0,
+	y: 0,
+	width: scatterStage.getWidth(),
+	height: scatterStage.getHeight(),
+	strokeWidth : 2
+});
+scatterBorderLayer.add(scatterRectBorder);
+scatterStage.add(scatterBorderLayer);
+//////////////////////////////////////scatterStage Border End//////////////////////////////////////  
+
 //////////////////////////////////////Drawing Plot Start//////////////////////////////////////
 var scatterPlotLayer= new Kinetic.Layer();  
 drawBaseRect('black', scatterPlotLayer);

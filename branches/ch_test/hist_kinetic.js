@@ -1,6 +1,7 @@
 var histHasArr;
-var histIdStart = idCounter;
-var histIdEnd;
+histIdStart = idCounter;
+//var histIdEnd;
+
 var histArr = new Array();
 histArr = drawDataHist(histXMax,histYMax,histXMain, diffHist);	 
 
@@ -34,15 +35,32 @@ function drawDataHist(histXMax,histYMax,xData,a)
 
 //////////////////////////////////////histStage Start//////////////////////////////////////
   var histStage = new Kinetic.Stage({
-    container: 'container',
-    width: plotWidth+plotXmargin*2,
-    height: plotHeight+plotYmargin*2
+    container: 'histContainer',
+
+    width: plotWidth+plotXmargin*2 ,
+    height: plotHeight+plotYmargin*2 
   });
+ //histStage.setAbsolutePosition(200,200);
+//////////////////////////////////////histStage Border Start//////////////////////////////////////
+  var histBorderLayer = new Kinetic.Layer();
+  var histRectBorder = new Kinetic.Rect({
+	name: 'rectBorder',
+    x: 0,
+    y: 0,
+    width: histStage.getWidth(),
+    height: histStage.getHeight(),
+    strokeWidth : 2
+  });
+  histBorderLayer.add(histRectBorder);
+  histStage.add(histBorderLayer);
+//////////////////////////////////////hsitStage Border End//////////////////////////////////////  
+
   
 //////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
 var histPlotLayer = new Kinetic.Layer();
 drawBaseRect('white', histPlotLayer);
 var histXAxis = new Kinetic.Line({
+	name: 'histXAxis',
 	points: [plotXmargin, plotYmargin+plotHeight+plotLength, plotXmargin+parseInt(histXMax/histXDiff)*plotWidth/(histXMax/histXDiff),  plotYmargin+plotHeight+plotLength],
 	stroke: 'black',
 	strokeWidth: 2,		     

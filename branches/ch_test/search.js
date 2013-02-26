@@ -1,6 +1,9 @@
 var ans='';
 var ansShow='';
 // variable buttons update
+for(var i=0; i<50 ; i++){
+	document.write("<br>");
+}
 document.write("<p>Use the variables below only, you can click one to add into input box</p>");
 document.write("<p>");
 for(var i=0; i<labelArr.length; i++)
@@ -104,5 +107,4 @@ function booleanSearch(string)
     }   
 	writeMsg(msgLayer);
 }
-
 

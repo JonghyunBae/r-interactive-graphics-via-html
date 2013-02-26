@@ -5,26 +5,36 @@
 	</head>
 	<body>
 	
-		<input type="radio" value="2" name="ex" id="radio1" /><label for="radio1">IE, FF </label><br />
+	
+	<header>
+      <a href=""><font size=55px>Welcome to RIGHT</font></a>
+      <nav>
+         <a href="">Home</a>
+         <a href="/about">About</a>
+      </nav>
+    </header>
+    
+	<section>
+<!-- <input type="radio" value="2" name="ex" id="radio1" /><label for="radio1">IE, FF </label><br />  -->	
 		
 		<script src="kinetic-v4.3.1.js"></script>
+		
+		<div id="scatterContainer" style="position : absolute; " ></div>
+		<div id="histContainer" style="position : absolute; " ></div>
+		
 		<script src="common.js"> </script>
-		<div id="container" ></div>
-		<div id="container1"></div>
 		<script>
+
+		   
+		   
 			/////////////// Create Main structure from CSV file ///////////
 			createMainStructure("Theoph-from-R.csv");
 			//createMainStructure("ChickWeight-from-R.csv");
 			
-			//////////////////Common variables///////////////////////////
-			var idCounter = 0;
-			var plotWidth=500;
-			var plotHeight=500;
-			var plotXmargin=150;
-			var plotYmargin=90;
-			var plotLength=15;
+			
 			
 			//////////variables for scatter chart//////////////// names are likely to change later
+			
 			var radius_scale = 4; // / Dot radius in scatter chart
 			var scatterX = 3;
 			var scatterY = 4;
@@ -43,6 +53,7 @@
 			var scatterXDiff=parseInt(scatterXMax/5);//나중에 자동으로 잡아주기.
 			var scatterYDiff=parseInt(scatterYMax/6);
 			//////////variables for histogram chart//////////////// names are likely to change later
+			
 			var histX = 3;
 			var histXLabel = labelArr[histX ];
 			var histXMain =  mainArr[histX ];
@@ -53,9 +64,10 @@
 			var histXDiff=parseInt(histXMax/5);//나중에 자동으로 잡아주기.
 			var histYDiff=parseInt(histYMax/5);  
 		</script>    
+		
 		<script src="scatter_kinetic.js"></script>
    		<script src="hist_kinetic.js"></script>
-  	  	<script src="search.js"></script>
+ 	<script src="search.js"></script>
 		<p>
 			<form id="searchForm">
 			 	<input type="text"  id ="searchBox" name = "searchId"  placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm);  printAns(); return false;}};"/>
@@ -67,10 +79,12 @@
 			<a id="showSelected" href="#" class="myButton" onClick =" return false;">Show Table</a>
 			<a id="hideSelected" href="#" class="myButton" onClick =" return false;">Hide Table</a>
 			<a id="save" href="#" class="myButton" onClick =" return false;">Save as image</a>
-			<a id="sendImg" href="#" class="myButton" onClick =" return false;">Send an image to Email (not supported yet)</a><!-- not supported yet -->
+			<a id="sendImg" href="#" class="myButton" onClick =" return false;">Send an image to Email (not supported yet)</a>
 		</p>		
 		<p><div id="msgContainer" class="myButton"></div></p>
  		<script src="msg.js"></script>
-		<script src="event.js"></script>
+		<script src="event.js"></script> -
+		
+	</section>	
 	</body>
 </html>

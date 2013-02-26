@@ -178,6 +178,7 @@ scatterPlotLayer.on('click', function(evt){
 	if(evt.button == 0)
 	{
 		allDeselect();
+		saveWork();
 		writeMsg(msgLayer);
 		 tmpShift = false;
 		 doRefresh();		
@@ -237,7 +238,6 @@ scatterPlotLayer.on('mouseup touchend', function(evt){
 	rangeBox.setHeight(0);
 	tmptmp = 0;
 	rangeBoxLayer.drawScene();	
-	
 });
 
 
@@ -247,12 +247,13 @@ scatterDataLayer.on('click', function(evt){
   	var semiNode;
   	var mousePos = {x: node.getX(), y:node.getY()};
   	var tmpNode;
+  	var saving;
   	
   	if(aPressed){	//select ALL
-  		allSelect(1);
+  		allSelect();
   		tmpShift = false;
   	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
-		allDeselect(3);
+		allDeselect();
   		nameArr = node.getName().split(',');	
   		for(var i = 0 ; i < scatterData.length ; i++){
 			var tmpNameArr = new Array();
@@ -260,12 +261,12 @@ scatterDataLayer.on('click', function(evt){
 			if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
 			{
 				tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-				allUpdate("scatter", tmpNode, i, 0)
+				allUpdate("scatter", tmpNode, i, 0);
 			}
 		}
 		tmpShift = false;
 	}else if(shiftPressed){
-		allDeselect(3);
+		allDeselect();
 		tmpShift = true;
 		if(preMousePos.x < mousePos.x)
 		{
@@ -274,7 +275,7 @@ scatterDataLayer.on('click', function(evt){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
 						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0, 1);
+						allUpdate("scatter", tmpNode, i, 0);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -282,7 +283,7 @@ scatterDataLayer.on('click', function(evt){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
 					{
 						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0, 1);
+						allUpdate("scatter", tmpNode, i, 0);
 					}
 				}
 			}
@@ -308,28 +309,27 @@ scatterDataLayer.on('click', function(evt){
 		}	
 	}else if(ctrlPressed){ //select mutiple node one by one.
   		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1, 1);
+  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1);
    		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
-   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0, 1);
+   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0);
   		}
   		tmpShift = false;
   	}else{
 		tmpShift = false;
-		allDeselect(3);
-		allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0, 1); 		
+		allDeselect();
+		allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0); 	
   	}  	
   	if(tmpShift == false)
 	{
 		preMousePos = mousePos;
-	}  	
-  	saveWork(0, 0, 0);
+	}
+  	saveWork();
 	writeMsg(msgLayer);
   	doRefresh();  	
 }); 
 
-function scatterSingleSelect(node, id, saving)
+function scatterSingleSelect(node, id)
 {
-	saveWork(id, 0, saving);
 	node.apply('setAttrs', {
 		opacity: 1,
 		strokeWidth : 2,
@@ -339,9 +339,8 @@ function scatterSingleSelect(node, id, saving)
 	scatterData[id].selected=1;
 }
 
-function scatterSingleDeselect(node, id, saving)
+function scatterSingleDeselect(node, id)
 {
-	saveWork(id, 1, saving);
 	node.apply('setAttrs', {
 		opacity: 0.75,
 		strokeWidth : 0.01,
@@ -351,7 +350,7 @@ function scatterSingleDeselect(node, id, saving)
 	scatterData[id].selected=0;
 }
 
-function scatterAllSelect(saving)
+function scatterAllSelect()
 {
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
@@ -359,12 +358,12 @@ function scatterAllSelect(saving)
 		node = scatterStage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 0)
 		{
-			scatterSingleSelect(node, i, saving);
+			scatterSingleSelect(node, i);
 		}
 	}
 }
 
-function scatterAllDeselect(saving)
+function scatterAllDeselect()
 {
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
@@ -372,19 +371,19 @@ function scatterAllDeselect(saving)
 		node = scatterStage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 1)
 		{
-			scatterSingleDeselect(node, i, saving);
+			scatterSingleDeselect(node, i);
 		}
 	}
 }
 
-function scatterUpdate(rectId, eraseOn, saving)
+function scatterUpdate(rectId, eraseOn)
 {
 	var node;
 	if(eraseOn == 0)	{
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
 		{	
 			node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
-			scatterSingleSelect(node, histHasArr[rectId][i], saving);
+			scatterSingleSelect(node, histHasArr[rectId][i]);
 		}
 	}else if(eraseOn == 1){ 
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
@@ -392,7 +391,7 @@ function scatterUpdate(rectId, eraseOn, saving)
 			node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
 			if(scatterData[histHasArr[rectId][i]].selected  == 1)
 			{
-				scatterSingleDeselect(node, histHasArr[rectId][i], saving);
+				scatterSingleDeselect(node, histHasArr[rectId][i]);
 			}			
 		}
 	}

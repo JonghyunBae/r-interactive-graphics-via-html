@@ -120,6 +120,7 @@ function checkKeyDown(e)
 	{
 		fetchWork();
 	}
+	
 }	
 function checkKeyUp(e) 
 {
@@ -279,18 +280,6 @@ function redrawStage(stage, xMax, xDiff){
 	
 	doRefresh();
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 function findMaxValue(Data,diff) // if diff =0, for scatter.
 {
@@ -587,7 +576,8 @@ function getMyLegend(Location, Data){//only works for pre-sorted array....
 	};
 }
 
-function doRefresh(){
+function doRefresh()
+{
 	var tmpNode = scatterStage.get("#"+ (scatterIdStart));
 	tmpNode.apply('transitionTo', {
 	    rotation : 0,
@@ -607,74 +597,106 @@ function doRefresh(){
 //	histPlotLayer.drawScene();
 }
 ////////////////////////////////Undo Start////////////////////////////
-var workRowCount = 0;
-var workColCount = 1; // start with 1 because the [0] is for eraseOn.
-var fetchCount = 0;
-var saveWorkArr = make2DArr(10);
-saveWorkArr[0] =  new Array(mainArr[0].length + 1);
 
-function saveWork(id, eraseOn, saving) // this is only for scatter relative id
-{														// saving is for save or not ( 1: saving 2: start or finish saving 3: not save)
-	if(saving == 1)
+var workColCount = 0; // start with 1 because the [0] is for eraseOn.
+var fetchCount = 1;
+var limitSave = 10;
+var saveWorkArr = make2DArr(limitSave+1);
+var saveMousePosArr = new Array(limitSave+1);
+var start = 0;
+var workRowCount = 0;
+
+function saveWork() // this is only for scatter relative id
+{	// saving is for save or not
+	if(start == 0)
 	{
-		saveWorkArr[workRowCount][workColCount++] = id;
-	}else	if(saving == 0){
-		saveWorkArr[workRowCount][0] = (parseInt(eraseOn)+1)%2; // 2's complement
-		saveWorkArr[workRowCount][workColCount] = -1; // save finish sign
-		workColCount = 1;
-		if(workRowCount  != 9){
-			workRowCount++;		
-		}else if(workRowCount == 9){
-			workRowCount = 0;
-		}
-		saveWorkArr[workRowCount] = new Array(mainArr[0].length + 1);
-		if(fetchCount != 10){
-			fetchCount++;
-		}			
-	}else if(saving == 3){ // don't save work.
-		
+		saveWorkArr[0] =  new Array(mainArr[0].length + 1);
+		saveWorkArr[9] =  new Array(mainArr[0].length + 1);
+		saveWorkArr[0][0] = -2;
+		saveWorkArr[9][0] = -2;
+		start =1;
+	}	
+//	alert(start);
+	if(workRowCount  != limitSave-1){
+		workRowCount++;		
+	}else if(workRowCount == limitSave-1){
+		workRowCount = 0;
 	}
+	if(fetchCount != limitSave-1){
+		fetchCount++;
+	}
+	saveWorkArr[workRowCount] = new Array(mainArr[0].length + 1);
+	
+	for(var i = 0 ; i < scatterData.length ; i ++)
+	{
+		if(scatterData[i].selected == 1)
+		{
+			saveWorkArr[workRowCount][workColCount++] = i;
+		}
+	}
+	
+	if(workColCount == 0)
+	{
+		if((workRowCount > 0) && (saveWorkArr[workRowCount-1][0] == -2))
+		{
+		//	document.write("dddddddd");
+			fetchCount = fetchCount-1;
+			workRowCount = workRowCount-1;
+			return;
+		}
+		saveWorkArr[workRowCount][workColCount++] = -2
+	}else{
+		saveWorkArr[workRowCount][workColCount++] = -1; // save finish sign
+	}				
+	workColCount = 0;		
+	saveMousePosArr[workRowCount] = preMousePos;
+//	alert("111 "+ workRowCount + "  111   " +fetchCount );
 }
+
 function fetchWork()
 {
-	var node;	
-//	allDeselect();
+	var node;		
 	if(fetchCount != 0)
 	{
+		allDeselect();
 		if(workRowCount  != 0){
 			workRowCount--;		
 		}else if(workRowCount == 0){
-			workRowCount = 9;
+			workRowCount = limitSave-1;
 		}
-		var eraseOn = saveWorkArr[workRowCount][0];
-		for(var i = 1;  ; i ++)
+		
+	//	alert(fetchCount);
+		if(saveWorkArr[workRowCount][0] == -1) // Allselect
 		{
-			if(saveWorkArr[workRowCount][i] == -1)
+	//		alert("111");
+			allSelect();
+		}else if(saveWorkArr[workRowCount][0] == -2){   //All Deselect
+		//		alert("222");
+			//alert(fetchCount);
+		//	allDeselect();
+		}else{
+		//	alert(workRowCount);
+		//	alert(fetchCount);
+			for(var i = 0;  ; i ++)
 			{
-				break;
-			}
-			node = scatterStage.get("#"+ (saveWorkArr[workRowCount][i] + scatterIdStart));
-	//	alert(node +"," + saveWorkArr[workRowCount][i] + "," + eraseOn);
-			allUpdate("scatter", node, saveWorkArr[workRowCount][i], eraseOn);
-			
+				
+			//	alert("RowCount "+ workRowCount +","+ saveWorkArr[workRowCount][i]);
+				if(saveWorkArr[workRowCount][i] == -1)
+				{					
+					break;
+				}
+				node = scatterStage.get("#"+ (saveWorkArr[workRowCount][i] + scatterIdStart));
+				allUpdate("scatter", node, saveWorkArr[workRowCount][i], 0);
+			}		
 		}
-		fetchCount--;
+		doRefresh();
+		//alert("!!!!!!!!!!!");
+//		alert(fetchCount);
+		fetchCount = fetchCount-1;
+		preMousePos  = saveMousePosArr[workRowCount];
+		
 	}
-	if(fetchCount != 0)
-	{
-		var eraseOn = (saveWorkArr[workRowCount-1][0] + 1) % 2;
-		for(var i = 1;  ; i ++)
-		{
-			if(saveWorkArr[workRowCount-1][i] == -1)
-			{
-				break;
-			}
-			node = scatterStage.get("#"+ (saveWorkArr[workRowCount-1][i] + scatterIdStart));
-	//		alert(node +"," + saveWorkArr[workRowCount][i] + "," + eraseOn);
-			allUpdate("scatter", node, saveWorkArr[workRowCount-1][i], eraseOn);
-		}
-	}
-	doRefresh();
+//	alert("222 "+ workRowCount + "  222   " +fetchCount );
 }
 
 for(var i = 0; i <scatterData.length ; i ++)
@@ -687,19 +709,19 @@ for(var i = 0; i <scatterData.length ; i ++)
 }
 ////////////////////////////////Undo End/////////////////////////////
 ///////////////////////////// Total Platform Start/////////////////////////
-function allSelect(saving)
+function allSelect()
 {
-	scatterAllSelect(saving);
+	scatterAllSelect();
 	histAllSelect();	
 }
 
-function allDeselect(saving)
+function allDeselect()
 {
-	scatterAllDeselect(saving);
+	scatterAllDeselect();
 	histAllDeselect();
 }
 
-function allUpdate(hostName, node, id, eraseOn, saving)
+function allUpdate(hostName, node, id, eraseOn)
 {
 	//// eraseOn : 0 is add node , 1 is delete node //
 	//// id is each relative id ///
@@ -707,11 +729,12 @@ function allUpdate(hostName, node, id, eraseOn, saving)
 	{
 		if(eraseOn == 0) // add node
 		{
-			scatterSingleSelect(node, id, saving);
+			scatterSingleSelect(node, id);
 		}
 		else{
-			scatterSingleDeselect(node, id, saving);
+			scatterSingleDeselect(node, id);
 		}
+	//	alert(eraseOn);
   		histUpdate(scatterXMain[id],eraseOn);
 	}else if(hostName == "hist"){
 		if(eraseOn == 0) // add node
@@ -721,8 +744,7 @@ function allUpdate(hostName, node, id, eraseOn, saving)
 		else{
 			histSingleDeselect(node, id);
 		}
-		scatterUpdate(id,eraseOn, saving);
+		scatterUpdate(id,eraseOn);
 	}
 }
 ///////////////////////////// Total Platform End/////////////////////////
-

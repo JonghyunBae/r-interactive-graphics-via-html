@@ -262,6 +262,7 @@ histDataLayer.on('click', function(evt){
 	{
 		preId = node.getId();
 	}
+  	saveWork();
   	doRefresh();
  	writeMsg(msgLayer);
 }); 

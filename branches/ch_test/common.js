@@ -118,7 +118,7 @@ function checkKeyDown(e)
 	}
 	if(ctrlPressed == true && zPressed == true)
 	{
-		alert("sssssssss");
+		fetchWork();
 	}
 }	
 function checkKeyUp(e) 
@@ -146,34 +146,7 @@ function checkKeyUp(e)
 		zPressed = false;
 	}
 }	
-var workCount = 0;
-var saving = false;
-var saveWorkArr = make2DArr(10);
-function saveWork()
-{
-	if(saving == true)
-	{
-		
-	}
-	if(saving == false)
-	{
-		workCount++;
-	}
-	//singleSelect = 0 singleDeselect = 1 AllSelect = 2 All
-}
-/*
-function check(e) {
-var code = e.keyCode;
-switch (code) {
-case 37: alert("Left"); break; //Left key
-case 38: alert("Up"); break; //Up key
-case 39: alert("Right"); break; //Right key
-case 40: alert("Down"); break; //Down key
-default: alert(code); //Everything else
-}
-}*/
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-
 
 var beforeInnerWidth = window.innerWidth; //window.innerWidth..., Does this variable respond when event occur?........
 containerSizeInit();
@@ -633,21 +606,100 @@ function doRefresh(){
 //	scatterPlotLayer.drawScene();
 //	histPlotLayer.drawScene();
 }
-///////////////////////////// Total Platform /////////////////////////
-function allSelect()
+////////////////////////////////Undo Start////////////////////////////
+var workRowCount = 0;
+var workColCount = 1; // start with 1 because the [0] is for eraseOn.
+var fetchCount = 0;
+var saveWorkArr = make2DArr(10);
+saveWorkArr[0] =  new Array(mainArr[0].length + 1);
+
+function saveWork(id, eraseOn, saving) // this is only for scatter relative id
+{														// saving is for save or not ( 1: saving 2: start or finish saving 3: not save)
+	if(saving == 1)
+	{
+		saveWorkArr[workRowCount][workColCount++] = id;
+	}else	if(saving == 0){
+		saveWorkArr[workRowCount][0] = (parseInt(eraseOn)+1)%2; // 2's complement
+		saveWorkArr[workRowCount][workColCount] = -1; // save finish sign
+		workColCount = 1;
+		if(workRowCount  != 9){
+			workRowCount++;		
+		}else if(workRowCount == 9){
+			workRowCount = 0;
+		}
+		saveWorkArr[workRowCount] = new Array(mainArr[0].length + 1);
+		if(fetchCount != 10){
+			fetchCount++;
+		}			
+	}else if(saving == 3){ // don't save work.
+		
+	}
+}
+function fetchWork()
 {
-	histAllSelect();
-	scatterAllSelect();
+	var node;	
+//	allDeselect();
+	if(fetchCount != 0)
+	{
+		if(workRowCount  != 0){
+			workRowCount--;		
+		}else if(workRowCount == 0){
+			workRowCount = 9;
+		}
+		var eraseOn = saveWorkArr[workRowCount][0];
+		for(var i = 1;  ; i ++)
+		{
+			if(saveWorkArr[workRowCount][i] == -1)
+			{
+				break;
+			}
+			node = scatterStage.get("#"+ (saveWorkArr[workRowCount][i] + scatterIdStart));
+	//	alert(node +"," + saveWorkArr[workRowCount][i] + "," + eraseOn);
+			allUpdate("scatter", node, saveWorkArr[workRowCount][i], eraseOn);
+			
+		}
+		fetchCount--;
+	}
+	if(fetchCount != 0)
+	{
+		var eraseOn = (saveWorkArr[workRowCount-1][0] + 1) % 2;
+		for(var i = 1;  ; i ++)
+		{
+			if(saveWorkArr[workRowCount-1][i] == -1)
+			{
+				break;
+			}
+			node = scatterStage.get("#"+ (saveWorkArr[workRowCount-1][i] + scatterIdStart));
+	//		alert(node +"," + saveWorkArr[workRowCount][i] + "," + eraseOn);
+			allUpdate("scatter", node, saveWorkArr[workRowCount-1][i], eraseOn);
+		}
+	}
+	doRefresh();
 }
 
-function allDeselect()
+for(var i = 0; i <scatterData.length ; i ++)
 {
-	scatterAllDeselect();
-//	document.write("dddd");
+	node = scatterStage.get("#"+ (i + scatterIdStart));
+	if(scatterData[i].selected == 0)
+	{
+		scatterSingleSelect(node, i);
+	}
+}
+////////////////////////////////Undo End/////////////////////////////
+///////////////////////////// Total Platform Start/////////////////////////
+function allSelect(saving)
+{
+	scatterAllSelect(saving);
+	histAllSelect();	
+}
+
+function allDeselect(saving)
+{
+	scatterAllDeselect(saving);
 	histAllDeselect();
 }
 
-function allUpdate(hostName, node, id, eraseOn)
+function allUpdate(hostName, node, id, eraseOn, saving)
 {
 	//// eraseOn : 0 is add node , 1 is delete node //
 	//// id is each relative id ///
@@ -655,10 +707,10 @@ function allUpdate(hostName, node, id, eraseOn)
 	{
 		if(eraseOn == 0) // add node
 		{
-			scatterSingleSelect(node, id);
+			scatterSingleSelect(node, id, saving);
 		}
 		else{
-			scatterSingleDeselect(node, id);
+			scatterSingleDeselect(node, id, saving);
 		}
   		histUpdate(scatterXMain[id],eraseOn);
 	}else if(hostName == "hist"){
@@ -669,8 +721,8 @@ function allUpdate(hostName, node, id, eraseOn)
 		else{
 			histSingleDeselect(node, id);
 		}
-		scatterUpdate(id,eraseOn);
+		scatterUpdate(id,eraseOn, saving);
 	}
 }
-
+///////////////////////////// Total Platform End/////////////////////////
 

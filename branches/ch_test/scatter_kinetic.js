@@ -249,10 +249,10 @@ scatterDataLayer.on('click', function(evt){
   	var tmpNode;
   	
   	if(aPressed){	//select ALL
-  		allSelect();
+  		allSelect(1);
   		tmpShift = false;
   	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
-		allDeselect();
+		allDeselect(3);
   		nameArr = node.getName().split(',');	
   		for(var i = 0 ; i < scatterData.length ; i++){
 			var tmpNameArr = new Array();
@@ -265,7 +265,7 @@ scatterDataLayer.on('click', function(evt){
 		}
 		tmpShift = false;
 	}else if(shiftPressed){
-		allDeselect();
+		allDeselect(3);
 		tmpShift = true;
 		if(preMousePos.x < mousePos.x)
 		{
@@ -274,7 +274,7 @@ scatterDataLayer.on('click', function(evt){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
 						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
+						allUpdate("scatter", tmpNode, i, 0, 1);
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
@@ -282,7 +282,7 @@ scatterDataLayer.on('click', function(evt){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
 					{
 						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
+						allUpdate("scatter", tmpNode, i, 0, 1);
 					}
 				}
 			}
@@ -308,29 +308,28 @@ scatterDataLayer.on('click', function(evt){
 		}	
 	}else if(ctrlPressed){ //select mutiple node one by one.
   		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1);
+  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1, 1);
    		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
-   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0);
+   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0, 1);
   		}
   		tmpShift = false;
   	}else{
 		tmpShift = false;
-		allDeselect();
-		allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0);
-  		
+		allDeselect(3);
+		allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0, 1); 		
   	}  	
   	if(tmpShift == false)
 	{
 		preMousePos = mousePos;
 	}  	
+  	saveWork(0, 0, 0);
 	writeMsg(msgLayer);
   	doRefresh();  	
 }); 
 
-
-
-function scatterSingleSelect(node, id)
+function scatterSingleSelect(node, id, saving)
 {
+	saveWork(id, 0, saving);
 	node.apply('setAttrs', {
 		opacity: 1,
 		strokeWidth : 2,
@@ -340,8 +339,9 @@ function scatterSingleSelect(node, id)
 	scatterData[id].selected=1;
 }
 
-function scatterSingleDeselect(node, id)
+function scatterSingleDeselect(node, id, saving)
 {
+	saveWork(id, 1, saving);
 	node.apply('setAttrs', {
 		opacity: 0.75,
 		strokeWidth : 0.01,
@@ -351,7 +351,7 @@ function scatterSingleDeselect(node, id)
 	scatterData[id].selected=0;
 }
 
-function scatterAllSelect()
+function scatterAllSelect(saving)
 {
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
@@ -359,12 +359,12 @@ function scatterAllSelect()
 		node = scatterStage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 0)
 		{
-			scatterSingleSelect(node, i);
+			scatterSingleSelect(node, i, saving);
 		}
 	}
 }
 
-function scatterAllDeselect()
+function scatterAllDeselect(saving)
 {
 	var node;
 	for(var i = 0; i <scatterData.length ; i ++)
@@ -372,19 +372,19 @@ function scatterAllDeselect()
 		node = scatterStage.get("#"+ (i + scatterIdStart));
 		if(scatterData[i].selected == 1)
 		{
-			scatterSingleDeselect(node, i);
+			scatterSingleDeselect(node, i, saving);
 		}
 	}
 }
 
-function scatterUpdate(rectId, eraseOn)
+function scatterUpdate(rectId, eraseOn, saving)
 {
 	var node;
 	if(eraseOn == 0)	{
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
 		{	
 			node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
-			scatterSingleSelect(node, histHasArr[rectId][i]);
+			scatterSingleSelect(node, histHasArr[rectId][i], saving);
 		}
 	}else if(eraseOn == 1){ 
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
@@ -392,7 +392,7 @@ function scatterUpdate(rectId, eraseOn)
 			node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
 			if(scatterData[histHasArr[rectId][i]].selected  == 1)
 			{
-				scatterSingleDeselect(node, histHasArr[rectId][i]);
+				scatterSingleDeselect(node, histHasArr[rectId][i], saving);
 			}			
 		}
 	}
@@ -407,4 +407,3 @@ if(legend ==true)
 	drawLegend("topright",scatterColor, scatterStage);
 }
 //////////////////////////////////////Legend End//////////////////////////////////////
-

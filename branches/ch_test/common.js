@@ -64,40 +64,79 @@ window.addEventListener('keyup',this.checkKeyUp,false);
 var ctrlPressed = false;
 var shiftPressed = false;
 var aPressed = false;
+var zPressed = false;
 var gPressed = false;
 var tmpShift = false;
-function checkKeyDown(e) {
+
+function checkKeyDown(e) 
+{
 	//alert(e.keyCode);
 	//17 || 25 = ctrl, shift = 16, a=65, g= 71
-	if(e.keyCode == 17 || e.keyCode == 25){
+	if(e.keyCode == 17 || e.keyCode == 25)
+	{
 		ctrlPressed = true;
 	}
-	if(e.keyCode == 16){
+	if(e.keyCode == 16)
+	{
 		shiftPressed = true;
 	}
-	if(e.keyCode == 65){
+	if(e.keyCode == 65)
+	{
 		aPressed = true;
 	}
-	if(e.keyCode == 71){
+	if(e.keyCode == 71)
+	{
 		gPressed = true;
 	}
+	if(e.keyCode == 90)
+	{
+		zPressed = true;
+	}
+	if(ctrlPressed == true && zPressed == true)
+	{
+		alert("sssssssss");
+	}
 }	
-function checkKeyUp(e) {
+function checkKeyUp(e) 
+{
 //	alert(e.keyCode);
 	//17 || 25 = ctrl, shift = 16
-	if(ctrlPressed = true){
+	if(ctrlPressed = true)
+	{
 		ctrlPressed = false;
 	}
-	if(shiftPressed = true){
+	if(shiftPressed = true)
+	{
 		shiftPressed = false;
 	}
-	if(aPressed = true){
+	if(aPressed = true)
+	{
 		aPressed = false;
 	}
-	if(gPressed == true){
+	if(gPressed == true)
+	{
 		gPressed = false;
 	}
+	if(zPressed == true)
+	{
+		zPressed = false;
+	}
 }	
+var workCount = 0;
+var saving = false;
+var saveWorkArr = make2DArr(10);
+function saveWork()
+{
+	if(saving == true)
+	{
+		
+	}
+	if(saving == false)
+	{
+		workCount++;
+	}
+	//singleSelect = 0 singleDeselect = 1 AllSelect = 2 All
+}
 /*
 function check(e) {
 var code = e.keyCode;
@@ -420,8 +459,44 @@ function doRefresh(){
 //	scatterPlotLayer.drawScene();
 //	histPlotLayer.drawScene();
 }
+///////////////////////////// Total Platform /////////////////////////
+function allSelect()
+{
+	histAllSelect();
+	scatterAllSelect();
+}
 
+function allDeselect()
+{
+	scatterAllDeselect();
+//	document.write("dddd");
+	histAllDeselect();
+}
 
-
+function allUpdate(hostName, node, id, eraseOn)
+{
+	//// eraseOn : 0 is add node , 1 is delete node //
+	//// id is each relative id ///
+	if(hostName == "scatter")
+	{
+		if(eraseOn == 0) // add node
+		{
+			scatterSingleSelect(node, id);
+		}
+		else{
+			scatterSingleDeselect(node, id);
+		}
+  		histUpdate(scatterXMain[id],eraseOn);
+	}else if(hostName == "hist"){
+		if(eraseOn == 0) // add node
+		{
+			histSingleSelect(node, id);
+		}
+		else{
+			histSingleDeselect(node, id);
+		}
+		scatterUpdate(id,eraseOn);
+	}
+}
 
 

@@ -201,72 +201,51 @@ histDataLayer.on('mouseout', function(evt) {
 //////////////////////////////////////Selection Start//////////////////////////////////////
 var preId;
 histPlotLayer.on('click', function(evt){
-	scatterAllDeselect();
-	histAllDeselect();
-	//if(msgShow==true){
-		writeMsg(msgLayer);
-//	}
+	allDeselect();
+	writeMsg(msgLayer);
 	doRefresh();	 
 });
 histDataLayer.on('click', function(evt){
   	var node = evt.shape;
   	var shapes = histStage.get('#'+node.getId());
-  	var semiNode;
+  	var tmpNode;
   	if(aPressed){	//select ALL
-  		histAllSelect();
-  		scatterAllSelect();
+  		allSelect();
   		tmpShift = false;
   	}else if(shiftPressed){
   		tmpShift = true;
-  		scatterAllDeselect();
-		histAllDeselect();
+  		allDeselect();
 		if(preId > node.getId()){
 			for(var i = node.getId() - histIdStart ; i < preId + 1 - histIdStart ; i++)
 			{
-				semiNode = histStage.get("#"+ (i + histIdStart));
-				histSingleSelect(semiNode);
-				histData[i].selected = histArr[i];
-				scatterUpdate(i, 0);
+				tmpNode = histStage.get("#"+ (i + histIdStart));
+				allUpdate("hist", tmpNode, i, 0);
 			}
 		}else if(preId < node.getId()){
 			for(var i = preId - histIdStart  ; i < node.getId() + 1 - histIdStart ; i++)
 			{
-				semiNode = histStage.get("#"+ (i + histIdStart));
-				histSingleSelect(semiNode);
-				histData[i].selected =histArr[i];
-				scatterUpdate(i, 0);
+				tmpNode = histStage.get("#"+ (i + histIdStart));
+				allUpdate("hist", tmpNode, i, 0);
 			}
 		} 
 	}else if(ctrlPressed){ //select mutiple node one by one.
   		if(histData[node.getId() - histIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			histData[node.getId() - histIdStart].selected = 0;
-  			scatterUpdate(node.getId() - histIdStart, 1);
-  			histSingleDeselect(shapes);
+  			allUpdate("hist", shapes, node.getId() - histIdStart, 1);
   		}else if(histData[node.getId() - histIdStart].selected == 0){ // unselected -> selected
-  			histData[node.getId() - histIdStart].selected=histArr[node.getId() - histIdStart];
-  			scatterUpdate(node.getId() - histIdStart, 0);
-  			histSingleSelect(shapes);
+  			allUpdate("hist", shapes, node.getId() - histIdStart, 0);
   		}
   		tmpShift = false;
   	}else{ 	// just one click
 		tmpShift = false;
-  		histAllDeselect();
-  		scatterAllDeselect();
-  		histData[node.getId() - histIdStart].selected=histArr[node.getId() - histIdStart];
-  		histSingleSelect(shapes);
-		scatterUpdate(node.getId() - histIdStart, 0);		
-  	}
-  	
+		allDeselect();
+		allUpdate("hist", shapes, node.getId() - histIdStart, 0);
+  	}  	
   	if(tmpShift == false)
 	{
 		preId = node.getId();
 	}
-
   	doRefresh();
-  	
-  	//if(msgShow==true){
-		writeMsg(msgLayer);
-	//}
+ 	writeMsg(msgLayer);
 }); 
 
 function histUpdate(xData, eraseOn)
@@ -276,30 +255,35 @@ function histUpdate(xData, eraseOn)
 	
 	if(eraseOn == 0)	{		
 		histData[id].selected = histData[id].selected + 1;
-		histSingleSelect(node);
+		histSingleSelect(node, -1);
 	}else if(eraseOn == 1){  // ctrl press - erase
 		histData[id].selected = histData[id].selected - 1;
 		if(histData[id].selected == 0)
 		{
-			histSingleDeselect(node);
+			histSingleDeselect(node, id);
 		}
 	}
 }
 
-function histSingleSelect(node)
+function histSingleSelect(node, id)
 {
 	node.apply('setAttrs', {
 		opacity: 1,
 		scale: { x : 1.05, y : 1 }
 	});
+	if(id != -1)
+	{
+		histData[id].selected=histArr[id];
+	}	
 }
 
-function histSingleDeselect(node)
+function histSingleDeselect(node, id)
 {
 	node.apply('setAttrs', {
 		opacity: 0.5,
 		scale: { x : 1, y : 1 }
 	});
+	histData[id].selected = 0;
 }
 
 function histAllSelect()
@@ -308,8 +292,7 @@ function histAllSelect()
 	for(var i = 0; i <histArr.length ; i ++)
 	{
 		node = histStage.get("#"+ (i + histIdStart));
-		histData[i].selected=histArr[i]; // should be number of scatters
-		histSingleSelect(node);		
+		histSingleSelect(node, i);		
 	}
 }
 
@@ -319,8 +302,7 @@ function histAllDeselect()
 	for(var i = 0; i <histArr.length ; i ++)
 	{
 		node = histStage.get("#"+ (i + histIdStart));
-		histData[i].selected=0;
-		histSingleDeselect(node);
+		histSingleDeselect(node, i);
 	}
 }
   //////////////////////////////////////Selection End//////////////////////////////////////

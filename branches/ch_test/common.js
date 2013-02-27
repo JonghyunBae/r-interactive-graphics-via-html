@@ -751,13 +751,22 @@ function allUpdate(hostName, node, id, eraseOn)
 	{
 		if(eraseOn == 0) // add node
 		{
-			scatterSingleSelect(node, id);
+			if(scatterData[id].selected == 0)
+			{
+				scatterSingleSelect(node, id);
+				histUpdate(scatterXMain[id],eraseOn);
+			}
+			
 		}
 		else{
-			scatterSingleDeselect(node, id);
+			if(scatterData[id].selected == 1)
+			{
+				scatterSingleDeselect(node, id);
+				histUpdate(scatterXMain[id],eraseOn);
+			}
 		}
 	//	alert(eraseOn);
-  		histUpdate(scatterXMain[id],eraseOn);
+  		
 	}else if(hostName == "hist"){
 		if(eraseOn == 0) // add node
 		{

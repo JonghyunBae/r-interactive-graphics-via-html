@@ -389,7 +389,7 @@ rangeBoxLayer.add(rangeBox);
 var moving = false;
 var downOn = false;
 
-scatterPlotLayer.on('mousedown touchstart', function(evt){
+scatterStage.on('mousedown touchstart', function(evt){
 	downOn = true; 
 	preDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};
 	if(moving == true){

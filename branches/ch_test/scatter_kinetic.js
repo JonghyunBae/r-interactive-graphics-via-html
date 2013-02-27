@@ -179,15 +179,15 @@ scatterPlotLayer.on('click', function(evt){
 */
 var preMousePos = {x: -1, y:-1};
 scatterDataLayer.on('click', function(evt){
-  	var node = evt.shape;
+	var node = evt.shape;
   	var shapes = scatterStage.get('#'+node.getId());
   	var semiNode;
   	var mousePos = {x: node.getX(), y:node.getY()};
   	var tmpNode;
   	if(downOn == true)
-  	{
-  		aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	//	alert("dddddddd");
-  		scatterRectRange(aftDragMousePos);
+  	{  		
+  	//	aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	//	alert("dddddddd");
+  	//	scatterRectRange(aftDragMousePos);
   	  	return;
   	}
 
@@ -378,6 +378,7 @@ scatterPlotLayer.on('mousedown touchstart', function(evt){
 		rangeBoxLayer.drawScene();
 	}
 }); 
+/*
 scatterStage.on('mousemove touchmove', function(evt){
 	if(moving == true){
 		var mousePos = scatterStage.getMousePosition();
@@ -395,19 +396,66 @@ scatterPlotLayer.on('mouseup touchend', function(evt){
 	scatterRectRange(aftDragMousePos);			
 	//alert(preDragMousePos.x+', '+preDragMousePos.y+', '+aftDragMousePos.x+', '+aftDragMousePos.y);	
 });
+*/
+window.addEventListener ("mousemove", function (evt){
+	if(moving == true)
+	{
+		var mousePos = {x: (evt.pageX-plotXmargin-scatterStageX), y: (evt.pageY-plotYmargin-plotHeight-scatterStageY)};
+	//	var mousePos2 = scatterStage.getMousePosition();
+	//	mousePos.x = mousePos.x + 
+	//	mousePos.x = mousePos.x*(plotWidth/scatterXMax);
+	//	var mousePos = scatterStage.getMousePosition(); // px 단위
+		var x, y;
+		x = mousePos.x + plotXmargin;
+		y = mousePos.y + plotYmargin + plotHeight;
+	//	alert(mousePos.x +","+ mousePos2.x +","+ rangeBox.getY() );
+		
+	//	var x = mousePos.x;
+	//	var y = mousePos.y;
+/*	if(x > plotWidth + plotXmargin + plotLength)
+		{
+			x = plotWidth + plotXmargin + plotLength;
+		}else if(x < plotXmargin - plotLength)
+		{
+			x = plotXmargin - plotLength;
+		}		
+		if(y > plotHeight + plotYmargin + plotLength)
+		{
+			y = plotHeight + plotYmargin + plotLength;
+		}else if(y < plotYmargin - plotLength)
+		{
+			y = plotYmargin - plotLength;
+		}*/
+		//aftDragMousePos = {x: mousePos.x*scatterXMax/plotWidth, y:mousePos.y*scatterYMax/plotHeight};
 
+		rangeBox.setWidth(x- rangeBox.getX());
+		rangeBox.setHeight(y- rangeBox.getY());
+		rangeBoxLayer.drawScene();
+	}
+}, true);
+
+window.addEventListener ("mouseup", function (evt){
+	
+	if(moving == true)
+	{
+		aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	
+		//alert(aftDragMousePos.x);
+		scatterRectRange(aftDragMousePos);
+	}
+	//alert(moving);
+}, true);
 function scatterRectRange(afterPosition)
 {		
 	var tmpNode;	
 	var prePosition;
-	if(downOn == true)
-	{
+//	if(downOn == true)
+//	{
 		rangeBox.setWidth(0);
 		rangeBox.setHeight(0);
 		rangeBoxLayer.drawScene();
 		prePosition = preDragMousePos;	
 		moving = false;
-	}
+//	}
 	allDeselect();
 	if(prePosition.x < afterPosition.x)
 	{
@@ -453,7 +501,7 @@ function scatterRectRange(afterPosition)
 	writeMsg(msgLayer);
   	doRefresh();  	
   	saveWork();
-  	downOn = false;
+ // 	downOn = false;
 	
 }
 

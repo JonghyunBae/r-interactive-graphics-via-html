@@ -36,9 +36,11 @@ scatterStage.add(scatterPlotLayer);
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
 
 //add node function.
-function scatterAddNode(obj, layer) 
+
+var superNode = new Array(mainArr[0].length);
+function scatterAddNode(number, obj, layer) 
 {
-	var node = new Kinetic.Circle({
+	superNode[number] = new Kinetic.Circle({
 		id: obj.id,
 		name: obj.name,
 		x: obj.x,
@@ -51,8 +53,9 @@ function scatterAddNode(obj, layer)
 		draggable: false,
 		selected : obj.selected
 	});		
-	layer.add(node);
+	layer.add(superNode[number] );
 }
+
 //build data
 var xScale=plotWidth/scatterXMax;//added by us
 var yScale=plotHeight/scatterYMax; //added by us
@@ -80,7 +83,7 @@ scatterIdEnd = idCounter - 1;
 var scatterDataLayer= new Kinetic.Layer();
 for(var n = 0; n < scatterData.length; n++) 
 {
-	scatterAddNode(scatterData[n], scatterDataLayer);
+	scatterAddNode(n, scatterData[n], scatterDataLayer);
 }
 scatterStage.add(scatterDataLayer);
 
@@ -178,6 +181,14 @@ scatterPlotLayer.on('click', function(evt){
 });
 */
 var preMousePos = {x: -1, y:-1};
+scatterPlotLayer.on('click', function(evt){ // mouse drag하고나서 연속클릭되어 망치는 것 방지.
+	if(downOn == true)								// 그리고 연속클릭 가능하게 함.
+	{  		
+  		downOn = false;
+	  	return;
+	}
+});
+
 scatterDataLayer.on('click', function(evt){
 	var node = evt.shape;
   	var shapes = scatterStage.get('#'+node.getId());
@@ -185,12 +196,10 @@ scatterDataLayer.on('click', function(evt){
   	var mousePos = {x: node.getX(), y:node.getY()};
   	var tmpNode;
   	if(downOn == true)
-  	{  		
-  	//	aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	//	alert("dddddddd");
-  	//	scatterRectRange(aftDragMousePos);
+	{  		
   		downOn = false;
-  	  	return;
-  	}
+	  	return;
+	}
 
   	if(aPressed){	//select ALL
   		allSelect();
@@ -204,7 +213,9 @@ scatterDataLayer.on('click', function(evt){
 			if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
 			{
 				tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-				allUpdate("scatter", tmpNode, i, 0);
+		//		tmpNode.hide();
+		//		scatterDataLayer.draw();
+				//allUpdate("scatter", tmpNode, i, 0);
 			}
 		}
 		tmpShift = false;
@@ -217,16 +228,22 @@ scatterDataLayer.on('click', function(evt){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+							allUpdate("scatter", tmpNode, i, 0);
+						}						
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+							allUpdate("scatter", tmpNode, i, 0);
+						}
 					}
 				}
 			}
@@ -236,16 +253,22 @@ scatterDataLayer.on('click', function(evt){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x  && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+							allUpdate("scatter", tmpNode, i, 0);
+						}
 					}
 				}
 			}else if(mousePos.y < preMousePos.y){
 				for(var i = 0 ; i < scatterData.length ; i++){
 					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x && mousePos.y  <= scatterData[i].y && scatterData[i].y <= preMousePos.y  )
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+							allUpdate("scatter", tmpNode, i, 0);
+						}
 					}
 				}
 			}
@@ -279,7 +302,7 @@ function scatterSingleSelect(node, id)
 		strokeWidth : 2,
 		stroke : 'red',
 		scale: { x : 1.3, y : 1.3 }
-	});
+	});	
 	scatterData[id].selected=1;
 }
 
@@ -291,7 +314,7 @@ function scatterSingleDeselect(node, id)
 		stoke : 'green',
 		scale: { x : 1, y : 1 }
 	});
-	scatterData[id].selected=0;
+		scatterData[id].selected=0;
 }
 
 function scatterAllSelect()
@@ -326,8 +349,11 @@ function scatterUpdate(rectId, eraseOn)
 	if(eraseOn == 0)	{
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
 		{	
-			node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
-			scatterSingleSelect(node, histHasArr[rectId][i]);
+			if(scatterData[histHasArr[rectId][i]].selected == 0)
+			{
+				node = scatterStage.get("#" + scatterData[histHasArr[rectId][i]].id);
+				scatterSingleSelect(node, histHasArr[rectId][i]);
+			}			
 		}
 	}else if(eraseOn == 1){ 
 		for(var i = 0 ; i< histHasArr[rectId].length ; i ++)
@@ -445,19 +471,24 @@ window.addEventListener ("mouseup", function (evt){
 	}
 	//alert(moving);
 }, true);
+
 function scatterRectRange(afterPosition)
 {		
 	var tmpNode;	
 	var prePosition;
 //	if(downOn == true)
 //	{
-		rangeBox.setWidth(0);
-		rangeBox.setHeight(0);
-		rangeBoxLayer.drawScene();
-		prePosition = preDragMousePos;	
-		moving = false;
+	rangeBox.setWidth(0);
+	rangeBox.setHeight(0);
+	rangeBoxLayer.drawScene();
+	prePosition = preDragMousePos;	
+	moving = false;
 //	}
-	allDeselect();
+	if(ctrlPressed == false)
+	{
+		allDeselect();
+	}
+	
 	if(prePosition.x < afterPosition.x)
 	{
 		if(prePosition.y < afterPosition.y)	{
@@ -466,16 +497,22 @@ function scatterRectRange(afterPosition)
 				
 				if(prePosition.x <= scatterXMain[i] &&  scatterXMain[i] <= afterPosition.x && prePosition.y <=  scatterYMain[i] && scatterYMain[i] <= afterPosition.y )
 				{			
-	    			tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-	    			allUpdate("scatter", tmpNode, i, 0);
+					if(scatterData[i].selected == 0)
+					{
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+		    			allUpdate("scatter", tmpNode, i, 0);
+					}
 				}
 			}
 		}else if(afterPosition.y < prePosition.y){
 			for(var i = 0 ; i < scatterData.length ; i++){
 				if(prePosition.x <= scatterXMain[i] && scatterXMain[i] <= afterPosition.x && afterPosition.y <= scatterYMain[i] && scatterYMain[i] <= prePosition.y )
 				{
-					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-					allUpdate("scatter", tmpNode, i, 0);
+					if(scatterData[i].selected == 0)
+					{
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+		    			allUpdate("scatter", tmpNode, i, 0);
+					}
 				}
 			}
 		}
@@ -485,16 +522,22 @@ function scatterRectRange(afterPosition)
 			for(var i = 0 ; i < scatterData.length ; i++){
 				if(afterPosition.x <= scatterXMain[i] && scatterXMain[i] <= prePosition.x  && prePosition.y <= scatterYMain[i] && scatterYMain[i] <= afterPosition.y )
 				{
-					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-					allUpdate("scatter", tmpNode, i, 0);
+					if(scatterData[i].selected == 0)
+					{
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+		    			allUpdate("scatter", tmpNode, i, 0);
+					}
 				}
 			}
 		}else if(afterPosition.y < prePosition.y){
 			for(var i = 0 ; i < scatterData.length ; i++){
 				if(afterPosition.x <= scatterXMain[i] && scatterXMain[i] <= prePosition.x && afterPosition.y  <= scatterYMain[i] && scatterYMain[i] <= prePosition.y  )
 				{
-					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-					allUpdate("scatter", tmpNode, i, 0);
+					if(scatterData[i].selected == 0)
+					{
+						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+		    			allUpdate("scatter", tmpNode, i, 0);
+					}
 				}
 			}
 		}
@@ -514,3 +557,96 @@ if(legend ==true)
 	drawLegend("topright",scatterColor, scatterStage);
 }
 //////////////////////////////////////Legend End//////////////////////////////////////
+
+
+
+////////////////////////////Hide Start ///////////////////////////////////
+function hideSelected()
+{
+	for(var i = 0 ; i < mainArr[0].length ; i ++)
+	{
+		if(scatterData[i].selected == 1)
+		{
+			var node = scatterStage.get("#"+ (i + scatterIdStart));
+			scatterSingleDeselect(node, i);
+			scatterData[i].selected = 3;
+			superNode[i].hide();
+			histHide(scatterXMain[i]);
+		}
+	}
+	scatterDataLayer.draw();	
+	doRefresh();
+}
+function histHide(xData)
+{
+	var id = parseInt(xData/diffHist);
+	var node = histStage.get("#"+ (id + histIdStart));
+	histData[id].selected = histData[id].selected - 1;
+	histArr[id] = histArr[id] - 1;
+	var tmp = histArr[id] * plotHeight / histYMax;
+	if(histData[id].selected == 0)
+	{
+		histSingleDeselect(node, id);
+	}
+	node.apply('setAttrs', {
+		height : tmp,
+		y : plotYmargin + plotHeight - tmp + tmp/2,
+		offset: {x: width/2, y: tmp/2},
+		name: histArr[id] 		
+	});	
+}
+////////////////////////////Hide End//////////////////////////////////
+///////////////////////////Reset Start ////////////////////////////////
+function resetSelected()
+{
+	for(var i = 0 ; i < mainArr[0].length ; i ++)
+	{
+		if(scatterData[i].selected == 3)
+		{
+			scatterData[i].selected = 0;
+			superNode[i].show();
+			histReset(scatterXMain[i]);
+		}
+	}
+	scatterDataLayer.draw();	
+	doRefresh();
+}
+function histReset(xData)
+{
+	var id = parseInt(xData/diffHist);
+	var node = histStage.get("#"+ (id + histIdStart));
+	histData[id].selected = histData[id].selected + 1;
+	histArr[id] = histArr[id] + 1;
+	var tmp = histArr[id] * plotHeight / histYMax;
+	if(histData[id].selected == 0)
+	{
+		histSingleDeselect(node, id);
+	}
+	node.apply('setAttrs', {
+		height : tmp,
+		y : plotYmargin + plotHeight - tmp + tmp/2,
+		offset: {x: width/2, y: tmp/2},
+		name: histArr[id] 		
+	});	
+}
+///////////////////////////Reset End ////////////////////////////////
+
+///////////////////////////Delete Start ////////////////////////////////
+function deleteSelected()
+{
+	for(var i = 0 ; i < mainArr[0].length ; i ++)
+	{
+		if(scatterData[i].selected == 1)
+		{
+			var node = scatterStage.get("#"+ (i + scatterIdStart));
+			scatterSingleDeselect(node, i);
+			scatterData[i].selected = 4;
+			superNode[i].hide();
+			histHide(scatterXMain[i]);
+		}
+	}
+	scatterDataLayer.draw();	
+	doRefresh();
+}
+/////////////////////////Delete End ////////////////////////////////
+

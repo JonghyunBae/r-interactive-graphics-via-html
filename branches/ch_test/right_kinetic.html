@@ -18,25 +18,24 @@
 		
 		<script src="kinetic-v4.3.1.js"></script>
 		
+		
 		<div id="scatterContainer" style="position : absolute; " ></div>
 		<div id="histContainer" style="position : absolute; " ></div>
+<!-- 		<input type="text" style="font-size:16pt;width:100px;height:30px;left:1400px;top:320px;position:absolute;" onfocus="" onblur="" />   -->	
 		
+			
 		<script src="common.js"> </script>
+		
 		<script>
-
-		   
-		   
 			/////////////// Create Main structure from CSV file ///////////
 			createMainStructure("Theoph-from-R.csv");
-			//createMainStructure("ChickWeight-from-R.csv");
-			
-			
+			//createMainStructure("ChickWeight-from-R.csv");			
 			
 			//////////variables for scatter chart//////////////// names are likely to change later
 			
 			var radius_scale = 4; // / Dot radius in scatter chart
-			var scatterX = 3;
-			var scatterY = 4;
+			var scatterX = 3;	//[scatterX]th column data
+			var scatterY = 4;	//[scatterY]th column data
 			var scatterXLabel = labelArr[scatterX];
 			var scatterYLabel = labelArr[scatterY];
 			var scatterXMain =  mainArr[scatterX];
@@ -53,7 +52,7 @@
 			var scatterYDiff=parseInt(scatterYMax/6);
 			//////////variables for histogram chart//////////////// names are likely to change later
 			
-			var histX = 3;
+			var histX = 3; //[histX]th column data
 			var histXLabel = labelArr[histX ];
 			var histXMain =  mainArr[histX ];
 			

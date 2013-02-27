@@ -1,22 +1,25 @@
 
 //////////////////Common variables///////////////////////////
-var asideWidth = 300;
-var headerHeight = 200;
-var scatterStageX = asideWidth;
-var scatterStageY =200;
-var histStageX =200;
-var histStageY =200;
-var idCounter = 0;
-var plotXmargin=100;
-var plotYmargin=100;
-var plotLength=15;
-var plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin;
-var plotHeight=400;
 
+//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////
+var asideWidth = 300; //left aside width, IT SHOULD BE SET ONLY BY ADMINISTRATOR
+var headerHeight = 200; //header height, IT SHOULD BE SET ONLY BY ADMINISTRATOR
+
+var scatterStageX = asideWidth; //scatter stage canvas left
+var scatterStageY =200; //scatter stage canvas top
+var histStageX =200;  // hist stage canvas left
+var histStageY =200;  // hist stage canvas top
+
+var plotXmargin=100; //canvas left, right margin
+var plotYmargin=100; //canvas top, bottom margin
+var plotLength=15; //margin from plot box
+var plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin; //plot width, THE RATIO SHOULD BE SET ONLY BY ADMINISTRATOR
+var plotHeight=400; //plot height, IT SHOULD BE SET ONLY BY ADMINISTRATOR
+
+
+var idCounter = 0;
 var scatterIdStart = idCounter;
 var scatterIdEnd;
-//var scatterX;
-//var scatterY;
 
 var histHasArr;
 var histIdStart = idCounter;
@@ -24,7 +27,6 @@ var histIdEnd;
 
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
-//var msgShow=true;
 
 function createMainStructure(fileName)
 {
@@ -718,6 +720,7 @@ for(var i = 0; i <scatterData.length ; i ++)
 	}
 }
 ////////////////////////////////Undo End/////////////////////////////
+
 ///////////////////////////// Total Platform Start/////////////////////////
 function allSelect()
 {

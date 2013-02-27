@@ -91,8 +91,9 @@ function booleanSearch(string)
     		if(eval(inputStr))
     		{
     			var tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-    			scatterSingleSelect(tmpNode, i);
-    			histUpdate(scatterXMain[i], 0);  //과부하로 인한 보류
+    			allUpdate("scatter", tmpNode, i, 0);
+  //  			scatterSingleSelect(tmpNode, i);
+   // 			histUpdate(scatterXMain[i], 0);  //과부하로 인한 보류
     		}
         }
     	doRefresh();

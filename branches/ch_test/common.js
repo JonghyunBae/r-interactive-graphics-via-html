@@ -120,21 +120,22 @@ function checkKeyDown(e)
 	{
 		fetchWork();
 	}
+//	alert("11111" + ctrlPressed + "," + zPressed);
 	
 }	
 function checkKeyUp(e) 
 {
 //	alert(e.keyCode);
 	//17 || 25 = ctrl, shift = 16
-	if(ctrlPressed = true)
+	if(ctrlPressed == true && zPressed != true)
 	{
 		ctrlPressed = false;
 	}
-	if(shiftPressed = true)
+	if(shiftPressed == true)
 	{
 		shiftPressed = false;
 	}
-	if(aPressed = true)
+	if(aPressed == true)
 	{
 		aPressed = false;
 	}
@@ -146,6 +147,7 @@ function checkKeyUp(e)
 	{
 		zPressed = false;
 	}
+//	alert("22222" + ctrlPressed + "," + zPressed);
 }	
 //////////////////////////////////////Chk key event End//////////////////////////////////////
 

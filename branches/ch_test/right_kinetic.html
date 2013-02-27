@@ -4,7 +4,11 @@
 
 		<meta charset="UTF-8">
 		<title>RIGHT, R-Interactive-Graph-HTml5</title>
+		
 		<link  rel="stylesheet" href="right_kinetic.css"> 
+		
+	
+		
 	</head>
 	<body>
 	
@@ -68,6 +72,19 @@
 			var histXDiff=parseInt(histXMax/5);//나중에 자동으로 잡아주기.
 			var histYDiff=parseInt(histYMax/5);  
 		</script>    
+		
+			<script>
+		//	labelArr.length;
+			var colWidth=100;
+			document.write("<style>");
+			document.write("div.scrollableContainer { width: "+ ((colWidth+1)*(labelArr.length+1)+65) +"px; }");
+			document.write("div.scrollingArea { height: " + 300 + "px; }"); //you can set the height of scrolling area
+			document.write("table.selectedInfo .node     div { width: "+colWidth+"px; text-align:center;  }");
+			document.write("table.selectedInfo .column div { width: "+colWidth+"px; text-align:center;  }");
+			document.write("");					
+					
+			document.write("</style>");
+		</script>
 		
 		<script src="scatter_kinetic.js"></script>
    		<script src="hist_kinetic.js"></script>

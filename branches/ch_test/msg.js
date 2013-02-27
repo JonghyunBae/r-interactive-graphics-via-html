@@ -1,38 +1,42 @@
  //create dynamic table
 
-	document.write("<div class=\"scrollableContainer\" style=\"position : absolute; left:600px; top:1000px\">");
+	document.write("<div class=\"scrollableContainer\" style=\"position : absolute; left:800px; top:1000px\">");
 	document.write(" <div class=\"scrollingArea\">");
 		document.write("<table id=\"dataTable\" class=\"selectedInfo scrollable\">");
 			document.write("<thead>");
 				document.write("<tr>");
-					document.write("<th class=\"node\"><div>node<br>(number)</div></th>");
-					for(var i=0; i<labelArr.length ; i++)
-					{
-						document.write("<th class=\"column1\"><div>"+labelArr[i]+"</div></th>");
-					}
-				document.write("</tr>");				
+				document.write("<th class=\"node\"><div>node<br>(number)</div></th>");
+				for(var i=0; i<labelArr.length ; i++)
+				{
+					document.write("<th class=\"column\"><div>"+labelArr[i]+"</div></th>");
+				}	  			
+	  	      document.write("</tr>");
 			document.write("</thead>");
 			document.write("<tbody>");		
-				for(var i=0; i<3; i++)
-				{
-					if(scatterData[i].selected==0)
-					{
-						document.write("<tr>");
-						document.write("<td class=\"column1\"><div>"+i+"</div></th>");
-						for(var j=0; j<labelArr.length ; j++)
-						{
-							document.write("<td class=\"column1\"><div>"+mainArr[j][i]+"</div></th>");
-						}
+				//for(var i=0; i<scatterData.length; i++)
+			//	{
+				//	if(scatterData[i].selected==1)
+				//	{
+						document.write("<tr id=\"tr1\"> ");			//style=\"display:none\">
+							document.write("<td id=\"td1\" class=\"node\"><div>-</div></td>");
+							for(var i=0; i<labelArr.length ; i++)
+							{
+								document.write("<td class=\"column\"><div>-</div></td>");
+							}	  	
 						document.write("</tr>");		
-					}					
-				}
+				//	}					
+			//	}
 				document.write("</tbody>");			
 			document.write("</table>");	
 		document.write(" </div>");
 	document.write(" </div>");			
 
+	
 	function addRow(tableID) {
-		 deleteRow(tableID);
+		
+		
+		
+		deleteRow(tableID);
         var table = document.getElementById(tableID);
 
         var rowCount = table.rows.length;
@@ -47,12 +51,19 @@
 				rowCount = table.rows.length;
 				row = table.insertRow(rowCount);
 					var newcell = row.insertCell(0);
+					 newcell.align = 'center';
+					
+					newcell.style.backgroundColor = '#b6c5ee';
+					newcell.width = colWidth;
 					newcell.innerHTML = i;
 				   for(var j=1; j<colCount; j++) {
 
-			            var newcell = row.insertCell(j);
+			           var newcell = row.insertCell(j);
 			           // newcell.innerHTML = table.rows[0].cells[j].innerHTML;
+			           newcell.align = 'center';
+			           newcell.width = colWidth;
 			           newcell.innerHTML = mainArr[j-1][i];
+			           
 				   }
 			}
 		}	

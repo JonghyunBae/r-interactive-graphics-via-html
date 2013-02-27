@@ -212,7 +212,7 @@ histDataLayer.on('mouseout', function(evt) {
    
 	//if(msgShow==true){
 		writeMsg(msgLayer);
-		
+		addRow('dataTable');
 //	}
 });	 
 //////////////////////////////////////hist Tooltip End//////////////////////////////////////
@@ -222,7 +222,7 @@ var preId = -1;
 histPlotLayer.on('click', function(evt){
 	allDeselect();
 	writeMsg(msgLayer);
-	
+	addRow('dataTable');
 	doRefresh();	 
 });
 histDataLayer.on('click', function(evt){
@@ -268,6 +268,7 @@ histDataLayer.on('click', function(evt){
   	doRefresh();
  	writeMsg(msgLayer);
  	addRow('dataTable');
+ 	
 }); 
 
 function histUpdate(xData, eraseOn)

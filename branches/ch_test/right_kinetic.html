@@ -1,6 +1,9 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
+
+		<meta charset="UTF-8">
+		<title>RIGHT, R-Interactive-Graph-HTml5</title>
 		<link  rel="stylesheet" href="right_kinetic.css"> 
 	</head>
 	<body>
@@ -12,21 +15,24 @@
          <a href="/about">About</a>
       </nav>
     </header>
-    
+    <p>
+		<a id="hideSelected" href="#" class="myButton" onClick ="hideSelected(); return false;">Hide</a>
+		<a id="deleteSelected" href="#" class="myButton" onClick ="deleteSelected(); return false;">Delete</a>
+		<a id="resetSelected" href="#" class="myButton" onClick ="resetSelected(); return false;">Reset</a>
+	</p>		
 	<section>
 <!-- <input type="radio" value="2" name="ex" id="radio1" /><label for="radio1">IE, FF </label><br />  -->	
+	
 		
 		<script src="kinetic-v4.3.1.js"></script>
-		
-		
 		<div id="scatterContainer" style="position : absolute; " ></div>
 		<div id="histContainer" style="position : absolute; " ></div>
-<!-- 		<input type="text" style="font-size:16pt;width:100px;height:30px;left:1400px;top:320px;position:absolute;" onfocus="" onblur="" />   -->	
+ 		<input type="text" id="histDiffTextBox" style="width: 50px; top:320px;position:absolute;" placeholder="Diff"  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {histDiffUpdate(); return false;}};"/>   	
 		
 			
 		<script src="common.js"> </script>
 		
-		<script>
+		<script>//
 			/////////////// Create Main structure from CSV file ///////////
 			createMainStructure("Theoph-from-R.csv");
 			//createMainStructure("ChickWeight-from-R.csv");			
@@ -79,6 +85,8 @@
 			<a id="save" href="#" class="myButton" onClick =" return false;">Save as image</a>
 			<a id="sendImg" href="#" class="myButton" onClick =" return false;">Send an image to Email (not supported yet)</a>
 		</p>		
+		
+		
 		<p><div id="msgContainer" class="myButton"></div></p>
  		<script src="msg.js"></script>
 		<script src="event.js"></script> -

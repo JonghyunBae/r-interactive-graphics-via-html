@@ -157,11 +157,14 @@ var beforeInnerWidth = window.innerWidth; //window.innerWidth..., Does this vari
 containerSizeInit();
 function containerSizeInit()
 {
-	document.getElementById("scatterContainer").style.top = headerHeight+"px";
 	document.getElementById("scatterContainer").style.left = scatterStageX+"px";
-
-	document.getElementById("histContainer").style.top = headerHeight+"px";
+	document.getElementById("scatterContainer").style.top = headerHeight+"px";
+	
 	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.35 +"px";
+	document.getElementById("histContainer").style.top = headerHeight+"px";	
+	document.getElementById("histDiffTextBox").style.top = parseFloat(document.getElementById("histContainer").style.top) + plotYmargin +"px";
+	document.getElementById("histDiffTextBox").style.left = parseFloat(document.getElementById("histContainer").style.left) + plotXmargin + plotWidth + "px";
+	
 	//scatterStage.setWidth(window.innerWidth*0.35);
 	//scatterStage.setHeight(window.innerWidth*0.2);
 }
@@ -175,11 +178,17 @@ window.onresize = function(evt) {
 
 function containerResize()
 {
-//	document.getElementById("scatterContainer").style.left = window.innerWidth*0.2+"px";
-	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.35 +"px";
+
 	scatterStage.setWidth((window.innerWidth-asideWidth)*0.35);
 	histStage.setWidth((window.innerWidth-asideWidth)*0.35);
 	plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin;
+	
+//	document.getElementById("scatterContainer").style.left = window.innerWidth*0.2+"px";
+	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.35 +"px";
+	document.getElementById("histDiffTextBox").style.top = parseFloat(document.getElementById("histContainer").style.top) + plotYmargin +"px";
+	document.getElementById("histDiffTextBox").style.left = parseFloat(document.getElementById("histContainer").style.left) + plotXmargin + plotWidth + "px";
+	
+	
 	
 	redrawStage(scatterStage, scatterXMax, scatterXDiff);
 	redrawStage(histStage, histXMax, histXDiff);

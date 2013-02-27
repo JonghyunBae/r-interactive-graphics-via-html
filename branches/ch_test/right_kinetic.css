@@ -242,3 +242,61 @@ input[type="button"]:active {
     }
 
 
+
+
+/*** SELECTED INFORMATION TABLE ***/
+  table.selectedInfo { 
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 11px;
+    cellspacing: 0; 
+    border-collapse: collapse; 
+    width: 535px;    
+    }
+  table.selectedInfo td { 
+    border-left: 1px solid #999; 
+    border-top: 1px solid #999;  
+    padding: 2px 4px;
+    }
+  table.selectedInfo tr:first-child td {
+    border-top: none;
+  }
+  table.selectedInfo th { 
+    border-left: 1px solid #999; 
+    padding: 2px 4px;
+    background: #6b6164;
+    color: white;
+    font-variant: small-caps;
+    }
+  table.selectedInfo td { background: #eee; overflow: hidden; }
+  
+  div.scrollableContainer { 
+    position: relative; 
+    width: 560px; 
+    padding-top: 2em; 
+    margin: 40px;    
+    border: 1px solid #999;
+    background: #6b6164;
+    }
+  div.scrollingArea { 
+    height: 240px; 
+    overflow: auto; 
+    }
+
+  table.scrollable thead tr {
+    left: -1px; top: 0;
+    position: absolute;
+    }
+
+  table.selectedInfo .node     div { width: 100px; text-align:center;  }
+  table.selectedInfo .column1 div { width: 100px; text-align:center;  }
+  table.selectedInfo .column2  div { width: 100px;  text-align:center; }
+  table.selectedInfo .column3  div { width: 100px;  text-align:center; }
+  table.selectedInfo .column4   div { width: 100px; text-align:center; }
+  
+  table.selectedInfo td.column1 { background: #ebcb4d; }
+  table.selectedInfo td.column3  { background: #acd171; }
+  table.selectedInfo td.node     { background: #C7E0C1; }  
+  table.selectedInfo td.column2    { background: #B7C3E8; }
+	table.selectedInfo td.column4    { background: #C7D311; } 
+
+

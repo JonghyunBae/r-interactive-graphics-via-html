@@ -1,7 +1,7 @@
 var ans='';
 var ansShow='';
 // variable buttons update
-for(var i=0; i<50 ; i++){
+for(var i=0; i<35 ; i++){
 	document.write("<br>");
 }
 document.write("<p>Use the variables below only, you can click one to add into input box</p>");
@@ -26,8 +26,10 @@ document.write("<label id=\"label1\">undefined</label>");
 document.write("</p>");
 
 function printAns(){
-	document.getElementById('label1').innerHTML = ansShow;
-	if(ansShow==''){
+	var tmpStr = '';	
+	tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.
+	document.getElementById('label1').innerHTML = tmpStr;
+	if(ansShow==''){		
 		printClearAns();
 	}
 }
@@ -99,13 +101,16 @@ function booleanSearch(string)
     	doRefresh();
     }
     ansShow=ans;
+   
     for(var i=0; i<labelArr.length; i++)
     {
 	    var tmpStr = "mainArr\\\["+i+"\\\]\\\[i\\\]";
+
 	    var searchStr1 =new RegExp( tmpStr, 'g'); // "g" means all search, "i" menas not-case-sensitive
 //    var newStr = mainArr[j][i].toString();
-		ansShow = ansShow.replace( searchStr1, labelArr[i]);
-    }   
+		ansShow = ansShow.replace(searchStr1, labelArr[i]);
+		
+    }    
 	writeMsg(msgLayer);
 }
 ///////////////////5<TIME ,,,,,,,bug found

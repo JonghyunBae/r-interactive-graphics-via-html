@@ -1,4 +1,131 @@
-  var msgStage = new Kinetic.Stage({
+ //create dynamic table
+
+	document.write("<div class=\"scrollableContainer\" style=\"position : absolute; left:600px; top:1000px\">");
+	document.write(" <div class=\"scrollingArea\">");
+		document.write("<table id=\"dataTable\" class=\"selectedInfo scrollable\">");
+			document.write("<thead>");
+				document.write("<tr>");
+					document.write("<th class=\"node\"><div>node<br>(number)</div></th>");
+					for(var i=0; i<labelArr.length ; i++)
+					{
+						document.write("<th class=\"column1\"><div>"+labelArr[i]+"</div></th>");
+					}
+				document.write("</tr>");				
+			document.write("</thead>");
+			document.write("<tbody>");		
+				for(var i=0; i<3; i++)
+				{
+					if(scatterData[i].selected==0)
+					{
+						document.write("<tr>");
+						document.write("<td class=\"column1\"><div>"+i+"</div></th>");
+						for(var j=0; j<labelArr.length ; j++)
+						{
+							document.write("<td class=\"column1\"><div>"+mainArr[j][i]+"</div></th>");
+						}
+						document.write("</tr>");		
+					}					
+				}
+				document.write("</tbody>");			
+			document.write("</table>");	
+		document.write(" </div>");
+	document.write(" </div>");			
+
+	function addRow(tableID) {
+		 deleteRow(tableID);
+        var table = document.getElementById(tableID);
+
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        var colCount = table.rows[0].cells.length;
+       
+        for(var i=0; i<scatterData.length; i++)
+		{
+			if(scatterData[i].selected==1)
+			{
+				rowCount = table.rows.length;
+				row = table.insertRow(rowCount);
+					var newcell = row.insertCell(0);
+					newcell.innerHTML = i;
+				   for(var j=1; j<colCount; j++) {
+
+			            var newcell = row.insertCell(j);
+			           // newcell.innerHTML = table.rows[0].cells[j].innerHTML;
+			           newcell.innerHTML = mainArr[j-1][i];
+				   }
+			}
+		}	
+    }
+	function deleteRow(tableID) {
+            try {
+	            var table = document.getElementById(tableID);
+	            var rowCount = table.rows.length;
+	 
+	            for(var i=2; i<rowCount; i++) {
+	                var row = table.rows[i];
+	               //var chkbox = row.cells[0].childNodes[0];
+	                if(1) {
+	                    table.deleteRow(i);
+	                    rowCount--;
+	                    i--;
+	                }
+	            }
+            }catch(e) {
+                alert(e);
+            }
+        }
+
+
+/*
+<div class="scrollableContainer" style="left:100px; top:100px">
+  <div class="scrollingArea">
+  	<table class="selectedInfo scrollable" >
+  	  <thead>
+  			<tr>
+  	      <th class="node"><div>node</div></th>
+  	      <th class="column1"><div>column1</div></th>
+  	      <th class="column2"><div>column2 operation</div></th>
+  	      <th class="column3"><div>column3</div></th>
+  	      <th class="column4"><div>column4</div></th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  		  		  <tr>
+          <td class="node"><div>Seabourne Sun</div></td>
+          <td class="column1"><div>Seabourn Cruise Line</div></td>
+          <td class="column2"><div>1988</div></td>
+          <td class="column3"><div></div></td>
+          <td class="column4"><div >Ended service in 2002, currently operating as Prinsendam</div></td>                        
+        </tr>
+        		  <tr>
+          <td class="node"><div>Adventures of the Seas</div></td>
+          <td class="column1"><div>Royal Caribbean International</div></td>
+          <td class="column2"><div>2001</div></td>
+          <td class="column3"><div>138,000</div></td>
+          <td class="column4"><div >Operating</div></td>                        
+        </tr>
+        </tbody>
+      	</table>
+	</div>
+</div>
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var msgStage = new Kinetic.Stage({
         container: 'msgContainer',
         width: 500,
         height: 500

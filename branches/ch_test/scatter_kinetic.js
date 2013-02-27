@@ -188,6 +188,7 @@ scatterDataLayer.on('click', function(evt){
   	{  		
   	//	aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	//	alert("dddddddd");
   	//	scatterRectRange(aftDragMousePos);
+  		downOn = false;
   	  	return;
   	}
 

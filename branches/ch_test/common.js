@@ -608,6 +608,7 @@ var workRowCount = 0;
 
 function saveWork() // this is only for scatter relative id
 {	// saving is for save or not
+	
 	if(start == 0)
 	{
 		saveWorkArr[0] =  new Array(mainArr[0].length + 1);
@@ -632,11 +633,13 @@ function saveWork() // this is only for scatter relative id
 		if(scatterData[i].selected == 1)
 		{
 			saveWorkArr[workRowCount][workColCount++] = i;
+	//		alert(i);
 		}
 	}
 	
 	if(workColCount == 0)
 	{
+		
 		if((workRowCount > 0) && (saveWorkArr[workRowCount-1][0] == -2))
 		{
 		//	document.write("dddddddd");
@@ -647,10 +650,15 @@ function saveWork() // this is only for scatter relative id
 		saveWorkArr[workRowCount][workColCount++] = -2
 	}else{
 		saveWorkArr[workRowCount][workColCount++] = -1; // save finish sign
+		
 	}				
 	workColCount = 0;		
 	saveMousePosArr[workRowCount] = preMousePos;
+	
+	
+//	alert(workColCount);
 //	alert("111 "+ workRowCount + "  111   " +fetchCount );
+	
 }
 
 function fetchWork()

@@ -168,164 +168,165 @@ scatterDataLayer.on('mouseout', function(evt) {
 });	  
 //////////////////////////////////////Tooltip End//////////////////////////////////////
 
+
+
+
 //////////////////////////////////////Selection Start//////////////////////////////////////
-
-
-
+/*
 scatterPlotLayer.on('click', function(evt){
-	//var node = evt.shape;
-//	alert(evt.button);
-	if(evt.button == 0)
-	{
-		allDeselect();
-		saveWork();
-		writeMsg(msgLayer);
-		 tmpShift = false;
-		 doRefresh();		
-	}
-	else if(evt.button == 2)
-	{
-		
-	}
-	
+	//allDeselect();
+	writeMsg(msgLayer);
+	doRefresh();	 
+	saveWork();
 });
-var preMousePos;
-var aftMousePos;
-var tmpMousePos;
-var rangeBox = new Kinetic.Rect({
-	x: 0,
-	y: 0, 
-	width : 0,
-	height : 0,
-	fill: "blue",
-	stroke: "blue",						
-	opacity : 0.3
-});
-var rangeBoxLayer = new Kinetic.Layer();
-scatterStage.add(rangeBoxLayer);
-rangeBoxLayer.add(rangeBox);
-var tmptmp = 0;
-
-
-scatterPlotLayer.on('mousedown touchstart', function(evt){
-	if(tmptmp == 1){
-		tmptmp = 0;
-		rangeBoxLayer.draw();
-	}else{
-		var mousePos = scatterStage.getMousePosition();		
-		rangeBox.setX(mousePos.x);
-		rangeBox.setY(mousePos.y);
-		rangeBox.setWidth(0);
-		rangeBox.setHeight(0);
-        tmptmp = 1;
-        rangeBoxLayer.drawScene();
-	}
-}); 
-scatterPlotLayer.on('mousemove touchmove', function(evt){
-	if(tmptmp == 1){
-		var mousePos = scatterStage.getMousePosition();
-        var x = mousePos.x;
-        var y = mousePos.y;
-        rangeBox.setWidth(mousePos.x - rangeBox.getX());
-        rangeBox.setHeight(mousePos.y - rangeBox.getY());
-        tmptmp = true;
-        rangeBoxLayer.drawScene();
-	}
-});
-scatterPlotLayer.on('mouseup touchend', function(evt){
-//	alert("dddddddd");
-	rangeBox.setWidth(0);
-	rangeBox.setHeight(0);
-	tmptmp = 0;
-	rangeBoxLayer.drawScene();	
-});
-
-
+*/
+var preMousePos = {x: -1, y:-1};
 scatterDataLayer.on('click', function(evt){
   	var node = evt.shape;
   	var shapes = scatterStage.get('#'+node.getId());
   	var semiNode;
   	var mousePos = {x: node.getX(), y:node.getY()};
   	var tmpNode;
-  	var saving;
-  	
-  	if(aPressed){	//select ALL
-  		allSelect();
-  		tmpShift = false;
-  	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
-		allDeselect();
-  		nameArr = node.getName().split(',');	
-  		for(var i = 0 ; i < scatterData.length ; i++){
-			var tmpNameArr = new Array();
-			tmpNameArr = scatterData[i].name.split(',');	
-			if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
-			{
-				tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-				allUpdate("scatter", tmpNode, i, 0);
-			}
-		}
-		tmpShift = false;
-	}else if(shiftPressed){
-		allDeselect();
-		tmpShift = true;
-		if(preMousePos.x < mousePos.x)
-		{
-			if(preMousePos.y < mousePos.y)	{
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
-					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
-					}
-				}
-			}else if(mousePos.y < preMousePos.y){
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
-					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
-					}
-				}
-			}
-		}else if(preMousePos.x > mousePos.x)
-		{
-			if(preMousePos.y < mousePos.y)	{
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x  && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
-					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
-					}
-				}
-			}else if(mousePos.y < preMousePos.y){
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x && mousePos.y  <= scatterData[i].y && scatterData[i].y <= preMousePos.y  )
-					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-						allUpdate("scatter", tmpNode, i, 0);
-					}
-				}
-			}
-		}	
-	}else if(ctrlPressed){ //select mutiple node one by one.
-  		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1);
-   		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
-   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0);
+  	if(downOn == false)
+  	{
+  	  	if(aPressed){	//select ALL
+  	  		allSelect();
+  	  		tmpShift = false;
+  	  	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
+  			allDeselect();
+  	  		nameArr = node.getName().split(',');	
+  	  		for(var i = 0 ; i < scatterData.length ; i++){
+  				var tmpNameArr = new Array();
+  				tmpNameArr = scatterData[i].name.split(',');	
+  				if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
+  				{
+  					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  					allUpdate("scatter", tmpNode, i, 0);
+  				}
+  			}
+  			tmpShift = false;
+  		}else if(shiftPressed && preMousePos.x != -1 && preMousePos.y != -1){
+  			allDeselect();
+  			tmpShift = true;
+  			if(preMousePos.x < mousePos.x)
+  			{
+  				if(preMousePos.y < mousePos.y)	{
+  					for(var i = 0 ; i < scatterData.length ; i++){
+  						if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
+  						{
+  							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  							allUpdate("scatter", tmpNode, i, 0);
+  						}
+  					}
+  				}else if(mousePos.y < preMousePos.y){
+  					for(var i = 0 ; i < scatterData.length ; i++){
+  						if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
+  						{
+  							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  							allUpdate("scatter", tmpNode, i, 0);
+  						}
+  					}
+  				}
+  			}else if(preMousePos.x > mousePos.x)
+  			{
+  				if(preMousePos.y < mousePos.y)	{
+  					for(var i = 0 ; i < scatterData.length ; i++){
+  						if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x  && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
+  						{
+  							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  							allUpdate("scatter", tmpNode, i, 0);
+  						}
+  					}
+  				}else if(mousePos.y < preMousePos.y){
+  					for(var i = 0 ; i < scatterData.length ; i++){
+  						if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x && mousePos.y  <= scatterData[i].y && scatterData[i].y <= preMousePos.y  )
+  						{
+  							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  							allUpdate("scatter", tmpNode, i, 0);
+  						}
+  					}
+  				}
+  			}	
+  		}else if(ctrlPressed){ //select mutiple node one by one.
+  	  		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
+  	  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1);
+  	   		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
+  	   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0);
+  	  		}
+  	  		tmpShift = false;
+  	  	}else{
+  			tmpShift = false;
+  			allDeselect();
+  			allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0); 	
+  	  	}  	
+  	  	if(tmpShift == false)
+  		{
+  			preMousePos = mousePos;
   		}
-  		tmpShift = false;
+  	  	saveWork();
+  		writeMsg(msgLayer);
+  	  	doRefresh();  	
   	}else{
-		tmpShift = false;
-		allDeselect();
-		allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0); 	
-  	}  	
-  	if(tmpShift == false)
-	{
-		preMousePos = mousePos;
-	}
-  	saveWork();
-	writeMsg(msgLayer);
-  	doRefresh();  	
+  		aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	//	alert("dddddddd");
+  		rangeBox.setWidth(0);
+  		rangeBox.setHeight(0);  		
+  		moving = false;
+  		rangeBoxLayer.drawScene();	
+  		//alert(evt.clientX+','+evt.clientY);
+  		var tmpNode;	
+  		//alert(scatterXMain[0]);	
+  		allDeselect();
+  		if(preDragMousePos.x < aftDragMousePos.x)
+  		{
+  			if(preDragMousePos.y < aftDragMousePos.y)	{
+  				
+  				for(var i = 0 ; i < scatterData.length ; i++){
+  					
+  					if(preDragMousePos.x <= scatterXMain[i] &&  scatterXMain[i] <= aftDragMousePos.x && preDragMousePos.y <=  scatterYMain[i] && scatterYMain[i] <= aftDragMousePos.y )
+  					{			
+  		    			tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  		    			allUpdate("scatter", tmpNode, i, 0);
+  					}
+  				}	
+  			}else if(aftDragMousePos.y < preDragMousePos.y){
+  				for(var i = 0 ; i < scatterData.length ; i++){
+  					if(preDragMousePos.x <= scatterXMain[i] && scatterXMain[i] <= aftDragMousePos.x && aftDragMousePos.y <= scatterYMain[i] && scatterYMain[i] <= preDragMousePos.y )
+  					{
+  						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  						allUpdate("scatter", tmpNode, i, 0);
+  					}
+  				}
+  			}
+  		}else if(preDragMousePos.x > aftDragMousePos.x)
+  		{
+  			if(preDragMousePos.y < aftDragMousePos.y)	{
+  				for(var i = 0 ; i < scatterData.length ; i++){
+  					if(aftDragMousePos.x <= scatterXMain[i] && scatterXMain[i] <= preDragMousePos.x  && preDragMousePos.y <= scatterYMain[i] && scatterYMain[i] <= aftDragMousePos.y )
+  					{
+  						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  						allUpdate("scatter", tmpNode, i, 0);
+  					}
+  				}
+  			}else if(aftDragMousePos.y < preDragMousePos.y){
+  				for(var i = 0 ; i < scatterData.length ; i++){
+  					if(aftDragMousePos.x <= scatterXMain[i] && scatterXMain[i] <= preDragMousePos.x && aftDragMousePos.y  <= scatterYMain[i] && scatterYMain[i] <= preDragMousePos.y  )
+  					{
+  						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+  						allUpdate("scatter", tmpNode, i, 0);
+  					}
+  				}
+  			}
+  		}	
+
+//  		preMousePos.x = -1;
+  //		preMousePos.y = -1;
+  		writeMsg(msgLayer);
+  	  	doRefresh();  	
+  	  	saveWork();
+  	  	downOn = false;
+  	  	
+  	}
+
 }); 
 
 function scatterSingleSelect(node, id)
@@ -399,6 +400,116 @@ function scatterUpdate(rectId, eraseOn)
 
 //////////////////////////////////////Selection End//////////////////////////////////////
 
+//////////////////////////////////////Drag Selection Start//////////////////////////////////////
+
+var preDragMousePos;
+var aftDragMousePos;
+
+var rangeBox = new Kinetic.Rect({
+	x: 0,
+	y: 0, 
+	width : 0,
+	height : 0,
+	fill: "blue",
+	stroke: "blue",						
+	opacity : 0.3
+});
+var rangeBoxLayer = new Kinetic.Layer();
+scatterStage.add(rangeBoxLayer);
+rangeBoxLayer.add(rangeBox);
+var moving = false;
+var downOn = false;
+
+scatterPlotLayer.on('mousedown touchstart', function(evt){
+	downOn = true; 
+	preDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};
+	if(moving == true){
+		moving = false;
+		rangeBoxLayer.draw();
+	}else{
+		var mousePos = scatterStage.getMousePosition();		
+		rangeBox.setX(mousePos.x);
+		rangeBox.setY(mousePos.y);
+		rangeBox.setWidth(0);
+		rangeBox.setHeight(0);
+		moving = true;
+		rangeBoxLayer.drawScene();
+	}
+}); 
+scatterStage.on('mousemove touchmove', function(evt){
+	if(moving == true){
+		var mousePos = scatterStage.getMousePosition();
+		var x = mousePos.x;
+		var y = mousePos.y;
+		rangeBox.setWidth(mousePos.x - rangeBox.getX());
+		rangeBox.setHeight(mousePos.y - rangeBox.getY());
+		moving = true;
+		rangeBoxLayer.drawScene();
+	}
+});
+scatterPlotLayer.on('mouseup touchend', function(evt){
+	aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	//	alert("dddddddd");
+	rangeBox.setWidth(0);
+	rangeBox.setHeight(0);
+	
+	moving = false;
+	rangeBoxLayer.drawScene();	
+	//alert(evt.clientX+','+evt.clientY);
+	
+	var tmpNode;	
+	//alert(scatterXMain[0]);	
+	allDeselect();
+	if(preDragMousePos.x < aftDragMousePos.x)
+	{
+		if(preDragMousePos.y < aftDragMousePos.y)	{
+			
+			for(var i = 0 ; i < scatterData.length ; i++){
+				
+				if(preDragMousePos.x <= scatterXMain[i] &&  scatterXMain[i] <= aftDragMousePos.x && preDragMousePos.y <=  scatterYMain[i] && scatterYMain[i] <= aftDragMousePos.y )
+				{			
+	    			tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+	    			allUpdate("scatter", tmpNode, i, 0);
+				}
+			}
+		}else if(aftDragMousePos.y < preDragMousePos.y){
+			for(var i = 0 ; i < scatterData.length ; i++){
+				if(preDragMousePos.x <= scatterXMain[i] && scatterXMain[i] <= aftDragMousePos.x && aftDragMousePos.y <= scatterYMain[i] && scatterYMain[i] <= preDragMousePos.y )
+				{
+					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+					allUpdate("scatter", tmpNode, i, 0);
+				}
+			}
+		}
+	}else if(preDragMousePos.x > aftDragMousePos.x)
+	{
+		if(preDragMousePos.y < aftDragMousePos.y)	{
+			for(var i = 0 ; i < scatterData.length ; i++){
+				if(aftDragMousePos.x <= scatterXMain[i] && scatterXMain[i] <= preDragMousePos.x  && preDragMousePos.y <= scatterYMain[i] && scatterYMain[i] <= aftDragMousePos.y )
+				{
+					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+					allUpdate("scatter", tmpNode, i, 0);
+				}
+			}
+		}else if(aftDragMousePos.y < preDragMousePos.y){
+			for(var i = 0 ; i < scatterData.length ; i++){
+				if(aftDragMousePos.x <= scatterXMain[i] && scatterXMain[i] <= preDragMousePos.x && aftDragMousePos.y  <= scatterYMain[i] && scatterYMain[i] <= preDragMousePos.y  )
+				{
+					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+					allUpdate("scatter", tmpNode, i, 0);
+				}
+			}
+		}
+	}	
+
+	
+	writeMsg(msgLayer);
+  	doRefresh();  	
+  	saveWork();
+  	downOn = false;
+	
+	//alert(preDragMousePos.x+', '+preDragMousePos.y+', '+aftDragMousePos.x+', '+aftDragMousePos.y);	
+});
+//////////////////////////////////////Drag Selection End//////////////////////////////////////
 
 //////////////////////////////////////Legend Start//////////////////////////////////////
 if(legend ==true)

@@ -90,12 +90,12 @@ function booleanSearch(string)
     		//    alert("Please use given variables!");
     		if(eval(inputStr))
     		{
-    			tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+    			var tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
     			scatterSingleSelect(tmpNode, i);
     			histUpdate(scatterXMain[i], 0);  //과부하로 인한 보류
     		}
         }
-    doRefresh();
+    	doRefresh();
     }
     ansShow=ans;
     for(var i=0; i<labelArr.length; i++)

@@ -217,7 +217,7 @@ histDataLayer.on('mouseout', function(evt) {
 //////////////////////////////////////hist Tooltip End//////////////////////////////////////
   
 //////////////////////////////////////Selection Start//////////////////////////////////////
-var preId;
+var preId = -1;
 histPlotLayer.on('click', function(evt){
 	allDeselect();
 	writeMsg(msgLayer);
@@ -230,7 +230,7 @@ histDataLayer.on('click', function(evt){
   	if(aPressed){	//select ALL
   		allSelect();
   		tmpShift = false;
-  	}else if(shiftPressed){
+  	}else if(shiftPressed && preId != -1){
   		tmpShift = true;
   		allDeselect();
 		if(preId > node.getId()){

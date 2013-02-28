@@ -45,6 +45,7 @@ function clearSearchBox()
 	var textBox = document.getElementById("searchBox");
 	textBox.value = '';
 	writeMsg(msgLayer);
+	addRow('dataTable');
 	doRefresh();	     	
 }
 
@@ -112,5 +113,6 @@ function booleanSearch(string)
 		
     }    
 	writeMsg(msgLayer);
+	addRow('dataTable');
 }
 ///////////////////5<TIME ,,,,,,,bug found

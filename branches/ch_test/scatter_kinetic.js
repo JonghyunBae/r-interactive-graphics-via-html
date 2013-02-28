@@ -35,12 +35,19 @@ drawMainLabel('Scatter of '+scatterXLabel+'&'+scatterYLabel, scatterPlotLayer);
 scatterStage.add(scatterPlotLayer);
 //////////////////////////////////////Drawing Plot End//////////////////////////////////////
 
+//////////////////////////////////////Legend Start//////////////////////////////////////
+if(legend ==true)
+{
+drawLegend("topright",scatterColor, scatterStage);
+}
+//////////////////////////////////////Legend End//////////////////////////////////////
+
 //add node function.
 
-var superNode = new Array(mainArr[0].length);
+var scatterNode = new Array(mainArr[0].length);
 function scatterAddNode(number, obj, layer) 
 {
-	superNode[number] = new Kinetic.Circle({
+	scatterNode[number] = new Kinetic.Circle({
 		id: obj.id,
 		name: obj.name,
 		x: obj.x,
@@ -53,7 +60,7 @@ function scatterAddNode(number, obj, layer)
 		draggable: false,
 		selected : obj.selected
 	});		
-	layer.add(superNode[number] );
+	layer.add(scatterNode[number] );
 }
 
 //build data
@@ -171,6 +178,193 @@ scatterDataLayer.on('mouseout', function(evt) {
 });	  
 //////////////////////////////////////Tooltip End//////////////////////////////////////
 
+//////////////////////////////////////Menu Start//////////////////////////////////////
+var scatterMenuOn = false;
+var scatterMenuLayer = new Kinetic.Layer();
+var scatterMenu = new Kinetic.Group({
+	opacity: 0.75,
+	visible: false
+});
+var scatterMenuTextHide = new Kinetic.Text({
+	text: '',
+	fontFamily: 'Calibri',
+	fontSize: 15,
+	padding: 5,
+	fill: 'white'
+});	  
+var scatterMenuTextDelete = new Kinetic.Text({
+	y:25,
+	text: '',
+	fontFamily: 'Calibri',
+	fontSize: 15,
+	padding: 5,
+	fill: 'white'
+});	  
+var scatterMenuTextReset = new Kinetic.Text({
+	y:50,
+	text: '',
+	fontFamily: 'Calibri',
+	fontSize: 15,
+	padding: 5,
+	fill: 'white'
+});	  
+var scatterMenuRectHide = new Kinetic.Rect({
+	width: 100,
+	height: 25,
+	fill: 'black'
+});
+var scatterMenuRectDelete = new Kinetic.Rect({
+	y:25,
+	width: 100,
+	height: 25,
+	fill: 'black'
+});
+var scatterMenuRectReset = new Kinetic.Rect({
+	y:50,
+	width: 100,
+	height: 25,
+	fill: 'black'
+});
+
+scatterMenu.add(scatterMenuRectHide).add(scatterMenuTextHide);
+scatterMenu.add(scatterMenuRectDelete).add(scatterMenuTextDelete);
+scatterMenu.add(scatterMenuRectReset).add(scatterMenuTextReset);
+scatterMenuLayer.add(scatterMenu);
+scatterStage.add(scatterMenuLayer);
+
+scatterMenuTextHide.setText(" Hide"); 
+scatterMenuTextDelete.setText(" Delete"); 
+scatterMenuTextReset.setText(" Reset"); 
+
+scatterMenuTextHide.on('click', function(evt){
+	hideSelected();
+	scatterMenuOn=false;
+	scatterMenu.hide();
+	scatterMenuLayer.draw();	
+});
+scatterMenuRectHide.on('click', function(evt){
+	hideSelected();	
+	scatterMenuOn=false;
+	scatterMenu.hide();
+	scatterMenuLayer.draw();	
+});
+scatterMenuTextHide.on('mouseover', function(evt){
+	scatterMenuRectHide.setFill('#d8c7a9');
+	scatterMenuTextHide.setFill('black');
+    scatterMenuLayer.draw();
+});
+scatterMenuRectHide.on('mouseover', function(evt){
+	scatterMenuRectHide.setFill('#d8c7a9');
+	scatterMenuTextHide.setFill('black');
+    scatterMenuLayer.draw();
+});
+scatterMenuTextHide.on('mouseout', function(evt){
+ 	scatterMenuRectHide.setFill('black');
+ 	scatterMenuTextHide.setFill('white');
+    scatterMenuLayer.draw();
+});
+scatterMenuRectHide.on('mouseout', function(evt){
+	scatterMenuRectHide.setFill('black');
+	scatterMenuTextHide.setFill('white');
+     scatterMenuLayer.draw();
+});
+
+scatterMenuTextDelete.on('click', function(evt){
+	deleteSelected();
+	scatterMenuOn=false;
+	scatterMenu.hide();
+	scatterMenuLayer.draw();	
+});
+scatterMenuRectDelete.on('click', function(evt){
+	deleteSelected();
+	scatterMenuOn=false;
+	scatterMenu.hide();
+	scatterMenuLayer.draw();	
+});
+scatterMenuTextDelete.on('mouseover', function(evt){
+	scatterMenuRectDelete.setFill('#d8c7a9');
+	scatterMenuTextDelete.setFill('black');
+    scatterMenuLayer.draw();
+});
+scatterMenuRectDelete.on('mouseover', function(evt){
+	scatterMenuRectDelete.setFill('#d8c7a9');
+	scatterMenuTextDelete.setFill('black');
+     scatterMenuLayer.draw();
+});
+scatterMenuTextDelete.on('mouseout', function(evt){
+	scatterMenuRectDelete.setFill('black');
+	scatterMenuTextDelete.setFill('white');
+    scatterMenuLayer.draw();
+});
+scatterMenuRectDelete.on('mouseout', function(evt){
+	scatterMenuRectDelete.setFill('black');
+	scatterMenuTextDelete.setFill('white');
+    scatterMenuLayer.draw();
+});
+
+
+scatterMenuTextReset.on('click', function(evt){
+	resetSelected();
+	scatterMenuOn=false;
+	scatterMenu.hide();
+	scatterMenuLayer.draw();	
+});
+scatterMenuRectReset.on('click', function(evt){
+	resetSelected();
+	scatterMenuOn=false;
+	scatterMenu.hide();
+	scatterMenuLayer.draw();	
+});
+scatterMenuTextReset.on('mouseover', function(evt){
+	scatterMenuRectReset.setFill('#d8c7a9');
+	scatterMenuTextReset.setFill('black');
+    scatterMenuLayer.draw();
+});
+scatterMenuRectReset.on('mouseover', function(evt){
+	scatterMenuRectReset.setFill('#d8c7a9');
+	scatterMenuTextReset.setFill('black');
+     scatterMenuLayer.draw();
+});
+scatterMenuTextReset.on('mouseout', function(evt){
+	scatterMenuRectReset.setFill('black');
+	scatterMenuTextReset.setFill('white');
+    scatterMenuLayer.draw();
+});
+scatterMenuRectReset.on('mouseout', function(evt){
+	scatterMenuRectReset.setFill('black');
+	scatterMenuTextReset.setFill('white');
+    scatterMenuLayer.draw();
+});
+
+
+
+scatterPlotLayer.on('click', function(evt){ // mouse drag하고나서 연속클릭되어 망치는 것 방지.
+	if ((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click
+		if(scatterMenuOn==false){
+			scatterMenuOn=true;
+			//alert('right clicked');
+			var node = evt.shape;
+			// update menu
+			var mousePos = node.getStage().getMousePosition();
+			scatterMenu.setPosition(mousePos.x + 8, mousePos.y + 8);
+			scatterMenu.show();
+			scatterMenuLayer.draw();
+		}else{//scatterMenuOn==true
+			scatterMenuOn=false;
+			scatterMenu.hide();
+			scatterMenuLayer.draw();			
+		}
+	}else if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+		if(scatterMenuOn==true){
+			scatterMenuOn=false;
+			scatterMenu.hide();
+			scatterMenuLayer.draw();
+		}		
+	}	
+});
+
+//////////////////////////////////////Menu End//////////////////////////////////////
+
 //////////////////////////////////////Selection Start//////////////////////////////////////
 /*
 scatterPlotLayer.on('click', function(evt){
@@ -182,124 +376,136 @@ scatterPlotLayer.on('click', function(evt){
 */
 var preMousePos = {x: -1, y:-1};
 scatterPlotLayer.on('click', function(evt){ // mouse drag하고나서 연속클릭되어 망치는 것 방지.
-	if(downOn == true)								// 그리고 연속클릭 가능하게 함.
-	{  		
-  		downOn = false;
-	  	return;
-	}
+	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click		
+		if(downOn == true)								// 그리고 연속클릭 가능하게 함.
+		{  		
+	  		downOn = false;
+		  	return; //????????????
+		}
+	}	
 });
 
 scatterDataLayer.on('click', function(evt){
+	if ((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click
+		//add menu for (de)selection, group selection, delete, hide, ...
 	
-	var node = evt.shape;
-	
-  	var shapes = scatterStage.get('#'+node.getId());
-  	
-  	var semiNode;
-  	
-  	var mousePos = {x: node.getX(), y:node.getY()};
-  	var tmpNode;
- // 	alert(downOn);
-  	if(downOn == true)
-	{  		
-  		downOn = false;
-	  	return;
-	}
-  	
-  	if(aPressed){	//select ALL
-  		allSelect();
-  		tmpShift = false;
-  	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
-		allDeselect();
-  		nameArr = node.getName().split(',');	
-  		for(var i = 0 ; i < scatterData.length ; i++){
-			var tmpNameArr = new Array();
-			tmpNameArr = scatterData[i].name.split(',');	
-			if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
-			{
-				tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-		//		tmpNode.hide();
-		//		scatterDataLayer.draw();
-				//allUpdate("scatter", tmpNode, i, 0);
-			}
+	}else if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+		var node = evt.shape;
+		
+	  	var shapes = scatterStage.get('#'+node.getId());
+	  	
+	  	var semiNode;
+	  	
+	  	var mousePos = {x: node.getX(), y:node.getY()};
+	  	var tmpNode;
+	 // 	alert(downOn);
+	  	if(downOn == true)
+		{  		
+	  		downOn = false;
+		  	return;
 		}
-		tmpShift = false;
-	}else if(shiftPressed && preMousePos.x != -1 && preMousePos.y != -1){
-		allDeselect();
-		tmpShift = true;
-		if(preMousePos.x < mousePos.x)
-		{
-			if(preMousePos.y < mousePos.y)	{
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
-					{
-						if(scatterData[i].selected == 0)
-						{
-							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-							allUpdate("scatter", tmpNode, i, 0);
-						}						
-					}
-				}
-			}else if(mousePos.y < preMousePos.y){
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
-					{
-						if(scatterData[i].selected == 0)
-						{
-							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-							allUpdate("scatter", tmpNode, i, 0);
-						}
-					}
+	  	if(scatterMenuOn==true){
+			scatterMenuOn=false;
+			scatterMenu.hide();
+			scatterMenuLayer.draw();
+		}
+	  	if(aPressed){	//select ALL
+	  		allSelect();
+	  		tmpShift = false;
+	  	}else if(gPressed){ //select by Group, (select every node whose subject is the same)
+			allDeselect();
+	  		nameArr = node.getName().split(',');	
+	  		for(var i = 0 ; i < scatterData.length ; i++){
+				var tmpNameArr = new Array();
+				tmpNameArr = scatterData[i].name.split(',');	
+				if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
+				{
+					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			//		tmpNode.hide();
+			//		scatterDataLayer.draw();
+					//allUpdate("scatter", tmpNode, i, 0);
 				}
 			}
-		}else if(preMousePos.x > mousePos.x)
+			tmpShift = false;
+		}else if(shiftPressed && preMousePos.x != -1 && preMousePos.y != -1){
+			allDeselect();
+			tmpShift = true;
+			if(preMousePos.x < mousePos.x)
+			{
+				if(preMousePos.y < mousePos.y)	{
+					for(var i = 0 ; i < scatterData.length ; i++){
+						if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
+						{
+							if(scatterData[i].selected == 0)
+							{
+								tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+								allUpdate("scatter", tmpNode, i, 0);
+							}						
+						}
+					}
+				}else if(mousePos.y < preMousePos.y){
+					for(var i = 0 ; i < scatterData.length ; i++){
+						if(preMousePos.x <= scatterData[i].x && scatterData[i].x <= mousePos.x && mousePos.y <= scatterData[i].y && scatterData[i].y <= preMousePos.y )
+						{
+							if(scatterData[i].selected == 0)
+							{
+								tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+								allUpdate("scatter", tmpNode, i, 0);
+							}
+						}
+					}
+				}
+			}else if(preMousePos.x > mousePos.x)
+			{
+				if(preMousePos.y < mousePos.y)	{
+					for(var i = 0 ; i < scatterData.length ; i++){
+						if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x  && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
+						{
+							if(scatterData[i].selected == 0)
+							{
+								tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+								allUpdate("scatter", tmpNode, i, 0);
+							}
+						}
+					}
+				}else if(mousePos.y < preMousePos.y){
+					for(var i = 0 ; i < scatterData.length ; i++){
+						if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x && mousePos.y  <= scatterData[i].y && scatterData[i].y <= preMousePos.y  )
+						{
+							if(scatterData[i].selected == 0)
+							{
+								tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+								allUpdate("scatter", tmpNode, i, 0);
+							}
+						}
+					}
+				}
+			}	
+		}else if(ctrlPressed){ //select mutiple node one by one.
+	  		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
+	  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1);
+	   		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
+	   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0);
+	  		}
+	  		tmpShift = false;
+	  	}else{
+	  		
+			tmpShift = false;
+			allDeselect();
+			allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0); 	
+	  	}  	
+	  	if(tmpShift == false)
 		{
-			if(preMousePos.y < mousePos.y)	{
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x  && preMousePos.y <= scatterData[i].y && scatterData[i].y <= mousePos.y )
-					{
-						if(scatterData[i].selected == 0)
-						{
-							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-							allUpdate("scatter", tmpNode, i, 0);
-						}
-					}
-				}
-			}else if(mousePos.y < preMousePos.y){
-				for(var i = 0 ; i < scatterData.length ; i++){
-					if(mousePos.x <= scatterData[i].x && scatterData[i].x <= preMousePos.x && mousePos.y  <= scatterData[i].y && scatterData[i].y <= preMousePos.y  )
-					{
-						if(scatterData[i].selected == 0)
-						{
-							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-							allUpdate("scatter", tmpNode, i, 0);
-						}
-					}
-				}
-			}
-		}	
-	}else if(ctrlPressed){ //select mutiple node one by one.
-  		if(scatterData[node.getId() - scatterIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-  			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 1);
-   		}else if(scatterData[node.getId() - scatterIdStart].selected == 0){ // unselected -> selected
-   			allUpdate("scatter", shapes, node.getId() - scatterIdStart, 0);
-  		}
-  		tmpShift = false;
-  	}else{
-  		
-		tmpShift = false;
-		allDeselect();
-		allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0); 	
-  	}  	
-  	if(tmpShift == false)
-	{
-		preMousePos = mousePos;
-	}
-  	saveWork();
-	writeMsg(msgLayer);
-	addRow('dataTable');
-  	doRefresh();  	
+			preMousePos = mousePos;
+		}
+	  	saveWork();
+		writeMsg(msgLayer);
+		addRow('dataTable');
+	  	doRefresh();  	
 
+		
+	}
+	
 }); 
 
 function scatterSingleSelect(node, id)
@@ -398,22 +604,22 @@ var downOn = false;
 
 
 scatterPlotLayer.on('mousedown touchstart', function(evt){
-
-	downOn = true; 
-	preDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};
-	if(moving == true){
-		moving = false;
-		rangeBoxLayer.draw();
-	}else{
-		var mousePos = scatterStage.getMousePosition();		
-		rangeBox.setX(mousePos.x);
-		rangeBox.setY(mousePos.y);
-		rangeBox.setWidth(0);
-		rangeBox.setHeight(0);
-		moving = true;
-		rangeBoxLayer.drawScene();
+	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+		downOn = true; 
+		preDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};
+		if(moving == true){
+			moving = false;
+			rangeBoxLayer.draw();
+		}else{
+			var mousePos = scatterStage.getMousePosition();		
+			rangeBox.setX(mousePos.x);
+			rangeBox.setY(mousePos.y);
+			rangeBox.setWidth(0);
+			rangeBox.setHeight(0);
+			moving = true;
+			rangeBoxLayer.drawScene();
+		}
 	}
-
 }); 
 
 
@@ -437,51 +643,53 @@ scatterPlotLayer.on('mouseup touchend', function(evt){
 });
 */
 window.addEventListener ("mousemove", function (evt){
-	if(moving == true)
-	{
-		var mousePos = {x: (evt.pageX-plotXmargin-scatterStageX), y: (evt.pageY-plotYmargin-plotHeight-scatterStageY)};
-	//	var mousePos2 = scatterStage.getMousePosition();
-	//	mousePos.x = mousePos.x + 
-	//	mousePos.x = mousePos.x*(plotWidth/scatterXMax);
-	//	var mousePos = scatterStage.getMousePosition(); // px 단위
-		var x, y;
-		x = mousePos.x + plotXmargin;
-		y = mousePos.y + plotYmargin + plotHeight;
-	//	alert(mousePos.x +","+ mousePos2.x +","+ rangeBox.getY() );
-		
-	//	var x = mousePos.x;
-	//	var y = mousePos.y;
-/*	if(x > plotWidth + plotXmargin + plotLength)
+	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+		if(moving == true)
 		{
-			x = plotWidth + plotXmargin + plotLength;
-		}else if(x < plotXmargin - plotLength)
-		{
-			x = plotXmargin - plotLength;
-		}		
-		if(y > plotHeight + plotYmargin + plotLength)
-		{
-			y = plotHeight + plotYmargin + plotLength;
-		}else if(y < plotYmargin - plotLength)
-		{
-			y = plotYmargin - plotLength;
-		}*/
-		//aftDragMousePos = {x: mousePos.x*scatterXMax/plotWidth, y:mousePos.y*scatterYMax/plotHeight};
-
-		rangeBox.setWidth(x- rangeBox.getX());
-		rangeBox.setHeight(y- rangeBox.getY());
-		rangeBoxLayer.drawScene();
+			var mousePos = {x: (evt.pageX-plotXmargin-scatterStageX), y: (evt.pageY-plotYmargin-plotHeight-scatterStageY)};
+		//	var mousePos2 = scatterStage.getMousePosition();
+		//	mousePos.x = mousePos.x + 
+		//	mousePos.x = mousePos.x*(plotWidth/scatterXMax);
+		//	var mousePos = scatterStage.getMousePosition(); // px 단위
+			var x, y;
+			x = mousePos.x + plotXmargin;
+			y = mousePos.y + plotYmargin + plotHeight;
+		//	alert(mousePos.x +","+ mousePos2.x +","+ rangeBox.getY() );
+			
+		//	var x = mousePos.x;
+		//	var y = mousePos.y;
+	/*	if(x > plotWidth + plotXmargin + plotLength)
+			{
+				x = plotWidth + plotXmargin + plotLength;
+			}else if(x < plotXmargin - plotLength)
+			{
+				x = plotXmargin - plotLength;
+			}		
+			if(y > plotHeight + plotYmargin + plotLength)
+			{
+				y = plotHeight + plotYmargin + plotLength;
+			}else if(y < plotYmargin - plotLength)
+			{
+				y = plotYmargin - plotLength;
+			}*/
+			//aftDragMousePos = {x: mousePos.x*scatterXMax/plotWidth, y:mousePos.y*scatterYMax/plotHeight};
+	
+			rangeBox.setWidth(x- rangeBox.getX());
+			rangeBox.setHeight(y- rangeBox.getY());
+			rangeBoxLayer.drawScene();
+		}
 	}
 }, true);
 
 window.addEventListener ("mouseup", function (evt){
-	
-	if(moving == true)
-	{
-		aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	
-		//alert(aftDragMousePos.x);
-		scatterRectRange(aftDragMousePos);
-	}
-	//alert(moving);
+	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+		if(moving == true)
+		{
+			aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	
+			//alert(aftDragMousePos.x);
+			scatterRectRange(aftDragMousePos);
+		}
+	}//alert(moving);
 }, true);
 
 function scatterRectRange(afterPosition)
@@ -612,13 +820,6 @@ function scatterRectRange(afterPosition)
 
 //////////////////////////////////////Drag Selection End//////////////////////////////////////
 
-//////////////////////////////////////Legend Start//////////////////////////////////////
-if(legend ==true)
-{
-	drawLegend("topright",scatterColor, scatterStage);
-}
-//////////////////////////////////////Legend End//////////////////////////////////////
-
 
 
 ////////////////////////////Hide Start ///////////////////////////////////
@@ -632,7 +833,7 @@ function hideSelected()
 			var node = scatterStage.get("#"+ (i + scatterIdStart));
 			scatterSingleDeselect(node, i);
 			scatterData[i].selected = 3;
-			superNode[i].hide();
+			scatterNode[i].hide();
 			histHide(scatterXMain[i]);
 		}
 	}
@@ -669,7 +870,7 @@ function resetSelected()
 		if(scatterData[i].selected == 3)
 		{
 			scatterData[i].selected = 0;
-			superNode[i].show();
+			scatterNode[i].show();
 			histReset(scatterXMain[i]);
 		}
 	}
@@ -709,7 +910,7 @@ function deleteSelected()
 			var node = scatterStage.get("#"+ (i + scatterIdStart));
 			scatterSingleDeselect(node, i);
 			scatterData[i].selected = 4;
-			superNode[i].hide();
+			scatterNode[i].hide();
 			histHide(scatterXMain[i]);
 		}
 	}

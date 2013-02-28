@@ -38,9 +38,9 @@
 		
 		<script>//
 			/////////////// Create Main structure from CSV file ///////////
+	
+		//	createMainStructure("ChickWeight-from-R.csv");			
 			createMainStructure("Theoph-from-R.csv");
-			//createMainStructure("ChickWeight-from-R.csv");			
-			
 			//////////variables for scatter chart//////////////// names are likely to change later
 			
 			var radius_scale = 4; // / Dot radius in scatter chart
@@ -54,7 +54,7 @@
 			var scatterColor = mainArr[0];
 			var legend = true;
 			//var scatterColor = 'default';
-			//var legend = false;
+		//	var legend = false;
 			
 			var scatterXMax=findMaxValue(scatterXMain,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
 			var scatterYMax=findMaxValue(scatterYMain,0);
@@ -62,7 +62,7 @@
 			var scatterYDiff=parseInt(scatterYMax/6);
 			//////////variables for histogram chart//////////////// names are likely to change later
 			
-			var histX = 3; //[histX]th column data
+			var histX = scatterX; //[histX]th column data
 			var histXLabel = labelArr[histX ];
 			var histXMain =  mainArr[histX ];
 			
@@ -77,12 +77,12 @@
 		//	labelArr.length;
 			var colWidth=100;
 			document.write("<style>");
-			document.write("div.scrollableContainer { width: "+ ((colWidth+1)*(labelArr.length+1)+65) +"px; }");
+			document.write("table.selectedInfo { width: "+((colWidth+9)*(labelArr.length+1)-1)+"px; }");			
+			document.write("div.scrollableContainer { width: "+ ((colWidth+9)*(labelArr.length+1)+15) +"px; }");
 			document.write("div.scrollingArea { height: " + 300 + "px; }"); //you can set the height of scrolling area
 			document.write("table.selectedInfo .node     div { width: "+colWidth+"px; text-align:center;  }");
 			document.write("table.selectedInfo .column div { width: "+colWidth+"px; text-align:center;  }");
-			document.write("");					
-					
+	
 			document.write("</style>");
 		</script>
 		

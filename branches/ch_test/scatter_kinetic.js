@@ -291,6 +291,7 @@ scatterDataLayer.on('click', function(evt){
 	}
   	saveWork();
 	writeMsg(msgLayer);
+	addRow('dataTable');
   	doRefresh();  	
 
 }); 
@@ -543,6 +544,7 @@ function scatterRectRange(afterPosition)
 		}
 	}
 	writeMsg(msgLayer);
+	addRow('dataTable');
   	doRefresh();  	
   	saveWork();
  // 	downOn = false;

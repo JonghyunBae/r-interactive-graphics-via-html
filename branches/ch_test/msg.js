@@ -17,7 +17,7 @@
 			//	{
 				//	if(scatterData[i].selected==1)
 				//	{
-						document.write("<tr id=\"tr1\"> ");			//style=\"display:none\">
+						document.write("<tr id=\"tr1\" style=\"display:none; \"> ");			//style=\"display:none\">
 							document.write("<td id=\"td1\" class=\"node\"><div>-</div></td>");
 							for(var i=0; i<labelArr.length ; i++)
 							{

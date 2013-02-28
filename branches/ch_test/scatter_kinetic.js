@@ -190,17 +190,22 @@ scatterPlotLayer.on('click', function(evt){ // mouse drag하고나서 연속클�
 });
 
 scatterDataLayer.on('click', function(evt){
+	
 	var node = evt.shape;
+	
   	var shapes = scatterStage.get('#'+node.getId());
+  	
   	var semiNode;
+  	
   	var mousePos = {x: node.getX(), y:node.getY()};
   	var tmpNode;
+ // 	alert(downOn);
   	if(downOn == true)
 	{  		
   		downOn = false;
 	  	return;
 	}
-
+  	
   	if(aPressed){	//select ALL
   		allSelect();
   		tmpShift = false;
@@ -281,6 +286,7 @@ scatterDataLayer.on('click', function(evt){
   		}
   		tmpShift = false;
   	}else{
+  		
 		tmpShift = false;
 		allDeselect();
 		allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0); 	
@@ -390,7 +396,9 @@ rangeBoxLayer.add(rangeBox);
 var moving = false;
 var downOn = false;
 
-scatterStage.on('mousedown touchstart', function(evt){
+
+scatterPlotLayer.on('mousedown touchstart', function(evt){
+
 	downOn = true; 
 	preDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};
 	if(moving == true){
@@ -405,7 +413,10 @@ scatterStage.on('mousedown touchstart', function(evt){
 		moving = true;
 		rangeBoxLayer.drawScene();
 	}
+
 }); 
+
+
 /*
 scatterStage.on('mousemove touchmove', function(evt){
 	if(moving == true){
@@ -497,11 +508,23 @@ function scatterRectRange(afterPosition)
 			for(var i = 0 ; i < scatterData.length ; i++){
 				
 				if(prePosition.x <= scatterXMain[i] &&  scatterXMain[i] <= afterPosition.x && prePosition.y <=  scatterYMain[i] && scatterYMain[i] <= afterPosition.y )
-				{			
-					if(scatterData[i].selected == 0)
+				{
+					if(ctrlPressed == false)
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-		    			allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}
+					}else{
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}else if(scatterData[i].selected == 1){
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 1);
+						}						
 					}
 				}
 			}
@@ -509,10 +532,22 @@ function scatterRectRange(afterPosition)
 			for(var i = 0 ; i < scatterData.length ; i++){
 				if(prePosition.x <= scatterXMain[i] && scatterXMain[i] <= afterPosition.x && afterPosition.y <= scatterYMain[i] && scatterYMain[i] <= prePosition.y )
 				{
-					if(scatterData[i].selected == 0)
+					if(ctrlPressed == false)
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-		    			allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}
+					}else{
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}else if(scatterData[i].selected == 1){
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 1);
+						}						
 					}
 				}
 			}
@@ -523,10 +558,22 @@ function scatterRectRange(afterPosition)
 			for(var i = 0 ; i < scatterData.length ; i++){
 				if(afterPosition.x <= scatterXMain[i] && scatterXMain[i] <= prePosition.x  && prePosition.y <= scatterYMain[i] && scatterYMain[i] <= afterPosition.y )
 				{
-					if(scatterData[i].selected == 0)
+					if(ctrlPressed == false)
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-		    			allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}
+					}else{
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}else if(scatterData[i].selected == 1){
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 1);
+						}						
 					}
 				}
 			}
@@ -534,10 +581,22 @@ function scatterRectRange(afterPosition)
 			for(var i = 0 ; i < scatterData.length ; i++){
 				if(afterPosition.x <= scatterXMain[i] && scatterXMain[i] <= prePosition.x && afterPosition.y  <= scatterYMain[i] && scatterYMain[i] <= prePosition.y  )
 				{
-					if(scatterData[i].selected == 0)
+					if(ctrlPressed == false)
 					{
-						tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-		    			allUpdate("scatter", tmpNode, i, 0);
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}
+					}else{
+						if(scatterData[i].selected == 0)
+						{
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 0);
+						}else if(scatterData[i].selected == 1){
+							tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+			    			allUpdate("scatter", tmpNode, i, 1);
+						}						
 					}
 				}
 			}
@@ -565,6 +624,7 @@ if(legend ==true)
 ////////////////////////////Hide Start ///////////////////////////////////
 function hideSelected()
 {
+	
 	for(var i = 0 ; i < mainArr[0].length ; i ++)
 	{
 		if(scatterData[i].selected == 1)
@@ -578,6 +638,8 @@ function hideSelected()
 	}
 	scatterDataLayer.draw();	
 	doRefresh();
+	writeMsg(msgLayer);
+	addRow('dataTable');
 }
 function histHide(xData)
 {
@@ -601,6 +663,7 @@ function histHide(xData)
 ///////////////////////////Reset Start ////////////////////////////////
 function resetSelected()
 {
+	
 	for(var i = 0 ; i < mainArr[0].length ; i ++)
 	{
 		if(scatterData[i].selected == 3)
@@ -612,6 +675,8 @@ function resetSelected()
 	}
 	scatterDataLayer.draw();	
 	doRefresh();
+	writeMsg(msgLayer);
+	addRow('dataTable');
 }
 function histReset(xData)
 {
@@ -636,6 +701,7 @@ function histReset(xData)
 ///////////////////////////Delete Start ////////////////////////////////
 function deleteSelected()
 {
+	
 	for(var i = 0 ; i < mainArr[0].length ; i ++)
 	{
 		if(scatterData[i].selected == 1)
@@ -649,6 +715,8 @@ function deleteSelected()
 	}
 	scatterDataLayer.draw();	
 	doRefresh();
+	writeMsg(msgLayer);
+	addRow('dataTable');
 }
 /////////////////////////Delete End ////////////////////////////////
 

@@ -80,7 +80,7 @@ function booleanSearch(string)
   //if "Time" is for "mainArr[1][i]" and "labelArr[1]"    
 //for example, "8<= Time && Time <=10" will be "8<=mainArr[1][i] && mainArr[1][i] <=10"
     	
-    	inputStr =inputStr.replace("[ans]", "("+ans+")"); //If there is "[ans]", change it to (ans).
+    	inputStr =inputStr.replace(/\[ans\]/gi, "("+ans+")"); //If there is "[ans]", change it to (ans).
     	ans=inputStr; //current answer update.
     	
     	

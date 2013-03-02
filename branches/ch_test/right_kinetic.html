@@ -4,7 +4,7 @@
 	<head>
 
 		<meta charset="UTF-8">
-		<title>RIGHT, R-Interactive-Graph-HTml5</title>
+		<title>RIGHT, R-Interactive-Graphics-via-HTml</title>
 		
 		<link  rel="stylesheet" href="right_kinetic.css"> 
 		
@@ -22,7 +22,7 @@
 		<!-- <h2>designed by <a href="#">RIGHT</a></h2>-->
 			<div id="nav">
 				<ul>
-					<li><a href="#">Home</a></li>
+					<li><a href="right_kinetic.html">Home</a></li>
 					<li><a href="about.html">About</a></li>
 					<li><a href="#">Tutorial</a></li>
 					<li><a href="#">Contact</a></li>
@@ -52,8 +52,7 @@
 
 	
 	
-	<div id="content">
-		
+	<div id="content">		
 		<div style="margin: 5px 5px 5px 5px; float:left; border:1px solid black; width: 500px;">
 			<h1>1. Scatter</h1>
 			<div id="scatterContainer" style="width: 500px; position : relative; border:1px solid black; background:  #eeeeee;" oncontextmenu="return false;" ></div>
@@ -66,13 +65,13 @@
 			<h1>3. Box-and-Whisker</h1>
 		</div>
 		<div style="margin: 5px 5px 5px 5px; float:left; border:1px solid black; width: 500px; height: 500px;">
-		<h1>4. ????????</h1>
+			<h1>4. ????????</h1>
 		</div>
 		<h1>------------------------------------------------------------------------------------------------------------------</h1>
 		
-	<!--  input type="text" id="histDiffTextBox" style="width: 50px; top:320px;position:absolute;" placeholder="Diff"  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {histDiffUpdate(); return false;}};"/>   	 -->
-	
+		<!--  input type="text" id="histDiffTextBox" style="width: 50px; top:320px;position:absolute;" placeholder="Diff"  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {histDiffUpdate(); return false;}};"/>   	 -->
 	</div>	
+	
 	<script src="common.js"> </script>
 	
 	<script>//
@@ -112,7 +111,7 @@
 		var histYDiff=parseInt(histYMax/5);  
 	</script>    
 	
-		<script>
+	<script>
 	//	labelArr.length;
 		var colWidth=100;
 		document.write("<style>");
@@ -126,16 +125,15 @@
 	</script>
 	
 	<script src="scatter_kinetic.js"></script>
-  		<script src="hist_kinetic.js"></script>
+  	<script src="hist_kinetic.js"></script>
  	
  	<div id="content">
- 	<h1>Table</h1>
- 	<script src="msg.js"></script>
+	 	<h1>Table</h1>
+	 	<script src="msg.js"></script>
  	</div>
  	
  	
  	<div id="left">
- 		
 		<h1>Search</h1>
 			<ul>
 				<li><a href="#">How To Search</a></li>
@@ -222,7 +220,7 @@
 				<div class="clearer">&nbsp;</div><br /><br />
 				<p class="foot">
 					Created by <a class="credit" href="#">RIGHT</a><br />
-					&copy; RIGHT Site 2013
+					&copy; RIGHT, R-Interactive-Graphics-via-HTml 2013.
 				</p>
 		</div>
 	</div>

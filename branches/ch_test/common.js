@@ -3,18 +3,26 @@
 
 //////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////
 var asideWidth = 300; //left aside width, IT SHOULD BE SET ONLY BY ADMINISTRATOR
-var headerHeight = 200; //header height, IT SHOULD BE SET ONLY BY ADMINISTRATOR
+var headerHeight = 300; //header height, IT SHOULD BE SET ONLY BY ADMINISTRATOR
 
-var scatterStageX = asideWidth; //scatter stage canvas left
-var scatterStageY =200; //scatter stage canvas top
-var histStageX =200;  // hist stage canvas left
-var histStageY =200;  // hist stage canvas top
+var scatterStageX = 10; //scatter stage canvas left
+var scatterStageY =10; //scatter stage canvas top
+var histStageX =10;  // hist stage canvas left
+var histStageY =10;  // hist stage canvas top
 
 var plotXmargin=100; //canvas left, right margin
 var plotYmargin=100; //canvas top, bottom margin
 var plotLength=15; //margin from plot box
-var plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin; //plot width, THE RATIO SHOULD BE SET ONLY BY ADMINISTRATOR
-var plotHeight=400; //plot height, IT SHOULD BE SET ONLY BY ADMINISTRATOR
+
+var minWindowInnerWidth =1200;
+
+var plotWidth=300; 
+if(window.innerWidth<minWindowInnerWidth){//set minimum size
+	plotWidth=300;
+}else{
+	plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin;  //plot width, THE RATIO SHOULD BE SET ONLY BY ADMINISTRATOR
+}
+var plotHeight=300; //plot height, IT SHOULD BE SET ONLY BY ADMINISTRATOR
 
 
 var idCounter = 0;
@@ -153,18 +161,34 @@ function checkKeyUp(e)
 }	
 //////////////////////////////////////Chk key event End//////////////////////////////////////
 
+/*
+//////////////////////////////////////Resizing Start//////////////////////////////////////
+
 var beforeInnerWidth = window.innerWidth; //window.innerWidth..., Does this variable respond when event occur?........
 containerSizeInit();
 function containerSizeInit()
-{
-	document.getElementById("scatterContainer").style.left = scatterStageX+"px";
-	document.getElementById("scatterContainer").style.top = headerHeight+"px";
-	
-	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.35 +"px";
-	document.getElementById("histContainer").style.top = headerHeight+"px";	
-	document.getElementById("histDiffTextBox").style.top = parseFloat(document.getElementById("histContainer").style.top) + plotYmargin +"px";
-	document.getElementById("histDiffTextBox").style.left = parseFloat(document.getElementById("histContainer").style.left) + plotXmargin + plotWidth + "px";
-	
+{	
+	if(window.innerWidth<minWindowInnerWidth){//set minimum size
+	//	document.getElementById("scatterContainer").style.left = scatterStageX+"px";
+	//	document.getElementById("scatterContainer").style.top = headerHeight +"px";
+		
+	//	document.getElementById("histContainer").style.left = asideWidth + ( plotWidth +2*plotXmargin )+ 10 + "px";
+	//	document.getElementById("histContainer").style.top = headerHeight +"px";	
+	//	document.getElementById("histDiffTextBox").style.top = parseFloat(document.getElementById("histContainer").style.top) + plotYmargin +"px";
+	//	document.getElementById("histDiffTextBox").style.left = parseFloat(document.getElementById("histContainer").style.left) + plotXmargin + plotWidth + "px";
+		
+	//	document.getElementById("right").style.left = parseFloat(document.getElementById("histContainer").style.left) + ( plotWidth +2*plotXmargin ) + 10 +"px";	
+	}else{ // if(window.innerWidth>1500)
+	//	document.getElementById("scatterContainer").style.left = scatterStageX+"px";
+	//	document.getElementById("scatterContainer").style.top = headerHeight +"px";
+		
+	//	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.36 +"px";
+	//	document.getElementById("histContainer").style.top = headerHeight  +"px";	
+	//	document.getElementById("histDiffTextBox").style.top = parseFloat(document.getElementById("histContainer").style.top) + plotYmargin +"px";
+	//	document.getElementById("histDiffTextBox").style.left = parseFloat(document.getElementById("histContainer").style.left) + plotXmargin + plotWidth + "px";
+	//	
+	//	document.getElementById("right").style.left = asideWidth+(window.innerWidth-asideWidth)*0.72 +"px";	
+	}
 	//scatterStage.setWidth(window.innerWidth*0.35);
 	//scatterStage.setHeight(window.innerWidth*0.2);
 }
@@ -172,23 +196,25 @@ function containerSizeInit()
 
 
 window.onresize = function(evt) {
-	   containerResize();
+	 if(window.innerWidth>minWindowInnerWidth){ //for minimum size
+		 containerResize();
+	 }
+	   
 	// window.innerWidth;
 } 
-
 function containerResize()
 {
 
-	scatterStage.setWidth((window.innerWidth-asideWidth)*0.35);
-	histStage.setWidth((window.innerWidth-asideWidth)*0.35);
+//	scatterStage.setWidth((window.innerWidth-asideWidth)*0.35);
+//	histStage.setWidth((window.innerWidth-asideWidth)*0.35);
 	plotWidth=(window.innerWidth-asideWidth)*0.35-2*plotXmargin;
 	
 //	document.getElementById("scatterContainer").style.left = window.innerWidth*0.2+"px";
-	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.35 +"px";
-	document.getElementById("histDiffTextBox").style.top = parseFloat(document.getElementById("histContainer").style.top) + plotYmargin +"px";
-	document.getElementById("histDiffTextBox").style.left = parseFloat(document.getElementById("histContainer").style.left) + plotXmargin + plotWidth + "px";
+//	document.getElementById("histContainer").style.left = asideWidth+(window.innerWidth-asideWidth)*0.36 +"px";
+//	document.getElementById("histDiffTextBox").style.top = parseFloat(document.getElementById("histContainer").style.top) + plotYmargin +"px";
+//	document.getElementById("histDiffTextBox").style.left = parseFloat(document.getElementById("histContainer").style.left) + plotXmargin + plotWidth + "px";
 	
-	
+//	document.getElementById("right").style.left = asideWidth+(window.innerWidth-asideWidth)*0.72 +"px";
 	
 	redrawStage(scatterStage, scatterXMax, scatterXDiff);
 	redrawStage(histStage, histXMax, histXDiff);
@@ -207,15 +233,7 @@ function redrawStage(stage, xMax, xDiff){
 		rotation:0,
 		duration:0.01
 	});
-	//redraw border
-	var node= stage.get(".rectBorder");
-	node.apply('setAttrs', {
-		width: stage.getWidth(),
-	});
-	node.apply('transitionTo', {
-		rotation:0,
-		duration:0.01
-	});
+	
 	
 	
 	//redraw base rectangle
@@ -293,6 +311,12 @@ function redrawStage(stage, xMax, xDiff){
 	
 	doRefresh();
 }
+
+//////////////////////////////////////Resizing End//////////////////////////////////////
+*/
+
+
+
 
 function findMaxValue(Data,diff) // if diff =0, for scatter.
 {

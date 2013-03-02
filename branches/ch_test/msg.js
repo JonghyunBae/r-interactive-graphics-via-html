@@ -1,6 +1,6 @@
  //create dynamic table
 
-	document.write("<div class=\"scrollableContainer\" style=\"position : absolute; left:800px; top:1000px\">");
+	document.write("<div id=\"tableScrollableContainer\" class=\"scrollableContainer\" style=\"position : relative\">");
 	document.write(" <div class=\"scrollingArea\">");
 		document.write("<table id=\"dataTable\" class=\"selectedInfo scrollable\">");
 			document.write("<thead>");
@@ -54,6 +54,7 @@
 					 newcell.align = 'center';
 					
 					newcell.style.backgroundColor = '#b6c5ee';
+					newcell.style.color = 'black';
 					newcell.width = colWidth;
 					newcell.innerHTML = i;
 				   for(var j=1; j<colCount; j++) {
@@ -61,6 +62,7 @@
 			           var newcell = row.insertCell(j);
 			           // newcell.innerHTML = table.rows[0].cells[j].innerHTML;
 			           newcell.align = 'center';
+			           newcell.style.color = 'black';
 			           newcell.width = colWidth;
 			           newcell.innerHTML = mainArr[j-1][i];
 			           
@@ -134,26 +136,19 @@
 
 
 
-
+/*
 
 var msgStage = new Kinetic.Stage({
         container: 'msgContainer',
         width: 500,
-        height: 500
+        height: 500,
+        
       });     
     var msgLayer = new Kinetic.Layer();
-   /*
-    var drawEdgeRect = new Kinetic.Rect({
-          x: 0,
-      y: 0,
-      width: 500,
-      height: 500,
-      fillEnabled: false,
-      stroke: 'black',
-      strokeWidth: 2 
- });
- msgLayer.add(drawEdgeRect);
-   */
+    
+    document.getElementById('msgContainer').style.visibility = 'hidden'; 
+
+
     msgStage.add(msgLayer);
    
     function writeMsg(layer){
@@ -192,7 +187,6 @@ var msgStage = new Kinetic.Stage({
         //    document.write("selected("+i+") is : "+scatterData.selected[i]+"<br>");
             }
         }
-       
-   
-       
     }
+	
+	*/

@@ -1,3 +1,4 @@
+
 var histHasArr;
 histIdStart = idCounter;
 //var histIdEnd;
@@ -41,20 +42,6 @@ function drawDataHist(histXMax,histYMax,xData,a)
     height: plotHeight+plotYmargin*2 
   });
  //histStage.setAbsolutePosition(200,200);
-//////////////////////////////////////histStage Border Start//////////////////////////////////////
-  var histBorderLayer = new Kinetic.Layer();
-  var histRectBorder = new Kinetic.Rect({
-	name: 'rectBorder',
-    x: 0,
-    y: 0,
-    width: histStage.getWidth(),
-    height: histStage.getHeight(),
-    strokeWidth : 2
-  });
-  histBorderLayer.add(histRectBorder);
-  histStage.add(histBorderLayer);
-//////////////////////////////////////hsitStage Border End//////////////////////////////////////  
-
   
 //////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
 var histPlotLayer = new Kinetic.Layer();
@@ -211,7 +198,7 @@ histDataLayer.on('mouseout', function(evt) {
 	}
    
 	//if(msgShow==true){
-		writeMsg(msgLayer);
+	//	writeMsg(msgLayer);
 		addRow('dataTable');
 //	}
 });	 
@@ -221,7 +208,7 @@ histDataLayer.on('mouseout', function(evt) {
 var preId = -1;
 histPlotLayer.on('click', function(evt){
 	allDeselect();
-	writeMsg(msgLayer);
+//	writeMsg(msgLayer);
 	addRow('dataTable');
 	doRefresh();	 
 });
@@ -266,7 +253,7 @@ histDataLayer.on('click', function(evt){
 	}
   	saveWork();
   	doRefresh();
- 	writeMsg(msgLayer);
+ //	writeMsg(msgLayer);
  	addRow('dataTable');
  	
 }); 

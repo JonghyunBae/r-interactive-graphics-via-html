@@ -1,9 +1,7 @@
 var ans='';
 var ansShow='';
 // variable buttons update
-for(var i=0; i<35 ; i++){
-	document.write("<br>");
-}
+
 document.write("<p>Use the variables below only, you can click one to add into input box</p>");
 document.write("<p>");
 for(var i=0; i<labelArr.length; i++)
@@ -20,7 +18,7 @@ document.write("</p>");
 
 document.write("<p>");
 document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
-document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a>");
+document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a><br>");
 document.write("<label> [ans] : </label>");
 document.write("<label id=\"label1\">undefined</label>");
 document.write("</p>");
@@ -44,7 +42,7 @@ function clearSearchBox()
 	//histAllDeselect();
 	var textBox = document.getElementById("searchBox");
 	textBox.value = '';
-	writeMsg(msgLayer);
+	//writeMsg(msgLayer);
 	addRow('dataTable');
 	doRefresh();	     	
 }
@@ -112,7 +110,7 @@ function booleanSearch(string)
 		ansShow = ansShow.replace(searchStr1, labelArr[i]);
 		
     }    
-	writeMsg(msgLayer);
+	//writeMsg(msgLayer);
 	addRow('dataTable');
 }
 ///////////////////5<TIME ,,,,,,,bug found

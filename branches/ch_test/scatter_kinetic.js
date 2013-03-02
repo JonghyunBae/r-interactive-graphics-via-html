@@ -12,19 +12,6 @@ var scatterStage = new Kinetic.Stage({
 	height: plotHeight+plotYmargin*2
 });
 
-//////////////////////////////////////scatterStage Border Start//////////////////////////////////////
-var scatterBorderLayer = new Kinetic.Layer();
-var scatterRectBorder = new Kinetic.Rect({
-	name: 'rectBorder',
-	x: 0,
-	y: 0,
-	width: scatterStage.getWidth(),
-	height: scatterStage.getHeight(),
-	strokeWidth : 2
-});
-scatterBorderLayer.add(scatterRectBorder);
-scatterStage.add(scatterBorderLayer);
-//////////////////////////////////////scatterStage Border End//////////////////////////////////////  
 
 //////////////////////////////////////Drawing Plot Start//////////////////////////////////////
 var scatterPlotLayer= new Kinetic.Layer();  
@@ -182,7 +169,7 @@ scatterDataLayer.on('mouseout', function(evt) {
 var scatterMenuOn = false;
 var scatterMenuLayer = new Kinetic.Layer();
 var scatterMenu = new Kinetic.Group({
-	opacity: 0.75,
+	opacity: 0.95,
 	visible: false
 });
 var scatterMenuTextHide = new Kinetic.Text({
@@ -211,19 +198,19 @@ var scatterMenuTextReset = new Kinetic.Text({
 var scatterMenuRectHide = new Kinetic.Rect({
 	width: 100,
 	height: 25,
-	fill: 'black'
+	fill: '#6b6164'
 });
 var scatterMenuRectDelete = new Kinetic.Rect({
 	y:25,
 	width: 100,
 	height: 25,
-	fill: 'black'
+	fill: '#6b6164'
 });
 var scatterMenuRectReset = new Kinetic.Rect({
 	y:50,
 	width: 100,
 	height: 25,
-	fill: 'black'
+	fill: '#6b6164'
 });
 
 scatterMenu.add(scatterMenuRectHide).add(scatterMenuTextHide);
@@ -250,21 +237,21 @@ scatterMenuRectHide.on('click', function(evt){
 });
 scatterMenuTextHide.on('mouseover', function(evt){
 	scatterMenuRectHide.setFill('#d8c7a9');
-	scatterMenuTextHide.setFill('black');
+	scatterMenuTextHide.setFill('#black');
     scatterMenuLayer.draw();
 });
 scatterMenuRectHide.on('mouseover', function(evt){
 	scatterMenuRectHide.setFill('#d8c7a9');
-	scatterMenuTextHide.setFill('black');
+	scatterMenuTextHide.setFill('#black');
     scatterMenuLayer.draw();
 });
 scatterMenuTextHide.on('mouseout', function(evt){
- 	scatterMenuRectHide.setFill('black');
+ 	scatterMenuRectHide.setFill('#6b6164');
  	scatterMenuTextHide.setFill('white');
     scatterMenuLayer.draw();
 });
 scatterMenuRectHide.on('mouseout', function(evt){
-	scatterMenuRectHide.setFill('black');
+	scatterMenuRectHide.setFill('#6b6164');
 	scatterMenuTextHide.setFill('white');
      scatterMenuLayer.draw();
 });
@@ -283,21 +270,21 @@ scatterMenuRectDelete.on('click', function(evt){
 });
 scatterMenuTextDelete.on('mouseover', function(evt){
 	scatterMenuRectDelete.setFill('#d8c7a9');
-	scatterMenuTextDelete.setFill('black');
+	scatterMenuTextDelete.setFill('#black');
     scatterMenuLayer.draw();
 });
 scatterMenuRectDelete.on('mouseover', function(evt){
 	scatterMenuRectDelete.setFill('#d8c7a9');
-	scatterMenuTextDelete.setFill('black');
+	scatterMenuTextDelete.setFill('#black');
      scatterMenuLayer.draw();
 });
 scatterMenuTextDelete.on('mouseout', function(evt){
-	scatterMenuRectDelete.setFill('black');
+	scatterMenuRectDelete.setFill('#6b6164');
 	scatterMenuTextDelete.setFill('white');
     scatterMenuLayer.draw();
 });
 scatterMenuRectDelete.on('mouseout', function(evt){
-	scatterMenuRectDelete.setFill('black');
+	scatterMenuRectDelete.setFill('#6b6164');
 	scatterMenuTextDelete.setFill('white');
     scatterMenuLayer.draw();
 });
@@ -317,21 +304,21 @@ scatterMenuRectReset.on('click', function(evt){
 });
 scatterMenuTextReset.on('mouseover', function(evt){
 	scatterMenuRectReset.setFill('#d8c7a9');
-	scatterMenuTextReset.setFill('black');
+	scatterMenuTextReset.setFill('#black');
     scatterMenuLayer.draw();
 });
 scatterMenuRectReset.on('mouseover', function(evt){
 	scatterMenuRectReset.setFill('#d8c7a9');
-	scatterMenuTextReset.setFill('black');
+	scatterMenuTextReset.setFill('#black');
      scatterMenuLayer.draw();
 });
 scatterMenuTextReset.on('mouseout', function(evt){
-	scatterMenuRectReset.setFill('black');
+	scatterMenuRectReset.setFill('#6b6164');
 	scatterMenuTextReset.setFill('white');
     scatterMenuLayer.draw();
 });
 scatterMenuRectReset.on('mouseout', function(evt){
-	scatterMenuRectReset.setFill('black');
+	scatterMenuRectReset.setFill('#6b6164');
 	scatterMenuTextReset.setFill('white');
     scatterMenuLayer.draw();
 });
@@ -499,7 +486,7 @@ scatterDataLayer.on('click', function(evt){
 			preMousePos = mousePos;
 		}
 	  	saveWork();
-		writeMsg(msgLayer);
+		//writeMsg(msgLayer);
 		addRow('dataTable');
 	  	doRefresh();  	
 
@@ -810,7 +797,7 @@ function scatterRectRange(afterPosition)
 			}
 		}
 	}
-	writeMsg(msgLayer);
+//	writeMsg(msgLayer);
 	addRow('dataTable');
   	doRefresh();  	
   	saveWork();
@@ -839,7 +826,7 @@ function hideSelected()
 	}
 	scatterDataLayer.draw();	
 	doRefresh();
-	writeMsg(msgLayer);
+	//writeMsg(msgLayer);
 	addRow('dataTable');
 }
 function histHide(xData)
@@ -876,7 +863,7 @@ function resetSelected()
 	}
 	scatterDataLayer.draw();	
 	doRefresh();
-	writeMsg(msgLayer);
+//	writeMsg(msgLayer);
 	addRow('dataTable');
 }
 function histReset(xData)
@@ -916,7 +903,7 @@ function deleteSelected()
 	}
 	scatterDataLayer.draw();	
 	doRefresh();
-	writeMsg(msgLayer);
+//	writeMsg(msgLayer);
 	addRow('dataTable');
 }
 /////////////////////////Delete End ////////////////////////////////

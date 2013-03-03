@@ -18,7 +18,7 @@
 	
 	<div id="head">
 		<div class="wrap">
-			<h1><a id="mainTitle" href="#">RIGHT</a></h1>
+			<h1><a id="mainTitle" href="right_index.html">RIGHT</a></h1>
 		<!-- <h2>designed by <a href="#">RIGHT</a></h2>-->
 			<div id="nav">
 				<ul>
@@ -63,6 +63,7 @@
 		</div>
 		<div style="margin: 5px 5px 5px 5px; float:left; border:1px solid black; width: 500px; height: 500px;">
 			<h1>3. Box-and-Whisker</h1>
+			<div id="boxContainer" style="width: graphWidth; position : relative; border:1px solid black; background:  #eeeeee;; " oncontextmenu="return false;"></div>		
 		</div>
 		<div style="margin: 5px 5px 5px 5px; float:left; border:1px solid black; width: 500px; height: 500px;">
 			<h1>4. ????????</h1>
@@ -109,6 +110,18 @@
 		var histYMax=histFindMaxValue(histXMax,histXMain,diffHist);
 		var histXDiff=parseInt(histXMax/5);//나중에 자동으로 잡아주기.
 		var histYDiff=parseInt(histYMax/5);  
+		
+		var boxX = 3;	//[boxX]th column data
+		var boxY = 4;	//[boxY]th column data
+		var boxXLabel = labelArr[boxX];
+		var boxYLabel = labelArr[boxY];
+		var boxXMain =  mainArr[boxX];
+		var boxYMain = mainArr[boxY];
+		var boxXMax=findMaxValue(boxXMain,0); //나중에 max함수 추가해서 5단위로 잡게 만들기.
+		var boxYMax=findMaxValue(boxYMain,0);
+		var boxXDiff=parseInt(boxXMax/5);//나중에 자동으로 잡아주기.
+		var boxYDiff=parseInt(boxYMax/6);
+		
 	</script>    
 	
 	<script>
@@ -126,6 +139,7 @@
 	
 	<script src="scatter.js"></script>
   	<script src="hist.js"></script>
+ 	<script src="box.js"></script>
  	
  	<div id="content">
 	 	<h1>Table</h1>
@@ -188,7 +202,7 @@
 		<div class="wrap">
 				<div id="footnav">
 					<ul>
-						<li><a href="#">Home</a></li>
+						<li><a href="right_index.html">Home</a></li>
 						<li><a href="about.html">About</a></li>
 						<li><a href="#">Tutorial</a></li>
 						<li><a href="#">Contact</a></li>

@@ -14,6 +14,9 @@ var plotXmargin=100; //canvas left, right margin
 var plotYmargin=100; //canvas top, bottom margin
 var plotLength=15; //margin from plot box
 
+var graphWidth = 200;
+
+
 var minWindowInnerWidth =1200;
 
 var plotWidth=300; 
@@ -35,6 +38,9 @@ var histIdEnd;
 
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
+
+
+
 
 function createMainStructure(fileName)
 {
@@ -636,13 +642,101 @@ function doRefresh()
 ////////////////////////////////Undo Start////////////////////////////
 
 var workColCount = 0; // start with 1 because the [0] is for eraseOn.
-var fetchCount = 1;
+var fetchCount = 0;
 var limitSave = 10;
 var saveWorkArr = make2DArr(limitSave+1);
 var saveMousePosArr = new Array(limitSave+1);
 var start = 0;
 var workRowCount = 0;
+var temp = 0;
+function saveWork() // this is only for scatter relative id
+{	// saving is for save or not
+	if(start == 0)
+	{
+		for(var i = 0 ; i < limitSave ; i ++)
+		{
+			saveWorkArr[i] = new Array(scatterData.length + 1);
+		}
+		for(var i = 0 ; i < limitSave ; i ++)
+		{
+			for( var j = 0 ; j < scatterData.length ; j ++)
+			{
+				saveWorkArr[i][j] = 0;
+			}
+		}
+	//	start = 1;
+	}
+	
+	for(var i = 0 ; i < scatterData.length ; i ++)
+	{
+		if(start == 1)
+		{
+			document.write("work " + workRowCount  + " , " + saveWorkArr[workRowCount-1][i] + "<br>");
+			document.write("i " + i + " , " + scatterData[i].selected + "<br>");
+		}
+		
+		if(workRowCount > 0)
+		{
+		//	alert(saveWorkArr[workRowCount-1][i]);
+		//	alert(scatterData[i].selected);			
+			if(saveWorkArr[workRowCount-1][i] == scatterData[i].selected)
+			{
+				temp ++;
+			}
+		}else if(start == 1 && workRowCount == 0){
+			if(saveWorkArr[9][i] == scatterData[i].selected)
+			{
+				temp ++;
+			}
+		}
+	//	alert(scatterData[i].selected);
+		saveWorkArr[workRowCount][i] == scatterData[i].selected;		
+	}	
+//	alert("dddd");
+	if(temp == i)
+	{		
+		alert("dddd11");
+		return ; 
+	}
+//	alert(temp);
+// alert(workRowCount);
+	if(workRowCount  != limitSave-1){
+		workRowCount++;		
+	}else if(workRowCount == limitSave-1){
+		workRowCount = 0;
+	}
+	if(fetchCount != limitSave-1){
+		fetchCount++;
+	}
+	start = 1;
+	temp = 0;
+	workColCount = 0;		
+	saveMousePosArr[workRowCount] = preMousePos;
+	alert(workRowCount);
+}
 
+function fetchWork()
+{
+	alert(fetchCount);
+	var node;		
+	if(fetchCount != 0)
+	{
+		allDeselect();
+		for( var i = 0 ; i < scatterData.length ; i ++)
+		{
+			scatterData[i].selected = saveWorkArr[workRowCount][i]; 
+		}
+		if(workRowCount  != 0){
+			workRowCount--;		
+		}else if(workRowCount == 0){
+			workRowCount = limitSave-1;
+		}
+		doRefresh();
+		fetchCount = fetchCount-1;
+		preMousePos  = saveMousePosArr[workRowCount];
+	}
+}
+/*
 function saveWork() // this is only for scatter relative id
 {	// saving is for save or not
 	
@@ -695,7 +789,6 @@ function saveWork() // this is only for scatter relative id
 	
 //	alert(workColCount);
 //	alert("111 "+ workRowCount + "  111   " +fetchCount );
-	
 }
 
 function fetchWork()
@@ -742,8 +835,8 @@ function fetchWork()
 		
 	}
 //	alert("222 "+ workRowCount + "  222   " +fetchCount );
-}
-
+} */
+/*
 for(var i = 0; i <scatterData.length ; i ++)
 {
 	node = scatterStage.get("#"+ (i + scatterIdStart));
@@ -751,7 +844,7 @@ for(var i = 0; i <scatterData.length ; i ++)
 	{
 		scatterSingleSelect(node, i);
 	}
-}
+}*/
 ////////////////////////////////Undo End/////////////////////////////
 
 ///////////////////////////// Total Platform Start/////////////////////////
@@ -778,7 +871,7 @@ function allUpdate(hostName, node, id, eraseOn)
 			if(scatterData[id].selected == 0)
 			{
 				scatterSingleSelect(node, id);
-				histUpdate(scatterXMain[id],eraseOn);
+				histUpdate(histXMain[id],eraseOn);
 			}
 			
 		}
@@ -786,7 +879,7 @@ function allUpdate(hostName, node, id, eraseOn)
 			if(scatterData[id].selected == 1)
 			{
 				scatterSingleDeselect(node, id);
-				histUpdate(scatterXMain[id],eraseOn);
+				histUpdate(histXMain[id],eraseOn);
 			}
 		}
 	//	alert(eraseOn);

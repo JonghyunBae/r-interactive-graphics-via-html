@@ -179,16 +179,16 @@ var scatterMenuTextHide = new Kinetic.Text({
 	padding: 5,
 	fill: 'white'
 });	  
-var scatterMenuTextDelete = new Kinetic.Text({
-	y:25,
+/*var scatterMenuTextDelete = new Kinetic.Text({
+	y:50,
 	text: '',
 	fontFamily: 'Calibri',
 	fontSize: 15,
 	padding: 5,
 	fill: 'white'
-});	  
+});	  */
 var scatterMenuTextReset = new Kinetic.Text({
-	y:50,
+	y:25,
 	text: '',
 	fontFamily: 'Calibri',
 	fontSize: 15,
@@ -200,27 +200,27 @@ var scatterMenuRectHide = new Kinetic.Rect({
 	height: 25,
 	fill: '#6b6164'
 });
-var scatterMenuRectDelete = new Kinetic.Rect({
-	y:25,
+/*var scatterMenuRectDelete = new Kinetic.Rect({
+	y:50,
 	width: 100,
 	height: 25,
 	fill: '#6b6164'
-});
+});*/
 var scatterMenuRectReset = new Kinetic.Rect({
-	y:50,
+	y:25,
 	width: 100,
 	height: 25,
 	fill: '#6b6164'
 });
 
 scatterMenu.add(scatterMenuRectHide).add(scatterMenuTextHide);
-scatterMenu.add(scatterMenuRectDelete).add(scatterMenuTextDelete);
+//scatterMenu.add(scatterMenuRectDelete).add(scatterMenuTextDelete);
 scatterMenu.add(scatterMenuRectReset).add(scatterMenuTextReset);
 scatterMenuLayer.add(scatterMenu);
 scatterStage.add(scatterMenuLayer);
 
 scatterMenuTextHide.setText(" Hide"); 
-scatterMenuTextDelete.setText(" Delete"); 
+//scatterMenuTextDelete.setText(" Delete"); 
 scatterMenuTextReset.setText(" Reset"); 
 
 scatterMenuTextHide.on('click', function(evt){
@@ -255,8 +255,8 @@ scatterMenuRectHide.on('mouseout', function(evt){
 	scatterMenuTextHide.setFill('white');
      scatterMenuLayer.draw();
 });
-
-scatterMenuTextDelete.on('click', function(evt){
+/*
+ scatterMenuTextDelete.on('click', function(evt){
 	deleteSelected();
 	scatterMenuOn=false;
 	scatterMenu.hide();
@@ -288,7 +288,7 @@ scatterMenuRectDelete.on('mouseout', function(evt){
 	scatterMenuTextDelete.setFill('white');
     scatterMenuLayer.draw();
 });
-
+*/
 
 scatterMenuTextReset.on('click', function(evt){
 	resetSelected();
@@ -385,7 +385,7 @@ scatterDataLayer.on('click', function(evt){
 	  	
 	  	var mousePos = {x: node.getX(), y:node.getY()};
 	  	var tmpNode;
-	 // 	alert(downOn);
+
 	  	if(downOn == true)
 		{  		
 	  		downOn = false;
@@ -408,9 +408,7 @@ scatterDataLayer.on('click', function(evt){
 				if(nameArr[0] == tmpNameArr[0]) //[0]안의 0값을 유듕적으로 바꿀 수 있게, idea는 key1누루면 1로 key2누르면 2로 바꾸면 될 듯...
 				{
 					tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-			//		tmpNode.hide();
-			//		scatterDataLayer.draw();
-					//allUpdate("scatter", tmpNode, i, 0);
+					allUpdate("scatter", tmpNode, i, 0);
 				}
 			}
 			tmpShift = false;
@@ -479,6 +477,7 @@ scatterDataLayer.on('click', function(evt){
 	  		
 			tmpShift = false;
 			allDeselect();
+			//alert("dddd");
 			allUpdate("scatter", shapes, (node.getId() - scatterIdStart), 0); 	
 	  	}  	
 	  	if(tmpShift == false)
@@ -593,7 +592,7 @@ var downOn = false;
 scatterPlotLayer.on('mousedown touchstart', function(evt){
 	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 		downOn = true; 
-		preDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};
+		preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
 		if(moving == true){
 			moving = false;
 			rangeBoxLayer.draw();
@@ -631,16 +630,18 @@ scatterPlotLayer.on('mouseup touchend', function(evt){
 */
 window.addEventListener ("mousemove", function (evt){
 	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+		
 		if(moving == true)
 		{
-			var mousePos = {x: (evt.pageX-plotXmargin-scatterStageX), y: (evt.pageY-plotYmargin-plotHeight-scatterStageY)};
-		//	var mousePos2 = scatterStage.getMousePosition();
+			//alert("dddd");
+			var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+				//	var mousePos2 = scatterStage.getMousePosition();
 		//	mousePos.x = mousePos.x + 
 		//	mousePos.x = mousePos.x*(plotWidth/scatterXMax);
 		//	var mousePos = scatterStage.getMousePosition(); // px 단위
 			var x, y;
-			x = mousePos.x + plotXmargin;
-			y = mousePos.y + plotYmargin + plotHeight;
+			x = mousePos.x;// + plotXmargin;
+			y = mousePos.y; //+ plotYmargin + plotHeight;
 		//	alert(mousePos.x +","+ mousePos2.x +","+ rangeBox.getY() );
 			
 		//	var x = mousePos.x;
@@ -672,37 +673,32 @@ window.addEventListener ("mouseup", function (evt){
 	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 		if(moving == true)
 		{
-			aftDragMousePos={x: (evt.pageX-plotXmargin-scatterStageX)*scatterXMax/plotWidth, y: -(evt.pageY-plotYmargin-plotHeight-scatterStageY)*scatterYMax/plotHeight};	
+			aftDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};	
 			//alert(aftDragMousePos.x);
 			scatterRectRange(aftDragMousePos);
 		}
-	}//alert(moving);
+	}
 }, true);
 
 function scatterRectRange(afterPosition)
 {		
 	var tmpNode;	
 	var prePosition;
-//	if(downOn == true)
-//	{
 	rangeBox.setWidth(0);
 	rangeBox.setHeight(0);
 	rangeBoxLayer.drawScene();
 	prePosition = preDragMousePos;	
 	moving = false;
-//	}
+
 	if(ctrlPressed == false)
 	{
 		allDeselect();
 	}
-	
 	if(prePosition.x < afterPosition.x)
 	{
 		if(prePosition.y < afterPosition.y)	{
-			
 			for(var i = 0 ; i < scatterData.length ; i++){
-				
-				if(prePosition.x <= scatterXMain[i] &&  scatterXMain[i] <= afterPosition.x && prePosition.y <=  scatterYMain[i] && scatterYMain[i] <= afterPosition.y )
+				if(prePosition.x <= scatterData[i].x && scatterData[i].x <= afterPosition.x && prePosition.y <= scatterData[i].y && scatterData[i].y <= afterPosition.y )
 				{
 					if(ctrlPressed == false)
 					{
@@ -725,7 +721,7 @@ function scatterRectRange(afterPosition)
 			}
 		}else if(afterPosition.y < prePosition.y){
 			for(var i = 0 ; i < scatterData.length ; i++){
-				if(prePosition.x <= scatterXMain[i] && scatterXMain[i] <= afterPosition.x && afterPosition.y <= scatterYMain[i] && scatterYMain[i] <= prePosition.y )
+				if(prePosition.x <= scatterData[i].x && scatterData[i].x <= afterPosition.x && afterPosition.y <= scatterData[i].y && scatterData[i].y <= prePosition.y )
 				{
 					if(ctrlPressed == false)
 					{
@@ -751,7 +747,7 @@ function scatterRectRange(afterPosition)
 	{
 		if(prePosition.y < afterPosition.y)	{
 			for(var i = 0 ; i < scatterData.length ; i++){
-				if(afterPosition.x <= scatterXMain[i] && scatterXMain[i] <= prePosition.x  && prePosition.y <= scatterYMain[i] && scatterYMain[i] <= afterPosition.y )
+				if(afterPosition.x <= scatterData[i].x && scatterData[i].x <= prePosition.x  && prePosition.y <= scatterData[i].y && scatterData[i].y <= afterPosition.y )
 				{
 					if(ctrlPressed == false)
 					{
@@ -774,7 +770,7 @@ function scatterRectRange(afterPosition)
 			}
 		}else if(afterPosition.y < prePosition.y){
 			for(var i = 0 ; i < scatterData.length ; i++){
-				if(afterPosition.x <= scatterXMain[i] && scatterXMain[i] <= prePosition.x && afterPosition.y  <= scatterYMain[i] && scatterYMain[i] <= prePosition.y  )
+				if(afterPosition.x <= scatterData[i].x && scatterData[i].x <= prePosition.x && afterPosition.y  <= scatterData[i].y && scatterData[i].y <= prePosition.y  )
 				{
 					if(ctrlPressed == false)
 					{
@@ -886,6 +882,7 @@ function histReset(xData)
 }
 ///////////////////////////Reset End ////////////////////////////////
 
+/*
 ///////////////////////////Delete Start ////////////////////////////////
 function deleteSelected()
 {
@@ -908,3 +905,4 @@ function deleteSelected()
 }
 /////////////////////////Delete End ////////////////////////////////
 
+*/

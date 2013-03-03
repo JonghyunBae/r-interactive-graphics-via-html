@@ -62,8 +62,8 @@ function addAnsToSearchBox()
 
 function booleanSearch(string)
 {
-	scatterAllDeselect();
-	histAllDeselect();
+//	scatterAllDeselect();
+//	histAllDeselect();
     var inputStr = string.searchId.value;
        
     if(1){
@@ -112,5 +112,6 @@ function booleanSearch(string)
     }    
 	//writeMsg(msgLayer);
 	addRow('dataTable');
+	saveWork();
 }
 ///////////////////5<TIME ,,,,,,,bug found

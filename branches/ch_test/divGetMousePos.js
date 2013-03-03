@@ -3,28 +3,29 @@
  Within quotes, separated by comma.
  E.g.:   ['imgid', 'divid'];
 */
-var elmids = ['scatterContainer', 'histContainer'];
+var elmids = ['scatterContainer'];
 
-var x, y = 0;       // variables that will contain the coordinates
+var divX, divY = 0;       // variables that will contain the coordinates
+var divOffsetX, divOffsetY = 0;
 
 // Get X and Y position of the elm (from: vishalsays.wordpress.com)
 function getXYpos(elm) {
-  x = elm.offsetLeft;        // set x to elm’s offsetLeft
-  y = elm.offsetTop;         // set y to elm’s offsetTop
+	divX = elm.offsetLeft;        // set x to elm’s offsetLeft
+	divY = elm.offsetTop;         // set y to elm’s offsetTop
 
   elm = elm.offsetParent;    // set elm to its offsetParent
 
   //use while loop to check if elm is null
   // if not then add current elm’s offsetLeft to x
   //offsetTop to y and set elm to its offsetParent
-  while(elm != null) {
-    x = parseInt(x) + parseInt(elm.offsetLeft);
-    y = parseInt(y) + parseInt(elm.offsetTop);
+while(elm != null) {
+	divX = parseInt(divX) + parseInt(elm.offsetLeft);
+    divY = parseInt(divY) + parseInt(elm.offsetTop);
     elm = elm.offsetParent;
   }
 
-  // returns an object with "xp" (Left), "=yp" (Top) position
-  return {'xp':x, 'yp':y};
+  // returns an object with "divXp" (Left), "=yp" (Top) position
+  return {'xp':divX, 'yp':divY};
 }
 
 // Get X, Y coords, and displays Mouse coordinates
@@ -38,19 +39,20 @@ function getCoords(e) {
     // This gets the page element that will be used to add scrolling value to correct mouse coords
     var standardBody = (document.compatMode == 'CSS1Compat') ? document.documentElement : document.body;
 
-    x = event.clientX + standardBody.scrollLeft;
-    y = event.clientY + standardBody.scrollTop;
+    divX = event.clientX + standardBody.scrollLeft;
+    divY = event.clientY + standardBody.scrollTop;
   }
   else {
-    x = e.pageX;
-    y = e.pageY;
+    divX = e.pageX;
+    divY = e.pageY;
   }
 
-  x = x - xy_pos['xp'];
-  y = y - xy_pos['yp'];
-
+  divX = divX - xy_pos['xp'];
+  divY = divY - xy_pos['yp'];
+  divOffsetX = xy_pos['xp'];
+  divOffsetY = xy_pos['yp'];
   // displays x and y coords in the #coords element
-  document.getElementById('coords').innerHTML = 'X= '+ x+ ' ,Y= ' +y;
+  document.getElementById('coords').innerHTML = 'X= '+ divX+ ' ,Y= ' +divY;
 }
 
 // register onmousemove, and onclick the each element with ID stored in elmids
@@ -61,7 +63,7 @@ for(var i=0; i<elmids.length; i++) {
 
     // execute a function when click
     document.getElementById(elmids[i]).onclick = function() {
-      document.getElementById('regcoords').value = x+ ' , ' +y;
+      document.getElementById('regcoords').value = divX+ ' , ' +divY;
     };
   }
 }

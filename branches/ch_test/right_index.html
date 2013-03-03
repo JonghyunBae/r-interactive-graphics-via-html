@@ -55,11 +55,11 @@
 	<div id="content">		
 		<div style="margin: 5px 5px 5px 5px; float:left; border:1px solid black; width: 500px;">
 			<h1>1. Scatter</h1>
-			<div id="scatterContainer" style="width: 500px; position : relative; border:1px solid black; background:  #eeeeee;" oncontextmenu="return false;" ></div>
+			<div id="scatterContainer" style="width: graphWidth; position : relative; border:1px solid black; background:  #eeeeee;" oncontextmenu="return false;" ></div>
 		</div>
 		<div style="margin: 5px 5px 5px 5px; float:left; border:1px solid black; width: 500px;">
 			<h1>2. Histogram</h1>	
-			<div id="histContainer" style="width: 500px; position : relative; border:1px solid black; background:  #eeeeee;; " oncontextmenu="return false;"></div>
+			<div id="histContainer" style="width: graphWidth; position : relative; border:1px solid black; background:  #eeeeee;; " oncontextmenu="return false;"></div>
 		</div>
 		<div style="margin: 5px 5px 5px 5px; float:left; border:1px solid black; width: 500px; height: 500px;">
 			<h1>3. Box-and-Whisker</h1>
@@ -101,8 +101,8 @@
 		//////////variables for histogram chart//////////////// names are likely to change later
 		
 		var histX = 3; //[histX]th column data
-		var histXLabel = labelArr[histX ];
-		var histXMain =  mainArr[histX ];
+		var histXLabel = labelArr[histX];
+		var histXMain =  mainArr[histX];
 		
 		var diffHist = 2;
 		var histXMax=findMaxValue(histXMain,diffHist); //나중에 max함수 추가해서 5단위로 잡게 만들기.
@@ -159,7 +159,7 @@
 		<h1>Hide & Reset</h1>
 		<p>
 			<a id="nodeHide" href="#" class="myButton" onClick ="hideSelected(); return false;">Hide</a>
-			<a id="nodeDelete" href="#" class="myButton" onClick ="deleteSelected(); return false;">Delete</a>
+	<!-- <a id="nodeDelete" href="#" class="myButton" onClick ="deleteSelected(); return false;">Delete</a> -->		
 			<a id="nodeReset" href="#" class="myButton" onClick ="resetSelected(); return false;">Reset</a>
 		</p>		
 		

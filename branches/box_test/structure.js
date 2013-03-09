@@ -43,11 +43,11 @@ function getData(fileName)
 }
 
 function make2DArr(rows) {
-	  var Arr = [];
+	  var arr = [];
 	  for (var i=0;i<rows;i++) {
-		  Arr[i] = [];
+		  arr[i] = [];
 	  }
-	  return Arr;
+	  return arr;
 }
 
 function createMainStructure(fileName)

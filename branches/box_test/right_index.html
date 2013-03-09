@@ -1,0 +1,377 @@
+<!DOCTYPE HTML>
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+		<title>RIGHT, R-Interactive-Graphics-via-HTml</title>		
+		<link  rel="stylesheet" href="right.css"> 		
+	</head>
+	
+	
+	<body>
+	<div id="histContainer" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+	<!-- <div id="scatterContainer" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; " oncontextmenu="return false;"></div>  -->
+	<script src="kinetic-v4.3.1.js"></script>
+	<script> 
+
+		//Once starting, belows will be set up right away.
+		var mainArr; // array for all data.
+		var labelArr; // character array for the column names.
+		
+		function csv2Arr(data, liveChar)
+		 {	
+		 	var i = 0;
+		 	var eof = '';
+		 	var cursor = data.charAt(i);
+		 	var result_array = new Array();
+		 	var result_row = "";
+		 	var line = 0;
+		 	while(cursor != eof)
+		 	{
+		 		if((cursor == '\"') || (cursor == '\r') || (cursor == '\t') || (cursor == ' ')){
+		 		}else if( cursor == "\n" ){
+		 			if (result_array.length <= line)
+		 			{
+		 				result_array.push(new Array());
+		 				result_array[line].push(result_row);
+		 				result_row = "";
+		 				line++;
+		 			}
+		 		}else{
+		 			result_row += cursor;
+		 		}
+		 		cursor = data.charAt(i++);
+		 	}
+		 	return result_array;
+		 }
+		function getData(fileName)
+		{
+			var filePath = fileName;	
+			xmlhttp = new XMLHttpRequest();	
+			xmlhttp.open("GET",filePath,false);
+			xmlhttp.send(null);
+			var fileContent = xmlhttp.responseText;
+			var tempArr = csv2Arr(fileContent);
+			var returnLabelArr = tempArr[0].toString().split(',');	
+			tempArr.shift();
+			var returnDataArr = tempArr;
+			return { 'dataArr' : returnDataArr, 'labelArr' : returnLabelArr };	
+		}
+
+		function make2DArr(rows) {
+			  var Arr = [];
+			  for (var i=0;i<rows;i++) {
+				  Arr[i] = [];
+			  }
+			  return Arr;
+		}
+
+		function createMainStructure(fileName)
+		{
+			var tmpArr = getData(fileName);		
+			var dataArr=tmpArr.dataArr;
+			labelArr=tmpArr.labelArr;	 
+			mainArr = make2DArr(labelArr.length);	
+			for(var j=0; j<dataArr.length; j++)
+			{
+				var tmpArr = dataArr[j].toString().split(',');	
+				for(var i = 0 ; i < labelArr.length ; i ++)
+				{
+					mainArr[i][j] = parseFloat(tmpArr[i]);
+				}	
+			}
+		}		
+		
+		createMainStructure("Theoph-from-R.csv");			
+		
+		
+		//////////////////Common variables///////////////////////////
+		
+		//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////		
+		var plotXMargin=100; //canvas left, right margin
+		var plotYMargin=100; //canvas top, bottom margin
+		var plotLength=15; //margin from plot box
+		var plotWidth=500;  //plot width
+		var plotHeight=500; //plot height, IT SHOULD BE SET ONLY BY ADMINISTRATOR		
+		var idCounter = 0;		
+		
+		function findMaxValue(Data,diff) // if diff =0, for scatter.
+		{
+			var maxValue=Data[0];
+
+			var returnValue;
+			for(var i=1; i<Data.length; i++)
+			{
+			//	document.write(maxValue + ", " +  Data[i] + "<br>");
+				if(Data[i]>maxValue)
+				{
+//					document.write("dddddddddddddd");
+					maxValue=Data[i];					
+				}
+//				document.write(maxValue + ", " +  Data[i] + "<br>");
+			}
+			returnValue=parseInt(maxValue+1);	
+			for(var i=0; i<diff; i++) //until mod ==0
+			{
+				returnValue=returnValue+i;
+				if((returnValue% diff) == 0)
+				{
+					break;
+				}				
+			}	
+			return returnValue;
+		}
+		function histFindMaxValue(xMaxHist, xData,diff)
+		{
+			var maxValue=0;
+			var tmpHistArr = new Array();
+			var cnt=0;
+			for (var i=0; i<parseInt(xMaxHist/diff +1); i++)//tmpHistArr initialization
+			{
+				tmpHistArr[i]=0;
+			}			
+			for(cnt=0; cnt< parseInt(xMaxHist/diff +1); cnt++)
+			{
+				for( var i = 0 ; i < xData.length; i++)
+				{	
+					if(xData[i]>=cnt*diff && xData[i]<(cnt+1)*diff)
+					{
+						tmpHistArr[cnt]++;
+					}
+				}
+			}
+			for(var i=0; i<parseInt(xMaxHist/diff +1); i++)
+			{
+				if(tmpHistArr[i]>maxValue)
+				{
+					maxValue=tmpHistArr[i];					
+				}
+			}	
+			return maxValue;
+		}
+		
+		</script>
+		<script>
+		
+		
+		function setHistArr(xMax,yMax,xMain,plotWidth,plotHeight,bin)
+		{
+			var freq = new Array();
+			var height = new Array();
+			var midPointX = new Array();
+			var midPointY = new Array();
+			var selected = new Array();
+			var hidden = new Array();
+			
+			var cnt = 0;
+			var col = 0;
+			var histHasArr=make2DArr(parseInt(xMax/bin +1));
+			
+			for (var i=0; i<parseInt(xMax/bin ); i++)//tmpHistArr initialization
+			{
+				freq[i]=0;
+				height[i]=0;
+			}			
+			
+			for(cnt=0; cnt< parseInt(xMax/bin ); cnt++)//count how many data in certain range and save the value into freq array
+			{
+				for( var i = 0 ; i < xMain.length; i++)
+				{	
+					if(xMain[i]>=cnt*bin && xMain[i]<(cnt+1)*bin)
+					{
+						freq[cnt]++;
+						histHasArr[cnt][col] = i;
+						col++;
+					}
+				}
+				col = 0;
+			}			
+			
+			for (var i=0; i<parseInt(xMax/bin ); i++)//height array set
+			{				
+				var width= plotWidth / parseInt(xMax/bin); 
+				height[i]=freq[i]*plotHeight/yMax;
+				midPointX[i]= plotXMargin +  i * plotWidth / parseInt(xMax/bin) + width/2;
+				midPointY[i]=  plotYMargin + plotHeight - height[i]/2;
+				selected[i]=0;
+				hidden[i]=false;				
+			}			
+			
+			return {freq: freq, height: height, midPoint:{x:midPointX, y:midPointY}, selected: selected, hidden: hidden};
+		}
+		
+		
+		//hist environment variables		
+		var histX = 3; //[histX]th column data
+		var histXLabel = labelArr[histX];
+		var histXMain =  mainArr[histX];		
+		
+		var histPlotWidth = 500;
+		var histPlotHeight = 500;
+		
+		var histBin=2;
+		var histXMax=findMaxValue(histXMain,histBin); //나중에 max함수 추가해서 5단위로 잡게 만들기.
+		var histYMax=histFindMaxValue(histXMax,histXMain,histBin);
+		var histXDiff=parseInt(histXMax/5);//나중에 자동으로 잡아주기.
+		var histYDiff=parseInt(histYMax/5);  				
+		
+		//alert(histXMax+','+histYMax+','+histXDiff+','+histYDiff+','+histXMain);				
+		var histFreqArr = new Array();
+		var histHeightArr = new Array();
+		var histMidPointArr = new Array();
+		var histSelectedArr = new Array();
+		var histHiddenArr = new Array();
+		
+		var histFreqArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).freq;	 
+		var histHeightArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).height;
+		var histMidPointArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).midPoint;	 
+		var histSelectedArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).selected;
+		var histHiddenArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).hidden;	 
+		
+		
+		//////////////////////////////////////histStage Start//////////////////////////////////////
+		var histStage = new Kinetic.Stage({			
+			container: 'histContainer',			
+			width: plotWidth+plotXMargin*2,
+			height: plotHeight+plotYMargin*2 
+		});
+			
+//////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
+		var histPlotLayer = new Kinetic.Layer();
+
+		function drawBaseRect(color, layer)//Put base layer
+		{
+			var plotRect = new Kinetic.Rect({
+				name : "baseRect",
+				x: plotXMargin-plotLength,
+				y: plotYMargin-plotLength,
+				width: plotWidth+2*plotLength,
+				height: plotHeight+2*plotLength,
+				stroke: color,
+				strokeWidth: 2
+			});
+			layer.add(plotRect);
+		}
+		
+		drawBaseRect('white', histPlotLayer);
+		
+		
+		var histXAxis = new Kinetic.Line({
+			name: 'histXAxis',
+			points: [plotXMargin, plotYMargin+plotHeight+plotLength, plotXMargin+parseInt(histXMax/histXDiff)*plotWidth/(histXMax/histXDiff),  plotYMargin+plotHeight+plotLength],
+			stroke: 'black',
+			strokeWidth: 2,		     
+		});
+		var histYAxis = new Kinetic.Line({
+			points: [plotXMargin-plotLength, plotYMargin+plotHeight-parseInt(histYMax/histYDiff)*plotHeight/(histYMax/histYDiff) ,plotXMargin-plotLength,  plotYMargin+plotHeight],
+			stroke: 'black',
+			strokeWidth: 2,		     
+		});
+		histPlotLayer.add(histXAxis);
+		histPlotLayer.add(histYAxis);
+		histStage.add(histPlotLayer);
+		histPlotLayer.on('mouseover mousemove dragmove', function(evt){  
+			document.body.style.cursor = "default";
+		});
+
+		//////////////////////////////////////Drawing histPlot End//////////////////////////////////////
+		 
+	
+		
+	
+	/*
+	(function() {
+		Hist = function(config) {
+	        this._initHist(config);
+	        
+	    };
+	
+	    Hist.prototype = {
+	        _initStage: function(config) {
+	        	//var dd = Kinetic.DD;
+	            this.setDefaultAttrs({
+	                width: 400,
+	                height: 200
+	            });	
+	        },  	        
+	        setDefaultAttrs: function(config) {
+	            // create attrs object if undefined
+	            if(this.attrs === undefined) {
+	                this.attrs = {};
+               	}
+	            if(config) {
+	                for(var key in config) {
+	                    
+	                    if(this.attrs[key] === undefined) {
+	                        this.attrs[key] = config[key];
+	                    }
+	                }
+	            }
+	        },
+	        draw: function(){
+				alert('hist is drawn');
+			};
+	})();
+	*/
+/*
+		function Hist(mainArr, optionObj){ //hist constructor 
+			if(optionObj.width== undefined){
+				this.width = 300;
+			}else{
+				this.width = optionObj.width;
+			}			
+			//this.width = optionObj.width;
+		//	this.height = optionObj.width;
+			this._initHist(optionObj);
+			
+			for(var option in optionObj){
+						
+				if(optionObj.hasOwnProperty(option)){
+					this[option] = optionObj[option];
+				}				
+			}
+			
+			this.draw=function(){
+				alert('hist is drawn');
+			};
+		}
+	*/
+		
+	(function() {	
+		Hist = function(mainArr, optionObj) {
+			this._initHist(optionObj);
+	    };
+		Hist.prototype = {
+				_initHist: function(optionObj) {
+		            this.width = optionObj.width || 300;
+		            this.height = optionObj.height || 300;
+		         
+		        },				
+				doIt: function() { 
+					alert('do it'); 
+				},
+				draw: function(){
+					alert('hist is drawn');
+				},
+				update: function(){
+					alert('hist is updated');				
+				}
+		};
+	})();
+		
+		var hist01 = new Hist(histXMain, { width:333, height:444});
+		hist01.draw();
+		hist01.update();
+		hist01.doIt();
+		alert('hist01.hasOwnProperty[width]: '+ hist01.hasOwnProperty('width'));
+		alert('hist01.hasOwnProperty[x]: '+ hist01.hasOwnProperty('x'));
+		
+		alert('width is '+hist01.width+', height is '+hist01.height);
+		
+		
+		
+	</script>
+ 	
+	
+	</body>
+</html>

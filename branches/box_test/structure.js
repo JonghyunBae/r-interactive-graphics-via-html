@@ -78,7 +78,7 @@ function createMainStructure(fileName)
 			}			
 		}	
 	}
-	alert(isDiscrete);
+	//alert(isDiscrete);
 }		
 
 

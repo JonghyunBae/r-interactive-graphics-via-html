@@ -13,8 +13,8 @@ var Hist = {};
 				this.bin = optionObj.bin || 1;
 	            this.width = optionObj.width || plotWidth; //plot width
 	            this.height = optionObj.height || plotHeight; //plot height
-	            this.plotXMargin=this.width*0.1; //canvas left, right margin
-	            this.plotYMargin=this.height*0.1; //canvas top, bottom margin
+	            this.plotXMargin=this.width*0.2; //canvas left, right margin
+	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength=this.width*0.02; //margin from plot box
 	            for(var i = 0 ; i < labelArr.length ; i ++)
 	            {

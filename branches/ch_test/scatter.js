@@ -80,7 +80,7 @@ for(var n = 0; n < scatterData.length; n++)
 	scatterAddNode(n, scatterData[n], scatterDataLayer);
 }
 scatterStage.add(scatterDataLayer);
-
+alert(scatterNode[0].x);
 //////////////////////////////////////Tooltip Start//////////////////////////////////////
 var scatterTooltipLayer = new Kinetic.Layer();
 var scatterTooltip = new Kinetic.Group({

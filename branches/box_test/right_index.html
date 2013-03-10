@@ -10,7 +10,8 @@
 	
 	
 	<body>
-	<div id="histContainer" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+	<div id="histContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+	<div id="histContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 	<!-- <div id="scatterContainer" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; " oncontextmenu="return false;"></div>  -->
 	<script src="kinetic-v4.3.1.js"></script>
 	<script src="structure.js"></script>
@@ -214,11 +215,13 @@
 	
 		
 		var hist01 = new Hist(mainArr, {bin: 2, x:'time', width:400, height:400, });
-	   hist01.draw();
+	   hist01.draw(1);
+	   var hist02 = new Hist(mainArr, {bin: 1, x:'subject', width:300, height:300, });
+	   hist02.draw(2);
 	 //  alert('barWidth is '+hist01.barWidth);
-    alert(hist01.plotXMargin-hist01.plotLength);
+ //   alert(hist01.plotXMargin-hist01.plotLength);
 	 
-       alert('height is '+hist01.histArr.length);
+   //    alert('height is '+hist01.histArr.length);
       // alert('height is '+hist01.histArr.hasArr);
 	 //  hist01.draw();
 	//	hist01.update();
@@ -252,7 +255,7 @@
         Within quotes, separated by comma.
         E.g.:   ['imgid', 'divid'];
        */
-       var elmids = ['histContainer'];
+       var elmids = ['histContainer1', 'histContainer2'];
 
        var divX, divY = 0;       // variables that will contain the coordinates
        var divOffsetX, divOffsetY = 0;

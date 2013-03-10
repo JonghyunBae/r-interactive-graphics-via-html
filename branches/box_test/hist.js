@@ -25,45 +25,111 @@ var Hist = {};
 	            	if(i==labelArr.length-1){
 	            		alert('retype x label');
 	            	}
-	            }	           
-	            this.xMax = findMaxValue(mainArr[this.x],this.bin);	            
-	            this.yMax= histFindMaxValue(this.xMax,mainArr[this.x],this.bin);
-	        	this.xDiff=parseInt(this.xMax/5);//5 should be selected automatically later
-	    		this.yDiff=parseInt(this.yMax/5); //5 should be selected automatically later
-				this.barWidth = optionObj.barWidth || ( this.width /parseInt(this.xMax/this.bin));
-				
-				//////////Make Data Structure of nodes and essential arrays////////
-				this.node = new Array();							
-				for(var cnt = 0; cnt< parseInt(this.xMax/this.bin ); cnt++)//count how many data in certain range and save the value into freq array
-				{
-					var freqTmp = 0;
-					var hasTmp = new Array();
-					var col = 0;
-					for( var i = 0 ; i < mainArr[this.x].length; i++)
-					{
-						if(mainArr[this.x][i]>=cnt*this.bin && mainArr[this.x][i]<(cnt+1)*this.bin)
-						{	
-							freqTmp++;
-							hasTmp[col] = i;
-							col++;
-						}
-					}
-					this.node[cnt] = new Kinetic.Rect({
-						name: freqTmp,
-						x: this.plotXMargin +  cnt* this.width / parseInt(this.xMax/this.bin) + (this.width / parseInt(this.xMax/this.bin))/2,
-						y: this.plotYMargin + this.height - freqTmp*this.height/this.yMax/2, 
-						width: this.barWidth,
-						height: freqTmp*this.height/this.yMax,
-						fill: 'green',
-						stroke: 'black',						
-						opacity : 0.5,
-						draggable : false,
-						hidden : false,
-						selected : 0,
-						hasArr : hasTmp
-					});
-				}
-				
+	            }	
+	            
+	            if(isDiscrete[this.x] == true)
+	            {
+	            	var cnt = 0;
+	            	var xTmp = new Array();
+	            	var freqTmp = new Array();
+	            	var hasTmp = make2DArr(mainArr[this.x].length);
+	            	freqTmp[cnt] = 1;
+	            	hasTmp[cnt][0] = 0;
+	            	xTmp[cnt++] = mainArr[this.x][0];
+	            	for(i = 1 ; i < mainArr[this.x].length ; i++)
+	            	{
+	            		for(j = 0 ; j < xTmp.length ; j ++)
+	            		{
+	            			if(xTmp[j] == mainArr[this.x][i])
+	            			{
+	            				hasTmp[j].push(i);
+	            				freqTmp[j] ++; 
+	            				break;
+	            			}	            				
+	            		}
+	            		if(j == xTmp.length)
+	            		{
+	            			freqTmp[j] = 1;
+	            			xTmp.push(mainArr[this.x][i]);
+	            		}
+	            	}
+	            	this.barWidth = this.width/freqTmp.length/2;
+	            	this.barGap = this.barWidth;
+	            	this.xMax = parseInt(this.width/this.barWidth);
+	            	this.yMax = findMaxValue(freqTmp,0);
+	            	this.xDiff = parseInt(this.xMax/5);
+	            	this.yDiff = parseInt(this.yMax/5);
+	           // 	alert("yMax " + this.yMax);	            	
+	            	//////////Make Data Structure of nodes and essential arrays////////
+	            	this.node = new Array();
+	            	for(var cnt = 0; cnt< xTmp.length ; cnt++)
+	            	{
+	            		this.node[cnt] = new Kinetic.Rect({
+							name: freqTmp[cnt],
+							label : xTmp[cnt],
+							x: this.plotXMargin +  cnt*(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2,
+							y: this.plotYMargin + this.height - freqTmp[cnt]*this.height/this.yMax/2, 
+							width: this.barWidth,
+							height: freqTmp[cnt]*this.height/this.yMax,
+							fill: 'green',
+							stroke: 'black',						
+							opacity : 0.5,
+							draggable : false,
+							hidden : false,
+							selected : 0,
+							hasArr : hasTmp[cnt],
+							offset: {x: this.barWidth/2, y: freqTmp[cnt]*this.height/this.yMax/2},
+						});
+	            	}            	 
+	            }else{
+	            	this.xMax = findMaxValue(mainArr[this.x],0);			// xMax를 먼저 구해야 barwidth를 구해줄 수 있다. 
+	            	this.barWidth = this.width /parseInt(this.xMax/this.bin); // 일단 barGap은 여기엔 넣지 않음. .
+	            	this.barGap = optionObj.barGap || 0;
+	            	var xTmp = new Array(parseInt(this.xMax/this.bin));  // 수직선에 찍히는 이름 저장할 꺼 -> 여기서는 bin
+	            	var freqTmp = new Array(parseInt(this.xMax/this.bin)); // frequency 저장 
+	            	var hasTmp = make2DArr(mainArr[this.x].length);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
+	            	var countTmp = 0;	         
+	            	var cnt = 0;
+	            	
+	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
+	            	{
+	            		freqTmp[i] = 0;  // frequency 저장할꺼 초기화 
+	            		xTmp[i] = this.bin * i ; // xTmp는 여기서 초기화 하면 아래에서는 건들필요 없다. 여기서는 숫자이기때문에 	            		
+	            	}
+	            	
+	            	for(var i = 0 ; i < mainArr[this.x].length ; i++)
+	            	{
+	            		countTmp = parseInt(mainArr[this.x][i]/this.bin);  // 어느 배열위치에 들어갈지 결정.
+	            		freqTmp[countTmp] ++ ; // 해당배열 frequency 하나씩 늘려주고 
+	            		hasTmp[countTmp].push(i); // hasarray에 저장해준다.
+	            	}	            		
+	            	
+	            	this.yMax = findMaxValue(freqTmp,0); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
+	            	this.xDiff = parseInt(this.xMax/5);
+	            	this.yDiff = parseInt(this.yMax/5);	        	
+	   
+					//////////Make Data Structure of nodes and essential arrays////////
+	            	this.node = new Array();
+	            	for(var cnt = 0; cnt< xTmp.length ; cnt++)
+	            	{
+	            		this.node[cnt] = new Kinetic.Rect({
+							name: freqTmp[cnt],
+							label : xTmp[cnt],
+							x: this.plotXMargin +  cnt*(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2,
+							y: this.plotYMargin + this.height - freqTmp[cnt]*this.height/this.yMax/2, 
+							width: this.barWidth,
+							height: freqTmp[cnt]*this.height/this.yMax,
+							fill: 'green',
+							stroke: 'black',						
+							opacity : 0.5,
+							draggable : false,
+							hidden : false,
+							selected : 0,
+							hasArr : hasTmp[cnt],
+							offset: {x: this.barWidth/2, y: freqTmp[cnt]*this.height/this.yMax/2},
+						});
+	            	}	            	
+	            }            				
 	        },				
 			doIt: function() { 
 				alert('do it'); 

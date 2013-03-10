@@ -1,6 +1,7 @@
 //Once starting, belows will be set up right away.
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
+var isDiscrete; // array for confirming discrete data
 
 function csv2Arr(data, liveChar)
  {	
@@ -56,14 +57,28 @@ function createMainStructure(fileName)
 	var dataArr=tmpArr.dataArr;
 	labelArr=tmpArr.labelArr;	 
 	mainArr = make2DArr(labelArr.length);	
+	isDiscrete = new Array(labelArr.length);
+	
 	for(var j=0; j<dataArr.length; j++)
 	{
 		var tmpArr = dataArr[j].toString().split(',');	
+		
 		for(var i = 0 ; i < labelArr.length ; i ++)
 		{
-			mainArr[i][j] = parseFloat(tmpArr[i]);
+			if(isNaN((tmpArr[i])))
+			{
+				mainArr[i][j] = tmpArr[i];
+				isDiscrete[i] = true;					
+			}else{				
+				mainArr[i][j] = parseFloat(tmpArr[i]);
+				if( j > 0 && isDiscrete[i] != true)
+				{
+					isDiscrete[i] = false;
+				}
+			}			
 		}	
 	}
+	alert(isDiscrete);
 }		
 
 

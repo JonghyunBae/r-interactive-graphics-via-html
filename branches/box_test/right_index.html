@@ -17,8 +17,8 @@
 	<script src="structure.js"></script>
 	<script> 
 
-	   createMainStructure("Theoph-from-R.csv");         //mainArr = data, labelArr= column1
-		
+	 //  createMainStructure("diamonds-from-R.csv");         //mainArr = data, labelArr= column1
+	   createMainStructure("Theoph-from-R.csv");
 		//////////////////Common variables///////////////////////////
 		
 		//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////		
@@ -216,8 +216,8 @@
 		
 		var hist01 = new Hist(mainArr, {bin: 2, x:'time', width:400, height:400, });
 	   hist01.draw(1);
-	   var hist02 = new Hist(mainArr, {bin: 1, x:'subject', width:300, height:300, });
-	   hist02.draw(2);
+	//   var hist02 = new Hist(mainArr, {bin: 1, x:'subject', width:300, height:300, });
+	 //  hist02.draw(2);
 	 //  alert('barWidth is '+hist01.barWidth);
  //   alert(hist01.plotXMargin-hist01.plotLength);
 	 

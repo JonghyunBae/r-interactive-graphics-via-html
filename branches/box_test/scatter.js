@@ -48,6 +48,7 @@ var Scatter = {};
 	  	            		alert('retype colors label');
 	  	            	}
 	  	            }	
+	            	setColor(mainArr[this.color]);
 	            }
 	            this.xMax = scatterFindMaxValue(mainArr[this.x]);	            
 	            this.yMax = scatterFindMaxValue(mainArr[this.y]);
@@ -63,10 +64,10 @@ var Scatter = {};
 						x: mainArr[this.x][i]*(this.width/this.xMax)+this.plotXMargin,
 						y: mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin + 2*( this.height/2+this.plotYMargin-(mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin) ),
 						radius: this.radius,
-						fill: (this.color==-1)?('green'):setColor(mainArr[this.color],i),
+						fill: (this.color==-1)?('green'):getColor(i),
 						stroke : 'black',
 						strokeWidth : 0.01,
-						opacity : 0.5,
+						opacity : 1,
 						draggable : false,
 						hidden : false,
 						selected : 0
@@ -223,85 +224,289 @@ function scatterFindMaxValue(Data)
 	}
 	return parseInt(maxValue+1);
 }
-function setColor(colorArr,n){
-	
-	
-	/*  if(isDiscrete[this.x] == true)
-      {
-      	var cnt = 0;
-      	var xTmp = new Array();
-      	var freqTmp = new Array();
-      	this.node = new Array();
-      	freqTmp[cnt] = 1;
-      	xTmp[cnt++] = mainArr[this.x][0];
-      	for(i = 1 ; i < mainArr[this.x].length ; i++)
-      	{
-	      	for(j = 0 ; j < xTmp.length ; j ++)
-	      	{
-		      	if(xTmp[j] == mainArr[this.x][i])
-		      	{
-			      	freqTmp[j] ++; 
-			      	break;
-		      	}	           	
-		    }
-		      	if(j == xTmp.length)
-		      	{
-			      	freqTmp[j] = 1;
-			      	xTmp.push(mainArr[this.x][i]);
-		      	}
-      	}
-      }*/
-	
+
+
+var Quicksort = (function() {
+	 
+	/**
+	* Swaps two values in the heap
+	*
+	* @param {int} indexA Index of the first item to be swapped
+	* @param {int} indexB Index of the second item to be swapped
+	*/
+	function swap(array, indexA, indexB) {
+	var temp = array[indexA];
+	array[indexA] = array[indexB];
+	array[indexB] = temp;
+	}
+	 
+	/**
+	* Partitions the (sub)array into values less than and greater
+	* than the pivot value
+	*
+	* @param {Array} array The target array
+	* @param {int} pivot The index of the pivot
+	* @param {int} left The index of the leftmost element
+	* @param {int} left The index of the rightmost element
+	*/
+	function partition(array, pivot, left, right) {
+	 
+	var storeIndex = left,
+	pivotValue = array[pivot];
+	 
+	// put the pivot on the right
+	swap(array, pivot, right);
+	 
+	// go through the rest
+	for(var v = left; v < right; v++) {
+	 
+	// if the value is less than the pivot's
+	// value put it to the left of the pivot
+	// point and move the pivot point along one
+	if(array[v] < pivotValue) {
+	swap(array, v, storeIndex);
+	storeIndex++;
+	}
+	}
+	 
+	// finally put the pivot in the correct place
+	swap(array, right, storeIndex);
+	 
+	return storeIndex;
+	}
+	 
+	/**
+	* Sorts the (sub-)array
+	*
+	* @param {Array} array The target array
+	* @param {int} left The index of the leftmost element, defaults 0
+	* @param {int} left The index of the rightmost element,
+	defaults array.length-1
+	*/
+	function sort(array, left, right) {
+	 
+	var pivot = null;
+	 
+	if(typeof left !== 'number') {
+	left = 0;
+	}
+	 
+	if(typeof right !== 'number') {
+	right = array.length - 1;
+	}
+	 
+	// effectively set our base
+	// case here. When left == right
+	// we'll stop
+	if(left < right) {
+	 
+	// pick a pivot between left and right
+	// and update it once we've partitioned
+	// the array to values < than or > than
+	// the pivot value
+	pivot = left + Math.ceil((right - left) * 0.5);
+	newPivot = partition(array, pivot, left, right);
+	 
+	// recursively sort to the left and right
+	sort(array, left, newPivot - 1);
+	sort(array, newPivot + 1, right);
+	}
+	 
+	}
+	 
+	return {
+	sort: sort
+	};
+	 
+	})();
+
+function setColor(colorArr){
 	//setColor(mainArr[this.color],i),
 	var cnt=0;
-	var mainValueArr = new Array();
-	var tmpColorArr = new Array();
+	  var sortedArr = make2DArr(colorArr.length);
+	
 	for(var i=0; i<colorArr.length; i++){		
-		if(i==0){
-			mainValueArr[cnt]=colorArr[0];
-			tmpColorArr[0]=0;
-			cnt++;
-		}
-		for(var j=0; j<cnt; j++){
-			if(colorArr[i]==mainValueArr[j]){
-				break;
-			}
-		}		
-		if(j==cnt){
-			mainValueArr[cnt]=colorArr[i];				
-			cnt++;
-			tmpColorArr[i]=cnt;
-		}else{
-			tmpColorArr[i]=cnt;
-		}
+	//	sortedArr[i] = colorArr[i];	
+		sortedArr[i][0] = parseFloat(colorArr[i]); //colorArr[i] value is now string, for sorting, we need to change it to number
+		sortedArr[i][1] = i;	
+		
 	}
-//alert(mainValueArr.length);
+	
+	//alert('1');
+	//Quicksort.sort(sortedArr);
+//	alert(sortedArr);
+//	Quicksort.sort(sortedArr);
+	
+	sortedArr.sort(
+			function(a,b){return a[0] - b[0];}
+	);	
+	
+	for(var i=0; i<colorArr.length; i++){	
+			document.write(sortedArr[i][0]+','+ sortedArr[i][1]+'</br>');
+			
+	}
+	
+	
+	//for(var i=0; i<colorArr.length; i++){		
+	//	alert(sortedArr[i][1]);
+	//}
+	
+	//sortedArr.sort();
+	//colorArr=quickSort(colorArr);	
+	//for(var i=0; i<colorArr.length; i++){	
+	//	document.write(sortedArr[i]+'</br>');
+//	}
+	//alert(mainArr[3]);
+	
+	//alert(sortedArr[0]);
+	//alert(sortedArr[1]);
+	
+	for(var i=0; i<sortedArr.length; i++){		
+		if(i==0){
+			mainValueArr[cnt]=sortedArr[0][0];
+			tmpColorArr[0]=0;//////////////////////
+			//cnt++;
+			//alert('i==0');
+		}else{
+			for(var j=0; j<(i); j++){
+				if(sortedArr[i][0]==sortedArr[j][0]){
+			//		alert('j'+j);
+				//	alert('j'+j+'tmp'+tmpColorArr[j]);
+					tmpColorArr[i]=tmpColorArr[j];//////////////////////
+					break;
+				}
+			}		
+		//	alert('j is : '+j+'cnt is '+cnt);
+			if(j==(i)){
+				//alert('j==cnt');
+				cnt++;
+				mainValueArr[cnt]=sortedArr[i][0];
+				tmpColorArr[i]=cnt;///////////////////////
+				
+			}else{
+			//	tmpColorArr[i]=cnt;//////////////////////
+			//	cnt++;
+			}
+		}
+//	alert('i : '+i+', tmpColorArr : '+tmpColorArr[i]+', cnt : '+cnt+', main : '+mainValueArr[cnt]);
+	}
+//	alert(cnt);
+//	alert(mainValueArr.length);
+	var reTmpColorArr = new Array(); // re assign
+	
+	var cccnt=0;
+	//alert(sortedArr[1][1]);
+	for(var i=0; i<sortedArr.length; i++){		// re assign
+		
+		reTmpColorArr[sortedArr[i][1]]=tmpColorArr[ i ]; ////////i iiiiiiiiiiiiiii
+		
+		  
+	}
+	
+	for(var i=0; i<sortedArr.length; i++){		// re assign
+		
+	//	alert(reTmpColorArr[i]);////////i iiiiiiiiiiiiiii
+	}
+//	alert(cccnt);
+	/*
+	reTmpColorArr[0]=tmpColorArr[0];
+	reTmpColorArr[1]=tmpColorArr[12];
+	reTmpColorArr[2]=tmpColorArr[30];
+	reTmpColorArr[11]=tmpColorArr[1];
+	reTmpColorArr[22]=tmpColorArr[2];
+	reTmpColorArr[33]=tmpColorArr[3];
+	*/
+	
+	
+	for(var i=0; i<sortedArr.length; i++){		//re re assign
+		tmpColorArr[i]=reTmpColorArr[i];		
+	//	alert(i+','+ tmpColorArr[i]);
+	}
+	
 	
 	if(mainValueArr.length<60){
+		colors = [	'#FF0000',  '#0000FF', '#FEFF00','#00FF00', '#FF7F00', '#7FFF00'	, '#FF00FE','#007FFF','#00FF7F','#00FFFE','#7F00FF',  '#FF007F',
+	              		'#ED7763', '#7762ED', '#D8ED62','#62ED76', '#EDBC62',  '#93ED62','#ED62D8','#6293ED', '#62EDBB' ,'#62D8ED',  '#BC62ED', '#ED6293',
+	              		'#BD6B70','#6B70BD','#BDB86B','#70BD6B','#BD8F6B','#98BD6B','#B86BBD','#6B99BD','#6BBD8F','#6BBDB8','#8F6BBD','#BD6B98',
+	              		'#FE5078','#5078FE','#FED650','#78FE50','#FE7F50','#CEFE50','#D550FE','#50CFFE','#50FE7E','#50FED5','#7F50FE','#FE50CE',
+	              		'#8B0000','#00008B','#8A8B00','#008B00','#8B4500','#458B00','#8B008A','#00458B','#008B45','#008B8A','#45008B','#8B0045'	];     
+						//red, blue,  yellow, green, orange,yellow green,   pink, white blue, dark green, sky, purple, hot pink
+	}else{
+		var rgbR = new Array();
+		var rgbG = new Array();
+		var rgbB = new Array();
+		
+		var startR=0;
+		var startG=128;
+		var startB=0;
+		var endR=0;
+		var endG=255;
+		var endB=0;
+		for(i = 0; i < mainValueArr.length; i++)
+		{
+			rgbR[i] =parseInt( startR + (i * (endR - startR)) / (mainValueArr.length-1) );
+			rgbG[i] =parseInt( startG + (i * (endG - startG)) / (mainValueArr.length-1) );
+			rgbB[i] =parseInt( startB + (i * (endB - startB)) / (mainValueArr.length-1) ); 
+			
+		//	alert(rgbR[i]+','+rgbG[i]+','+rgbB[i]);
+			//alert(colors);
+			colors[i] = 'rgb('+rgbR[i]+','+rgbG[i]+','+ rgbB[i]+')';
+	//	alert(colors[i]);
+		}
+	}
+	
+	//alert(mainValueArr.length);
+}
+function getColor(n){
+	if(mainValueArr.length<60){
 		var tmpColor='green';
-		var colors = [	'#FF0000', '#FF7F00','#FEFF00', '#7FFF00','#00FF00'	,'#00FF7F','#00FFFE', '#007FFF', '#0000FF', '#7F00FF', '#FF00FE', '#FF007F',
-		              		'#ED7763', '#EDBC62', '#D8ED62', '#93ED62','#62ED76', '#62EDBB' ,'#62D8ED', '#6293ED', '#7762ED', '#BC62ED','#ED62D8', '#ED6293',
-		              		'#BD6B70','#BD8F6B','#BDB86B','#98BD6B','#70BD6B','#6BBD8F','#6BBDB8','#6B99BD','#6B70BD','#8F6BBD','#B86BBD','#BD6B98',
-		              		'#FE5078','#FE7F50','#FED650','#CEFE50','#78FE50','#50FE7E','#50FED5','#50CFFE','#5078FE','#7F50FE','#D550FE','#FE50CE',
-		              		'#8B0000','#8B4500','#8A8B00','#458B00','#008B00','#008B45','#008B8A','#00458B','#00008B','#45008B','#8B008A','#8B0045'	];     
 		tmpColor= colors[tmpColorArr[n]];	
+		//alert(tmpColorArr[n]);
 		return tmpColor;
 		
 	}else{
-		var colors = new Array();
-		var R=0;
-		var G=128;
-		var B=0;
-		for(var i=0; i<mainValueArr.length; i++){
+		
+		var tmpColor='green';
+		//alert('1');
+		/*for(var i=0; i<mainValueArr.length; i++){
+			
 			R=R+i;
 			G=G+i;
 			B=B+i;
 			colors[i] = 'rgb('+R+','+G+','+ B+')';
-		}				
-		tmpColor= colors[tmpColorArr[n]];	
-		return tmpColor;
+		}				*/
+	//	alert(tmpColor);
 		
-	}
-	
-	
+		tmpColor= colors[tmpColorArr[n]];	
+		//tmpColor= 'rgb(0,128,0)';		
+	//	alert(tmpColor);
+	//	alert(tmpColor);
+		return tmpColor;		
+	}	
 }
+
+/*  if(isDiscrete[this.x] == true)
+  {
+  	var cnt = 0;
+  	var xTmp = new Array();
+  	var freqTmp = new Array();
+  	this.node = new Array();
+  	freqTmp[cnt] = 1;
+  	xTmp[cnt++] = mainArr[this.x][0];
+  	for(i = 1 ; i < mainArr[this.x].length ; i++)
+  	{
+      	for(j = 0 ; j < xTmp.length ; j ++)
+      	{
+	      	if(xTmp[j] == mainArr[this.x][i])
+	      	{
+		      	freqTmp[j] ++; 
+		      	break;
+	      	}	           	
+	    }
+	      	if(j == xTmp.length)
+	      	{
+		      	freqTmp[j] = 1;
+		      	xTmp.push(mainArr[this.x][i]);
+	      	}
+  	}
+  }*/

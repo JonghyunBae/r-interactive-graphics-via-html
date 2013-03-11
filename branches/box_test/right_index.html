@@ -20,7 +20,7 @@
     <script src="structure.js"></script>
     <script> 
 
-       //createMainStructure("Theoph-from-R.csv");         //mainArr = data, labelArr= column1
+  //     createMainStructure("Theoph-from-R.csv");         //mainArr = data, labelArr= column1
         createMainStructure("diamonds-from-R.csv"); 
         //////////////////Common variables///////////////////////////
         
@@ -216,16 +216,18 @@
             };
         }
     */
-    
+    var colors = new Array();
+    var mainValueArr = new Array();
+    var tmpColorArr = new Array();
         
       var hist01 = new Hist(mainArr, { bin: 0.5, x:'carat', width:300, height:300 });
        hist01.draw(1);
 //     var hist02 = new Hist(mainArr, {bin: 1, x:'price', width:200, height:200 });
 //     hist02.draw(2);
-       var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'cut', width:300, height:300 });
-       scatter01.draw(1);
-   //    var scatter02 = new Scatter(mainArr, {plotLength:5, radius:8, x:'carat', y:'count', width:400, height:400 });
-   //    scatter02.draw(2);
+       var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'price', width:300, height:300 });
+      scatter01.draw(1);
+      var scatter02 = new Scatter(mainArr, {plotLength:15, radius:1, x:'carat',y:'x', color:'cut',width:400, height:400 });
+       scatter02.draw(2);
    //    scatter02.update();
      //  alert('barWidth is '+hist01.barWidth);
  //   alert(hist01.plotXMargin-hist01.plotLength);

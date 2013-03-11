@@ -2612,7 +2612,7 @@ var Kinetic = {}; (function() {
         return no;
     };
     // add getters setters
-    Kinetic.Node.addGettersSetters(Kinetic.Node, ['x', 'y', 'opacity' , 'label', 'hasArr' , 'selected', 'hidden']);
+    Kinetic.Node.addGettersSetters(Kinetic.Node, ['x', 'y', 'opacity' ,'freq', 'label', 'hasArr' , 'selected', 'hidden']);
 
     /**
      * set x position

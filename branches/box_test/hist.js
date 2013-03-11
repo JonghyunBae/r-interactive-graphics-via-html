@@ -57,8 +57,8 @@ var Hist = {};
 	            	this.barGap = this.barWidth;
 	            	this.xMax = parseInt(this.width/this.barWidth);
 	            	this.yMax = findMaxValue(freqTmp,0);
-	            	this.xDiff = parseInt(this.xMax/5);
-	            	this.yDiff = parseInt(this.yMax/5);
+	            	this.xDiff = parseInt(this.xMax/2);
+	            	this.yDiff = parseInt(this.yMax/2);
 	           // 	alert("yMax " + this.yMax);	            	
 	            	//////////Make Data Structure of nodes and essential arrays////////
 	            	this.node = new Array();
@@ -105,7 +105,7 @@ var Hist = {};
 	            	}	            		
 	            	
 	            	this.yMax = findMaxValue(freqTmp,0); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
-	            	this.xDiff = parseInt(this.xMax/5);
+	            	this.xDiff = parseInt(this.xMax/3);
 	            	this.yDiff = parseInt(this.yMax/5);	        	
 	   
 					//////////Make Data Structure of nodes and essential arrays////////
@@ -149,7 +149,7 @@ var Hist = {};
                     y: this.plotYMargin-this.plotLength,
                     width: this.width+2*this.plotLength,
                     height: this.height+2*this.plotLength,
-                    stroke: 'white',
+                    stroke: '#eeeeee',
                     strokeWidth: 2
                 });                
                 this.plotLayer.add(this.plotRect);                
@@ -188,13 +188,13 @@ var Hist = {};
                     this.plotLayer.add(this.xLine[i]);               
                     this.xText[i] = new Kinetic.Text({
                         name : "xText"+i,
-                        x: this.plotXMargin+i*this.width/(this.xMax/this.xDiff)-15,
+                        x: this.plotXMargin+i*this.width/(this.xMax/this.xDiff)-30,
                         y: this.plotYMargin+this.height+this.plotLength*2,
                         text: i*this.xDiff,
                         fontSize: 15,
                         fontFamily: 'Calibri',
                         fill: 'black',
-                        width: 30,
+                        width: 60,
                         align: 'center'    
                     });          
                     this.plotLayer.add(this.xText[i]);            
@@ -214,12 +214,12 @@ var Hist = {};
                     this.plotLayer.add(this.yLine[i]);       
                     this.yText[i] = new Kinetic.Text({
                         x: this.plotXMargin-this.plotLength*2-15,
-                        y: this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff)+15,
+                        y: this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff)+30,
                         text: i*this.yDiff,
                         fontSize: 15,
                         fontFamily: 'Calibri',
                         fill: 'black',
-                        width: 30,
+                        width: 60,
                         align: 'center',
                         rotation: (Math.PI)*3/2
                     });           
@@ -228,20 +228,22 @@ var Hist = {};
                 this.xLabel = new Kinetic.Text({
                     name : 'xLabel',
                     x: this.plotXMargin+this.width/2,
-                    y: this.plotYMargin+this.height+4*this.plotLength,
+                    y: this.plotYMargin+this.height+5*this.plotLength,
                     offset : {x: labelArr[this.x].length/2 * 10, y:0},
                     text: labelArr[this.x],
                     fontSize: 15,
+                    fontStyle: 'bold',
                     fontFamily: 'Calibri',
                     fill: 'black',
                 });                                   
                 this.plotLayer.add(this.xLabel);
                 this.yLabel = new Kinetic.Text({
-                    x: this.plotXMargin-5*this.plotLength,
-                    y: this.plotYMargin+this.height/2  - 'Frequency'.length/2 * 5,
+                    x: this.plotXMargin-this.plotLength - 40,
+                    y: this.plotYMargin+this.height/2  - 15,
                     offset : {x: 'Frequency'.length/2 * 10},
                     text: 'Frequency',
                     fontSize: 15,
+                    fontStyle: 'bold',
                     fontFamily: 'Calibri',
                     fill: 'black',
                     rotation: (Math.PI)*3/2
@@ -250,7 +252,7 @@ var Hist = {};
                 this.mainLabel = new Kinetic.Text({
                     name : 'mainLabel',
                     x: this.plotXMargin+this.width/2, 
-                    y: this.plotYMargin *0.5 ,
+                    y: this.plotYMargin *0.3 ,
                     offset : {x: ('Histogram of ' + labelArr[this.x]).length/2 * 10, y:0},
                     text: 'Histogram of ' + labelArr[this.x],
                     fontSize: 20,

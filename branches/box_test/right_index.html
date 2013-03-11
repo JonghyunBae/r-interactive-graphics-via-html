@@ -35,215 +35,29 @@
     <script src="scatter.js"></script>
         <script>
         
-    /*
-        function setHistArr(xMax,yMax,xMain,plotWidth,plotHeight,bin)
-        {
-            var freq = new Array();
-            var height = new Array();
-            var midPointX = new Array();
-            var midPointY = new Array();
-            var selected = new Array();
-            var hidden = new Array();
-            
-            var cnt = 0;
-            var col = 0;
-            var histHasArr=make2DArr(parseInt(xMax/bin +1));
-            
-            for (var i=0; i<parseInt(xMax/bin ); i++)//tmpHistArr initialization
-            {
-                freq[i]=0;
-                height[i]=0;
-            }           
-            
-            for(cnt=0; cnt< parseInt(xMax/bin ); cnt++)//count how many data in certain range and save the value into freq array
-            {
-                for( var i = 0 ; i < xMain.length; i++)
-                {   
-                    if(xMain[i]>=cnt*bin && xMain[i]<(cnt+1)*bin)
-                    {
-                        freq[cnt]++;
-                        histHasArr[cnt][col] = i;
-                        col++;
-                    }
-                }
-                col = 0;
-            }           
-            
-            for (var i=0; i<parseInt(xMax/bin ); i++)//height array set
-            {               
-                var width= plotWidth / parseInt(xMax/bin); 
-                height[i]=freq[i]*plotHeight/yMax;
-                midPointX[i]= plotXMargin +  i * plotWidth / parseInt(xMax/bin) + width/2;
-                midPointY[i]=  plotYMargin + plotHeight - height[i]/2;
-                selected[i]=0;
-                hidden[i]=false;                
-            }           
-            
-            return {freq: freq, height: height, midPoint:{x:midPointX, y:midPointY}, selected: selected, hidden: hidden};
-        }
-        
-        
-        //hist environment variables        
-        var histX = 3; //[histX]th column data
-        var histXLabel = labelArr[histX];
-        var histXMain =  mainArr[histX];        
-        
-        var histPlotWidth = 500;
-        var histPlotHeight = 500;
-        
-        var histBin=2;
-        var histXMax=findMaxValue(histXMain,histBin); //나중에 max함수 추가해서 5단위로 잡게 만들기.
-        var histYMax=histFindMaxValue(histXMax,histXMain,histBin);
-        var histXDiff=parseInt(histXMax/5);//나중에 자동으로 잡아주기.
-        var histYDiff=parseInt(histYMax/5);                 
-        
-        //alert(histXMax+','+histYMax+','+histXDiff+','+histYDiff+','+histXMain);               
-        var histFreqArr = new Array();
-        var histHeightArr = new Array();
-        var histMidPointArr = new Array();
-        var histSelectedArr = new Array();
-        var histHiddenArr = new Array();
-        
-        var histFreqArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).freq;    
-        var histHeightArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).height;
-        var histMidPointArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).midPoint;    
-        var histSelectedArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).selected;
-        var histHiddenArr = setHistArr(histXMax, histYMax, histXMain, histPlotWidth, histPlotHeight, histBin).hidden;    
-        
-        
-        //////////////////////////////////////histStage Start//////////////////////////////////////
-        var histStage = new Kinetic.Stage({         
-            container: 'histContainer',         
-            width: plotWidth+plotXMargin*2,
-            height: plotHeight+plotYMargin*2 
-        });
-            
-//////////////////////////////////////Drawing histPlot Start//////////////////////////////////////
-        var histPlotLayer = new Kinetic.Layer();
-
-        function drawBaseRect(color, layer)//Put base layer
-        {
-            var plotRect = new Kinetic.Rect({
-                name : "baseRect",
-                x: plotXMargin-plotLength,
-                y: plotYMargin-plotLength,
-                width: plotWidth+2*plotLength,
-                height: plotHeight+2*plotLength,
-                stroke: color,
-                strokeWidth: 2
-            });
-            layer.add(plotRect);
-        }
-        
-        drawBaseRect('white', histPlotLayer);
-        
-        
-        var histXAxis = new Kinetic.Line({
-            name: 'histXAxis',
-            points: [plotXMargin, plotYMargin+plotHeight+plotLength, plotXMargin+parseInt(histXMax/histXDiff)*plotWidth/(histXMax/histXDiff),  plotYMargin+plotHeight+plotLength],
-            stroke: 'black',
-            strokeWidth: 2,          
-        });
-        var histYAxis = new Kinetic.Line({
-            points: [plotXMargin-plotLength, plotYMargin+plotHeight-parseInt(histYMax/histYDiff)*plotHeight/(histYMax/histYDiff) ,plotXMargin-plotLength,  plotYMargin+plotHeight],
-            stroke: 'black',
-            strokeWidth: 2,          
-        });
-        histPlotLayer.add(histXAxis);
-        histPlotLayer.add(histYAxis);
-        histStage.add(histPlotLayer);
-        histPlotLayer.on('mouseover mousemove dragmove', function(evt){  
-            document.body.style.cursor = "default";
-        });
-*/
-        //////////////////////////////////////Drawing histPlot End//////////////////////////////////////
-         
     
-    /*
-    (function() {
-        Hist = function(config) {
-            this._initHist(config);
-            
-        };
     
-        Hist.prototype = {
-            _initStage: function(config) {
-                //var dd = Kinetic.DD;
-                this.setDefaultAttrs({
-                    width: 400,
-                    height: 200
-                }); 
-            },              
-            setDefaultAttrs: function(config) {
-                // create attrs object if undefined
-                if(this.attrs === undefined) {
-                    this.attrs = {};
-                }
-                if(config) {
-                    for(var key in config) {
-                        
-                        if(this.attrs[key] === undefined) {
-                            this.attrs[key] = config[key];
-                        }
-                    }
-                }
-            },
-            draw: function(){
-                alert('hist is drawn');
-            };
-    })();
-    */
-/*
-        function Hist(mainArr, optionObj){ //hist constructor 
-            if(optionObj.width== undefined){
-                this.width = 300;
-            }else{
-                this.width = optionObj.width;
-            }           
-            //this.width = optionObj.width;
-        //  this.height = optionObj.width;
-            this._initHist(optionObj);
-            
-            for(var option in optionObj){
-                        
-                if(optionObj.hasOwnProperty(option)){
-                    this[option] = optionObj[option];
-                }               
-            }
-            
-            this.draw=function(){
-                alert('hist is drawn');
-            };
-        }
-    */
-    var colors = new Array();
-    var mainValueArr = new Array();
-    var tmpColorArr = new Array();
         
-      var hist01 = new Hist(mainArr, { bin: 0.5, x:'carat', width:300, height:300 });
+   /*   var hist01 = new Hist(mainArr, { bin: 0.5, x:'time', width:300, height:300 });
        hist01.draw(1);
 //     var hist02 = new Hist(mainArr, {bin: 1, x:'price', width:200, height:200 });
 //     hist02.draw(2);
-       var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'price', width:300, height:300 });
+       var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'time', width:300, height:300 });
       scatter01.draw(1);
-      var scatter02 = new Scatter(mainArr, {plotLength:15, radius:1, x:'carat',y:'x', color:'cut',width:400, height:400 });
+      var scatter02 = new Scatter(mainArr, {plotLength:15, radius:5, x:'time',y:'conc', color:'subject' });
        scatter02.draw(2);
-   //    scatter02.update();
-     //  alert('barWidth is '+hist01.barWidth);
- //   alert(hist01.plotXMargin-hist01.plotLength);
-     
-   //    alert('height is '+hist01.histArr.length);
-      // alert('height is '+hist01.histArr.hasArr);
-     //  hist01.draw();
-    //  hist01.update();
-    //  hist01.doIt();
-    //  alert('hist01.hasOwnProperty[width]: '+ hist01.hasOwnProperty('width'));
-    //  alert('hist01.hasOwnProperty[x]: '+ hist01.hasOwnProperty('x'));
-        
-    //  alert('plotXMargin is '+hist01.plotXMargin+', height is '+hist01.height);
-        
-        
-        
+        */
+       
+       var hist01 = new Hist(mainArr, { bin: 0.5, x:'carat', width:300, height:300 });
+        hist01.draw(1);
+      var hist02 = new Hist(mainArr, {bin: 1, x:'cut', width:200, height:200 });
+     hist02.draw(2);
+        var scatter01 = new Scatter(mainArr, {x:'price', y:'carat', color:'carat', width:300, height:300 });
+       scatter01.draw(1);
+       var scatter02 = new Scatter(mainArr, { radius:5, x:'price',y:'x', color:'x' });
+        scatter02.draw(2);
+         
+       
     </script>
     
     

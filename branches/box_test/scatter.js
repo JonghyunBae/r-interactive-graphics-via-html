@@ -55,10 +55,10 @@ var Scatter = {};
 	            }
 	            this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
 	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
-	            this.xMax = scatterFindMaxValue(mainArr[this.x]);	            
-	            this.yMax = scatterFindMaxValue(mainArr[this.y]);
-	            this.xMin = scatterFindMinValue(mainArr[this.x]);	            
-	            this.yMin = scatterFindMinValue(mainArr[this.y]);
+	            this.xMax = findMaxValue(mainArr[this.x]);	            
+	            this.yMax = findMaxValue(mainArr[this.y]);
+	            this.xMin = findMinValue(mainArr[this.x]);	            
+	            this.yMin = findMinValue(mainArr[this.y]);
 	            this.xTickRange = (this.xMax - this.xMin)/this.xTick;
 	            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
 	      
@@ -69,31 +69,8 @@ var Scatter = {};
 	           
 	         //   alert( Math.pow(10,x));
 	        //    alert('before:'+this.xTickRange/Math.pow(10,x));
-	            if(this.xTickRange/Math.pow(10,x) < 0.1){this.xTickRange = 0.1 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.2){this.xTickRange = 0.2 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.25){this.xTickRange = 0.25 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.3){this.xTickRange = 0.3 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.4){this.xTickRange = 0.4 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.5){this.xTickRange = 0.5 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.6){this.xTickRange = 0.6 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.7){this.xTickRange = 0.7 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.75){this.xTickRange = 0.75 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.8){this.xTickRange = 0.8 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 0.9){this.xTickRange = 0.9 * Math.pow(10,x); }
-	            else if(this.xTickRange/Math.pow(10,x) <= 1.0){this.xTickRange = 1.0 * Math.pow(10,x); }
-	     //       alert('before:'+this.yTickRange); 
-	            if(this.yTickRange/Math.pow(10,y) < 0.1){this.yTickRange = 0.1 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.2){this.yTickRange = 0.2 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.25){this.yTickRange = 0.25 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.3){this.yTickRange = 0.3 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.4){this.yTickRange = 0.4 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.5){this.yTickRange = 0.5 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.6){this.yTickRange = 0.6 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.7){this.yTickRange = 0.7 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.75){this.yTickRange = 0.75 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.8){this.yTickRange = 0.8 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 0.9){this.yTickRange = 0.9 * Math.pow(10,y); }
-	            else if(this.yTickRange/Math.pow(10,y) <= 1.0){this.yTickRange = 1.0 * Math.pow(10,y); }
+	            this.xTickRange = setTickRange(x, this.xTickRange);
+	            this.yTickRange = setTickRange(y, this.yTickRange);
 	    //        alert('after:'+this.yTickRange);
 	            /*0.1 -> 0.1
 	            <= 0.2 -> 0.2
@@ -293,30 +270,7 @@ var Scatter = {};
 	};
 })();
 
-function scatterFindMaxValue(Data)
-{
-	var maxValue=Data[0];
-	for(var i=1; i<Data.length; i++)
-	{
-		if(Data[i]>maxValue)
-		{
-			maxValue=Data[i];					
-		}
-	}
-	return maxValue;
-}
-function scatterFindMinValue(Data)
-{
-	var minValue=Data[0];
-	for(var i=1; i<Data.length; i++)
-	{
-		if(Data[i]<minValue)
-		{
-			minValue=Data[i];					
-		}
-	}
-	return minValue;
-}
+
 
 
 

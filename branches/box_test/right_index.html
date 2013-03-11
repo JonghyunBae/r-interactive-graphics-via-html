@@ -18,7 +18,10 @@
     <!-- <div id="scatterContainer" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; " oncontextmenu="return false;"></div>  -->
     <script src="kinetic-v4.3.1.js"></script>
     <script src="structure.js"></script>
+    <script src="common.js"></script>
     <script> 
+
+
 
   //     createMainStructure("Theoph-from-R.csv");         //mainArr = data, labelArr= column1
         createMainStructure("diamonds-from-R.csv"); 
@@ -48,7 +51,7 @@
        scatter02.draw(2);
         */
        
-       var hist01 = new Hist(mainArr, { bin: 0.5	, x:'cut', width:300, height:300 });
+       var hist01 = new Hist(mainArr, { bin: 200	, x:'price', width:300, height:300 });
         hist01.draw(1);
  //     var hist02 = new Hist(mainArr, { x:'cut', width:200, height:300 });
     // hist02.draw(2);

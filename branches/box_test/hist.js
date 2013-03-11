@@ -81,15 +81,18 @@ var Hist = {};
 	            	
 	            	
 	            }else{
-	            	this.xMax = findMaxValue(mainArr[this.x],0);			// xMax를 먼저 구해야 barwidth를 구해줄 수 있다. 
+	            	
+	            	this.xMax = findMaxValue(mainArr[this.x]);			// xMax를 먼저 구해야 barwidth를 구해줄 수 있다. 
+	            	this.xMin = findMinValue(mainArr[this.x]);
 	            	if(this.bin > this.xMax){ this.xMax = this.bin};
-	            	this.barWidth = this.width /parseInt(this.xMax/this.bin); // 일단 barGap은 여기엔 넣지 않음. .
+	            	this.barWidth = this.width /(parseInt(this.xMax/this.bin) + 1); // 일단 barGap은 여기엔 넣지 않음. .
 	            	this.barGap = optionObj.barGap || 0;
-	            	var xTmp = new Array(parseInt(this.xMax/this.bin));  // 수직선에 찍히는 이름 저장할 꺼 -> 여기서는 bin
-	            	var freqTmp = new Array(parseInt(this.xMax/this.bin)); // frequency 저장 
-	            	var hasTmp = make2DArr(mainArr[this.x].length);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
+	            	var xTmp = new Array(parseInt(this.xMax/this.bin)+1);  // 수직선에 찍히는 이름 저장할 꺼 -> 여기서는 bin
+	            	var freqTmp = new Array(parseInt(this.xMax/this.bin)+1); // frequency 저장 
+	            	var hasTmp = make2DArr(parseInt(this.xMax/this.bin)+1);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
 	            	var countTmp = 0;	         
-	            	var cnt = 0;	            	
+	            	var cnt = 0;	            
+	            	
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
 	            		freqTmp[i] = 0;  // frequency 저장할꺼 초기화 
@@ -102,14 +105,13 @@ var Hist = {};
 	            		freqTmp[countTmp] ++ ; // 해당배열 frequency 하나씩 늘려주고 
 	            		hasTmp[countTmp].push(i); // hasarray에 저장해준다.
 	            	}	            		
-	            	
 	            	this.firstNode = 0;  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
 	            	this.lastNode = freqTmp.length-1; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
 	            }            			
 
-	            this.yMax = findMaxValue(freqTmp,0); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
-	            this.xDiff = parseInt(this.xMax/3);
-            	this.yDiff = parseInt(this.yMax/5);	   
+	            this.yMax = findMaxValue(freqTmp); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
+	            this.yMin = 0;
+	            	   
             	
             	 //////////Make Data Structure of nodes and essential arrays////////            	
             	this.node = new Array();            	
@@ -180,6 +182,11 @@ var Hist = {};
                 this.xLine = new Array();
                 this.xText = new Array();
                
+                ///////////////////////////////////////////
+                this.xDiff = parseInt(this.xMax/3);
+            	this.yDiff = parseInt(this.yMax/5);
+            	/////////////////////////////////////////
+            	
                 if(isDiscrete[this.x] == true)
                 {
                 	for(var i = 0 ; i < this.node.length ; i ++)
@@ -210,7 +217,7 @@ var Hist = {};
 	                    this.plotLayer.add(this.xText[i]);
                 	}
                 	
-                }else{
+                }else{  ////////////////////////sssabja //////////////////
                 	
                 	for(var i = 0 ; i < this.node.length ; i ++)
                     {
@@ -253,7 +260,7 @@ var Hist = {};
                         name : "xText"+i,
                         x: this.node[i-1].getX() - this.node[i-1].getOffset().x-30 + this.node[i-1].getWidth(),
                         y: this.plotYMargin+this.height+this.plotLength*2,
-                        text: this.node[i-1].getLabel(), ///////////////////////////////////////////
+                        text: parseFloat(this.node[i-1].getLabel())+this.bin, ///////////////////////////////////////////
                         fontSize: 15,
                         fontFamily: 'Calibri',
                         fill: 'black',
@@ -347,59 +354,3 @@ var Hist = {};
 			}
 	};
 })();
-
-
-function findMaxValue(Data,bin)
-{
-	var maxValue=Data[0];
-
-	var returnValue;
-	for(var i=1; i<Data.length; i++)
-	{
-	//	document.write(maxValue + ", " +  Data[i] + "<br>");
-		if(Data[i]>maxValue)
-		{
-//					document.write("dddddddddddddd");
-			maxValue=Data[i];					
-		}
-//				document.write(maxValue + ", " +  Data[i] + "<br>");
-	}
-	returnValue=parseInt(maxValue+1);	
-	for(var i=0; i<bin; i++) //until mod ==0
-	{
-		returnValue=returnValue+i;
-		if((returnValue% bin) == 0)
-		{
-			break;
-		}				
-	}	
-	return returnValue;
-}
-function histFindMaxValue(xMaxHist, xData,bin)
-{
-	var maxValue=0;
-	var tmpHistArr = new Array();
-	var cnt=0;
-	for (var i=0; i<parseInt(xMaxHist/bin +1); i++)//tmpHistArr initialization
-	{
-		tmpHistArr[i]=0;
-	}			
-	for(cnt=0; cnt< parseInt(xMaxHist/bin +1); cnt++)
-	{
-		for( var i = 0 ; i < xData.length; i++)
-		{	
-			if(xData[i]>=cnt*bin && xData[i]<(cnt+1)*bin)
-			{
-				tmpHistArr[cnt]++;
-			}
-		}
-	}
-	for(var i=0; i<parseInt(xMaxHist/bin +1); i++)
-	{
-		if(tmpHistArr[i]>maxValue)
-		{
-			maxValue=tmpHistArr[i];					
-		}
-	}	
-	return maxValue;
-}

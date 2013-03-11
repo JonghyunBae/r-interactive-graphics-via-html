@@ -93,6 +93,8 @@ var Hist = {};
 	            	var countTmp = 0;	         
 	            	var cnt = 0;	            
 	            	
+	            	
+	            	
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
 	            		freqTmp[i] = 0;  // frequency 저장할꺼 초기화 
@@ -107,11 +109,20 @@ var Hist = {};
 	            	}	            		
 	            	this.firstNode = 0;  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
 	            	this.lastNode = freqTmp.length-1; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
+	            	
+	            	this.maxFreq =  findMaxValue(freqTmp);	            	
+	            	this.maxNode =0;
+	                for(var cnt = 0; cnt<  this.xTmpLength ; cnt++)
+	             	{
+	                 	if(this.node[cnt].getFreq()>maxFreq){
+	                 		this.maxNode=cnt;
+	                 	}                	
+	             	}	            	
 	            }            			
 
 	            this.yMax = findMaxValue(freqTmp); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
 	            this.yMin = 0;
-	            	   
+	              
             	
             	 //////////Make Data Structure of nodes and essential arrays////////            	
             	this.node = new Array();            	
@@ -135,7 +146,26 @@ var Hist = {};
 					});
             	}
             	
+            	
 	           
+            	 this.xTmpLength=xTmp.length;	
+           // 	this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
+ 	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
+ 	         	
+ 	     //       this.xTickRange = (this.xMax - this.xMin)/this.xTick;
+ 	            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
+ 	           
+ 	    //       var x = Math.ceil( Math.log(this.xTickRange) / Math.log(10));
+	            var y = Math.ceil( Math.log(this.yTickRange) / Math.log(10));
+	    //        this.xTickRange = setTickRange(x, this.xTickRange);
+	            this.yTickRange = setTickRange(y, this.yTickRange);
+	    //        this.xMax = this.xTickRange * Math.round(1+this.xMax/this.xTickRange);            
+	            this.yMax = this.yTickRange * Math.round(this.yMax/this.yTickRange);           
+	     //       this.xMin = this.xTickRange * Math.round(this.xMin/this.xTickRange);           	            
+	            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);   
+	    //    	this.xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
+	    	//	this.yDiff = (parseInt(this.yMax/this.yTick)<1)?1:parseInt(this.yMax/this.yTick); //5 should be selected automatically later
+            	
 	        },				
 			doIt: function() { 
 				alert('do it'); 
@@ -170,22 +200,22 @@ var Hist = {};
                 });
                 
                 this.plotLayer.add(this.xAxis);
+                //////////////////////////////chungha/////////////////////////////////
+               
                 this.yAxis = new Kinetic.Line({
                     points: [    this.plotXMargin-this.plotLength, 
-                                 this.plotYMargin+this.height-parseInt(this.yMax/this.yDiff)*this.height/(this.yMax/this.yDiff),
+                                 this.plotYMargin+this.height-this.node[this.maxNode].getHeight(),
                                  this.plotXMargin-this.plotLength,  
                                  this.plotYMargin+this.height],
                     stroke: 'black',
                     strokeWidth: 2             
                 });                                
-                this.plotLayer.add(this.yAxis);        
+                this.plotLayer.add(this.yAxis);
+//////////////////////////////chungha/////////////////////////////////
                 this.xLine = new Array();
                 this.xText = new Array();
                
-                ///////////////////////////////////////////
-                this.xDiff = parseInt(this.xMax/3);
-            	this.yDiff = parseInt(this.yMax/5);
-            	/////////////////////////////////////////
+              
             	
                 if(isDiscrete[this.x] == true)
                 {
@@ -217,8 +247,8 @@ var Hist = {};
 	                    this.plotLayer.add(this.xText[i]);
                 	}
                 	
-                }else{  ////////////////////////sssabja //////////////////
-                	
+                }else{  
+             
                 	for(var i = 0 ; i < this.node.length ; i ++)
                     {
                         this.xLine[i] = new Kinetic.Line({
@@ -273,21 +303,33 @@ var Hist = {};
                 
                 this.yLine = new Array();
                 this.yText = new Array();
-                for(var i=0; i<parseInt(this.yMax/this.yDiff)+1; i++)
+                
+                
+               // this.yTickRange
+                var maxFreq=0;
+                var maxNode=0;
+                for(var cnt = 0; cnt<  this.xTmpLength ; cnt++)
+            	{
+                	if(this.node[cnt].getFreq()>maxFreq){
+                		maxFreq=this.node[cnt].getFreq();
+                		maxNode=cnt;
+                	}                	
+            	}
+                for(var i=0; i<parseInt(this.yTick); i++)
                 {
                     this.yLine[i] = new Kinetic.Line({
                         points: [    this.plotXMargin-this.plotLength, 
-                                     this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff) , 
+                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.maxFreq, 
                                      this.plotXMargin-2*this.plotLength,
-                                     this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff)],
+                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.maxFreq],
                         stroke: 'black',
                         strokeWidth: 2,             
                     });
                     this.plotLayer.add(this.yLine[i]);       
                     this.yText[i] = new Kinetic.Text({
                         x: this.plotXMargin-this.plotLength*2-15,
-                        y: this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff)+30,
-                        text: i*this.yDiff,
+                        y: this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.maxFreq+30,
+                        text: i*this.yTickRange,
                         fontSize: 15,
                         fontFamily: 'Calibri',
                         fill: 'black',

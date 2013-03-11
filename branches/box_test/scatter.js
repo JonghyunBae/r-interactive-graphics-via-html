@@ -53,10 +53,86 @@ var Scatter = {};
 					var mainValueArrLength = tmpSetColor.mainValueArrLength;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
+	            this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
+	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
 	            this.xMax = scatterFindMaxValue(mainArr[this.x]);	            
 	            this.yMax = scatterFindMaxValue(mainArr[this.y]);
-	        	this.xDiff = parseInt(this.xMax/5);//5 should be selected automatically later
-	    		this.yDiff = parseInt(this.yMax/3); //5 should be selected automatically later
+	            this.xMin = scatterFindMinValue(mainArr[this.x]);	            
+	            this.yMin = scatterFindMinValue(mainArr[this.y]);
+	            this.xTickRange = (this.xMax - this.xMin)/this.xTick;
+	            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
+	      
+	            
+	            var x = Math.ceil( Math.log(this.xTickRange) / Math.log(10));
+	            var y = Math.ceil( Math.log(this.yTickRange) / Math.log(10));
+	            
+	           
+	         //   alert( Math.pow(10,x));
+	        //    alert('before:'+this.xTickRange/Math.pow(10,x));
+	            if(this.xTickRange/Math.pow(10,x) < 0.1){this.xTickRange = 0.1 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.2){this.xTickRange = 0.2 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.25){this.xTickRange = 0.25 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.3){this.xTickRange = 0.3 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.4){this.xTickRange = 0.4 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.5){this.xTickRange = 0.5 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.6){this.xTickRange = 0.6 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.7){this.xTickRange = 0.7 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.75){this.xTickRange = 0.75 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.8){this.xTickRange = 0.8 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 0.9){this.xTickRange = 0.9 * Math.pow(10,x); }
+	            else if(this.xTickRange/Math.pow(10,x) <= 1.0){this.xTickRange = 1.0 * Math.pow(10,x); }
+	     //       alert('before:'+this.yTickRange); 
+	            if(this.yTickRange/Math.pow(10,y) < 0.1){this.yTickRange = 0.1 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.2){this.yTickRange = 0.2 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.25){this.yTickRange = 0.25 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.3){this.yTickRange = 0.3 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.4){this.yTickRange = 0.4 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.5){this.yTickRange = 0.5 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.6){this.yTickRange = 0.6 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.7){this.yTickRange = 0.7 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.75){this.yTickRange = 0.75 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.8){this.yTickRange = 0.8 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 0.9){this.yTickRange = 0.9 * Math.pow(10,y); }
+	            else if(this.yTickRange/Math.pow(10,y) <= 1.0){this.yTickRange = 1.0 * Math.pow(10,y); }
+	    //        alert('after:'+this.yTickRange);
+	            /*0.1 -> 0.1
+	            <= 0.2 -> 0.2
+	            <= 0.25 -> 0.25
+	            <= 0.3 -> 0.3
+	            <= 0.4 -> 0.4
+	            <= 0.5 -> 0.5
+	            <= 0.6 -> 0.6
+	            <= 0.7 -> 0.7
+	            <= 0.75 -> 0.75
+	            <= 0.8 -> 0.8
+	            <= 0.9 -> 0.9
+	            <= 1.0 -> 1.0
+	             */
+	            
+	       //     alert(this.yMax+','+this.yMin);
+	            
+	            this.xMax = this.xTickRange * Math.round(1+this.xMax/this.xTickRange);            
+	            this.yMax = this.yTickRange * Math.round(1+this.yMax/this.yTickRange);           
+	            this.xMin = this.xTickRange * Math.round(this.xMin/this.xTickRange);           	            
+	            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);           
+
+	         //   alert(this.xMax+','+this.xMin);
+	        //    alert(this.yMax+','+this.yMin);
+	            
+	            
+	          /*  lower bound = 15
+	            upper bound = 234
+	            range = 234-15 = 219
+	            tick range = 21.9. This should be 25.0
+	            new lower bound = 25 * round(15/25) = 0
+	            new upper bound = 25 * round(1+235/25) = 250*/
+	           
+	            
+	       //     alert(this.xMin+','+this.yMin);
+	            
+	        	this.xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
+	    		this.yDiff = (parseInt(this.yMax/this.yTick)<1)?1:parseInt(this.yMax/this.yTick); //5 should be selected automatically later
+	    		
 	    		//////////Make Data Structure of nodes and essential arrays////////
 				this.node = new Array();			
 				for(var i = 0; i < mainArr[this.x].length ; i++)
@@ -227,8 +303,21 @@ function scatterFindMaxValue(Data)
 			maxValue=Data[i];					
 		}
 	}
-	return parseInt(maxValue+1);
+	return maxValue;
 }
+function scatterFindMinValue(Data)
+{
+	var minValue=Data[0];
+	for(var i=1; i<Data.length; i++)
+	{
+		if(Data[i]<minValue)
+		{
+			minValue=Data[i];					
+		}
+	}
+	return minValue;
+}
+
 
 
 

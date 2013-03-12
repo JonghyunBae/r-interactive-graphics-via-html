@@ -34,8 +34,7 @@ var Scatter = {};
 	            	if(i==labelArr.length-1){
 	            		alert('retype y label');
 	            	}
-	            }	  
-	           
+	            }
 	            if(optionObj.color==undefined){
 	            	this.color=-1; //default color
 	            }else{
@@ -51,10 +50,10 @@ var Scatter = {};
 	  	            }	
         			var tmpSetColor =  setColor(mainArr[this.color]);
     				var colors = tmpSetColor.colors;
-					var mainValueArrLength = tmpSetColor.mainValueArrLength;
+					var mainValueArr = tmpSetColor.mainValueArr;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
-	            }	      
-	           
+	            }
+	         
 	    		if(isDiscrete[this.x] == true)
 	    		{
 	    			var nodeX = new Array(mainArr[this.x].length); // discrete data일 경우 node 점의 좌표가 고정 되야 하므로 저장할 배열 선언 
@@ -169,7 +168,7 @@ var Scatter = {};
 						x: (isDiscrete[this.x] == true) ?  nodeX[i] : mainArr[this.x][i]*(this.width/this.xMax)+this.plotXMargin,
 						y: (isDiscrete[this.y] == true) ? nodeY[i] : mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin + 2*( this.height/2+this.plotYMargin-(mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin) ),
 						radius: this.radius,
-						fill: (this.color==-1)?('green'):getColor(i,colors, mainValueArrLength, tmpColorArr),
+						fill: (this.color==-1)?('green'):getColor(i,colors, mainValueArr, tmpColorArr),
 						stroke : 'black',
 						strokeWidth : 0.01,
 						opacity : 1,
@@ -178,19 +177,144 @@ var Scatter = {};
 						selected : 0
 					});				
 				}
-	           
-	            
+           	 //////////Make Legend////////
+	            if(optionObj.legend!=undefined){
+	            	this.legend=optionObj.legend;
+	            	var legendX = 0;
+					var legendY = 0;
+	            	if (this.legend == 'topright' || this.legend == 'right')	{
+	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
+	            		legendY = this.plotYMargin-this.plotLength;
+	            	}else if(this.legend == 'topleft' ||this.legend == 'left'){
+	            		legendX = this.plotXMargin-this.plotLength;
+	            		legendY = this.plotYMargin-this.plotLength;
+	            	}else{						// default is center right
+	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
+	            		legendY = this.plotYMargin-this.plotLength;
+	            	}
+	            	if(mainValueArr.length<24){
+		            	this.legendNode = new Array();	
+		            	this.legendText = new Array();	
+						for(var i = 0; i < mainValueArr.length ; i++)
+						{						
+							this.legendNode[i] = new Kinetic.Circle({
+								x: legendX+15,
+								y: legendY+15*i+11,
+								radius: this.radius,
+								fill: (this.color==-1)?('green'):getLegendColor(i, colors, mainValueArr)
+							});				
+							this.legendText[i] = new Kinetic.Text({
+								x: legendX+20,
+						        y: legendY+15*i,
+								text: (this.color==-1)?('green'):mainValueArr[i],
+								fontFamily: 'Calibri',
+								fontSize: 13,
+								padding: 5,
+								fill: 'black',
+								align:'center'
+							});						
+						}		
+						var maxLengthLegendText = this.legendText[0].getWidth();
+						for(var i=0; i<mainValueArr.length; i++)
+						{
+							if(this.legendText[i].getWidth()>maxLengthLegendText)
+							{
+								maxLengthLegendText=this.legendText[i].getWidth();
+							}						
+						}					
+						this.legendRect= new Kinetic.Rect({
+							x:legendX,
+							y:legendY,
+							width: maxLengthLegendText + 30,
+							height: this.legendText[mainValueArr.length-1].getY()-30,
+							stroke: 'black',
+							fill: '#eeeeee'
+						});		
+	            	}else{
+	            		var legendTick= 5; //default legend ticks is 5        	            
+			            this.legendMax = findMaxValue(mainArr[this.color]);		
+			            var legendMin = findMinValue(mainArr[this.color]);			 
+			            var legendTickRange = (this.legendMax - legendMin)/legendTick;	
+			            legendTickRange = setTickRange( Math.ceil( Math.log(legendTickRange) / Math.log(10)) , legendTickRange);
+			            this.legendMax = legendTickRange * Math.round(1+this.legendMax/legendTickRange);     			                       	                       
+			    		var legendDiff = (parseInt(this.legendMax/legendTick)<1)?1:parseInt(this.legendMax/legendTick); //5 should be selected automatically later
+			        	//var diff = this.height / legendTick;			    		
+			        	this.legendPlotArr = make2DArr(legendTick);		        	
+		    			for(var i = 0 ; i < this.legendPlotArr.length ; i ++)
+		    			{
+		    			//	this.legendPlotArr[i][0] = i*diff;
+		    				this.legendPlotArr[i][1] = i*legendDiff;
+		    			}		    	
+	            		this.legendNode = new Array();	
+		            	this.legendText = new Array();	
+		            	for(var i = 0; i < this.legendPlotArr.length-1 ; i++)
+						{						
+								
+							this.legendText[i] = new Kinetic.Text({
+								x: legendX+30,
+						        y: legendY+20*i+30,
+								text: '- '+this.legendPlotArr[ (this.legendPlotArr.length-2)-i ][1],
+								fontFamily: 'Calibri',
+								fontSize: 13,
+								padding: 5,
+								fill: 'black',
+								align:'center'
+							});						
+						}		
+		            	this.legendNode[0] = new Kinetic.Rect({
+							x: legendX+15,
+							y: 156- 20*(findMaxValue(mainArr[this.color]))/legendDiff,
+							width :20,
+							height :  20*(findMaxValue(mainArr[this.color]))/legendDiff,
+							fillLinearGradientStartPoint: [0, 0],
+					        fillLinearGradientEndPoint: [0, 20*(findMaxValue(mainArr[this.color])-findMinValue(mainArr[this.color]))/legendDiff],
+					        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],								
+						});			
+		            	
+						var maxLengthLegendText = this.legendText[0].getWidth();
+						
+						for(var i=0; i<this.legendPlotArr.length-1; i++)
+						{
+							if(this.legendText[i].getWidth()>maxLengthLegendText)
+							{
+								maxLengthLegendText=this.legendText[i].getWidth();
+							}						
+						}				
+						this.legendRect= new Kinetic.Rect({
+							x:legendX,
+							y:legendY,
+							width: maxLengthLegendText + 40,
+							height:  this.legendText[this.legendPlotArr.length-2].getY()-30,
+							stroke: 'black',
+							fill: '#eeeeee'
+						});	
+	            	}
+	            }//legend end
+				
+				
+				
+				
+				
+				
+				
+				
     		},
 			doIt: function() { 
 				alert('do it'); 
 			},
 			draw: function(id){	
 				//draw plot
+				
+				
 				this.stage = new Kinetic.Stage({            
 					container: 'scatterContainer'+id,            
-					width: this.width+this.plotXMargin*2,
+					width: (this.legend==undefined)?(this.width+this.plotXMargin*2):(this.width+this.plotXMargin*2+this.legendRect.getWidth()),
+					
+					
 					height: this.height+this.plotYMargin*2 
 				});
+				
+				
 				this.plotLayer = new Kinetic.Layer();
 				this.plotRect = new Kinetic.Rect({
 					name : "baseRect",
@@ -307,6 +431,34 @@ var Scatter = {};
 				this.stage.add(this.dataLayer);
 				//alert(this.node[0].getHasArr());
 				
+				//draw legend
+				if(this.legend!=undefined){
+					this.legendLayer = new Kinetic.Layer({name:'legendLayer', draggable:true});
+					this.legendLayer.on('mouseover', function(evt){  
+						document.body.style.cursor = "pointer";
+					}); 
+					this.legendLayer.add(this.legendRect);
+					
+				//	var mainValueArr =  setColor(mainArr[this.color]).mainValueArr;
+				//	if(mainValueArr.length<24){	
+						for(var i = 0; i < this.legendNode.length; i++) 
+						{
+							this.legendLayer.add(this.legendNode[i]);
+						}
+						for(var i = 0; i < this.legendText.length; i++) 
+						{
+							this.legendLayer.add(this.legendText[i]);
+						}
+				//	}
+					
+					this.stage.add(this.legendLayer);				
+					if(this.legend != 'topleft' && this.legend != 'topright'){
+						this.legendLayer.setY((this.height-this.legendRect.getHeight())/2); //move legend layer to center.
+				        this.legendLayer.draw();
+					}
+				}
+				
+				
 				
 			},			
 			update: function(){
@@ -351,12 +503,13 @@ function setColor(colorArr) //set color
 			}
 		}
 	}
-	if(mainValueArr.length<60){		
+	if(mainValueArr.length<24){		
 		colors = [	'#FF0000',  '#0000FF', '#FEFF00','#00FF00', '#FF7F00', '#7FFF00'	, '#FF00FE','#007FFF','#00FF7F','#00FFFE','#7F00FF',  '#FF007F',
-	              		'#ED7763', '#7762ED', '#D8ED62','#62ED76', '#EDBC62',  '#93ED62','#ED62D8','#6293ED', '#62EDBB' ,'#62D8ED',  '#BC62ED', '#ED6293',
-	              		'#BD6B70','#6B70BD','#BDB86B','#70BD6B','#BD8F6B','#98BD6B','#B86BBD','#6B99BD','#6BBD8F','#6BBDB8','#8F6BBD','#BD6B98',
+	              		'#ED7763', '#7762ED', '#D8ED62','#62ED76', '#EDBC62',  '#93ED62','#ED62D8','#6293ED', '#62EDBB' ,'#62D8ED',  '#BC62ED', '#ED6293'];
+		
+	              	/*	'#BD6B70','#6B70BD','#BDB86B','#70BD6B','#BD8F6B','#98BD6B','#B86BBD','#6B99BD','#6BBD8F','#6BBDB8','#8F6BBD','#BD6B98',
 	              		'#FE5078','#5078FE','#FED650','#78FE50','#FE7F50','#CEFE50','#D550FE','#50CFFE','#50FE7E','#50FED5','#7F50FE','#FE50CE',
-	              		'#8B0000','#00008B','#8A8B00','#008B00','#8B4500','#458B00','#8B008A','#00458B','#008B45','#008B8A','#45008B','#8B0045'	];     
+	              		'#8B0000','#00008B','#8A8B00','#008B00','#8B4500','#458B00','#8B008A','#00458B','#008B45','#008B8A','#45008B','#8B0045'	]; */    
 						//red, blue,  yellow, green, orange,yellow green,   pink, white blue, dark green, sky, purple, hot pink
 	}else{
 		var reTmpColorArr = new Array(); // re assign
@@ -378,12 +531,12 @@ function setColor(colorArr) //set color
 			colors[i] = 'rgb('+rgb.R[i]+','+rgb.G[i]+','+ rgb.B[i]+')';
 		}
 	}	
-	return {colors: colors, mainValueArrLength: mainValueArr.length, tmpColorArr: tmpColorArr};
+	return {colors: colors, mainValueArr: mainValueArr, tmpColorArr: tmpColorArr};
 }
 
-function getColor(n, colors, mainValueArrLength, tmpColorArr)
+function getColor(n, colors, mainValueArr, tmpColorArr)
 {
-	if(mainValueArrLength<60){
+	if(mainValueArr.length<24){
 		var tmpColor='green';
 		tmpColor= colors[tmpColorArr[n]];	
 		return tmpColor;		
@@ -393,4 +546,15 @@ function getColor(n, colors, mainValueArrLength, tmpColorArr)
 		return tmpColor;		
 	}	
 }
-
+function getLegendColor(n, colors, mainValueArr)
+{
+	if(mainValueArr.length<24){
+		var tmpColor='green';
+		tmpColor= colors[n];	
+		return tmpColor;		
+	}else{
+		var tmpColor='green';
+		tmpColor= colors[n];	
+		return tmpColor;		
+	}	
+}

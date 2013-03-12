@@ -53,54 +53,112 @@ var Scatter = {};
     				var colors = tmpSetColor.colors;
 					var mainValueArrLength = tmpSetColor.mainValueArrLength;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
-	            }
-	            if(isDiscrete[this.x] == false && isDiscrete[this.y] == false){this.disCase = 0;}
-	            else if(isDiscrete[this.x] == false && isDiscrete[this.y] == true){this.disCase = 1;}
-	            else if(isDiscrete[this.x] == true && isDiscrete[this.y] == false){this.disCase = 2;}
-	            else if(isDiscrete[this.x] == true && isDiscrete[this.y] == true){this.disCase = 3;}
-	            
-            	
+	            }	      
+	           
 	    		if(isDiscrete[this.x] == true)
 	    		{
+	    			var nodeX = new Array(mainArr[this.x].length); // discrete data일 경우 node 점의 좌표가 고정 되야 하므로 저장할 배열 선언 
 	    			var xTmp = new Array();  // 밑의 각 항목 이름들 
 	    			xTmp[0] = mainArr[this.x][0];
+	    			nodeX[0] = 0;
 	    			for(i = 1 ; i < mainArr[this.x].length ; i++)
 	            	{
 	            		for(j = 0 ; j < xTmp.length ; j ++)
 	            		{
 	            			if(xTmp[j] == mainArr[this.x][i])
 	            			{
+	            				nodeX[i] = j;
 	            				break;
 	            			}	            				
 	            		}
 	            		if(j == xTmp.length)
 	            		{
+	            			nodeX[i] = j;
 	            			xTmp.push(mainArr[this.x][i]);
 	            		}
 	            	}
-	    			var barWidth = this.width/xTmp.length
-	    			this.xMax = xTmp.length + 1;
-	    			
-	    		}else{
+	    			this.xPlotArr = make2DArr(xTmp.length);
+	    			var diff = this.width / (xTmp.length+1);
+	    			for(var i = 1 ; i < this.xPlotArr.length+1 ; i ++)
+	    			{
+	    				this.xPlotArr[i-1][0] = i*diff;
+	    				this.xPlotArr[i-1][1] = xTmp[i-1];
+	    			}
+	    			for(var i = 0 ; i < nodeX.length ; i++)
+	    			{
+	    				nodeX[i] = (nodeX[i]+1)*diff + this.plotXMargin;
+	    			}
+	    		}else{	    			
 	    			this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
-		            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
-		            this.xMax = findMaxValue(mainArr[this.x]);	            
-		            this.yMax = findMaxValue(mainArr[this.y]);
-		            this.xMin = findMinValue(mainArr[this.x]);	            
-		            this.yMin = findMinValue(mainArr[this.y]);
-		            this.xTickRange = (this.xMax - this.xMin)/this.xTick;
-		            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
-		            var x = Math.ceil( Math.log(this.xTickRange) / Math.log(10));
-		            var y = Math.ceil( Math.log(this.yTickRange) / Math.log(10));
-		            this.xTickRange = setTickRange(x, this.xTickRange);
-		            this.yTickRange = setTickRange(y, this.yTickRange);
-		            this.xMax = this.xTickRange * Math.round(1+this.xMax/this.xTickRange);            
-		            this.yMax = this.yTickRange * Math.round(1+this.yMax/this.yTickRange);           
-		            this.xMin = this.xTickRange * Math.round(this.xMin/this.xTickRange);           	            
-		            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);           
-		        	this.xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
-		    		this.yDiff = (parseInt(this.yMax/this.yTick)<1)?1:parseInt(this.yMax/this.yTick); //5 should be selected automatically later
+	    			this.xMax = findMaxValue(mainArr[this.x]);
+	    			var xMin = findMinValue(mainArr[this.x]);
+	    			var xTickRange = (this.xMax - xMin)/this.xTick;
+	    			var x = Math.ceil( Math.log(xTickRange) / Math.log(10));
+	    			xTickRange = setTickRange(x, xTickRange);
+		            this.xMax = xTickRange * Math.round(1+this.xMax/xTickRange);
+		        	var xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
+		        	var diff = this.width / this.xTick;
+		        	this.xPlotArr = make2DArr(this.xTick);		        	
+	    			for(var i = 0 ; i < this.xPlotArr.length ; i ++)
+	    			{
+	    				this.xPlotArr[i][0] = i*diff;
+	    				this.xPlotArr[i][1] = i*xDiff;
+	    			}	    			
 	    		}
+	    		
+	    		if(isDiscrete[this.y] == true)
+	    		{
+	    			var nodeY = new Array(mainArr[this.y].length);
+	    			var yTmp = new Array();  // 밑의 각 항목 이름들 
+	    			yTmp[0] = mainArr[this.y][0];
+	    			nodeY[0] = 0;
+	    			for(i = 1 ; i < mainArr[this.y].length ; i++)
+	            	{
+	            		for(j = 0 ; j < yTmp.length ; j ++)
+	            		{
+	            			if(yTmp[j] == mainArr[this.y][i])
+	            			{
+	            				nodeY[i] = j;
+	            				break;
+	            			}	            				
+	            		}
+	            		if(j == yTmp.length)
+	            		{
+	            			nodeY[i] = j;
+	            			yTmp.push(mainArr[this.y][i]);
+	            		}
+	            	}
+	    			this.yPlotArr = make2DArr(yTmp.length);
+	    			var diff = this.height / (yTmp.length+1);
+	    			for(var i = 1 ; i < yTmp.length+1 ; i ++)
+	    			{
+	    				this.yPlotArr[i-1][0] = i*diff;
+	    				this.yPlotArr[i-1][1] = yTmp[i-1];
+	    			}	    	
+	    			for(var i = 0 ; i < nodeY.length ; i++)
+	    			{
+	    				nodeY[i] = this.plotYMargin + this.height -  (nodeY[i]+1)*diff ;
+	    			}
+	    		}else{
+	    				var yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5        	            
+			            this.yMax = findMaxValue(mainArr[this.y]);			            	            
+			            var yMin = findMinValue(mainArr[this.y]);			           
+			            var yTickRange = (this.yMax - yMin)/yTick;			            
+			            var y = Math.ceil( Math.log(yTickRange) / Math.log(10));			            
+			            yTickRange = setTickRange(y, yTickRange);			                        
+			            this.yMax = yTickRange * Math.round(1+this.yMax/yTickRange);     			                       	                       
+			    		var yDiff = (parseInt(this.yMax/yTick)<1)?1:parseInt(this.yMax/yTick); //5 should be selected automatically later
+			        	var diff = this.height / yTick;
+			        	this.yPlotArr = make2DArr(yTick);		        	
+		    			for(var i = 0 ; i < this.yPlotArr.length ; i ++)
+		    			{
+		    				this.yPlotArr[i][0] = i*diff;
+		    				this.yPlotArr[i][1] = i*yDiff;
+		    			}
+	    		}
+	    		
+	    		//결과적으로 discrete이던 아니든  yPlotArr와 xPlotArr에 각 점선표시(xLine, xText etc.) 좌표가들어 있다. 아래 draw에 있는  plot에서는 이 array들만 사용하여 그려주면 된다. 
+	    		
 	    		//////////Make Data Structure of nodes and essential arrays////////
 				this.node = new Array();			
 				for(var i = 0; i < mainArr[this.x].length ; i++)
@@ -108,8 +166,8 @@ var Scatter = {};
 					this.node[i] = new Kinetic.Circle({
 						//id: i,
 						name: 'a', //dataGetName(i),
-						x: mainArr[this.x][i]*(this.width/this.xMax)+this.plotXMargin,
-						y: mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin + 2*( this.height/2+this.plotYMargin-(mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin) ),
+						x: (isDiscrete[this.x] == true) ?  nodeX[i] : mainArr[this.x][i]*(this.width/this.xMax)+this.plotXMargin,
+						y: (isDiscrete[this.y] == true) ? nodeY[i] : mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin + 2*( this.height/2+this.plotYMargin-(mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin) ),
 						radius: this.radius,
 						fill: (this.color==-1)?('green'):getColor(i,colors, mainValueArrLength, tmpColorArr),
 						stroke : 'black',
@@ -146,13 +204,13 @@ var Scatter = {};
 				this.plotLayer.add(this.plotRect);   
 				this.xLine = new Array();
 				this.xText = new Array();
-				for(var i=0; i<parseInt(this.xMax/this.xDiff)+1; i++)
+				for(var i=0; i<this.xPlotArr.length; i++)
 				{
 				    this.xLine[i] = new Kinetic.Line({
 				        name : "xLine"+i,
-				        points: [	this.plotXMargin+i*this.width/(this.xMax/this.xDiff),
+				        points: [	this.plotXMargin+this.xPlotArr[i][0],
 				                     this.plotYMargin+this.height+this.plotLength,
-				                     this.plotXMargin+i*this.width/(this.xMax/this.xDiff),
+				                     this.plotXMargin+this.xPlotArr[i][0],
 				                     this.plotYMargin+this.height+2*this.plotLength],
 				        stroke: 'black',
 				        strokeWidth: 2,             
@@ -160,9 +218,9 @@ var Scatter = {};
 				    this.plotLayer.add(this.xLine[i]);               
 				    this.xText[i] = new Kinetic.Text({
 				        name : "xText"+i,
-				        x: this.plotXMargin+i*this.width/(this.xMax/this.xDiff)-30,
+				        x: this.plotXMargin+this.xPlotArr[i][0]-30,
 				        y: this.plotYMargin+this.height+this.plotLength*2,
-				        text: i*this.xDiff,
+				        text: this.xPlotArr[i][1],
 				        fontSize: 15,
 				        fontFamily: 'Calibri',
 				        fill: 'black',
@@ -173,21 +231,22 @@ var Scatter = {};
 				} 
 				this.yLine = new Array();
                 this.yText = new Array();
-                for(var i=0; i<parseInt(this.yMax/this.yDiff)+1; i++)
+               
+                for(var i=0; i< this.yPlotArr.length ; i++)
                 {
                     this.yLine[i] = new Kinetic.Line({
                         points: [	this.plotXMargin-this.plotLength, 
-                                     this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff) , 
+                                     this.plotYMargin+this.height-this.yPlotArr[i][0], 
                                      this.plotXMargin-2*this.plotLength,
-                                     this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff)],
+                                     this.plotYMargin+this.height-this.yPlotArr[i][0]],
                         stroke: 'black',
                         strokeWidth: 2,             
                     });
                     this.plotLayer.add(this.yLine[i]);       
                     this.yText[i] = new Kinetic.Text({
                         x: this.plotXMargin-this.plotLength*2-15,
-                        y: this.plotYMargin+this.height-i*this.height/(this.yMax/this.yDiff)+30,
-                        text: i*this.yDiff,
+                        y: this.plotYMargin+this.height-this.yPlotArr[i][0]+30,
+                        text: this.yPlotArr[i][1],
                         fontSize: 15,
                         fontFamily: 'Calibri',
                         fill: 'black',

@@ -10,7 +10,18 @@ var Hist = {};
 			_initHist: function(optionObj){
 
 				////////// Make essential variables ////////
-				this.bin = optionObj.bin || 1;
+				//this.xMax = findMaxValue(mainArr[this.x]);
+				for(var i = 0 ; i < labelArr.length ; i ++)
+	            {
+	            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+	            		 this.x =  i;
+	            		 break;
+	            	}
+	            	if(i==labelArr.length-1){
+	            		alert('retype x label');
+	            	}
+	            }	
+				this.bin = (optionObj.bin==undefined)?(parseInt(findMaxValue(mainArr[this.x])/10)):(optionObj.bin);
 				this.fixPoint = 0;
 			//	alert(this.bin.toString().indexOf('.'));
 				if(this.bin.toString().indexOf('.') != -1)
@@ -23,16 +34,7 @@ var Hist = {};
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength=this.width*0.02; //margin from plot box
-	            for(var i = 0 ; i < labelArr.length ; i ++)
-	            {
-	            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-	            		 this.x =  i;
-	            		 break;
-	            	}
-	            	if(i==labelArr.length-1){
-	            		alert('retype x label');
-	            	}
-	            }	
+	            
 	            
 	            if(isDiscrete[this.x] == true)
 	            {
@@ -74,7 +76,8 @@ var Hist = {};
 	            	var cntTmp = new Array(freqRank.length);
 	            	this.firstNode = freqRank[0][1];  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
 	            	this.lastNode = freqRank[freqRank.length-1][1]; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
-	            	for(var i  = 0 ; i < freqRank.length ; i ++)
+	            	this.maxNode = this.lastNode; // Y Axis를 그릴때 제일위에까지 그리기위한 것 
+ 	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
 	            		cntTmp[freqRank[i][1]] = i;				// 이 cntTmp array를 노드의 x값들에 넣어준다. 즉 x 위치만 바꿔서 넣는다. 
 	            	}
@@ -91,10 +94,7 @@ var Hist = {};
 	            	var freqTmp = new Array(parseInt(this.xMax/this.bin)+1); // frequency 저장 
 	            	var hasTmp = make2DArr(parseInt(this.xMax/this.bin)+1);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
 	            	var countTmp = 0;	         
-	            	var cnt = 0;	            
-	            	
-	            	
-	            	
+	            	var cnt = 0;	      
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
 	            		freqTmp[i] = 0;  // frequency 저장할꺼 초기화 
@@ -110,20 +110,20 @@ var Hist = {};
 	            	this.firstNode = 0;  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
 	            	this.lastNode = freqTmp.length-1; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
 	            	
-	            	this.maxFreq =  findMaxValue(freqTmp);	            	
+	            		            	
+	            	var maxFreq = findMaxValue(freqTmp);
 	            	this.maxNode =0;
-	                for(var cnt = 0; cnt<  this.xTmpLength ; cnt++)
+	                for(var i = 0; i<  freqTmp.length ; i++)
 	             	{
-	                 	if(this.node[cnt].getFreq()>maxFreq){
-	                 		this.maxNode=cnt;
+	                 	if(freqTmp[i] == maxFreq){
+	                 		this.maxNode=i;
+	                 		break;
 	                 	}                	
 	             	}	            	
 	            }            			
-
 	            this.yMax = findMaxValue(freqTmp); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
-	            this.yMin = 0;
-	              
-            	
+	            this.yMin = 0;	              
+	            
             	 //////////Make Data Structure of nodes and essential arrays////////            	
             	this.node = new Array();            	
             	for(var cnt = 0; cnt< xTmp.length ; cnt++)
@@ -147,7 +147,7 @@ var Hist = {};
             	}
             	
             	
-	           
+            	
             	 this.xTmpLength=xTmp.length;	
            // 	this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
  	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
@@ -161,11 +161,9 @@ var Hist = {};
 	            this.yTickRange = setTickRange(y, this.yTickRange);
 	    //        this.xMax = this.xTickRange * Math.round(1+this.xMax/this.xTickRange);            
 	            this.yMax = this.yTickRange * Math.round(this.yMax/this.yTickRange);           
-	     //       this.xMin = this.xTickRange * Math.round(this.xMin/this.xTickRange);           	            
+     	            
 	            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);   
-	    //    	this.xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
-	    	//	this.yDiff = (parseInt(this.yMax/this.yTick)<1)?1:parseInt(this.yMax/this.yTick); //5 should be selected automatically later
-            	
+          
 	        },				
 			doIt: function() { 
 				alert('do it'); 
@@ -200,8 +198,7 @@ var Hist = {};
                 });
                 
                 this.plotLayer.add(this.xAxis);
-                //////////////////////////////chungha/////////////////////////////////
-               
+                
                 this.yAxis = new Kinetic.Line({
                     points: [    this.plotXMargin-this.plotLength, 
                                  this.plotYMargin+this.height-this.node[this.maxNode].getHeight(),
@@ -211,7 +208,8 @@ var Hist = {};
                     strokeWidth: 2             
                 });                                
                 this.plotLayer.add(this.yAxis);
-//////////////////////////////chungha/////////////////////////////////
+                
+
                 this.xLine = new Array();
                 this.xText = new Array();
                
@@ -219,6 +217,7 @@ var Hist = {};
             	
                 if(isDiscrete[this.x] == true)
                 {
+                	
                 	for(var i = 0 ; i < this.node.length ; i ++)
                 	{
                 		this.xLine[i] = new Kinetic.Line({
@@ -231,8 +230,7 @@ var Hist = {};
                             strokeWidth: 2,             
                         });
                         this.plotLayer.add(this.xLine[i]);                	
-	                //	var tmp = this.node[i].getX();
-	             //   	alert("dddd");
+
 	                	this.xText[i] = new Kinetic.Text({
 	                        name : "xText"+i,
 	                        x: this.node[i].getX() - 30,
@@ -251,84 +249,81 @@ var Hist = {};
              
                 	for(var i = 0 ; i < this.node.length ; i ++)
                     {
-                        this.xLine[i] = new Kinetic.Line({
-                            name : "xLine"+i,
-                            points: [    this.node[i].getX() - this.node[i].getOffset().x,
-                                         this.plotYMargin+this.height+this.plotLength,
-                                         this.node[i].getX() - this.node[i].getOffset().x,
-                                         this.plotYMargin+this.height+2*this.plotLength],
-                            stroke: 'black',
-                            strokeWidth: 2,             
-                        });
-                        this.plotLayer.add(this.xLine[i]);               
-                        this.xText[i] = new Kinetic.Text({
-                            name : "xText"+i,
-                            x: this.node[i].getX() - this.node[i].getOffset().x-30,
-                            y: this.plotYMargin+this.height+this.plotLength*2,
-                            text: this.node[i].getLabel(), ///////////////////////////////////////////
-                            fontSize: 15,
-                            fontFamily: 'Calibri',
-                            fill: 'black',
-                            width: 60,
-                            align: 'center'    
-                        });          
-                        this.plotLayer.add(this.xText[i]);            
+                		if( (this.node.length < 10) || (this.node.length>=10)&&( i%(parseInt(this.node.length/5))==0) )
+                		{
+                			this.xLine[i] = new Kinetic.Line({
+                                name : "xLine"+i,
+                                points: [    this.node[i].getX() - this.node[i].getOffset().x,
+                                             this.plotYMargin+this.height+this.plotLength,
+                                             this.node[i].getX() - this.node[i].getOffset().x,
+                                             this.plotYMargin+this.height+2*this.plotLength],
+                                stroke: 'black',
+                                strokeWidth: 2,             
+                            });
+                            this.plotLayer.add(this.xLine[i]);               
+                            this.xText[i] = new Kinetic.Text({
+                                name : "xText"+i,
+                                x: this.node[i].getX() - this.node[i].getOffset().x-30,
+                                y: this.plotYMargin+this.height+this.plotLength*2,
+                                text: this.node[i].getLabel(), ///////////////////////////////////////////
+                                fontSize: 15,
+                                fontFamily: 'Calibri',
+                                fill: 'black',
+                                width: 60,
+                                align: 'center'    
+                            });          
+                            this.plotLayer.add(this.xText[i]);
+                		}
+                                    
                         
                     }
-                	// 끝에 하나 더 그려주기 위해서 넣은 것 
-                	this.xLine[i] = new Kinetic.Line({
-                        name : "xLine"+i,
-                        points: [    this.node[i-1].getX() - this.node[i-1].getOffset().x + this.node[i-1].getWidth(),
-                                     this.plotYMargin+this.height+this.plotLength,
-                                     this.node[i-1].getX() - this.node[i-1].getOffset().x + this.node[i-1].getWidth(),
-                                     this.plotYMargin+this.height+2*this.plotLength],
-                        stroke: 'black',
-                        strokeWidth: 2,             
-                    });
-                    this.plotLayer.add(this.xLine[i]);               
-                    this.xText[i] = new Kinetic.Text({
-                        name : "xText"+i,
-                        x: this.node[i-1].getX() - this.node[i-1].getOffset().x-30 + this.node[i-1].getWidth(),
-                        y: this.plotYMargin+this.height+this.plotLength*2,
-                        text: parseFloat(this.node[i-1].getLabel())+this.bin, ///////////////////////////////////////////
-                        fontSize: 15,
-                        fontFamily: 'Calibri',
-                        fill: 'black',
-                        width: 60,
-                        align: 'center'    
-                    });          
-                    this.plotLayer.add(this.xText[i]);
-                	
+                	if( this.node.length < 10 )
+            		{
+	               	// 끝에 하나 더 그려주기 위해서 넣은 것 
+	                	this.xLine[i] = new Kinetic.Line({
+	                        name : "xLine"+i,
+	                        points: [    this.node[i-1].getX() - this.node[i-1].getOffset().x + this.node[i-1].getWidth(),
+	                                     this.plotYMargin+this.height+this.plotLength,
+	                                     this.node[i-1].getX() - this.node[i-1].getOffset().x + this.node[i-1].getWidth(),
+	                                     this.plotYMargin+this.height+2*this.plotLength],
+	                        stroke: 'black',
+	                        strokeWidth: 2,             
+	                    });
+	                    this.plotLayer.add(this.xLine[i]);               
+	                    this.xText[i] = new Kinetic.Text({
+	                        name : "xText"+i,
+	                        x: this.node[i-1].getX() - this.node[i-1].getOffset().x-30 + this.node[i-1].getWidth(),
+	                        y: this.plotYMargin+this.height+this.plotLength*2,
+	                        text: parseFloat(this.node[i-1].getLabel())+this.bin , ///////////////////////////////////////////
+	                        fontSize: 15,
+	                        fontFamily: 'Calibri',
+	                        fill: 'black',
+	                        width: 60,
+	                        align: 'center'    
+	                    });          
+	                    this.plotLayer.add(this.xText[i]);
+            		} 	
                 }
                 
                 this.yLine = new Array();
                 this.yText = new Array();
                 
-                
-               // this.yTickRange
-                var maxFreq=0;
-                var maxNode=0;
-                for(var cnt = 0; cnt<  this.xTmpLength ; cnt++)
-            	{
-                	if(this.node[cnt].getFreq()>maxFreq){
-                		maxFreq=this.node[cnt].getFreq();
-                		maxNode=cnt;
-                	}                	
-            	}
+
+
                 for(var i=0; i<parseInt(this.yTick); i++)
                 {
                     this.yLine[i] = new Kinetic.Line({
                         points: [    this.plotXMargin-this.plotLength, 
-                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.maxFreq, 
+                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.yMax, 
                                      this.plotXMargin-2*this.plotLength,
-                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.maxFreq],
+                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.yMax],
                         stroke: 'black',
                         strokeWidth: 2,             
                     });
                     this.plotLayer.add(this.yLine[i]);       
                     this.yText[i] = new Kinetic.Text({
                         x: this.plotXMargin-this.plotLength*2-15,
-                        y: this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.maxFreq+30,
+                        y: this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.yMax+30,
                         text: i*this.yTickRange,
                         fontSize: 15,
                         fontFamily: 'Calibri',

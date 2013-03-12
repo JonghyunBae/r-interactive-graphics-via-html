@@ -1,156 +1,154 @@
 <!DOCTYPE HTML>
 <html>
     
-    <head>
-    
+    <head>    
         <meta charset="UTF-8">
         <title>RIGHT, R-Interactive-Graphics-via-HTml</title>       
         <link  rel="stylesheet" href="right.css">       
     </head>
     
-    
     <body>
-    <div id="histContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-    <div id="histContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-    <div id="scatterContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-    <div id="scatterContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+    	<div id="head">
+			<div class="wrap">
+				<h1><a id="mainTitle" href="right_index.html">RIGHT</a></h1>
+			<!-- <h2>designed by <a href="#">RIGHT</a></h2>-->
+				<div id="nav">
+					<ul>
+						<li><a href="right_index.html">Home</a></li>
+						<li><a href="about.html">About</a></li>
+						<li><a href="#">Tutorial</a></li>
+						<li><a href="#">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	
+		<div id="right">
+			<h1>About RIGHT</h1>
+			<p>Learn more about RIGHT chart... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...</p>
+			<h1>Recent Works</h1>
+				<ul>
+					<li><a href="#">A Scatter Chart</a></li>
+					<li><a href="#">A Histogram Chart</a></li>
+					<li><a href="#">A Box-and-Whisker Chart</a></li>
+					<li><a href="#">A Chart</a></li>
+					<li><a href="#">A Chart</a></li>
+				</ul>
+		</div>	
     
-    <!-- <div id="scatterContainer" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; " oncontextmenu="return false;"></div>  -->
-    <script src="kinetic-v4.3.1.js"></script>
-    <script src="structure.js"></script>
-    <script src="common.js"></script>
-    <script> 
-
-
-
-  //     createMainStructure("Theoph-from-R.csv");         //mainArr = data, labelArr= column1
-        createMainStructure("diamonds-from-R.csv"); 
-        //////////////////Common variables///////////////////////////
-        
-        //////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
-        var plotWidth=500;  //default value for plot width
-        var plotHeight=500; //default value for plot height
-    //  var idCounter = 0;      
+    	<div id="content">		
+		    <div id="histContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+		    <div id="histContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+		    <div id="scatterContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+		    <div id="scatterContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+		</div>	
+	    
+	 	<script src="kinetic-v4.3.1.js"></script>
+	    <script src="structure.js"></script>
+	    <script src="common.js"></script>
+	    <script>
+	    	//createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
+	      	createMainStructure("diamonds-from-R.csv");//mainArr = data, labelArr= column1        
+        	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
+       		 var plotWidth=500;  //default value for plot width
+   		     var plotHeight=500; //default value for plot height   		     
+    	</script> 
+	    <script src="hist.js"></script>
+	    <script src="scatter.js"></script>
+        <script>        
+        	/*
+			var hist01 = new Hist(mainArr, { x:'time', width:300, height:300 });
+			hist01.draw(1);
+			var hist02 = new Hist(mainArr, {bin: 1, x:'time', width:300, height:300 });
+			hist02.draw(2);
+			var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'time', width:300, height:300 });
+			scatter01.draw(1);
+			var scatter02 = new Scatter(mainArr, {radius:5, x:'time',y:'conc', color:'subject',width:800, height:800  });
+			scatter02.draw(2);
+			*/
+			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
+			hist01.draw(1);
+			var hist02 = new Hist(mainArr, { x:'cut', width:300, height:300 });
+			hist02.draw(2);
+			var scatter01 = new Scatter(mainArr, {x:'price', y:'carat', color:'cut', width:300, height:300});
+			scatter01.draw(1);
+			var scatter02 = new Scatter(mainArr, { radius:5, x:'price',y:'cut', color:'price',width:300, height:300});
+			scatter02.draw(2);      
+		</script>    
+   		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
+		<input type="text" name="regcoords" id="regcoords" />
+		<div id="coords">Coords</div>
+        <script src="divGetMousePos.js"></script>
     
-    </script>   
+    	<div id="left">
+			<h1>Search</h1>
+				<ul>
+					<li><a href="#">How To Search</a></li>					
+				</ul>	 
+			<p>
+				<form id="searchForm1">  
+					<textarea rows="3" cols="20" id ="searchBox" name = "searchId"  placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"></textarea>
+					<a id="searchBtn" href="#" class="myButton" onClick ="booleanSearch(searchForm1); printAns(); return false;">Search</a>	
+					<a id="clearBtn" href="#" class="myButton"  onClick ="clearSearchBox(); return false;">Clear</a>
+				</form>  
+			</p>
+			<h1>Hide & Reset</h1>
+			<p>
+				<a id="nodeHide" href="#" class="myButton" onClick ="hideSelected(); return false;">Hide</a>
+				<a id="nodeReset" href="#" class="myButton" onClick ="resetSelected(); return false;">Reset</a>
+			</p>		
+			<h1>Other Functions</h1>			
+				<p>
+					<a id="showMsg" href="#" class="myButton" onClick =" return false;">Show Table</a>	
+					<a id="hideMsg" href="#" class="myButton" onClick =" return false;">Hide Table</a>
+				</p>	
+				<p><a id="save" href="#" class="myButton" onClick =" return false;">Save as image</a></p>	
+				<p><a id="sendImg" href="#" class="myButton" onClick =" return false;">Send an image to Email<br> (not supported yet)</a></p>	
+				<p></p>	
+		</div>
+		
+    	<div id="footer">
+			<div class="wrap">
+					<div id="footnav">
+						<ul>
+							<li><a href="right_index.html">Home</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="#">Tutorial</a></li>
+							<li><a href="#">Contact</a></li>
+						</ul>
+					</div>
+					<div class="linksright">
+						<h4><a href="#">Discover RIght</a></h4>
+						<ul>
+							<li><a href="#">Why RIGHT?</a></li>
+							<li><a href="#">What Does RIGHT Do?</a></li>
+							<li><a href="#">Who Uses RIGHT?</a></li>
+							<li><a href="#">Demo Gallaery</a></li>
+						</ul>
+					</div>
+					<div class="linksright">
+						<h4><a href="#">About Us</a></h4>
+						<ul>
+							<li><a href="#">News</a></li>
+							<li><a href="#">Contact Us</a></li>
+						</ul>
+					</div><div class="linksright">
+						<h4><a href="#">Follow Us</a></h4>
+						<ul>
+							<li><a href="#">Twitter</a></li>
+							<li><a href="#">Facebook</a></li>			
+						</ul>
+					</div>
+					
+					<div class="clearer">&nbsp;</div><br /><br />
+					<p class="foot">
+						Created by <a class="credit" href="#">RIGHT</a><br />
+						&copy; RIGHT, R-Interactive-Graphics-via-HTml 2013.
+					</p>
+			</div>
+		</div>
     
-    <script src="hist.js"></script>
-    <script src="scatter.js"></script>
-        <script>
-        
     
-    
-        
-   /*   var hist01 = new Hist(mainArr, { bin: 0.5, x:'time', width:300, height:300 });
-       hist01.draw(1);
-//     var hist02 = new Hist(mainArr, {bin: 1, x:'price', width:200, height:200 });
-//     hist02.draw(2);
-       var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'time', width:300, height:300 });
-      scatter01.draw(1);
-      var scatter02 = new Scatter(mainArr, {plotLength:15, radius:5, x:'time',y:'conc', color:'subject' });
-       scatter02.draw(2);
-        */
-       
-       var hist01 = new Hist(mainArr, { bin: 5000	, x:'price', width:300, height:300 });
-        hist01.draw(1);
- //     var hist02 = new Hist(mainArr, { x:'cut', width:200, height:300 });
-    // hist02.draw(2);
-        var scatter01 = new Scatter(mainArr, {x:'price', y:'carat', color:'carat', width:300, height:300 });
-       scatter01.draw(1);
-       var scatter02 = new Scatter(mainArr, { radius:5, x:'price',y:'x', color:'x' });
-        scatter02.draw(2);
-         
-       
-    </script>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-     <br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
-    <input type="text" name="regcoords" id="regcoords" />
-    <div id="coords">Coords</div>
-    
-        
-        <script>
-        /*
-        Here add the ID of the HTML elements for which to show the mouse coords
-        Within quotes, separated by comma.
-        E.g.:   ['imgid', 'divid'];
-       */
-       var elmids = ['histContainer1', 'histContainer2','scatterContainer1', 'scatterContainer2'];
-
-       var divX, divY = 0;       // variables that will contain the coordinates
-       var divOffsetX, divOffsetY = 0;
-
-       // Get X and Y position of the elm (from: vishalsays.wordpress.com)
-       function getXYpos(elm) {
-           divX = elm.offsetLeft;        // set x to elm’s offsetLeft
-           divY = elm.offsetTop;         // set y to elm’s offsetTop
-
-         elm = elm.offsetParent;    // set elm to its offsetParent
-
-         //use while loop to check if elm is null
-         // if not then add current elm’s offsetLeft to x
-         //offsetTop to y and set elm to its offsetParent
-       while(elm != null) {
-           divX = parseInt(divX) + parseInt(elm.offsetLeft);
-           divY = parseInt(divY) + parseInt(elm.offsetTop);
-           elm = elm.offsetParent;
-         }
-
-         // returns an object with "divXp" (Left), "=yp" (Top) position
-         return {'xp':divX, 'yp':divY};
-       }
-
-       // Get X, Y coords, and displays Mouse coordinates
-       function getCoords(e) {
-        // coursesweb.net/
-         var xy_pos = getXYpos(this);
-
-         // if IE
-         if(navigator.appVersion.indexOf("MSIE") != -1) {
-           // in IE scrolling page affects mouse coordinates into an element
-           // This gets the page element that will be used to add scrolling value to correct mouse coords
-           var standardBody = (document.compatMode == 'CSS1Compat') ? document.documentElement : document.body;
-
-           divX = event.clientX + standardBody.scrollLeft;
-           divY = event.clientY + standardBody.scrollTop;
-         }
-         else {
-           divX = e.pageX;
-           divY = e.pageY;
-         }
-
-         divX = divX - xy_pos['xp'];
-         divY = divY - xy_pos['yp'];
-         divOffsetX = xy_pos['xp'];
-         divOffsetY = xy_pos['yp'];
-         // displays x and y coords in the #coords element
-         document.getElementById('coords').innerHTML = 'X= '+ divX+ ' ,Y= ' +divY;
-       }
-
-       // register onmousemove, and onclick the each element with ID stored in elmids
-       for(var i=0; i<elmids.length; i++) {
-         if(document.getElementById(elmids[i])) {
-           // calls the getCoords() function when mousemove
-           document.getElementById(elmids[i]).onmousemove = getCoords;
-
-           // execute a function when click
-           document.getElementById(elmids[i]).onclick = function() {
-             document.getElementById('regcoords').value = divX+ ' , ' +divY;
-           };
-         }
-       }
-
-
-        
-        </script>
     
     </body>
 </html>

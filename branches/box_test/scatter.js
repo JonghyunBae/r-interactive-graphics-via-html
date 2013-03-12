@@ -35,6 +35,7 @@ var Scatter = {};
 	            		alert('retype y label');
 	            	}
 	            }	  
+	           
 	            if(optionObj.color==undefined){
 	            	this.color=-1; //default color
 	            }else{
@@ -53,63 +54,53 @@ var Scatter = {};
 					var mainValueArrLength = tmpSetColor.mainValueArrLength;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
-	            this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
-	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
-	            this.xMax = findMaxValue(mainArr[this.x]);	            
-	            this.yMax = findMaxValue(mainArr[this.y]);
-	            this.xMin = findMinValue(mainArr[this.x]);	            
-	            this.yMin = findMinValue(mainArr[this.y]);
-	            this.xTickRange = (this.xMax - this.xMin)/this.xTick;
-	            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
-	      
+	            if(isDiscrete[this.x] == false && isDiscrete[this.y] == false){this.disCase = 0;}
+	            else if(isDiscrete[this.x] == false && isDiscrete[this.y] == true){this.disCase = 1;}
+	            else if(isDiscrete[this.x] == true && isDiscrete[this.y] == false){this.disCase = 2;}
+	            else if(isDiscrete[this.x] == true && isDiscrete[this.y] == true){this.disCase = 3;}
 	            
-	            var x = Math.ceil( Math.log(this.xTickRange) / Math.log(10));
-	            var y = Math.ceil( Math.log(this.yTickRange) / Math.log(10));
-	            
-	           
-	         //   alert( Math.pow(10,x));
-	        //    alert('before:'+this.xTickRange/Math.pow(10,x));
-	            this.xTickRange = setTickRange(x, this.xTickRange);
-	            this.yTickRange = setTickRange(y, this.yTickRange);
-	    //        alert('after:'+this.yTickRange);
-	            /*0.1 -> 0.1
-	            <= 0.2 -> 0.2
-	            <= 0.25 -> 0.25
-	            <= 0.3 -> 0.3
-	            <= 0.4 -> 0.4
-	            <= 0.5 -> 0.5
-	            <= 0.6 -> 0.6
-	            <= 0.7 -> 0.7
-	            <= 0.75 -> 0.75
-	            <= 0.8 -> 0.8
-	            <= 0.9 -> 0.9
-	            <= 1.0 -> 1.0
-	             */
-	            
-	       //     alert(this.yMax+','+this.yMin);
-	            
-	            this.xMax = this.xTickRange * Math.round(1+this.xMax/this.xTickRange);            
-	            this.yMax = this.yTickRange * Math.round(1+this.yMax/this.yTickRange);           
-	            this.xMin = this.xTickRange * Math.round(this.xMin/this.xTickRange);           	            
-	            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);           
-
-	         //   alert(this.xMax+','+this.xMin);
-	        //    alert(this.yMax+','+this.yMin);
-	            
-	            
-	          /*  lower bound = 15
-	            upper bound = 234
-	            range = 234-15 = 219
-	            tick range = 21.9. This should be 25.0
-	            new lower bound = 25 * round(15/25) = 0
-	            new upper bound = 25 * round(1+235/25) = 250*/
-	           
-	            
-	       //     alert(this.xMin+','+this.yMin);
-	            
-	        	this.xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
-	    		this.yDiff = (parseInt(this.yMax/this.yTick)<1)?1:parseInt(this.yMax/this.yTick); //5 should be selected automatically later
-	    		
+            	
+	    		if(isDiscrete[this.x] == true)
+	    		{
+	    			var xTmp = new Array();  // 밑의 각 항목 이름들 
+	    			xTmp[0] = mainArr[this.x][0];
+	    			for(i = 1 ; i < mainArr[this.x].length ; i++)
+	            	{
+	            		for(j = 0 ; j < xTmp.length ; j ++)
+	            		{
+	            			if(xTmp[j] == mainArr[this.x][i])
+	            			{
+	            				break;
+	            			}	            				
+	            		}
+	            		if(j == xTmp.length)
+	            		{
+	            			xTmp.push(mainArr[this.x][i]);
+	            		}
+	            	}
+	    			var barWidth = this.width/xTmp.length
+	    			this.xMax = xTmp.length + 1;
+	    			
+	    		}else{
+	    			this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
+		            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
+		            this.xMax = findMaxValue(mainArr[this.x]);	            
+		            this.yMax = findMaxValue(mainArr[this.y]);
+		            this.xMin = findMinValue(mainArr[this.x]);	            
+		            this.yMin = findMinValue(mainArr[this.y]);
+		            this.xTickRange = (this.xMax - this.xMin)/this.xTick;
+		            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
+		            var x = Math.ceil( Math.log(this.xTickRange) / Math.log(10));
+		            var y = Math.ceil( Math.log(this.yTickRange) / Math.log(10));
+		            this.xTickRange = setTickRange(x, this.xTickRange);
+		            this.yTickRange = setTickRange(y, this.yTickRange);
+		            this.xMax = this.xTickRange * Math.round(1+this.xMax/this.xTickRange);            
+		            this.yMax = this.yTickRange * Math.round(1+this.yMax/this.yTickRange);           
+		            this.xMin = this.xTickRange * Math.round(this.xMin/this.xTickRange);           	            
+		            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);           
+		        	this.xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
+		    		this.yDiff = (parseInt(this.yMax/this.yTick)<1)?1:parseInt(this.yMax/this.yTick); //5 should be selected automatically later
+	    		}
 	    		//////////Make Data Structure of nodes and essential arrays////////
 				this.node = new Array();			
 				for(var i = 0; i < mainArr[this.x].length ; i++)
@@ -129,13 +120,8 @@ var Scatter = {};
 						selected : 0
 					});				
 				}
-				/*
-	    		
-	    		var scatterColor = mainArr[0];
-	    		var legend = true;
-//	    		var scatterColor = 'default';
-//	    		var legend = false;
-    			*/
+	           
+	            
     		},
 			doIt: function() { 
 				alert('do it'); 

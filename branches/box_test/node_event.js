@@ -115,7 +115,40 @@ function hover(Name)
 		});	
 		
         	
-	
+	Name.stage.on('mouseout', function(evt){  
+		if(isNaN(node.getName()) == false)
+		{
+			document.body.style.cursor = "default";  // 나중에 지워도 되는지 확인할 것 
+			Name.tooltip.hide();
+	    	Name.tooltipLayer.draw();
+	    	var node = evt.shape;
+	    	if(node.getSelected() == 0)
+	    	{
+	    		var shapes = Name.stage.get('.'+node.getName());
+	    		switch(Name._type)
+	        	{
+	    	    	case 'hist' : 
+	    				shapes.apply('setAttrs', {
+	    	    		opacity: 0.5,
+	    	    		scale : {x:1, y:1}
+	    				});    	
+	    				break;
+	    			case 'scatter' : 
+	        			shapes.apply('setAttrs', {
+	                		opacity: 0.7,
+	                		scale : {x:1, y:1}
+	            			});    	
+	        			break;
+	            	default:
+	            		break;
+	        	}	
+	        	shapes.apply('transitionTo', {
+	        	    rotation : 0,
+	        	    duration: 0.01
+	        	});
+	    	}    	    	
+		}
+	});
 }
 var tmpShift = false;
 function select(Name)

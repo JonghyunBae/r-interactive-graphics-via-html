@@ -336,6 +336,11 @@ var Scatter = {};
 				this.dataLayer = new Kinetic.Layer();	
 				for(var i = 0 ; i < this.node.length ; i ++)
 				{
+					if(i % 1000 == 0)
+					{
+						this.stage.add(this.dataLayer);
+						this.dataLayer = new Kinetic.Layer();
+					}
 					this.dataLayer.add(this.node[i]);
 				} 
 				this.stage.add(this.dataLayer);

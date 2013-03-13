@@ -63,82 +63,59 @@ function checkKeyUp(e)
 
 function hover(Name)
 {
-	Name.dataLayer.on('mouseover mousemove', function(evt){  
-        document.body.style.cursor = "pointer";
-        var node = evt.shape;
-        node.moveToTop();
-        var mousePos = node.getStage().getMousePosition();
-    	Name.tooltipText.setText(node.getInfo()); 
-    	Name.tooltipRect.setAttrs({
-    		width: Name.tooltipText.getWidth(),
-    		height: Name.tooltipText.getHeight()
-    	});
-    	if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
-			Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
-		}else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
-			Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltipText.getHeight());
-		}else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
-			Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth(), mousePos.y + 2);
-		}else{
-			Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth() , mousePos.y - 2 - Name.tooltipText.getHeight());
+	Name.stage.on('mouseover mousemove', function(evt){  
+		var node = evt.shape;
+	//	alert(node.getName());
+		if(isNaN(node.getName()) == false)
+		{
+			document.body.style.cursor = "pointer";
+	        
+	        node.moveToTop();
+	        var mousePos = node.getStage().getMousePosition();
+	    	Name.tooltipText.setText(node.getInfo()); 
+	    	Name.tooltipRect.setAttrs({
+	    		width: Name.tooltipText.getWidth(),
+	    		height: Name.tooltipText.getHeight()
+	    	});
+	    	if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
+				Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
+			}else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
+				Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltipText.getHeight());
+			}else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
+				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth(), mousePos.y + 2);
+			}else{
+				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth() , mousePos.y - 2 - Name.tooltipText.getHeight());
+			}
+	    	Name.tooltipLayer.moveUp();
+	    	Name.tooltip.show();
+	    	Name.tooltipLayer.draw();
+	    	var shapes = Name.stage.get('.'+node.getName());
+	    	switch(Name._type)
+	    	{
+		    	case 'hist' : 
+					shapes.apply('setAttrs', {
+		    		opacity: 1,
+		    		scale : {x:1.2, y:1}
+					});    	
+					break;
+				case 'scatter' : 
+	    			shapes.apply('setAttrs', {
+	            		opacity: 1,
+	            		scale : {x:1.5, y:1.5}
+	        			});    	
+	    			break;
+	        	default:
+	        		break;
+	    	}
+	    	shapes.apply('transitionTo', {    		
+	    	    rotation : 0,
+	    	    duration: 0.01
+	    	});  
 		}
-    	Name.tooltipLayer.moveUp();
-    	Name.tooltip.show();
-    	Name.tooltipLayer.draw();
-    	var shapes = Name.stage.get('.'+node.getName());
-    	switch(Name._type)
-    	{
-	    	case 'hist' : 
-				shapes.apply('setAttrs', {
-	    		opacity: 1,
-	    		scale : {x:1.2, y:1}
-				});    	
-				break;
-			case 'scatter' : 
-    			shapes.apply('setAttrs', {
-            		opacity: 1,
-            		scale : {x:1.5, y:1.5}
-        			});    	
-    			break;
-        	default:
-        		break;
-    	}
-    	shapes.apply('transitionTo', {    		
-    	    rotation : 0,
-    	    duration: 0.01
-    	});    	
-    });		
-	Name.dataLayer.on('mouseout', function(evt){  
-		document.body.style.cursor = "default";  // 나중에 지워도 되는지 확인할 것 
-		Name.tooltip.hide();
-    	Name.tooltipLayer.draw();
-    	var node = evt.shape;
-    	if(node.getSelected() == 0)
-    	{
-    		var shapes = Name.stage.get('.'+node.getName());
-    		switch(Name._type)
-        	{
-    	    	case 'hist' : 
-    				shapes.apply('setAttrs', {
-    	    		opacity: 0.5,
-    	    		scale : {x:1, y:1}
-    				});    	
-    				break;
-    			case 'scatter' : 
-        			shapes.apply('setAttrs', {
-                		opacity: 0.7,
-                		scale : {x:1, y:1}
-            			});    	
-        			break;
-            	default:
-            		break;
-        	}	
-        	shapes.apply('transitionTo', {
-        	    rotation : 0,
-        	    duration: 0.01
-        	});
-    	}    	    	
-	});
+		});	
+		
+        	
+	
 }
 var tmpShift = false;
 function select(Name)

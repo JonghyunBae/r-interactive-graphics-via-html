@@ -9,7 +9,7 @@ var Hist = {};
 	Hist.prototype = {
 			
 			_initHist: function(optionObj){
-				
+
 				////////// Make essential variables ////////
 				//this.xMax = findMaxValue(mainArr[this.x]);
 				for(var i = 0 ; i < labelArr.length ; i ++)
@@ -35,10 +35,7 @@ var Hist = {};
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength=this.width*0.02; //margin from plot box
-	            
-	            var xTmp = makeAxisArr(this.width, this.x, 5); // node가 찍혀야할 nodeX array에 저장. x좌표가 찍혀야할 좌표 위치와 이름이 xPlotArr에 저장된다. 
-	            this.xPlotArr = xTmp.plotArr;	 
-	            
+
 	            if(isDiscrete[this.x] == true)
 	            {
 	            	var cnt = 0;
@@ -65,9 +62,9 @@ var Hist = {};
 	            			xTmp.push(mainArr[this.x][i]);
 	            		}
 	            	}
-	            	this.barWidth = this.width/freqTmp.length/2;
-	            	this.barGap = this.barWidth;
-	            	this.xMax = parseInt(this.width/this.barWidth);
+	            	var barWidth = this.width/freqTmp.length/2;
+	            	var barGap = barWidth;
+	            	this.xMax = parseInt(this.width/barWidth);
 	            	
 	            	var freqRank =make2DArr(freqTmp.length); 			// 히스토그램을 오름차순을 정리하기 위한 과정 
 	            	for(var i  = 0 ; i < freqRank.length ; i ++)
@@ -76,50 +73,84 @@ var Hist = {};
 	            		freqRank[i][1] = i;
 	            	}
 	            	freqRank.sort(function(a,b){return a[0] - b[0];});
-	            	var cntTmp = new Array(freqRank.length);
-	            	this.firstNode = freqRank[0][1];  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
-	            	this.lastNode = freqRank[freqRank.length-1][1]; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
-	            	this.maxNode = this.lastNode; // Y Axis를 그릴때 제일위에까지 그리기위한 것 
+	            	var nodeX = new Array(freqTmp.length);
+	            	this.maxNode =freqRank[freqRank.length-1][1]; // Y Axis를 그릴때 제일위에까지 그리기위한 것 
+	            	this.xPlotArr = make2DArr(freqTmp.length);
  	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
-	            		cntTmp[freqRank[i][1]] = i;				// 이 cntTmp array를 노드의 x값들에 넣어준다. 즉 x 위치만 바꿔서 넣는다. 
-	            	}
-	            	
-	            	
+ 	            	//	nodeX[freqRank[i][1]] = i;				// 이 cntTmp array를 노드의 x값들에 넣어준다. 즉 x 위치만 바꿔서 넣는다. 
+ 	            		this.xPlotArr[i][0] = i*(barWidth+barWidth) + (barWidth+barWidth)/2;
+ 	            		this.xPlotArr[i][1] = xTmp[freqRank[i][1]];
+	            		nodeX[freqRank[i][1]] = i*(barWidth+barWidth) + (barWidth)/2;
+	            	}	            	
+ 	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
+ 	            	var firstcnt = 0;
 	            }else{
 	            	
-	            	this.xMax = findMaxValue(mainArr[this.x]);			// xMax를 먼저 구해야 barwidth를 구해줄 수 있다. 
-	            	this.xMin = findMinValue(mainArr[this.x]);
-	            	if(this.bin > this.xMax){ this.xMax = this.bin};
-	            	this.barWidth = this.width /(parseInt(this.xMax/this.bin) + 1); // 일단 barGap은 여기엔 넣지 않음. .
-	            	this.barGap = optionObj.barGap || 0;
-	            	var xTmp = new Array(parseInt(this.xMax/this.bin)+1);  // 수직선에 찍히는 이름 저장할 꺼 -> 여기서는 bin
-	            	var freqTmp = new Array(parseInt(this.xMax/this.bin)+1); // frequency 저장 
-	            	var hasTmp = make2DArr(parseInt(this.xMax/this.bin)+1);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
-	            	var countTmp = 0;	         
-	            	var cnt = 0;	      
+	            	var xMax = findMaxValue(mainArr[this.x]);			// xMax를 먼저 구해야 barwidth를 구해줄 수 있다. 
+	            	var xMin = findMinValue(mainArr[this.x]);
+	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); // frequency 임시로 저장 
+	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
+	            	var cnt = 0;
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
-	            		freqTmp[i] = 0;  // frequency 저장할꺼 초기화 
-	            		xTmp[i] = this.bin * i ; // xTmp는 여기서 초기화 하면 아래에서는 건들필요 없다. 여기서는 숫자이기때문에 	            		
+	            		freqTmp[i] = 0;  // frequency 저장할꺼 초기화  	            		
 	            	}
 	            	
 	            	for(var i = 0 ; i < mainArr[this.x].length ; i++)
 	            	{
-	            		countTmp = parseInt(mainArr[this.x][i]/this.bin);  // 어느 배열위치에 들어갈지 결정.
-	            		freqTmp[countTmp] ++ ; // 해당배열 frequency 하나씩 늘려주고 
-	            		hasTmp[countTmp].push(i); // hasarray에 저장해준다.
-	            	}	            		
-	            	this.firstNode = 0;  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
-	            	this.lastNode = freqTmp.length-1; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
+	            		if(xMin < 0)
+	            		{
+	            			cnt = parseInt((mainArr[this.x][i]+Math.abs(xMin))/this.bin);  // 어느 배열위치에 들어갈지 결정.
+	            		}else{
+	            			cnt = parseInt(mainArr[this.x][i]/this.bin);
+	            		}	            		
+	            		freqTmp[cnt] ++ ; // 해당배열 frequency 하나씩 늘려주고 
+	            		hasTmp[cnt].push(i); // hasarray에 저장해준다.
+	            	}
+	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 처음부터 어디까지 0이 나오는지 저장. 즉, frequency가 0이 아닌 첫 노드 검사 
+	            	{	            		
+	            		if(freqTmp[firstcnt] != 0)
+	            		{
+	            			break;
+	            		}
+	            	}
+	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // 위와 반대로 끝에서부터 frequency가 0이 아닌 첫 노드 검사 
+	            	{
+	            		if(freqTmp[lastcnt] != 0)
+	            		{
+	            			break;
+	            		}
+	            	}
+	            	if(lastcnt == firstcnt) // 1개있다는 뜻 
+	            	{
+	            		var barWidth = this.width /(3);	// 양쪽에 1칸씩 여유분	따라서 +2 
+		            	this.xPlotArr = make2DArr(4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
+	            	}else{
+	            		var barWidth = this.width /(lastcnt-firstcnt + 2);	// 양쪽에 1칸씩 여유분	따라서 +2 
+		            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
+	            	}
+	            	cnt = 0;
+	            	var nodeX = new Array(lastcnt-firstcnt+1);
 	            	
-	            		            	
+	            	for(var i = 0 ; i < this.xPlotArr.length ; i++)
+	            	{
+	            		this.xPlotArr[i][0] = (i)*barWidth;
+	            		this.xPlotArr[i][1] = (xMin > 0 ) ? (i-1)*this.bin + firstcnt*this.bin : (i-1)*this.bin + firstcnt*this.bin -Math.abs(xMin);
+	            		if(i !=0 && i < this.xPlotArr.length-2 )
+	            		{	            			
+	            			nodeX[cnt++] =  i*(barWidth);	            			
+	            		}
+	            	}	 
+	            	this.firstX = this.xPlotArr[0][0];  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
 	            	var maxFreq = findMaxValue(freqTmp);
 	            	this.maxNode =0;
 	                for(var i = 0; i<  freqTmp.length ; i++)
 	             	{
 	                 	if(freqTmp[i] == maxFreq){
-	                 		this.maxNode=i;
+	                 		this.maxNode=i-firstcnt;
 	                 		break;
 	                 	}                	
 	             	}	            	
@@ -129,47 +160,35 @@ var Hist = {};
 	            
             	 //////////Make Data Structure of nodes and essential arrays////////            	
             	this.node = new Array();            	
-            	for(var cnt = 0; cnt< xTmp.length ; cnt++)
+            	for(var cnt = 0; cnt< nodeX.length ; cnt++)
             	{
             		this.node[cnt] = new Kinetic.Rect({
             			id : cnt,
-            			name : cnt,
-						freq: freqTmp[cnt],
-						label : (isDiscrete[this.x] == true) ? xTmp[cnt] : parseFloat(xTmp[cnt]).toFixed(this.fixPoint),
-						x: (isDiscrete[this.x] == true) ? this.plotXMargin +  cntTmp[cnt] *(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2 : this.plotXMargin +  cnt*(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2,
-						y: this.plotYMargin + this.height - freqTmp[cnt]*this.height/this.yMax/2, 
-						width: this.barWidth,
-						height: freqTmp[cnt]*this.height/this.yMax,
+				name : cnt,
+						freq: freqTmp[cnt+firstcnt],
+						x: this.plotXMargin + nodeX[cnt] + barWidth/2, 
+						y: this.plotYMargin + this.height - freqTmp[cnt+firstcnt]*this.height/this.yMax/2, 
+						
+						width: barWidth,
+						height: freqTmp[cnt+firstcnt]*this.height/this.yMax,
 						fill: 'green',
 						stroke: 'black',						
 						opacity : 0.5,
 						draggable : false,
 						hidden : false,
 						selected : 0,
-						info : "Node : "+cnt+"\r\n"+"Frequency : "+freqTmp[cnt],
+						info : "Node : "+cnt+"\r\n"+"Frequency : "+freqTmp[cnt+firstcnt],
 						hasArr : hasTmp[cnt],
-						offset: {x: this.barWidth/2, y: freqTmp[cnt]*this.height/this.yMax/2},
+						offset: {x: barWidth/2, y: freqTmp[cnt+firstcnt]*this.height/this.yMax/2},
 					});
             	}
-            	
-            	
-            	
-            	 this.xTmpLength=xTmp.length;	
-           // 	this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
- 	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
- 	         	
- 	     //       this.xTickRange = (this.xMax - this.xMin)/this.xTick;
+	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
  	            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
- 	           
- 	    //       var x = Math.ceil( Math.log(this.xTickRange) / Math.log(10));
 	            var y = Math.ceil( Math.log(this.yTickRange) / Math.log(10));
-	    //        this.xTickRange = setTickRange(x, this.xTickRange);
-	            this.yTickRange = setTickRange(y, this.yTickRange);
-	    //        this.xMax = this.xTickRange * Math.round(1+this.xMax/this.xTickRange);            
+	            this.yTickRange = setTickRange(y, this.yTickRange);      
 	            this.yMax = this.yTickRange * Math.round(this.yMax/this.yTickRange);           
-     	            
 	            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);   
-          
+	            
 	        },				
 			doIt: function() { 
 				alert('do it'); 
@@ -192,19 +211,20 @@ var Hist = {};
                     stroke: '#eeeeee',
                     strokeWidth: 2
                 });                
-                this.plotLayer.add(this.plotRect);      
+                this.plotLayer.add(this.plotRect);    
+
                 this.xAxis = new Kinetic.Line({
                     name: 'xAxis',
-                    points: [  this.node[this.firstNode].getX() - this.node[this.firstNode].getOffset().x, 
+                    points: [  this.plotXMargin+this.firstX, 
                                  this.plotYMargin+this.height+this.plotLength, 
-                                 this.node[this.lastNode].getX() + this.node[this.lastNode].getOffset().x, 
+                                 this.plotXMargin+this.lastX, 
                                  this.plotYMargin+this.height+this.plotLength],
                     stroke: 'black',
                     strokeWidth: 2             
                 });
                 
-                this.plotLayer.add(this.xAxis);
                 
+                this.plotLayer.add(this.xAxis);
                 this.yAxis = new Kinetic.Line({
                     points: [    this.plotXMargin-this.plotLength, 
                                  this.plotYMargin+this.height-this.node[this.maxNode].getHeight(),
@@ -214,7 +234,6 @@ var Hist = {};
                     strokeWidth: 2             
                 });                                
                 this.plotLayer.add(this.yAxis);
-                
                 //////////////////////////////Tooltip Setting////////////////////////////////////////
                 this.tooltipLayer = new Kinetic.Layer();
                 this.tooltip = new Kinetic.Group({
@@ -236,105 +255,41 @@ var Hist = {};
                 this.tooltipLayer.add(this.tooltip);
                 this.stage.add(this.tooltipLayer);
                 ///////////////////////////////////////////////////////////////////////////////////
-
+                
                 this.xLine = new Array();
                 this.xText = new Array();
-                     	
-                if(isDiscrete[this.x] == true)
+                var tmp = 0;
+                for(var i = 0 ; i < this.xPlotArr.length ; i ++)
                 {
-                	
-                	for(var i = 0 ; i < this.node.length ; i ++)
-                	{
-                		this.xLine[i] = new Kinetic.Line({
-                            name : "xLine"+i,
-                            points: [    this.node[i].getX(),
-                                         this.plotYMargin+this.height+this.plotLength,
-                                         this.node[i].getX(),
-                                         this.plotYMargin+this.height+2*this.plotLength],
-                            stroke: 'black',
-                            strokeWidth: 2,             
-                        });
-                        this.plotLayer.add(this.xLine[i]);                	
-
-	                	this.xText[i] = new Kinetic.Text({
-	                        name : "xText"+i,
-	                        x: this.node[i].getX() - 30,
-	                        y: this.plotYMargin+this.height+this.plotLength*2,
-	                        text: this.node[i].getLabel(), ///////////////////////////////////////////
-	                        fontSize: this.width/20,
-	                        fontFamily: 'Calibri',
-	                        fill: 'black',
-	                        width: 60,
-	                        align: 'center'    
-	                    });          
-	                    this.plotLayer.add(this.xText[i]);
-                	}
-                	
-                }else{  
-             
-                	for(var i = 0 ; i < this.node.length ; i ++)
+                	if((this.node.length < 10) || (this.node.length>=10)&&( i%(parseInt(this.node.length/5))==0) )
                     {
-                		if( (this.node.length < 10) || (this.node.length>=10)&&( i%(parseInt(this.node.length/5))==0) )
-                		{
-                			this.xLine[i] = new Kinetic.Line({
-                                name : "xLine"+i,
-                                points: [    this.node[i].getX() - this.node[i].getOffset().x,
-                                             this.plotYMargin+this.height+this.plotLength,
-                                             this.node[i].getX() - this.node[i].getOffset().x,
-                                             this.plotYMargin+this.height+2*this.plotLength],
-                                stroke: 'black',
-                                strokeWidth: 2,             
-                            });
-                            this.plotLayer.add(this.xLine[i]);               
-                            this.xText[i] = new Kinetic.Text({
-                                name : "xText"+i,
-                                x: this.node[i].getX() - this.node[i].getOffset().x-30,
-                                y: this.plotYMargin+this.height+this.plotLength*2,
-                                text: this.node[i].getLabel(), ///////////////////////////////////////////
-                                fontSize: 15,
-                                fontFamily: 'Calibri',
-                                fill: 'black',
-                                width: 60,
-                                align: 'center'    
-                            });          
-                            this.plotLayer.add(this.xText[i]);
-                		}
-                                    
-                        
-                    }
-                	if( this.node.length < 10 )
-            		{
-	               	// 끝에 하나 더 그려주기 위해서 넣은 것 
-	                	this.xLine[i] = new Kinetic.Line({
-	                        name : "xLine"+i,
-	                        points: [    this.node[i-1].getX() - this.node[i-1].getOffset().x + this.node[i-1].getWidth(),
+	                	this.xLine[tmp] = new Kinetic.Line({
+	                        name : "xLine"+tmp,
+	                        points: [   this.plotXMargin + this.xPlotArr[i][0],
 	                                     this.plotYMargin+this.height+this.plotLength,
-	                                     this.node[i-1].getX() - this.node[i-1].getOffset().x + this.node[i-1].getWidth(),
+	                                     this.plotXMargin + this.xPlotArr[i][0],
 	                                     this.plotYMargin+this.height+2*this.plotLength],
 	                        stroke: 'black',
 	                        strokeWidth: 2,             
 	                    });
-	                    this.plotLayer.add(this.xLine[i]);               
-	                    this.xText[i] = new Kinetic.Text({
-	                        name : "xText"+i,
-	                        x: this.node[i-1].getX() - this.node[i-1].getOffset().x-30 + this.node[i-1].getWidth(),
+	                    this.plotLayer.add(this.xLine[tmp]);                	
+	                	this.xText[tmp] = new Kinetic.Text({
+	                        name : "xText"+tmp,
+	                        x: this.plotXMargin + this.xPlotArr[i][0]-30,
 	                        y: this.plotYMargin+this.height+this.plotLength*2,
-	                        text: parseFloat(this.node[i-1].getLabel())+this.bin , ///////////////////////////////////////////
-	                        fontSize: 15,
+	                        text: this.xPlotArr[i][1], ///////////////////////////////////////////
+	                        fontSize: this.width/40,
 	                        fontFamily: 'Calibri',
 	                        fill: 'black',
 	                        width: 60,
 	                        align: 'center'    
 	                    });          
-	                    this.plotLayer.add(this.xText[i]);
-            		} 	
+	                    this.plotLayer.add(this.xText[tmp]);
+	                    tmp++;
+                    }
                 }
-                
                 this.yLine = new Array();
-                this.yText = new Array();
-                
-
-
+                this.yText = new Array();            
                 for(var i=0; i<parseInt(this.yTick); i++)
                 {
                     this.yLine[i] = new Kinetic.Line({

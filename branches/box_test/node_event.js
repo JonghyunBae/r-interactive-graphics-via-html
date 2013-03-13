@@ -66,6 +66,7 @@ function hover(Name)
 	Name.dataLayer.on('mouseover mousemove', function(evt){  
         document.body.style.cursor = "pointer";
         var node = evt.shape;
+        node.moveToTop();
         var mousePos = node.getStage().getMousePosition();
     	Name.tooltipText.setText(node.getInfo()); 
     	Name.tooltipRect.setAttrs({

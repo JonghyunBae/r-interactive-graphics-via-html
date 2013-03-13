@@ -234,7 +234,7 @@ var Scatter = {};
 	    				nodeX[i] = (nodeX[i]+1)*diff + this.plotXMargin;
 	    			}
 	    		}else{	    		//	alert('1');
-	    			this.xTick= (optionObj.xTick==undefined)?(4):(optionObj.xTick); //default x ticks is 5
+	    			this.xTick= (optionObj.xTick==undefined)?(5	):(optionObj.xTick); //default x ticks is 5
 	    			this.xMax = findMaxValue(mainArr[this.x]);
 	    		//	alert(this.xMax );
 	    		
@@ -246,18 +246,26 @@ var Scatter = {};
 	    			var x = Math.ceil( Math.log(xTickRange) / Math.log(10));
 	    	//		alert(x);
 	    			xTickRange = setTickRange(x, xTickRange);
-	    		alert("ddddd"+xTickRange);
+	    	//	alert("ddddd"+xTickRange);
 		            this.xMax = xTickRange * Math.ceil(this.xMax/xTickRange);		      
 		            this.xMin = xTickRange * Math.floor(this.xMin/xTickRange);
 		     //       alert(this.xMax);
 		  //      	var xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
+		    //    	alert("xMax " +this.xMax + ", xMin " + this.xMin + " , xTickRange" + xTickRange );
 		        	var diff = this.width * xTickRange   / (this.xMax - this.xMin);
-		        	alert(xTickRange);
-		        	this.xPlotArr = make2DArr(this.xTick+1);		        	
+		        //	alert(xTickRange);
+		        	
+		
+		        		
+		        		
+		        	this.xPlotArr = make2DArr(  Math.round ((this.xMax - this.xMin)/xTickRange + 1 ));
+		        	
+		        //	alert(   Math.round ((this.xMax - this.xMin)/xTickRange + 1 ) );
 	    			for(var i = 0 ; i < this.xPlotArr.length ; i ++)
 	    			{
 	    				this.xPlotArr[i][0] = (i)*diff;
-	    				this.xPlotArr[i][1] = (i+this.xMin)*xTickRange;
+	    				this.xPlotArr[i][1] = (xTickRange.toString().indexOf('.') == -1) ?  (this.xMin+i*xTickRange) : (this.xMin+i*xTickRange).toFixed(xTickRange.toString().substring(xTickRange.toString().indexOf('.')+1,xTickRange.toString().length).length);
+	    				
 	    			}	    			
 	    		}
 	    		
@@ -323,14 +331,14 @@ var Scatter = {};
 	    		//this.xMax = findMaxValue(mainArr[this.x]);
 	    		this.yMax = findMaxValue(mainArr[this.y]);
 				this.node = new Array();			
-				alert(this.xMax);
-				alert(findMaxValue(mainArr[this.x]) );
+			//	alert(this.xMax);
+			//	alert(findMaxValue(mainArr[this.x]) );
 				for(var i = 0; i < mainArr[this.x].length ; i++)
 				{
 					this.node[i] = new Kinetic.Circle({
 						//id: i,
 						name: 'a', //dataGetName(i),
-						x: (isDiscrete[this.x] == true) ?  nodeX[i] : this.plotXMargin + this.width*  (     (mainArr[this.x][i]-this.xMin) *(1 )  ) /   (    (this.xMax - this.xMin)     ),
+						x: (isDiscrete[this.x] == true) ?  nodeX[i] : this.plotXMargin + this.width*  (     (mainArr[this.x][i]-this.xMin)   ) /   (    (this.xMax - this.xMin)     ),
 						y: (isDiscrete[this.y] == true) ? nodeY[i] : mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin + 2*( this.height/2+this.plotYMargin-(mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin) ),
 						radius: this.radius,
 						fill: (this.color==-1)?('green'):getColor(i,colors, mainValueArr, tmpColorArr),

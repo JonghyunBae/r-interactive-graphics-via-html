@@ -54,222 +54,23 @@ var Scatter = {};
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
 	         
-	  ////////////////////////////////////////////////Make Legend Start////////////////////////////////////////////
-	            if(optionObj.legend!=undefined){
-	            	this.legend=optionObj.legend;
-	            	var legendX = 0;
-					var legendY = 0;
-	            	if (this.legend == 'topright' || this.legend == 'right')	{
-	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
-	            		legendY = this.plotYMargin-this.plotLength;
-	            	}else if(this.legend == 'topleft' ||this.legend == 'left'){
-	            		this.plotXMargin = 3 * this.plotXMargin ;
-	            		legendX = this.plotLength*5;
-	            		legendY = this.plotYMargin-this.plotLength;
-	            		
-	            	}else{						// default is center right
-	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
-	            		legendY = this.plotYMargin-this.plotLength;
-	            	}
-	            	if(mainValueArr.length<24){
-	            	
-		            	this.legendNode = new Array();	
-		            	this.legendText = new Array();	
-						for(var i = 0; i < mainValueArr.length ; i++)
-						{						
-							this.legendNode[i] = new Kinetic.Circle({
-								x: legendX+15,
-								y: legendY+15*i+11+20,
-								radius: this.radius,
-								fill: (this.color==-1)?('green'):getLegendColor(i, colors, mainValueArr)
-							});				
-							this.legendText[i] = new Kinetic.Text({
-								x: legendX+20,
-						        y: legendY+15*i+20,
-								text: (this.color==-1)?('green'):mainValueArr[i],
-								fontFamily: 'Calibri',
-								fontSize: 13,
-								padding: 5,
-								fill: 'black',
-								align:'center'
-							});						
-						}		
-						var maxLengthLegendText = this.legendText[0].getWidth();
-						for(var i=0; i<mainValueArr.length; i++)
-						{
-							if(this.legendText[i].getWidth()>maxLengthLegendText)
-							{
-								maxLengthLegendText=this.legendText[i].getWidth();
-							}						
-						}					
-						this.legendRect= new Kinetic.Rect({
-							x:legendX,
-							y:legendY,
-							width: maxLengthLegendText + 30,
-							height: this.legendText[mainValueArr.length-1].getY()-30,
-							stroke: 'black',
-							fill: '#eeeeee'
-						});		
-						this.legendMain= new Kinetic.Text({
-							x: legendX,
-					        y: legendY+5,
-							text: labelArr[this.color],
-							fontFamily: 'Calibri',
-							width : this.legendRect.getWidth(),
-							fontSize: 15,
-							fill: 'black',
-							fontStyle: 'bold',
-							align:'center'
-						});
-						
-	            	}else{ //if(mainValueArr.length> = 24)
-	            		
-	            		var legendTick= 5; //default legend ticks is 5        	            
-			            this.legendMax = findMaxValue(mainArr[this.color]);		
-			            this.legendMin = findMinValue(mainArr[this.color]);	
-			            var legendTickRange = (this.legendMax - this.legendMin)/legendTick;
-			            legendTickRange = setTickRange( Math.ceil( Math.log(legendTickRange) / Math.log(10)) , legendTickRange);
-			            this.legendMax = legendTickRange * Math.ceil(this.legendMax/legendTickRange);     		
-			            this.legendMin= legendTickRange * Math.floor(this.legendMin/legendTickRange);     	
-			        	this.legendPlotArr = make2DArr((this.legendMax-this.legendMin)/legendTickRange+1);		        	
-		    			for(var i = 0 ; i < this.legendPlotArr.length ; i ++)
-		    			{
-		    				this.legendPlotArr[i][1] = (i+this.legendMin) *legendTickRange;
-		    			}		    	
-		    	
-	            		this.legendNode = new Array();	
-		            	this.legendText = new Array();	
-		            	for(var i = 0; i < this.legendPlotArr.length ; i++)
-						{						
-								
-							this.legendText[i] = new Kinetic.Text({
-								x: legendX+30,
-						        y: legendY+20*i+15,
-								text: '- '+this.legendPlotArr[ (this.legendPlotArr.length-1)-i ][1],
-								fontFamily: 'Calibri',
-								fontSize: 13,
-								padding: 5,
-								fill: (i==0 || i==this.legendPlotArr.length-1 )?'#eeeeee':'black',
-								align:'center'
-							});						
-						}		
-		            	
-		            	this.legendNode[0] = new Kinetic.Rect({
-							x: legendX+15,
-							y:  101 + 20*((this.legendMax-this.legendMin)/legendTickRange-1) - 20*(findMaxValue(mainArr[this.color])- findMinValue(mainArr[this.color]) )/legendTickRange - 20*(findMinValue(mainArr[this.color]) -this.legendMin)/legendTickRange,
-							width :20,
-							height :  20*(findMaxValue(mainArr[this.color])- findMinValue(mainArr[this.color]))/legendTickRange,
-							fillLinearGradientStartPoint: [0, 0],
-					        fillLinearGradientEndPoint: [0, 20*(findMaxValue(mainArr[this.color]))/legendTickRange],
-					        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],								
-						});			
-						var maxLengthLegendText = this.legendText[0].getWidth();
-						
-						for(var i=0; i<this.legendPlotArr.length; i++)
-						{
-							if(this.legendText[i].getWidth()>maxLengthLegendText)
-							{
-								maxLengthLegendText=this.legendText[i].getWidth();
-							}						
-						}				
-						this.legendRect= new Kinetic.Rect({
-							x:legendX,
-							y:legendY,
-							width: maxLengthLegendText + 40,
-							height:  this.legendText[this.legendPlotArr.length-1].getY()-30,
-							stroke: 'black',
-							fill: '#eeeeee'
-						});	
-						
-						this.legendMain= new Kinetic.Text({
-							x: legendX,
-					        y: legendY+5,
-							text: labelArr[this.color],
-							fontFamily: 'Calibri',
-							width : this.legendRect.getWidth(),
-							fontSize: 15,
-							fill: 'black',
-							fontStyle: 'bold',
-							align:'center'
-						});	
-						
-						
-	            	}
-	            }
-	            ////////////////////////////////////////////////Make Legend End////////////////////////////////////////////
+
 	            
+	            var nodeX = new Array(mainArr[this.x].length);
+	            this.xTick= (optionObj.xTick==undefined)?(5	):(optionObj.xTick);
+	            var xTmp = makeAxisArr(this.width, this.x, this.xTick); // node가 찍혀야할 nodeX array에 저장. x좌표가 찍혀야할 좌표 위치와 이름이 xPlotArr에 저장된다. 
+	            nodeX = xTmp.node;
+	            this.xPlotArr = xTmp.plotArr;
 	            
+	            var nodeY = new Array(mainArr[this.y].length);
+	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5 
 	            
-	    		if(isDiscrete[this.x] == true)
-	    		{
-	    			var nodeX = new Array(mainArr[this.x].length); //If data is discontinuous, the axis of node should be fixed. So, we define array for the axis 
-	    			var xTmp = new Array();  //the names of each content below
-	    			xTmp[0] = mainArr[this.x][0];
-	    			nodeX[0] = 0;
-	    			for(i = 1 ; i < mainArr[this.x].length ; i++)
-	            	{
-	            		for(j = 0 ; j < xTmp.length ; j ++)
-	            		{
-	            			if(xTmp[j] == mainArr[this.x][i])
-	            			{
-	            				nodeX[i] = j;
-	            				break;
-	            			}	            				
-	            		}
-	            		if(j == xTmp.length)
-	            		{
-	            			nodeX[i] = j;
-	            			xTmp.push(mainArr[this.x][i]);
-	            		}
-	            	}
-	    			this.xPlotArr = make2DArr(xTmp.length);
-	    			var diff = this.width / (xTmp.length+1);
-	    			for(var i = 1 ; i < this.xPlotArr.length+1 ; i ++)
-	    			{
-	    				this.xPlotArr[i-1][0] = i*diff;
-	    				this.xPlotArr[i-1][1] = xTmp[i-1];
-	    			}
-	    			for(var i = 0 ; i < nodeX.length ; i++)
-	    			{
-	    				nodeX[i] = (nodeX[i]+1)*diff + this.plotXMargin;
-	    			}
-	    		}else{	    		//	alert('1');
-	    			this.xTick= (optionObj.xTick==undefined)?(5	):(optionObj.xTick); //default x ticks is 5
-	    			this.xMax = findMaxValue(mainArr[this.x]);
-	    		//	alert(this.xMax );
-	    		
-	    			this.xMin = findMinValue(mainArr[this.x]);
-	    			var xTickRange = (this.xMax-this.xMin )/this.xTick;
-	    		
-	    		//	alert("xMax " +this.xMax + ", xMin " + this.xMin + " , xTickRange" + xTickRange );
-	    		//	alert(xTickRange);
-	    			var x = Math.ceil( Math.log(xTickRange) / Math.log(10));
-	    	//		alert(x);
-	    			xTickRange = setTickRange(x, xTickRange);
-	    	//	alert("ddddd"+xTickRange);
-		            this.xMax = xTickRange * Math.ceil(this.xMax/xTickRange);		      
-		            this.xMin = xTickRange * Math.floor(this.xMin/xTickRange);
-		     //       alert(this.xMax);
-		  //      	var xDiff = (parseInt(this.xMax/this.xTick)<1)?1:parseInt(this.xMax/this.xTick);//5 should be selected automatically later
-		    //    	alert("xMax " +this.xMax + ", xMin " + this.xMin + " , xTickRange" + xTickRange );
-		        	var diff = this.width * xTickRange   / (this.xMax - this.xMin);
-		        //	alert(xTickRange);
-		        	
-		
-		        		
-		        		
-		        	this.xPlotArr = make2DArr(  Math.round ((this.xMax - this.xMin)/xTickRange + 1 ));
-		        	
-		        //	alert(   Math.round ((this.xMax - this.xMin)/xTickRange + 1 ) );
-	    			for(var i = 0 ; i < this.xPlotArr.length ; i ++)
-	    			{
-	    				this.xPlotArr[i][0] = (i)*diff;
-	    				this.xPlotArr[i][1] = (xTickRange.toString().indexOf('.') == -1) ?  (this.xMin+i*xTickRange) : (this.xMin+i*xTickRange).toFixed(xTickRange.toString().substring(xTickRange.toString().indexOf('.')+1,xTickRange.toString().length).length);
-	    				
-	    			}	    			
-	    		}
-	    		
-	    		if(isDiscrete[this.y] == true)
+	            var yTmp = makeAxisArr(this.height, this.y, this.yTick);
+	            
+	            nodeY = yTmp.node;
+	            this.yPlotArr = yTmp.plotArr;
+	            
+	    	/*	if(isDiscrete[this.y] == true)
 	    		{
 	    			var nodeY = new Array(mainArr[this.y].length);
 	    			var yTmp = new Array();  //the names of each content below
@@ -303,7 +104,7 @@ var Scatter = {};
 	    				nodeY[i] = this.plotYMargin + this.height -  (nodeY[i]+1)*diff ;
 	    			}
 	    		}else{
-	    				this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5        	            
+	    			this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5        	            
 			            this.yMax = findMaxValue(mainArr[this.y]);			            	            
 			            var yMin = findMinValue(mainArr[this.y]);			           
 			            var yTickRange = (this.yMax )/this.yTick;			            
@@ -322,24 +123,21 @@ var Scatter = {};
 		    			}
 		    			
 		    			
-	    		}
+	    		}*/
 	    		
 	    		//Whether data is discontinuous or continuous, xPlotArr and yPlotArr have each information about ticks ( xLine, xText etc. )
 	    		// So, drawing function just uses these array.
 	    		
 	    		//////////Make Data Structure of nodes and essential arrays////////
-	    		//this.xMax = findMaxValue(mainArr[this.x]);
 	    		this.yMax = findMaxValue(mainArr[this.y]);
 				this.node = new Array();			
-			//	alert(this.xMax);
-			//	alert(findMaxValue(mainArr[this.x]) );
 				for(var i = 0; i < mainArr[this.x].length ; i++)
 				{
 					this.node[i] = new Kinetic.Circle({
 						//id: i,
 						name: 'a', //dataGetName(i),
-						x: (isDiscrete[this.x] == true) ?  nodeX[i] : this.plotXMargin + this.width*  (     (mainArr[this.x][i]-this.xMin)   ) /   (    (this.xMax - this.xMin)     ),
-						y: (isDiscrete[this.y] == true) ? nodeY[i] : mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin + 2*( this.height/2+this.plotYMargin-(mainArr[this.y][i]*(this.height/this.yMax)+this.plotYMargin) ),
+						x: nodeX[i] + this.plotXMargin,
+						y: this.height +this.plotYMargin - nodeY[i],
 						radius: this.radius,
 						fill: (this.color==-1)?('green'):getColor(i,colors, mainValueArr, tmpColorArr),
 						stroke : 'black',
@@ -632,3 +430,69 @@ function getLegendColor(n, colors, mainValueArr)
 		return tmpColor;		
 	}	
 }
+
+function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나 this.y를 받고 xtick이나 ytick을 받는다. 
+{														// return은 x좌표와 x좌표 이름이 찍혀있는 plotArr와 node가 찍혀야할 좌표가 node에 저장되어 return된다. 
+	var node = new Array(mainArr[axis].length);
+	if(isDiscrete[axis] == true)
+	{		
+		
+		var tmp = new Array();  //the names of each content below
+		tmp[0] = mainArr[axis][0];
+		node[0] = 0;
+		for(var i = 1 ; i < mainArr[axis].length ; i++)
+    	{
+    		for(j = 0 ; j < tmp.length ; j ++)
+    		{
+    			if(tmp[j] == mainArr[axis][i])
+    			{
+    				node[i] = j;
+    				break;
+    			}	            				
+    		}
+    		if(j == tmp.length)
+    		{
+    			node[i] = j;
+    			tmp.push(mainArr[axis][i]);
+    		}
+    	}	
+		var plotArr = make2DArr(tmp.length);
+		var diff = length / (tmp.length+1);
+		for(var i = 1 ; i < plotArr.length+1 ; i ++)
+		{
+			plotArr[i-1][0] = i*diff;
+			plotArr[i-1][1] = tmp[i-1];
+		}	
+		for(var i = 0 ; i < node.length ; i++)
+		{
+			node[i] = (node[i]+1)*diff;
+		}
+	}else{	    	
+		
+		var max = findMaxValue(mainArr[axis]);
+		var min = findMinValue(mainArr[axis]);
+		var tickRange = (max-min )/tick;	    		
+		var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
+		tickRange = setTickRange(tmp, tickRange);
+        max = tickRange * Math.ceil(max/tickRange);		      
+        min = tickRange * Math.floor(min/tickRange);
+    	var diff = length * tickRange   / (max - min);
+    	plotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));
+    	
+		for(var i = 0 ; i < plotArr.length ; i ++)
+		{
+			plotArr[i][0] = (i)*diff;
+			plotArr[i][1] = (tickRange.toString().indexOf('.') == -1) ?  (min+i*tickRange) : (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
+		}	    
+		//alert(obj.plotXMargin);
+		for(var i = 0 ; i < node.length ; i ++)
+		{
+			node[i] = length* ((mainArr[axis][i]-min)) /((max - min));
+		}
+	//	alert(node);
+	}
+	return { plotArr : plotArr, node : node};
+}
+
+
+

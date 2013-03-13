@@ -35,6 +35,8 @@ var Hist = {};
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength=this.width*0.02; //margin from plot box
 	            
+	            var xTmp = makeAxisArr(this.width, this.x, 5); // node가 찍혀야할 nodeX array에 저장. x좌표가 찍혀야할 좌표 위치와 이름이 xPlotArr에 저장된다. 
+	            this.xPlotArr = xTmp.plotArr;	 
 	            
 	            if(isDiscrete[this.x] == true)
 	            {

@@ -54,7 +54,7 @@ var Scatter = {};
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
 	         
-	  //////////Make Legend////////
+	  ////////////////////////////////////////////////Make Legend Start////////////////////////////////////////////
 	            if(optionObj.legend!=undefined){
 	            	this.legend=optionObj.legend;
 	            	var legendX = 0;
@@ -122,48 +122,20 @@ var Scatter = {};
 							align:'center'
 						});
 						
-	            	}else{
-	            		this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5        	            
-			            this.yMax = findMaxValue(mainArr[this.y]);			            	            
-			            var yMin = findMinValue(mainArr[this.y]);			           
-			            var yTickRange = (this.yMax - yMin)/this.yTick;			            
-			            var y = Math.ceil( Math.log(yTickRange) / Math.log(10));			            
-			            yTickRange = setTickRange(y, yTickRange);			                        
-			            this.yMax = yTickRange * Math.round(1+this.yMax/yTickRange);     			                       	                       
-			    	//	var yDiff = (parseInt(this.yMax/yTick)<1)?1:parseInt(this.yMax/yTick); //5 should be selected automatically later
-			            var diff = (this.yMax*this.height)/( findMaxValue(mainArr[this.y])*(this.yTick+1));
-			            this.yPlotArr = make2DArr(this.yTick);		        	
-		    			for(var i = 0 ; i < this.yPlotArr.length ; i ++)
-		    			{
-		    				this.yPlotArr[i][0] = i*diff;
-		    				this.yPlotArr[i][1] = i*yTickRange;
-		    				
-		    			}
-	            		
-	            		
+	            	}else{ //if(mainValueArr.length> = 24)
 	            		
 	            		var legendTick= 5; //default legend ticks is 5        	            
 			            this.legendMax = findMaxValue(mainArr[this.color]);		
 			            this.legendMin = findMinValue(mainArr[this.color]);	
-			       //    alert(this.legendMax);
-			        //   alert(this.legendMin);
-			            var legendTickRange = (this.legendMax - this.legendMin)/legendTick;	
-			           // alert (legendTickRange );
+			            var legendTickRange = (this.legendMax - this.legendMin)/legendTick;
 			            legendTickRange = setTickRange( Math.ceil( Math.log(legendTickRange) / Math.log(10)) , legendTickRange);
 			            this.legendMax = legendTickRange * Math.ceil(this.legendMax/legendTickRange);     		
 			            this.legendMin= legendTickRange * Math.floor(this.legendMin/legendTickRange);     	
-			       //     alert(this.legendMax);
-			     //      alert(this.legendMin);
-			    	//	var legendDiff = (parseInt(this.legendMax/legendTick)<1)?1:parseInt(this.legendMax/legendTick); //5 should be selected automatically later
-			        	//var diff = this.height / legendTick;			    
-			     //      alert ((this.legendMax-this.legendMin)/legendTickRange );
 			        	this.legendPlotArr = make2DArr((this.legendMax-this.legendMin)/legendTickRange+1);		        	
 		    			for(var i = 0 ; i < this.legendPlotArr.length ; i ++)
 		    			{
-		    			//	this.legendPlotArr[i][0] = i*diff;
 		    				this.legendPlotArr[i][1] = (i+this.legendMin) *legendTickRange;
 		    			}		    	
-		    		//	alert(this.legendPlotArr.length);
 		    	
 	            		this.legendNode = new Array();	
 		            	this.legendText = new Array();	
@@ -181,8 +153,6 @@ var Scatter = {};
 								align:'center'
 							});						
 						}		
-		            ////	alert(this.legendMax);
-		            //	alert((this.legendMax-this.legendMin)/legendTickRange);
 		            	
 		            	this.legendNode[0] = new Kinetic.Rect({
 							x: legendX+15,
@@ -193,7 +163,6 @@ var Scatter = {};
 					        fillLinearGradientEndPoint: [0, 20*(findMaxValue(mainArr[this.color]))/legendTickRange],
 					        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],								
 						});			
-		           //	alert(findMaxValue(mainArr[this.color]));
 						var maxLengthLegendText = this.legendText[0].getWidth();
 						
 						for(var i=0; i<this.legendPlotArr.length; i++)
@@ -226,20 +195,15 @@ var Scatter = {};
 						
 						
 	            	}
-	            }//legend end
-	            
-	            
-	            
-	            
-	            
-	            
+	            }
+	            ////////////////////////////////////////////////Make Legend End////////////////////////////////////////////
 	            
 	            
 	            
 	    		if(isDiscrete[this.x] == true)
 	    		{
-	    			var nodeX = new Array(mainArr[this.x].length); // discrete data일 경우 node 점의 좌표가 고정 되야 하므로 저장할 배열 선언 
-	    			var xTmp = new Array();  // 밑의 각 항목 이름들 
+	    			var nodeX = new Array(mainArr[this.x].length); //If data is discontinuous, the axis of node should be fixed. So, we define array for the axis 
+	    			var xTmp = new Array();  //the names of each content below
 	    			xTmp[0] = mainArr[this.x][0];
 	    			nodeX[0] = 0;
 	    			for(i = 1 ; i < mainArr[this.x].length ; i++)
@@ -273,7 +237,7 @@ var Scatter = {};
 	    			this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick); //default x ticks is 5
 	    			this.xMax = findMaxValue(mainArr[this.x]);
 	    			var xMin = findMinValue(mainArr[this.x]);
-	    			var xTickRange = (this.xMax -xMin)/this.xTick;
+	    			var xTickRange = (this.xMax )/this.xTick;
 	    			var x = Math.ceil( Math.log(xTickRange) / Math.log(10));
 	    			xTickRange = setTickRange(x, xTickRange);
 		            this.xMax = xTickRange * Math.round(1+this.xMax/xTickRange);		          
@@ -290,7 +254,7 @@ var Scatter = {};
 	    		if(isDiscrete[this.y] == true)
 	    		{
 	    			var nodeY = new Array(mainArr[this.y].length);
-	    			var yTmp = new Array();  // 밑의 각 항목 이름들 
+	    			var yTmp = new Array();  //the names of each content below
 	    			yTmp[0] = mainArr[this.y][0];
 	    			nodeY[0] = 0;
 	    			for(i = 1 ; i < mainArr[this.y].length ; i++)
@@ -324,7 +288,7 @@ var Scatter = {};
 	    				this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5        	            
 			            this.yMax = findMaxValue(mainArr[this.y]);			            	            
 			            var yMin = findMinValue(mainArr[this.y]);			           
-			            var yTickRange = (this.yMax - yMin)/this.yTick;			            
+			            var yTickRange = (this.yMax )/this.yTick;			            
 			            var y = Math.ceil( Math.log(yTickRange) / Math.log(10));			            
 			            yTickRange = setTickRange(y, yTickRange);			                        
 			            this.yMax = yTickRange * Math.round(1+this.yMax/yTickRange);     			                       	                       
@@ -342,7 +306,8 @@ var Scatter = {};
 		    			
 	    		}
 	    		
-	    		//결과적으로 discrete이던 아니든  yPlotArr와 xPlotArr에 각 점선표시(xLine, xText etc.) 좌표가들어 있다. 아래 draw에 있는  plot에서는 이 array들만 사용하여 그려주면 된다. 
+	    		//Whether data is discontinuous or continuous, xPlotArr and yPlotArr have each information about ticks ( xLine, xText etc. )
+	    		// So, drawing function just uses these array.
 	    		
 	    		//////////Make Data Structure of nodes and essential arrays////////
 	    		this.xMax = findMaxValue(mainArr[this.x]);
@@ -366,14 +331,6 @@ var Scatter = {};
 					});				
 				}
            	 
-				
-				
-				
-				
-				
-				
-				
-				
     		},
 			doIt: function() { 
 				alert('do it'); 
@@ -558,47 +515,64 @@ function setColor(colorArr) //set color
     var tmpColorArr = new Array();
 	
 	var cnt=0;
-	var sortedColorArr = make2DArr(colorArr.length);	
+	var sortedColorArr = new Array();	
 	for(var i=0; i<colorArr.length; i++){		
-		sortedColorArr[i][0] = colorArr[i];
-		sortedColorArr[i][1] = i;
-	}
-	sortedColorArr.sort(function(a,b){return a[0] - b[0];}); //sort colorArr and save into sortedColorArr	
+		sortedColorArr[i] = {
+				a : colorArr[i],
+				b : i
+		};		
+	}	 
+	var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
+	    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1; 
+	    if (a.a > b.a) return 1;
+	    return -1;
+	};
+	for (i = 0; i < sortedColorArr.length; i++) {                     
+		sortedColorArr[i].stableSortKey = i;                           
+	}                                                   
+	sortedColorArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
+	
 	for(var i=0; i<sortedColorArr.length; i++){		
 		if(i==0){
-			mainValueArr[cnt]=sortedColorArr[0][0];
+			mainValueArr[cnt]=sortedColorArr[0].a;
 			tmpColorArr[0]=0;
 		}else{
 			for(var j=0; j<i ; j++){
-				if(sortedColorArr[i][0]==sortedColorArr[j][0]){
+				if(sortedColorArr[i].a==sortedColorArr[j].a){
 					tmpColorArr[i]=tmpColorArr[j];
 					break;
 				}
 			}	
 			if(j==i){
 				cnt++;
-				mainValueArr[cnt]=sortedColorArr[i][0];
+				mainValueArr[cnt]=sortedColorArr[i].a;
 				tmpColorArr[i]=cnt;
 			}
 		}
 	}
+	
+	var reTmpColorArr = new Array(); // re assign
+	for(var i=0; i<sortedColorArr.length; i++){		// re assign
+		reTmpColorArr[sortedColorArr[i].b]=tmpColorArr[ i ]; 
+	}
+	for(var i=0; i<sortedColorArr.length; i++){		//re re assign
+		tmpColorArr[i]=reTmpColorArr[i];	
+	}
+	
 	if(mainValueArr.length<24){		
+		
 		colors = [	'#FF0000',  '#0000FF', '#FEFF00','#00FF00', '#FF7F00', '#7FFF00'	, '#FF00FE','#007FFF','#00FF7F','#00FFFE','#7F00FF',  '#FF007F',
+		          		//main brightness : [red, blue,  yellow, green, orange,yellow green,   pink, white blue, dark green, sky, purple, hot pink]
 	              		'#ED7763', '#7762ED', '#D8ED62','#62ED76', '#EDBC62',  '#93ED62','#ED62D8','#6293ED', '#62EDBB' ,'#62D8ED',  '#BC62ED', '#ED6293'];
+						//little bit brighter or darker : [red, blue,  yellow, green, orange,yellow green,   pink, white blue, dark green, sky, purple, hot pink]
 		
 	              	/*	'#BD6B70','#6B70BD','#BDB86B','#70BD6B','#BD8F6B','#98BD6B','#B86BBD','#6B99BD','#6BBD8F','#6BBDB8','#8F6BBD','#BD6B98',
 	              		'#FE5078','#5078FE','#FED650','#78FE50','#FE7F50','#CEFE50','#D550FE','#50CFFE','#50FE7E','#50FED5','#7F50FE','#FE50CE',
 	              		'#8B0000','#00008B','#8A8B00','#008B00','#8B4500','#458B00','#8B008A','#00458B','#008B45','#008B8A','#45008B','#8B0045'	]; */    
-						//red, blue,  yellow, green, orange,yellow green,   pink, white blue, dark green, sky, purple, hot pink
+						
 	}else{
-		var reTmpColorArr = new Array(); // re assign
-		for(var i=0; i<sortedColorArr.length; i++){		// re assign
-			reTmpColorArr[sortedColorArr[i][1]]=tmpColorArr[ i ]; 
-		}
-		for(var i=0; i<sortedColorArr.length; i++){		//re re assign
-			tmpColorArr[i]=reTmpColorArr[i];	
-		}
 		
+	
 		var rgb = {R: new Array(), G: new Array(), B: new Array()}
 		var start = {R:0, G:128, B: 0};
 		var end = {R:0, G:255, B: 0};

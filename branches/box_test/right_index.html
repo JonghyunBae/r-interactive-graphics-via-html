@@ -47,7 +47,7 @@
 	    <script src="structure.js"></script>
 	    <script src="common.js"></script>
 	    <script>
-	    	//createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
+	    // createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
 	    	createMainStructure("diamonds-from-R.csv");//mainArr = data, labelArr= column1        
         	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
        		 var plotWidth=500;  //default value for plot width
@@ -58,26 +58,26 @@
 	    <script src="event.js"></script>
 	    <script src="node_event.js"></script>
         <script>        
-        	/*
+        /*
 			var hist01 = new Hist(mainArr, { x:'time', width:300, height:300 });
 			hist01.draw(1);
 			var hist02 = new Hist(mainArr, {bin: 1, x:'time', width:300, height:300 });
 			hist02.draw(2);
-			var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'dose', width:300, height:300, legend:'topleft' });
+			var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'time', width:300, height:300, legend:'left' });
 			scatter01.draw(1);
-			var scatter02 = new Scatter(mainArr, {radius:5, x:'time',y:'conc', color:'time',width:300, height:300, legend:'topright'  });//legend conc.,,not topright.
+			var scatter02 = new Scatter(mainArr, {radius:5, x:'time',y:'conc', color:'subject',width:300, height:300, legend:'topright'  });//legend conc.,,not topright.
 			scatter02.draw(2);
-			*/
+			 */	
 			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
 			hist01.draw(1);
 			hover(hist01);
 			var hist02 = new Hist(mainArr, { x:'cut', width:300, height:300 });
 			hist02.draw(2);
 			hover(hist02);
-			var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'cut', width:300, height:300  ,legend:'topleft'});
+			var scatter01 = new Scatter(mainArr, {x:'cut', y:'x', color:'x', width:300, height:300  ,legend:'topleft'});
 			scatter01.draw(1);
 			var scatter02 = new Scatter(mainArr, { radius:5, x:'price',y:'cut', color:'cut',width:300, height:300, legend:'right'});
-			scatter02.draw(2);      
+			scatter02.draw(2);    
 		</script>    
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
 		<input type="text" name="regcoords" id="regcoords" />

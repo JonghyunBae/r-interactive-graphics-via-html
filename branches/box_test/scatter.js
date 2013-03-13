@@ -53,7 +53,39 @@ var Scatter = {};
 					var mainValueArr = tmpSetColor.mainValueArr;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
-	         
+	            ////////////////////////////////////////////////Make Legend Start////////////////////////////////////////////
+	            if(optionObj.legend!=undefined){
+	            	var legendChk = optionObj.legend.toLowerCase();
+	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
+	  	            		 this.legend = optionObj.legend;
+	  	            }else{
+	  	            	alert('retype legend! (right, left, topright, topleft, or default)');	            		
+	  	            }
+	            }
+	            if(this.legend!=undefined){	            	
+	            	var legendX = 0;
+					var legendY = 0;
+	            	if (this.legend == 'topright' || this.legend == 'right')	{
+	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
+	            		legendY = this.plotYMargin-this.plotLength;
+	            	}else if(this.legend == 'topleft' ||this.legend == 'left'){
+	            		legendX = this.plotLength*5;
+	            		legendY = this.plotYMargin-this.plotLength;	            		
+	            	}else{// default is center right
+	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
+	            		legendY = this.plotYMargin-this.plotLength;
+	            	}	            		            	
+					var myLegend = makeLegend(legendX, legendY, mainValueArr, this.color, colors);					
+					this.legendGroup = new Kinetic.Group({
+						width: myLegend.getWidth(),
+						height : myLegend.getHeight()
+					});			
+					this.legendGroup.add(myLegend);
+					if(this.legend == 'topleft' ||this.legend == 'left'){
+	            		this.plotXMargin = this.plotXMargin + myLegend.getWidth() + this.plotLength * 4;
+					}
+	            }
+	            ////////////////////////////////////////////////Make Legend End////////////////////////////////////////////
 
 	            
 	            var nodeX = new Array(mainArr[this.x].length);
@@ -158,9 +190,9 @@ var Scatter = {};
 				//draw plot
 				var tmpWidth=0;
 				if(this.legend=='left' || this.legend=='topleft'){
-					tmpWidth =  this.width+this.plotXMargin+this.legendRect.getWidth();
+					tmpWidth =  this.width+this.plotXMargin+this.legendGroup.getWidth();
 				}else if(this.legend=='right' || this.legend=='topright' || this.legend){
-					tmpWidth =  this.width+this.plotXMargin*2+this.legendRect.getWidth();
+					tmpWidth =  this.width+this.plotXMargin*2+this.legendGroup.getWidth();
 				}else{
 					tmpWidth =  this.width+this.plotXMargin*2;
 				}				
@@ -168,7 +200,7 @@ var Scatter = {};
 					container: 'scatterContainer'+id,            
 					width : tmpWidth,							
 					height: this.height+this.plotYMargin*2 
-				});				
+				});		
 				
 				this.plotLayer = new Kinetic.Layer();
 				this.plotRect = new Kinetic.Rect({
@@ -292,23 +324,10 @@ var Scatter = {};
 					this.legendLayer.on('mouseover', function(evt){  
 						document.body.style.cursor = "pointer";
 					}); 
-					this.legendLayer.add(this.legendRect);
-					this.legendLayer.add(this.legendMain);
-				//	var mainValueArr =  setColor(mainArr[this.color]).mainValueArr;
-				//	if(mainValueArr.length<24){	
-						for(var i = 0; i < this.legendNode.length; i++) 
-						{
-							this.legendLayer.add(this.legendNode[i]);
-						}
-						for(var i = 0; i < this.legendText.length; i++) 
-						{
-							this.legendLayer.add(this.legendText[i]);
-						}
-				//	}
-					
+					this.legendLayer.add(this.legendGroup);					
 					this.stage.add(this.legendLayer);				
 					if(this.legend != 'topleft' && this.legend != 'topright'){
-						this.legendLayer.setY((this.height-this.legendRect.getHeight())/2); //move legend layer to center.
+						this.legendLayer.setY((this.height-this.legendGroup.getHeight())/2); //move legend layer to center.
 				        this.legendLayer.draw();
 					}
 				}
@@ -481,8 +500,12 @@ function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나
     	
 		for(var i = 0 ; i < plotArr.length ; i ++)
 		{
-			plotArr[i][0] = (i)*diff;
-			plotArr[i][1] = (tickRange.toString().indexOf('.') == -1) ?  (min+i*tickRange) : (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
+			plotArr[i][0] = i*diff;
+			if (tickRange.toString().indexOf('.') == -1){
+				plotArr[i][1] = min+i*tickRange;
+			}else{
+				plotArr[i][1] = (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
+			}
 		}	    
 		//alert(obj.plotXMargin);
 		for(var i = 0 ; i < node.length ; i ++)
@@ -496,3 +519,118 @@ function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나
 
 
 
+function makeLegend(legendX, legendY, mainValueArr, color, colors){
+	if(mainValueArr.length<24){
+    	var legendNode = new Array();	
+    	var legendText = new Array();	
+		for(var i = 0; i < mainValueArr.length ; i++)
+		{						
+			legendNode[i] = new Kinetic.Circle({
+				x: legendX+15,
+				y: legendY+15*i+11+20,
+				radius: 5,
+				fill: (color==-1)?('green'):getLegendColor(i, colors, mainValueArr)
+			});			
+			legendText[i] = new Kinetic.Text({
+				x: legendX+20,
+		        y: legendY+15*i+20,
+				text: (color==-1)?('green'):mainValueArr[i],
+				fontFamily: 'Calibri',
+				fontSize: 13,
+				padding: 5,
+				fill: 'black',
+				align:'center'
+			});				
+		}	
+		var maxLengthLegendText = legendText[0].getWidth();
+		for(var i=0; i<mainValueArr.length; i++)
+		{
+			if(legendText[i].getWidth()>maxLengthLegendText)
+			{
+				maxLengthLegendText=legendText[i].getWidth();
+			}						
+		}		
+	}else{
+		var tick= 5; //default legend ticks is 5        	            
+        var max = findMaxValue(mainArr[color]);		
+        var min = findMinValue(mainArr[color]);	
+        var tickRange = (max - min)/tick;
+        tickRange = setTickRange( Math.ceil( Math.log(tickRange) / Math.log(10)) , tickRange);
+        var newMax = tickRange * Math.ceil(max/tickRange);     		
+        var newMin= tickRange * Math.floor(min/tickRange);     	
+    	var plotArr = new Array((newMax-newMin)/tickRange+1);		        	
+		for(var i = 0 ; i < plotArr.length ; i ++)
+		{
+			if((tickRange.toString().indexOf('.') == -1)){
+				plotArr[i] = newMin + i*tickRange;
+			}else{
+				plotArr[i] = (newMin + i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
+			}
+		}	
+		var legendNode = new Array();	
+    	var legendText = new Array();	
+    	for(var i = 0; i < plotArr.length ; i++)
+		{										
+			legendText[i] = new Kinetic.Text({
+				x: legendX+30,
+		        y: legendY+20*i+15,
+				text: '-  '+plotArr[ (plotArr.length-1)-i ],
+				fontFamily: 'Calibri',
+				fontSize: 13,
+				padding: 5,
+				fill: (i==0 || i==plotArr.length-1 )?'#eeeeee':'black',
+				align:'center'
+			});						
+		}		    	
+    	legendNode[0] = new Kinetic.Rect({
+			x: legendX+15,
+			y:  101 + 20*((newMax-newMin)/tickRange-1) - 20*(max - min )/tickRange - 20*(min -newMin)/tickRange,
+			width :20,
+			height :  20*(max - min)/tickRange,
+			fillLinearGradientStartPoint: [0, 0],
+	        fillLinearGradientEndPoint: [0, 20*(max - min)/tickRange],
+	        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],								
+		});			
+		var maxLengthLegendText = legendText[0].getWidth();		
+		for(var i=0; i<plotArr.length; i++)
+		{
+			if(legendText[i].getWidth()>maxLengthLegendText)
+			{
+				maxLengthLegendText=legendText[i].getWidth();
+			}						
+		}
+	}	
+	 var legendRect= new Kinetic.Rect({
+		x:legendX,
+		y:legendY,
+		width: maxLengthLegendText + 30,
+		height: legendText[i-1].getY()-30, //i is set by (mainValueArr.length) or  (plotArr.length)
+		stroke: 'black',
+		fill: '#eeeeee'
+	});			
+	var legendMain= new Kinetic.Text({
+		x: legendX,
+        y: legendY+5,
+		text: labelArr[color],
+		fontFamily: 'Calibri',
+		width : legendRect.getWidth(),
+		fontSize: 15,
+		fill: 'black',
+		fontStyle: 'bold',
+		align:'center'
+	});		
+	var group = new Kinetic.Group({
+		y: 0,
+		width:  legendRect.getWidth(),
+		height:  legendRect.getHeight()
+	});	
+	group.add(legendRect);
+	group.add(legendMain);
+	for(var i = 0; i < legendNode.length; i++){
+		group.add(legendNode[i]);
+	}
+	for(var i = 0; i < legendText.length; i++){
+		group.add(legendText[i]);
+	}
+	return group;	
+}

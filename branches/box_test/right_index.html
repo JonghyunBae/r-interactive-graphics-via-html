@@ -48,14 +48,14 @@
 	    <script src="common.js"></script>
 	    <script>
 	    // createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
-	    	createMainStructure("diamonds-from-R.csv");//mainArr = data, labelArr= column1        
+	  	createMainStructure("diamonds-from-R.csv");//mainArr = data, labelArr= column1     
+	  //  createMainStructure("special-diamonds-from-R.csv");//mainArr = data, labelArr= column1     
         	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
        		 var plotWidth=500;  //default value for plot width
    		     var plotHeight=500; //default value for plot height   		     
     	</script> 
-    	<script src="scatter.js"></script>
 	    <script src="hist.js"></script>
-	    
+	    <script src="scatter.js"></script>
 	    <script src="event.js"></script>
 	    <script src="node_event.js"></script>
         <script>        
@@ -69,15 +69,15 @@
 			var scatter02 = new Scatter(mainArr, {radius:5, x:'time',y:'conc', color:'subject',width:300, height:300, legend:'topright'  });//legend conc.,,not topright.
 			scatter02.draw(2);
 			 */	
-			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
-			hist01.draw(1);
-			hover(hist01);
-			var hist02 = new Hist(mainArr, { x:'cut', width:300, height:300 });
-			hist02.draw(2);
-			hover(hist02);
-			var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'price', height:300  ,legend:'topleft'});
+		//	var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
+		//	hist01.draw(1);
+		//	hover(hist01);
+		//	var hist02 = new Hist(mainArr, { x:'cut', width:300, height:300 });
+	//		hist02.draw(2);
+		//	hover(hist02);
+			var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'cut', legend:'left', width:300, height:300});
 			scatter01.draw(1);
-			var scatter02 = new Scatter(mainArr, { radius:5, x:'x',y:'cut', color:'cut',width:300, height:300, legend:'right'});
+			var scatter02 = new Scatter(mainArr, { radius:7, x:'price',y:'carat', color:'price',width:300, height:300, legend:'right'});
 			scatter02.draw(2);    
 		</script>    
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>

@@ -128,16 +128,17 @@ var Hist = {};
 	            		var barWidth = this.width /(3);	// 양쪽에 1칸씩 여유분	따라서 +2 
 		            	this.xPlotArr = make2DArr(4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
 	            	}else{
-	            		var barWidth = this.width /(lastcnt-firstcnt + 2);	// 양쪽에 1칸씩 여유분	따라서 +2 
+	            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// 양쪽에 1칸씩 여유분	따라서 +2 
 		            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
 	            	}
+	            	
 	            	cnt = 0;
 	            	var nodeX = new Array(lastcnt-firstcnt+1);
 	            	
 	            	for(var i = 0 ; i < this.xPlotArr.length ; i++)
 	            	{
 	            		this.xPlotArr[i][0] = (i)*barWidth;
-	            		this.xPlotArr[i][1] = (xMin > 0 ) ? (i-1)*this.bin + firstcnt*this.bin : (i-1)*this.bin + firstcnt*this.bin -Math.abs(xMin);
+	            		this.xPlotArr[i][1] = (xMin > 0 ) ? ((i-1)*this.bin + firstcnt*this.bin).toFixed(this.fixPoint) : ((i-1)*this.bin + firstcnt*this.bin -Math.abs(xMin)).toFixed(this.fixPoint);
 	            		if(i !=0 && i < this.xPlotArr.length-2 )
 	            		{	            			
 	            			nodeX[cnt++] =  i*(barWidth);	            			

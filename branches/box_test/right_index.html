@@ -55,8 +55,10 @@
     	</script> 
 	    <script src="hist.js"></script>
 	    <script src="scatter.js"></script>
+	    <script src="event.js"></script>
+	    <script src="node_event.js"></script>
         <script>        
-        /*
+        	/*
 			var hist01 = new Hist(mainArr, { x:'time', width:300, height:300 });
 			hist01.draw(1);
 			var hist02 = new Hist(mainArr, {bin: 1, x:'time', width:300, height:300 });
@@ -68,11 +70,13 @@
 			*/
 			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
 			hist01.draw(1);
+			hover(hist01);
 			var hist02 = new Hist(mainArr, { x:'cut', width:300, height:300 });
 			hist02.draw(2);
-			var scatter01 = new Scatter(mainArr, {radius:5, x:'price', y:'cut', color:'cut', width:300, height:300  ,legend:'left'});
+			hover(hist02);
+			var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'cut', width:300, height:300  ,legend:'topleft'});
 			scatter01.draw(1);
-			var scatter02 = new Scatter(mainArr, { radius:2, x:'x',y:'price', color:'price',width:300, height:300, legend:'topright'});
+			var scatter02 = new Scatter(mainArr, { radius:5, x:'price',y:'cut', color:'cut',width:300, height:300, legend:'right'});
 			scatter02.draw(2);      
 		</script>    
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>

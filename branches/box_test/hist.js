@@ -129,6 +129,7 @@ var Hist = {};
             	for(var cnt = 0; cnt< xTmp.length ; cnt++)
             	{
             		this.node[cnt] = new Kinetic.Rect({
+            			id : cnt,
 						freq: freqTmp[cnt],
 						label : (isDiscrete[this.x] == true) ? xTmp[cnt] : parseFloat(xTmp[cnt]).toFixed(this.fixPoint),
 						x: (isDiscrete[this.x] == true) ? this.plotXMargin +  cntTmp[cnt] *(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2 : this.plotXMargin +  cnt*(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2,
@@ -209,12 +210,31 @@ var Hist = {};
                 });                                
                 this.plotLayer.add(this.yAxis);
                 
+                //////////////////////////////Tooltip Setting////////////////////////////////////////
+                this.tooltipLayer = new Kinetic.Layer();
+                this.tooltip = new Kinetic.Group({
+                	opacity: 0.75,
+                	visible: false
+                });
+                this.tooltipText = new Kinetic.Text({
+                	text: '',
+                	fontFamily: 'Calibri',
+                	fontSize: 15,
+                	padding: 5,
+                	fill: 'white'
+                });	  
+                this.tooltipRect = new Kinetic.Rect({
+                	fill: 'black'
+                });
+                
+                this.tooltip.add(this.tooltipRect).add(this.tooltipText);
+                this.tooltipLayer.add(this.tooltip);
+                this.stage.add(this.tooltipLayer);
+                ///////////////////////////////////////////////////////////////////////////////////
 
                 this.xLine = new Array();
                 this.xText = new Array();
-               
-              
-            	
+                     	
                 if(isDiscrete[this.x] == true)
                 {
                 	

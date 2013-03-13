@@ -4,7 +4,7 @@ var Scatter = {};
 	
 	Scatter = function(mainArr, optionObj) {
 		this._initScatter(optionObj);		
-		
+		this._type = 'scatter';
     };
     Scatter.prototype = {
     		_initScatter: function(optionObj){
@@ -159,25 +159,26 @@ var Scatter = {};
 	    		
 	    		//Whether data is discontinuous or continuous, xPlotArr and yPlotArr have each information about ticks ( xLine, xText etc. )
 	    		// So, drawing function just uses these array.
-	    		
+	                 
 	    		//////////Make Data Structure of nodes and essential arrays////////
 	    		this.yMax = findMaxValue(mainArr[this.y]);
 				this.node = new Array();			
 				for(var i = 0; i < mainArr[this.x].length ; i++)
 				{
 					this.node[i] = new Kinetic.Circle({
-						//id: i,
-						name: 'a', //dataGetName(i),
+						id: i,
+						name : i,
 						x: nodeX[i] + this.plotXMargin,
 						y: this.height +this.plotYMargin - nodeY[i],
 						radius: this.radius,
 						fill: (this.color==-1)?('green'):getColor(i,colors, mainValueArr, tmpColorArr),
 						stroke : 'black',
 						strokeWidth : 0.01,
-						opacity : 1,
+						opacity : 0.7,
 						draggable : false,
 						hidden : false,
-						selected : 0
+						selected : 0,
+						info :  "Node : "+i+"\r\n"+tooltipTextGetInfo(i)
 					});		
 				
 				}
@@ -303,12 +304,34 @@ var Scatter = {};
                     fill: 'black',
                 });           
                 this.plotLayer.add(this.mainLabel);
-                 
 				 
 				this.stage.add(this.plotLayer);
 				this.plotLayer.on('mouseover mousemove dragmove', function(evt){  
 					document.body.style.cursor = "default";
 				});   
+				
+				 //////////////////////////////Tooltip Setting////////////////////////////////////////
+                this.tooltipLayer = new Kinetic.Layer();
+                this.tooltip = new Kinetic.Group({
+                	opacity: 0.75,
+                	visible: false
+                });
+                this.tooltipText = new Kinetic.Text({
+                	text: '',
+                	fontFamily: 'Calibri',
+                	fontSize: 15,
+                	padding: 5,
+                	fill: 'white'
+                });	  
+                this.tooltipRect = new Kinetic.Rect({
+                	fill: 'black'
+                });
+                
+                this.tooltip.add(this.tooltipRect).add(this.tooltipText);
+                this.tooltipLayer.add(this.tooltip);
+                this.stage.add(this.tooltipLayer);
+                ///////////////////////////////////////////////////////////////////////////////////
+				
 				 //draw node
 				this.dataLayer = new Kinetic.Layer();	
 				for(var i = 0 ; i < this.node.length ; i ++)
@@ -342,7 +365,13 @@ var Scatter = {};
 })();
 
 
-
+function tooltipTextGetInfo(n){
+	var info=labelArr[0]+" : " + mainArr[0][n]+ "\r\n" ;
+	for(var i=1; i< labelArr.length ; i++){
+		info=info+ labelArr[i]+" : " + mainArr[i][n]+ "\r\n" ;
+	}
+	return info;	
+}	     
 
 
 
@@ -398,16 +427,28 @@ function setColor(colorArr) //set color
 	}
 	
 	if(mainValueArr.length<24){		
+		var rgb = {R: new Array(), G: new Array(), B: new Array()}
 		
-		colors = [	'#FF0000',  '#0000FF', '#FEFF00','#00FF00', '#FF7F00', '#7FFF00'	, '#FF00FE','#007FFF','#00FF7F','#00FFFE','#7F00FF',  '#FF007F',
-		          		//main brightness : [red, blue,  yellow, green, orange,yellow green,   pink, white blue, dark green, sky, purple, hot pink]
-	              		'#ED7763', '#7762ED', '#D8ED62','#62ED76', '#EDBC62',  '#93ED62','#ED62D8','#6293ED', '#62EDBB' ,'#62D8ED',  '#BC62ED', '#ED6293'];
-						//little bit brighter or darker : [red, blue,  yellow, green, orange,yellow green,   pink, white blue, dark green, sky, purple, hot pink]
-		
-	              	/*	'#BD6B70','#6B70BD','#BDB86B','#70BD6B','#BD8F6B','#98BD6B','#B86BBD','#6B99BD','#6BBD8F','#6BBDB8','#8F6BBD','#BD6B98',
-	              		'#FE5078','#5078FE','#FED650','#78FE50','#FE7F50','#CEFE50','#D550FE','#50CFFE','#50FE7E','#50FED5','#7F50FE','#FE50CE',
-	              		'#8B0000','#00008B','#8A8B00','#008B00','#8B4500','#458B00','#8B008A','#00458B','#008B45','#008B8A','#45008B','#8B0045'	]; */    
+		colors = ['#C91F16', '#CC3615','#D9580E','DD680B','#E68601','#EEAD00','#FCCF03','EDE400','#CED500','#B0C50F',
+	          		'#8FBB0C','#77B312','#69B011','#47A41E','#2D9C1F', '#189425','#088343','#0E8C62','#05949D','#0894B6',
+	          		'#1F9AD7','#0D84C4','#0363A3','#094A91','#113279','#182369','#1D1259','#310C5A','#5B0B5A','#820060'];  
 						
+		
+		
+
+	 	var frequency = 1;
+	 	for (var i = 0; i <24; ++i)
+	 	{
+	 		rgb.R[i]  = parseInt( Math.sin(frequency*i + 0) * 127 + 128 );
+	 		rgb.G[i] = parseInt( Math.sin(frequency*i + 2) * 127 + 128 );
+	 		rgb.B[i]  = parseInt( Math.sin(frequency*i + 4) * 127 + 128 );
+	 	  colors[i] = 'rgb('+rgb.R[i]+','+rgb.G[i]+','+ rgb.B[i]+')';
+	 	}
+
+		
+		
+		
+		
 	}else{
 		
 	
@@ -529,6 +570,7 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 				x: legendX+15,
 				y: legendY+15*i+11+20,
 				radius: 5,
+				opacity: 0.7,
 				fill: (color==-1)?('green'):getLegendColor(i, colors, mainValueArr)
 			});			
 			legendText[i] = new Kinetic.Text({
@@ -582,11 +624,13 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 				align:'center'
 			});						
 		}		    	
+    		
     	legendNode[0] = new Kinetic.Rect({
 			x: legendX+15,
-			y:  101 + 20*((newMax-newMin)/tickRange-1) - 20*(max - min )/tickRange - 20*(min -newMin)/tickRange,
+			y:  legendY + 47 + 20*((newMax-newMin)/tickRange-1) - 20*(max - min )/tickRange - 20*(min -newMin)/tickRange,
 			width :20,
 			height :  20*(max - min)/tickRange,
+			opacity: 0.7,
 			fillLinearGradientStartPoint: [0, 0],
 	        fillLinearGradientEndPoint: [0, 20*(max - min)/tickRange],
 	        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],								

@@ -47,9 +47,12 @@
 	    <script src="structure.js"></script>
 	    <script src="common.js"></script>
 	    <script>
-	    // createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
-	  	createMainStructure("diamonds-from-R.csv");//mainArr = data, labelArr= column1     
-	  //  createMainStructure("special-diamonds-from-R.csv");//mainArr = data, labelArr= column1     
+	     createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
+	  //		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
+	  //createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
+	  //		createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
+	//  		createMainStructure("diamonds-from-R_special");//mainArr = data, labelArr= column1     
+	 
         	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
        		 var plotWidth=500;  //default value for plot width
    		     var plotHeight=500; //default value for plot height   		     
@@ -59,26 +62,32 @@
 	    <script src="event.js"></script>
 	    <script src="node_event.js"></script>
         <script>        
-        /*
+        
 			var hist01 = new Hist(mainArr, { x:'time', width:300, height:300 });
 			hist01.draw(1);
-			var hist02 = new Hist(mainArr, {bin: 1, x:'time', width:300, height:300 });
+			hover(hist01);
+			var hist02 = new Hist(mainArr, {bin: 0.5, x:'time', width:300, height:300 });
 			hist02.draw(2);
-			var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'time', width:300, height:300, legend:'left' });
+			hover(hist02);
+			var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'conc', width:300, height:300, legend:'left' });
 			scatter01.draw(1);
+			hover(scatter01);
 			var scatter02 = new Scatter(mainArr, {radius:5, x:'time',y:'conc', color:'subject',width:300, height:300, legend:'topright'  });//legend conc.,,not topright.
 			scatter02.draw(2);
-			 */	
-		//	var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
-		//	hist01.draw(1);
-		//	hover(hist01);
-		//	var hist02 = new Hist(mainArr, { x:'cut', width:300, height:300 });
-	//		hist02.draw(2);
-		//	hover(hist02);
-			var scatter01 = new Scatter(mainArr, {x:'carat', y:'price', color:'cut', legend:'left', width:300, height:300});
+			hover(scatter02);
+			/*	 
+			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
+			hist01.draw(1);
+			hover(hist01);
+			var hist02 = new Hist(mainArr, { x:'cut', width:300, height:300 });
+			hist02.draw(2);
+			hover(hist02);
+			var scatter01 = new Scatter(mainArr, {  x:'color',y:'x', color:'clarity',width:300, height:300, legend:'left'});
 			scatter01.draw(1);
-			var scatter02 = new Scatter(mainArr, { radius:7, x:'price',y:'carat', color:'price',width:300, height:300, legend:'right'});
+			hover(scatter01);
+			var scatter02 = new Scatter(mainArr, {  x:'price',y:'carat', color:'price',width:322, height:333, legend:'topright'});
 			scatter02.draw(2);    
+			hover(scatter02);	*/
 		</script>    
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
 		<input type="text" name="regcoords" id="regcoords" />

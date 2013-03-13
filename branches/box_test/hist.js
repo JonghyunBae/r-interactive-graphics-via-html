@@ -4,11 +4,12 @@ var Hist = {};
 	
 	Hist = function(mainArr, optionObj) {
 		this._initHist(optionObj);		
+		this._type = 'hist';
     };
 	Hist.prototype = {
 			
 			_initHist: function(optionObj){
-
+				
 				////////// Make essential variables ////////
 				//this.xMax = findMaxValue(mainArr[this.x]);
 				for(var i = 0 ; i < labelArr.length ; i ++)
@@ -132,6 +133,7 @@ var Hist = {};
             	{
             		this.node[cnt] = new Kinetic.Rect({
             			id : cnt,
+            			name : cnt,
 						freq: freqTmp[cnt],
 						label : (isDiscrete[this.x] == true) ? xTmp[cnt] : parseFloat(xTmp[cnt]).toFixed(this.fixPoint),
 						x: (isDiscrete[this.x] == true) ? this.plotXMargin +  cntTmp[cnt] *(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2 : this.plotXMargin +  cnt*(this.barGap+this.barWidth) + (this.barGap+this.barWidth)/2,
@@ -144,6 +146,7 @@ var Hist = {};
 						draggable : false,
 						hidden : false,
 						selected : 0,
+						info : "Node : "+cnt+"\r\n"+"Frequency : "+freqTmp[cnt],
 						hasArr : hasTmp[cnt],
 						offset: {x: this.barWidth/2, y: freqTmp[cnt]*this.height/this.yMax/2},
 					});

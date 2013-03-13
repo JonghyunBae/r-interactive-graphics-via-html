@@ -11,39 +11,33 @@ var tmpShift = false;
 
 function checkKeyDown(e) 
 {
-	//alert(e.keyCode);
-	//17 || 25 = ctrl, shift = 16, a=65, g= 71
-	if(e.keyCode == 17 || e.keyCode == 25)
+	if(e.keyCode == 17 || e.keyCode == 25)//ctrl key pressed
 	{
 		ctrlPressed = true;
 	}
-	if(e.keyCode == 16)
+	if(e.keyCode == 16)//shift key pressed
 	{
 		shiftPressed = true;
 	}
-	if(e.keyCode == 65)
+	if(e.keyCode == 65)//a key pressed
 	{
 		aPressed = true;
 	}
-	if(e.keyCode == 71)
+	if(e.keyCode == 71)//g key pressed
 	{
 		gPressed = true;
 	}
-	if(e.keyCode == 90)
+	if(e.keyCode == 90)//z key pressed
 	{
 		zPressed = true;
 	}
-	if(ctrlPressed == true && zPressed == true)
+	if(ctrlPressed == true && zPressed == true)//ctrl key and z key pressed at the same time
 	{
 		fetchWork();
 	}
-//	alert("11111" + ctrlPressed + "," + zPressed);
-	
 }	
 function checkKeyUp(e) 
 {
-//	alert(e.keyCode);
-	//17 || 25 = ctrl, shift = 16
 	if(ctrlPressed == true && zPressed != true)
 	{
 		ctrlPressed = false;
@@ -64,7 +58,6 @@ function checkKeyUp(e)
 	{
 		zPressed = false;
 	}
-//	alert("22222" + ctrlPressed + "," + zPressed);
 }	
 //////////////////////////////////////Chk key event End//////////////////////////////////////
 
@@ -74,21 +67,44 @@ function hover(Name)
         document.body.style.cursor = "pointer";
         var node = evt.shape;
         var mousePos = node.getStage().getMousePosition();
-        Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 8);
-    	Name.tooltipText.setText("Frequency \n     " + node.getFreq()); //Name split?
+    	Name.tooltipText.setText(node.getInfo()); 
     	Name.tooltipRect.setAttrs({
     		width: Name.tooltipText.getWidth(),
     		height: Name.tooltipText.getHeight()
     	});
+    	if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
+			Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
+		}else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
+			Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltipText.getHeight());
+		}else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
+			Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth(), mousePos.y + 2);
+		}else{
+			Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth() , mousePos.y - 2 - Name.tooltipText.getHeight());
+		}
     	Name.tooltipLayer.moveUp();
     	Name.tooltip.show();
     	Name.tooltipLayer.draw();
-
-    	var shapes = Name.stage.get('#'+node.getId());
-    	Name.node[node.getId()].setOpacity(1);    	
-    	shapes.apply('transitionTo', {
+    	var shapes = Name.stage.get('.'+node.getName());
+    	switch(Name._type)
+    	{
+	    	case 'hist' : 
+				shapes.apply('setAttrs', {
+	    		opacity: 1,
+	    		scale : {x:1.2, y:1}
+				});    	
+				break;
+			case 'scatter' : 
+    			shapes.apply('setAttrs', {
+            		opacity: 1,
+            		scale : {x:1.5, y:1.5}
+        			});    	
+    			break;
+        	default:
+        		break;
+    	}
+    	shapes.apply('transitionTo', {    		
     	    rotation : 0,
-    	    duration: 0.1
+    	    duration: 0.01
     	});    	
     });		
 	Name.dataLayer.on('mouseout', function(evt){  
@@ -98,11 +114,27 @@ function hover(Name)
     	var node = evt.shape;
     	if(node.getSelected() == 0)
     	{
-    		var shapes = Name.stage.get('#'+node.getId());
-        	Name.node[node.getId()].setOpacity(0.5);    	
+    		var shapes = Name.stage.get('.'+node.getName());
+    		switch(Name._type)
+        	{
+    	    	case 'hist' : 
+    				shapes.apply('setAttrs', {
+    	    		opacity: 0.5,
+    	    		scale : {x:1, y:1}
+    				});    	
+    				break;
+    			case 'scatter' : 
+        			shapes.apply('setAttrs', {
+                		opacity: 0.7,
+                		scale : {x:1, y:1}
+            			});    	
+        			break;
+            	default:
+            		break;
+        	}	
         	shapes.apply('transitionTo', {
         	    rotation : 0,
-        	    duration: 0.1
+        	    duration: 0.01
         	});
     	}    	    	
 	});

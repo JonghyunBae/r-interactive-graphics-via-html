@@ -66,13 +66,13 @@
 			var hist01 = new Hist(mainArr, { x:'time', width:300, height:300 });
 			hist01.draw(1);
 			hover(hist01);
-			var hist02 = new Hist(mainArr, {bin: 0.5, x:'time', width:300, height:300 });
+			var hist02 = new Hist(mainArr, {bin: 0.1, x:'time', width:300, height:300 });
 			hist02.draw(2);
 			hover(hist02);
-			var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'conc', width:300, height:300, legend:'left' });
+			var scatter01 = new Scatter(mainArr, {x:'time', y:'dose', color:'subject', width:300, height:500, legend:'topleft' });
 			scatter01.draw(1);
 			hover(scatter01);
-			var scatter02 = new Scatter(mainArr, {radius:5, x:'time',y:'conc', color:'subject',width:300, height:300, legend:'topright'  });//legend conc.,,not topright.
+			var scatter02 = new Scatter(mainArr, {radius:5, x:'time',y:'conc', color:'time',width:300, height:300, legend:'topright'  });//legend conc.,,not topright.
 			scatter02.draw(2);
 			hover(scatter02);
 			/*	 

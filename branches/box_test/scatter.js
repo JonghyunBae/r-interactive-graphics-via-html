@@ -427,32 +427,22 @@ function setColor(colorArr) //set color
 	}
 	
 	if(mainValueArr.length<24){		
-		var rgb = {R: new Array(), G: new Array(), B: new Array()}
-		
-		colors = ['#C91F16', '#CC3615','#D9580E','DD680B','#E68601','#EEAD00','#FCCF03','EDE400','#CED500','#B0C50F',
-	          		'#8FBB0C','#77B312','#69B011','#47A41E','#2D9C1F', '#189425','#088343','#0E8C62','#05949D','#0894B6',
-	          		'#1F9AD7','#0D84C4','#0363A3','#094A91','#113279','#182369','#1D1259','#310C5A','#5B0B5A','#820060'];  
-						
-		
-		
-
-	 	var frequency = 1;
+		var rgb = {R: new Array(), G: new Array(), B: new Array()};
+	 	var rgbFreq = 4.8 / mainValueArr.length ;
+	 	var rgbCenter = 128;
+	 	var rgbWidth = 127;
 	 	for (var i = 0; i <24; ++i)
 	 	{
-	 		rgb.R[i]  = parseInt( Math.sin(frequency*i + 0) * 127 + 128 );
-	 		rgb.G[i] = parseInt( Math.sin(frequency*i + 2) * 127 + 128 );
-	 		rgb.B[i]  = parseInt( Math.sin(frequency*i + 4) * 127 + 128 );
+	 		rgb.R[i]  = parseInt( Math.sin(rgbFreq*i + 0) * rgbWidth + rgbCenter );
+	 		rgb.G[i] = parseInt( Math.sin(rgbFreq*i + 2) * rgbWidth + rgbCenter );
+	 		rgb.B[i]  = parseInt( Math.sin(rgbFreq*i + 4) * rgbWidth + rgbCenter );
 	 	  colors[i] = 'rgb('+rgb.R[i]+','+rgb.G[i]+','+ rgb.B[i]+')';
 	 	}
-
-		
-		
-		
 		
 	}else{
 		
 	
-		var rgb = {R: new Array(), G: new Array(), B: new Array()}
+		var rgb = {R: new Array(), G: new Array(), B: new Array()};
 		var start = {R:0, G:128, B: 0};
 		var end = {R:0, G:255, B: 0};
 		for(i = 0; i < mainValueArr.length; i++)
@@ -634,7 +624,7 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 			fillLinearGradientStartPoint: [0, 0],
 	        fillLinearGradientEndPoint: [0, 20*(max - min)/tickRange],
 	        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],								
-		});			
+		});				
 		var maxLengthLegendText = legendText[0].getWidth();		
 		for(var i=0; i<plotArr.length; i++)
 		{
@@ -642,29 +632,31 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 			{
 				maxLengthLegendText=legendText[i].getWidth();
 			}						
-		}
+		}		
 	}	
-	 var legendRect= new Kinetic.Rect({
-		x:legendX,
-		y:legendY,
-		width: maxLengthLegendText + 30,
-		height: legendText[i-1].getY()-30, //i is set by (mainValueArr.length) or  (plotArr.length)
-		stroke: 'black',
-		fill: '#eeeeee'
-	});			
 	var legendMain= new Kinetic.Text({
 		x: legendX,
         y: legendY+5,
 		text: labelArr[color],
 		fontFamily: 'Calibri',
-		width : legendRect.getWidth(),
 		fontSize: 15,
 		fill: 'black',
 		fontStyle: 'bold',
 		align:'center'
 	});		
+	if(legendMain.getWidth() > maxLengthLegendText ){
+		maxLengthLegendText=legendMain.getWidth();
+	}		
+	 var legendRect= new Kinetic.Rect({
+		x:legendX,
+		y:legendY,
+		width: maxLengthLegendText + 30,
+		height: legendText[i-1].getY()-legendY + 30, //i is set by (mainValueArr.length) or  (plotArr.length)
+		stroke: 'black',
+		fill: '#eeeeee'
+	});			
+	legendMain.setWidth(legendRect.getWidth());
 	var group = new Kinetic.Group({
-		y: 0,
 		width:  legendRect.getWidth(),
 		height:  legendRect.getHeight()
 	});	

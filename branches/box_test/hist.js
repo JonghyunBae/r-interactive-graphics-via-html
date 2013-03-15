@@ -400,7 +400,7 @@ function histUpdate(obj, id)
 {
 	return	function(selectOn)
 				{
-					alert(id);
+					//alert(id);
 					if(obj.node[id].getSelected() == 1 && selectOn == 0)
 					{
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);

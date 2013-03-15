@@ -128,13 +128,12 @@ var Hist = {};
 	            		freqTmp.shift();
 	            		hasTmp.shift();
 	            	}
-	            	if(firstcnt != 0)
+
+            		for(var i = 0 ; i < mainArr[this.x].length ; i++)
 	            	{
-	            		for(var i = 0 ; i < mainArr[this.x].length ; i++)
-		            	{
-		            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
-		            	}
+	            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
 	            	}
+
 	            	
 	            	
 	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // 위와 반대로 끝에서부터 frequency가 0이 아닌 첫 노드 검사 
@@ -401,7 +400,7 @@ function histUpdate(obj, id)
 {
 	return	function(selectOn)
 				{
-				//	alert(id);
+					alert(id);
 					if(obj.node[id].getSelected() == 1 && selectOn == 0)
 					{
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);

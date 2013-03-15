@@ -15,7 +15,7 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 		{
 			//alert(j);
 			for(var i =1 ; i < isSelected[id].length ; i ++)
-			{//	alert(isSelected[id].length);
+			{	alert(isSelected[tmp[j]][i]);
 				isSelected[tmp[j]][i](select);
 			}			
 			isSelected[tmp[j]][0] = select;

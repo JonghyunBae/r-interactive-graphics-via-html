@@ -3,7 +3,7 @@ var mainArr; // array for all data.
 var labelArr; // character array for the column names.
 var isDiscrete; // array for confirming discrete data
 var isSelected; // array for selected node and save each update function
-
+var objArr = new Array();
 
 function test(i)
 {

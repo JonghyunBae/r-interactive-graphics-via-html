@@ -6,6 +6,7 @@ var Scatter = {};
 		
 		this._initScatter(optionObj);		
 		this._type = 'scatter';		
+		objArr.push(this);
 		
     };
     Scatter.prototype = {
@@ -506,10 +507,7 @@ function scatterUpdate(obj, id)
 						});
 						obj.node[id].setSelected(1);
 					}
-					shapes.apply('transitionTo', {    		
-			    	    rotation : 0,
-			    	    duration: 0.01
-			    	});
+					
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

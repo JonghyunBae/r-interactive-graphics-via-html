@@ -5,6 +5,7 @@ var Hist = {};
 	Hist = function(mainArr, optionObj) {
 		this._initHist(optionObj);		
 		this._type = 'hist';
+		objArr.push(this);
     };
 	Hist.prototype = {
 			
@@ -412,10 +413,6 @@ function histUpdate(obj, id)
 					    		scale : {x:1, y:1}
 							});
 							obj.node[id].setSelected(0);
-							shapes.apply('transitionTo', {    		
-					    	    rotation : 0,
-					    	    duration: 0.01
-					    	});
 						}
 					}else if(selectOn == 1){
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);
@@ -427,10 +424,6 @@ function histUpdate(obj, id)
 					    		scale : {x:1.05, y:1}
 							});
 							obj.node[id].setSelected(1);
-							shapes.apply('transitionTo', {    		
-					    	    rotation : 0,
-					    	    duration: 0.01
-					    	});
 						}
 						
 					}

@@ -15,12 +15,26 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 		{
 			//alert(j);
 			for(var i =1 ; i < isSelected[id].length ; i ++)
-			{	alert(isSelected[tmp[j]][i]);
+			{//	alert(isSelected[tmp[j]][i]);
 				isSelected[tmp[j]][i](select);
 			}			
 			isSelected[tmp[j]][0] = select;
 		}		
 	}
+	refresh();
+}
+function refresh()
+{
+	for(var i = 0 ; i < objArr.length ; i ++)
+	{
+		var shapes = objArr[i].stage.get('.' + 0);
+		shapes.apply('transitionTo', {    		
+    	    rotation : 0,
+    	    duration: 0.01
+    	});
+		objArr[i].stage.draw();
+	}
+	
 }
 
 function findMaxValue(Data)

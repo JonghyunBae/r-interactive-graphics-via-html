@@ -60,7 +60,12 @@ function checkKeyUp(e)
 	}
 }	
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-
+function eventTrigger(Name)
+{
+	hover(Name);
+	select(Name);
+	
+}
 function hover(Name)
 {
 	Name.stage.on('mouseover mousemove', function(evt){  
@@ -89,30 +94,33 @@ function hover(Name)
 	    	Name.tooltipLayer.moveUp();
 	    	Name.tooltip.show();
 	    	Name.tooltipLayer.draw();
-	    	var shapes = Name.stage.get('.'+node.getName());
-	    	switch(Name._type)
+	    	if(node.getSelected() == 0)
 	    	{
-		    	case 'hist' : 
-					shapes.apply('setAttrs', {
-		    		opacity: 1,
-		    		scale : {x:1.2, y:1}
-					});    	
-					break;
-				case 'scatter' : 
-	    			shapes.apply('setAttrs', {
-	            		opacity: 1,
-	            		scale : {x:1.5, y:1.5}
-	        			});    	
-	    			break;
-	        	default:
-	        		break;
+		    	var shapes = Name.stage.get('.'+node.getName());
+		    	switch(Name._type)
+		    	{
+			    	case 'hist' : 
+						shapes.apply('setAttrs', {
+			    		opacity: 1,
+			    		scale : {x:1.2, y:1}
+						});    	
+						break;
+					case 'scatter' : 
+		    			shapes.apply('setAttrs', {
+		            		opacity: 1,
+		            		scale : {x:1.5, y:1.5}
+		        			});    	
+		    			break;
+		        	default:
+		        		break;
+		    	}
+		    	shapes.apply('transitionTo', {    		
+		    	    rotation : 0,
+		    	    duration: 0.01
+		    	});  
 	    	}
-	    	shapes.apply('transitionTo', {    		
-	    	    rotation : 0,
-	    	    duration: 0.01
-	    	});  
 		}
-		});	
+	});	
 		
         	
 	Name.stage.on('mouseout', function(evt){  
@@ -122,7 +130,7 @@ function hover(Name)
 			document.body.style.cursor = "default";  // 나중에 지워도 되는지 확인할 것 
 			Name.tooltip.hide();
 	    	Name.tooltipLayer.draw();
-	    	var node = evt.shape;
+	    	
 	    	if(node.getSelected() == 0)
 	    	{
 	    		var shapes = Name.stage.get('.'+node.getName());
@@ -147,16 +155,20 @@ function hover(Name)
 		    	    rotation : 0,
 		    	    duration: 0.01
 		    	});  
-	    	}    	    	
+	    	}
 		}
 	});
 }
 var tmpShift = false;
+
+
+
 function select(Name)
 {
-	Name.dataLayer.on('click', function(evt){
+	
+	Name.stage.on('click', function(evt){
 		var node = evt.shape;
-		var shapes = Name.stage.get('#'+node.getId());
+	//	var shapes = Name.stage.get('#'+node.getId());
 		var tmpNode;
 		if(aPressed){	//select ALL
 //	  		allSelect();
@@ -186,6 +198,7 @@ function select(Name)
 	  		tmpShift = false;
 	  	}else{ 	// just one click
 			tmpShift = false;
+			allGraphUpdate(node.getName(), 1 , Name);
 	//		allDeselect();
 	//		allUpdate("hist", shapes, node.getId() - histIdStart, 0);
 	  	}  	

@@ -1,3 +1,28 @@
+function allGraphUpdate(id , select, name) // update 되야하는 node id와 select 여부, 주체가 누군지를 받는다. 
+{
+	//가장 먼저 주체 여부를 확인한다. 
+	if(name._type == "scatter")
+	{
+		for(var i =1 ; i < isSelected[id].length ; i ++)
+		{
+			isSelected[id][i](select);
+		}
+		isSelected[id][0] = select;
+	}else if(name._type == "hist"){	//histogram인 경우 id값이 node의 번호이므로 hasArr를 구해야 한다. 
+		var tmp = name.node[id].getHasArr();
+		//alert(tmp.length);
+		for(var j = 0 ; j < tmp.length ; j ++)
+		{
+			//alert(j);
+			for(var i =1 ; i < isSelected[id].length ; i ++)
+			{//	alert(isSelected[id].length);
+				isSelected[tmp[j]][i](select);
+			}			
+			isSelected[tmp[j]][0] = select;
+		}		
+	}
+}
+
 function findMaxValue(Data)
 {
 	var maxValue=Data[0];

@@ -38,6 +38,7 @@ var Hist = {};
 
 	            if(isDiscrete[this.x] == true)
 	            {
+	            	
 	            	var cnt = 0;
 	            	var xTmp = new Array();  // 밑의 각 항목 이름들 
 	            	var freqTmp = new Array();  //frequency를 저장 
@@ -45,6 +46,7 @@ var Hist = {};
 	            	freqTmp[cnt] = 1;
 	            	hasTmp[cnt][0] = 0;
 	            	xTmp[cnt++] = mainArr[this.x][0];
+	            	isSelected[0].push(histUpdate(this, 0));
 	            	for(i = 1 ; i < mainArr[this.x].length ; i++)
 	            	{
 	            		for(j = 0 ; j < xTmp.length ; j ++)
@@ -52,14 +54,18 @@ var Hist = {};
 	            			if(xTmp[j] == mainArr[this.x][i])
 	            			{
 	            				hasTmp[j].push(i);
+	            				isSelected[i].push(histUpdate(this, j));
 	            				freqTmp[j] ++; 
 	            				break;
 	            			}	            				
 	            		}
+	            		
 	            		if(j == xTmp.length)
 	            		{
 	            			freqTmp[j] = 1;
+	            			hasTmp[j].push(i);
 	            			xTmp.push(mainArr[this.x][i]);
+	            			isSelected[i].push(histUpdate(this , j));
 	            		}
 	            	}
 	            	var barWidth = this.width/freqTmp.length/2;
@@ -92,6 +98,7 @@ var Hist = {};
 	            	var xMin = findMinValue(mainArr[this.x]);
 	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); // frequency 임시로 저장 
 	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
+	            	var upTmp = new Array(mainArr[this.x].length);
 	            	var cnt = 0;
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
@@ -108,14 +115,28 @@ var Hist = {};
 	            		}	            		
 	            		freqTmp[cnt] ++ ; // 해당배열 frequency 하나씩 늘려주고 
 	            		hasTmp[cnt].push(i); // hasarray에 저장해준다.
+	            		upTmp[i] = cnt;
+	            		
 	            	}
+	            	
 	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 처음부터 어디까지 0이 나오는지 저장. 즉, frequency가 0이 아닌 첫 노드 검사 
 	            	{	            		
 	            		if(freqTmp[firstcnt] != 0)
 	            		{
 	            			break;
 	            		}
+	            		freqTmp.shift();
+	            		hasTmp.shift();
 	            	}
+	            	if(firstcnt != 0)
+	            	{
+	            		for(var i = 0 ; i < mainArr[this.x].length ; i++)
+		            	{
+		            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
+		            	}
+	            	}
+	            	
+	            	
 	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // 위와 반대로 끝에서부터 frequency가 0이 아닌 첫 노드 검사 
 	            	{
 	            		if(freqTmp[lastcnt] != 0)
@@ -164,24 +185,26 @@ var Hist = {};
             	for(var cnt = 0; cnt< nodeX.length ; cnt++)
             	{
             		this.node[cnt] = new Kinetic.Rect({
-            			id : cnt,
-				name : cnt,
-						freq: freqTmp[cnt+firstcnt],
+            			//id : cnt,
+            			name : cnt,
+						freq: freqTmp[cnt],
 						x: this.plotXMargin + nodeX[cnt] + barWidth/2, 
-						y: this.plotYMargin + this.height - freqTmp[cnt+firstcnt]*this.height/this.yMax/2, 
+						y: this.plotYMargin + this.height - freqTmp[cnt]*this.height/this.yMax/2, 
 						
 						width: barWidth,
-						height: freqTmp[cnt+firstcnt]*this.height/this.yMax,
+						height: freqTmp[cnt]*this.height/this.yMax,
 						fill: 'green',
 						stroke: 'black',						
 						opacity : 0.5,
 						draggable : false,
-						hidden : false,
+				//		hidden : false,
 						selected : 0,
-						info : "Node : "+cnt+"\r\n"+"Frequency : "+freqTmp[cnt+firstcnt],
+						selectCnt : 0,
+						info : "Node : "+cnt+"\r\n"+"Frequency : "+freqTmp[cnt],
 						hasArr : hasTmp[cnt],
-						offset: {x: barWidth/2, y: freqTmp[cnt+firstcnt]*this.height/this.yMax/2},
+						offset: {x: barWidth/2, y: freqTmp[cnt]*this.height/this.yMax/2},
 					});
+            		
             	}
 	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
  	            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
@@ -372,3 +395,47 @@ var Hist = {};
 			}
 	};
 })();
+
+/////////////////////////////////////////update function //////////////////////////////
+function histUpdate(obj, id)
+{
+	return	function(selectOn)
+				{
+				//	alert(id);
+					if(obj.node[id].getSelected() == 1 && selectOn == 0)
+					{
+						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);
+						if(obj.node[id].getSelectCnt() == 0)
+						{
+							var shapes = obj.stage.get('.' + id);
+							shapes.apply('setAttrs', {
+					    		opacity: 0.5,
+					    		scale : {x:1, y:1}
+							});
+							obj.node[id].setSelected(0);
+							shapes.apply('transitionTo', {    		
+					    	    rotation : 0,
+					    	    duration: 0.01
+					    	});
+						}
+					}else if(selectOn == 1){
+						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);
+						if(obj.node[id].getSelected() == 0)
+						{
+							var shapes = obj.stage.get('.' + id);
+							shapes.apply('setAttrs', {
+					    		opacity: 1,
+					    		scale : {x:1.05, y:1}
+							});
+							obj.node[id].setSelected(1);
+							shapes.apply('transitionTo', {    		
+					    	    rotation : 0,
+					    	    duration: 0.01
+					    	});
+						}
+						
+					}
+
+				};
+}
+////////////////////////////////////////////////////////////////////////////////////////

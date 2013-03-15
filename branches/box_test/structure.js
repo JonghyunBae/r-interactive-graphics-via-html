@@ -2,6 +2,32 @@
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
 var isDiscrete; // array for confirming discrete data
+var isSelected; // array for selected node and save each update function
+
+
+function test(i)
+{
+	return function (tt)
+	{
+		alert(i + ", " + tt);
+	};
+}
+
+//b = a(1);
+/*
+var b = make2DArr(10);
+for(var i = 0 ; i < 10 ; i++)
+{
+	b[i][0] = 1
+}
+alert(b);
+b[0].push(a(3));
+b[0].push(a(4));
+b[0][1](2);
+b[0][2](5);
+*/
+
+
 
 function csv2Arr(data, liveChar)
  {	
@@ -29,6 +55,7 @@ function csv2Arr(data, liveChar)
  	}
  	return result_array;
  }
+
 function getData(fileName)
 {
 	var filePath = fileName;	
@@ -53,12 +80,14 @@ function make2DArr(rows) {
 
 function createMainStructure(fileName)
 {
+	
 	var tmpArr = getData(fileName);		
 	var dataArr=tmpArr.dataArr;
 	labelArr=tmpArr.labelArr;	 
-	mainArr = make2DArr(labelArr.length);	
-	isDiscrete = new Array(labelArr.length);
 	
+	isSelected = make2DArr(dataArr.length);
+	mainArr = make2DArr(labelArr.length);		
+	isDiscrete = new Array(labelArr.length);
 	for(var j=0; j<dataArr.length; j++)
 	{
 		var tmpArr = dataArr[j].toString().split(',');	
@@ -76,9 +105,13 @@ function createMainStructure(fileName)
 					isDiscrete[i] = false;
 				}
 			}			
-		}	
+		}
+		isSelected[j][0] = 0;	//selected 값 저장 . selected는 모두 0이므로 0으로 초기화 여기에 추가적으로 update function들 붙일 것.  
 	}
-	//alert(isDiscrete);
+	
+//	isSelected[0].push(test(1));
+//	alert(isSelected[0][1](3));
+	
 }		
 
 

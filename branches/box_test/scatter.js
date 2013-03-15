@@ -2,10 +2,10 @@ var Scatter = {};
 
 (function() {	
 	
-	Scatter = function(mainArr, optionObj) {
-		this._initScatter(optionObj);		
-		this._type = 'scatter';
+	Scatter = function(mainArr,  optionObj) {
 		
+		this._initScatter(optionObj);		
+		this._type = 'scatter';		
 		
     };
     Scatter.prototype = {
@@ -14,7 +14,8 @@ var Scatter = {};
     			
     		
     				
-    			////////// Make essential variables ////////				
+    			////////// Make essential variables ////////	
+    			
 	            this.width = optionObj.width || plotWidth; //plot width
 	            this.height = optionObj.height || plotHeight; //plot height
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
@@ -116,7 +117,7 @@ var Scatter = {};
 	            nodeY = yTmp.node;
 	            this.yPlotArr = yTmp.plotArr;
 	            
-	    	
+	            
 	            
 	    		//////////Make Data Structure of nodes and essential arrays////////
 	    		this.yMax = findMaxValue(mainArr[this.y]);
@@ -145,12 +146,14 @@ var Scatter = {};
 						//	strokeWidth : 0.01,
 						//	opacity : 0.7,
 						//	draggable : false,
-							hidden : 0,
+						//	hidden : 0,
 							selected : 0,
 							info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
-						});							
+						});			
+						isSelected[i].push(scatterUpdate(this, i));
 					}
 				}else{
+					
 					for(var i = 0; i < mainArr[this.x].length ; i++)
 					{
 						this.node[i] = new Kinetic.Circle({
@@ -164,13 +167,17 @@ var Scatter = {};
 						//	strokeWidth : 0.01,
 						//	opacity : 0.7,
 						//	draggable : false,
-							hidden : 0,
+						//	hidden : 0,
 							selected : 0,
 							info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
-						});							
+						});				
+						//alert("ddd");
+						isSelected[i].push(scatterUpdate(this,i));
 					}
+					
 				}
-				
+			//	alert("dddd");
+			//	alert(nameof);
 				
     		},
 			doIt: function() { 
@@ -473,6 +480,40 @@ function getLegendColor(n, colors, mainValueArr)
 		return tmpColor;		
 	}	
 }
+
+/////////////////////////////////////////update function //////////////////////////////
+function scatterUpdate(obj, id)
+{
+	return	function(selectOn)
+				{
+					if(selectOn == 0 && obj.node[id].getSelected() == 1)
+					{	
+						var shapes = obj.stage.get('.' + id);
+						shapes.apply('setAttrs', {
+				    		opacity: 0.7,
+				    		scale : {x:1, y:1}
+						});
+						obj.node[id].setSelected(0);
+					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){
+						var shapes = obj.stage.get('.' + id);
+						shapes.apply('setAttrs', {
+							stroke : 'black',
+							strokeWidth : 1,
+							radius : 5,
+							stroke: 1,
+				    		opacity: 1,
+				    		scale : {x:4, y:4}
+						});
+						obj.node[id].setSelected(1);
+					}
+					shapes.apply('transitionTo', {    		
+			    	    rotation : 0,
+			    	    duration: 0.01
+			    	});
+				};
+}
+////////////////////////////////////////////////////////////////////////////////////////
+
 
 function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나 this.y를 받고 xtick이나 ytick을 받는다. 
 {														// return은 x좌표와 x좌표 이름이 찍혀있는 plotArr와 node가 찍혀야할 좌표가 node에 저장되어 return된다. 

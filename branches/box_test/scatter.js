@@ -7,6 +7,8 @@ var Scatter = {};
 		this._initScatter(optionObj);		
 		this._type = 'scatter';		
 		objArr.push(this);
+		this.tmpShift = false;
+		this.preId = {x : -1, y : -1};
 		
     };
     Scatter.prototype = {
@@ -170,7 +172,7 @@ var Scatter = {};
 						//	draggable : false,
 						//	hidden : 0,
 							selected : 0,
-							info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
+							info :"X : " + nodeX[i] + "\r\n" + "Y : " +  nodeY[i] +  "\r\n "+ "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
 						});				
 						//alert("ddd");
 						isSelected[i].push(scatterUpdate(this,i));
@@ -491,6 +493,8 @@ function scatterUpdate(obj, id)
 					{	
 						var shapes = obj.stage.get('.' + id);
 						shapes.apply('setAttrs', {
+							radius : obj.radius,
+							strokeWidth : 0.01,
 				    		opacity: 0.7,
 				    		scale : {x:1, y:1}
 						});
@@ -500,7 +504,7 @@ function scatterUpdate(obj, id)
 						shapes.apply('setAttrs', {
 							stroke : 'black',
 							strokeWidth : 1,
-							radius : 5,
+							radius : 2,
 							stroke: 1,
 				    		opacity: 1,
 				    		scale : {x:4, y:4}

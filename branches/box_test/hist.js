@@ -6,6 +6,8 @@ var Hist = {};
 		this._initHist(optionObj);		
 		this._type = 'hist';
 		objArr.push(this);
+		this.tmpShift = false;
+		this.preId = {x : -1, y : -1};
     };
 	Hist.prototype = {
 			

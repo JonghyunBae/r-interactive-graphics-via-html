@@ -1,7 +1,7 @@
 //////////////////////////////////////Chk key event Start//////////////////////////////////////   
 
-window.addEventListener('keydown',this.checkKeyDown,false);	
-window.addEventListener('keyup',this.checkKeyUp,false);	
+window.addEventListener('keydown',checkKeyDown,false);	
+window.addEventListener('keyup',checkKeyUp,false);	
 var ctrlPressed = false;
 var shiftPressed = false;
 var aPressed = false;
@@ -33,7 +33,6 @@ function checkKeyDown(e)
 	}
 	if(ctrlPressed == true && zPressed == true)//ctrl key and z key pressed at the same time
 	{
-		fetchWork();
 	}
 }	
 function checkKeyUp(e) 
@@ -159,7 +158,7 @@ function hover(Name)
 		}
 	});
 }
-var tmpShift = false;
+
 
 
 
@@ -168,126 +167,107 @@ function select(Name)
 	
 	Name.stage.on('click', function(evt){
 		var node = evt.shape;
-	//	var shapes = Name.stage.get('#'+node.getId());
-		var tmpNode;
-		if(aPressed){	//select ALL
-//	  		allSelect();
-	  		tmpShift = false;
-	  	}else if(shiftPressed && preId != -1){
-	  		tmpShift = true;
-	  /*		allDeselect();
-			if(preId > node.getId()){
-				for(var i = node.getId() - histIdStart ; i < preId + 1 - histIdStart ; i++)
+		if(isNaN(node.getName()) == false)
+		{
+			var tmpX = Name.node[node.getName()].getX(); // 클릭 당한 노드의 x, y 좌표를 받아 놓는다. 
+			var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); // Y좌표가 뒤집어저 있으므로 다시 순서대로 뒤집는다. 
+		//	alert(tmpX + " , " + tmpY);
+			if(aPressed){	//select ALL
+				Name.tmpShift = false;
+				allSelect();
+		  	}else if(gPressed){
+		  		Name.tmpShift = false;
+		  	}else if(shiftPressed && Name.preId.x != -1){			 
+		  		
+		  		Name.tmpShift = true;
+		  		allDeselect();
+		  		if(Name._type == "scatter")
+		  		{
+		  			if(Name.preId.x > tmpX){
+		  				//alert(Name.preId.y + ", " + tmpY);
+		  				if(Name.preId.y > tmpY){
+		  					for(var i = 0 ; i < Name.node.length ; i ++)
+				  			{
+				  				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <=Name.preId.x && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
+				  				{				  					
+				  					allGraphUpdate(i ,1, Name);
+				  				}
+				  			}
+		  				}else if(Name.preId.y < tmpY){
+		  					for(var i = 0 ; i < Name.node.length ; i ++)
+				  			{
+				  				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
+				  				{				  					
+				  					allGraphUpdate(i ,1, Name);
+				  				}
+				  			}
+		  				}
+		  			}else if(Name.preId.x < tmpX){
+		  			
+		  				if(Name.preId.y > tmpY){
+		  					for(var i = 0 ; i < Name.node.length ; i ++)
+				  			{
+				  				if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX  && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
+				  				{				  					
+				  					allGraphUpdate(i ,1, Name);
+				  				}
+				  			}
+		  				}else if(Name.preId.y < tmpY){
+		  					for(var i = 0 ; i < Name.node.length ; i ++)
+				  			{
+				  				if((Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX) && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
+				  				{				
+				  					allGraphUpdate(i ,1, Name);
+				  				}
+				  			}
+		  				}
+		  			}
+		  			
+		  		}else if(Name._type == "hist"){
+		  			if(Name.preId.x > tmpX){
+		  				for(var i = 0 ; i < Name.node.length ; i ++)
+			  			{
+			  				if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX)
+			  				{
+			  					allGraphUpdate(i ,1, Name);
+			  				}
+			  			}
+		  			}else if(Name.preId.x > tmpX){
+		  				for(var i = 0 ; i < Name.node.length ; i ++)
+			  			{
+			  				if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX)
+			  				{
+			  					allGraphUpdate(i ,1, Name);
+			  				}
+			  			}
+		  			}
+		  			
+		  		}
+			}else if(ctrlPressed){ //select mutiple node one by one.
+				if(node.getSelected() == 0)
 				{
-		//			tmpNode = histStage.get("#"+ (i + histIdStart));
-		//			allUpdate("hist", tmpNode, i, 0);
+					allGraphUpdate(node.getName(), 1 , Name);
+				}else if(node.getSelected() == 1){
+					allGraphUpdate(node.getName(), 0 , Name);
 				}
-			}else if(preId < node.getId()){
-		/*		for(var i = preId - histIdStart  ; i < node.getId() + 1 - histIdStart ; i++)
-				{
-		//			tmpNode = histStage.get("#"+ (i + histIdStart));
-		//			allUpdate("hist", tmpNode, i, 0);
-				}
-			} */
-		}else if(ctrlPressed){ //select mutiple node one by one.
-/*	  		if(histData[node.getId() - histIdStart].selected > 0){ // pre pressed state -> deselect rect & scatter
-	  			allUpdate("hist", shapes, node.getId() - histIdStart, 1);
-	  		}else if(histData[node.getId() - histIdStart].selected == 0){ // unselected -> selected
-	  			allUpdate("hist", shapes, node.getId() - histIdStart, 0);
-	  		}*/
-	  		tmpShift = false;
-	  	}else{ 	// just one click
-			tmpShift = false;
-			allGraphUpdate(node.getName(), 1 , Name);
-	//		allDeselect();
-	//		allUpdate("hist", shapes, node.getId() - histIdStart, 0);
-	  	}  	
-	  	if(tmpShift == false)
-		{
-	//		preId = node.getId();
-		}
-	  	//saveWork();
-	  	//doRefresh();
-	 //	writeMsg(msgLayer);
-	 //	addRow('dataTable');
-	});
-}
-
-function allUpdate(hostName, node, id, eraseOn)
-{
-	//// eraseOn : 0 is add node , 1 is delete node //
-	//// id is each relative id ///
-	if(hostName == "scatter")
-	{
-		if(eraseOn == 0) // add node
-		{
-			if(scatterData[id].selected == 0)
+				Name.tmpShift = false;
+		  	}else{ 	// just one click
+		  		Name.tmpShift = false;
+				allDeselect();
+				allGraphUpdate(node.getName(), 1 , Name);
+		//		allDeselect();
+		//		allUpdate("hist", shapes, node.getId() - histIdStart, 0);
+		  	}  	
+		  	if(Name.tmpShift == false)
 			{
-				scatterSingleSelect(node, id);
-				histUpdate(histXMain[id],eraseOn);
+		  		Name.preId = {x : tmpX , y : tmpY};
 			}
-			
+		}else{
+			allDeselect();
 		}
-		else{
-			if(scatterData[id].selected == 1)
-			{
-				scatterSingleDeselect(node, id);
-				histUpdate(histXMain[id],eraseOn);
-			}
-		}
-	//	alert(eraseOn);
-  		
-	}else if(hostName == "hist"){
-		if(eraseOn == 0) // add node
-		{
-			histSingleSelect(node, id);
-		}
-		else{
-			histSingleDeselect(node, id);
-		}
-		scatterUpdate(id,eraseOn);
-	}
-}
-
-function singleSelect(node, id)
-{
-	node.apply('setAttrs', {
-		opacity: 1,
-		scale: { x : 1.05, y : 1 }
+		refresh();
 	});
-	if(id != -1)
-	{
-		histData[id].selected=histArr[id];
-	}	
 }
 
-function singleDeselect(node, id)
-{
-	node.apply('setAttrs', {
-		opacity: 0.5,
-		scale: { x : 1, y : 1 }
-	});
-	histData[id].selected = 0;
-}
-
-function allSelect()
-{
-	var node;
-	for(var i = 0; i <histArr.length ; i ++)
-	{
-		node = histStage.get("#"+ (i + histIdStart));
-		histSingleSelect(node, i);		
-	}
-}
-
-function histAllDeselect()
-{
-	var node;
-	for(var i = 0; i <histArr.length ; i ++)
-	{
-		node = histStage.get("#"+ (i + histIdStart));
-		histSingleDeselect(node, i);
-	}
-}
 
 

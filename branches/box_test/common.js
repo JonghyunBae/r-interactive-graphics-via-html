@@ -21,8 +21,8 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 			isSelected[tmp[j]][0] = select;
 		}		
 	}
-	refresh();
 }
+
 function refresh()
 {
 	for(var i = 0 ; i < objArr.length ; i ++)
@@ -34,9 +34,38 @@ function refresh()
     	});
 		objArr[i].stage.draw();
 	}
-	
 }
 
+function allSelect()
+{
+	for(var i = 0 ; i < isSelected.length ; i ++)
+	{
+		if(isSelected[i][0] == 0)
+		{
+			for(var j = 1 ; j < isSelected[i].length ; j++)
+			{
+				isSelected[i][j](1);
+			}
+			isSelected[i][0] = 1;
+		}		
+	}
+
+}
+function allDeselect()
+{
+	for(var i = 0 ; i < isSelected.length ; i ++)
+	{
+		if(isSelected[i][0] == 1)
+		{
+			for(var j = 1 ; j < isSelected[i].length ; j++)
+			{
+				isSelected[i][j](0);
+			}
+			isSelected[i][0] = 0;
+		}		
+	}
+
+}
 function findMaxValue(Data)
 {
 	var maxValue=Data[0];

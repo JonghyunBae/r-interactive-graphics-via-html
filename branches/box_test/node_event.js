@@ -110,6 +110,15 @@ function hover(Name)
 		            		scale : {x:1.5, y:1.5}
 		        			});    	
 		    			break;
+					case 'box' : 
+					//	alert(shapes.getInfo());
+					//	if(shapes.getRadius() != undefined){
+							shapes.apply('setAttrs', {
+			            		opacity: 1,
+			            		scale : {x:1.2, y:1}
+			        			});    	
+					//	}
+						break;
 		        	default:
 		        		break;
 		    	}
@@ -142,6 +151,12 @@ function hover(Name)
 						});    	
 						break;
 					case 'scatter' : 
+		    			shapes.apply('setAttrs', {
+		            		opacity: 0.7,
+		            		scale : {x:1, y:1}
+		        			});    	
+		    			break;
+					case 'box' : 
 		    			shapes.apply('setAttrs', {
 		            		opacity: 0.7,
 		            		scale : {x:1, y:1}

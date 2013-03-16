@@ -130,7 +130,7 @@ var Box = {};
           //          document.write(boxHasArr[i], '<br />');
                 }
                 
-                this.boxWidth = (optionObj.plotLength==undefined)?(this.width/xMainValueArr.length*0.8):(optionObj.plotLength); 
+                this.boxWidth = (optionObj.plotLength==undefined)?(this.width/xMainValueArr.length*0.7):(optionObj.plotLength); 
 /*
                 function findQuartile(_th, Data, index)//_th =1, return Q1
                 { 
@@ -220,12 +220,17 @@ var Box = {};
 
 
 
-                
-                
-                
-                
+            var tooltipTextGetInfo = new Array();
+			for(var i = 0; i < mainArr[this.x].length ; i++)
+			{
+				tooltipTextGetInfo[i]=labelArr[0]+" : " + mainArr[0][i]+ "\r\n" ;
+				for(var j=1; j< labelArr.length ; j++){
+					tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + mainArr[j][i]+ "\r\n" ;
+				}
+			}				   
                 
                 //////////Make Data Structure of nodes and essential arrays////////
+               
             this.node = new Array();
             this.outlierNode = new Array();
             var yMax = findMaxValue(mainArr[this.y]);
@@ -249,7 +254,7 @@ var Box = {};
                 this.node[i] = new Kinetic.Rect({
                     //id: i,
                     name : i,
-                    x: medianXPos-this.boxWidth/2, //////////////////////////////////???????????????????????????
+                    x: medianXPos, //////////////////////////////////???????????????????????????
                     y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
                     stroke : 'black',
                     fill : 'green',
@@ -258,37 +263,42 @@ var Box = {};
                     height: (q3[i]-q1[i])*this.height/(yMax - yMin),
                 //    strokeWidth : 0.01,
                     opacity : 0.7,
+                    offset : {x: this.boxWidth/2},
                 //    draggable : false,
                     hidden : 0,
                     selected : 0,
-                    info :  i,
+                    info :  "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
                     hasArr : boxHasArr[i]
-                });                
+                });       
                 this.node[i+xMainValueArr.length]= new Kinetic.Line({
                     name : i,
-                    x: medianXPos-this.boxWidth/2,
+                    x: medianXPos,
                     y: medianYPos,
                     points: [0, 0, this.boxWidth, 0],
                     opacity : 0.7,
+                    offset : {x: this.boxWidth/2},
                     stroke: 'black',
+                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
                     strokeWidth: '4',
                 });        
                 this.node[i+2*xMainValueArr.length]= new Kinetic.Line({
                     name : i,
                     x: medianXPos,
                 //    y: medianYPos,
-                    points: [    0, this.height +this.plotYMargin -(maxBelowFence[i])*this.height/(yMax - yMin),
-                                 0, this.height +this.plotYMargin -(q3[i])*this.height/(yMax - yMin)],
+                    points: [    0, this.height +this.plotYMargin -(maxBelowFence[i]-yMin)*this.height/(yMax - yMin),
+                                 0, this.height +this.plotYMargin -(q3[i]-yMin)*this.height/(yMax - yMin)],
                     opacity : 0.7,
+                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
                     stroke: 'black'
                 });    
                 this.node[i+3*xMainValueArr.length]= new Kinetic.Line({
                     name : i,
                     x: medianXPos,
                 //    y: medianYPos,
-                    points: [    0, this.height +this.plotYMargin -(q1[i])*this.height/(yMax - yMin),
-                                 0, this.height +this.plotYMargin -(yMin)*this.height/(yMax - yMin)],
+                    points: [    0, this.height +this.plotYMargin -(q1[i]-yMin)*this.height/(yMax - yMin),
+                                 0, this.height +this.plotYMargin -(minAboveFence[i]-yMin)*this.height/(yMax - yMin)],
                     opacity : 0.7,
+                    info: "Node : "+i+"/r/n"+"Frequency : "+boxHasArr[i].length,
                     stroke: 'black'
                 });    
                 
@@ -303,7 +313,7 @@ var Box = {};
                         hidden : 0,
                         selected : 0,
                         opacity : 0.7,
-                        info : xMainValueArr.length+j+cnt
+                        info : "Node : "+(xMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
                     });                    
                 }
                 cnt=cnt+outliersArr[i].length;
@@ -582,7 +592,7 @@ function findMaxBelowFence(Data, index, q1, q3)
     var fence = q3 + 1.5*iqr;
     var outliers = new Array();
     var j=0;
-    var maxValue=Data[ index[j++] ];
+    var maxValue=q3;
     for(var i=1; i<Data.length; i++)
     {    
         if(i==index[j])
@@ -602,8 +612,8 @@ function findMinAboveFence(Data, index, q1, q3)
     var iqr = q3-q1;    
     var fence = q1 - 1.5*iqr;
     var outliers = new Array();
-    var j=index.length-1;    
-    var minValue=Data[ index[j--] ];
+    var j=0;    
+    var minValue=q1;
     
     for(var i=0; i<Data.length; i++)
     {    
@@ -614,7 +624,7 @@ function findMinAboveFence(Data, index, q1, q3)
             }else if(Data[i] < fence){
                 outliers.push(i);                
             }            
-            j--;
+            j++;
         }    
     }
     //outliers.push('NaN');

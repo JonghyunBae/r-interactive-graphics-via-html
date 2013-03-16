@@ -3,7 +3,7 @@
     Within quotes, separated by comma.
     E.g.:   ['imgid', 'divid'];
    */
-   var elmids = ['histContainer1', 'histContainer2','scatterContainer1', 'scatterContainer2'];
+   var elmids = ['histContainer1', 'histContainer2','scatterContainer1', 'scatterContainer2','boxContainer1', 'boxContainer2',];
 
    var divX, divY = 0;       // variables that will contain the coordinates
    var divOffsetX, divOffsetY = 0;

@@ -42,6 +42,7 @@
 		    <div id="scatterContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="scatterContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 			<div id="boxContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+			<div id="boxContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		</div>	
 	    
 	 	<script src="kinetic-v4.3.1.js"></script>
@@ -49,11 +50,11 @@
 	    <script src="common.js"></script>
 	    <script>
 	 //    createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
-	  		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
+	  //		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
 	  	//		createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
 	  	//	createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
 	  //		createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
-	  //		createMainStructure("full-diamonds-from-R_50K.csv");//mainArr = data, labelArr= column1     
+	  		createMainStructure("full-diamonds-from-R_50K.csv");//mainArr = data, labelArr= column1     
 	
         	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
        		 var plotWidth=500;  //default value for plot width
@@ -96,6 +97,9 @@
 			var box01 = new Box(mainArr, {  x:'color',y:'carat',width:300, height:300});
 			box01.draw(1);   
 			eventTrigger(box01);
+			var box02 = new Box(mainArr, {  x:'cut',y:'price',width:300, height:300});
+			box02.draw(2);   
+			eventTrigger(box02);
 		/*	var hist02 = new Hist(mainArr, { bin: 0.5	, x:'color', width:300, height:300 });
 			hist02.draw(2);
 			eventTrigger(hist02);*/

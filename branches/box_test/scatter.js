@@ -510,6 +510,8 @@ function scatterUpdate(obj, id)
 				    		scale : {x:4, y:4}
 						});
 						obj.node[id].setSelected(1);
+						obj.node[id].moveToTop();
+						//alert("ddd");
 					}
 					
 				};

@@ -4,7 +4,7 @@ var labelArr; // character array for the column names.
 var isDiscrete; // array for confirming discrete data
 var isSelected; // array for selected node and save each update function
 var objArr = new Array();
-
+/*
 function test(i)
 {
 	return function (tt)
@@ -12,7 +12,7 @@ function test(i)
 		alert(i + ", " + tt);
 	};
 }
-
+*/
 //b = a(1);
 /*
 var b = make2DArr(10);

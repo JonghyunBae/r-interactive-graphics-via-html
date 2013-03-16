@@ -224,18 +224,19 @@ function select(Name)
 		  			}
 		  			
 		  		}else if(Name._type == "hist"){
-		  			if(Name.preId.x > tmpX){
+		  			//alert(Name.preId.x + " , " + tmpX);
+		  			if(Name.preId.x >= tmpX){
 		  				for(var i = 0 ; i < Name.node.length ; i ++)
 			  			{
-			  				if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX)
+			  				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x)
 			  				{
 			  					allGraphUpdate(i ,1, Name);
 			  				}
 			  			}
-		  			}else if(Name.preId.x > tmpX){
+		  			}else if(Name.preId.x <= tmpX){
 		  				for(var i = 0 ; i < Name.node.length ; i ++)
 			  			{
-			  				if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX)
+			  				if(tmpX >= Name.node[i].getX() && Name.node[i].getX() >= Name.preId.x)
 			  				{
 			  					allGraphUpdate(i ,1, Name);
 			  				}
@@ -255,8 +256,6 @@ function select(Name)
 		  		Name.tmpShift = false;
 				allDeselect();
 				allGraphUpdate(node.getName(), 1 , Name);
-		//		allDeselect();
-		//		allUpdate("hist", shapes, node.getId() - histIdStart, 0);
 		  	}  	
 		  	if(Name.tmpShift == false)
 			{

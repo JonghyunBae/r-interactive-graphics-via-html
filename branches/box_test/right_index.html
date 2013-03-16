@@ -41,6 +41,7 @@
 		    <div id="histContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="scatterContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="scatterContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+			<div id="boxContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		</div>	
 	    
 	 	<script src="kinetic-v4.3.1.js"></script>
@@ -61,6 +62,7 @@
 	    
 	    <script src="scatter.js"></script>
 	    <script src="hist.js"></script>
+	    <script src="box.js"></script>
 	    <script src="event.js"></script>
 	    <script src="node_event.js"></script>
         <script>        
@@ -82,15 +84,18 @@
 			select(scatter02);*/
 			
 			
-			var scatter01 = new Scatter(mainArr, {  x:'x',y:'cut', color:'x',width:800, height:800, legend:'left'});
+			var scatter01 = new Scatter(mainArr, {  x:'x',y:'cut', color:'x',width:300, height:300, legend:'left'});
 			scatter01.draw(1);
 			eventTrigger(scatter01);
-			var scatter02 = new Scatter(mainArr, {  x:'price',y:'carat', color:'price',width:800, height:800, legend:'topright'});
+			var scatter02 = new Scatter(mainArr, {  x:'color',y:'carat', color:'color',width:300, height:300, legend:'topright'});
 			scatter02.draw(2);    
 			eventTrigger(scatter02);
-			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:800, height:800 });
+			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
 			hist01.draw(1);
 			eventTrigger(hist01);
+			var box01 = new Box(mainArr, {  x:'color',y:'carat',width:300, height:300});
+			box01.draw(1);   
+			eventTrigger(box01);
 		/*	var hist02 = new Hist(mainArr, { bin: 0.5	, x:'color', width:300, height:300 });
 			hist02.draw(2);
 			eventTrigger(hist02);*/

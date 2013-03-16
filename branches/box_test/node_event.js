@@ -198,9 +198,9 @@ function select(Name)
 		  		allDeselect();
 		  		if(Name._type == "scatter")
 		  		{
-		  			if(Name.preId.x > tmpX){
+		  			if(Name.preId.x >= tmpX){
 		  				//alert(Name.preId.y + ", " + tmpY);
-		  				if(Name.preId.y > tmpY){
+		  				if(Name.preId.y >= tmpY){
 		  					for(var i = 0 ; i < Name.node.length ; i ++)
 				  			{
 				  				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <=Name.preId.x && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
@@ -208,7 +208,7 @@ function select(Name)
 				  					allGraphUpdate(i ,1, Name);
 				  				}
 				  			}
-		  				}else if(Name.preId.y < tmpY){
+		  				}else if(Name.preId.y <= tmpY){
 		  					for(var i = 0 ; i < Name.node.length ; i ++)
 				  			{
 				  				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
@@ -217,9 +217,9 @@ function select(Name)
 				  				}
 				  			}
 		  				}
-		  			}else if(Name.preId.x < tmpX){
+		  			}else if(Name.preId.x <= tmpX){
 		  			
-		  				if(Name.preId.y > tmpY){
+		  				if(Name.preId.y >= tmpY){
 		  					for(var i = 0 ; i < Name.node.length ; i ++)
 				  			{
 				  				if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX  && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
@@ -227,7 +227,7 @@ function select(Name)
 				  					allGraphUpdate(i ,1, Name);
 				  				}
 				  			}
-		  				}else if(Name.preId.y < tmpY){
+		  				}else if(Name.preId.y <= tmpY){
 		  					for(var i = 0 ; i < Name.node.length ; i ++)
 				  			{
 				  				if((Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX) && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
@@ -278,8 +278,12 @@ function select(Name)
 			}
 		}else{
 			allDeselect();
+			Name.preId = {x : -1 , y : -1};
 		}
+		
 		refresh();
+		
+		
 	});
 }
 

@@ -40,11 +40,11 @@
 	    <script src="structure.js"></script>
 	    <script src="common.js"></script>
 	    <script>
-	     createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
-	 	//		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
+	 //    createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
+	 			createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
 	  	//		createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
 	  	//	createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
-	  //		createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
+	  	//	createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
 	 	//	createMainStructure("full-diamonds-from-R_50K.csv");//mainArr = data, labelArr= column1     
 	
         	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
@@ -59,19 +59,19 @@
 	    <script src="node_event.js"></script>
         <script>        
         
-	        var scatter01 = new Scatter(mainArr, {  x:'time',y:'conc', color:'time',width:300, height:300, legend:'left'});
+	/*        var scatter01 = new Scatter(mainArr, {  x:'time',y:'conc', color:'time',width:300, height:300, legend:'left'});
 			scatter01.draw(1);
 			eventTrigger(scatter01);
 			var scatter02 = new Scatter(mainArr, {  x:'wt',y:'time', color:'subject',width:300, height:300, legend:'topright'});
 			scatter02.draw(2);    
 			eventTrigger(scatter02);
-			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'time', width:300, height:300 });
+			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'subject', width:300, height:300 });
 			hist01.draw(1);
 			eventTrigger(hist01);			
-			var hist02 = new Hist(mainArr, { bin: 0.5	, x:'subject', width:300, height:300 });
+			var hist02 = new Hist(mainArr, { bin: 0.5	, x:'time', width:300, height:300 });
 			hist02.draw(2);
-			eventTrigger(hist02);
-			var box01 = new Box(mainArr, {  x:'time',y:'conc',width:300, height:300});
+			eventTrigger(hist02); */
+	/*		var box01 = new Box(mainArr, {  x:'time',y:'conc',width:300, height:300});
 			box01.draw(1);   
 			eventTrigger(box01);
 			var box02 = new Box(mainArr, {  x:'time',y:'wt',width:300, height:300});
@@ -82,13 +82,13 @@
 	 	 	eventTrigger(box03);
 			var box04 = new Box(mainArr, {  x:'subject',y:'subject',width:300, height:300});
 			box04.draw(4);   
-			eventTrigger(box04);
+			eventTrigger(box04);*/
 			
-			/*
+			
 			var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'x',width:300, height:300, legend:'left'});
 			scatter01.draw(1);
 			eventTrigger(scatter01);
-			var scatter02 = new Scatter(mainArr, {  x:'cut',y:'carat', color:'color',width:300, height:300, legend:'topright'});
+			var scatter02 = new Scatter(mainArr, {  x:'cut',y:'color', color:'color',width:300, height:300, legend:'topright'});
 			scatter02.draw(2);    
 			eventTrigger(scatter02);
 			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
@@ -109,7 +109,7 @@
 			var box04 = new Box(mainArr, {  x:'clarity',y:'x',width:300, height:300});
 			box04.draw(4);   
 			eventTrigger(box04);
-		*/
+		
 		</script>    
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
 		<input type="text" name="regcoords" id="regcoords" />

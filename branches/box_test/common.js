@@ -10,21 +10,33 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 		isSelected[id][0] = select;
 	}else if(name._type == "hist"){	//histogram인 경우 id값이 node의 번호이므로 hasArr를 구해야 한다. 
 		var tmp = name.node[id].getHasArr();
-		//alert(tmp.length);
+	//	alert(tmp);
 		for(var j = 0 ; j < tmp.length ; j ++)
 		{
-			//alert(j);
-			for(var i =1 ; i < isSelected[id].length ; i ++)
-			{//	alert(isSelected[tmp[j]][i]);
+		//	alert(j);
+			for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
+			{
+			//	alert(isSelected[tmp[j]][i]);
+				
+				if(j == tmp.length-1 && i == isSelected[tmp[j]].length-1)
+				{
+			//		alert(j + " ,1   " + i);
+			//		alert(isSelected[tmp[j]][i]);
+				}
 				isSelected[tmp[j]][i](select);
+				//alert(j + " ,2  " + i);
 			}			
+		//	alert(j);
 			isSelected[tmp[j]][0] = select;
 		}		
 	}
+	
 }
 
 function refresh()
 {
+//	alert("ddd");
+//	alert(objArr.length);
 	for(var i = 0 ; i < objArr.length ; i ++)
 	{
 		var shapes = objArr[i].stage.get('.' + 0);
@@ -40,15 +52,19 @@ function allSelect()
 {
 	for(var i = 0 ; i < isSelected.length ; i ++)
 	{
+	//	document.write("isselectlength11  " + isSelected.length + "<br>");
 		if(isSelected[i][0] == 0)
 		{
 			for(var j = 1 ; j < isSelected[i].length ; j++)
 			{
+	//			document.write("isselectlength22  " + isSelected[i].length + "<br>");
 				isSelected[i][j](1);
+			//	document.write(i + " , " + j + "<br>");
 			}
 			isSelected[i][0] = 1;
 		}		
 	}
+	//alert("ddd");
 
 }
 function allDeselect()

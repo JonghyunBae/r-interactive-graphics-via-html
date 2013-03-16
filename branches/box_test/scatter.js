@@ -14,9 +14,6 @@ var Scatter = {};
     Scatter.prototype = {
     		
     		_initScatter: function(optionObj){
-    			
-    		
-    				
     			////////// Make essential variables ////////	
     			
 	            this.width = optionObj.width || plotWidth; //plot width

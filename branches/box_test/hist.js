@@ -122,23 +122,14 @@ var Hist = {};
 	            		
 	            	}
 	            	
+	            //	alert(freqTmp.length);
 	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 처음부터 어디까지 0이 나오는지 저장. 즉, frequency가 0이 아닌 첫 노드 검사 
 	            	{	            		
 	            		if(freqTmp[firstcnt] != 0)
 	            		{
 	            			break;
 	            		}
-	            		freqTmp.shift();
-	            		hasTmp.shift();
 	            	}
-
-            		for(var i = 0 ; i < mainArr[this.x].length ; i++)
-	            	{
-	            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
-	            	}
-
-	            	
-	            	
 	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // 위와 반대로 끝에서부터 frequency가 0이 아닌 첫 노드 검사 
 	            	{
 	            		if(freqTmp[lastcnt] != 0)
@@ -146,15 +137,30 @@ var Hist = {};
 	            			break;
 	            		}
 	            	}
-	            	if(lastcnt == firstcnt) // 1개있다는 뜻 
-	            	{
-	            		var barWidth = this.width /(3);	// 양쪽에 1칸씩 여유분	따라서 +2 
-		            	this.xPlotArr = make2DArr(4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
-	            	}else{
-	            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// 양쪽에 1칸씩 여유분	따라서 +2 
-		            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
-	            	}
 	            	
+	            	for(var i = 0 ; i < firstcnt ; i ++)
+	            	{
+	            		freqTmp.shift();
+	            		hasTmp.shift();
+	            	}
+	           // 	alert(freqTmp.length);
+	           // 	alert(hasTmp[2]);
+	            //	alert(firstcnt);
+
+            		for(var i = 0 ; i < mainArr[this.x].length ; i++)
+	            	{
+            //			if(i == 121)
+            	//			alert(upTmp[i]);
+	            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
+	            	}
+            		
+	            	
+	            	
+	            	
+            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// 양쪽에 1칸씩 여유분	따라서 +3
+	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
+	           // 	alert(firstcnt);
+	           // 	alert(lastcnt);
 	            	cnt = 0;
 	            	var nodeX = new Array(lastcnt-firstcnt+1);
 	            	
@@ -162,7 +168,7 @@ var Hist = {};
 	            	{
 	            		this.xPlotArr[i][0] = (i)*barWidth;
 	            		this.xPlotArr[i][1] = (xMin > 0 ) ? ((i-1)*this.bin + firstcnt*this.bin).toFixed(this.fixPoint) : ((i-1)*this.bin + firstcnt*this.bin -Math.abs(xMin)).toFixed(this.fixPoint);
-	            		if(i !=0 && i < this.xPlotArr.length-2 )
+	            		if(0 < i && i < this.xPlotArr.length-2 )
 	            		{	            			
 	            			nodeX[cnt++] =  i*(barWidth);	            			
 	            		}
@@ -174,10 +180,11 @@ var Hist = {};
 	                for(var i = 0; i<  freqTmp.length ; i++)
 	             	{
 	                 	if(freqTmp[i] == maxFreq){
-	                 		this.maxNode=i-firstcnt;
+	                 		this.maxNode=i;
 	                 		break;
 	                 	}                	
-	             	}	            	
+	             	}	     
+	              //  alert(this.maxNode);
 	            }            			
 	            this.yMax = findMaxValue(freqTmp); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
 	            this.yMin = 0;	              
@@ -238,7 +245,7 @@ var Hist = {};
                     strokeWidth: 2
                 });                
                 this.plotLayer.add(this.plotRect);    
-
+                
                 this.xAxis = new Kinetic.Line({
                     name: 'xAxis',
                     points: [  this.plotXMargin+this.firstX, 
@@ -249,7 +256,7 @@ var Hist = {};
                     strokeWidth: 2             
                 });
                 
-                
+               
                 this.plotLayer.add(this.xAxis);
                 this.yAxis = new Kinetic.Line({
                     points: [    this.plotXMargin-this.plotLength, 
@@ -260,6 +267,7 @@ var Hist = {};
                     strokeWidth: 2             
                 });                                
                 this.plotLayer.add(this.yAxis);
+                
                 //////////////////////////////Tooltip Setting////////////////////////////////////////
                 this.tooltipLayer = new Kinetic.Layer();
                 this.tooltip = new Kinetic.Group({
@@ -281,7 +289,7 @@ var Hist = {};
                 this.tooltipLayer.add(this.tooltip);
                 this.stage.add(this.tooltipLayer);
                 ///////////////////////////////////////////////////////////////////////////////////
-                
+               
                 this.xLine = new Array();
                 this.xText = new Array();
                 var tmp = 0;
@@ -403,7 +411,7 @@ function histUpdate(obj, id)
 {
 	return	function(selectOn)
 				{
-					//alert(id);
+					
 					if(obj.node[id].getSelected() == 1 && selectOn == 0)
 					{
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);
@@ -426,8 +434,7 @@ function histUpdate(obj, id)
 					    		scale : {x:1.05, y:1}
 							});
 							obj.node[id].setSelected(1);
-						}
-						
+						}				
 					}
 
 				};

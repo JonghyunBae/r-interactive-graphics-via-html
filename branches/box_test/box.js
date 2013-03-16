@@ -158,7 +158,7 @@ var Box = {};
                              j++;
                          }
                      }
-                     valueOfHasArr[k].sort();                
+                     valueOfHasArr[k].sort(function (a, b){ return (a-b);});                
                 }
             //    for(var k=0; k<boxHasArr.length; k++){
                        //       document.write(valueOfHasArr[ k ], '<br />');
@@ -189,13 +189,14 @@ var Box = {};
                     minAboveFence[i] = tmpFindMinAboveFence.min;
                     maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
                     minOutliersArr[i] = tmpFindMinAboveFence.outliers;
-                //    document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
+               //     document.write('<br>'+' ,valueOfHasArr : '+valueOfHasArr[i]);
+               //     document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
                     outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
                   //   document.write('<br>','<br>','i : '+outliersArr[i],'<br>','<br>' );
                 }
-            //    document.write('<br>',maxOutliersArr[0],'<br>' );
-            //    document.write('<br>',minOutliersArr[0],'<br>' );
-            //    document.write('<br>',maxOutliersArr,'<br>' );
+             //   document.write('<br>',maxOutliersArr[0],'<br>' );
+           //    document.write('<br>',minOutliersArr[0],'<br>' );
+            //    document.write('<br>',outliersArr,'<br>' );
                 /*
                 var tmpMainArr = mainArr[this.y];
                 
@@ -593,7 +594,7 @@ function findMaxBelowFence(Data, index, q1, q3)
     var outliers = new Array();
     var j=0;
     var maxValue=q3;
-    for(var i=1; i<Data.length; i++)
+    for(var i=0; i<Data.length; i++)
     {    
         if(i==index[j])
         {   

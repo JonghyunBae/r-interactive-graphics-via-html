@@ -22,19 +22,7 @@
 				</div>
 			</div>
 		</div>
-	
-		<div id="right">
-			<h1>About RIGHT</h1>
-			<p>Learn more about RIGHT chart... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...</p>
-			<h1>Recent Works</h1>
-				<ul>
-					<li><a href="#">A Scatter Chart</a></li>
-					<li><a href="#">A Histogram Chart</a></li>
-					<li><a href="#">A Box-and-Whisker Chart</a></li>
-					<li><a href="#">A Chart</a></li>
-					<li><a href="#">A Chart</a></li>
-				</ul>
-		</div>	
+		
     
     	<div id="content">		
 		    <div id="histContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
@@ -50,11 +38,11 @@
 	    <script src="common.js"></script>
 	    <script>
 	 //    createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
-	  //		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
+	 		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
 	  	//		createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
 	  	//	createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
 	  //		createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
-	  		createMainStructure("full-diamonds-from-R_50K.csv");//mainArr = data, labelArr= column1     
+	 //		createMainStructure("full-diamonds-from-R_50K.csv");//mainArr = data, labelArr= column1     
 	
         	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
        		 var plotWidth=500;  //default value for plot width
@@ -88,7 +76,7 @@
 			var scatter01 = new Scatter(mainArr, {  x:'x',y:'cut', color:'x',width:300, height:300, legend:'left'});
 			scatter01.draw(1);
 			eventTrigger(scatter01);
-			var scatter02 = new Scatter(mainArr, {  x:'color',y:'carat', color:'color',width:300, height:300, legend:'topright'});
+			var scatter02 = new Scatter(mainArr, {  x:'cut',y:'carat', color:'color',width:300, height:300, legend:'topright'});
 			scatter02.draw(2);    
 			eventTrigger(scatter02);
 			var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });

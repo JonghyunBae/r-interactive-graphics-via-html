@@ -45,7 +45,7 @@ var Box = {};
                 
 
                 var nodeX = new Array(mainArr[this.x].length);
-                this.xTick= (optionObj.xTick==undefined)?(5    ):(optionObj.xTick);
+                this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);
                 var xTmp = boxMakeAxisArr(this.width, this.x, this.xTick); // node가 찍혀야할 nodeX array에 저장. x좌표가 찍혀야할 좌표 위치와 이름이 xPlotArr에 저장된다. 
                 nodeX = xTmp.node;
                 this.xPlotArr = xTmp.plotArr;
@@ -56,15 +56,337 @@ var Box = {};
                 nodeY = yTmp.node;
                 this.yPlotArr = yTmp.plotArr;
             
+                if(isDiscrete[this.x] == true)
+	            { 
+                ///////xMain sort and assign what is what/////////////////////////////////////////////////
+	                var xMainValueArr = new Array(); //mainValueArr>>> name change to 
+	                var indexArr = new Array();
+	                var cnt=0;
+	                var sortedXMainArr = new Array();                    
+	                for(var i=0; i<mainArr[this.x].length; i++){        
+	                    sortedXMainArr[i] = {
+	                            a : mainArr[this.x][i],
+	                            b : i
+	                    };        
+	                }     
+	                var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
+	                    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1; 
+	                    if (a.a > b.a) return 1;
+	                    return -1;
+	                };
+	                for (i = 0; i < sortedXMainArr.length; i++) {                     
+	                    sortedXMainArr[i].stableSortKey = i;                           
+	                }       
+	                sortedXMainArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
+	
+	                 for(var i=0; i<sortedXMainArr.length; i++){        
+	                    if(i==0){
+	                        xMainValueArr[cnt]=sortedXMainArr[0].a;
+	                        indexArr[0]=0;
+	                      
+	                    }else{
+	                        if(sortedXMainArr[i].a==sortedXMainArr[i-1].a){
+	                            
+	                            indexArr[i]=cnt;
+	                        }else{
+	                            cnt++;
+	                            xMainValueArr[cnt]=sortedXMainArr[i].a;
+	                            indexArr[i]=cnt;
+	                        }
+	                    }
+	                }
+	                 var reindexArr = new Array(); // re assign
+	                for(var i=0; i<sortedXMainArr.length; i++){        // re assign
+	                    reindexArr[sortedXMainArr[i].b]=indexArr[ i ]; 
+	                }
+	                for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
+	                    indexArr[i]=reindexArr[i];    
+	                }
+	
+	            //    for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
+	            //        document.write(sortedXMainArr[i].a+','+sortedXMainArr[i].b, '<br />');
+	            //    }                
+	         //      document.write(xMainValueArr, '<br />');
+	               ///////xMain sort and assign what is what/////////////////////////////////////////////////     
+	                
+	                var boxHasArr = make2DArr(xMainValueArr.length);
+	                
+	                var j=0;
+	                boxHasArr[0][0] = sortedXMainArr[0].b;
+	            //    boxHasArr[0][1] = sortedXMainArr[1].b;
+	                for(var i=1; i<sortedXMainArr.length; i++){
+	                    //for(var j=0; j<xMainValueArr.length; j++){
+	                    //    if(sortedXMainArr[i].a == xMainValueArr[j]){
+	                    if(sortedXMainArr[i].a != sortedXMainArr[i-1].a){
+	                        j++;
+	                    }
+	                //    alert(boxHasArr);
+	                    
+	                    boxHasArr[j].push(sortedXMainArr[i].b);
+	                //            alert(boxHasArr[0]);
+	                    //    }
+	                //    }
+	                }
+	                for(var i=0; i<xMainValueArr.length; i++){
+	          //          document.write(boxHasArr[i], '<br />');
+	                }
+	                
+	                this.boxWidth = (optionObj.plotLength==undefined)?(this.width/xMainValueArr.length*0.7):(optionObj.plotLength); 
+	/*
+	                function findQuartile(_th, Data, index)//_th =1, return Q1
+	                { 
+	                    var x = new Array();
+	                    var j=0;
+	                    for(var i=0; i<Data.length; i++)
+	                    {    
+	                        if(i==index[j] )
+	                        {   
+	                            x.push(Data[i]);
+	                            j++;
+	                        }
+	                    }
+	                */
+	                //boxHasArr has node number, valueOfHasArr has node value itself
+	                var valueOfHasArr = make2DArr(boxHasArr.length);
+	                for(var k=0; k<boxHasArr.length; k++){
+	                     var j=0;
+	                     
+	                     for(var i=0; i<mainArr[this.y].length; i++)
+	                     {    
+	                         if(i==boxHasArr[k][j] )
+	                         {   
+	                             valueOfHasArr[k].push(mainArr[this.y][i]);
+	                             j++;
+	                         }
+	                     }
+	                     valueOfHasArr[k].sort(function (a, b){ return (a-b);});                
+	                }
+	            //    for(var k=0; k<boxHasArr.length; k++){
+	                       //       document.write(valueOfHasArr[ k ], '<br />');
+	            //    }
+	                
+	                var max = new Array();
+	                var min = new Array();
+	                var median = new Array();
+	                var q3 = new Array();
+	                var q1 = new Array();
+	                var iqr = new Array();
+	                var maxBelowFence = new Array();
+	                var minAboveFence = new Array();
+	                var maxOutliersArr = new Array();
+	                var minOutliersArr = new Array();
+	                var outliersArr = new Array();
+	              
+	                for(var i=0; i<xMainValueArr.length; i++){
+	                    max[i] = findMaxValue(valueOfHasArr[i]);
+	                    min[i] = findMinValue(valueOfHasArr[i]);
+	                    q3[i] = findQuartile(valueOfHasArr[i], 3);
+	                    median[i] = findQuartile(valueOfHasArr[i], 2);
+	                    q1[i] = findQuartile(valueOfHasArr[i], 1);
+	                    iqr[i] = q3[i] - q1[i];
+	                    var tmpFindMaxBelowFence = findMaxBelowFence(mainArr[this.y], boxHasArr[i], q1[i], q3[i]);
+	                    var tmpFindMinAboveFence = findMinAboveFence(mainArr[this.y], boxHasArr[i], q1[i], q3[i]);
+	                    maxBelowFence[i] = tmpFindMaxBelowFence.max;
+	                    minAboveFence[i] = tmpFindMinAboveFence.min;
+	                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
+	                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
+	               //     document.write('<br>'+' ,valueOfHasArr : '+valueOfHasArr[i]);
+	               //     document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
+	                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
+	                  //   document.write('<br>','<br>','i : '+outliersArr[i],'<br>','<br>' );
+	                }
+	             //   document.write('<br>',maxOutliersArr[0],'<br>' );
+	           //    document.write('<br>',minOutliersArr[0],'<br>' );
+	            //    document.write('<br>',outliersArr,'<br>' );
+	                /*
+	                var tmpMainArr = mainArr[this.y];
+	                
+	                tmpMainArr.sort();
+	                
+	              //  alert(tmpMainArr);
+	                
+	                for(var i = 0; i < this.xPlotArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+	                {
+	                    this.median[i] = getMedianValue(tmpMainArr);
+	                }*/
+	                
+	            }//discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                else{//from here, cont X ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                	var xMainValueArr = new Array();
+                	xMainValueArr[0] = 'ThisIsContinuousXData';
+                	var boxHasArr = make2DArr(xMainValueArr.length);
+                	for(var i=0; i<mainArr[this.y].length; i++){
+                		boxHasArr[0][i] = i;
+                	}
+                //	alert('boxHasArr : '+boxHasArr[0] );
+	                var sortedYMainArr = new Array();                    
+	                for(var i=0; i<mainArr[this.y].length; i++){        
+	                    sortedYMainArr[i]=mainArr[this.y][i]
+	                }  
+	                sortedYMainArr.sort(function (a, b){ return (a-b);});        
+                	
+                	
+                	var max = new Array();
+	                var min = new Array();
+	                var median = new Array();
+	                var q3 = new Array();
+	                var q1 = new Array();
+	                var iqr = new Array();
+	                var maxBelowFence = new Array();
+	                var minAboveFence = new Array();
+	                var maxOutliersArr = new Array();
+	                var minOutliersArr = new Array();
+	                var outliersArr = new Array();
+	               
+	                
+	                
+	                for(var i=0; i<xMainValueArr.length; i++){
+	                    max[i] = findMaxValue(sortedYMainArr);
+	                    min[i] = findMinValue(sortedYMainArr);
+	                    q3[i] = findQuartile(sortedYMainArr, 3);
+	                    median[i] = findQuartile(sortedYMainArr, 2);
+	                    q1[i] = findQuartile(sortedYMainArr, 1);
+	                    iqr[i] = q3[i] - q1[i];
+	                    var tmpFindMaxBelowFence = findMaxBelowFence(mainArr[this.y], boxHasArr[i], q1[i], q3[i]);
+	                    var tmpFindMinAboveFence = findMinAboveFence(mainArr[this.y], boxHasArr[i]	, q1[i], q3[i]);
+	                    maxBelowFence[i] = tmpFindMaxBelowFence.max;
+	                    minAboveFence[i] = tmpFindMinAboveFence.min;
+	                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
+	                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
+	               //     document.write('<br>'+' ,valueOfHasArr : '+valueOfHasArr[i]);
+	                    document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
+	                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
+	                     document.write('<br>','<br>','i : '+minOutliersArr[i],'<br>','<br>' );
+	                }
+	                
+	                var xMax = findMaxValue(mainArr[this.x]);
+	                var xMin = findMinValue(mainArr[this.x]);
+	                var xTick = 5;
+	                var xTickRange = (xMax-xMin )/xTick;                
+	                var xTmp = Math.ceil( Math.log(xTickRange) / Math.log(10));
+	                xTickRange = setTickRange(xTmp, xTickRange);
+	                xMax = xTickRange * Math.ceil(xMax/xTickRange);              
+	                xMin = xTickRange * Math.floor(xMin/xTickRange);
+	                
+	               // var xMax=findMaxValue(mainArr[this.x]);
+	              //  var xMin=findMinValue(mainArr[this.x]);
+	                this.boxWidth = this.width*(findMaxValue(mainArr[this.x])-findMinValue(mainArr[this.x]))/(xMax-xMin);
+	                
+                	
+                }
+            var tooltipTextGetInfo = new Array();
+			for(var i = 0; i < mainArr[this.x].length ; i++)
+			{
+				tooltipTextGetInfo[i]=labelArr[0]+" : " + mainArr[0][i]+ "\r\n" ;
+				for(var j=1; j< labelArr.length ; j++){
+					tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + mainArr[j][i]+ "\r\n" ;
+				}
+			}				   
                 
+                //////////Make Data Structure of nodes and essential arrays////////
+			if(isDiscrete[this.y] != true){
+				  this.node = new Array();
+		            this.outlierNode = new Array();
+		            var yMax = findMaxValue(mainArr[this.y]);
+		            var yMin = findMinValue(mainArr[this.y]);
+		            var tickRange = (yMax-yMin )/this.yTick;                
+		            var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
+		            tickRange = setTickRange(tmp, tickRange);
+		            yMax = tickRange * Math.ceil(yMax/tickRange);              
+		            yMin = tickRange * Math.floor(yMin/tickRange);
+		         //   alert(xMainValueArr.length);
+		          
+		                    //if(this.color==-1 ){
+		            var cnt=0;
+		            var medianXPos =0;
+		            var medianYpos =0;
+		            for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+		            {
+		                medianXPos = this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1);
+		                medianYPos = this.height +this.plotYMargin - (median[i]-yMin)*this.height/(yMax - yMin);  
+		         //       
+		        //        alert(medianXPos+','+q3[i]+','+median[i]+','+this.boxWidth+', boxHasArr : '+boxHasArr[i].length); 
+		                this.node[i] = new Kinetic.Rect({  	
+		                    //id: i,
+		                    name : i,
+		                    x: medianXPos, //////////////////////////////////???????????????????????????
+		                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
+		                    stroke : 'black',
+		                    fill : 'green',
+		                    radius : this.radius,
+		                    width:  this.boxWidth,
+		                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
+		                //    strokeWidth : 0.01,
+		                    opacity : 0.7,
+		                    offset : {x: this.boxWidth/2},
+		                //    draggable : false,
+		                    hidden : 0,
+		                    selected : 0,
+		                    info :  "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+		                    hasArr : boxHasArr[i]
+		                });         
+		                this.node[i+xMainValueArr.length]= new Kinetic.Line({
+		                    name : i,
+		                    x: medianXPos,
+		                    y: medianYPos,
+		                    points: [0, 0, this.boxWidth, 0],
+		                    opacity : 0.7,
+		                    offset : {x: this.boxWidth/2},
+		                    stroke: 'black',
+		                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+		                    strokeWidth: '4',
+		                });        
+		                this.node[i+2*xMainValueArr.length]= new Kinetic.Line({
+		                    name : i,
+		                    x: medianXPos,
+		                    y: medianYPos,
+		                    points: [    0,  (median[i]-maxBelowFence[i])*this.height/(yMax - yMin),
+		                                 0, (median[i]-q3[i])*this.height/(yMax - yMin)],
+		                    opacity : 0.7,
+		                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+		                    stroke: 'black'
+		                });    
+		                this.node[i+3*xMainValueArr.length]= new Kinetic.Line({
+		                    name : i,
+		                    x: medianXPos,
+		                    y: medianYPos,
+		                    points: [    0, (median[i]-q1[i])*this.height/(yMax - yMin),
+		                                 0, (median[i]-minAboveFence[i])*this.height/(yMax - yMin)],
+		                    opacity : 0.7,
+		                    info: "Node : "+i+"/r/n"+"Frequency : "+boxHasArr[i].length,
+		                    stroke: 'black'
+		                });    
+		                
+		                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+		                {
+		                    this.node[4*xMainValueArr.length+j+cnt] = new Kinetic.Circle({
+		                        name : 4*xMainValueArr.length+j+cnt,
+		                        x: this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1), //////////////////////////////////???????????????????????????
+		                        y: this.height +this.plotYMargin - (mainArr[this.y][outliersArr[i][j]]-yMin)*this.height/(yMax - yMin), //this.median[i],
+		                        fill : 'green',
+		                        radius : this.radius,
+		                        hidden : 0,
+		                        selected : 0,
+		                        opacity : 0.7,
+		                        info : "Node : "+(xMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
+		                    });                    
+		                }
+		                cnt=cnt+outliersArr[i].length;
+		            }    
+		    
+				
+				
+			}//coninuous Y//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else{  //Y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
-                var xMainValueArr = new Array(); //mainValueArr>>> name change to 
+            	 ///////xMain sort and assign what is what/////////////////////////////////////////////////
+                var yMainValueArr = new Array(); //mainValueArr>>> name change to 
                 var indexArr = new Array();
                 var cnt=0;
                 var sortedXMainArr = new Array();                    
-                for(var i=0; i<mainArr[this.x].length; i++){        
+                for(var i=0; i<mainArr[this.y].length; i++){        
                     sortedXMainArr[i] = {
-                            a : mainArr[this.x][i],
+                            a : mainArr[this.y][i],
                             b : i
                     };        
                 }     
@@ -80,7 +402,7 @@ var Box = {};
 
                  for(var i=0; i<sortedXMainArr.length; i++){        
                     if(i==0){
-                        xMainValueArr[cnt]=sortedXMainArr[0].a;
+                        yMainValueArr[cnt]=sortedXMainArr[0].a;
                         indexArr[0]=0;
                       
                     }else{
@@ -89,7 +411,7 @@ var Box = {};
                             indexArr[i]=cnt;
                         }else{
                             cnt++;
-                            xMainValueArr[cnt]=sortedXMainArr[i].a;
+                            yMainValueArr[cnt]=sortedXMainArr[i].a;
                             indexArr[i]=cnt;
                         }
                     }
@@ -98,229 +420,118 @@ var Box = {};
                 for(var i=0; i<sortedXMainArr.length; i++){        // re assign
                     reindexArr[sortedXMainArr[i].b]=indexArr[ i ]; 
                 }
-                for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
+                for(var i=0; i<sortedXMainArr.length; i++){    	   //re re assign
                     indexArr[i]=reindexArr[i];    
                 }
- 
+
             //    for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
             //        document.write(sortedXMainArr[i].a+','+sortedXMainArr[i].b, '<br />');
             //    }                
-            //    document.write(xMainValueArr, '<br />');
-                
-                
-                var boxHasArr = make2DArr(xMainValueArr.length);
-                
-                var j=0;
-                boxHasArr[0][0] = sortedXMainArr[0].b;
-            //    boxHasArr[0][1] = sortedXMainArr[1].b;
-                for(var i=1; i<sortedXMainArr.length; i++){
-                    //for(var j=0; j<xMainValueArr.length; j++){
-                    //    if(sortedXMainArr[i].a == xMainValueArr[j]){
-                    if(sortedXMainArr[i].a != sortedXMainArr[i-1].a){
-                        j++;
-                    }
-                //    alert(boxHasArr);
-                    
-                    boxHasArr[j].push(sortedXMainArr[i].b);
-                //            alert(boxHasArr[0]);
-                    //    }
-                //    }
-                }
-                for(var i=0; i<xMainValueArr.length; i++){
-          //          document.write(boxHasArr[i], '<br />');
-                }
-                
-                this.boxWidth = (optionObj.plotLength==undefined)?(this.width/xMainValueArr.length*0.7):(optionObj.plotLength); 
-/*
-                function findQuartile(_th, Data, index)//_th =1, return Q1
-                { 
-                    var x = new Array();
-                    var j=0;
-                    for(var i=0; i<Data.length; i++)
-                    {    
-                        if(i==index[j] )
-                        {   
-                            x.push(Data[i]);
-                            j++;
-                        }
-                    }
-                */
-                //boxHasArr has node number, valueOfHasArr has node value itself
-                var valueOfHasArr = make2DArr(boxHasArr.length);
-                for(var k=0; k<boxHasArr.length; k++){
-                     var j=0;
-                     
-                     for(var i=0; i<mainArr[this.y].length; i++)
-                     {    
-                         if(i==boxHasArr[k][j] )
-                         {   
-                             valueOfHasArr[k].push(mainArr[this.y][i]);
-                             j++;
-                         }
-                     }
-                     valueOfHasArr[k].sort(function (a, b){ return (a-b);});                
-                }
-            //    for(var k=0; k<boxHasArr.length; k++){
-                       //       document.write(valueOfHasArr[ k ], '<br />');
-            //    }
-                
-                var max = new Array();
-                var min = new Array();
-                var median = new Array();
-                var q3 = new Array();
-                var q1 = new Array();
-                var iqr = new Array();
-                var maxBelowFence = new Array();
-                var minAboveFence = new Array();
-                var maxOutliersArr = new Array();
-                var minOutliersArr = new Array();
-                var outliersArr = new Array();
-                
-                for(var i=0; i<xMainValueArr.length; i++){
-                    max[i] = findMaxValue(valueOfHasArr[i]);
-                    min[i] = findMinValue(valueOfHasArr[i]);
-                    q3[i] = findQuartile(valueOfHasArr[i], 3);
-                    median[i] = findQuartile(valueOfHasArr[i], 2);
-                    q1[i] = findQuartile(valueOfHasArr[i], 1);
-                    iqr[i] = q3[i] - q1[i];
-                    var tmpFindMaxBelowFence = findMaxBelowFence(mainArr[this.y], boxHasArr[i], q1[i], q3[i]);
-                    var tmpFindMinAboveFence = findMinAboveFence(mainArr[this.y], boxHasArr[i], q1[i], q3[i]);
-                    maxBelowFence[i] = tmpFindMaxBelowFence.max;
-                    minAboveFence[i] = tmpFindMinAboveFence.min;
-                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
-                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
-               //     document.write('<br>'+' ,valueOfHasArr : '+valueOfHasArr[i]);
-               //     document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
-                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
-                  //   document.write('<br>','<br>','i : '+outliersArr[i],'<br>','<br>' );
-                }
-             //   document.write('<br>',maxOutliersArr[0],'<br>' );
-           //    document.write('<br>',minOutliersArr[0],'<br>' );
-            //    document.write('<br>',outliersArr,'<br>' );
-                /*
-                var tmpMainArr = mainArr[this.y];
-                
-                tmpMainArr.sort();
-                
-              //  alert(tmpMainArr);
-                
-                for(var i = 0; i < this.xPlotArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-                {
-                    this.median[i] = getMedianValue(tmpMainArr);
-                }*/
-                
-             // 요소 개수가 1개뿐인 배열은 이렇게 지정해야 합니다
-             // 다음은, 100 이라는 숫자 하나만 들어 있는 배열 정의
-        //     a = new Array();
-      //       a[0] = 100;
-      //       a[1]= 20;
-       //      a.sort();
-        //     document.write(findMedianValue(a), '<br />');
-             // 출력 결과: 100
-
-
-
-
-            var tooltipTextGetInfo = new Array();
-			for(var i = 0; i < mainArr[this.x].length ; i++)
-			{
-				tooltipTextGetInfo[i]=labelArr[0]+" : " + mainArr[0][i]+ "\r\n" ;
-				for(var j=1; j< labelArr.length ; j++){
-					tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + mainArr[j][i]+ "\r\n" ;
-				}
-			}				   
-                
-                //////////Make Data Structure of nodes and essential arrays////////
-               
-            this.node = new Array();
-            this.outlierNode = new Array();
-            var yMax = findMaxValue(mainArr[this.y]);
-            var yMin = findMinValue(mainArr[this.y]);
-            var tickRange = (yMax-yMin )/this.yTick;                
-            var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
-            tickRange = setTickRange(tmp, tickRange);
-            yMax = tickRange * Math.ceil(yMax/tickRange);              
-            yMin = tickRange * Math.floor(yMin/tickRange);
-         //   alert(xMainValueArr.length);
+              document.write('yMainValueArr :' + yMainValueArr, '<br />');
+               ///////xMain sort and assign what is what/////////////////////////////////////////////////     
+            	
+            	
+            	
+            	
+            	
+            	this.node = new Array();
+	            this.outlierNode = new Array();
+	            var yMax = findMaxValue(mainArr[this.y]);
+	            var yMin = findMinValue(mainArr[this.y]);
+	            var tickRange = (yMax-yMin )/this.yTick;                
+	            var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
+	            tickRange = setTickRange(tmp, tickRange);
+	            yMax = tickRange * Math.ceil(yMax/tickRange);              
+	            yMin = tickRange * Math.floor(yMin/tickRange);
+	         //   alert(yMainValueArr.length);
+	        //  alert(yMainValueArr);
+	                    //if(this.color==-1 ){
+	            var cnt=0;
+	            var medianXPos =0;
+	            var medianYpos =0;
+	            for(var i = 0; i < yMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+	            {
+	                medianXPos = this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1);//this.plotXMargin +12;// + this.width*(findMaxValue(mainArr[this.x])-findMinValue(mainArr[this.x]))/(xMax-xMin);
+	                medianYPos = this.height +this.plotYMargin - (i+1) * (this.height) / (yMainValueArr.length+1);
+	         //       
+	        //        alert(medianXPos+','+q3[i]+','+median[i]+','+this.boxWidth+', boxHasArr : '+boxHasArr[i].length); 
+	                this.node[i] = new Kinetic.Rect({  	
+	                    //id: i,
+	                    name : i,
+	                    x: medianXPos, //////////////////////////////////???????????????????????????
+	                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
+	                    stroke : 'black',
+	                    fill : 'green',
+	                    radius : this.radius,
+	                    width:  this.boxWidth,
+	                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
+	                //    strokeWidth : 0.01,
+	                    opacity : 0.7,
+	                    offset : {x: this.boxWidth/2},
+	                //    draggable : false,
+	                    hidden : 0,
+	                    selected : 0,
+	                    info :  "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+	                    hasArr : boxHasArr[i]
+	                });         
+	                this.node[i+yMainValueArr.length]= new Kinetic.Line({
+	                    name : i,
+	                    x: medianXPos,
+	                    y: medianYPos,
+	                    points: [0, 0, this.boxWidth, 0],
+	                    opacity : 0.7,
+	                    offset : {x: this.boxWidth/2},
+	                    stroke: 'black',
+	                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+	                    strokeWidth: '4',
+	                });        
+	                this.node[i+2*yMainValueArr.length]= new Kinetic.Line({
+	                    name : i,
+	                    x: medianXPos,
+	                    y: medianYPos,
+	                    points: [    0,  (median[i]-maxBelowFence[i])*this.height/(yMax - yMin),
+	                                 0, (median[i]-q3[i])*this.height/(yMax - yMin)],
+	                    opacity : 0.7,
+	                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+	                    stroke: 'black'
+	                });    
+	                this.node[i+3*yMainValueArr.length]= new Kinetic.Line({
+	                    name : i,
+	                    x: medianXPos,
+	                    y: medianYPos,
+	                    points: [    0, (median[i]-q1[i])*this.height/(yMax - yMin),
+	                                 0, (median[i]-minAboveFence[i])*this.height/(yMax - yMin)],
+	                    opacity : 0.7,
+	                    info: "Node : "+i+"/r/n"+"Frequency : "+boxHasArr[i].length,
+	                    stroke: 'black'
+	                });    
+	                
+	                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+	                {
+	                    this.node[4*yMainValueArr.length+j+cnt] = new Kinetic.Circle({
+	                        name : 4*yMainValueArr.length+j+cnt,
+	                        x: this.plotXMargin + (i+1) * (this.width) / (yMainValueArr.length+1), //////////////////////////////////???????????????????????????
+	                        y: this.height +this.plotYMargin - (mainArr[this.y][outliersArr[i][j]]-yMin)*this.height/(yMax - yMin), //this.median[i],
+	                        fill : 'green',
+	                        radius : this.radius,
+	                        hidden : 0,
+	                        selected : 0,
+	                        opacity : 0.7,
+	                        info : "Node : "+(yMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
+	                    });                    
+	                }
+	                cnt=cnt+outliersArr[i].length;
+	            }    
+            	
+            	
+            	
+            	     
             
-                    //if(this.color==-1 ){
-            var cnt=0;
-            var medianXPos =0;
-            var medianYpos =0;
-            for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-            {
-                medianXPos = this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1);
-                medianYPos = this.height +this.plotYMargin - (median[i]-yMin)*this.height/(yMax - yMin); 
+            
+            }
                 
-                this.node[i] = new Kinetic.Rect({
-                    //id: i,
-                    name : i,
-                    x: medianXPos, //////////////////////////////////???????????????????????????
-                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
-                    stroke : 'black',
-                    fill : 'green',
-                    radius : this.radius,
-                    width:  this.boxWidth,
-                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
-                //    strokeWidth : 0.01,
-                    opacity : 0.7,
-                    offset : {x: this.boxWidth/2},
-                //    draggable : false,
-                    hidden : 0,
-                    selected : 0,
-                    info :  "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
-                    hasArr : boxHasArr[i]
-                });       
-                this.node[i+xMainValueArr.length]= new Kinetic.Line({
-                    name : i,
-                    x: medianXPos,
-                    y: medianYPos,
-                    points: [0, 0, this.boxWidth, 0],
-                    opacity : 0.7,
-                    offset : {x: this.boxWidth/2},
-                    stroke: 'black',
-                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
-                    strokeWidth: '4',
-                });        
-                this.node[i+2*xMainValueArr.length]= new Kinetic.Line({
-                    name : i,
-                    x: medianXPos,
-                //    y: medianYPos,
-                    points: [    0, this.height +this.plotYMargin -(maxBelowFence[i]-yMin)*this.height/(yMax - yMin),
-                                 0, this.height +this.plotYMargin -(q3[i]-yMin)*this.height/(yMax - yMin)],
-                    opacity : 0.7,
-                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
-                    stroke: 'black'
-                });    
-                this.node[i+3*xMainValueArr.length]= new Kinetic.Line({
-                    name : i,
-                    x: medianXPos,
-                //    y: medianYPos,
-                    points: [    0, this.height +this.plotYMargin -(q1[i]-yMin)*this.height/(yMax - yMin),
-                                 0, this.height +this.plotYMargin -(minAboveFence[i]-yMin)*this.height/(yMax - yMin)],
-                    opacity : 0.7,
-                    info: "Node : "+i+"/r/n"+"Frequency : "+boxHasArr[i].length,
-                    stroke: 'black'
-                });    
-                
-                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-                {
-                    this.node[4*xMainValueArr.length+j+cnt] = new Kinetic.Circle({
-                        name : 4*xMainValueArr.length+j+cnt,
-                        x: this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1), //////////////////////////////////???????????????????????????
-                        y: this.height +this.plotYMargin - (mainArr[this.y][outliersArr[i][j]]-yMin)*this.height/(yMax - yMin), //this.median[i],
-                        fill : 'green',
-                        radius : this.radius,
-                        hidden : 0,
-                        selected : 0,
-                        opacity : 0.7,
-                        info : "Node : "+(xMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
-                    });                    
-                }
-                cnt=cnt+outliersArr[i].length;
-            }    
-    
-            this.boxRect = new Array();
+          
+   /*         this.boxRect = new Array();
             this.boxVerticalLine = new Array();
             this.boxHorizontalLine = new Array();
             for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
@@ -348,10 +559,10 @@ var Box = {};
             }
             for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
             {
-            //    this.node[i].add(this.boxVerticalLine[i]);
-            //    this.node[i].add(this.boxRect[i]);
-            //    this.node[i].add(this.boxHorizontalLine[i]);
-            }
+                this.node[i].add(this.boxVerticalLine[i]);
+               this.node[i].add(this.boxRect[i]);
+                this.node[i].add(this.boxHorizontalLine[i]);
+            }*/
     //        alert(this.node[6].getName());
         //    alert(    this.group1[0].getName());
         //    alert(this.node[1].getHasArr());
@@ -597,11 +808,11 @@ function findMaxBelowFence(Data, index, q1, q3)
     for(var i=0; i<Data.length; i++)
     {    
         if(i==index[j])
-        {   
+        {  
             if(Data[i] > maxValue && Data[i] <= fence){
                 maxValue=Data[i];            
             }else if(Data[i] > fence){
-                outliers.push(i);                
+                outliers.push(i);               
             }            
             j++;
         }
@@ -631,7 +842,7 @@ function findMinAboveFence(Data, index, q1, q3)
     //outliers.push('NaN');
     return {min : minValue, outliers : outliers};    
 }
-
+/*
 function findOutliers(Data, maxBelowFence, minAboveFence)
 {
     var outliersArr = new Array();    
@@ -643,7 +854,7 @@ function findOutliers(Data, maxBelowFence, minAboveFence)
     }
     return outliersArr;
 }
-
+*/
 /*
 
 // 중앙값 계산 함수

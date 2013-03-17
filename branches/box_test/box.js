@@ -100,50 +100,22 @@ var Box = {};
 	                    indexArr[i]=reindexArr[i];    
 	                }
 	
-	            //    for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
-	            //        document.write(sortedXMainArr[i].a+','+sortedXMainArr[i].b, '<br />');
-	            //    }                
-	         //      document.write(xMainValueArr, '<br />');
 	               ///////xMain sort and assign what is what/////////////////////////////////////////////////     
 	                
 	                var boxHasArr = make2DArr(xMainValueArr.length);
 	                
 	                var j=0;
 	                boxHasArr[0][0] = sortedXMainArr[0].b;
-	            //    boxHasArr[0][1] = sortedXMainArr[1].b;
 	                for(var i=1; i<sortedXMainArr.length; i++){
-	                    //for(var j=0; j<xMainValueArr.length; j++){
-	                    //    if(sortedXMainArr[i].a == xMainValueArr[j]){
 	                    if(sortedXMainArr[i].a != sortedXMainArr[i-1].a){
 	                        j++;
 	                    }
-	                //    alert(boxHasArr);
-	                    
 	                    boxHasArr[j].push(sortedXMainArr[i].b);
-	                //            alert(boxHasArr[0]);
-	                    //    }
-	                //    }
-	                }
-	                for(var i=0; i<xMainValueArr.length; i++){
-	          //          document.write(boxHasArr[i], '<br />');
 	                }
 	                
 	                this.boxWidth = new Array();
 	                this.boxWidth[0] = (optionObj.boxWidth==undefined)?(this.width/xMainValueArr.length*0.7):(optionObj.boxWidth); 
-	/*
-	                function findQuartile(_th, Data, index)//_th =1, return Q1
-	                { 
-	                    var x = new Array();
-	                    var j=0;
-	                    for(var i=0; i<Data.length; i++)
-	                    {    
-	                        if(i==index[j] )
-	                        {   
-	                            x.push(Data[i]);
-	                            j++;
-	                        }
-	                    }
-	                */
+	
 	                //boxHasArr has node number, valueOfHasArr has node value itself
 	                var valueOfHasArr = make2DArr(boxHasArr.length);
 	                for(var k=0; k<boxHasArr.length; k++){
@@ -159,9 +131,6 @@ var Box = {};
 	                     }
 	                     valueOfHasArr[k].sort(function (a, b){ return (a-b);});                
 	                }
-	            //    for(var k=0; k<boxHasArr.length; k++){
-	                       //       document.write(valueOfHasArr[ k ], '<br />');
-	            //    }
 	                
 	                var max = new Array();
 	                var min = new Array();
@@ -188,26 +157,8 @@ var Box = {};
 	                    minAboveFence[i] = tmpFindMinAboveFence.min;
 	                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
 	                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
-	               //     document.write('<br>'+' ,valueOfHasArr : '+valueOfHasArr[i]);
-	               //     document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
 	                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
-	                  //   document.write('<br>','<br>','i : '+outliersArr[i],'<br>','<br>' );
-	                }
-	             //   document.write('<br>',maxOutliersArr[0],'<br>' );
-	           //    document.write('<br>',minOutliersArr[0],'<br>' );
-	            //    document.write('<br>',outliersArr,'<br>' );
-	                /*
-	                var tmpMainArr = mainArr[this.y];
-	                
-	                tmpMainArr.sort();
-	                
-	              //  alert(tmpMainArr);
-	                
-	                for(var i = 0; i < this.xPlotArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-	                {
-	                    this.median[i] = getMedianValue(tmpMainArr);
-	                }*/
-	                
+	                }             
 	            }//discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 else{//from here, cont X ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 	
@@ -254,9 +205,9 @@ var Box = {};
 		                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
 		                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
 		               //     document.write('<br>'+' ,valueOfHasArr : '+valueOfHasArr[i]);
-		                    document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
+		             //       document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
 		                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
-		                     document.write('<br>','<br>','i : '+minOutliersArr[i],'<br>','<br>' );
+		               //      document.write('<br>','<br>','i : '+minOutliersArr[i],'<br>','<br>' );
 		                }
 		                
 		                var xMax = findMaxValue(mainArr[this.x]);
@@ -320,34 +271,17 @@ var Box = {};
 	                    for(var i=0; i<sortedXMainArr.length; i++){    	   //re re assign
 	                        indexArr[i]=reindexArr[i];    
 	                    }
-
-	                //    for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
-	                //        document.write(sortedXMainArr[i].a+','+sortedXMainArr[i].b, '<br />');
-	                //    }                
-	               //   document.write('yMainValueArr :' + yMainValueArr, '<br />');
-	                   ///////xMain sort and assign what is what/////////////////////////////////////////////////     
+	                   ///////yMain sort and assign what is what/////////////////////////////////////////////////     
 	                  var boxHasArr = make2DArr(yMainValueArr.length);
 		                
 		                var j=0;
 		                boxHasArr[0][0] = sortedXMainArr[0].b;
-		            //    boxHasArr[0][1] = sortedXMainArr[1].b;
 		                for(var i=1; i<sortedXMainArr.length; i++){
-		                    //for(var j=0; j<xMainValueArr.length; j++){
-		                    //    if(sortedXMainArr[i].a == xMainValueArr[j]){
 		                    if(sortedXMainArr[i].a != sortedXMainArr[i-1].a){
 		                        j++;
 		                    }
-		                //    alert(boxHasArr);
-		                    
 		                    boxHasArr[j].push(sortedXMainArr[i].b);
-		                //            alert(boxHasArr[0]);
-		                    //    }
-		                //    }
-		                }
-		                for(var i=0; i<yMainValueArr.length; i++){
-		          //          document.write('x cont, y discon: '+boxHasArr[i], '<br />');
-		                }
-		   
+		                }		   
 		                //boxHasArr has node number, valueOfHasArr has node value itself
 		                var valueOfHasArr = make2DArr(boxHasArr.length);
 		                for(var k=0; k<boxHasArr.length; k++){
@@ -362,9 +296,6 @@ var Box = {};
 		                         }
 		                     }
 		                     valueOfHasArr[k].sort(function (a, b){ return (a-b);});                
-		                }
-		                for(var k=0; k<boxHasArr.length; k++){
-		                              document.write(valueOfHasArr[ k ], '<br />');
 		                }
 		                
 		                var max = new Array();
@@ -391,10 +322,7 @@ var Box = {};
 		                    minAboveFence[i] = tmpFindMinAboveFence.min;
 		                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
 		                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
-		               //     document.write('<br>'+' ,valueOfHasArr : '+valueOfHasArr[i]);
-		                    document.write('<br>'+' ,max : '+max[i]+' ,min : '+min[i]+' ,q3 : '+q3[i]+' ,median : '+median[i]+' ,q1 : '+q1[i] +' ,iqr : '+iqr[i] +' ,maxBF : '+maxBelowFence[i]+' ,minAF : '+minAboveFence[i], '<br />');
 		                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
-		                  //   document.write('<br>','<br>','i : '+outliersArr[i],'<br>','<br>' );
 		                }
 
 		                var xMax = findMaxValue(mainArr[this.x]);
@@ -408,39 +336,167 @@ var Box = {};
 		                this.boxWidth = new Array();
 		                for(var i=0; i<yMainValueArr.length; i++){
 		                	this.boxWidth[i] = this.width*(findMaxValue(valueOfHasArr[i])-findMinValue(valueOfHasArr[i]))/(xMax-xMin);
-		                	// document.write('<br>'+'boxwidth : '+(findMaxValue(valueOfHasArr[i])-findMinValue(valueOfHasArr[i])), (xMax-xMin));
 		                }
-		          //      alert(xMax);
 	                }//y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	                	
-	                	
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-                	
+	              
                 }
-            var tooltipTextGetInfo = new Array();
-			for(var i = 0; i < mainArr[this.x].length ; i++)
-			{
-				tooltipTextGetInfo[i]=labelArr[0]+" : " + mainArr[0][i]+ "\r\n" ;
-				for(var j=1; j< labelArr.length ; j++){
-					tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + mainArr[j][i]+ "\r\n" ;
-				}
-			}				   
-                
-                //////////Make Data Structure of nodes and essential arrays////////
-			if(isDiscrete[this.y] != true){
-				  this.node = new Array();
+	            var tooltipTextGetInfo = new Array();
+				for(var i = 0; i < mainArr[this.x].length ; i++)
+				{
+					tooltipTextGetInfo[i]=labelArr[0]+" : " + mainArr[0][i]+ "\r\n" ;
+					for(var j=1; j< labelArr.length ; j++){
+						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + mainArr[j][i]+ "\r\n" ;
+					}
+				}				   
+	                
+	                //////////Make Data Structure of nodes and essential arrays////////
+				if(isDiscrete[this.y] != true){
+					  this.node = new Array();
+			            this.outlierNode = new Array();
+			            var yMax = findMaxValue(mainArr[this.y]);
+			            var yMin = findMinValue(mainArr[this.y]);
+			            var tickRange = (yMax-yMin )/this.yTick;                
+			            var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
+			            tickRange = setTickRange(tmp, tickRange);
+			            yMax = tickRange * Math.ceil(yMax/tickRange);              
+			            yMin = tickRange * Math.floor(yMin/tickRange);
+			         //   alert(xMainValueArr.length);
+			          
+			                    //if(this.color==-1 ){
+			            var cnt=0;
+			            var medianXPos =0;
+			            var medianYpos =0;
+			            for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+			            {
+			                medianXPos = this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1);
+			                medianYPos = this.height +this.plotYMargin - (median[i]-yMin)*this.height/(yMax - yMin);  
+			         //       
+			        //        alert(medianXPos+','+q3[i]+','+median[i]+','+this.boxWidth+', boxHasArr : '+boxHasArr[i].length); 
+			                this.node[i] = new Kinetic.Rect({  	
+			                    //id: i,
+			                    name : i,
+			                    x: medianXPos, //////////////////////////////////???????????????????????????
+			                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
+			                    stroke : 'black',
+			                    fill : 'green',
+			                    radius : this.radius,
+			                    width:  this.boxWidth[0],
+			                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
+			                //    strokeWidth : 0.01,
+			                    opacity : 0.7,
+			                    offset : {x: this.boxWidth[0]/2},
+			                //    draggable : false,
+			                    hidden : 0,
+			                    selected : 0,
+			                    info :  "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+			                    hasArr : boxHasArr[i]
+			                });         
+			                this.node[i+xMainValueArr.length]= new Kinetic.Line({
+			                    name : i,
+			                    x: medianXPos,
+			                    y: medianYPos,
+			                    points: [0, 0, this.boxWidth[0], 0],
+			                    opacity : 0.7,
+			                    offset : {x: this.boxWidth[0]/2},
+			                    stroke: 'black',
+			                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+			                    strokeWidth: '4',
+			                });        
+			                this.node[i+2*xMainValueArr.length]= new Kinetic.Line({
+			                    name : i,
+			                    x: medianXPos,
+			                    y: medianYPos,
+			                    points: [    0,  (median[i]-maxBelowFence[i])*this.height/(yMax - yMin),
+			                                 0, (median[i]-q3[i])*this.height/(yMax - yMin)],
+			                    opacity : 0.7,
+			                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
+			                    stroke: 'black'
+			                });    
+			                this.node[i+3*xMainValueArr.length]= new Kinetic.Line({
+			                    name : i,
+			                    x: medianXPos,
+			                    y: medianYPos,
+			                    points: [    0, (median[i]-q1[i])*this.height/(yMax - yMin),
+			                                 0, (median[i]-minAboveFence[i])*this.height/(yMax - yMin)],
+			                    opacity : 0.7,
+			                    info: "Node : "+i+"/r/n"+"Frequency : "+boxHasArr[i].length,
+			                    stroke: 'black'
+			                });    
+			                
+			                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+			                {
+			                    this.node[4*xMainValueArr.length+j+cnt] = new Kinetic.Circle({
+			                        name : 4*xMainValueArr.length+j+cnt,
+			                        x: this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1), //////////////////////////////////???????????????????????????
+			                        y: this.height +this.plotYMargin - (mainArr[this.y][outliersArr[i][j]]-yMin)*this.height/(yMax - yMin), //this.median[i],
+			                        fill : 'green',
+			                        radius : this.radius,
+			                        hidden : 0,
+			                        selected : 0,
+			                        opacity : 0.7,
+			                        info : "Node : "+(xMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
+			                    });                    
+			                }
+			                cnt=cnt+outliersArr[i].length;
+			            }    
+			    
+					
+					
+				}//coninuous Y//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	            else{  //Y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	                
+	            	
+	           	 ///////xMain sort and assign what is what/////////////////////////////////////////////////
+	                var yMainValueArr = new Array(); //mainValueArr>>> name change to 
+	                var indexArr = new Array();
+	                var cnt=0;
+	                var sortedXMainArr = new Array();                    
+	                for(var i=0; i<mainArr[this.y].length; i++){        
+	                    sortedXMainArr[i] = {
+	                            a : mainArr[this.y][i],
+	                            b : i
+	                    };        
+	                }     
+	                var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
+	                    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1; 
+	                    if (a.a > b.a) return 1;
+	                    return -1;
+	                };
+	                for (i = 0; i < sortedXMainArr.length; i++) {                     
+	                    sortedXMainArr[i].stableSortKey = i;                           
+	                }       
+	                sortedXMainArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
+	
+	                 for(var i=0; i<sortedXMainArr.length; i++){        
+	                    if(i==0){
+	                        yMainValueArr[cnt]=sortedXMainArr[0].a;
+	                        indexArr[0]=0;
+	                      
+	                    }else{
+	                        if(sortedXMainArr[i].a==sortedXMainArr[i-1].a){
+	                            
+	                            indexArr[i]=cnt;
+	                        }else{
+	                            cnt++;
+	                            yMainValueArr[cnt]=sortedXMainArr[i].a;
+	                            indexArr[i]=cnt;
+	                        }
+	                    }
+	                }
+	                 var reindexArr = new Array(); // re assign
+	                for(var i=0; i<sortedXMainArr.length; i++){        // re assign
+	                    reindexArr[sortedXMainArr[i].b]=indexArr[ i ]; 
+	                }
+	                for(var i=0; i<sortedXMainArr.length; i++){    	   //re re assign
+	                    indexArr[i]=reindexArr[i];    
+	                }
+	
+	            //    for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
+	            //        document.write(sortedXMainArr[i].a+','+sortedXMainArr[i].b, '<br />');
+	            //    }                
+	            //  document.write('yMainValueArr :' + yMainValueArr, '<br />');
+	              ///////xMain sort and assign what is what/////////////////////////////////////////////////    
+	            	this.node = new Array();
 		            this.outlierNode = new Array();
 		            var yMax = findMaxValue(mainArr[this.y]);
 		            var yMin = findMinValue(mainArr[this.y]);
@@ -449,49 +505,59 @@ var Box = {};
 		            tickRange = setTickRange(tmp, tickRange);
 		            yMax = tickRange * Math.ceil(yMax/tickRange);              
 		            yMin = tickRange * Math.floor(yMin/tickRange);
-		         //   alert(xMainValueArr.length);
-		          
+		         //   alert(yMainValueArr.length);
+		        //  alert(yMainValueArr);
 		                    //if(this.color==-1 ){
 		            var cnt=0;
 		            var medianXPos =0;
 		            var medianYpos =0;
-		            for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-		            {
-		                medianXPos = this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1);
-		                medianYPos = this.height +this.plotYMargin - (median[i]-yMin)*this.height/(yMax - yMin);  
-		         //       
-		        //        alert(medianXPos+','+q3[i]+','+median[i]+','+this.boxWidth+', boxHasArr : '+boxHasArr[i].length); 
+		            
+		            
+		            for(var i = 0; i < yMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
+		            {	 //alert((median[i]-min[i]));
+		            	if(isDiscrete[this.x] == false){//  x con y discon
+		            		medianXPos = this.plotXMargin + (min[i]-xMin)*this.width/(xMax - xMin)+this.boxWidth[i]/2;  
+		            	//	alert(medianXPos);
+		            		//outliersArr ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+		            	}else{	            		//x discon y discon
+		            		medianXPos = this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1);//this.plotXMargin +12;// + this.width*(findMaxValue(mainArr[this.x])-findMinValue(mainArr[this.x]))/(xMax-xMin);   
+		            		this.boxWidth[i]=this.boxWidth[0];
+		            		
+		            	}
+		            	medianYPos = this.height +this.plotYMargin - (i+1) * (this.height) / (yMainValueArr.length+1);
+		          // alert(medianXPos+'+'+medianYPos+'width:'+this.bo);
+		             //  alert(medianXPos+','+q3[i]+','+median[i]+','+this.boxWidth+', boxHasArr : '+boxHasArr[i].length); 
 		                this.node[i] = new Kinetic.Rect({  	
 		                    //id: i,
 		                    name : i,
 		                    x: medianXPos, //////////////////////////////////???????????????????????????
-		                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
+		                    y: medianYPos,//-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
 		                    stroke : 'black',
 		                    fill : 'green',
 		                    radius : this.radius,
-		                    width:  this.boxWidth[0],
+		                    width:  this.boxWidth[i],
 		                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
 		                //    strokeWidth : 0.01,
 		                    opacity : 0.7,
-		                    offset : {x: this.boxWidth[0]/2},
+		                    offset : {x: this.boxWidth[i]/2},
 		                //    draggable : false,
 		                    hidden : 0,
 		                    selected : 0,
 		                    info :  "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
 		                    hasArr : boxHasArr[i]
-		                });         
-		                this.node[i+xMainValueArr.length]= new Kinetic.Line({
+		                });              
+		               this.node[i+yMainValueArr.length]= new Kinetic.Line({
 		                    name : i,
 		                    x: medianXPos,
 		                    y: medianYPos,
-		                    points: [0, 0, this.boxWidth[0], 0],
+		                    points: [0, 0, this.boxWidth[i], 0],
 		                    opacity : 0.7,
-		                    offset : {x: this.boxWidth[0]/2},
+		                    offset : {x: this.boxWidth[i]/2},
 		                    stroke: 'black',
 		                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
 		                    strokeWidth: '4',
 		                });        
-		                this.node[i+2*xMainValueArr.length]= new Kinetic.Line({
+		                this.node[i+2*yMainValueArr.length]= new Kinetic.Line({
 		                    name : i,
 		                    x: medianXPos,
 		                    y: medianYPos,
@@ -501,7 +567,7 @@ var Box = {};
 		                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
 		                    stroke: 'black'
 		                });    
-		                this.node[i+3*xMainValueArr.length]= new Kinetic.Line({
+		                this.node[i+3*yMainValueArr.length]= new Kinetic.Line({
 		                    name : i,
 		                    x: medianXPos,
 		                    y: medianYPos,
@@ -514,244 +580,21 @@ var Box = {};
 		                
 		                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
 		                {
-		                    this.node[4*xMainValueArr.length+j+cnt] = new Kinetic.Circle({
-		                        name : 4*xMainValueArr.length+j+cnt,
-		                        x: this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1), //////////////////////////////////???????????????????????????
+		                    this.node[4*yMainValueArr.length+j+cnt] = new Kinetic.Circle({
+		                        name : 4*yMainValueArr.length+j+cnt,
+		                        x: this.plotXMargin + (i+1) * (this.width) / (yMainValueArr.length+1), //////////////////////////////////???????????????????????????
 		                        y: this.height +this.plotYMargin - (mainArr[this.y][outliersArr[i][j]]-yMin)*this.height/(yMax - yMin), //this.median[i],
 		                        fill : 'green',
 		                        radius : this.radius,
 		                        hidden : 0,
 		                        selected : 0,
 		                        opacity : 0.7,
-		                        info : "Node : "+(xMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
+		                        info : "Node : "+(yMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
 		                    });                    
 		                }
 		                cnt=cnt+outliersArr[i].length;
 		            }    
-		    
-				
-				
-			}//coninuous Y//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else{  //Y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                
-            	
-           	 ///////xMain sort and assign what is what/////////////////////////////////////////////////
-                var yMainValueArr = new Array(); //mainValueArr>>> name change to 
-                var indexArr = new Array();
-                var cnt=0;
-                var sortedXMainArr = new Array();                    
-                for(var i=0; i<mainArr[this.y].length; i++){        
-                    sortedXMainArr[i] = {
-                            a : mainArr[this.y][i],
-                            b : i
-                    };        
-                }     
-                var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
-                    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1; 
-                    if (a.a > b.a) return 1;
-                    return -1;
-                };
-                for (i = 0; i < sortedXMainArr.length; i++) {                     
-                    sortedXMainArr[i].stableSortKey = i;                           
-                }       
-                sortedXMainArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
-
-                 for(var i=0; i<sortedXMainArr.length; i++){        
-                    if(i==0){
-                        yMainValueArr[cnt]=sortedXMainArr[0].a;
-                        indexArr[0]=0;
-                      
-                    }else{
-                        if(sortedXMainArr[i].a==sortedXMainArr[i-1].a){
-                            
-                            indexArr[i]=cnt;
-                        }else{
-                            cnt++;
-                            yMainValueArr[cnt]=sortedXMainArr[i].a;
-                            indexArr[i]=cnt;
-                        }
-                    }
-                }
-                 var reindexArr = new Array(); // re assign
-                for(var i=0; i<sortedXMainArr.length; i++){        // re assign
-                    reindexArr[sortedXMainArr[i].b]=indexArr[ i ]; 
-                }
-                for(var i=0; i<sortedXMainArr.length; i++){    	   //re re assign
-                    indexArr[i]=reindexArr[i];    
-                }
-
-            //    for(var i=0; i<sortedXMainArr.length; i++){        //re re assign
-            //        document.write(sortedXMainArr[i].a+','+sortedXMainArr[i].b, '<br />');
-            //    }                
-              document.write('yMainValueArr :' + yMainValueArr, '<br />');
-               ///////xMain sort and assign what is what/////////////////////////////////////////////////     
-            	
-            	
-            	
-            	
-            	this.node = new Array();
-	            this.outlierNode = new Array();
-	            var yMax = findMaxValue(mainArr[this.y]);
-	            var yMin = findMinValue(mainArr[this.y]);
-	            var tickRange = (yMax-yMin )/this.yTick;                
-	            var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
-	            tickRange = setTickRange(tmp, tickRange);
-	            yMax = tickRange * Math.ceil(yMax/tickRange);              
-	            yMin = tickRange * Math.floor(yMin/tickRange);
-	         //   alert(yMainValueArr.length);
-	        //  alert(yMainValueArr);
-	                    //if(this.color==-1 ){
-	            var cnt=0;
-	            var medianXPos =0;
-	            var medianYpos =0;
-	            
-	            
-	            for(var i = 0; i < yMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-	            {	 //alert((median[i]-min[i]));
-	            	if(isDiscrete[this.x] == false){//  x con y discon
-	            		medianXPos = this.plotXMargin + (min[i]-xMin)*this.width/(xMax - xMin)+this.boxWidth[i]/2;  
-	            	//	alert(medianXPos);
-	            		//outliersArr ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-	            	}else{	            		//x discon y discon
-	            		medianXPos = this.plotXMargin + (i+1) * (this.width) / (xMainValueArr.length+1);//this.plotXMargin +12;// + this.width*(findMaxValue(mainArr[this.x])-findMinValue(mainArr[this.x]))/(xMax-xMin);   
-	            		this.boxWidth[i]=this.boxWidth[0];
-	            		
-	            	}
-	            	medianYPos = this.height +this.plotYMargin - (i+1) * (this.height) / (yMainValueArr.length+1);
-	          // alert(medianXPos+'+'+medianYPos+'width:'+this.bo);
-	             //  alert(medianXPos+','+q3[i]+','+median[i]+','+this.boxWidth+', boxHasArr : '+boxHasArr[i].length); 
-	                this.node[i] = new Kinetic.Rect({  	
-	                    //id: i,
-	                    name : i,
-	                    x: medianXPos, //////////////////////////////////???????????????????????????
-	                    y: medianYPos,//-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
-	                    stroke : 'black',
-	                    fill : 'green',
-	                    radius : this.radius,
-	                    width:  this.boxWidth[i],
-	                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
-	                //    strokeWidth : 0.01,
-	                    opacity : 0.7,
-	                    offset : {x: this.boxWidth[i]/2},
-	                //    draggable : false,
-	                    hidden : 0,
-	                    selected : 0,
-	                    info :  "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
-	                    hasArr : boxHasArr[i]
-	                });              
-	               this.node[i+yMainValueArr.length]= new Kinetic.Line({
-	                    name : i,
-	                    x: medianXPos,
-	                    y: medianYPos,
-	                    points: [0, 0, this.boxWidth[i], 0],
-	                    opacity : 0.7,
-	                    offset : {x: this.boxWidth[i]/2},
-	                    stroke: 'black',
-	                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
-	                    strokeWidth: '4',
-	                });        
-	                this.node[i+2*yMainValueArr.length]= new Kinetic.Line({
-	                    name : i,
-	                    x: medianXPos,
-	                    y: medianYPos,
-	                    points: [    0,  (median[i]-maxBelowFence[i])*this.height/(yMax - yMin),
-	                                 0, (median[i]-q3[i])*this.height/(yMax - yMin)],
-	                    opacity : 0.7,
-	                    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
-	                    stroke: 'black'
-	                });    
-	                this.node[i+3*yMainValueArr.length]= new Kinetic.Line({
-	                    name : i,
-	                    x: medianXPos,
-	                    y: medianYPos,
-	                    points: [    0, (median[i]-q1[i])*this.height/(yMax - yMin),
-	                                 0, (median[i]-minAboveFence[i])*this.height/(yMax - yMin)],
-	                    opacity : 0.7,
-	                    info: "Node : "+i+"/r/n"+"Frequency : "+boxHasArr[i].length,
-	                    stroke: 'black'
-	                });    
-	                
-	                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-	                {
-	                    this.node[4*yMainValueArr.length+j+cnt] = new Kinetic.Circle({
-	                        name : 4*yMainValueArr.length+j+cnt,
-	                        x: this.plotXMargin + (i+1) * (this.width) / (yMainValueArr.length+1), //////////////////////////////////???????????????????????????
-	                        y: this.height +this.plotYMargin - (mainArr[this.y][outliersArr[i][j]]-yMin)*this.height/(yMax - yMin), //this.median[i],
-	                        fill : 'green',
-	                        radius : this.radius,
-	                        hidden : 0,
-	                        selected : 0,
-	                        opacity : 0.7,
-	                        info : "Node : "+(yMainValueArr.length+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]],
-	                    });                    
-	                }
-	                cnt=cnt+outliersArr[i].length;
-	            }    
-            	
-            	
-            	
-            	     
-            
-            
-            }
-                
-          
-   /*         this.boxRect = new Array();
-            this.boxVerticalLine = new Array();
-            this.boxHorizontalLine = new Array();
-            for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-            {
-                this.boxVerticalLine[i]= new Kinetic.Line({
-                    y: -(maxBelowFence[i]-median[i])*this.height/(yMax - yMin),
-                    points: [    0, minAboveFence[i]*this.height/(yMax - yMin),
-                                 0, maxBelowFence[i]*this.height/(yMax - yMin)],
-                    stroke: 'green'
-                });    
-                this.boxRect[i]= new Kinetic.Rect({
-                    x:-this.boxWidth/2,
-                    y:-(q3[i]-median[i])*this.height/(yMax - yMin),
-                    width:  this.boxWidth,
-                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
-                    stroke: 'green',
-                    fill : 'yellowgreen'
-                });                        
-                this.boxHorizontalLine[i]= new Kinetic.Line({
-                    x: -this.boxWidth/2,
-                    points: [0, 0, this.boxWidth, 0],
-                    stroke: 'green',
-                    strokeWidth: '4',
-                });    
-            }
-            for(var i = 0; i < xMainValueArr.length ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
-            {
-                this.node[i].add(this.boxVerticalLine[i]);
-               this.node[i].add(this.boxRect[i]);
-                this.node[i].add(this.boxHorizontalLine[i]);
-            }*/
-    //        alert(this.node[6].getName());
-        //    alert(    this.group1[0].getName());
-        //    alert(this.node[1].getHasArr());
-                /*    }else{
-                        for(var i = 0; i < mainArr[this.x].length ; i++)
-                        {
-                            this.node[i] = new Kinetic.Circle({
-                                //id: i,
-                                name : i,
-                                x: nodeX[i] + this.plotXMargin,
-                                y: this.height +this.plotYMargin - nodeY[i],
-                                radius: this.radius,
-                                fill: getColor(i,colors, mainValueArr, tmpColorArr),
-                            //    stroke : 'black',
-                            //    strokeWidth : 0.01,
-                            //    opacity : 0.7,
-                            //    draggable : false,
-                                hidden : 0,
-                                selected : 0,
-                                info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
-                            });                            
-                        }
-                    }*/
-                
+	            }
             },
             doIt: function() { 
                 alert('do it'); 
@@ -882,9 +725,7 @@ var Box = {};
                     
                 } 
                 this.stage.add(this.dataLayer);
-                
-
-                 //////////////////////////////Tooltip Setting////////////////////////////////////////
+                //////////////////////////////Tooltip Setting////////////////////////////////////////
                this.tooltipLayer = new Kinetic.Layer();
                this.tooltip = new Kinetic.Group({
                    opacity: 0.75,
@@ -905,8 +746,6 @@ var Box = {};
                this.tooltipLayer.add(this.tooltip);
                this.stage.add(this.tooltipLayer);
                ///////////////////////////////////////////////////////////////////////////////////
-                
-                
             },            
             update: function(){
                 alert('scatter is updated');                

@@ -97,7 +97,7 @@
 			var hist02 = new Hist(mainArr, { bin: 0.5	, x:'color', width:300, height:300 });
 			hist02.draw(2);
 			eventTrigger(hist02);
-			var box01 = new Box(mainArr, {  x:'color',y:'color',width:300, height:300});
+			var box01 = new Box(mainArr, {  x:'clarity',y:'x',width:300, height:300});
 			box01.draw(1);   
 			eventTrigger(box01);
 			var box02 = new Box(mainArr, {  x:'price',y:'color',width:300, height:300});
@@ -106,10 +106,10 @@
 			var box03 = new Box(mainArr, {  x:'price',y:'carat',width:300, height:300});
 			box03.draw(3);   
 	 	 	eventTrigger(box03);
-			var box04 = new Box(mainArr, {  x:'clarity',y:'x',width:300, height:300});
+			var box04 = new Box(mainArr, {  x:'color',y:'cut',width:300, height:300});
 			box04.draw(4);   
 			eventTrigger(box04);
-			*/
+			
 		</script>    
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
 		<input type="text" name="regcoords" id="regcoords" />

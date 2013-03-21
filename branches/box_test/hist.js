@@ -43,8 +43,8 @@ var Hist = {};
 	            {
 	            	
 	            	var cnt = 0;
-	            	var xTmp = new Array();  // 밑의 각 항목 이름들 
-	            	var freqTmp = new Array();  //frequency를 저장 
+	            	var xTmp = new Array();  // 諛묒쓽 媛���ぉ �대쫫��
+	            	var freqTmp = new Array();  //frequency瑜���옣 
 	            	var hasTmp = make2DArr(mainArr[this.x].length);
 	            	freqTmp[cnt] = 1;
 	            	hasTmp[cnt][0] = 0;
@@ -75,7 +75,7 @@ var Hist = {};
 	            	var barGap = barWidth;
 	            	this.xMax = parseInt(this.width/barWidth);
 	            	
-	            	var freqRank =make2DArr(freqTmp.length); 			// 히스토그램을 오름차순을 정리하기 위한 과정 
+	            	var freqRank =make2DArr(freqTmp.length); 			// �덉뒪�좉렇�⑥쓣 �ㅻ쫫李⑥닚���뺣━�섍린 �꾪븳 怨쇱젙 
 	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
 	            		freqRank[i][0] = freqTmp[i];
@@ -83,54 +83,54 @@ var Hist = {};
 	            	}
 	            	freqRank.sort(function(a,b){return a[0] - b[0];});
 	            	var nodeX = new Array(freqTmp.length);
-	            	this.maxNode =freqRank[freqRank.length-1][1]; // Y Axis를 그릴때 제일위에까지 그리기위한 것 
+	            	this.maxNode =freqRank[freqRank.length-1][1]; // Y Axis瑜�洹몃┫���쒖씪�꾩뿉源뚯� 洹몃━湲곗쐞��寃�
 	            	this.xPlotArr = make2DArr(freqTmp.length);
  	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
- 	            	//	nodeX[freqRank[i][1]] = i;				// 이 cntTmp array를 노드의 x값들에 넣어준다. 즉 x 위치만 바꿔서 넣는다. 
+ 	            	//	nodeX[freqRank[i][1]] = i;				// ��cntTmp array瑜��몃뱶��x媛믩뱾���ｌ뼱以�떎. 利�x �꾩튂留�諛붽퓭���ｋ뒗�� 
  	            		this.xPlotArr[i][0] = i*(barWidth+barWidth) + (barWidth+barWidth)/2;
  	            		this.xPlotArr[i][1] = xTmp[freqRank[i][1]];
 	            		nodeX[freqRank[i][1]] = i*(barWidth+barWidth) + (barWidth)/2;
 	            	}	            	
- 	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
-	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
+ 	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;  // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2; // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
  	            	var firstcnt = 0;
 	            }else{
 	            	
-	            	var xMax = findMaxValue(mainArr[this.x]);			// xMax를 먼저 구해야 barwidth를 구해줄 수 있다. 
+	            	var xMax = findMaxValue(mainArr[this.x]);			// xMax瑜�癒쇱� 援ы빐��barwidth瑜�援ы빐以����덈떎. 
 	            	var xMin = findMinValue(mainArr[this.x]);
-	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); // frequency 임시로 저장 
-	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);  // has array초기화는 일단 최악의 경우인 mainArray[this.x].length로 해준다. 
+	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); // frequency �꾩떆濡���옣 
+	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);  // has array珥덇린�붾뒗 �쇰떒 理쒖븙��寃쎌슦��mainArray[this.x].length濡��댁��� 
 	            	var upTmp = new Array(mainArr[this.x].length);
 	            	var cnt = 0;
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
-	            		freqTmp[i] = 0;  // frequency 저장할꺼 초기화  	            		
+	            		freqTmp[i] = 0;  // frequency ��옣�좉볼 珥덇린�� 	            		
 	            	}
 	            	
 	            	for(var i = 0 ; i < mainArr[this.x].length ; i++)
 	            	{
 	            		if(xMin < 0)
 	            		{
-	            			cnt = parseInt((mainArr[this.x][i]+Math.abs(xMin))/this.bin);  // 어느 배열위치에 들어갈지 결정.
+	            			cnt = parseInt((mainArr[this.x][i]+Math.abs(xMin))/this.bin);  // �대뒓 諛곗뿴�꾩튂���ㅼ뼱媛덉� 寃곗젙.
 	            		}else{
 	            			cnt = parseInt(mainArr[this.x][i]/this.bin);
 	            		}	            		
-	            		freqTmp[cnt] ++ ; // 해당배열 frequency 하나씩 늘려주고 
-	            		hasTmp[cnt].push(i); // hasarray에 저장해준다.
+	            		freqTmp[cnt] ++ ; // �대떦諛곗뿴 frequency �섎굹���섎젮二쇨퀬 
+	            		hasTmp[cnt].push(i); // hasarray����옣�댁���
 	            		upTmp[i] = cnt;
 	            		
 	            	}
 	            	
 	            //	alert(freqTmp.length);
-	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 처음부터 어디까지 0이 나오는지 저장. 즉, frequency가 0이 아닌 첫 노드 검사 
+	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 泥섏쓬遺�꽣 �대뵒源뚯� 0���섏삤�붿� ��옣. 利� frequency媛�0���꾨땶 泥��몃뱶 寃�궗 
 	            	{	            		
 	            		if(freqTmp[firstcnt] != 0)
 	            		{
 	            			break;
 	            		}
 	            	}
-	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // 위와 반대로 끝에서부터 frequency가 0이 아닌 첫 노드 검사 
+	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // �꾩� 諛섎�濡��앹뿉�쒕���frequency媛�0���꾨땶 泥��몃뱶 寃�궗 
 	            	{
 	            		if(freqTmp[lastcnt] != 0)
 	            		{
@@ -157,8 +157,8 @@ var Hist = {};
 	            	
 	            	
 	            	
-            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// 양쪽에 1칸씩 여유분	따라서 +3
-	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 총 찍어야 하는 x축 scale이 4개 더 더해야 맞다. 
+            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// �묒そ��1移몄뵫 �ъ쑀遺��곕씪��+3
+	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 珥�李띿뼱���섎뒗 x異�scale��4媛����뷀빐��留욌떎. 
 	           // 	alert(firstcnt);
 	           // 	alert(lastcnt);
 	            	cnt = 0;
@@ -173,8 +173,8 @@ var Hist = {};
 	            			nodeX[cnt++] =  i*(barWidth);	            			
 	            		}
 	            	}	 
-	            	this.firstX = this.xPlotArr[0][0];  // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
-	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]; // x Axis를 그릴때 처음부터 끝까지 그려주기 위해 하는 것. 
+	            	this.firstX = this.xPlotArr[0][0];  // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]; // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
 	            	var maxFreq = findMaxValue(freqTmp);
 	            	this.maxNode =0;
 	                for(var i = 0; i<  freqTmp.length ; i++)
@@ -186,7 +186,7 @@ var Hist = {};
 	             	}	     
 	              //  alert(this.maxNode);
 	            }            			
-	            this.yMax = findMaxValue(freqTmp); // 얘는 freqTmp 개수가 몇개인지 나와야 구할 수 있으므로 뒤에서 구한다.
+	            this.yMax = findMaxValue(freqTmp); // �섎뒗 freqTmp 媛쒖닔媛�紐뉕컻�몄� �섏���援ы븷 ���덉쑝誘�줈 �ㅼ뿉��援ы븳��
 	            this.yMin = 0;	              
 	            
             	 //////////Make Data Structure of nodes and essential arrays////////            	
@@ -441,8 +441,8 @@ function histUpdate(obj, id)
 				    		opacity: 0.5,
 				    		scale : {x:1, y:1}
 						});
-						obj.node[id].setSelected(0);
 						obj.node[id].setSelected(2);
+						obj.node[id].setSelectCnt(0);
 						obj.node[id].hide();
 					}else if(selectOn == 3){		// reset
 						obj.node[id].setSelected(0);

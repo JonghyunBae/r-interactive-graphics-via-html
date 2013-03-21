@@ -114,7 +114,7 @@
 	 
 			
 		</script>    
-		<script src="search.js"></script>
+		
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
 		<input type="text" name="regcoords" id="regcoords" />
 		<div id="coords">Coords</div>
@@ -125,6 +125,7 @@
 				<ul>
 					<li><a href="#">How To Search</a></li>					
 				</ul>	 
+				<script src="search.js"></script>
 			<p>
 				<form id="searchForm1">  
 					<textarea id ="searchBox" name = "searchId"  style="height:50px;width:200px;" placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"></textarea>

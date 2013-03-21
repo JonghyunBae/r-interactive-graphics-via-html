@@ -1,4 +1,4 @@
-(function() {
+
 	var ans='';
 	var ansShow='';
 	// variable buttons update
@@ -50,6 +50,7 @@
 
 	function addValueToSearchBox(i)
 	{
+		
 	    var textBox = document.getElementById("searchBox");
 	    textBox.value = textBox.value + labelArr[i];
 	}
@@ -63,6 +64,7 @@
 
 	function booleanSearch(string)
 	{
+		
 //		scatterAllDeselect();
 //		histAllDeselect();
 	    var inputStr = string.searchId.value;
@@ -84,21 +86,33 @@
 	    	inputStr =inputStr.replace(/\[ans\]/gi, "("+ans+")"); //If there is "[ans]", change it to (ans).
 	    	ans=inputStr; //current answer update.
 	    	
-	    	
-	    	for(var i = 0 ; i < scatterData.length ; i++)
+
+	    	for(var i = 0 ; i < mainArr[0].length ; i++)
 	        {
 	    	    //    var tmpNameArr = new Array();
 	    		//    tmpNameArr = scatterData[i].name.split(',');   
 	    		//    alert("Please use given variables!");
+
 	    		if(eval(inputStr))
 	    		{
-	    			var tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-	    			allUpdate("scatter", tmpNode, i, 0);
+	    			if(isSelected[i][0] == 0)
+	    			{
+	    				for(var j = 1 ; j < isSelected[i].length ; j ++)
+	    				{
+	    					
+	    					isSelected[i][j](1);
+	    				}
+	    				isSelected[i][0] = 1;
+	    			}    	
+	    			
+	    			//var tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
+	    			//allUpdate("scatter", tmpNode, i, 0);
 	  //  			scatterSingleSelect(tmpNode, i);
-	   // 			histUpdate(scatterXMain[i], 0);  //과부하로 인한 보류
+	   // 			histUpdate(scatterXMain[i], 0);  
 	    		}
+	    		
 	        }
-	    	doRefresh();
+	    	refresh();
 	    }
 	    ansShow=ans;
 	   
@@ -112,11 +126,10 @@
 			
 	    }    
 		//writeMsg(msgLayer);
-		addRow('dataTable');
-		saveWork();
+		//addRow('dataTable');
+		//saveWork();
 	}
 	///////////////////5<TIME ,,,,,,,bug found
 
-})();
 
 

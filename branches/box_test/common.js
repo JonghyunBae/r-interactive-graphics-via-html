@@ -1,3 +1,33 @@
+function resetSelected()
+{
+	for(var i = 0 ; i < isSelected.length ; i ++)
+	{
+		if(isSelected[i][0] == 2)
+		{
+			for(var j = 1 ; j < isSelected[i].length ; j++)
+			{
+				isSelected[i][j](3);
+			}
+			isSelected[i][0] = 0;
+		}		
+	}
+	refresh();
+}
+function hideSelected()
+{
+	for(var i = 0 ; i < isSelected.length ; i ++)
+	{
+		if(isSelected[i][0] == 1)
+		{
+			for(var j = 1 ; j < isSelected[i].length ; j++)
+			{
+				isSelected[i][j](2);
+			}
+			isSelected[i][0] = 2;
+		}		
+	}
+	refresh();
+}
 function allGraphUpdate(id , select, name) // update 되야하는 node id와 select 여부, 주체가 누군지를 받는다. 
 {
 	//가장 먼저 주체 여부를 확인한다. 

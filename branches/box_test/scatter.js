@@ -432,7 +432,7 @@ function setColor(colorArr) //set color
 	 	var rgbCenter = 128;
 	 	var rgbWidth = 127;
 	 	for (var i = 0; i <24; ++i)
-	 	{
+	 	{isSelected
 	 		rgb.R[i]  = parseInt( Math.sin(rgbFreq*i + 0) * rgbWidth + rgbCenter );
 	 		rgb.G[i] = parseInt( Math.sin(rgbFreq*i + 2) * rgbWidth + rgbCenter );
 	 		rgb.B[i]  = parseInt( Math.sin(rgbFreq*i + 4) * rgbWidth + rgbCenter );
@@ -486,7 +486,7 @@ function scatterUpdate(obj, id)
 {
 	return	function(selectOn)
 				{
-					if(selectOn == 0 && obj.node[id].getSelected() == 1)
+					if(selectOn == 0 && obj.node[id].getSelected() == 1)		//unselect
 					{	
 						var shapes = obj.stage.get('.' + id);
 						shapes.apply('setAttrs', {
@@ -496,7 +496,7 @@ function scatterUpdate(obj, id)
 				    		scale : {x:1, y:1}
 						});
 						obj.node[id].setSelected(0);
-					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){
+					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){	//select
 						var shapes = obj.stage.get('.' + id);
 						shapes.apply('setAttrs', {
 							stroke : 'black',
@@ -509,6 +509,19 @@ function scatterUpdate(obj, id)
 						obj.node[id].setSelected(1);
 						obj.node[id].moveToTop();
 						//alert("ddd");
+					}else if(selectOn == 2 && obj.node[id].getSelected() == 1){	//hide
+						var shapes = obj.stage.get('.' + id);
+						shapes.apply('setAttrs', {
+							radius : obj.radius,
+							strokeWidth : 0.01,
+				    		opacity: 0.7,
+				    		scale : {x:1, y:1}
+						});
+						obj.node[id].setSelected(2);
+						obj.node[id].hide();
+					}else if(selectOn == 3){		//reset
+						obj.node[id].setSelected(0);
+						obj.node[id].show();						
 					}
 					
 				};

@@ -412,7 +412,7 @@ function histUpdate(obj, id)
 	return	function(selectOn)
 				{
 					
-					if(obj.node[id].getSelected() == 1 && selectOn == 0)
+					if(obj.node[id].getSelected() == 1 && selectOn == 0)		//unselect
 					{
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);
 						if(obj.node[id].getSelectCnt() == 0)
@@ -424,7 +424,7 @@ function histUpdate(obj, id)
 							});
 							obj.node[id].setSelected(0);
 						}
-					}else if(selectOn == 1){
+					}else if(selectOn == 1){		// select
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);
 						if(obj.node[id].getSelected() == 0)
 						{
@@ -435,6 +435,18 @@ function histUpdate(obj, id)
 							});
 							obj.node[id].setSelected(1);
 						}				
+					}else if(selectOn == 2 && obj.node[id].getSelected() == 1){ // hide
+						var shapes = obj.stage.get('.' + id);
+						shapes.apply('setAttrs', {
+				    		opacity: 0.5,
+				    		scale : {x:1, y:1}
+						});
+						obj.node[id].setSelected(0);
+						obj.node[id].setSelected(2);
+						obj.node[id].hide();
+					}else if(selectOn == 3){		// reset
+						obj.node[id].setSelected(0);
+						obj.node[id].show();
 					}
 
 				};

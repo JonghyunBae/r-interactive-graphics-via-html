@@ -267,6 +267,8 @@ function menu(Name)
 	
 	//////////////////////////////////////Menu End//////////////////////////////////////
 }
+
+var dragOn = false;
 function drag(Name)
 {
 	var preDragMousePos;
@@ -286,13 +288,11 @@ function drag(Name)
 	rangeBoxLayer.add(rangeBox);
 	
 	var moving = false;
-	var downOn = false;
-	var div_num;
-
+	var divid;
 	Name.plotLayer.on('mousedown touchstart', function(evt){
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-
-			downOn = true; 
+			divid = mouseName;
+			dragOn = true; 
 			preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
 			if(moving == true){
 				moving = false;
@@ -308,15 +308,41 @@ function drag(Name)
 			}
 		}
 	}); 
+	Name.dataLayer.on('mousedown touchstart', function(evt){
+		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+			divid = mouseName;
+			dragOn = true; 
+			preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+			if(moving == true){
+				moving = false;
+				rangeBoxLayer.draw();
+			}else{
+				var mousePos = Name.stage.getMousePosition();		
+				rangeBox.setX(mousePos.x);
+				rangeBox.setY(mousePos.y);
+				rangeBox.setWidth(0);
+				rangeBox.setHeight(0);
+				moving = true;
+				rangeBoxLayer.drawScene();
+			}
+		}
+	}); 
+	var tmpx, tmpy, tmpName;
 	window.addEventListener ("mousemove", function (evt){
-		if(div_num == divNumber)
-		{
+
 			if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 				
 				if(moving == true)
 				{
-
-					var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+					if(divid == mouseName)
+					{
+						var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+						tmpx = divOffsetX;
+						tmpy = divOffsetY;
+						tmpName = Name;
+					}else{
+						var mousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
+					}
 					var x, y;
 					x = mousePos.x;// + plotXmargin;
 					y = mousePos.y; //+ plotYmargin + plotHeight;
@@ -325,7 +351,6 @@ function drag(Name)
 					rangeBoxLayer.drawScene();
 				}
 			}
-		}
 		
 	}, true);
 	
@@ -333,21 +358,85 @@ function drag(Name)
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 			if(moving == true)
 			{
-				aftDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};	
+				aftDragMousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
 				rangeBox.setWidth(0);
 				rangeBox.setHeight(0);
 				rangeBoxLayer.drawScene();
 				moving = false;
-				//alert(aftDragMousePos.x);
-		//		scatterRectRange(aftDragMousePos);
+				RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
 			}
 		}
 	}, true);
+}
+function RectRangeSelect(Name, pre, aft)
+{
+	var smallX, bigX;
+	var smallY, bigY;
+	if(pre.x >= aft.x){
+		smallX = aft.x;
+		bigX = pre.x;
+	}else if(pre.x < aft.x){
+		smallX = pre.x;
+		bigX = aft.x;
+	}
+	if(pre.y >= aft.y){
+		smallY = aft.y;
+		bigY = pre.y;
+	}else if(pre.y < aft.y){
+		smallY = pre.y;
+		bigY = aft.y;
+	}
+	if(ctrlPressed == false)
+	{
+		allDeselect();
+	}	
+	if(Name._type == "scatter"){
+		if(ctrlPressed == true)	{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+				{
+						allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);			
+				}
+			}
+		}else{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+				{
+						allGraphUpdate(i ,1, Name);			
+				}
+			}
+		}
+			
+	}else if(Name._type == "hist"){
+		if(ctrlPressed == true)	{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
+				{
+						allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);			
+				}
+			}
+		}else{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
+				{
+						allGraphUpdate(i ,1, Name);			
+				}
+			}
+		}
+	}
+	refresh();
+	addRow('dataTable');
 }
 
 function hover(Name)
 {
 	Name.stage.on('mouseover mousemove', function(evt){  
+		
+		
 		var node = evt.shape;
 	//	alert(node.getName());
 		if(isNaN(node.getName()) == false)
@@ -461,6 +550,13 @@ function select(Name)
 {
 	
 	Name.stage.on('click', function(evt){
+		
+		if(dragOn == true)
+		{
+			dragOn = false;
+			return;
+		}
+		
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 			var node = evt.shape;
 

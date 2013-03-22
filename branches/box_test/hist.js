@@ -240,6 +240,10 @@ var Hist = {};
 			},
 			draw: function(id){						
 				
+				document.getElementById('histContainer'+id).onmousemove =getCoords;
+				document.getElementById('histContainer'+id).onclick = function() {
+			        document.getElementById('regcoords').value = divX+ ' , ' +divY;
+			    };
 				//draw plot
                 this.stage = new Kinetic.Stage({            
                     container: 'histContainer'+id,            

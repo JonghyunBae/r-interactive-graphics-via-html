@@ -87,10 +87,10 @@
 		eventTrigger(box04);*/
 		
 		
-		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'x',width:300, height:300, legend:'left'});
+		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'x',width:300, height:300});
 		scatter01.draw(1);
 		eventTrigger(scatter01);
-		var scatter02 = new Scatter(mainArr, {  x:'cut',y:'color', color:'color',width:300, height:300, legend:'topright'});
+		var scatter02 = new Scatter(mainArr, {  x:'cut',y:'color', color:'color',width:300, height:300});
 		scatter02.draw(2);    
 		eventTrigger(scatter02);
 		var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });

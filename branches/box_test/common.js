@@ -11,6 +11,7 @@ function resetSelected()
 			isSelected[i][0] = 0;
 		}		
 	}
+	addRow('dataTable');
 	refresh();
 }
 function hideSelected()
@@ -26,38 +27,37 @@ function hideSelected()
 			isSelected[i][0] = 2;
 		}		
 	}
+	addRow('dataTable');
 	refresh();
 }
+//allGraphUpdate is used for only select & unselect
 function allGraphUpdate(id , select, name) // update 되야하는 node id와 select 여부, 주체가 누군지를 받는다. 
 {
 	//가장 먼저 주체 여부를 확인한다. 
 	if(name._type == "scatter")
 	{
-		for(var i =1 ; i < isSelected[id].length ; i ++)
+		if(isSelected[id][0] != 2)
 		{
-			isSelected[id][i](select);
-		}
-		isSelected[id][0] = select;
+			for(var i =1 ; i < isSelected[id].length ; i ++)
+			{
+				isSelected[id][i](select);
+			}
+			isSelected[id][0] = select;
+		}		
 	}else if(name._type == "hist"){	//histogram인 경우 id값이 node의 번호이므로 hasArr를 구해야 한다. 
 		var tmp = name.node[id].getHasArr();
 	//	alert(tmp);
 		for(var j = 0 ; j < tmp.length ; j ++)
 		{
 		//	alert(j);
-			for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
+			if(isSelected[tmp[j]][0] != 2)
 			{
-			//	alert(isSelected[tmp[j]][i]);
-				
-				if(j == tmp.length-1 && i == isSelected[tmp[j]].length-1)
+				for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
 				{
-			//		alert(j + " ,1   " + i);
-			//		alert(isSelected[tmp[j]][i]);
-				}
-				isSelected[tmp[j]][i](select);
-				//alert(j + " ,2  " + i);
+					isSelected[tmp[j]][i](select);
+				}			
+				isSelected[tmp[j]][0] = select;
 			}			
-		//	alert(j);
-			isSelected[tmp[j]][0] = select;
 		}		
 	}
 	

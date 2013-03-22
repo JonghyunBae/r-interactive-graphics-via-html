@@ -435,15 +435,19 @@ function histUpdate(obj, id)
 							});
 							obj.node[id].setSelected(1);
 						}				
-					}else if(selectOn == 2 && obj.node[id].getSelected() == 1){ // hide
+					}else if(selectOn == 2){ // hide
 						var shapes = obj.stage.get('.' + id);
+						alert(obj.node[id].getSelectCnt());
+						alert(obj.plotYMargin + obj.height - (obj.node[id].getFreq()-obj.node[id].getSelectCnt())*obj.height/obj.yMax/2);
 						shapes.apply('setAttrs', {
+							y : obj.plotYMargin + obj.height - (obj.node[id].getFreq()-obj.node[id].getSelectCnt())*obj.height/obj.yMax/2,
+							height: (obj.node[id].getFreq()-obj.node[id].getSelectCnt())*obj.height/obj.yMax,
 				    		opacity: 0.5,
 				    		scale : {x:1, y:1}
 						});
 						obj.node[id].setSelected(2);
 						obj.node[id].setSelectCnt(0);
-						obj.node[id].hide();
+					//	obj.node[id].hide();
 					}else if(selectOn == 3){		// reset
 						obj.node[id].setSelected(0);
 						obj.node[id].show();

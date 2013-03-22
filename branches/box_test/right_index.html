@@ -41,8 +41,8 @@
 	    <script src="common.js"></script>
 	    
 	    <script>
-	      createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
- 	//		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
+	//      createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
+ 			createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
   	//		createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
   	//	createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
   	//	createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
@@ -61,7 +61,7 @@
     <script src="button_event.js"></script>    
     <script>        
     
-    var scatter01 = new Scatter(mainArr, {  x:'time',y:'conc', color:'time',width:300, height:300, legend:'left'});
+  /*  	var scatter01 = new Scatter(mainArr, {  x:'time',y:'conc', color:'time',width:300, height:300, legend:'left'});
 		scatter01.draw(1);
 		eventTrigger(scatter01);
 		var scatter02 = new Scatter(mainArr, {  x:'wt',y:'time', color:'subject',width:300, height:300, legend:'topright'});
@@ -72,7 +72,7 @@
 		eventTrigger(hist01);			
 		var hist02 = new Hist(mainArr, { bin: 0.5	, x:'time', width:300, height:300 });
 		hist02.draw(2);
-		eventTrigger(hist02); 
+		eventTrigger(hist02); */
 /*		var box01 = new Box(mainArr, {  x:'time',y:'conc',width:300, height:300});
 		box01.draw(1);   
 		eventTrigger(box01);
@@ -86,7 +86,7 @@
 		box04.draw(4);   
 		eventTrigger(box04);*/
 		
-	/*	
+		
 		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'x',width:200, height:200, legend:'left'});
 		scatter01.draw(1);
 		eventTrigger(scatter01);

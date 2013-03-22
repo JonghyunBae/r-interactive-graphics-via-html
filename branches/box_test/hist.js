@@ -143,20 +143,13 @@ var Hist = {};
 	            		freqTmp.shift();
 	            		hasTmp.shift();
 	            	}
-	           // 	alert(freqTmp.length);
-	           // 	alert(hasTmp[2]);
-	            //	alert(firstcnt);
 
-            		for(var i = 0 ; i < mainArr[this.x].length ; i++)
+	            	for(var i = 0 ; i < mainArr[this.x].length ; i++)
 	            	{
             //			if(i == 121)
             	//			alert(upTmp[i]);
 	            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
 	            	}
-            		
-	            	
-	            	
-	            	
             		var barWidth = this.width /(lastcnt-firstcnt + 3);	// �묒そ��1移몄뵫 �ъ쑀遺��곕씪��+3
 	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 珥�李띿뼱���섎뒗 x異�scale��4媛����뷀빐��留욌떎. 
 	           // 	alert(firstcnt);
@@ -186,13 +179,38 @@ var Hist = {};
 	             	}	     
 	              //  alert(this.maxNode);
 	            }            			
-	            this.yMax = findMaxValue(freqTmp); // �섎뒗 freqTmp 媛쒖닔媛�紐뉕컻�몄� �섏���援ы븷 ���덉쑝誘�줈 �ㅼ뿉��援ы븳��
-	            this.yMin = 0;	              
+	            //////////////////////////// y Axis ///////////////////////////////////////////////////
+	            var max = findMaxValue(freqTmp);
+	            var min = 0;
+	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5 
+	            var tickRange = (max - min)/ this.yTick;	    		
+	    		var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
+	    		tickRange = setTickRange(tmp, tickRange);
+	            max = tickRange * Math.ceil(max/tickRange);		      
+	            min = tickRange * Math.floor(min/tickRange);
+	        	var diff = this.height * tickRange   / (max - min);
+	        	
+	        	this.yPlotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));
+	        	
+	    		for(var i = 0 ; i < this.yPlotArr.length ; i ++)
+	    		{
+	    			this.yPlotArr[i][0] = i*diff;
+	    			if (tickRange.toString().indexOf('.') == -1){
+	    				this.yPlotArr[i][1] = min+i*tickRange;
+	    			}else{
+	    				this.yPlotArr[i][1] = (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
+	    			}
+	    		}	    
+	    		///////////////////////////////////////////////////////////////////////////
+	           
+	            this.yMax = max; // �섎뒗 freqTmp 媛쒖닔媛�紐뉕컻�몄� �섏���援ы븷 ���덉쑝誘�줈 �ㅼ뿉��援ы븳��
+	            this.yMin = 0;	          
 	            
             	 //////////Make Data Structure of nodes and essential arrays////////            	
             	this.node = new Array();            	
             	for(var cnt = 0; cnt< nodeX.length ; cnt++)
             	{
+            	//	alert(freqTmp[cnt]);
             		this.node[cnt] = new Kinetic.Rect({
             			//id : cnt,
             			name : cnt,
@@ -215,12 +233,6 @@ var Hist = {};
 					});
             		
             	}
-	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5
- 	            this.yTickRange = (this.yMax - this.yMin)/this.yTick;
-	            var y = Math.ceil( Math.log(this.yTickRange) / Math.log(10));
-	            this.yTickRange = setTickRange(y, this.yTickRange);      
-	            this.yMax = this.yTickRange * Math.round(this.yMax/this.yTickRange);           
-	            this.yMin = this.yTickRange * Math.round(this.yMin/this.yTickRange);   
 	            
 	        },				
 			doIt: function() { 
@@ -260,7 +272,7 @@ var Hist = {};
                 this.plotLayer.add(this.xAxis);
                 this.yAxis = new Kinetic.Line({
                     points: [    this.plotXMargin-this.plotLength, 
-                                 this.plotYMargin+this.height-this.node[this.maxNode].getHeight(),
+                                 this.plotYMargin+this.height-this.yPlotArr[this.yPlotArr.length-1][0],
                                  this.plotXMargin-this.plotLength,  
                                  this.plotYMargin+this.height],
                     stroke: 'black',
@@ -322,23 +334,26 @@ var Hist = {};
 	                    tmp++;
                     }
                 }
+                
                 this.yLine = new Array();
-                this.yText = new Array();            
-                for(var i=0; i<parseInt(this.yTick); i++)
+                this.yText = new Array();
+                for(var i=0; i< this.yPlotArr.length ; i++)
                 {
+
                     this.yLine[i] = new Kinetic.Line({
-                        points: [    this.plotXMargin-this.plotLength, 
-                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.yMax, 
+                        points: [	this.plotXMargin-this.plotLength, 
+                                 	this.plotYMargin+this.height-this.yPlotArr[i][0], 
                                      this.plotXMargin-2*this.plotLength,
-                                     this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.yMax],
+                                     this.plotYMargin+this.height-this.yPlotArr[i][0]],
                         stroke: 'black',
                         strokeWidth: 2,             
                     });
+
                     this.plotLayer.add(this.yLine[i]);       
                     this.yText[i] = new Kinetic.Text({
                         x: this.plotXMargin-this.plotLength*2-15,
-                        y: this.plotYMargin+this.height-i*(this.yTickRange*this.height)/this.yMax+30,
-                        text: i*this.yTickRange,
+                        y: this.plotYMargin+this.height-this.yPlotArr[i][0]+30,
+                        text: this.yPlotArr[i][1],
                         fontSize: 15,
                         fontFamily: 'Calibri',
                         fill: 'black',
@@ -347,7 +362,7 @@ var Hist = {};
                         rotation: (Math.PI)*3/2
                     });           
                     this.plotLayer.add(this.yText[i]);        
-                }    
+                } 
                 this.xLabel = new Kinetic.Text({
                     name : 'xLabel',
                     x: this.plotXMargin+this.width/2,
@@ -437,22 +452,34 @@ function histUpdate(obj, id)
 						}				
 					}else if(selectOn == 2){ // hide
 						var shapes = obj.stage.get('.' + id);
-						alert(obj.node[id].getSelectCnt());
-						alert(obj.plotYMargin + obj.height - (obj.node[id].getFreq()-obj.node[id].getSelectCnt())*obj.height/obj.yMax/2);
 						shapes.apply('setAttrs', {
-							y : obj.plotYMargin + obj.height - (obj.node[id].getFreq()-obj.node[id].getSelectCnt())*obj.height/obj.yMax/2,
-							height: (obj.node[id].getFreq()-obj.node[id].getSelectCnt())*obj.height/obj.yMax,
+							x : obj.node[id].getX(),
+							y : obj.node[id].getY() + (obj.node[id].getSelectCnt())*obj.height/obj.yMax/2,
+							freq : (obj.node[id].getFreq()- obj.node[id].getSelectCnt()),
+							height: obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax,
 				    		opacity: 0.5,
-				    		scale : {x:1, y:1}
+				    		scale : {x:1, y:1},
+				    		info : "Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()- obj.node[id].getSelectCnt()),
+							offset : { y :  (obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax)/2}
 						});
-						obj.node[id].setSelected(2);
+						obj.node[id].setSelected(0);
 						obj.node[id].setSelectCnt(0);
 					//	obj.node[id].hide();
 					}else if(selectOn == 3){		// reset
+						var shapes = obj.stage.get('.' + id);
+						shapes.apply('setAttrs', {
+							x : obj.node[id].getX(),
+							y : obj.plotYMargin + obj.height - obj.node[id].getFreq()*obj.height/obj.yMax/2, 
+							freq : obj.node[id].getHasArr().length,
+							height: obj.node[id].getFreq()*obj.height/obj.yMax, 
+				    		opacity: 0.5,
+				    		scale : {x:1, y:1},
+				    		info : "Node : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length,
+							offset : { y :  (obj.node[id].getFreq()*obj.height/obj.yMax)/2}
+						});
 						obj.node[id].setSelected(0);
-						obj.node[id].show();
+						obj.node[id].setSelectCnt(0);
 					}
-
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

@@ -135,7 +135,7 @@ function hover(Name)
 		var node = evt.shape;
 		if(isNaN(node.getName()) == false)
 		{
-			document.body.style.cursor = "default";  // 나중에 지워도 되는지 확인할 것 
+			document.body.style.cursor = "default";  // �섏쨷��吏�썙���섎뒗吏��뺤씤��寃�
 			Name.tooltip.hide();
 	    	Name.tooltipLayer.draw();
 	    	
@@ -184,8 +184,8 @@ function select(Name)
 		var node = evt.shape;
 		if(isNaN(node.getName()) == false)
 		{
-			var tmpX = Name.node[node.getName()].getX(); // 클릭 당한 노드의 x, y 좌표를 받아 놓는다. 
-			var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); // Y좌표가 뒤집어저 있으므로 다시 순서대로 뒤집는다. 
+			var tmpX = Name.node[node.getName()].getX(); // �대┃ �뱁븳 �몃뱶��x, y 醫뚰몴瑜�諛쏆븘 �볥뒗�� 
+			var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); // Y醫뚰몴媛��ㅼ쭛�댁� �덉쑝誘�줈 �ㅼ떆 �쒖꽌��줈 �ㅼ쭛�붾떎. 
 		//	alert(tmpX + " , " + tmpY);
 			if(aPressed){	//select ALL
 				Name.tmpShift = false;
@@ -282,9 +282,10 @@ function select(Name)
 		}
 		
 		refresh();
-		
+		addRow('dataTable');
 		
 	});
+	
 }
 
 

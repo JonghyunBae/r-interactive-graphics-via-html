@@ -64,6 +64,7 @@ function eventTrigger(Name)
 	hover(Name);
 	select(Name);
 	menu(Name);
+	drag(Name);
 	
 }
 
@@ -265,10 +266,84 @@ function menu(Name)
 	});
 	
 	//////////////////////////////////////Menu End//////////////////////////////////////
-
-
 }
+function drag(Name)
+{
+	var preDragMousePos;
+	var aftDragMousePos;
+	
+	var rangeBox = new Kinetic.Rect({
+		x: 0,
+		y: 0, 
+		width : 0,
+		height : 0,
+		fill: "blue",
+		stroke: "blue",						
+		opacity : 0.3
+	});
+	var rangeBoxLayer = new Kinetic.Layer();
+	Name.stage.add(rangeBoxLayer);
+	rangeBoxLayer.add(rangeBox);
+	
+	var moving = false;
+	var downOn = false;
+	var div_num;
 
+	Name.plotLayer.on('mousedown touchstart', function(evt){
+		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+
+			downOn = true; 
+			preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+			if(moving == true){
+				moving = false;
+				rangeBoxLayer.draw();
+			}else{
+				var mousePos = Name.stage.getMousePosition();		
+				rangeBox.setX(mousePos.x);
+				rangeBox.setY(mousePos.y);
+				rangeBox.setWidth(0);
+				rangeBox.setHeight(0);
+				moving = true;
+				rangeBoxLayer.drawScene();
+			}
+		}
+	}); 
+	window.addEventListener ("mousemove", function (evt){
+		if(div_num == divNumber)
+		{
+			if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+				
+				if(moving == true)
+				{
+
+					var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+					var x, y;
+					x = mousePos.x;// + plotXmargin;
+					y = mousePos.y; //+ plotYmargin + plotHeight;
+					rangeBox.setWidth(x- rangeBox.getX());
+					rangeBox.setHeight(y- rangeBox.getY());
+					rangeBoxLayer.drawScene();
+				}
+			}
+		}
+		
+	}, true);
+	
+	window.addEventListener ("mouseup", function (evt){
+		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+			if(moving == true)
+			{
+				aftDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};	
+				rangeBox.setWidth(0);
+				rangeBox.setHeight(0);
+				rangeBoxLayer.drawScene();
+				moving = false;
+				//alert(aftDragMousePos.x);
+		//		scatterRectRange(aftDragMousePos);
+			}
+		}
+	}, true);
+}
 
 function hover(Name)
 {
@@ -484,8 +559,11 @@ function select(Name)
 			  		Name.preId = {x : tmpX , y : tmpY};
 				}
 			}else{
-				allDeselect();
-				Name.preId = {x : -1 , y : -1};
+				if(!(ctrlPressed || shiftPressed || aPressed || gPressed))
+				{
+					allDeselect();
+					Name.preId = {x : -1 , y : -1};
+				}				
 			}
 			
 			refresh();

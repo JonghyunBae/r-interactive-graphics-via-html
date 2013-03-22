@@ -472,8 +472,6 @@ function histUpdate(obj, id)
 							y : obj.plotYMargin + obj.height - obj.node[id].getFreq()*obj.height/obj.yMax/2, 
 							freq : obj.node[id].getHasArr().length,
 							height: obj.node[id].getFreq()*obj.height/obj.yMax, 
-				    		opacity: 0.5,
-				    		scale : {x:1, y:1},
 				    		info : "Node : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length,
 							offset : { y :  (obj.node[id].getFreq()*obj.height/obj.yMax)/2}
 						});

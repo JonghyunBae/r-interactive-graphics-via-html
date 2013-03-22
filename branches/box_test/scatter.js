@@ -185,6 +185,11 @@ var Scatter = {};
 			},
 			draw: function(id){	
 				//draw plot
+				document.getElementById('scatterContainer'+id).onmousemove =getCoords;
+				document.getElementById('scatterContainer'+id).onclick = function() {
+			        document.getElementById('regcoords').value = divX+ ' , ' +divY;
+			    };
+			       
 				var tmpWidth=0;
 				if(this.legend=='left' || this.legend=='topleft'){
 					tmpWidth =  this.width+this.plotXMargin+this.legendGroup.getWidth();

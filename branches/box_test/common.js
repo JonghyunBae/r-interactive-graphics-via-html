@@ -1,3 +1,48 @@
+function getCoords(e) {
+    // coursesweb.net/
+	var divX, divY = 0; 
+	var xy_pos = getXYpos(this);
+	 // if IE
+	if(navigator.appVersion.indexOf("MSIE") != -1) {
+	   // in IE scrolling page affects mouse coordinates into an element
+	   // This gets the page element that will be used to add scrolling value to correct mouse coords
+		var standardBody = (document.compatMode == 'CSS1Compat') ? document.documentElement : document.body;
+		
+		divX = event.clientX + standardBody.scrollLeft;
+		divY = event.clientY + standardBody.scrollTop;
+	}
+	else {
+		divX = e.pageX;
+		divY = e.pageY;
+	}
+	
+	divX = divX - xy_pos['xp'];
+	divY = divY - xy_pos['yp'];
+	divOffsetX = xy_pos['xp'];
+	divOffsetY = xy_pos['yp'];
+	 // displays x and y coords in the #coords element
+	document.getElementById('coords').innerHTML = 'X= '+ divX+ ' ,Y= ' +divY;
+}
+//Get X, Y coords, and displays Mouse coordinates
+function getXYpos(elm) {
+	X = elm.offsetLeft;        // set x to elm’s offsetLeft
+	Y = elm.offsetTop;         // set y to elm’s offsetTop
+	
+	elm = elm.offsetParent;    // set elm to its offsetParent
+	
+	 //use while loop to check if elm is null
+	 // if not then add current elm’s offsetLeft to x
+	 //offsetTop to y and set elm to its offsetParent
+	while(elm != null) {
+		X = parseInt(X) + parseInt(elm.offsetLeft);
+		Y = parseInt(Y) + parseInt(elm.offsetTop);
+		elm = elm.offsetParent;
+	}
+    // returns an object with "divXp" (Left), "=yp" (Top) position
+	return {'xp':X, 'yp':Y};
+}
+
+
 function resetSelected()
 {
 	for(var i = 0 ; i < isSelected.length ; i ++)

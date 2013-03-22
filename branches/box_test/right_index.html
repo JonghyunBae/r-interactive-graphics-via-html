@@ -56,7 +56,7 @@
     <script src="scatter.js"></script>
     <script src="hist.js"></script>
     <script src="box.js"></script>
-    <script src="event.js"></script>
+  
     <script src="node_event.js"></script>
     <script src="button_event.js"></script>    
     <script>        
@@ -87,16 +87,16 @@
 		eventTrigger(box04);*/
 		
 		
-		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'x',width:200, height:200, legend:'left'});
+		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'x',width:300, height:300, legend:'left'});
 		scatter01.draw(1);
 		eventTrigger(scatter01);
-		var scatter02 = new Scatter(mainArr, {  x:'cut',y:'color', color:'color',width:200, height:200, legend:'topright'});
+		var scatter02 = new Scatter(mainArr, {  x:'cut',y:'color', color:'color',width:300, height:300, legend:'topright'});
 		scatter02.draw(2);    
 		eventTrigger(scatter02);
-		var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:200, height:200 });
+		var hist01 = new Hist(mainArr, { bin: 0.5	, x:'x', width:300, height:300 });
 		hist01.draw(1);
 		eventTrigger(hist01);			
-		var hist02 = new Hist(mainArr, { bin: 0.5	, x:'color', width:200, height:200 });
+		var hist02 = new Hist(mainArr, { bin: 0.5	, x:'color', width:300, height:300 });
 		hist02.draw(2);
 		eventTrigger(hist02);
 	/*	var box01 = new Box(mainArr, {  x:'clarity',y:'x',width:300, height:300});
@@ -119,7 +119,7 @@
    		<br style="clear:both" /><br/> Click to add the coordinates in this text field.<br/>
 		<input type="text" name="regcoords" id="regcoords" />
 		<div id="coords">Coords</div>
-        <script src="divGetMousePos.js"></script>
+
     
     	<div id="left">
 			<h1>Search</h1>

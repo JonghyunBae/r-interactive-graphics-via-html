@@ -13,16 +13,20 @@ document.getElementById('save').addEventListener('click', function() {
 	    window.open(dataUrl);
 	  }
 	});
-	histStage.toDataURL({ //save stage1
-	    callback: function(dataUrl1) {
-	      /*
-	       * here you can do anything you like with the data url.
-	       * In this tutorial we'll just open the url with the browser
-	       * so that you can see the result as an image
-	       */
-	      window.open(dataUrl1);
-	    }
-	  });
+	for(var i = 0 ; i < objArr.length ; i ++)
+	{
+		obj[i].toDataURL({ //save stage1
+		    callback: function(dataUrl1) {
+		      /*
+		       * here you can do anything you like with the data url.
+		       * In this tutorial we'll just open the url with the browser
+		       * so that you can see the result as an image
+		       */
+		      window.open(dataUrl1);
+		    }
+		  });
+	}
+	
 }, false);   
 document.getElementById('showMsg').addEventListener('click', function() {
      //   msgShow = true;

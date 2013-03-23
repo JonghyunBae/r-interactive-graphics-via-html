@@ -67,32 +67,23 @@ function eventTrigger(Name)
 	drag(Name);
 	
 }
-
+var menuOn = false;
 function menu(Name)
 {	
 	//////////////////////////////////////Menu Start//////////////////////////////////////
-	var menuOn = false;
-	var menuLayer = new Kinetic.Layer();
-	var menu = new Kinetic.Group({
+	Name.menuLayer = new Kinetic.Layer();
+	Name.menu = new Kinetic.Group({
 		opacity: 0.95,
 		visible: false
 	});
-	var menuTextHide = new Kinetic.Text({
+	Name.menuTextHide = new Kinetic.Text({
 		text: '',
 		fontFamily: 'Calibri',
 		fontSize: 15,
 		padding: 5,
 		fill: 'white'
 	});	  
-	/*var menuTextDelete = new Kinetic.Text({
-	y:50,
-	text: '',
-	fontFamily: 'Calibri',
-	fontSize: 15,
-	padding: 5,
-	fill: 'white'
-	});	  */
-	var menuTextReset = new Kinetic.Text({
+	Name.menuTextReset = new Kinetic.Text({
 		y:25,
 		text: '',
 		fontFamily: 'Calibri',
@@ -100,65 +91,56 @@ function menu(Name)
 		padding: 5,
 		fill: 'white'
 	});	  
-	var menuRectHide = new Kinetic.Rect({
+	Name.menuRectHide = new Kinetic.Rect({
 		width: 100,
 		height: 25,
 		fill: '#6b6164'
 	});
-	/*var menuRectDelete = new Kinetic.Rect({
-	y:50,
-	width: 100,
-	height: 25,
-	fill: '#6b6164'
-	});*/
-	var menuRectReset = new Kinetic.Rect({
+	Name.menuRectReset = new Kinetic.Rect({
 		y:25,
 		width: 100,
 		height: 25,
 		fill: '#6b6164'
 	});
 	
-	menu.add(menuRectHide).add(menuTextHide);
-	//menu.add(menuRectDelete).add(menuTextDelete);
-	menu.add(menuRectReset).add(menuTextReset);
-	menuLayer.add(menu);
-	Name.stage.add(menuLayer);
+	Name.menu.add(Name.menuRectHide).add(Name.menuTextHide);
+	Name.menu.add(Name.menuRectReset).add(Name.menuTextReset);
+	Name.menuLayer.add(Name.menu);
+	Name.stage.add(Name.menuLayer);
 	
-	menuTextHide.setText(" Hide"); 
+	Name.menuTextHide.setText(" Hide"); 
 	//menuTextDelete.setText(" Delete"); 
-	menuTextReset.setText(" Reset"); 
+	Name.menuTextReset.setText(" Reset"); 
 	
-	menuTextHide.on('click', function(evt){
+	Name.menuTextHide.on('click', function(evt){
 		hideSelected();
-		menuOn=false;
-		menu.hide();
-		menuLayer.draw();	
+		Name.menu.hide();
+		Name.menuLayer.draw();	
 	});
-	menuRectHide.on('click', function(evt){
+	Name.menuRectHide.on('click', function(evt){
 		hideSelected();	
-		menuOn=false;
-		menu.hide();
-		menuLayer.draw();	
+		Name.menu.hide();
+		Name.menuLayer.draw();	
 	});
-	menuTextHide.on('mouseover', function(evt){
-		menuRectHide.setFill('#d8c7a9');
-		menuTextHide.setFill('#black');
-		menuLayer.draw();
+	Name.menuTextHide.on('mouseover', function(evt){
+		Name.menuRectHide.setFill('#d8c7a9');
+		Name.menuTextHide.setFill('#black');
+		Name.menuLayer.draw();
 	});
-	menuRectHide.on('mouseover', function(evt){
-		menuRectHide.setFill('#d8c7a9');
-		menuTextHide.setFill('#black');
-		menuLayer.draw();
+	Name.menuRectHide.on('mouseover', function(evt){
+		Name.menuRectHide.setFill('#d8c7a9');
+		Name.menuTextHide.setFill('#black');
+		Name.menuLayer.draw();
 	});
-	menuTextHide.on('mouseout', function(evt){
-		menuRectHide.setFill('#6b6164');
-		menuTextHide.setFill('white');
-		menuLayer.draw();
+	Name.menuTextHide.on('mouseout', function(evt){
+		Name.menuRectHide.setFill('#6b6164');
+		Name.menuTextHide.setFill('white');
+		Name.menuLayer.draw();
 	});
-	menuRectHide.on('mouseout', function(evt){
-		menuRectHide.setFill('#6b6164');
-		menuTextHide.setFill('white');
-		menuLayer.draw();
+	Name.menuRectHide.on('mouseout', function(evt){
+		Name.menuRectHide.setFill('#6b6164');
+		Name.menuTextHide.setFill('white');
+		Name.menuLayer.draw();
 	});
 	/*
 	menuTextDelete.on('click', function(evt){
@@ -195,44 +177,48 @@ function menu(Name)
 	});
 	*/
 	
-	menuTextReset.on('click', function(evt){
+	Name.menuTextReset.on('click', function(evt){
 		resetSelected();
-		menuOn=false;
-		menu.hide();
-		menuLayer.draw();	
+		Name.menu.hide();
+		Name.menuLayer.draw();	
 	});
-	menuRectReset.on('click', function(evt){
+	Name.menuRectReset.on('click', function(evt){
 		resetSelected();
-		menuOn=false;
-		menu.hide();
-		menuLayer.draw();	
+		Name.menu.hide();
+		Name.menuLayer.draw();	
 	});
-	menuTextReset.on('mouseover', function(evt){
-		menuRectReset.setFill('#d8c7a9');
-		menuTextReset.setFill('#black');
-		menuLayer.draw();
+	Name.menuTextReset.on('mouseover', function(evt){
+		Name.menuRectReset.setFill('#d8c7a9');
+		Name.menuTextReset.setFill('#black');
+		Name.menuLayer.draw();
 	});
-	menuRectReset.on('mouseover', function(evt){
-		menuRectReset.setFill('#d8c7a9');
-		menuTextReset.setFill('#black');
-		menuLayer.draw();
+	Name.menuRectReset.on('mouseover', function(evt){
+		Name.menuRectReset.setFill('#d8c7a9');
+		Name.menuTextReset.setFill('#black');
+		Name.menuLayer.draw();
 	});
-	menuTextReset.on('mouseout', function(evt){
-		menuRectReset.setFill('#6b6164');
-		menuTextReset.setFill('white');
-		menuLayer.draw();
+	Name.menuTextReset.on('mouseout', function(evt){
+		Name.menuRectReset.setFill('#6b6164');
+		Name.menuTextReset.setFill('white');
+		Name.menuLayer.draw();
 	});
-	menuRectReset.on('mouseout', function(evt){
-		menuRectReset.setFill('#6b6164');
-		menuTextReset.setFill('white');
-		menuLayer.draw();
+	Name.menuRectReset.on('mouseout', function(evt){
+		Name.menuRectReset.setFill('#6b6164');
+		Name.menuTextReset.setFill('white');
+		Name.menuLayer.draw();
 	});
 	
 	
 	
-	Name.plotLayer.on('click', function(evt){ // mouse drag�섍퀬�섏꽌 �곗냽�대┃�섏뼱 留앹튂��寃�諛⑹�.
-		if((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click
-			if(menuOn==false){
+	Name.stage.on('click', function(evt){ // mouse drag�섍퀬�섏꽌 �곗냽�대┃�섏뼱 留앹튂��寃�諛⑹�.
+		for(var i = 0 ; i < objArr.length ; i ++)
+		{
+			objArr[i].menu.hide();
+			objArr[i].menuLayer.draw();
+		}
+		if((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click			
+			//alert("ddd");
+				
 				menuOn=true;
 				//alert('right clicked');
 				var node = evt.shape;
@@ -241,26 +227,21 @@ function menu(Name)
 				var menuWidth = 100;
 				var mousePos = node.getStage().getMousePosition();
 				if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set menu box position
-					menu.setPosition(mousePos.x + 8, mousePos.y + 2);
+					Name.menu.setPosition(mousePos.x + 8, mousePos.y + 2);
 				}else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
-					menu.setPosition(mousePos.x + 2, mousePos.y - 2 - menuHeight);
+					Name.menu.setPosition(mousePos.x + 2, mousePos.y - 2 - menuHeight);
 				}else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
-					menu.setPosition(mousePos.x - 2 - menuWidth, mousePos.y + 2);
+					Name.menu.setPosition(mousePos.x - 2 - menuWidth, mousePos.y + 2);
 				}else{
-					menu.setPosition(mousePos.x - 2 - menuWidth , mousePos.y - 2 - menuHeight);
+					Name.menu.setPosition(mousePos.x - 2 - menuWidth , mousePos.y - 2 - menuHeight);
 				}				
-				menu.show();
-				menuLayer.draw();
-			}else{//menuOn==true
-				menuOn=false;
-				menu.hide();
-				menuLayer.draw();			
-			}
+				Name.menu.show();
+				Name.menuLayer.draw();
+
 		}else if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 			if(menuOn==true){
-				menuOn=false;
-				menu.hide();
-				menuLayer.draw();
+				Name.menu.hide();
+				Name.menuLayer.draw();
 			}		
 		}	
 	});
@@ -292,7 +273,6 @@ function drag(Name)
 	Name.plotLayer.on('mousedown touchstart', function(evt){
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 			divid = mouseName;
-			dragOn = true; 
 			preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
 			if(moving == true){
 				moving = false;
@@ -311,7 +291,6 @@ function drag(Name)
 	Name.dataLayer.on('mousedown touchstart', function(evt){
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 			divid = mouseName;
-			dragOn = true; 
 			preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
 			if(moving == true){
 				moving = false;
@@ -329,11 +308,11 @@ function drag(Name)
 	}); 
 	var tmpx, tmpy, tmpName;
 	window.addEventListener ("mousemove", function (evt){
-
 			if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 				
 				if(moving == true)
 				{
+					dragOn = true;
 					if(divid == mouseName)
 					{
 						var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
@@ -363,13 +342,16 @@ function drag(Name)
 				rangeBox.setHeight(0);
 				rangeBoxLayer.drawScene();
 				moving = false;
+			//	alert(tmpName);
 				RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
+				
 			}
 		}
 	}, true);
 }
 function RectRangeSelect(Name, pre, aft)
 {
+	
 	var smallX, bigX;
 	var smallY, bigY;
 	if(pre.x >= aft.x){
@@ -386,16 +368,20 @@ function RectRangeSelect(Name, pre, aft)
 		smallY = pre.y;
 		bigY = aft.y;
 	}
+	
 	if(ctrlPressed == false)
 	{
 		allDeselect();
 	}	
+	//alert(Name._type);
+	
 	if(Name._type == "scatter"){
 		if(ctrlPressed == true)	{
 			for(var i = 0 ; i < Name.node.length ; i ++)
 			{
 				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
 				{
+				//		alert((Name.node[i].getSelected()+1)%2);
 						allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);			
 				}
 			}
@@ -430,6 +416,7 @@ function RectRangeSelect(Name, pre, aft)
 	}
 	refresh();
 	addRow('dataTable');
+	
 }
 
 function hover(Name)
@@ -552,14 +539,12 @@ function select(Name)
 	Name.stage.on('click', function(evt){
 		
 		if(dragOn == true)
-		{
+		{			
 			dragOn = false;
 			return;
 		}
-		
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
 			var node = evt.shape;
-
 			if(isNaN(node.getName()) == false)
 			{
 				var tmpX = Name.node[node.getName()].getX(); // 占쎈���占쎈콅釉�占쎈챶諭띰옙占퐔, y �ル슦紐당몴占썼쳸�녿툡 占쎈낄�쀯옙占�

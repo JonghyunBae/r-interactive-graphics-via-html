@@ -169,7 +169,7 @@ var Scatter = {};
 						//	draggable : false,
 						//	hidden : 0,
 							selected : 0,
-							info :"X : " + (nodeX[i] + this.plotXMargin) + "\r\n" + "Y : " +  (this.height +this.plotYMargin - nodeY[i]) +  "\r\n "+ "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
+							info : "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
 						});				
 						//alert("ddd");
 						isSelected[i].push(scatterUpdate(this,i));

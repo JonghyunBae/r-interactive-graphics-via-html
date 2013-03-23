@@ -112,6 +112,7 @@
 	    		}
 	    		
 	        }
+	    	addRow('dataTable');
 	    	refresh();
 	    }
 	    ansShow=ans;

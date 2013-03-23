@@ -41,8 +41,8 @@
 	    <script src="common.js"></script>
 	    
 	    <script>
-	      createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
- 	//		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
+	 //     createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
+ 			createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
   	//		createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
   	//	createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
   	//	createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
@@ -56,12 +56,11 @@
     <script src="scatter.js"></script>
     <script src="hist.js"></script>
     <script src="box.js"></script>
-  
     <script src="node_event.js"></script>
-    <script src="button_event.js"></script>    
+   
     <script>        
     
-    	var scatter01 = new Scatter(mainArr, {  x:'time',y:'conc', color:'time',width:300, height:300, legend:'left'});
+   /* 	var scatter01 = new Scatter(mainArr, {  x:'time',y:'conc', color:'time',width:300, height:300, legend:'left'});
 		scatter01.draw(1);
 		eventTrigger(scatter01);
 		var scatter02 = new Scatter(mainArr, {  x:'wt',y:'time', color:'subject',width:300, height:300, legend:'topright'});
@@ -87,7 +86,7 @@
 		eventTrigger(box04);*/
 		
 		
-/*		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'cut',width:300, height:300, legend:'left'});
+		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'cut',width:300, height:300, legend:'left'});
 		scatter01.draw(1);
 		eventTrigger(scatter01);
 		var scatter02 = new Scatter(mainArr, {  x:'cut',y:'color', color:'color',width:300, height:300});
@@ -192,7 +191,7 @@
 			</div>
 		</div>
     
-    <script src="button_event.js"></script><!-- event should be on last part-->
-    
+  
+    <script src="button_event.js"></script>    
     </body>
 </html>

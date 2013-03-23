@@ -87,7 +87,7 @@
 	    	ans=inputStr; //current answer update.
 	    	
 
-	    	for(var i = 0 ; i < mainArr[0].length ; i++)
+	    	for(var i = 0 ; i < isSelected.length ; i++)
 	        {
 	    	    //    var tmpNameArr = new Array();
 	    		//    tmpNameArr = scatterData[i].name.split(',');   

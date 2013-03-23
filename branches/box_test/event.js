@@ -15,7 +15,7 @@ document.getElementById('save').addEventListener('click', function() {
 	});
 	for(var i = 0 ; i < objArr.length ; i ++)
 	{
-		obj[i].toDataURL({ //save stage1
+		obj[i].stage.toDataURL({ //save stage1
 		    callback: function(dataUrl1) {
 		      /*
 		       * here you can do anything you like with the data url.

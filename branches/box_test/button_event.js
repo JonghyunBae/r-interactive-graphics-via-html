@@ -3,11 +3,14 @@ document.getElementById('saveImg').addEventListener('click', function() {
      * since the stage toDataURL() method is asynchronous, we need
      * to provide a callback
      */
-	hist01.stage.toDataURL({
-        callback: function(dataUrl) {         
-          window.open(dataUrl);
-        }
-      });
+	for(var i = 0 ; i < objArr.length ; i ++)
+	{
+		objArr[i].stage.toDataURL({
+	        callback: function(dataUrl) {         
+	            window.open(dataUrl);
+	          }
+	    });
+	}
   }, false); 
 document.getElementById('showTable').addEventListener('click', function() {
      //   msgShow = true;

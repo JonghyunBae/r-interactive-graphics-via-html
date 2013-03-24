@@ -93,8 +93,7 @@
 	    		//    tmpNameArr = scatterData[i].name.split(',');   
 	    		//    alert("Please use given variables!");
 
-	    		if(eval(inputStr))
-	    		{
+	    		if(eval(inputStr)){
 	    			if(isSelected[i][0] == 0)
 	    			{
 	    				for(var j = 1 ; j < isSelected[i].length ; j ++)
@@ -104,12 +103,17 @@
 	    				}
 	    				isSelected[i][0] = 1;
 	    			}    	
-	    			
-	    			//var tmpNode = scatterStage.get("#"+ (i + scatterIdStart));
-	    			//allUpdate("scatter", tmpNode, i, 0);
-	  //  			scatterSingleSelect(tmpNode, i);
-	   // 			histUpdate(scatterXMain[i], 0);  
-	    		}
+	       		}else{
+	       			if(isSelected[i][0] == 1)
+	    			{
+	    				for(var j = 1 ; j < isSelected[i].length ; j ++)
+	    				{
+	    					
+	    					isSelected[i][j](0);
+	    				}
+	    				isSelected[i][0] = 0;
+	    			}
+	       		}
 	    		
 	        }
 	    	addRow('dataTable');

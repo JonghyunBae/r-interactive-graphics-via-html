@@ -1,3 +1,6 @@
+var plotWidth=500;  //default value for plot width
+var plotHeight=500; //default value for plot height   
+
 ////////////////////////////////////mouse position of each graph////////////////////////////////////
 var mouseName;
 var divOffsetX, divOffsetY;

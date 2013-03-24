@@ -83,16 +83,29 @@ hist.RIGHT <- function(dataARray, x,
 } # function hist.RIGHT
 environment(hist.RIGHT) <- RIGHT.env
 
+# CHECK (junghoon): think about what to do with is.overwrite
 RIGHT <- function(..., fun = {}, 
                   header = "RIGHT: R Interactive Graphics via HTml",
-                  file = tempfile(tmpdir = getwd(), fileext = ".html")) {
+                  dir = tempfile(tmpdir = getwd()), # CHECK (junghoon): not used for now
+                  lib.dir = getwd(), # CHECK (junghoon): this should be updated
+                  is.overwrite = T) {
   
   require("XML")
   
   dataList <- as.list(match.call(expand.dots = F))$...
 
-  # Keep the list of files to clean up:
-  # CHECK: create a directory for data files?
+  # If dir does not contain path information, use the current location:
+#   tempArray <- unlist(strsplit(dir, ""))
+#   if (all(tempArray != "/") && all(tempArray != "\\")) dir <- file.path(getwd(), dir)
+
+  # CHECK (junghoon): this is temporary
+  dir <- getwd()
+  
+  # Create a directory for all the files:
+  if (!file.exists(dir)) dir.create(dir)
+  
+    
+  # Keep track of the file names of the data:
   numData <- length(dataList)
   fileNameArray <- vector("character", numData)
   
@@ -106,10 +119,12 @@ RIGHT <- function(..., fun = {},
     
     data <- dataList[[iData]]
     fileName <- paste0("_", as.character(data), ".csv")
-    do.call(write.csv, list(data, file = fileName, row.names = F))
+#     fileName.full <- file.path(dir, fileName)
+    fileName.full <- fileName
+    do.call(write.csv, list(data, file = fileName.full, row.names = F))
     
     index <- length(dataObj$children) + 1
-    dataObj$children[[index]] <- xmlTextNode(I(paste0("createMainStructure('", fileName, "');")))
+    dataObj$children[[index]] <- xmlTextNode(I(paste0("createMainStructure('", fileName.full, "');")))
     
     fileNameArray[iData] <- fileName
     
@@ -118,7 +133,9 @@ RIGHT <- function(..., fun = {},
   # Set some global variables:
   index <- length(dataObj$children)
   
-
+  dataObj$children[[index + 1]] <- xmlTextNode("var plotWidth=500;")
+  dataObj$children[[index + 2]] <- xmlTextNode("var plotHeight=500;")
+  
   ## ---
   ## Evaluate the user defined script:
   ## ---
@@ -132,23 +149,31 @@ RIGHT <- function(..., fun = {},
   ## Create HTML file from bottom up:
   ## ---
   
+  libArray <- c("kinetic-v4.3.1.js",
+                "structure.js",
+                "common.js",
+                "scatter.js",
+                "hist.js",
+                "box.js",
+                "node_event.js")
+  bodyObj <- xmlNode("body")
+
   # CHECK: optimize Javascript loading for different types of plots.
   # CHECK: is xmlTextNode("") really necessary to make this work?
-  bodyObj <- xmlNode("body",
-                     get("contentObj", RIGHT.env),
-                     xmlNode("script", attrs = c(src = "kinetic-v4.3.1.js"), xmlTextNode("")),
-                     xmlNode("script", attrs = c(src = "structure.js"), xmlTextNode("")),
-                     xmlNode("script", attrs = c(src = "common.js"), xmlTextNode("")),
-                     xmlNode("script", attrs = c(src = "scatter.js"), xmlTextNode("")),
-                     xmlNode("script", attrs = c(src = "hist.js"), xmlTextNode("")),
-                     xmlNode("script", attrs = c(src = "box.js"), xmlTextNode("")),
-                     xmlNode("script", attrs = c(src = "node_event.js"), xmlTextNode("")),
-                     dataObj,
-                     get("scriptObj", RIGHT.env))
+  for (iLib in 1:length(libArray)) {
+#     bodyObj$children[[iLib]] <- xmlNode("script", attrs= c(src = file.path(lib.dir, libArray[iLib])), xmlTextNode(""))
+    bodyObj$children[[iLib]] <- xmlNode("script", attrs= c(src = libArray[iLib]), xmlTextNode(""))
+  } # for
+  
+  index <- length(bodyObj$children)
+  bodyObj$children[[index + 1]] <- get("contentObj", RIGHT.env)
+  bodyObj$children[[index + 2]] <- dataObj
+  bodyObj$children[[index + 3]] <- get("scriptObj", RIGHT.env)
   
   headObj <- xmlNode("head", 
                      xmlNode("meta", attrs = c(charset = "UTF-8")),
                      xmlNode("title", xmlTextNode(header)),
+#                      xmlNode("link", attrs = c(rel = "stylesheet", href = file.path(lib.dir, "right.css"))))
                      xmlNode("link", attrs = c(rel = "stylesheet", href = "right.css")))
   
   XMLObj <- xmlNode("html", headObj, bodyObj)
@@ -158,8 +183,8 @@ RIGHT <- function(..., fun = {},
   ## ---
   
   RIGHTObj <- list(XML = XMLObj,
-                   fileName.XML = file,
-                   fileName.data = fileNameArray)
+                   dir = dir,
+                   file.data = fileNameArray)
   class(RIGHTObj) <- "RIGHT"
 
   return(RIGHTObj)
@@ -168,16 +193,21 @@ RIGHT <- function(..., fun = {},
 
 print.RIGHT <- function(obj) {
 
-  if (is.null(obj$fileName.data)) stop("cleanup was called on the object.")
-  
-  saveXML(obj$XML, file = obj$fileName.XML, 
+  if (!file.exists(obj$dir) ||
+        !all(file.exists(file.path(obj$dir, obj$file.data)))) {
+    stop("Cleanup was called on the object.")
+  } # if
+
+  fileName.full <- file.path(obj$dir, "index.html")
+  saveXML(obj$XML, file = fileName.full, 
           prefix = NULL, doctype = "<!DOCTYPE HTML>")
 
-  # CHECK: this will only work on Windows 7 for the moment.
-  # CHECK: should shell be used?
-  system(paste0("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe ", obj$fileName.XML))
-
-  shell.exec("right.html")
+  # CHECK (junghoon): is there a better way?
+  if (Sys.info()["sysname"] == "Windows") {
+    shell.exec(fileName.full)
+  } else {
+    system(paste0("firefox -new-tab ", fileName.full, " &"))
+  } # if
   
 } # function print.RIGHT
 
@@ -192,16 +222,19 @@ cleanup <- function(obj) {
   UseMethod("cleanup", obj)
 } # function cleanup
 
-# CHECK: does not work properly yet
-# CHECK: should I overload rm()?
+# CHECK (junghoon): is there a way to tightly integrate this with rm()?
 cleanup.RIGHT <- function(obj) {
 
-  objName <- match.call()$obj
+  # CHECK (junghoon): index.html is not deleted temporarily
+#   for (name in c("index.html", obj$file.data)) {
+  for (name in obj$file.data) {
+      
+    fileName <- file.path(obj$dir, name)
+    if (file.exists(fileName)) unlink(fileName)
+    
+  } # for
   
-  if (!is.null(obj$fileName.data)) unlink(obj$fileName.data)
-  if (file.exists(obj$fileName.data)) unlink(obj$fileName.XML)
-  
-  # CHECK: should use assign in the parent frame?
-  obj$fileName.data <- NULL
+  if (length(dir(path = obj$dir)) == 0) unlink(obj$dir, recursive = T)
   
 } # function cleanup.RIGHT
+

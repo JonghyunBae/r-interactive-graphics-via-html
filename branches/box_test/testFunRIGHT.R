@@ -2,14 +2,14 @@
 
 source("funRIGHT.R")
 
-diamonds <- diamonds[sample(1:nrow(diamonds), 1000, F), ]
+sub.diamonds <- diamonds[sample(1:nrow(diamonds), 1000, F), ]
 
-obj <- RIGHT(diamonds, fun = {
-  plot.RIGHT(diamonds, "x", price, color, "left")
-  plot.RIGHT(diamonds, "clarity", depth, depth, "right")
-  plot.RIGHT(diamonds, "table", cut, cut)
-  hist.RIGHT(diamonds, "color")
-  hist.RIGHT(diamonds, x)
-  hist.RIGHT(diamonds, cut)}, file = "right_test.html")
+obj <- RIGHT(sub.diamonds, fun = {
+  plot.RIGHT(sub.diamonds, "x", price, color, "left")
+  plot.RIGHT(sub.diamonds, "clarity", depth, depth, "right")
+  plot.RIGHT(sub.diamonds, "table", cut, cut)
+  hist.RIGHT(sub.diamonds, "color")
+  hist.RIGHT(sub.diamonds, x)
+  hist.RIGHT(sub.diamonds, cut)})
 
 print(obj)

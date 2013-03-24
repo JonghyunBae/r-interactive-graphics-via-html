@@ -27,12 +27,10 @@
     	<div id="content">		
 		    <div id="histContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="histContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+		    <div id="histContainer3" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="scatterContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="scatterContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-			<div id="boxContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-			<div id="boxContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-			<div id="boxContainer3" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-			<div id="boxContainer4" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+			<div id="scatterContainer3" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 			
 		</div>	
 	    
@@ -42,7 +40,8 @@
 	    
 	    <script>
 	 //     createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
- 			createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
+ 			createMainStructure("diamonds-from-R_1K.csv");//mainArr = data, labelArr= column1     
+ 	//		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
   	//		createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
   	//	createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
   	//	createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
@@ -71,44 +70,27 @@
 		var hist02 = new Hist(mainArr, { bin: 0.5	, x:'conc', width:300, height:300 });
 		hist02.draw(2);
 		eventTrigger(hist02); 
-	/*	var box01 = new Box(mainArr, {  x:'time',y:'conc',width:300, height:300});
-		box01.draw(1);   
-		eventTrigger(box01);
-		var box02 = new Box(mainArr, {  x:'time',y:'wt',width:300, height:300});
-		box02.draw(2);   
-		eventTrigger(box02);
-		var box03 = new Box(mainArr, {  x:'subject',y:'dose',width:300, height:300});
-		box03.draw(3);   
- 	 	eventTrigger(box03);
-		var box04 = new Box(mainArr, {  x:'subject',y:'subject',width:300, height:300});
-		box04.draw(4);   
-		eventTrigger(box04);*/
+*/	
 		
-		
-		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'cut',width:300, height:300, legend:'left'});
+		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'color',width:250, height:250, legend:'left'});
 		scatter01.draw(1);
 		eventTrigger(scatter01);
-		var scatter02 = new Scatter(mainArr, {  x:'cut',y:'color', color:'color',width:300, height:300});
+		var scatter02 = new Scatter(mainArr, {  x:'clarity',y:'depth', color:'depth',width:250, height:250,legend:'right'});
 		scatter02.draw(2);    
 		eventTrigger(scatter02);
-		var hist01 = new Hist(mainArr, { bin: 0.5	, x:'color', width:300, height:300 });
+		var scatter03 = new Scatter(mainArr, {  x:'table',y:'cut', color:'cut',width:250, height:250});
+		scatter03.draw(3);    
+		eventTrigger(scatter03);
+		var hist01 = new Hist(mainArr, { bin: 0.5	, x:'color', width:250, height:250 });
 		hist01.draw(1);
 		eventTrigger(hist01);			
-		var hist02 = new Hist(mainArr, { bin: 2	, x:'x', width:300, height:300 });
+		var hist02 = new Hist(mainArr, { bin: 2	, x:'x', width:250, height:250 });
 		hist02.draw(2);
 		eventTrigger(hist02);
-	/*	var box01 = new Box(mainArr, {  x:'clarity',y:'x',width:300, height:300});
-		box01.draw(1);   
-		eventTrigger(box01);
-		var box02 = new Box(mainArr, {  x:'price',y:'color',width:300, height:300});
-		box02.draw(2);   
-		eventTrigger(box02);
-		var box03 = new Box(mainArr, {  x:'price',y:'carat',width:300, height:300});
-		box03.draw(3);   
- 	 	eventTrigger(box03);
-		var box04 = new Box(mainArr, {  x:'color',y:'cut',width:300, height:300});
-		box04.draw(4);   
-		eventTrigger(box04);*/
+		var hist03 = new Hist(mainArr, { bin: 2	, x:'cut', width:250, height:250 });
+		hist03.draw(3);
+		eventTrigger(hist03);
+
 	 
 			
 		</script>    
@@ -153,7 +135,7 @@
 						</ul>
 					</div>
 					<div class="linksright">
-						<h4><a href="#">Discover RIght</a></h4>
+						<h4><a href="#">Discover Right</a></h4>
 						<ul>
 							<li><a href="about.html">Why RIGHT?</a></li>
 							<li><a href="about.html">What Does RIGHT Do?</a></li>

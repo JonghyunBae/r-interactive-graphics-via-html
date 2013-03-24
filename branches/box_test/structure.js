@@ -39,7 +39,7 @@ function csv2Arr(data, liveChar)
  	var line = 0;
  	while(cursor != eof)
  	{
- 		if((cursor == '\"') || (cursor == '\r') ||(cursor == '\t')){
+ 		if((cursor == '\"') || (cursor == '\r') ||(cursor == '\t')||(cursor == ';')){
  		}else if( cursor == "\n" ){
  			if (result_array.length <= line)
  			{

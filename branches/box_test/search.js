@@ -44,8 +44,7 @@
 		var textBox = document.getElementById("searchBox");
 		textBox.value = '';
 		//writeMsg(msgLayer);
-		addRow('dataTable');
-		doRefresh();	     	
+		addRow('dataTable');     	
 	}
 
 	function addValueToSearchBox(i)
@@ -118,6 +117,7 @@
 	        }
 	    	addRow('dataTable');
 	    	refresh();
+	    	clearSearchBox();
 	    }
 	    ansShow=ans;
 	   

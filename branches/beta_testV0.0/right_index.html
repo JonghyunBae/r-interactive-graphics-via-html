@@ -5,96 +5,47 @@
         <meta charset="UTF-8">
         <title>RIGHT, R-Interactive-Graphics-via-HTml</title>       
         <link  rel="stylesheet" href="right.css">       
-    </head>
-    
+    </head>    
     <body>
-    	<div id="head"  >
-			<div class="wrap">	
-				<h1><a id="mainTitle" href="right_index.html">RIGHT</a></h1>
-			<!-- <h2>designed by <a href="#">RIGHT</a></h2>-->
-				<div id="nav">
-					<ul>
-						<li><a href="right_index.html">Home</a></li>
-						<li><a href="about.html">About</a></li>
-						<li><a href="about.html">Tutorial</a></li>
-						<li><a href="about.html">Contact</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-    
-    	<div id="content">		
-		 	    <div id="histContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
+   		<div id="content">		
+		 	<div id="histContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="histContainer3" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="scatterContainer1" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
 		    <div id="scatterContainer2" style="margin: 5px 5px 5px 5px; float: left; position : relative; border:1px solid black; background:  #eeeeee; "oncontextmenu="return false;"></div>
-			
-		</div>	
-	    
+		</div>		    
 	 	<script src="kinetic-v4.3.1.js"></script>
 	    <script src="structure.js"></script>
-	    <script src="common.js"></script>
-	    
+	    <script src="common.js"></script>	    
 	    <script>
-	 //     createMainStructure("Theoph-from-R.csv");//mainArr = data, labelArr= column1         
- 			createMainStructure("diamonds-from-R_1K.csv");//mainArr = data, labelArr= column1     
- 	//		createMainStructure("diamonds-from-R_2K.csv");//mainArr = data, labelArr= column1     
-  	//		createMainStructure("diamonds-from-R_5K.csv");//mainArr = data, labelArr= column1     
-  	//	createMainStructure("diamonds-from-R_10K.csv");//mainArr = data, labelArr= column1     
-  	//	createMainStructure("diamonds-from-R_special.csv");//mainArr = data, labelArr= column1     
- 	//	createMainStructure("full-diamonds-from-R_50K.csv");//mainArr = data, labelArr= column1     
-
-    	//////////////////////////SCREEN&STAGE MEASUREMENT SET/////////////////////////////////     
-   		 		     
-	</script> 
-    
+	//		createMainStructure("datafiles/diamonds-from-R_1K.csv");//mainArr = data, labelArr= column1     
+		</script> 
     <script src="scatter.js"></script>
     <script src="hist.js"></script>
     <script src="box.js"></script>
     <script src="node_event.js"></script>
    
     <script>        
-    
-   /* 	var scatter01 = new Scatter(mainArr, {  x:'time',y:'conc', color:'time',width:250, height:250, legend:'left'});
+    	var mainObj = new readCSV("datafiles/Theoph-from-R.csv");
+  
+		var scatter01 = new Scatter(mainObj, {  x:'subject',y:'wt', color:'conc',width:250, height:250, legend:'left'});
+		alert(scatter01.constructor);
 		scatter01.draw(1);
 		eventTrigger(scatter01);
-		var scatter02 = new Scatter(mainArr, {  x:'wt',y:'time', color:'subject',width:250, height:250});
+		var scatter02 = new Scatter(mainObj, {  x:'clarity',y:'depth', color:'depth',width:250, height:250,legend:'right'});
 		scatter02.draw(2);    
-		eventTrigger(scatter02);
-		var scatter03 = new Scatter(mainArr, {  x:'dose',y:'wt', color:'dose',width:250, height:250, legend:'right'});
-		scatter03.draw(3);    
-		eventTrigger(scatter03);
-		var hist01 = new Hist(mainArr, { bin: 3	, x:'time', width:250, height:250 });
-		hist01.draw(1);
-		eventTrigger(hist01);			
-		var hist02 = new Hist(mainArr, { bin: 0.5	, x:'conc', width:250, height:250 });
-		hist02.draw(2);
-		eventTrigger(hist02); 
-		var hist03 = new Hist(mainArr, { bin: 1	, x:'subject', width:250, height:250 });
-		hist03.draw(3);
-		eventTrigger(hist03); 
-*/	
-		
-		var scatter01 = new Scatter(mainArr, {  x:'x',y:'price', color:'color',width:250, height:250, legend:'left'});
-		scatter01.draw(1);
-		eventTrigger(scatter01);
-		var scatter02 = new Scatter(mainArr, {  x:'clarity',y:'depth', color:'depth',width:250, height:250,legend:'right'});
-		scatter02.draw(2);    
-		eventTrigger(scatter02);
-	
-		var hist02 = new Hist(mainArr, { bin: 2	, x:'x', width:250, height:250 });
+		eventTrigger(scatter02);	
+		var hist02 = new Hist(mainObj, { bin: 2	, x:'x', width:250, height:250 });
 		hist02.draw(2);
 		eventTrigger(hist02);
-		var hist03 = new Hist(mainArr, { bin: 2	, x:'cut', width:250, height:250 });
+		var hist03 = new Hist(mainObj, { bin: 2	, x:'cut', width:250, height:250 });
 		hist03.draw(3);
 		eventTrigger(hist03);
-
-	 
-			
 		</script>    
-    	<div id="left">
-			<h1>Search</h1>
+	
+		<script src="table.js"></script>
+		
+    	<div >
+    	<h2>Search</h2>
 				<ul>
 					<li><a href="about.html">How To Search</a></li>					
 				</ul>	 
@@ -102,69 +53,28 @@
 			<p>
 				<form id="searchForm1">  
 					<textarea id ="searchBox" name = "searchId"  style="height:50px;width:200px;" placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"></textarea>
+					<p></p>
 					<a id="searchBtn" href="#" class="myButton" onClick ="booleanSearch(searchForm1); printAns(); return false;">Search</a>	
 					<a id="clearBtn" href="#" class="myButton"  onClick ="clearSearchBox(); return false;">Clear</a>
 				</form>  
 			</p>
-			<h1>Hide & Reset</h1>
-			<p>
-				<a id="nodeHide" href="#" class="myButton" onClick ="hideSelected(); return false;">Hide</a>
-				<a id="nodeReset" href="#" class="myButton" onClick ="resetSelected(); return false;">Reset</a>
-			</p>		
-			<h1>Other Functions</h1>			
+			<h2>Other Functions</h2>			
 				<p>
 					<a id="showTable" href="#" class="myButton" onClick =" return false;">Show Table</a>	
 					<a id="hideTable" href="#" class="myButton" onClick =" return false;">Hide Table</a>
 				</p>	
-				<p><a id="saveImg" href="#" class="myButton" onClick ="alert( return false;">Save as image</a></p>	
-				<p><a id="sendImg" href="about.html" class="myButton" >Send an image to Email</a></p>	
+				<a id="saveImg" href="#" class="myButton" onClick ="alert( return false;">Save as image</a>	
+				<a id="sendImg" href="about.html" class="myButton" >Send an image to Email</a>	
 				<p></p>	
-		</div>
-		
-		<script src="table.js"></script>
-		
-    	<div id="footer">
-			<div class="wrap">
-					<div id="footnav">
-						<ul>
-							<li><a href="right_index.html">Home</a></li>
-							<li><a href="about.html">About</a></li>
-							<li><a href="about.html">Tutorial</a></li>
-							<li><a href="about.html">Contact</a></li>
-						</ul>
-					</div>
-					<div class="linksright">
-						<h4><a href="#">Discover Right</a></h4>
-						<ul>
-							<li><a href="about.html">Why RIGHT?</a></li>
-							<li><a href="about.html">What Does RIGHT Do?</a></li>
-							<li><a href="about.html">Who Uses RIGHT?</a></li>
-							<li><a href="about.html">Demo Gallaery</a></li>
-						</ul>
-					</div>
-					<div class="linksright">
-						<h4><a href="#">About Us</a></h4>
-						<ul>
-							<li><a href="about.html">News</a></li>
-							<li><a href="about.html">Contact Us</a></li>
-						</ul>
-					</div><div class="linksright">
-						<h4><a href="#">Follow Us</a></h4>
-						<ul>
-							<li><a href="about.html">Twitter</a></li>
-							<li><a href="about.html">Facebook</a></li>			
-						</ul>
-					</div>
-					
-					<div class="clearer">&nbsp;</div><br /><br />
-					<p class="foot">
-						Created by <a class="credit" href="about.html">RIGHT</a><br />
-						&copy; RIGHT, R-Interactive-Graphics-via-HTml 2013.
-					</p>
-			</div>
-		</div>
-    
-  
+		</div> 
+		<div id = "footer">	
+			<p>
+			Created by <a class="credit" href="about.html">RIGHT</a><br />
+				Copyright &copy; {Jaewlee, flammy, sch8906, thepotter89} @ gmail.com
+			</p>
+		</div>	
+
+		 
     <script src="button_event.js"></script>    
     </body>
 </html>

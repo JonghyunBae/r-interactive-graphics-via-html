@@ -344,9 +344,8 @@ form input.button{
 	}
 	
 #footer {
-	width: 100%;
-	background: #6b6164 url('footbg.jpg') repeat-x top left;
-	float: left; 
+	width: 100% ;
+	float: right; 
 	}
 
 #footer .wrap {

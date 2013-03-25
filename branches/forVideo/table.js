@@ -14,7 +14,7 @@ document.write("</style>");
 
 //create dynamic table
 
-document.write("<div id=\"tableScrollableContainer\" class=\"scrollableContainer\" style=\"float: left; position : relative; display:none; margin: 15px 15px 15px 300px;\">");
+document.write("<div id=\"tableScrollableContainer\" class=\"scrollableContainer\" style=\"float: left; position : relative; display:none; margin: 15px 15px 15px 0px;\">");
 document.write(" <div class=\"scrollingArea\">");
 	document.write("<table id=\"dataTable\" class=\"selectedInfo scrollable\">");
 		document.write("<thead>");

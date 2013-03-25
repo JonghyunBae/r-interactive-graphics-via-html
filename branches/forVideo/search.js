@@ -3,27 +3,29 @@
 	var ansShow='';
 	// variable buttons update
 
-	document.write("<p>Use the variables below only, you can click one to add into input box</p>");
-	document.write("<p>");
+	document.write("<p  style = \"display:inline-block; color:#000; font-family:Trebuchet MS; font-size:17px; font-weight:bold;  text-decoration:none;  text-shadow:0px 1px 0px #8f7f24;\"  color : #000; margin : 5px 0px 5px 0px\">");
+
 	for(var i=0; i<labelArr.length; i++)
 	{
 		document.write("<a id=\"labelArr[");
 		document.write(i);
-		document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox(");
+		document.write("]\" href=\"#\" class=\"variableButton\"style = \"margin : 0px 0px 0px 2px\" onclick=\"addValueToSearchBox(");
 		document.write(i);
 		document.write("); return false;\">");
 		document.write(labelArr[i]);
 		document.write("</a>");	  
 	}			
-	document.write("</p>");
+	//document.write("</h1>");
+	
+	document.write("</p><br>");
+	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" style = \"margin : 5px 0px 0px 2px\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
+	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\"  style = \"margin : 0px 0px 0px 2px\"onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a>");
+	
 
-	document.write("<p>");
-	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
-	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a><br>");
-	document.write("<label> [ans] : </label>");
-	document.write("<label id=\"label1\">undefined</label>");
+	
+	document.write("<label  style = \" font-family:Trebuchet MS;font-weight:bold; color : #516ca3;\"> [ans] : </label>");
+	document.write("<label  style = \" font-family:Trebuchet MS;font-weight:bold; color : #516ca3;\" id=\"label1\">undefined</label>");
 	document.write("</p>");
-
 	function printAns(){
 		var tmpStr = '';	
 		tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.

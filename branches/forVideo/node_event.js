@@ -312,6 +312,7 @@ function drag(Name)
 				
 				if(moving == true)
 				{
+					document.body.style.cursor = "pointer";
 					dragOn = true;
 					if(divid == mouseName)
 					{

@@ -8,9 +8,11 @@ var aPressed = false;
 var zPressed = false;
 var gPressed = false;
 var tmpShift = false;
+var tPressed = false;
 
 function checkKeyDown(e) 
-{	
+{		
+//	alert(e.keyCode);
 	if(e.keyCode == 17 || e.keyCode == 25)//ctrl key pressed
 	{
 		ctrlPressed = true;
@@ -31,13 +33,25 @@ function checkKeyDown(e)
 	{
 		zPressed = true;
 	}
-	if(e.keyCode == 46)//del key pressed
+	if(ctrlPressed == true && e.keyCode == 46)//del key pressed
 	{
 		hideSelected();
 	}
-	if(e.keyCode == 45)//insert key pressed
+	if(ctrlPressed == true && e.keyCode == 45)//insert key pressed
 	{
 		resetSelected();
+	}
+	if(ctrlPressed == true &&  e.keyCode == 36)//ctrl key and home key pressed at the same time
+	{
+		if(tPressed == true){
+			tPressed = false;
+			document.getElementById('dataTable').style.display = 'none';
+			document.getElementById('tableScrollableContainer').style.display = 'none';			
+		}else{
+			tPressed = true;
+			document.getElementById('dataTable').style.display = 'block';
+			document.getElementById('tableScrollableContainer').style.display = 'block';		
+		}			
 	}
 	if(ctrlPressed == true && zPressed == true)//ctrl key and z key pressed at the same time
 	{

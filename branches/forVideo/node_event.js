@@ -10,7 +10,7 @@ var gPressed = false;
 var tmpShift = false;
 
 function checkKeyDown(e) 
-{
+{	
 	if(e.keyCode == 17 || e.keyCode == 25)//ctrl key pressed
 	{
 		ctrlPressed = true;
@@ -30,6 +30,14 @@ function checkKeyDown(e)
 	if(e.keyCode == 90)//z key pressed
 	{
 		zPressed = true;
+	}
+	if(e.keyCode == 46)//del key pressed
+	{
+		hideSelected();
+	}
+	if(e.keyCode == 45)//insert key pressed
+	{
+		resetSelected();
 	}
 	if(ctrlPressed == true && zPressed == true)//ctrl key and z key pressed at the same time
 	{

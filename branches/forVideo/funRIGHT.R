@@ -131,10 +131,10 @@ RIGHT <- function(..., fun = {},
   } # for
   
   # Set some global variables:
-  index <- length(dataObj$children)
-  
-  dataObj$children[[index + 1]] <- xmlTextNode("var plotWidth=500;")
-  dataObj$children[[index + 2]] <- xmlTextNode("var plotHeight=500;")
+#   index <- length(dataObj$children)
+#   
+#   dataObj$children[[index + 1]] <- xmlTextNode("var plotWidth=500;")
+#   dataObj$children[[index + 2]] <- xmlTextNode("var plotHeight=500;")
   
   ## ---
   ## Evaluate the user defined script:
@@ -149,6 +149,37 @@ RIGHT <- function(..., fun = {},
   ## Create HTML file from bottom up:
   ## ---
   
+  # Create search:
+  searchObj <- xmlNode("form", attrs = c(id = "searchForm1"),
+                       xmlNode("input", attrs = c(type = "text",
+                                                  id = "searchBox",
+                                                  name = "searchId",
+                                                  placeholder = "Please input boolean statement...",
+                                                  onkeydown = "if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"),
+                               xmlTextNode("")),
+                       xmlNode("a", attrs = c(id = "searchBtn",
+                                              href = "#",
+                                              class = "myButton",
+                                              onClick = "booleanSearch(searchForm1); printAns(); return false;"),
+                               xmlTextNode("Search")),
+                       xmlNode("a", attrs = c(id = "clearBtn",
+                                              href = "#",
+                                              class = "myButton",
+                                              onClick = "clearSearchBox(); return false;"),
+                               xmlTextNode("Clear")))
+  
+  searchObj <- xmlNode("div", attrs = c(id = "head"),
+                       xmlNode("div", attrs = c(class = "wrap"), 
+                               xmlNode("script", attrs = c(src = "search.js"), xmlTextNode("")),
+                               searchObj))
+  
+  # Create footer:
+  footerObj <- xmlNode("div", attrs = c(id = "footer"),
+                       xmlNode("div", attrs = c(class = "wrap2"),
+                               xmlNode("p", xmlTextNode(I('Created by <a herf="#">RIGHT</a>'))),
+                               xmlNode("p", xmlTextNode(I('Copyright &copy; 2013 <a herf="#">RIGHT team</a>')))))
+  
+  # Load libraries:
   libArray <- c("kinetic-v4.3.1.js",
                 "structure.js",
                 "common.js",
@@ -166,9 +197,12 @@ RIGHT <- function(..., fun = {},
   } # for
   
   index <- length(bodyObj$children)
-  bodyObj$children[[index + 1]] <- get("contentObj", RIGHT.env)
-  bodyObj$children[[index + 2]] <- dataObj
-  bodyObj$children[[index + 3]] <- get("scriptObj", RIGHT.env)
+  bodyObj$children[[index + 1]] <- dataObj
+  bodyObj$children[[index + 2]] <- searchObj
+  bodyObj$children[[index + 3]] <- get("contentObj", RIGHT.env)
+  bodyObj$children[[index + 4]] <- get("scriptObj", RIGHT.env)
+  bodyObj$children[[index + 5]] <- xmlNode("script", attrs = c(src = "button_event.js"), xmlTextNode(""))
+  bodyObj$children[[index + 6]] <- footerObj
   
   headObj <- xmlNode("head", 
                      xmlNode("meta", attrs = c(charset = "UTF-8")),

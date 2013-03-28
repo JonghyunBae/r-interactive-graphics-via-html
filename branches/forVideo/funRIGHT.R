@@ -166,7 +166,17 @@ RIGHT <- function(..., fun = {},
                                               href = "#",
                                               class = "myButton",
                                               onClick = "clearSearchBox(); return false;"),
-                               xmlTextNode("Clear")))
+                               xmlTextNode("Clear")),
+                       xmlNode("a", attrs = c(id = "showTable",
+                                              href = "#",
+                                              class = "myButton",
+                                              onClick = "return false;"),
+                               xmlTextNode("Show Table")),
+                       xmlNode("a", attrs = c(id = "hideTable",
+                                              href = "#",
+                                              class = "myButton",
+                                              onClick = "return false;"),
+                               xmlTextNode("Hide Table")))
   
   searchObj <- xmlNode("div", attrs = c(id = "head"),
                        xmlNode("div", attrs = c(class = "wrap"), 
@@ -202,7 +212,8 @@ RIGHT <- function(..., fun = {},
   bodyObj$children[[index + 3]] <- get("contentObj", RIGHT.env)
   bodyObj$children[[index + 4]] <- get("scriptObj", RIGHT.env)
   bodyObj$children[[index + 5]] <- xmlNode("script", attrs = c(src = "button_event.js"), xmlTextNode(""))
-  bodyObj$children[[index + 6]] <- footerObj
+  bodyObj$children[[index + 6]] <- xmlNode("script", attrs = c(src = "table.js"), xmlTextNode(""))
+  bodyObj$children[[index + 7]] <- footerObj
   
   headObj <- xmlNode("head", 
                      xmlNode("meta", attrs = c(charset = "UTF-8")),

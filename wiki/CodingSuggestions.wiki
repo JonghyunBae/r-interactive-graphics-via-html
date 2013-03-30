@@ -1,0 +1,14 @@
+Here are a few coding suggestions. Please delete the entries that are already addressed.
+
+= High Priority =
+
+ * Please place the latest code under trunk, including the HTML files corresponding to the two prototypes we are trying to create. 
+  * Delete any branches that are no longer used. It is getting very difficult to identify what is the latest implementation. 
+  * Merge code under forVideo and beta_testV0.0 if necessary.
+
+= Stylistic Comments =
+
+
+= Detailed Comments =
+
+= structure.js =

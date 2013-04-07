@@ -1,10 +1,12 @@
 Here are a few coding suggestions. Please delete the entries that are already addressed.
 
 = High Priority =
-
- * Please place the latest code under trunk, including the HTML files corresponding to the two prototypes we are trying to create. 
-  * Delete any branches that are no longer used. It is getting very difficult to identify what is the latest implementation. 
-  * Merge code under forVideo and beta_testV0.0 if necessary.
+ * Please clean up the repository:
+  * Please do not create directories under 'trunk' to keep track of release versions; we should do this with tagging. As a first step, let's tag the version used to create the demo video using the code under trunk.
+  * Reflect all the proven changes under 'ch_test' and 'box_text' to trunk to have the latest code. 
+  * Please do not create a branch unless you are trying something very different or uncertain. Instead, apply the changes directly to 'trunk'.
+  * Never check in a broken code into 'trunk'.
+ * Let's include copyright statements into the code.
 
 = Stylistic Comments =
 

@@ -264,6 +264,8 @@ c1 {
         font-weight:bold;
         padding:6px 11px;        
         text-shadow:0px 1px 0px #7a8eb9;
+        background: url('../img/c1bullet.png') no-repeat left;
+        padding-left: 30px;
 }	
 c2 {
 	display:inline-block;

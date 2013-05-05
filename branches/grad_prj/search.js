@@ -1,10 +1,34 @@
+/**
+ * SearchJS JavaScript Library
+ * 
+ * Copyright 2013, The RIGHT team
+ * Licensed under the MIT or GPL Version 2 licenses.
+ *
+ * Copyright (C) 2013 by The RIGHT team
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 	var ans='';
 	var ansShow='';
 	// variable buttons update
-
-	document.write("<p>Use the variables below only, you can click one to add into input box</p>");
-	document.write("<p>");
+	document.write("<p>");	  
 	for(var i=0; i<labelArr.length; i++)
 	{
 		document.write("<a id=\"labelArr[");
@@ -15,15 +39,13 @@
 		document.write(labelArr[i]);
 		document.write("</a>");	  
 	}			
-	document.write("</p>");
-
-	document.write("<p>");
+	document.write("</p>");	  
 	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
-	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a><br>");
-	document.write("<label> [ans] : </label>");
-	document.write("<label id=\"label1\">undefined</label>");
-	document.write("</p>");
-
+	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a>");
+	document.write("<br><label  style = \" font-family:Trebuchet MS;font-weight:bold; color : #516ca3;\"> [ans] : </label>");
+	document.write("<label  style = \" font-family:Trebuchet MS;font-weight:bold; color : #516ca3;\" id=\"label1\">undefined</label>");
+	document.write("");
+	
 	function printAns(){
 		var tmpStr = '';	
 		tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.

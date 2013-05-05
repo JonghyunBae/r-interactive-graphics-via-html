@@ -104,11 +104,41 @@ a:hover {color:#FFF; text-decoration: underline;}
 	clear: none;
 	width: 300px;
 	margin: 5px 30px 30px 0px;
-	color: #FFF;	
 	top: 100px;
       background: #93b21a url('../img/main-top.jpg') repeat-x;
       }
-
+  #main-box a{
+	color:#fff; 
+    text-decoration: none;
+  }
+#main-box a:hover {
+	color:#516ca3; 
+    text-decoration: underline;
+  }
+  
+#main-box-index {
+ 	word-break:break-all;
+      color: #fff;
+      font-size: 20px;
+	float: left;
+	clear: none;
+	width: 300px;
+	margin: 5px 30px 30px 0px;
+	top: 100px;
+      background: #93b21a url('../img/main-top.jpg') repeat-x;
+      }
+  #main-box-index a{
+	color:#fff; 
+    text-decoration: none;
+  }
+#main-box-index a:hover {
+	color:#fff; 
+    text-decoration: underline;
+  }  
+  
+  
+  
+  
 m1 {
 	display:inline-block;
         color:#ffffff;
@@ -116,11 +146,19 @@ m1 {
         font-size:25px;
         font-weight:bold;
         padding:6px 11px;
-        text-decoration:underline;
-        
+        text-decoration:underline;        
         text-shadow:0px 1px 0px #7a8eb9;
         
         
+}
+m2  {
+		display:inline-block;
+        color:#ffffff;
+        font-family:Trebuchet MS;
+        font-size:20px;
+        font-weight:bold;
+        padding:6px 11px;  
+        text-shadow:0px 1px 0px #7a8eb9;             
 }
 
 
@@ -159,6 +197,7 @@ m1 {
       width: 300px;
       }
       
+      
       #dont-delete-this{
       margin: 0 0 0 323px;
       text-align: right;
@@ -181,14 +220,18 @@ m1 {
 			width: 500px;
       }    
       
-      
+
+#content-box a:hover {
+	color:#516ca3; 
+    text-decoration: underline;
+  }
+  
       #content {
       padding: 10px 12px;
+      	margin: 0 0 0 0;
       }
-      
-#content {
-	margin: 0 0 0 0;
-	}
+
+
 	
 #content > div {
 	margin: 5px 5px 5px 0;
@@ -211,7 +254,15 @@ c2 {
 	display:inline-block;
         color:black;
         font-family:Trebuchet MS;
-        font-size:15px;
+        font-size:18px;
+        padding:6px 11px;        
+        text-shadow:0px 1px 0px #7a8eb9;    
+}
+c3 {
+	display:inline-block;
+        color:black;
+        font-family:Trebuchet MS;
+        font-size:14px;
         padding:6px 11px;        
         text-shadow:0px 1px 0px #7a8eb9;    
 }	

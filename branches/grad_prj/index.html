@@ -1,106 +1,74 @@
-<!-- **
- * index.html
- * 
- * Copyright 2013, The RIGHT team
- * Licensed under the MIT or GPL Version 2 licenses.
- *
- * Copyright (C) 2013 by The RIGHT team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
- -->
-<!DOCTYPE HTML>
-<html>    
-    <head>    
-        <meta charset="UTF-8">
-        <title>RIGHT, R Interactive Graphics via HTml</title>      
-        <link  rel="stylesheet" href="css/right.css">
-    </head>
-	<body>
-		<script src="kinetic-v4.3.1.js"></script>
-        <script src="structure.js"></script>
-        <script src="common.js"></script>  
-        <script src="scatter.js"></script>
-        <script src="hist.js"></script>
-        <script src="node_event.js"></script>
-		<script>createMainStructure("dataset/diamonds-from-R_1K.csv");</script> 
-    	<div id="layout">
-    	
-    		 <div id="header">
-    			<h1 id="logo"><a href="home.html" title="Home" ><span>The</span> RIGHT</a></h1>     		
-     			<div id="navigation">
-			        <ul>
-			          <li id="first"><a href="home.html" title="Home">Home</a></li>
-			          <li><a href="index.html" title="Start">Start</a></li>
-			          <li><a href="pages/tutorial/tutorial.html" title="Tutorial">Tutorial</a></li>
-			          <li><a href="pages/contact/contact.html" title="Contact">Contact</a></li>
-			        </ul>
-		        </div>  
-     		 </div>
-     		 
-         	 <div id="main-box-index">     
-        		<div id="quote">    
-        			<m1>Search Box</m1>
-        			<script src="search.js"></script>
-        				
-						<form id="searchForm1">                                
-							<input type="text" id ="searchBox" name = "searchId"  placeholder="Please input boolean statement..."  onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"></input>
-                            <a id="searchBtn" href="#" class="myButton" onClick ="booleanSearch(searchForm1); printAns(); return false;">Search</a>
-							<a id="clearBtn" href="#" class="myButton"  onClick ="clearSearchBox(); return false;">Clear</a><br>
-							     
-							<br><m1>Table Button</m1><br>           
-							<p>
-								<a id="showTable" href="#" class="myButton" onClick =" return false;">Show Table</a>    
-								<a id="hideTable" href="#" class="myButton" onClick =" return false;">Hide Table</a>
-							</p>
-						</form>
-				</div>
-			</div>
-			
-	        <div id="main">
-	        	<div id="content">
-					<div id="scatterContainer1" oncontextmenu="return false;"></div>
-                    <div id="histContainer2" oncontextmenu="return false;"></div>
-                </div>       
-                <script>                
-                        var scatter01 = new Scatter(mainArr, {  x:'carat',y:'price', color:'color',width:300, height:300, legend:'right'});
-                        scatter01.draw(1);
-                        eventTrigger(scatter01);                
-                        var hist02 = new Hist(mainArr, { bin: 2 , x:'cut', width:300, height:300 });
-                        hist02.draw(2);
-                        eventTrigger(hist02);       
-/*                        var scatter03 = new Scatter(mainArr, {  x:'carat',y:'price', color:'color',width:300, height:300, legend:'right'});
-                        scatter03.draw(3);
-                        eventTrigger(scatter03);                
-                        var hist04 = new Hist(mainArr, { bin: 2 , x:'cut', width:300, height:300 });
-                        hist04.draw(4);
-                        eventTrigger(hist04);       */
-                </script>                   
-                <script src="table.js"></script>
-   		     </div>
-   		     
-   		     <div id="footer">
-        		<p id="copyright">&copy; 2013 - <a href="pages/contact/contact.html">The RIGHT team</a></p>        
-		   	    <p id="dont-delete-this">E-mail : <a href="mailto:teamrightjs@gmail.com">team.right.js@gmail.com</a></p>
-		     </div> 
-      		 
-        </div>
-        <script src="button_event.js"></script>    
-  </body>
+<!DOCTYPE HTML> 
+<html>
+ <head>
+  <meta charset="UTF-8"/>
+  <title>RIGHT: R Interactive Graphics via HTml</title>
+  <link rel="stylesheet" href="css/right.css"/>
+ </head>
+ <body>
+  <script src="kinetic-v4.3.1.js"></script>
+  <script src="structure.js"></script>
+  <script src="common.js"></script>
+  <script src="scatter.js"></script>
+  <script src="hist.js"></script>
+  <script src="node_event.js"></script>
+  <script>createMainStructure('_sub.diamonds.csv');</script>
+  <div id="layout">
+   <div id="header">
+    <h1 id="logo">
+     <a id="home.html" title="Home"><span>The</span> RIGHT</a>
+    </h1>
+    <div id="navigation">
+     <ul>
+      <li id="first">
+       <a href="home.html" title="Home">Home</a>
+      </li>
+      <li>
+       <a href="index.html" title="Start">Start</a>
+      </li>
+      <li>
+       <a href="pages/tutorial/tutorial.html" title="Tutorial">Tutorial</a>
+      </li>
+      <li>
+       <a href="pages/contact/contact.html" title="Contact">Contact</a>
+      </li>
+     </ul>
+    </div>
+   </div>
+   <div id="main-box-index">
+    <div id="quote">
+     <m1>Search Box</m1>
+     <script src="search.js"></script>
+     <form id="searchForm1">
+      <input type="text" id="searchBox" name="searchId" placeholder="Please input boolean statement..." onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"></input>
+      <a id="searchBtn" href="#" class="myButton" onClick="booleanSearch(searchForm1); printAns(); return false;">Search</a>
+      <a id="clearBtn" href="#" class="myButton" onClick="clearSearchBox(); return false;">Clear</a>
+      <br><br><m1>Table Button</m1><br>
+      <p>
+       <a id="showTable" href="#" class="myButton" onClick="return false;">Show Table</a>
+       <a id="hideTable" href="#" class="myButton" onClick="return false;">Hide Table</a>
+      </p>
+     </form>
+    </div>
+   </div>
+   <div id="content">
+    <div id="scatterContainer1" oncontextmenu="return false;"></div>
+    <div id="histContainer2" oncontextmenu="return false;"></div>
+   </div>
+   <script>
+    var scatter1 = new Scatter(mainArr,{x: 'carat', y: 'price', color: 'color', legend: 'right', width: 300, height: 300});
+    scatter1.draw(1);
+    eventTrigger(scatter1);
+    var hist2 = new Hist(mainArr,{bin: 2, x: 'cut', width: 300, height: 300});
+    hist2.draw(2);
+    eventTrigger(hist2);
+   </script>
+   <script src="button_event.js"></script>
+   <script src="table.js"></script>
+   <div id="footer">
+    <p id="copyright">&copy; 2013 - <a href="pages/contact/contact.html">The RIGHT team</a></p>
+    <p id="dont-delete-this">E-mail : <a href="mailto:teamrightjs@gmail.com">team.right.js@gmail.com</a></p>
+   </div>
+  </div>
+ </body>
 </html>

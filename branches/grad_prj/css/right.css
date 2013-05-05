@@ -210,10 +210,7 @@ m2  {
       
      
           
-          #main {
-          margin: 0 0 0 323px;
-      padding: 0 20px 0 37px
-     }
+       
       
          #content-box {
 		 	word-break:break-all;
@@ -227,6 +224,7 @@ m2  {
   }
   
       #content {
+      margin: 0 0 0 323px;
       padding: 10px 12px;
       	margin: 0 0 0 0;
       }

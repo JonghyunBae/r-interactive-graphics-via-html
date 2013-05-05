@@ -1,5 +1,5 @@
 ## Script to test funRight.R:
-setwd("/home/paplp15/r-interactive-graphics-via-html/branches/grad_prj/")
+setwd("/home/chungha-sung/r-interactive/branches/grad_prj/")
 
 source("funRIGHT.R")
 

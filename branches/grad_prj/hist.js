@@ -257,7 +257,7 @@ var Hist = {};
                     y: this.plotYMargin-this.plotLength,
                     width: this.width+2*this.plotLength,
                     height: this.height+2*this.plotLength,
-                    stroke: '#eeeeee',
+                    stroke: '#fff',
                     strokeWidth: 2
                 });                
                 this.plotLayer.add(this.plotRect);    

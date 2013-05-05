@@ -663,7 +663,7 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 				fontFamily: 'Calibri',
 				fontSize: 13,
 				padding: 5,
-				fill: (i==0 || i==plotArr.length-1 )?'#eeeeee':'black',
+				fill: (i==0 || i==plotArr.length-1 )?'#fff':'black',
 				align:'center'
 			});						
 		}		    	
@@ -706,7 +706,7 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 		width: maxLengthLegendText + 30,
 		height: legendText[i-1].getY()-legendY + 30, //i is set by (mainValueArr.length) or  (plotArr.length)
 		stroke: 'black',
-		fill: '#eeeeee'
+		fill: '#fff'
 	});			
 	legendMain.setWidth(legendRect.getWidth());
 	var group = new Kinetic.Group({

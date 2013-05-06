@@ -256,6 +256,8 @@ m2  {
 	background:  #FFF; 
 }
 
+
+
 c1 {
 	display:inline-block;
         color:#93b21a;
@@ -273,7 +275,7 @@ c2 {
         font-family:Trebuchet MS;
         font-size:18px;
         padding:6px 11px;        
-        text-shadow:0px 1px 0px #7a8eb9;    
+        text-shadow:0px 1px 0px #7a8eb9;            
 }
 c3 {
 	display:inline-block;
@@ -282,6 +284,18 @@ c3 {
         font-size:14px;
         padding:6px 11px;        
         text-shadow:0px 1px 0px #7a8eb9;    
+}
+
+c4 {
+display:inline-block;
+        color:black;
+        font-family:Trebuchet MS;
+        font-size:18px;
+        padding:6px 11px;        
+        text-shadow:0px 1px 0px #7a8eb9;      
+         background: url('../img/c2bullet.png') no-repeat left;
+        padding-left: 20px;
+        
 }	
 p { margin:10px 0 15px 0; line-height: 24px; font-size: 95%}
 

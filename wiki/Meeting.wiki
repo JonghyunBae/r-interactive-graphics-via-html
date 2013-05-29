@@ -1,3 +1,21 @@
+
+  # KineticJS and browser compatibility issue: 
+   * Should we stick to KineticJS?
+   * Should we adapt something else, e.g. jQuary for its broad support?
+   * Should we even write our own code?
+  # Should we try to collaborate with RStudio/Shiny?
+   * This will help us reduce some uncertainty in server offloading and may make our work more useful/popular.  
+   * Look into Shiny documentation for initial assessment.
+    * http://www.rstudio.com/shiny/
+    * http://cran.r-project.org/web/packages/shiny/shiny.pdf
+   * Will this incur license issues (Shiny is GPL-3)?
+  # How should the R API look like? 
+   * Should it be a variant of base graphics (less risk)? 
+   * Should it be similar to ggplot2 (more risk)? We may be able to use ggplot_build() and reduce risk while adopting the ggplot2 syntax.
+  # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
+
+----
+
 Date : 28/01/2013
 
 participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.

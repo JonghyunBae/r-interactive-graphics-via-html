@@ -16,7 +16,9 @@
 
 * Research *
  # Shiny uses "Fast bidirectional communication between the web browser and R using the websockets package".
-  * Websockets package([http://cran.r-project.org/web/packages/websockets/index.html]) and it is under LGPL-3.
+  * Websockets package is under LGPL-3 license.
+   * http://illposed.net/websockets.html
+   * http://cran.r-project.org/web/packages/websockets/vignettes/websockets.pdf
   * Websockets package is possible to be adjusted in our code.
   * Reactive issue in shiny is the difference with our concept.
  

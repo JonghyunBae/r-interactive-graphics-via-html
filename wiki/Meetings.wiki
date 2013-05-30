@@ -11,7 +11,7 @@
   # How should the R API look like? 
    * Should it be a variant of base graphics (less risk)? 
    * Should it be similar to ggplot2 (more risk)? We may be able to use ggplot_build() and reduce risk while adopting the ggplot2 syntax.
-  # Deep dive into event handling interface.
+  # Deep dive into event handling interface. See EventHandling for more details.
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
 
 ----

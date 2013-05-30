@@ -4,12 +4,12 @@
 
 #Sequence
  * Scatter
-  * allGraphUpdate(common.js) -> call isSelect[id][graph_number](X)
+  * allGraphUpdate(common.js) -> call isSelect[**id][**graph_number](X)
  * Histogram
-  * allGraphUpdate(common.js) -> getHasArray -> call isSelect[array_number][graph_number](X)
+  * allGraphUpdate(common.js) -> getHasArray -> call isSelect[**array_number][**graph_number](X)
  * Parameter X is for selecting number (0 - select, 1 - unselect, 2 - hide, 3 - reset).
  * “HasArray” has data numbers which are in each histogram node.
 
 #Structure of isSelectArr
 
-<img src="C:\Users\JIN\Desktop\structure.png">
+<img src="C:/Users/JIN/Desktop/structure.png" alt="Smiley face" height="42" width="42">

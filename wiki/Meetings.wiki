@@ -14,6 +14,11 @@
   # Deep dive into event handling interface. See EventHandling for more details.
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
 
+* Research *
+ # Shiny uses "Fast bidirectional communication between the web browser and R using the websockets package([http://cran.r-project.org/web/packages/websockets/index.html]) and it is under LGPL-3."
+  * Websockets package is possible to be adjusted in our code.
+  * Reactive issue in shiny is the difference with our concept.
+ 
 ----
 
 Date : 28/01/2013

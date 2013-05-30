@@ -36,13 +36,13 @@ function getCoords(e) {
 }
 //Get X, Y coords, and displays Mouse coordinates
 function getXYpos(elm) {
-	X = elm.offsetLeft;        // set x to elm’s offsetLeft
-	Y = elm.offsetTop;         // set y to elm’s offsetTop
+	X = elm.offsetLeft;        // set x to elm�셲 offsetLeft
+	Y = elm.offsetTop;         // set y to elm�셲 offsetTop
 	
 	elm = elm.offsetParent;    // set elm to its offsetParent
 	
 	 //use while loop to check if elm is null
-	 // if not then add current elm’s offsetLeft to x
+	 // if not then add current elm�셲 offsetLeft to x
 	 //offsetTop to y and set elm to its offsetParent
 	while(elm != null) {
 		X = parseInt(X) + parseInt(elm.offsetLeft);
@@ -87,9 +87,9 @@ function hideSelected()
 	refresh();
 }
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate(id , select, name) // update 되야하는 node id와 select 여부, 주체가 누군지를 받는다. 
+function allGraphUpdate(id , select, name) // update �섏빞�섎뒗 node id��select �щ�, 二쇱껜媛��꾧뎔吏�� 諛쏅뒗�� 
 {
-	//가장 먼저 주체 여부를 확인한다. 
+	//媛�옣 癒쇱� 二쇱껜 �щ�瑜��뺤씤�쒕떎. 
 	if(name._type == "scatter")
 	{
 		if(isSelected[id][0] != 2)
@@ -100,7 +100,7 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 			}
 			isSelected[id][0] = select;
 		}		
-	}else if(name._type == "hist"){	//histogram인 경우 id값이 node의 번호이므로 hasArr를 구해야 한다. 
+	}else if(name._type == "hist"){	//histogram��寃쎌슦 id媛믪씠 node��踰덊샇�대�濡�hasArr瑜�援ы빐���쒕떎. 
 		var tmp = name.node[id].getHasArr();
 	//	alert(tmp);
 		for(var j = 0 ; j < tmp.length ; j ++)
@@ -121,8 +121,6 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 
 function refresh()
 {
-//	alert("ddd");
-//	alert(objArr.length);
 	for(var i = 0 ; i < objArr.length ; i ++)
 	{
 		var shapes = objArr[i].stage.get('.' + 0);
@@ -138,20 +136,15 @@ function allSelect()
 {
 	for(var i = 0 ; i < isSelected.length ; i ++)
 	{
-	//	document.write("isselectlength11  " + isSelected.length + "<br>");
 		if(isSelected[i][0] == 0)
 		{
 			for(var j = 1 ; j < isSelected[i].length ; j++)
 			{
-	//			document.write("isselectlength22  " + isSelected[i].length + "<br>");
 				isSelected[i][j](1);
-			//	document.write(i + " , " + j + "<br>");
 			}
 			isSelected[i][0] = 1;
 		}		
 	}
-	//alert("ddd");
-
 }
 function allDeselect()
 {

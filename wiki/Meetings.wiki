@@ -19,8 +19,11 @@
   * Websockets package is under LGPL-3 license.
    * http://illposed.net/websockets.html
    * http://cran.r-project.org/web/packages/websockets/vignettes/websockets.pdf
-  * Websockets package is possible to be adjusted in our code.
+  * Websockets package is possible to be adjusted in our code(need more study).
   * Reactive issue in shiny is the difference with our concept.
+ # KineticJS
+  * There is a bug report slot for users  (https://github.com/ericdrowell/KineticJS/issues?page=1&state=open).
+  * Keep changing syntax.
  
 ----
 

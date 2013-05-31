@@ -15,3 +15,7 @@
 
 == 3. Structure of isSelectArr ==
 <img src="https://lh6.googleusercontent.com/-N0dH-3QIPO4/UaecmTMr5UI/AAAAAAAAABY/FAOZPYPZGv4/w1153-h865-no/structure.png" width=550 height=450>
+
+=== ※ Drawbacks ===
+
+ * Histogram nodes are called repeatedly when allSelect occurs or other histogram is selected.

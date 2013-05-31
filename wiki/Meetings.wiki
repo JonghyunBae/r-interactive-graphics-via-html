@@ -8,6 +8,7 @@
     * http://www.rstudio.com/shiny/
     * http://cran.r-project.org/web/packages/shiny/shiny.pdf
    * Will this incur license issues (Shiny is GPL-3)?
+   * Set the [ServersideScenario server-offload] protocol.
   # How should the R API look like? 
    * Should it be a variant of base graphics (less risk)? 
    * Should it be similar to ggplot2 (more risk)? We may be able to use ggplot_build() and reduce risk while adopting the ggplot2 syntax.

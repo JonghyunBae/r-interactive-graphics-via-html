@@ -1,0 +1,15 @@
+ # Using a web page
+  * Client: Uploading a dataset file by web page. 
+  * Server: Receive the dataset file and make a graph HTML file.
+  * Transfer: Dataset file, HTML file.
+  * Usefulness: Mobile devices, Platform which has not been installed R.
+ # Hosting account like shiny
+  * Client: Log in the server, and use R
+  * Server: provide a hosting account.
+  * Transfer: ??
+  * Usefulness: Mobile devices, Platform which has not been installed R.
+ # Using R API(R-side offload)
+  * Client: Using R API and send a dataset file or other file by using some protocols. Then, receive a calculated graph HTML file.
+  * Server: Receive the file and make a graph HTML file.
+  * Transfer: Dataset file or other file form. (should set protocols) And, make a graph HTML file.
+  * Usefulness: Low specification computer.

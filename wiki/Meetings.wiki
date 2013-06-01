@@ -1,6 +1,6 @@
   # KineticJS and browser compatibility issue: 
    * Should we stick to KineticJS?
-   * Should we adapt something else, e.g. jQuary for its broad support?
+   * Should we adapt something else, e.g. jQuery for its broad support?
    * Should we even write our own code?
   # Should we try to collaborate with RStudio/Shiny?
    * This will help us reduce some uncertainty in server offloading and may make our work more useful/popular.  

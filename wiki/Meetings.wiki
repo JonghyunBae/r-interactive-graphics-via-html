@@ -22,6 +22,7 @@
    * http://cran.r-project.org/web/packages/websockets/vignettes/websockets.pdf
   * Websockets package is possible to be adjusted in our code(need more study).
   * Reactive issue in shiny is the difference with our concept.
+ # Shiny Server is free and open source, though in the future we will offer a commercially licensed edition with additional features for larger organizations. So, it might be a limitation in the near future, if we just take it. Right now, Shiny provides free beta service.
  # KineticJS
   * There is a bug report slot for users  (https://github.com/ericdrowell/KineticJS/issues?page=1&state=open).
   * Keep changing syntax.

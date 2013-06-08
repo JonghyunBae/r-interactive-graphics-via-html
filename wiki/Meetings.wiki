@@ -15,7 +15,7 @@ participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
    * We decided stick to KineticJS during the GSoC since
     * Developing our own code or switching to jQuery during the summer can be too time consuming and risky.
     * KineticJS works with most browsers, including Opera and Safari, except Chrome. We may be able to find a way to make it work. Otherwise, we will just report the compatibility issue at the end of GSoC.
-   * We will try to structure the code in such a way that replacing the KineticJS with something more suitable can quite easily be done.*
+   * *We will try to structure the code in such a way that replacing the KineticJS with something more suitable can quite easily be done.*
   # Should we try to collaborate with RStudio/Shiny?
    * This will help us reduce some uncertainty in server offloading and may make our work more useful/popular.  
    * We may have to switch to GPL-3 to freely use Shiny's code. We agreed that such a switch is fine since the authors can release the code under multiple licenses.

@@ -1,6 +1,4 @@
-  # How should the R API look like? 
-   * Should it be a variant of base graphics (less risk)? 
-   * Should it be similar to ggplot2 (more risk)? We may be able to use ggplot_build() and reduce risk while adopting the ggplot2 syntax.
+
   # Deep dive into event handling interface. See EventHandling for more details.
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
 
@@ -8,21 +6,26 @@
 
 Date : 02JUN2013
 
-participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
+Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
   # Tae Joon will be interning at Samsung from the beginning of July to the end of August.
   # KineticJS and browser compatibility issue: 
    * We decided stick to KineticJS during the GSoC since
     * Developing our own code or switching to jQuery during the summer can be too time consuming and risky.
     * KineticJS works with most browsers, including Opera and Safari, except Chrome. We may be able to find a way to make it work. Otherwise, we will just report the compatibility issue at the end of GSoC.
-   * *We will try to structure the code in such a way that replacing the KineticJS with something more suitable can quite easily be done.*
+   * *We will try to structure the code in such a way that replacing the KineticJS with something more suitable can be done quite easily.*
   # Should we try to collaborate with RStudio/Shiny?
    * This will help us reduce some uncertainty in server offloading and may make our work more useful/popular.  
    * We may have to switch to GPL-3 to freely use Shiny's code. We agreed that such a switch is fine since the authors can release the code under multiple licenses.
-   * Junghoon will create an example using Shiny's server-side interactivity support. Chung Ha and Tae Joon will try to change the code by supporting outlier removal using client-side interactivity RIGHT supports.
-    * Look into the HTML code that ui.R generates.
+   * *Junghoon will create an example using Shiny's server-side interactivity support. Chung Ha and Tae Joon will try to change the code by supporting outlier removal using client-side interactivity RIGHT provides.*
+    * Look into the HTML code Shiny generates.
     * Also look into shiny.js to understand Shiny's communication protocol.
-   * Shiny seems to be using jQuery (see [http://rstudio.github.io/shiny/tutorial/#html-ui HTML UI]). It is not clear whether jQuery and compatible with KineticJS.
+   * Shiny seems to be using jQuery (see [http://rstudio.github.io/shiny/tutorial/#html-ui HTML UI]). It is not clear whether jQuery is compatible with KineticJS.
+  # How should the R API look like? 
+   * We decided to support base graphics-type syntax as a start.
+   * If it turns out that server offloading can be addressed without much difficulty, we will try to support ggplot2-type syntax using 'ggplot_build()' function.
+   * *Junghoon will send an example to Chung Ha and Tae Joon.*
+   * *Look into into Shiny's code to perform code generation more efficiently.*
 
 Research prior to meeting
  # Shiny uses "Fast bidirectional communication between the web browser and R using the websockets package".

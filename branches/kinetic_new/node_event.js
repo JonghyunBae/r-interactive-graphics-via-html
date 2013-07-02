@@ -443,6 +443,58 @@ function RectRangeSelect(Name, pre, aft)
 
 function hover(Name)
 {
+	Name.stage.on('mouseover mousemove dragmove', function(evt) {
+        var node = evt.targetNode;        
+        // update tooltip
+        if(isNaN(node.getName()) == false)
+		{
+        	document.body.style.cursor = "pointer";	        
+	        var mousePos = node.getStage().getMousePosition();
+	        Name.tooltip.setPosition(mousePos.x, mousePos.y - 5);
+	        Name.tooltip.getText().setText(node.getInfo());
+	        Name.tooltip.show();
+	        Name.tooltipLayer.draw();	        
+	        if(node.getSelected() == 0)
+	    	{
+		    	var shapes = Name.stage.get('.'+node.getName());
+		    	switch(Name._type)
+		    	{
+			    	case 'hist' : 
+		/*				shapes.apply('setAttrs', {
+			    		opacity: 1,
+			    		scale : {x:1.2, y:1}
+						});    	*/
+						break;
+					case 'scatter' : 
+		/*    			shapes.apply('setAttrs', {
+		            		opacity: 1,
+		            		scale : {x:1.5, y:1.5}
+		        			});    	*/
+		    			break;
+					case 'box' : 
+					//	alert(shapes.getInfo());
+					//	if(shapes.getRadius() != undefined){
+			/*				shapes.apply('setAttrs', {
+			            		opacity: 1,
+			            		scale : {x:1.2, y:1}
+			        			});    	*/
+					//	}
+						break;
+		        	default:
+		        		break;
+		    	}
+		/*    	shapes.transitionTo({    		
+		    	    rotation : 0,
+		    	    duration: 0.01
+		    	});  */
+	    	}
+		}
+      }); 
+	Name.stage.on('mouseout', function(evt) {
+    	  document.body.style.cursor = "default";
+    	  Name.tooltip.hide();
+    	  Name.tooltipLayer.draw();
+      });
 	
 }
 

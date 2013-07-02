@@ -306,15 +306,14 @@ var Scatter = {};
 				} 
 				this.stage.add(this.dataLayer);
 				 //////////////////////////////Tooltip Setting////////////////////////////////////////
-				var tooltipLayer = new Kinetic.Layer();
-			 
-			      var tooltip = new Kinetic.Label({
+				this.tooltipLayer = new Kinetic.Layer();			 
+			    this.tooltip = new Kinetic.Label({
 			        opacity: 0.75,
 			        visible: false,
 			        listening: false
 			      });
 			      
-			      tooltip.add(new Kinetic.Tag({
+			     this.tooltip.add(new Kinetic.Tag({
 			        fill: 'black',
 			        pointerDirection: 'down',
 			        pointerWidth: 10,
@@ -326,37 +325,17 @@ var Scatter = {};
 			        shadowOpacity: 0.2
 			      }));
 			      
-			      tooltip.add(new Kinetic.Text({
+			      this.tooltip.add(new Kinetic.Text({
 			        text: '',
 			        fontFamily: 'Calibri',
-			        fontSize: 18,
+			        fontSize: 15,
 			        padding: 5,
 			        fill: 'white'
 			      }));
 			      
-			      tooltipLayer.add(tooltip);
+			      this.tooltipLayer.add(this.tooltip);
 			      
-			      this.stage.add(tooltipLayer);
-
-			      this.stage.on('mouseover mousemove dragmove', function(evt) {
-			        var node = evt.targetNode;
-			        // update tooltip
-			        if(isNaN(node.getName()) == false)
-					{
-			        	document.body.style.cursor = "pointer";	        
-			        var mousePos = node.getStage().getMousePosition();
-			        tooltip.setPosition(mousePos.x, mousePos.y - 5);
-			        tooltip.getText().setText(node.getInfo());
-			        tooltip.show();
-			        tooltipLayer.draw();
-					}
-			      }); 
-
-			      this.stage.on('mouseout', function(evt) {
-			    	  document.body.style.cursor = "default";
-			        tooltip.hide();
-			        tooltipLayer.draw();
-			      });
+			      this.stage.add(this.tooltipLayer);
                 
                 ///////////////////////////////////////////////////////////////////////////////////
 				

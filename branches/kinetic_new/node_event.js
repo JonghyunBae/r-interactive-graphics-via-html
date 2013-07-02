@@ -84,8 +84,8 @@ function eventTrigger(Name)
 {
 	hover(Name);
 	select(Name);
-//	menu(Name);
-//	drag(Name);
+	menu(Name);
+	drag(Name);
 	
 }
 var menuOn = false;

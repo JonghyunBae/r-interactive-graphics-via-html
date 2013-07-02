@@ -201,7 +201,7 @@ var Hist = {};
 	    				this.yPlotArr[i][1] = (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
 	    			}
 	    		}	    
-	    		///////////////////////////////////////////////////////////////////////////
+	    		/////////////////////////////////// ////////////////////////////////////////
 	           
 	            this.yMax = max; // 占쎌꼶��freqTmp 揶쏆뮇�붷첎占쏙쭗�뺤뻣占쎈챷占�占쎌꼷占쏙옙占썸뤃�釉�占쏙옙占쎈뜆�앲첋占쎌쨮 占썬끉肉됵옙占썸뤃�釉놂옙占�	            this.yMin = 0;	          
 	            

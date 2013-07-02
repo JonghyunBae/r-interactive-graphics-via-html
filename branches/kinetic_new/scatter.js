@@ -511,6 +511,15 @@ function scatterUpdate(obj, id)
 						obj.node[id].setSelected(2);
 						obj.node[id].hide();
 					}else if(selectOn == 3){		//reset
+						var tween = new Kinetic.Tween({
+  			    	        node: obj.node[id], 
+  			    	        radius : obj.radius,
+							strokeWidth : 0.01,
+  			    	        duration: 0.01,
+  			    	        opacity: 0.7,
+  			    	        scaleX: 1,
+  			    	        scaleY: 1
+  			    	      }).play();
 						obj.node[id].setSelected(0);
 						obj.node[id].show();						
 					}

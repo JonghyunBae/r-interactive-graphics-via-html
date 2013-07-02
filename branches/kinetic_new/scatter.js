@@ -475,34 +475,39 @@ function scatterUpdate(obj, id)
 				{
 					if(selectOn == 0 && obj.node[id].getSelected() == 1)		//unselect
 					{	
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							radius : obj.radius,
+						var tween = new Kinetic.Tween({
+  			    	        node: obj.node[id], 
+  			    	        radius : obj.radius,
 							strokeWidth : 0.01,
-				    		opacity: 0.7,
-				    		scale : {x:1, y:1}
-						});
+  			    	        duration: 0.01,
+  			    	        opacity: 0.7,
+  			    	        scaleX: 1,
+  			    	        scaleY: 1
+  			    	      }).play();
 						obj.node[id].setSelected(0);
 					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){	//select
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							stroke : 'black',
+						var tween = new Kinetic.Tween({
+  			    	        node: obj.node[id], 
+  			    	        stroke : 'black',
+  			    	        radius : 2,
 							strokeWidth : 1,
-							radius : 2,
-							stroke: 1,
-				    		opacity: 1,
-				    		scale : {x:4, y:4}
-						});
+  			    	        duration: 0.01,
+  			    	        opacity: 1,
+  			    	        scaleX: 2,
+  			    	        scaleY: 2
+  			    	      }).play();
 						obj.node[id].setSelected(1);
 						obj.node[id].moveToTop();
 					}else if(selectOn == 2 && obj.node[id].getSelected() == 1){	//hide
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							radius : obj.radius,
+						var tween = new Kinetic.Tween({
+  			    	        node: obj.node[id], 
+  			    	        radius : obj.radius,
 							strokeWidth : 0.01,
-				    		opacity: 0.7,
-				    		scale : {x:1, y:1}
-						});
+  			    	        duration: 0.01,
+  			    	        opacity: 0.7,
+  			    	        scaleX: 1,
+  			    	        scaleY: 1
+  			    	      }).play();
 						obj.node[id].setSelected(2);
 						obj.node[id].hide();
 					}else if(selectOn == 3){		//reset

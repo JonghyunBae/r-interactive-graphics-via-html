@@ -83,7 +83,7 @@ function checkKeyUp(e)
 function eventTrigger(Name)
 {
 	hover(Name);
-//	select(Name);
+	select(Name);
 //	menu(Name);
 //	drag(Name);
 	
@@ -448,6 +448,7 @@ function hover(Name)
         // update tooltip
         if(isNaN(node.getName()) == false)
 		{
+        	node.moveToTop();
         	document.body.style.cursor = "pointer";	        
 	        var mousePos = node.getStage().getMousePosition();
 	        Name.tooltip.setPosition(mousePos.x, mousePos.y - 5);
@@ -456,63 +457,76 @@ function hover(Name)
 	        Name.tooltipLayer.draw();	        
 	        if(node.getSelected() == 0)
 	    	{
-		    	var shapes = Name.stage.get('.'+node.getName());
-		    //	alert('tween');
-		    	 var tween = new Kinetic.Tween({
-		    	        node: node, 
-		    	        duration: 0.01,
-		    	       
-		    	       // rotation: Math.PI * 10,
-		    	        opacity: 1,
-		    	        strokeWidth: 6,
-		    	        scaleX: 1.3,
-		    	        scaleY: 1.3,
-		    	        easing: Kinetic.Easings.Linear
-		    	      //  fillR: 0,
-		    	     //   fillG: 0,
-		    	     //   fillB: 255
-		    	      }).play();
-		    //	 alert('tween1');
-		   // 	 tween.play();
-		    //	 alert('tween2');
+		    	//var shapes = Name.stage.get('.'+node.getName());
+		    	 
 		    	switch(Name._type)
 		    	{
 			    	case 'hist' : 
-		/*				shapes.apply('setAttrs', {
-			    		opacity: 1,
-			    		scale : {x:1.2, y:1}
-						});    	*/
-						break;
+						var tween = new Kinetic.Tween({
+			    	        node: node, 
+			    	        duration: 0.01,
+			    	        opacity: 1,
+			    	        scaleX: 1.2,
+			    	        scaleY: 1
+			    	      }).play();
+		    			break;
 					case 'scatter' : 
-		/*    			shapes.apply('setAttrs', {
-		            		opacity: 1,
-		            		scale : {x:1.5, y:1.5}
-		        			});    	*/
-						tween.play();
+						var tween = new Kinetic.Tween({
+			    	        node: node, 
+			    	        duration: 0.01,
+			    	        opacity: 1,
+			    	        scaleX: 1.5,
+			    	        scaleY: 1.5
+			    	      }).play();
+
 		    			break;
 					case 'box' : 
-					//	alert(shapes.getInfo());
-					//	if(shapes.getRadius() != undefined){
-			/*				shapes.apply('setAttrs', {
-			            		opacity: 1,
-			            		scale : {x:1.2, y:1}
-			        			});    	*/
-					//	}
 						break;
 		        	default:
 		        		break;
 		    	}
-		/*    	shapes.transitionTo({    		
-		    	    rotation : 0,
-		    	    duration: 0.01
-		    	});  */
 	    	}
 		}
       }); 
 	Name.stage.on('mouseout', function(evt) {
+		var node = evt.targetNode;
     	  document.body.style.cursor = "default";
     	  Name.tooltip.hide();
     	  Name.tooltipLayer.draw();
+    	  if(isNaN(node.getName()) == false)
+  		{
+            if(node.getSelected() == 0)
+  	    	{
+  		    //	var shapes = Name.stage.get('.'+node.getName());
+  		    	 
+  		    	switch(Name._type)
+  		    	{
+  			    	case 'hist' : 
+  						var tween = new Kinetic.Tween({
+  			    	        node: node, 
+  			    	        duration: 0.01,
+  			    	        opacity: 1,
+  			    	        scaleX: 1,
+  			    	        scaleY: 1
+  			    	      }).play();
+  		    			break;
+  					case 'scatter' : 
+  						var tween = new Kinetic.Tween({
+  			    	        node: node, 
+  			    	        duration: 0.01,
+  			    	        opacity: 0.7,
+  			    	        scaleX: 1,
+  			    	        scaleY: 1
+  			    	      }).play();
+  		    			break;
+  					case 'box' : 
+  						break;
+  		        	default:
+  		        		break;
+  		    	}
+  	    	}
+  		}
+    	  
       });
 	
 }

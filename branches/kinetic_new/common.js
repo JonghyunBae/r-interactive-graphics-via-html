@@ -36,13 +36,13 @@ function getCoords(e) {
 }
 //Get X, Y coords, and displays Mouse coordinates
 function getXYpos(elm) {
-	X = elm.offsetLeft;        // set x to elm�셲 offsetLeft
-	Y = elm.offsetTop;         // set y to elm�셲 offsetTop
+	X = elm.offsetLeft;        // set x to elm占쎌뀼 offsetLeft
+	Y = elm.offsetTop;         // set y to elm占쎌뀼 offsetTop
 	
 	elm = elm.offsetParent;    // set elm to its offsetParent
 	
 	 //use while loop to check if elm is null
-	 // if not then add current elm�셲 offsetLeft to x
+	 // if not then add current elm占쎌뀼 offsetLeft to x
 	 //offsetTop to y and set elm to its offsetParent
 	while(elm != null) {
 		X = parseInt(X) + parseInt(elm.offsetLeft);
@@ -87,9 +87,9 @@ function hideSelected()
 	refresh();
 }
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate(id , select, name) // update �섏빞�섎뒗 node id��select �щ�, 二쇱껜媛��꾧뎔吏�� 諛쏅뒗�� 
+function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉 node id占쏙옙select 占싼됵옙, 雅뚯눘猿쒎첎占쏙옙袁㏓럵筌욑옙占�獄쏆룆�쀯옙占�
 {
-	//媛�옣 癒쇱� 二쇱껜 �щ�瑜��뺤씤�쒕떎. 
+	//揶쏉옙���믪눘占�雅뚯눘猿�占싼됵옙�쒙옙占쎈벡�ㅿ옙�뺣뼄. 
 	if(name._type == "scatter")
 	{
 		if(isSelected[id][0] != 2)
@@ -100,7 +100,7 @@ function allGraphUpdate(id , select, name) // update �섏빞�섎뒗 node id�
 			}
 			isSelected[id][0] = select;
 		}		
-	}else if(name._type == "hist"){	//histogram��寃쎌슦 id媛믪씠 node��踰덊샇�대�濡�hasArr瑜�援ы빐���쒕떎. 
+	}else if(name._type == "hist"){	//histogram占쏙옙野껋럩��id揶쏅���node占쏙옙甕곕뜇�뉛옙��옙嚥∽옙hasArr�쒙옙�닌뗫퉸占쏙옙占쎌뮆�� 
 		var tmp = name.node[id].getHasArr();
 	//	alert(tmp);
 		for(var j = 0 ; j < tmp.length ; j ++)
@@ -121,7 +121,7 @@ function allGraphUpdate(id , select, name) // update �섏빞�섎뒗 node id�
 
 function refresh()
 {
-	for(var i = 0 ; i < objArr.length ; i ++)
+/*	for(var i = 0 ; i < objArr.length ; i ++)
 	{
 		var shapes = objArr[i].stage.get('.' + 0);
 		shapes.apply('transitionTo', {    		
@@ -129,7 +129,7 @@ function refresh()
     	    duration: 0.01
     	});
 		objArr[i].stage.draw();
-	}
+	} */
 }
 
 function allSelect()

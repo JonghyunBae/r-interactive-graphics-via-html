@@ -457,6 +457,24 @@ function hover(Name)
 	        if(node.getSelected() == 0)
 	    	{
 		    	var shapes = Name.stage.get('.'+node.getName());
+		    //	alert('tween');
+		    	 var tween = new Kinetic.Tween({
+		    	        node: node, 
+		    	        duration: 0.01,
+		    	       
+		    	       // rotation: Math.PI * 10,
+		    	        opacity: 1,
+		    	        strokeWidth: 6,
+		    	        scaleX: 1.3,
+		    	        scaleY: 1.3,
+		    	        easing: Kinetic.Easings.Linear
+		    	      //  fillR: 0,
+		    	     //   fillG: 0,
+		    	     //   fillB: 255
+		    	      }).play();
+		    //	 alert('tween1');
+		   // 	 tween.play();
+		    //	 alert('tween2');
 		    	switch(Name._type)
 		    	{
 			    	case 'hist' : 
@@ -470,6 +488,7 @@ function hover(Name)
 		            		opacity: 1,
 		            		scale : {x:1.5, y:1.5}
 		        			});    	*/
+						tween.play();
 		    			break;
 					case 'box' : 
 					//	alert(shapes.getInfo());

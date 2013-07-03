@@ -1,37 +1,10 @@
-/**
- * ScatterJS JavaScript Library
- * 
- * Copyright 2013, The RIGHT team
- * Licensed under the MIT or GPL Version 2 licenses.
- *
- * Copyright (C) 2013 by The RIGHT team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 var Scatter = {};	
 
 (function() {	
 	
-	Scatter = function(mainArr,  optionObj) {
+	Scatter = function(dataArr,  optionObj) {
 		
-		this._initScatter(optionObj);		
+		this._initScatter(dataArr, optionObj);		
 		this._type = 'scatter';		
 		objArr.push(this);
 		this.tmpShift = false;
@@ -40,18 +13,17 @@ var Scatter = {};
     };
     Scatter.prototype = {
     		
-    		_initScatter: function(optionObj){
-    			////////// Make essential variables ////////	
-    			
+    		_initScatter: function(dataArr, optionObj){
+    			//make essential variables	
 	            this.width = optionObj.width || plotWidth; //plot width
 	            this.height = optionObj.height || plotHeight; //plot height
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength= (optionObj.plotLength==undefined)?(this.width*0.02):(optionObj.plotLength); //margin from plot box
-	            this.radius= (optionObj.radius==undefined)?(3):(optionObj.radius); //default radius is 3
+	            this.radius= (optionObj.radius==undefined)?(2):(optionObj.radius); //default radius is 3
 	            
-	           
-	            for(var i = 0 ; i < labelArr.length ; i ++)
+	            //check the x label
+	            for(var i = 0 ; i < labelArr.length ; i ++)	
 	            {
 	            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
 	            		 this.x =  i;
@@ -61,6 +33,7 @@ var Scatter = {};
 	            		alert('retype x label');
 	            	}
 	            }
+	            //check the y label
 	            for(var i = 0 ; i < labelArr.length ; i ++)
 	            {
 	            	if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
@@ -71,8 +44,7 @@ var Scatter = {};
 	            		alert('retype y label');
 	            	}
 	            }
-	            
-	          
+	            // set the color type
 	            if(optionObj.color==undefined){
 	            	this.color=-1; //default color
 	            }else{
@@ -86,14 +58,14 @@ var Scatter = {};
 	  	            		alert('retype colors label');
 	  	            	}
 	  	            }	
-        			var tmpSetColor =  setColor(mainArr[this.color]);
+        			var tmpSetColor =  setColor(dataArr[this.color]);
     				var colors = tmpSetColor.colors;
 					var mainValueArr = tmpSetColor.mainValueArr;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
 
 	    		
-	            ////////////////////////////////////////////////Make Legend Start////////////////////////////////////////////
+	            //make legend start
 	            if(optionObj.legend!=undefined){
 	            	var legendChk = optionObj.legend.toLowerCase();
 	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
@@ -115,7 +87,7 @@ var Scatter = {};
 	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
 	            		legendY = this.plotYMargin-this.plotLength;
 	            	}	            		            	
-					var myLegend = makeLegend(legendX, legendY, mainValueArr, this.color, colors);					
+					var myLegend = makeLegend(dataArr, legendX, legendY, mainValueArr, this.color, colors);					
 					this.legendGroup = new Kinetic.Group({
 						width: myLegend.getWidth(),
 						height : myLegend.getHeight()
@@ -125,93 +97,79 @@ var Scatter = {};
 	            		this.plotXMargin = this.plotXMargin + myLegend.getWidth() + this.plotLength * 4;
 					}
 	            }
-	            ////////////////////////////////////////////////Make Legend End////////////////////////////////////////////
+	            //make legend end
 
 	        	
 	        	
-	        	
-	            var nodeX = new Array(mainArr[this.x].length);
-	            this.xTick= (optionObj.xTick==undefined)?(5	):(optionObj.xTick);
-	            var xTmp = makeAxisArr(this.width, this.x, this.xTick); // node가 찍혀야할 nodeX array에 저장. x좌표가 찍혀야할 좌표 위치와 이름이 xPlotArr에 저장된다. 
+	        	//nodeX and nodeY is for setting gap of each axis according to tick
+	            var nodeX = new Array(dataArr[this.x].length);
+	            this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);	//default x tick is 5
+	            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick);  
 	            nodeX = xTmp.node;
 	            this.xPlotArr = xTmp.plotArr;
 	            
-	            var nodeY = new Array(mainArr[this.y].length);
-	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y ticks is 5 
-	            
-	            var yTmp = makeAxisArr(this.height, this.y, this.yTick);
-	            
+	            var nodeY = new Array(dataArr[this.y].length);
+	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y tick is 5 	            
+	            var yTmp = makeAxisArr(dataArr, this.height, this.y, this.yTick);	            
 	            nodeY = yTmp.node;
 	            this.yPlotArr = yTmp.plotArr;
 	            
 	            
 	            
 	    		//////////Make Data Structure of nodes and essential arrays////////
-	    		this.yMax = findMaxValue(mainArr[this.y]);
+	    		this.yMax = findMaxValue(dataArr[this.y]);
 	    		
 				this.node = new Array();			
 				
 				var tooltipTextGetInfo = new Array();
-				for(var i = 0; i < mainArr[this.x].length ; i++)
+				for(var i = 0; i < dataArr[this.x].length ; i++)
 				{
-					tooltipTextGetInfo[i]=labelArr[0]+" : " + mainArr[0][i]+ "\r\n" ;
+					tooltipTextGetInfo[i]=labelArr[0]+" : " + dataArr[0][i]+ "\r\n" ;
 					for(var j=1; j< labelArr.length ; j++){
-						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + mainArr[j][i]+ "\r\n" ;
+						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + dataArr[j][i]+ "\r\n" ;
 					}
-				}				
+				}
+				// set and make information of nodes according to color
 				if(this.color==-1 ){
-					for(var i = 0; i < mainArr[this.x].length ; i++)
+					for(var i = 0; i < dataArr[this.x].length ; i++)
 					{
 						this.node[i] = new Kinetic.Circle({
-							//id: i,
 							name : i,
 							x: nodeX[i] + this.plotXMargin,
 							y: this.height +this.plotYMargin - nodeY[i],
 							radius: this.radius,
-							fill: 'green',
-						//	stroke : 'black',
-						//	strokeWidth : 0.01,
-						//	opacity : 0.7,
-						//	draggable : false,
-						//	hidden : 0,
+							stroke: 'green',
+							strokeWidth: 1,
+							fill: 'green',	//different part
 							selected : 0,
 							info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
 						});			
-						isSelected[i].push(scatterUpdate(this, i));
+						isSelected[i].push(scatterUpdate(this, i));	//save event handler
 					}
 				}else{
 					
-					for(var i = 0; i < mainArr[this.x].length ; i++)
+					for(var i = 0; i < dataArr[this.x].length ; i++)
 					{
 						this.node[i] = new Kinetic.Circle({
-							//id: i,
 							name : i,
 							x: nodeX[i] + this.plotXMargin,
 							y: this.height +this.plotYMargin - nodeY[i],
 							radius: this.radius,
-							fill: getColor(i,colors, mainValueArr, tmpColorArr),
-						//	stroke : 'black',
-						//	strokeWidth : 0.01,
-						//	opacity : 0.7,
-						//	draggable : false,
-						//	hidden : 0,
+							stroke: getColor(i,colors, mainValueArr, tmpColorArr),
+							strokeWidth: 1,
+							fill: getColor(i,colors, mainValueArr, tmpColorArr),	//different part
 							selected : 0,
 							info : "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
 						});				
-						//alert("ddd");
-						isSelected[i].push(scatterUpdate(this,i));
-					}
-					
+						isSelected[i].push(scatterUpdate(this,i));	//save event handler
+					}					
 				}
-			//	alert("dddd");
-			//	alert(nameof);
-				
     		},
 			doIt: function() { 
 				alert('do it'); 
 			},
-			draw: function(id){	
-				//draw plot
+			draw: function(id){	//draw plot part
+				
 				document.getElementById('scatterContainer'+id).onmousemove =getCoords;
 				document.getElementById('scatterContainer'+id).onclick = function() {
 			        document.getElementById('regcoords').value = divX+ ' , ' +divY;
@@ -351,27 +309,36 @@ var Scatter = {};
 					this.dataLayer.add(this.node[i]);
 				} 
 				this.stage.add(this.dataLayer);
-				//alert(this.node[0].getHasArr());
 				 //////////////////////////////Tooltip Setting////////////////////////////////////////
-                this.tooltipLayer = new Kinetic.Layer();
-                this.tooltip = new Kinetic.Group({
-                	opacity: 0.75,
-                	visible: false
-                });
-                this.tooltipText = new Kinetic.Text({
-                	text: '',
-                	fontFamily: 'Calibri',
-                	fontSize: 15,
-                	padding: 5,
-                	fill: 'white'
-                });	  
-                this.tooltipRect = new Kinetic.Rect({
-                	fill: 'black'
-                });
-                
-                this.tooltip.add(this.tooltipRect).add(this.tooltipText);
-                this.tooltipLayer.add(this.tooltip);
-                this.stage.add(this.tooltipLayer);
+				//new kenetic version -> tooltip setting change using tag
+				this.tooltipLayer = new Kinetic.Layer();			 
+			    this.tooltip = new Kinetic.Label({
+			        opacity: 0.75,
+			        visible: false,
+			        listening: false
+			      });
+			      
+			     this.tooltip.add(new Kinetic.Tag({
+			        fill: 'black',
+			        //pointerDirection: 'down',
+			        pointerWidth: 10,  
+			        pointerHeight: 10, 
+			        lineJoin: 'round',
+			        shadowColor: 'black',
+			        shadowBlur: 10,
+			        shadowOffset: 10,
+			        shadowOpacity: 0.2
+			      }));
+			      
+			      this.tooltip.add(new Kinetic.Text({
+			        text: '',
+			        fontFamily: 'Calibri',
+			        fontSize: 15,
+			        padding: 5,
+			        fill: 'white'
+			      }));			      
+			      this.tooltipLayer.add(this.tooltip);			      
+			      this.stage.add(this.tooltipLayer);                
                 ///////////////////////////////////////////////////////////////////////////////////
 				
 				//draw legend
@@ -395,16 +362,6 @@ var Scatter = {};
 	};
     
 })();
-
-/*
-function tooltipTextGetInfo(n){
-	var info=labelArr[0]+" : " + mainArr[0][n]+ "\r\n" ;
-	for(var i=1; i< labelArr.length ; i++){
-		info=info+ labelArr[i]+" : " + mainArr[i][n]+ "\r\n" ;
-	}
-	return info;	
-}	     
-*/
 
 
 function setColor(colorArr) //set color
@@ -472,8 +429,6 @@ function setColor(colorArr) //set color
 	 	}
 		
 	}else{
-		
-	
 		var rgb = {R: new Array(), G: new Array(), B: new Array()};
 		var start = {R:0, G:128, B: 0};
 		var end = {R:0, G:255, B: 0};
@@ -514,67 +469,54 @@ function getLegendColor(n, colors, mainValueArr)
 }
 
 /////////////////////////////////////////update function //////////////////////////////
+//Kinetic version update
+//just remove transitient, and change it with "set" syntax.
+//"set" syntax has not changed during many versions.
 function scatterUpdate(obj, id)
 {
 	return	function(selectOn)
 				{
 					if(selectOn == 0 && obj.node[id].getSelected() == 1)		//unselect
 					{	
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							radius : obj.radius,
-							strokeWidth : 0.01,
-				    		opacity: 0.7,
-				    		scale : {x:1, y:1}
-						});
+						obj.node[id].setStroke(obj.node[id].getFill());
+						obj.node[id].setScaleX(1);
+						obj.node[id].setScaleY(1);
 						obj.node[id].setSelected(0);
 					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){	//select
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							stroke : 'black',
-							strokeWidth : 1,
-							radius : 2,
-							stroke: 1,
-				    		opacity: 1,
-				    		scale : {x:4, y:4}
-						});
+						obj.node[id].setStroke('black');
+						obj.node[id].setScaleX(2);
+						obj.node[id].setScaleY(2);
 						obj.node[id].setSelected(1);
 						obj.node[id].moveToTop();
-						//alert("ddd");
 					}else if(selectOn == 2 && obj.node[id].getSelected() == 1){	//hide
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							radius : obj.radius,
-							strokeWidth : 0.01,
-				    		opacity: 0.7,
-				    		scale : {x:1, y:1}
-						});
+						obj.node[id].setStroke(obj.node[id].getFill());
+						obj.node[id].setScaleX(1);
+						obj.node[id].setScaleY(1);
 						obj.node[id].setSelected(2);
 						obj.node[id].hide();
 					}else if(selectOn == 3){		//reset
 						obj.node[id].setSelected(0);
 						obj.node[id].show();						
-					}
-					
+					}					
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나 this.y를 받고 xtick이나 ytick을 받는다. 
-{														// return은 x좌표와 x좌표 이름이 찍혀있는 plotArr와 node가 찍혀야할 좌표가 node에 저장되어 return된다. 
-	var node = new Array(mainArr[axis].length);
+function makeAxisArr(dataArr, length, axis, tick)	 //width��height��諛쏄퀬 this.x ��this.y瑜�諛쏄퀬 xtick�대굹 ytick��諛쏅뒗�� 
+{														// return��x醫뚰몴��x醫뚰몴 �대쫫��李랁��덈뒗 plotArr��node媛�李랁��쇳븷 醫뚰몴媛�node����옣�섏뼱 return�쒕떎. 
+	var node = new Array(dataArr[axis].length);
 	if(isDiscrete[axis] == true)
 	{		
 		
 		var tmp = new Array();  //the names of each content below
-		tmp[0] = mainArr[axis][0];
+		tmp[0] = dataArr[axis][0];
 		node[0] = 0;
-		for(var i = 1 ; i < mainArr[axis].length ; i++)
+		for(var i = 1 ; i < dataArr[axis].length ; i++)
     	{
     		for(j = 0 ; j < tmp.length ; j ++)
     		{
-    			if(tmp[j] == mainArr[axis][i])
+    			if(tmp[j] == dataArr[axis][i])
     			{
     				node[i] = j;
     				break;
@@ -583,7 +525,7 @@ function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나
     		if(j == tmp.length)
     		{
     			node[i] = j;
-    			tmp.push(mainArr[axis][i]);
+    			tmp.push(dataArr[axis][i]);
     		}
     	}	
 		var plotArr = make2DArr(tmp.length);
@@ -599,8 +541,8 @@ function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나
 		}
 	}else{	    	
 		
-		var max = findMaxValue(mainArr[axis]);
-		var min = findMinValue(mainArr[axis]);
+		var max = findMaxValue(dataArr[axis]);
+		var min = findMinValue(dataArr[axis]);
 		var tickRange = (max-min )/tick;	    		
 		var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
 		tickRange = setTickRange(tmp, tickRange);
@@ -621,7 +563,7 @@ function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나
 		//alert(obj.plotXMargin);
 		for(var i = 0 ; i < node.length ; i ++)
 		{
-			node[i] = length* ((mainArr[axis][i]-min)) /((max - min));
+			node[i] = length* ((dataArr[axis][i]-min)) /((max - min));
 		}
 	//	alert(node);
 	}
@@ -630,7 +572,7 @@ function makeAxisArr(length, axis, tick)	 //width나 height을 받고 this.x 나
 
 
 
-function makeLegend(legendX, legendY, mainValueArr, color, colors){
+function makeLegend(dataArr, legendX, legendY, mainValueArr, color, colors){
 	if(mainValueArr.length<24){
     	var legendNode = new Array();	
     	var legendText = new Array();	
@@ -664,8 +606,8 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 		}		
 	}else{
 		var tick= 5; //default legend ticks is 5        	            
-        var max = findMaxValue(mainArr[color]);		
-        var min = findMinValue(mainArr[color]);	
+        var max = findMaxValue(dataArr[color]);		
+        var min = findMinValue(dataArr[color]);	
         var tickRange = (max - min)/tick;
         tickRange = setTickRange( Math.ceil( Math.log(tickRange) / Math.log(10)) , tickRange);
         var newMax = tickRange * Math.ceil(max/tickRange);     		
@@ -690,7 +632,7 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 				fontFamily: 'Calibri',
 				fontSize: 13,
 				padding: 5,
-				fill: (i==0 || i==plotArr.length-1 )?'#eeeeee':'black',
+				fill: (i==0 || i==plotArr.length-1 )?'#fff':'black',
 				align:'center'
 			});						
 		}		    	
@@ -733,7 +675,7 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 		width: maxLengthLegendText + 30,
 		height: legendText[i-1].getY()-legendY + 30, //i is set by (mainValueArr.length) or  (plotArr.length)
 		stroke: 'black',
-		fill: '#eeeeee'
+		fill: '#fff'
 	});			
 	legendMain.setWidth(legendRect.getWidth());
 	var group = new Kinetic.Group({

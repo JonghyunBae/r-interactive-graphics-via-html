@@ -1,36 +1,9 @@
-/**
- * HistJS JavaScript Library
- * 
- * Copyright 2013, The RIGHT team
- * Licensed under the MIT or GPL Version 2 licenses.
- *
- * Copyright (C) 2013 by The RIGHT team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 var Hist = {};		
 
 (function() {	
 	
-	Hist = function(mainArr, optionObj) {
-		this._initHist(optionObj);		
+	Hist = function(dataArr, optionObj) {
+		this._initHist(dataArr, optionObj);		
 		this._type = 'hist';
 		objArr.push(this);
 		this.tmpShift = false;
@@ -38,10 +11,10 @@ var Hist = {};
     };
 	Hist.prototype = {
 			
-			_initHist: function(optionObj){
+			_initHist: function(dataArr, optionObj){
 
 				////////// Make essential variables ////////
-				//this.xMax = findMaxValue(mainArr[this.x]);
+				//this.xMax = findMaxValue(dataArr[this.x]);
 				for(var i = 0 ; i < labelArr.length ; i ++)
 	            {
 	            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
@@ -52,7 +25,7 @@ var Hist = {};
 	            		alert('retype x label');
 	            	}
 	            }	
-				this.bin = (optionObj.bin==undefined)?(parseInt(findMaxValue(mainArr[this.x])/10)):(optionObj.bin);
+				this.bin = (optionObj.bin==undefined)?(parseInt(findMaxValue(dataArr[this.x])/10)):(optionObj.bin);
 				this.fixPoint = 0;
 			//	alert(this.bin.toString().indexOf('.'));
 				if(this.bin.toString().indexOf('.') != -1)
@@ -70,18 +43,18 @@ var Hist = {};
 	            {
 	            	
 	            	var cnt = 0;
-	            	var xTmp = new Array();  // 諛묒쓽 媛���ぉ �대쫫��
-	            	var freqTmp = new Array();  //frequency瑜���옣 
-	            	var hasTmp = make2DArr(mainArr[this.x].length);
+	            	var xTmp = new Array();  // 獄쏅쵐��揶쏉옙占쏙옙��占쎈�已ワ옙占�	            	
+	            	var freqTmp = new Array();  //frequency�쒙옙占쏙옙��
+	            	var hasTmp = make2DArr(dataArr[this.x].length);
 	            	freqTmp[cnt] = 1;
 	            	hasTmp[cnt][0] = 0;
-	            	xTmp[cnt++] = mainArr[this.x][0];
+	            	xTmp[cnt++] = dataArr[this.x][0];
 	            	isSelected[0].push(histUpdate(this, 0));
-	            	for(i = 1 ; i < mainArr[this.x].length ; i++)
+	            	for(i = 1 ; i < dataArr[this.x].length ; i++)
 	            	{
 	            		for(j = 0 ; j < xTmp.length ; j ++)
 	            		{
-	            			if(xTmp[j] == mainArr[this.x][i])
+	            			if(xTmp[j] == dataArr[this.x][i])
 	            			{
 	            				hasTmp[j].push(i);
 	            				isSelected[i].push(histUpdate(this, j));
@@ -94,7 +67,7 @@ var Hist = {};
 	            		{
 	            			freqTmp[j] = 1;
 	            			hasTmp[j].push(i);
-	            			xTmp.push(mainArr[this.x][i]);
+	            			xTmp.push(dataArr[this.x][i]);
 	            			isSelected[i].push(histUpdate(this , j));
 	            		}
 	            	}
@@ -102,7 +75,7 @@ var Hist = {};
 	            	var barGap = barWidth;
 	            	this.xMax = parseInt(this.width/barWidth);
 	            	
-	            	var freqRank =make2DArr(freqTmp.length); 			// �덉뒪�좉렇�⑥쓣 �ㅻ쫫李⑥닚���뺣━�섍린 �꾪븳 怨쇱젙 
+	            	var freqRank =make2DArr(freqTmp.length); 			// 占쎈뜆�わ옙醫됰젃占썩뫁��占썬끇已ワ㎕�λ떄占쏙옙占쎈베�곻옙�띾┛ 占쎄쑵釉��⑥눘��
 	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
 	            		freqRank[i][0] = freqTmp[i];
@@ -110,54 +83,54 @@ var Hist = {};
 	            	}
 	            	freqRank.sort(function(a,b){return a[0] - b[0];});
 	            	var nodeX = new Array(freqTmp.length);
-	            	this.maxNode =freqRank[freqRank.length-1][1]; // Y Axis瑜�洹몃┫���쒖씪�꾩뿉源뚯� 洹몃━湲곗쐞��寃�
+	            	this.maxNode =freqRank[freqRank.length-1][1]; // Y Axis�쒙옙域밸챶�ワ옙占쏙옙�뽰뵬占쎄쑴肉됪틦��옙 域밸챶�곫묾怨쀬맄占쏙옙野껓옙
 	            	this.xPlotArr = make2DArr(freqTmp.length);
  	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
- 	            	//	nodeX[freqRank[i][1]] = i;				// ��cntTmp array瑜��몃뱶��x媛믩뱾���ｌ뼱以�떎. 利�x �꾩튂留�諛붽퓭���ｋ뒗�� 
+ 	            	//	nodeX[freqRank[i][1]] = i;				// 占쏙옙cntTmp array�쒙옙占쎈챶諭띰옙占퐔揶쏅�諭억옙占쏙옙節뚮선餓ο옙�� 筌앾옙x 占쎄쑴�귨쭕占썼쳸遺쏀벊占쏙옙占쏙퐢�쀯옙占�
  	            		this.xPlotArr[i][0] = i*(barWidth+barWidth) + (barWidth+barWidth)/2;
  	            		this.xPlotArr[i][1] = xTmp[freqRank[i][1]];
 	            		nodeX[freqRank[i][1]] = i*(barWidth+barWidth) + (barWidth)/2;
 	            	}	            	
- 	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;  // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
-	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2; // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
+ 	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;  // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2; // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
  	            	var firstcnt = 0;
 	            }else{
 	            	
-	            	var xMax = findMaxValue(mainArr[this.x]);			// xMax瑜�癒쇱� 援ы빐��barwidth瑜�援ы빐以����덈떎. 
-	            	var xMin = findMinValue(mainArr[this.x]);
-	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); // frequency �꾩떆濡���옣 
-	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);  // has array珥덇린�붾뒗 �쇰떒 理쒖븙��寃쎌슦��mainArray[this.x].length濡��댁��� 
-	            	var upTmp = new Array(mainArr[this.x].length);
+	            	var xMax = findMaxValue(dataArr[this.x]);			// xMax�쒙옙�믪눘占��닌뗫퉸占쏙옙barwidth�쒙옙�닌뗫퉸餓ο옙占쏙옙占쎈뜄�� 
+	            	var xMin = findMinValue(dataArr[this.x]);
+	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); // frequency 占쎄쑴�녷에占쏙옙占쎌삢 
+	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);  // has array�λ뜃由곤옙遺얜뮉 占쎌눖��筌ㅼ뮇釉숋옙占썲칰�뚯뒭占쏙옙dataArray[this.x].length嚥∽옙占쎈똻占쏙옙占�
+	            	var upTmp = new Array(dataArr[this.x].length);
 	            	var cnt = 0;
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
-	            		freqTmp[i] = 0;  // frequency ��옣�좉볼 珥덇린�� 	            		
+	            		freqTmp[i] = 0;  // frequency 占쏙옙�ｏ옙醫됰낵 �λ뜃由곤옙占�	            		
 	            	}
 	            	
-	            	for(var i = 0 ; i < mainArr[this.x].length ; i++)
+	            	for(var i = 0 ; i < dataArr[this.x].length ; i++)
 	            	{
 	            		if(xMin < 0)
 	            		{
-	            			cnt = parseInt((mainArr[this.x][i]+Math.abs(xMin))/this.bin);  // �대뒓 諛곗뿴�꾩튂���ㅼ뼱媛덉� 寃곗젙.
+	            			cnt = parseInt((dataArr[this.x][i]+Math.abs(xMin))/this.bin);  // 占쎈���獄쏄퀣肉댐옙袁⑺뒄占쏙옙占썬끉堉긷첎�됵옙 野껉퀣��
 	            		}else{
-	            			cnt = parseInt(mainArr[this.x][i]/this.bin);
+	            			cnt = parseInt(dataArr[this.x][i]/this.bin);
 	            		}	            		
-	            		freqTmp[cnt] ++ ; // �대떦諛곗뿴 frequency �섎굹���섎젮二쇨퀬 
-	            		hasTmp[cnt].push(i); // hasarray����옣�댁���
+	            		freqTmp[cnt] ++ ; // 占쎈���쳸怨쀫였 frequency 占쎌꼶援뱄옙占쏙옙�롮젻雅뚯눊��
+	            		hasTmp[cnt].push(i); // hasarray占쏙옙占쏙옙�ｏ옙�곻옙占쏙옙
 	            		upTmp[i] = cnt;
 	            		
 	            	}
 	            	
 	            //	alert(freqTmp.length);
-	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 泥섏쓬遺�꽣 �대뵒源뚯� 0���섏삤�붿� ��옣. 利� frequency媛�0���꾨땶 泥��몃뱶 寃�궗 
+	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 筌ｌ꼷�ч겫占쎄숲 占쎈�逾믤틦��옙 0占쏙옙占쎌꼷�ㅿ옙遺울옙 占쏙옙�� 筌앾옙 frequency揶쏉옙0占쏙옙占쎄쑬��筌ｏ옙占쎈챶諭�野껓옙沅�
 	            	{	            		
 	            		if(freqTmp[firstcnt] != 0)
 	            		{
 	            			break;
 	            		}
 	            	}
-	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // �꾩� 諛섎�濡��앹뿉�쒕���frequency媛�0���꾨땶 泥��몃뱶 寃�궗 
+	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // 占쎄쑴占�獄쏆꼶占썸에占쏙옙�밸퓠占쎌뮆占쏙옙占퐀requency揶쏉옙0占쏙옙占쎄쑬��筌ｏ옙占쎈챶諭�野껓옙沅�
 	            	{
 	            		if(freqTmp[lastcnt] != 0)
 	            		{
@@ -171,14 +144,14 @@ var Hist = {};
 	            		hasTmp.shift();
 	            	}
 
-	            	for(var i = 0 ; i < mainArr[this.x].length ; i++)
+	            	for(var i = 0 ; i < dataArr[this.x].length ; i++)
 	            	{
             //			if(i == 121)
             	//			alert(upTmp[i]);
 	            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
 	            	}
-            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// �묒そ��1移몄뵫 �ъ쑀遺��곕씪��+3
-	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // 珥�李띿뼱���섎뒗 x異�scale��4媛����뷀빐��留욌떎. 
+            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// 占쎈쵐�앾옙占�燁삳챷逾�占싼딆��븝옙占쎄퀡�わ옙占�3
+	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // �ο옙筌〓씮堉깍옙占쏙옙�롫뮉 x�곤옙scale占쏙옙4揶쏉옙占쏙옙占쎈�鍮먲옙占쏙쭕�뚮뼄. 
 	           // 	alert(firstcnt);
 	           // 	alert(lastcnt);
 	            	cnt = 0;
@@ -193,8 +166,8 @@ var Hist = {};
 	            			nodeX[cnt++] =  i*(barWidth);	            			
 	            		}
 	            	}	 
-	            	this.firstX = this.xPlotArr[0][0];  // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
-	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]; // x Axis瑜�洹몃┫��泥섏쓬遺�꽣 �앷퉴吏�洹몃젮二쇨린 �꾪빐 �섎뒗 寃� 
+	            	this.firstX = this.xPlotArr[0][0];  // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]; // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
 	            	var maxFreq = findMaxValue(freqTmp);
 	            	this.maxNode =0;
 	                for(var i = 0; i<  freqTmp.length ; i++)
@@ -228,10 +201,9 @@ var Hist = {};
 	    				this.yPlotArr[i][1] = (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
 	    			}
 	    		}	    
-	    		///////////////////////////////////////////////////////////////////////////
+	    		/////////////////////////////////// ////////////////////////////////////////
 	           
-	            this.yMax = max; // �섎뒗 freqTmp 媛쒖닔媛�紐뉕컻�몄� �섏���援ы븷 ���덉쑝誘�줈 �ㅼ뿉��援ы븳��
-	            this.yMin = 0;	          
+	            this.yMax = max; // 占쎌꼶��freqTmp 揶쏆뮇�붷첎占쏙쭗�뺤뻣占쎈챷占�占쎌꼷占쏙옙占썸뤃�釉�占쏙옙占쎈뜆�앲첋占쎌쨮 占썬끉肉됵옙占썸뤃�釉놂옙占�	            this.yMin = 0;	          
 	            
             	 //////////Make Data Structure of nodes and essential arrays////////            	
             	this.node = new Array();            	
@@ -284,7 +256,7 @@ var Hist = {};
                     y: this.plotYMargin-this.plotLength,
                     width: this.width+2*this.plotLength,
                     height: this.height+2*this.plotLength,
-                    stroke: '#eeeeee',
+                    stroke: '#fff',
                     strokeWidth: 2
                 });                
                 this.plotLayer.add(this.plotRect);    
@@ -309,30 +281,7 @@ var Hist = {};
                     stroke: 'black',
                     strokeWidth: 2             
                 });                                
-                this.plotLayer.add(this.yAxis);
-                
-                //////////////////////////////Tooltip Setting////////////////////////////////////////
-                this.tooltipLayer = new Kinetic.Layer();
-                this.tooltip = new Kinetic.Group({
-                	opacity: 0.75,
-                	visible: false
-                });
-                this.tooltipText = new Kinetic.Text({
-                	text: '',
-                	fontFamily: 'Calibri',
-                	fontSize: 15,
-                	padding: 5,
-                	fill: 'white'
-                });	  
-                this.tooltipRect = new Kinetic.Rect({
-                	fill: 'black'
-                });
-                
-                this.tooltip.add(this.tooltipRect).add(this.tooltipText);
-                this.tooltipLayer.add(this.tooltip);
-                this.stage.add(this.tooltipLayer);
-                ///////////////////////////////////////////////////////////////////////////////////
-               
+                this.plotLayer.add(this.yAxis);        
                 this.xLine = new Array();
                 this.xText = new Array();
                 var tmp = 0;
@@ -444,6 +393,37 @@ var Hist = {};
 				} 
 				this.stage.add(this.dataLayer);
 				//alert(this.node[0].getHasArr());
+				//////////////////////////////Tooltip Setting////////////////////////////////////////
+				//new kenetic version -> tooltip setting change using tag
+				this.tooltipLayer = new Kinetic.Layer();			 
+			    this.tooltip = new Kinetic.Label({
+			        opacity: 0.75,
+			        visible: false,
+			        listening: false
+			      });
+			      
+			     this.tooltip.add(new Kinetic.Tag({
+			        fill: 'black',
+			     //   pointerDirection: 'down',
+			        pointerWidth: 10,
+			        pointerHeight: 10,
+			        lineJoin: 'round',
+			        shadowColor: 'black',
+			        shadowBlur: 10,
+			        shadowOffset: 10,
+			        shadowOpacity: 0.2
+			      }));
+			      
+			      this.tooltip.add(new Kinetic.Text({
+			        text: '',
+			        fontFamily: 'Calibri',
+			        fontSize: 15,
+			        padding: 5,
+			        fill: 'white'
+			      }));			      
+			      this.tooltipLayer.add(this.tooltip);			      
+			      this.stage.add(this.tooltipLayer);                
+                ///////////////////////////////////////////////////////////////////////////////////
 			},
 			
 			update: function(){
@@ -453,6 +433,9 @@ var Hist = {};
 })();
 
 /////////////////////////////////////////update function //////////////////////////////
+//Kinetic version update
+//just remove transitient, and change it with "set" syntax.
+//"set" syntax has not changed during many versions.
 function histUpdate(obj, id)
 {
 	return	function(selectOn)
@@ -463,49 +446,34 @@ function histUpdate(obj, id)
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);
 						if(obj.node[id].getSelectCnt() == 0)
 						{
-							var shapes = obj.stage.get('.' + id);
-							shapes.apply('setAttrs', {
-					    		opacity: 0.5,
-					    		scale : {x:1, y:1}
-							});
+							obj.node[id].setOpacity(0.5);
+							obj.node[id].setScaleX(1);
 							obj.node[id].setSelected(0);
 						}
 					}else if(selectOn == 1){		// select
-						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);
+						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);						
 						if(obj.node[id].getSelected() == 0)
 						{
-							var shapes = obj.stage.get('.' + id);
-							shapes.apply('setAttrs', {
-					    		opacity: 1,
-					    		scale : {x:1.05, y:1}
-							});
+							obj.node[id].setOpacity(1);
+							obj.node[id].setScaleX(1.05);
 							obj.node[id].setSelected(1);
 						}				
 					}else if(selectOn == 2){ // hide
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							x : obj.node[id].getX(),
-							y : obj.node[id].getY() + (obj.node[id].getSelectCnt())*obj.height/obj.yMax/2,
-							freq : (obj.node[id].getFreq()- obj.node[id].getSelectCnt()),
-							height: obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax,
-				    		opacity: 0.5,
-				    		scale : {x:1, y:1},
-				    		info : "Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()- obj.node[id].getSelectCnt()),
-							offset : { y :  (obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax)/2}
-						});
+						obj.node[id].setFreq(obj.node[id].getFreq()- obj.node[id].getSelectCnt());
+						obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()- obj.node[id].getSelectCnt()));
+						obj.node[id].setOffset({ y :  (obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax)/2});
+						obj.node[id].setY(obj.node[id].getY() + (obj.node[id].getSelectCnt())*obj.height/obj.yMax/2);
+						obj.node[id].setHeight(obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax);
+						obj.node[id].setOpacity(0.5);
+						obj.node[id].setScaleX(1);
 						obj.node[id].setSelected(0);
 						obj.node[id].setSelectCnt(0);
-					//	obj.node[id].hide();
 					}else if(selectOn == 3){		// reset
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							x : obj.node[id].getX(),
-							y : obj.plotYMargin + obj.height - obj.node[id].getFreq()*obj.height/obj.yMax/2, 
-							freq : obj.node[id].getHasArr().length,
-							height: obj.node[id].getFreq()*obj.height/obj.yMax, 
-				    		info : "Node : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length,
-							offset : { y :  (obj.node[id].getFreq()*obj.height/obj.yMax)/2}
-						});
+						obj.node[id].setFreq(obj.node[id].getHasArr().length);
+						obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length);
+						obj.node[id].setOffset({ y :  (obj.node[id].getFreq()*obj.height/obj.yMax)/2});
+						obj.node[id].setY(obj.plotYMargin + obj.height - obj.node[id].getFreq()*obj.height/obj.yMax/2);
+						obj.node[id].setHeight(obj.node[id].getFreq()*obj.height/obj.yMax);
 						obj.node[id].setSelected(0);
 						obj.node[id].setSelectCnt(0);
 					}

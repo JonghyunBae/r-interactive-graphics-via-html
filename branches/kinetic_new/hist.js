@@ -281,30 +281,7 @@ var Hist = {};
                     stroke: 'black',
                     strokeWidth: 2             
                 });                                
-                this.plotLayer.add(this.yAxis);
-                
-                //////////////////////////////Tooltip Setting////////////////////////////////////////
-                this.tooltipLayer = new Kinetic.Layer();
-                this.tooltip = new Kinetic.Group({
-                	opacity: 0.75,
-                	visible: false
-                });
-                this.tooltipText = new Kinetic.Text({
-                	text: '',
-                	fontFamily: 'Calibri',
-                	fontSize: 15,
-                	padding: 5,
-                	fill: 'white'
-                });	  
-                this.tooltipRect = new Kinetic.Rect({
-                	fill: 'black'
-                });
-                
-                this.tooltip.add(this.tooltipRect).add(this.tooltipText);
-                this.tooltipLayer.add(this.tooltip);
-                this.stage.add(this.tooltipLayer);
-                ///////////////////////////////////////////////////////////////////////////////////
-               
+                this.plotLayer.add(this.yAxis);        
                 this.xLine = new Array();
                 this.xText = new Array();
                 var tmp = 0;
@@ -416,6 +393,37 @@ var Hist = {};
 				} 
 				this.stage.add(this.dataLayer);
 				//alert(this.node[0].getHasArr());
+				//////////////////////////////Tooltip Setting////////////////////////////////////////
+				//new kenetic version -> tooltip setting change using tag
+				this.tooltipLayer = new Kinetic.Layer();			 
+			    this.tooltip = new Kinetic.Label({
+			        opacity: 0.75,
+			        visible: false,
+			        listening: false
+			      });
+			      
+			     this.tooltip.add(new Kinetic.Tag({
+			        fill: 'black',
+			     //   pointerDirection: 'down',
+			        pointerWidth: 10,
+			        pointerHeight: 10,
+			        lineJoin: 'round',
+			        shadowColor: 'black',
+			        shadowBlur: 10,
+			        shadowOffset: 10,
+			        shadowOpacity: 0.2
+			      }));
+			      
+			      this.tooltip.add(new Kinetic.Text({
+			        text: '',
+			        fontFamily: 'Calibri',
+			        fontSize: 15,
+			        padding: 5,
+			        fill: 'white'
+			      }));			      
+			      this.tooltipLayer.add(this.tooltip);			      
+			      this.stage.add(this.tooltipLayer);                
+                ///////////////////////////////////////////////////////////////////////////////////
 			},
 			
 			update: function(){
@@ -425,6 +433,9 @@ var Hist = {};
 })();
 
 /////////////////////////////////////////update function //////////////////////////////
+//Kinetic version update
+//just remove transitient, and change it with "set" syntax.
+//"set" syntax has not changed during many versions.
 function histUpdate(obj, id)
 {
 	return	function(selectOn)
@@ -435,49 +446,34 @@ function histUpdate(obj, id)
 						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);
 						if(obj.node[id].getSelectCnt() == 0)
 						{
-							var shapes = obj.stage.get('.' + id);
-							shapes.apply('setAttrs', {
-					    		opacity: 0.5,
-					    		scale : {x:1, y:1}
-							});
+							obj.node[id].setOpacity(0.5);
+							obj.node[id].setScaleX(1);
 							obj.node[id].setSelected(0);
 						}
 					}else if(selectOn == 1){		// select
-						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);
+						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);						
 						if(obj.node[id].getSelected() == 0)
 						{
-							var shapes = obj.stage.get('.' + id);
-							shapes.apply('setAttrs', {
-					    		opacity: 1,
-					    		scale : {x:1.05, y:1}
-							});
+							obj.node[id].setOpacity(1);
+							obj.node[id].setScaleX(1.05);
 							obj.node[id].setSelected(1);
 						}				
 					}else if(selectOn == 2){ // hide
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							x : obj.node[id].getX(),
-							y : obj.node[id].getY() + (obj.node[id].getSelectCnt())*obj.height/obj.yMax/2,
-							freq : (obj.node[id].getFreq()- obj.node[id].getSelectCnt()),
-							height: obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax,
-				    		opacity: 0.5,
-				    		scale : {x:1, y:1},
-				    		info : "Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()- obj.node[id].getSelectCnt()),
-							offset : { y :  (obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax)/2}
-						});
+						obj.node[id].setFreq(obj.node[id].getFreq()- obj.node[id].getSelectCnt());
+						obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()- obj.node[id].getSelectCnt()));
+						obj.node[id].setOffset({ y :  (obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax)/2});
+						obj.node[id].setY(obj.node[id].getY() + (obj.node[id].getSelectCnt())*obj.height/obj.yMax/2);
+						obj.node[id].setHeight(obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax);
+						obj.node[id].setOpacity(0.5);
+						obj.node[id].setScaleX(1);
 						obj.node[id].setSelected(0);
 						obj.node[id].setSelectCnt(0);
-					//	obj.node[id].hide();
 					}else if(selectOn == 3){		// reset
-						var shapes = obj.stage.get('.' + id);
-						shapes.apply('setAttrs', {
-							x : obj.node[id].getX(),
-							y : obj.plotYMargin + obj.height - obj.node[id].getFreq()*obj.height/obj.yMax/2, 
-							freq : obj.node[id].getHasArr().length,
-							height: obj.node[id].getFreq()*obj.height/obj.yMax, 
-				    		info : "Node : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length,
-							offset : { y :  (obj.node[id].getFreq()*obj.height/obj.yMax)/2}
-						});
+						obj.node[id].setFreq(obj.node[id].getHasArr().length);
+						obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length);
+						obj.node[id].setOffset({ y :  (obj.node[id].getFreq()*obj.height/obj.yMax)/2});
+						obj.node[id].setY(obj.plotYMargin + obj.height - obj.node[id].getFreq()*obj.height/obj.yMax/2);
+						obj.node[id].setHeight(obj.node[id].getFreq()*obj.height/obj.yMax);
 						obj.node[id].setSelected(0);
 						obj.node[id].setSelectCnt(0);
 					}

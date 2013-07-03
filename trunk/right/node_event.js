@@ -1,31 +1,3 @@
-/**
- * Node_eventJS JavaScript Library
- * 
- * Copyright 2013, The RIGHT team
- * Licensed under the MIT or GPL Version 2 licenses.
- *
- * Copyright (C) 2013 by The RIGHT team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-
 //////////////////////////////////////Chk key event Start//////////////////////////////////////   
 
 window.addEventListener('keydown',checkKeyDown,false);	
@@ -36,7 +8,6 @@ var aPressed = false;
 var zPressed = false;
 var gPressed = false;
 var tmpShift = false;
-var tPressed = false;
 
 function checkKeyDown(e) 
 {		
@@ -120,7 +91,7 @@ function eventTrigger(Name)
 var menuOn = false;
 function menu(Name)
 {	
-	//////////////////////////////////////Menu Start//////////////////////////////////////
+//////////////////////////////////////Menu Start//////////////////////////////////////
 	Name.menuLayer = new Kinetic.Layer();
 	Name.menu = new Kinetic.Group({
 		opacity: 0.95,
@@ -144,13 +115,13 @@ function menu(Name)
 	Name.menuRectHide = new Kinetic.Rect({
 		width: 100,
 		height: 25,
-		fill: '#6b6164'
+		fill: '#93b21a'
 	});
 	Name.menuRectReset = new Kinetic.Rect({
 		y:25,
 		width: 100,
 		height: 25,
-		fill: '#6b6164'
+		fill: '#93b21a'
 	});
 	
 	Name.menu.add(Name.menuRectHide).add(Name.menuTextHide);
@@ -173,22 +144,22 @@ function menu(Name)
 		Name.menuLayer.draw();	
 	});
 	Name.menuTextHide.on('mouseover', function(evt){
-		Name.menuRectHide.setFill('#d8c7a9');
+		Name.menuRectHide.setFill('#cfe444');
 		Name.menuTextHide.setFill('#black');
 		Name.menuLayer.draw();
 	});
 	Name.menuRectHide.on('mouseover', function(evt){
-		Name.menuRectHide.setFill('#d8c7a9');
+		Name.menuRectHide.setFill('#cfe444');
 		Name.menuTextHide.setFill('#black');
 		Name.menuLayer.draw();
 	});
 	Name.menuTextHide.on('mouseout', function(evt){
-		Name.menuRectHide.setFill('#6b6164');
+		Name.menuRectHide.setFill('#93b21a');
 		Name.menuTextHide.setFill('white');
 		Name.menuLayer.draw();
 	});
 	Name.menuRectHide.on('mouseout', function(evt){
-		Name.menuRectHide.setFill('#6b6164');
+		Name.menuRectHide.setFill('#93b21a');
 		Name.menuTextHide.setFill('white');
 		Name.menuLayer.draw();
 	});
@@ -206,22 +177,22 @@ function menu(Name)
 	menuLayer.draw();	
 	});
 	menuTextDelete.on('mouseover', function(evt){
-	menuRectDelete.setFill('#d8c7a9');
+	menuRectDelete.setFill('#cfe444');
 	menuTextDelete.setFill('#black');
 	menuLayer.draw();
 	});
 	menuRectDelete.on('mouseover', function(evt){
-	menuRectDelete.setFill('#d8c7a9');
+	menuRectDelete.setFill('#cfe444');
 	menuTextDelete.setFill('#black');
 	menuLayer.draw();
 	});
 	menuTextDelete.on('mouseout', function(evt){
-	menuRectDelete.setFill('#6b6164');
+	menuRectDelete.setFill('#93b21a');
 	menuTextDelete.setFill('white');
 	menuLayer.draw();
 	});
 	menuRectDelete.on('mouseout', function(evt){
-	menuRectDelete.setFill('#6b6164');
+	menuRectDelete.setFill('#93b21a');
 	menuTextDelete.setFill('white');
 	menuLayer.draw();
 	});
@@ -238,40 +209,41 @@ function menu(Name)
 		Name.menuLayer.draw();	
 	});
 	Name.menuTextReset.on('mouseover', function(evt){
-		Name.menuRectReset.setFill('#d8c7a9');
+		Name.menuRectReset.setFill('#cfe444');
 		Name.menuTextReset.setFill('#black');
 		Name.menuLayer.draw();
 	});
 	Name.menuRectReset.on('mouseover', function(evt){
-		Name.menuRectReset.setFill('#d8c7a9');
+		Name.menuRectReset.setFill('#cfe444');
 		Name.menuTextReset.setFill('#black');
 		Name.menuLayer.draw();
 	});
 	Name.menuTextReset.on('mouseout', function(evt){
-		Name.menuRectReset.setFill('#6b6164');
+		Name.menuRectReset.setFill('#93b21a');
 		Name.menuTextReset.setFill('white');
 		Name.menuLayer.draw();
 	});
 	Name.menuRectReset.on('mouseout', function(evt){
-		Name.menuRectReset.setFill('#6b6164');
+		Name.menuRectReset.setFill('#93b21a');
 		Name.menuTextReset.setFill('white');
 		Name.menuLayer.draw();
 	});
 	
 	
 	
-	Name.stage.on('click', function(evt){ // mouse drag�섍퀬�섏꽌 �곗냽�대┃�섏뼱 留앹튂��寃�諛⑹�.
+	
+	Name.stage.on('click', function(evt){ // mouse drag
 		for(var i = 0 ; i < objArr.length ; i ++)
 		{
 			objArr[i].menu.hide();
 			objArr[i].menuLayer.draw();
 		}
 		if((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click			
-			//alert("ddd");
+
 				
 				menuOn=true;
 				//alert('right clicked');
-				var node = evt.shape;
+				var node = evt.targetNode;
 				//update menu
 				var menuHeight = 40;
 				var menuWidth = 100;
@@ -362,7 +334,6 @@ function drag(Name)
 				
 				if(moving == true)
 				{
-					document.body.style.cursor = "pointer";
 					dragOn = true;
 					if(divid == mouseName)
 					{
@@ -472,113 +443,87 @@ function RectRangeSelect(Name, pre, aft)
 
 function hover(Name)
 {
-	Name.stage.on('mouseover mousemove', function(evt){  
-		
-		
-		var node = evt.shape;
-	//	alert(node.getName());
-		if(isNaN(node.getName()) == false)
+	Name.stage.on('mouseover mousemove dragmove', function(evt) {
+        var node = evt.targetNode;        
+        // update tooltip
+        if(isNaN(node.getName()) == false)
 		{
-			document.body.style.cursor = "pointer";
-	        
-	        node.moveToTop();
+        	node.moveToTop();
+        	document.body.style.cursor = "pointer";	        
 	        var mousePos = node.getStage().getMousePosition();
-	    	Name.tooltipText.setText(node.getInfo()); 
-	    	Name.tooltipRect.setAttrs({
-	    		width: Name.tooltipText.getWidth(),
-	    		height: Name.tooltipText.getHeight()
-	    	});
-	    	if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
+	       // Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
+	        if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
 				Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
 			}else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
-				Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltipText.getHeight());
+				Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
 			}else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
-				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth(), mousePos.y + 2);
+				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
 			}else{
-				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltipText.getWidth() , mousePos.y - 2 - Name.tooltipText.getHeight());
+				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
 			}
-	    	Name.tooltipLayer.moveUp();
-	    	Name.tooltip.show();
-	    	Name.tooltipLayer.draw();
-	    	if(node.getSelected() == 0)
+	        Name.tooltip.getText().setText(node.getInfo());
+	        Name.tooltip.show();
+	        Name.tooltipLayer.draw();	        
+	        if(node.getSelected() == 0)
 	    	{
-		    	var shapes = Name.stage.get('.'+node.getName());
 		    	switch(Name._type)
 		    	{
 			    	case 'hist' : 
-						shapes.apply('setAttrs', {
-			    		opacity: 1,
-			    		scale : {x:1.2, y:1}
-						});    	
-						break;
+			    		node.setOpacity(1);
+			    		node.setScaleX(1.2);
+			    		node.draw();
+		    			break;
 					case 'scatter' : 
-		    			shapes.apply('setAttrs', {
-		            		opacity: 1,
-		            		scale : {x:1.5, y:1.5}
-		        			});    	
+						node.setScaleX(1.5);
+						node.setScaleY(1.5);
+						node.draw();
 		    			break;
 					case 'box' : 
-					//	alert(shapes.getInfo());
-					//	if(shapes.getRadius() != undefined){
-							shapes.apply('setAttrs', {
-			            		opacity: 1,
-			            		scale : {x:1.2, y:1}
-			        			});    	
-					//	}
 						break;
 		        	default:
 		        		break;
 		    	}
-		    	shapes.apply('transitionTo', {    		
-		    	    rotation : 0,
-		    	    duration: 0.01
-		    	});  
 	    	}
 		}
-	});	
-		
-        	
-	Name.stage.on('mouseout', function(evt){  
-		var node = evt.shape;
-		if(isNaN(node.getName()) == false)
-		{
-			document.body.style.cursor = "default";  // 占쎌꼷夷뤄옙占쏙쭪占쎌뜖占쏙옙占쎌꼶�쀯쭪占쏙옙類ㅼ뵥占쏙옙野껓옙
-			Name.tooltip.hide();
-	    	Name.tooltipLayer.draw();
-	    	
-	    	if(node.getSelected() == 0)
-	    	{
-	    		var shapes = Name.stage.get('.'+node.getName());
-		    	switch(Name._type)
-		    	{
-			    	case 'hist' : 
-						shapes.apply('setAttrs', {
-			    		opacity: 0.5,
-			    		scale : {x:1, y:1}
-						});    	
-						break;
-					case 'scatter' : 
-		    			shapes.apply('setAttrs', {
-		            		opacity: 0.7,
-		            		scale : {x:1, y:1}
-		        			});    	
-		    			break;
-					case 'box' : 
-		    			shapes.apply('setAttrs', {
-		            		opacity: 0.7,
-		            		scale : {x:1, y:1}
-		        			});    	
-		    			break;
-		        	default:
-		        		break;
-		    	}
-		    	shapes.apply('transitionTo', {    		
-		    	    rotation : 0,
-		    	    duration: 0.01
-		    	});  
-	    	}
-		}
-	});
+      }); 
+	Name.stage.on('mouseout', function(evt) {
+		var node = evt.targetNode;
+    	  document.body.style.cursor = "default";
+    	  Name.tooltip.hide();
+    	  Name.tooltipLayer.draw();
+    	  if(isNaN(node.getName()) == false)
+  		{
+            if(node.getSelected() == 0)
+  	    	{
+  		    	//new kinetic version using tween for animation.
+  		    	switch(Name._type)
+  		    	{
+  			    	case 'hist' : 
+  						var tween = new Kinetic.Tween({
+  			    	        node: node, 
+  			    	        duration: 0.01,
+  			    	        opacity: 0.5,
+  			    	        scaleX: 1
+  			    	      }).play(); 
+  		    			break; 
+  					case 'scatter' : 
+  						var tween = new Kinetic.Tween({
+  			    	        node: node, 
+  			    	        duration: 0.01,
+  			    	        scaleX: 1,
+  			    	        scaleY: 1
+  			    	      }).play(); 
+  		    			break;
+  					case 'box' : 
+  						break;
+  		        	default:
+  		        		break;
+  		    	}
+  	    	}
+  		}
+    	  
+      });
+	
 }
 
 
@@ -595,11 +540,11 @@ function select(Name)
 			return;
 		}
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-			var node = evt.shape;
+			var node = evt.targetNode;
 			if(isNaN(node.getName()) == false)
 			{
-				var tmpX = Name.node[node.getName()].getX(); // 占쎈���占쎈콅釉�占쎈챶諭띰옙占퐔, y �ル슦紐당몴占썼쳸�녿툡 占쎈낄�쀯옙占�
-				var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); // Y�ル슦紐닷첎占쏙옙�쇱춿占쎈똻占�占쎈뜆�앲첋占쎌쨮 占썬끉��占쎌뮇苑뚳옙占쎌쨮 占썬끉彛쏉옙遺얜뼄. 
+				var tmpX = Name.node[node.getName()].getX(); // �좎럥占쏙옙占썲뜝�덉퐛�됵옙�좎럥梨띈キ�곗삕�좏릶, y 占썬꺂��쭗�밸ご�좎띁爾몌옙�욱닡 �좎럥�꾬옙��삕�좑옙
+				var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); // Y占썬꺂��쭗�룹쾸�좎룞�숋옙�깆뗄�좎럥�삣뜝占썲뜝�덈쐠占쎌빍泥뗥뜝�뚯Ŧ �좎뜫�됵옙占썲뜝�뚮츋�묐슪�쇿뜝�뚯Ŧ �좎뜫�됧퐲�됱삕�븐뼔堉� 
 			//	alert(tmpX + " , " + tmpY);
 				if(aPressed){	//select ALL
 					Name.tmpShift = false;

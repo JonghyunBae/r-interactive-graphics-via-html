@@ -1,30 +1,3 @@
-/**
- * CommonJS JavaScript Library
- * 
- * Copyright 2013, The RIGHT team
- * Licensed under the MIT or GPL Version 2 licenses.
- *
- * Copyright (C) 2013 by The RIGHT team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 var plotWidth=500;  //default value for plot width
 var plotHeight=500; //default value for plot height   
 
@@ -63,13 +36,13 @@ function getCoords(e) {
 }
 //Get X, Y coords, and displays Mouse coordinates
 function getXYpos(elm) {
-	X = elm.offsetLeft;        // set x to elm’s offsetLeft
-	Y = elm.offsetTop;         // set y to elm’s offsetTop
+	X = elm.offsetLeft;        // set x to elm占쎌뀼 offsetLeft
+	Y = elm.offsetTop;         // set y to elm占쎌뀼 offsetTop
 	
 	elm = elm.offsetParent;    // set elm to its offsetParent
 	
 	 //use while loop to check if elm is null
-	 // if not then add current elm’s offsetLeft to x
+	 // if not then add current elm占쎌뀼 offsetLeft to x
 	 //offsetTop to y and set elm to its offsetParent
 	while(elm != null) {
 		X = parseInt(X) + parseInt(elm.offsetLeft);
@@ -114,9 +87,9 @@ function hideSelected()
 	refresh();
 }
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate(id , select, name) // update 되야하는 node id와 select 여부, 주체가 누군지를 받는다. 
+function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉 node id占쏙옙select 占싼됵옙, 雅뚯눘猿쒎첎占쏙옙袁㏓럵筌욑옙占�獄쏆룆�쀯옙占�
 {
-	//가장 먼저 주체 여부를 확인한다. 
+	//揶쏉옙���믪눘占�雅뚯눘猿�占싼됵옙�쒙옙占쎈벡�ㅿ옙�뺣뼄. 
 	if(name._type == "scatter")
 	{
 		if(isSelected[id][0] != 2)
@@ -127,7 +100,7 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 			}
 			isSelected[id][0] = select;
 		}		
-	}else if(name._type == "hist"){	//histogram인 경우 id값이 node의 번호이므로 hasArr를 구해야 한다. 
+	}else if(name._type == "hist"){	//histogram占쏙옙野껋럩��id揶쏅���node占쏙옙甕곕뜇�뉛옙��옙嚥∽옙hasArr�쒙옙�닌뗫퉸占쏙옙占쎌뮆�� 
 		var tmp = name.node[id].getHasArr();
 	//	alert(tmp);
 		for(var j = 0 ; j < tmp.length ; j ++)
@@ -145,40 +118,28 @@ function allGraphUpdate(id , select, name) // update 되야하는 node id와 sel
 	}
 	
 }
-
+// just remove transition.
 function refresh()
 {
-//	alert("ddd");
-//	alert(objArr.length);
 	for(var i = 0 ; i < objArr.length ; i ++)
 	{
-		var shapes = objArr[i].stage.get('.' + 0);
-		shapes.apply('transitionTo', {    		
-    	    rotation : 0,
-    	    duration: 0.01
-    	});
 		objArr[i].stage.draw();
-	}
+	} 
 }
 
 function allSelect()
 {
 	for(var i = 0 ; i < isSelected.length ; i ++)
 	{
-	//	document.write("isselectlength11  " + isSelected.length + "<br>");
 		if(isSelected[i][0] == 0)
 		{
 			for(var j = 1 ; j < isSelected[i].length ; j++)
 			{
-	//			document.write("isselectlength22  " + isSelected[i].length + "<br>");
 				isSelected[i][j](1);
-			//	document.write(i + " , " + j + "<br>");
 			}
 			isSelected[i][0] = 1;
 		}		
 	}
-	//alert("ddd");
-
 }
 function allDeselect()
 {

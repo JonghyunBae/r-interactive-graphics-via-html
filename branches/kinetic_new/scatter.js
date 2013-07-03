@@ -20,7 +20,7 @@ var Scatter = {};
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength= (optionObj.plotLength==undefined)?(this.width*0.02):(optionObj.plotLength); //margin from plot box
-	            this.radius= (optionObj.radius==undefined)?(3):(optionObj.radius); //default radius is 3
+	            this.radius= (optionObj.radius==undefined)?(2):(optionObj.radius); //default radius is 3
 	            
 	            //check the x label
 	            for(var i = 0 ; i < labelArr.length ; i ++)	
@@ -138,6 +138,8 @@ var Scatter = {};
 							x: nodeX[i] + this.plotXMargin,
 							y: this.height +this.plotYMargin - nodeY[i],
 							radius: this.radius,
+							stroke: 'green',
+							strokeWidth: 1,
 							fill: 'green',	//different part
 							selected : 0,
 							info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
@@ -153,6 +155,8 @@ var Scatter = {};
 							x: nodeX[i] + this.plotXMargin,
 							y: this.height +this.plotYMargin - nodeY[i],
 							radius: this.radius,
+							stroke: getColor(i,colors, mainValueArr, tmpColorArr),
+							strokeWidth: 1,
 							fill: getColor(i,colors, mainValueArr, tmpColorArr),	//different part
 							selected : 0,
 							info : "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
@@ -306,6 +310,7 @@ var Scatter = {};
 				} 
 				this.stage.add(this.dataLayer);
 				 //////////////////////////////Tooltip Setting////////////////////////////////////////
+				//new kenetic version -> tooltip setting change using tag
 				this.tooltipLayer = new Kinetic.Layer();			 
 			    this.tooltip = new Kinetic.Label({
 			        opacity: 0.75,
@@ -315,9 +320,9 @@ var Scatter = {};
 			      
 			     this.tooltip.add(new Kinetic.Tag({
 			        fill: 'black',
-			        pointerDirection: 'down',
-			        pointerWidth: 10,
-			        pointerHeight: 10,
+			        //pointerDirection: 'down',
+			        pointerWidth: 10,  
+			        pointerHeight: 10, 
 			        lineJoin: 'round',
 			        shadowColor: 'black',
 			        shadowBlur: 10,
@@ -331,12 +336,9 @@ var Scatter = {};
 			        fontSize: 15,
 			        padding: 5,
 			        fill: 'white'
-			      }));
-			      
-			      this.tooltipLayer.add(this.tooltip);
-			      
-			      this.stage.add(this.tooltipLayer);
-                
+			      }));			      
+			      this.tooltipLayer.add(this.tooltip);			      
+			      this.stage.add(this.tooltipLayer);                
                 ///////////////////////////////////////////////////////////////////////////////////
 				
 				//draw legend
@@ -427,8 +429,6 @@ function setColor(colorArr) //set color
 	 	}
 		
 	}else{
-		
-	
 		var rgb = {R: new Array(), G: new Array(), B: new Array()};
 		var start = {R:0, G:128, B: 0};
 		var end = {R:0, G:255, B: 0};
@@ -469,61 +469,35 @@ function getLegendColor(n, colors, mainValueArr)
 }
 
 /////////////////////////////////////////update function //////////////////////////////
+//Kinetic version update
+//just remove transitient, and change it with "set" syntax.
+//"set" syntax has not changed during many versions.
 function scatterUpdate(obj, id)
 {
 	return	function(selectOn)
 				{
 					if(selectOn == 0 && obj.node[id].getSelected() == 1)		//unselect
 					{	
-						var tween = new Kinetic.Tween({
-  			    	        node: obj.node[id], 
-  			    	        radius : obj.radius,
-							strokeWidth : 0.01,
-  			    	        duration: 0.01,
-  			    	        opacity: 0.7,
-  			    	        scaleX: 1,
-  			    	        scaleY: 1
-  			    	      }).play();
+						obj.node[id].setStroke(obj.node[id].getFill());
+						obj.node[id].setScaleX(1);
+						obj.node[id].setScaleY(1);
 						obj.node[id].setSelected(0);
 					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){	//select
-						var tween = new Kinetic.Tween({
-  			    	        node: obj.node[id], 
-  			    	        stroke : 'black',
-  			    	        radius : 2,
-							strokeWidth : 1,
-  			    	        duration: 0.01,
-  			    	        opacity: 1,
-  			    	        scaleX: 2,
-  			    	        scaleY: 2
-  			    	      }).play();
+						obj.node[id].setStroke('black');
+						obj.node[id].setScaleX(2);
+						obj.node[id].setScaleY(2);
 						obj.node[id].setSelected(1);
 						obj.node[id].moveToTop();
 					}else if(selectOn == 2 && obj.node[id].getSelected() == 1){	//hide
-						var tween = new Kinetic.Tween({
-  			    	        node: obj.node[id], 
-  			    	        radius : obj.radius,
-							strokeWidth : 0.01,
-  			    	        duration: 0.01,
-  			    	        opacity: 0.7,
-  			    	        scaleX: 1,
-  			    	        scaleY: 1
-  			    	      }).play();
+						obj.node[id].setStroke(obj.node[id].getFill());
+						obj.node[id].setScaleX(1);
+						obj.node[id].setScaleY(1);
 						obj.node[id].setSelected(2);
 						obj.node[id].hide();
 					}else if(selectOn == 3){		//reset
-						var tween = new Kinetic.Tween({
-  			    	        node: obj.node[id], 
-  			    	        radius : obj.radius,
-							strokeWidth : 0.01,
-  			    	        duration: 0.01,
-  			    	        opacity: 0.7,
-  			    	        scaleX: 1,
-  			    	        scaleY: 1
-  			    	      }).play();
 						obj.node[id].setSelected(0);
 						obj.node[id].show();						
-					}
-					
+					}					
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

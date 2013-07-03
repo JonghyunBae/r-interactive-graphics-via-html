@@ -118,18 +118,13 @@ function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉
 	}
 	
 }
-
+// just remove transition.
 function refresh()
 {
-/*	for(var i = 0 ; i < objArr.length ; i ++)
+	for(var i = 0 ; i < objArr.length ; i ++)
 	{
-		var shapes = objArr[i].stage.get('.' + 0);
-		shapes.apply('transitionTo', {    		
-    	    rotation : 0,
-    	    duration: 0.01
-    	});
 		objArr[i].stage.draw();
-	} */
+	} 
 }
 
 function allSelect()

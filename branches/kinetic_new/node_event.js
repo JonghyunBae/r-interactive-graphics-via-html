@@ -451,34 +451,32 @@ function hover(Name)
         	node.moveToTop();
         	document.body.style.cursor = "pointer";	        
 	        var mousePos = node.getStage().getMousePosition();
-	        Name.tooltip.setPosition(mousePos.x, mousePos.y - 5);
+	       // Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
+	        if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
+				Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
+			}else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
+				Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
+			}else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
+				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
+			}else{
+				Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
+			}
 	        Name.tooltip.getText().setText(node.getInfo());
 	        Name.tooltip.show();
 	        Name.tooltipLayer.draw();	        
 	        if(node.getSelected() == 0)
 	    	{
-		    	//var shapes = Name.stage.get('.'+node.getName());
-		    	 
 		    	switch(Name._type)
 		    	{
 			    	case 'hist' : 
-						var tween = new Kinetic.Tween({
-			    	        node: node, 
-			    	        duration: 0.01,
-			    	        opacity: 1,
-			    	        scaleX: 1.2,
-			    	        scaleY: 1
-			    	      }).play();
+			    		node.setOpacity(1);
+			    		node.setScaleX(1.2);
+			    		node.draw();
 		    			break;
 					case 'scatter' : 
-						var tween = new Kinetic.Tween({
-			    	        node: node, 
-			    	        duration: 0.01,
-			    	        opacity: 1,
-			    	        scaleX: 1.5,
-			    	        scaleY: 1.5
-			    	      }).play();
-
+						node.setScaleX(1.5);
+						node.setScaleY(1.5);
+						node.draw();
 		    			break;
 					case 'box' : 
 						break;
@@ -497,27 +495,24 @@ function hover(Name)
   		{
             if(node.getSelected() == 0)
   	    	{
-  		    //	var shapes = Name.stage.get('.'+node.getName());
-  		    	 
+  		    	//new kinetic version using tween for animation.
   		    	switch(Name._type)
   		    	{
   			    	case 'hist' : 
   						var tween = new Kinetic.Tween({
   			    	        node: node, 
   			    	        duration: 0.01,
-  			    	        opacity: 1,
-  			    	        scaleX: 1,
-  			    	        scaleY: 1
-  			    	      }).play();
-  		    			break;
+  			    	        opacity: 0.5,
+  			    	        scaleX: 1
+  			    	      }).play(); 
+  		    			break; 
   					case 'scatter' : 
   						var tween = new Kinetic.Tween({
   			    	        node: node, 
   			    	        duration: 0.01,
-  			    	        opacity: 0.7,
   			    	        scaleX: 1,
   			    	        scaleY: 1
-  			    	      }).play();
+  			    	      }).play(); 
   		    			break;
   					case 'box' : 
   						break;

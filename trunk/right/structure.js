@@ -1,30 +1,3 @@
-/**
- * StructureJS JavaScript Library
- * 
- * Copyright 2013, The RIGHT team
- * Licensed under the MIT or GPL Version 2 licenses.
- *
- * Copyright (C) 2013 by The RIGHT team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 //Once starting, belows will be set up right away.
 var mainArr; // array for all data.
 var labelArr; // character array for the column names.
@@ -133,9 +106,9 @@ function createMainStructure(fileName)
 				}
 			}			
 		}
-		isSelected[j][0] = 0;	//selected 값 저장 . selected는 모두 0이므로 0으로 초기화 여기에 추가적으로 update function들 붙일 것.  
+		isSelected[j][0] = 0;	//selected 媛���옣 . selected��紐⑤몢 0�대�濡�0�쇰줈 珥덇린���ш린��異붽��곸쑝濡�update function��遺숈씪 寃�  
 	}
-	
+
 //	isSelected[0].push(test(1));
 //	alert(isSelected[0][1](3));
 	

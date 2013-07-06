@@ -5,11 +5,11 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   # Analyse Shiny(Down load shiny from cran)
    * Understand "startApp" of shiny.
    * Understand transferring the image. 
-   * First action item : making a simple graph of modified shiny.
+   * *First action item : making a simple graph of modified shiny.*
   # Unit testing survey
-   * Trying to adjust Qunit module to our code.
+   * *Trying to adjust Qunit module to our code.*
   # Adding a new graph type
-   * Add a box-whisker graph (discontinuous - continuous graph).
+   * *Add a box-whisker graph (discontinuous - continuous graph).*
   # Improve code(but, later issue)
    * divide draw part from data analysis part -> expect for supporting a various visualization.
 

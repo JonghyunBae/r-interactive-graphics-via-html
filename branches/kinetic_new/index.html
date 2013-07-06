@@ -11,6 +11,7 @@
   <script src="common.js"></script>
   <script src="scatter.js"></script>
   <script src="hist.js"></script>
+  <script src="box.js"></script>
   <script src="node_event.js"></script>
   <script>createMainStructure('_sub.diamonds.csv');</script>
   <div id="layout">
@@ -54,14 +55,24 @@
    <div id="content">
     <div id="scatterContainer1" oncontextmenu="return false;"></div>
     <div id="histContainer2" oncontextmenu="return false;"></div>
+    <div id="boxContainer3" oncontextmenu="return false;"></div>
+    <div id="boxContainer4" oncontextmenu="return false;"></div>
+    
    </div>
    <script>
-    var scatter1 = new Scatter(mainArr,{x: 'carat', y: 'price', color: 'color', legend: 'right', width: 300, height: 300});
+    var scatter1 = new Scatter(mainArr,{x: 'cut', y: 'price', color: 'price', legend: 'right', width: 300, height: 300});
     scatter1.draw(1);
     eventTrigger(scatter1);
     var hist2 = new Hist(mainArr,{bin: 2, x: 'cut', width: 300, height: 300});
     hist2.draw(2);
     eventTrigger(hist2);
+    var box3 = new Box(mainArr,{x: 'cut', y: 'price',  width: 300, height: 300});
+    box3.draw(3);
+    eventTrigger(box3);
+    var box4 = new Box(mainArr,{x: 'carat', y: 'price',  width: 300, height: 300});
+    box4.draw(4);
+    eventTrigger(box4);
+
    </script>
    <script src="button_event.js"></script>
    <script src="table.js"></script>

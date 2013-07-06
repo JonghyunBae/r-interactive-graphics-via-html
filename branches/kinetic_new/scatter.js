@@ -20,7 +20,7 @@ var Scatter = {};
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength= (optionObj.plotLength==undefined)?(this.width*0.02):(optionObj.plotLength); //margin from plot box
-	            this.radius= (optionObj.radius==undefined)?(2):(optionObj.radius); //default radius is 3
+	            this.radius= (optionObj.radius==undefined)?(2):(optionObj.radius); //default radius is 2
 	            
 	            //check the x label
 	            for(var i = 0 ; i < labelArr.length ; i ++)	

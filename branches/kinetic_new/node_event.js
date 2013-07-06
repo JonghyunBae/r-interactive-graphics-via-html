@@ -294,6 +294,7 @@ function drag(Name)
 	var divid;
 	Name.plotLayer.on('mousedown touchstart', function(evt){
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+			//alert(preDragMousePos.x);
 			divid = mouseName;
 			preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
 			if(moving == true){
@@ -403,7 +404,6 @@ function RectRangeSelect(Name, pre, aft)
 			{
 				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
 				{
-				//		alert((Name.node[i].getSelected()+1)%2);
 						allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);			
 				}
 			}
@@ -435,6 +435,38 @@ function RectRangeSelect(Name, pre, aft)
 				}
 			}
 		}
+	}else if(Name._type == "box"){
+		if(ctrlPressed == true)	{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(Name.node[i].getIsOutlier()){
+					if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+					{
+							allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);			
+					}
+				}else{
+					if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
+					{
+							allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);			
+					}
+				}				
+			}
+		}else{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(Name.node[i].getIsOutlier()){
+					if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+					{
+						allGraphUpdate(i ,1, Name);
+					}
+				}else{
+					if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
+					{
+						allGraphUpdate(i ,1, Name);	
+					}
+				}
+			}
+		}
 	}
 	refresh();
 	addRow('dataTable');
@@ -448,7 +480,7 @@ function hover(Name)
         // update tooltip
         if(isNaN(node.getName()) == false)
 		{
-        	node.moveToTop();
+        //	node.moveToTop();
         	document.body.style.cursor = "pointer";	        
 	        var mousePos = node.getStage().getMousePosition();
 	       // Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
@@ -468,18 +500,27 @@ function hover(Name)
 	    	{
 		    	switch(Name._type)
 		    	{
-			    	case 'hist' : 
-			    		node.setOpacity(1);
-			    		node.setScaleX(1.2);
-			    		node.draw();
-		    			break;
 					case 'scatter' : 
 						node.setScaleX(1.5);
 						node.setScaleY(1.5);
 						node.draw();
 		    			break;
-					case 'box' : 
-						break;
+					case 'hist' : 
+			    		node.setOpacity(1);
+			    		node.setScaleX(1.2);
+			    		node.draw();
+		    			break;
+			    	case 'box' : 
+			    		if(node.getIsOutlier()){
+			    			node.setScaleX(1.5);
+							node.setScaleY(1.5);
+							node.draw();
+			    		}else{
+			    			node.setOpacity(1);
+				    		//node.setScaleX(1.2);
+				    		node.draw();
+			    		}
+		    			break;
 		        	default:
 		        		break;
 		    	}
@@ -497,15 +538,7 @@ function hover(Name)
   	    	{
   		    	//new kinetic version using tween for animation.
   		    	switch(Name._type)
-  		    	{
-  			    	case 'hist' : 
-  						var tween = new Kinetic.Tween({
-  			    	        node: node, 
-  			    	        duration: 0.01,
-  			    	        opacity: 0.5,
-  			    	        scaleX: 1
-  			    	      }).play(); 
-  		    			break; 
+  		    	{  		    			
   					case 'scatter' : 
   						var tween = new Kinetic.Tween({
   			    	        node: node, 
@@ -513,9 +546,32 @@ function hover(Name)
   			    	        scaleX: 1,
   			    	        scaleY: 1
   			    	      }).play(); 
-  		    			break;
-  					case 'box' : 
-  						break;
+  		    			break;  					
+  		    		case 'hist' : 
+  			    		var tween = new Kinetic.Tween({
+  			    	        node: node, 
+  			    	        duration: 0.01,
+  			    	        opacity: 0.5,
+  			    	        scaleX: 1
+  			    	      }).play(); 
+  		    			break;			
+  		    		case 'box' : 
+  		    			if(node.getIsOutlier()){
+  		    				var tween = new Kinetic.Tween({
+  	  			    	        node: node, 
+  	  			    	        duration: 0.01,
+  	  			    	        scaleX: 1,
+  	  			    	        scaleY: 1
+  	  			    	      }).play(); 
+			    		}else{
+			    			var tween = new Kinetic.Tween({
+	  			    	        node: node, 
+	  			    	        duration: 0.01,
+	  			    	        opacity: 0.5
+	  			    	   //     scaleX: 1
+	  			    	      }).play(); 
+			    		}
+		    			break;
   		        	default:
   		        		break;
   		    	}
@@ -597,7 +653,7 @@ function select(Name)
 			  				}
 			  			}
 			  			
-			  		}else if(Name._type == "hist"){
+			  		}else if(Name._type == "hist" || Name._type == "box"){
 			  			//alert(Name.preId.x + " , " + tmpX);
 			  			if(Name.preId.x >= tmpX){
 			  				for(var i = 0 ; i < Name.node.length ; i ++)

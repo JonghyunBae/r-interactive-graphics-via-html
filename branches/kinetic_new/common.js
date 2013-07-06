@@ -89,6 +89,7 @@ function hideSelected()
 //allGraphUpdate is used for only select & unselect
 function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉 node id占쏙옙select 占싼됵옙, 雅뚯눘猿쒎첎占쏙옙袁㏓럵筌욑옙占�獄쏆룆�쀯옙占�
 {
+	
 	//揶쏉옙���믪눘占�雅뚯눘猿�占싼됵옙�쒙옙占쎈벡�ㅿ옙�뺣뼄. 
 	if(name._type == "scatter")
 	{
@@ -102,10 +103,8 @@ function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉
 		}		
 	}else if(name._type == "hist"){	//histogram占쏙옙野껋럩��id揶쏅���node占쏙옙甕곕뜇�뉛옙��옙嚥∽옙hasArr�쒙옙�닌뗫퉸占쏙옙占쎌뮆�� 
 		var tmp = name.node[id].getHasArr();
-	//	alert(tmp);
 		for(var j = 0 ; j < tmp.length ; j ++)
 		{
-		//	alert(j);
 			if(isSelected[tmp[j]][0] != 2)
 			{
 				for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
@@ -115,6 +114,27 @@ function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉
 				isSelected[tmp[j]][0] = select;
 			}			
 		}		
+	}else if(name._type == "box"){
+		var tmp = name.node[id].getHasArr();
+		if(name.node[id].getIsOutlier()){
+			for(var i =1 ; i < isSelected[id].length ; i ++){
+				//alert(isSelected[tmp][i]);
+				isSelected[tmp][i](select);
+			}				
+			isSelected[tmp][0] = select;
+		}else{
+			for(var j = 0 ; j < tmp.length ; j ++)
+			{
+				if(isSelected[tmp[j]][0] != 2)
+				{
+					for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
+					{
+						isSelected[tmp[j]][i](select);
+					}			
+					isSelected[tmp[j]][0] = select;
+				}			
+			}
+		}
 	}
 	
 }
@@ -198,3 +218,6 @@ function setTickRange(x, tickRange)
 
 	return tickRange;
 }
+Array.prototype.remove = function(idx) {
+    return (idx<0 || idx>this.length) ? this : this.slice(0, idx).concat(this.slice(idx+1, this.length));
+};

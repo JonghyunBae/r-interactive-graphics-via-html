@@ -1,3 +1,22 @@
+Date : 06JULY2013
+
+Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
+
+  # Analyse Shiny(Down load shiny from cran)
+   * Understand "startApp" of shiny.
+   * Understand transferring the image. 
+   * First action item : making a simple graph of modified shiny.
+  # Unit testing survey
+   * Trying to adjust Qunit module to our code.
+  # Adding a new graph type
+   * Add a box-whisker graph (discontinuous - continuous graph).
+  # Improve code(but, later issue)
+   * divide draw part from data analysis part -> expect for supporting a various visualization.
+
+Next meeting : 09:00 AM (Korea time) on Sat, 7/13
+
+----
+
   # Collect the latest code:
    * Put the final code under trunk. If some functionalities are scattered around multiple branches, please collect them into trunk.
    * Ensure that the code under trunk functions. Do *not* try to make any improvements.

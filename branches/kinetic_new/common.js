@@ -93,7 +93,7 @@ function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉
 	//揶쏉옙���믪눘占�雅뚯눘猿�占싼됵옙�쒙옙占쎈벡�ㅿ옙�뺣뼄. 
 	if(name._type == "scatter")
 	{
-		if(isSelected[id][0] != 2)
+		if(isSelected[id][0] != 2)//if node is not hidden
 		{
 			for(var i =1 ; i < isSelected[id].length ; i ++)
 			{
@@ -105,7 +105,7 @@ function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉
 		var tmp = name.node[id].getHasArr();
 		for(var j = 0 ; j < tmp.length ; j ++)
 		{
-			if(isSelected[tmp[j]][0] != 2)
+			if(isSelected[tmp[j]][0] != 2)//if node is not hidden
 			{
 				for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
 				{
@@ -116,16 +116,19 @@ function allGraphUpdate(id , select, name) // update 占쎌꼷鍮욑옙�롫뮉
 		}		
 	}else if(name._type == "box"){
 		var tmp = name.node[id].getHasArr();
+		//alert(isSelected[tmp][0]);
 		if(name.node[id].getIsOutlier()){
-			for(var i =1 ; i < isSelected[id].length ; i ++){
-				//alert(isSelected[tmp][i]);
-				isSelected[tmp][i](select);
-			}				
-			isSelected[tmp][0] = select;
+			if(isSelected[tmp][0] != 2){//if node is not hidden
+				for(var i =1 ; i < isSelected[id].length ; i ++){
+					//alert(isSelected[tmp][i]);
+					isSelected[tmp][i](select);
+				}				
+				isSelected[tmp][0] = select;
+			}
 		}else{
 			for(var j = 0 ; j < tmp.length ; j ++)
 			{
-				if(isSelected[tmp[j]][0] != 2)
+				if(isSelected[tmp[j]][0] != 2)//if node is not hidden
 				{
 					for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
 					{

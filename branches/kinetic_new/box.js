@@ -42,6 +42,10 @@ var Box = {};
                     }
                 }
                 
+                if(isDiscrete[this.y] == true)
+                {
+                	alert('y axis should be continuous');
+                }
 
                 var nodeX = new Array(dataArr[this.x].length);
                 this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);
@@ -184,16 +188,20 @@ var Box = {};
 	   	                    isSelected[outliersArr[i][j]].push(boxUpdate(this, xMainValueArr.length+j+cnt1)); //update "outliers" into isSelected 
 	                    }
 	                    cnt1=cnt1+outliersArr[i].length;	  
+	                  //  alert('1');
 	                    for(var j=0; j<boxHasArr[i].length; j++) //update "boxHasArr without outliers" into isSelected 
 	                    {
 		                    isSelected[boxHasArr[i][j]].push(boxUpdate(this, i));
 	                    }	                    
 	                }  
 	                outliersArrLength = cnt1;
+	               // alert('a'+outliersArrLength);
 	            }//discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 else{//from here, cont X ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 	
                 	 if(isDiscrete[this.y]==false){//////////x con. y con/////////
+                		var cnt1 = 0;
+                		
 	                	var xMainValueArr = new Array();
 	                	xMainValueArr[0] = 'ThisIsContinuousXData';
 	                	var boxHasArr = make2DArr(xMainValueArr.length);
@@ -241,11 +249,12 @@ var Box = {};
 		   	                    isSelected[outliersArr[i][j]].push(boxUpdate(this, xMainValueArr.length+j+cnt1)); //update "outliers" into isSelected 
 		                    }
 		                    cnt1=cnt1+outliersArr[i].length;	  
-		                    for(var j=1; j<boxHasArr[i].length; j++) //update "boxHasArr without outliers" into isSelected 
+		                    for(var j=0; j<boxHasArr[i].length; j++) //update "boxHasArr without outliers" into isSelected 
 		                    {
 			                    isSelected[boxHasArr[i][j]].push(boxUpdate(this, i));
 		                    }	                    
-		                }
+		                }  
+		                outliersArrLength = cnt1;
 		                
 		                var xMax = findMaxValue(dataArr[this.x]);
 		                var xMin = findMinValue(dataArr[this.x]);
@@ -261,7 +270,7 @@ var Box = {};
 		                this.boxWidth = new Array();
 		                this.boxWidth[0] = this.width*(findMaxValue(dataArr[this.x])-findMinValue(dataArr[this.x]))/(xMax-xMin);
                 	 }
-                	 else if(isDiscrete[this.y]==true){//con x, y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                	/* else if(isDiscrete[this.y]==true){//con x, y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	                	
                 		
 	                  var boxHasArr = make2DArr(yMainValueArr.length);
@@ -330,7 +339,7 @@ var Box = {};
 		                	this.boxWidth[i] = this.width*(findMaxValue(valueOfHasArr[i])-findMinValue(valueOfHasArr[i]))/(xMax-xMin);
 		                }
 	                }//conx , y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	              
+	              */
                 }//from here, cont X end///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             	
 	            var tooltipTextGetInfo = new Array();
@@ -408,6 +417,7 @@ var Box = {};
 	                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
 	                {
 	                	//outlierHasArr.push(outliersArr[i][j]);
+	                //	alert('out '+(mainValueArrLength+j+cnt));
 	                    this.node[mainValueArrLength+j+cnt] = new Kinetic.Circle({
 	                        name : mainValueArrLength+j+cnt,
 	                        isOutlier : true,
@@ -424,12 +434,14 @@ var Box = {};
 	                        hasArr : outliersArr[i][j]
 	                    });                  
 	                   
-	                    //document.writeln("<br>"+outliersArr[i][j]);
+	        //            document.writeln("<br>"+outliersArr[i][j]);
 	                } 
 	                cnt=cnt+outliersArr[i].length;	      
 	                
-	              //  alert(mainValueArrLength+outliersArrLength+i*3);
-	             //   alert('line');
+	            //    alert('line1 '+(mainValueArrLength+outliersArrLength+i*3));
+	           //     alert('line2 '+(mainValueArrLength+outliersArrLength+i*3+1));
+	            //    alert('line3 '+(mainValueArrLength+outliersArrLength+i*3+2));
+	             //  alert(outliersArrLength);
 	                 this.node[mainValueArrLength+outliersArrLength+i*3]= new Kinetic.Line({
 	               //     name : i,
 	                    x: medianXPos,
@@ -465,7 +477,7 @@ var Box = {};
 	               
 	                          
 	              //  document.write("out+ <br>");                
-	               // document.writeln("@@boxHasArr : "+boxHasArr[i]);
+	             //   document.writeln("@@boxHasArr : "+boxHasArr[i]);
 	            }    
 	           
 	            

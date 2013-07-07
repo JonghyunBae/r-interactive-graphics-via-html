@@ -121,154 +121,129 @@ var Box = {};
 	                
 	            }
                 
+                if(isDiscrete[this.y] == false)//////////y con/////////
+                { 
+                	if(isDiscrete[this.x] == true)//////////x discon,
+                	{ 
+                	    var boxHasArr = make2DArr(xMainValueArr.length);
+                	    
+                	    var j=0;
+                	    boxHasArr[0][0] = sortedXMainArr[0].b;
+                	    for(var i=1; i<sortedXMainArr.length; i++){
+                	        if(sortedXMainArr[i].a != sortedXMainArr[i-1].a){
+                	            j++;
+                	        }
+                	        boxHasArr[j].push(sortedXMainArr[i].b);
+                	  //      isSelected[sortedXMainArr[i].b].push(boxUpdate(this, j));
+                	    }
+                	    //boxHasArr has node number, valueOfHasArr has node value itself
+                	    var valueOfHasArr = make2DArr(boxHasArr.length);
+                	    for(var k=0; k<boxHasArr.length; k++){
+                	         var j=0;
+                	         
+                	         for(var i=0; i<dataArr[this.y].length; i++)
+                	         {    
+                	             if(i==boxHasArr[k][j] )
+                	             {   
+                	                 valueOfHasArr[k].push(dataArr[this.y][i]);
+                	                 j++;
+                	             }
+                	         }
+                	         valueOfHasArr[k].sort(function (a, b){ return (a-b);});                
+                	    }
+                	}else{    //////////x con,
+                		
+                	    var xMainValueArr = new Array();
+                		xMainValueArr[0] = 'ThisIsContinuousXData';
+                		var boxHasArr = make2DArr(xMainValueArr.length);
+                		for(var i=0; i<dataArr[this.y].length; i++){
+                			boxHasArr[0][i] = i;
+                		}
+                		//	alert('boxHasArr : '+boxHasArr[0] );
+                	    var sortedYMainArr = new Array();                    
+                	    for(var i=0; i<dataArr[this.y].length; i++){        
+                	        sortedYMainArr[i]=dataArr[this.y][i]
+                	    }  
+                	    sortedYMainArr.sort(function (a, b){ return (a-b);});        
+                	}
+                    
+                    var max = new Array();
+                    var min = new Array();
+                    var median = new Array();
+                    var q3 = new Array();
+                    var q1 = new Array();
+                    var iqr = new Array();
+                    var maxBelowFence = new Array();
+                    var minAboveFence = new Array();
+                    var maxOutliersArr = new Array();
+                    var minOutliersArr = new Array();
+                    var outliersArr = new Array();
+                    var cnt1 = 0;
+                    this.boxWidth = new Array();
+                    
+                    for(var i=0; i<xMainValueArr.length; i++){
+                    	if(isDiscrete[this.x] == true)
+				 	    {
+                    		max[i] = findMaxValue(valueOfHasArr[i]);
+                    		min[i] = findMinValue(valueOfHasArr[i]);
+                    		q3[i] = findQuartile(valueOfHasArr[i], 3);
+                    		median[i] = findQuartile(valueOfHasArr[i], 2);
+                    		q1[i] = findQuartile(valueOfHasArr[i], 1);
+                    	}else{
+                    		max[i] = findMaxValue(sortedYMainArr);
+                    		min[i] = findMinValue(sortedYMainArr);
+                    		q3[i] = findQuartile(sortedYMainArr, 3);
+                    		median[i] = findQuartile(sortedYMainArr, 2);
+                    		q1[i] = findQuartile(sortedYMainArr, 1);
+                    	}
+                    	iqr[i] = q3[i] - q1[i];
+                    	var tmpFindMaxBelowFence = findMaxBelowFence(dataArr[this.y], boxHasArr[i], q1[i], q3[i]);
+						var tmpFindMinAboveFence = findMinAboveFence(dataArr[this.y], boxHasArr[i], q1[i], q3[i]);
+						maxBelowFence[i] = tmpFindMaxBelowFence.max;
+						minAboveFence[i] = tmpFindMinAboveFence.min;
+						maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
+						minOutliersArr[i] = tmpFindMinAboveFence.outliers;
+						outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
+						for(j=0; j<outliersArr[i].length; j++) //original boxHasArr contains all nodes, we need to remove outliers from it
+						{
+							boxHasArr[i].splice(boxHasArr[i].indexOf(outliersArr[i][j]),1); //indexOf doesn't work IE8 or below.
+							isSelected[outliersArr[i][j]].push(boxUpdate(this, xMainValueArr.length+j+cnt1)); //update "outliers" into isSelected 
+					    }
+					    cnt1=cnt1+outliersArr[i].length;	  
+						for(var j=0; j<boxHasArr[i].length; j++) //update "boxHasArr without outliers" into isSelected 
+						{
+						    isSelected[boxHasArr[i][j]].push(boxUpdate(this, i));
+						}	                    
+                    }  
+                    outliersArrLength = cnt1; //count total number of outliers for numbering node later
+                   
+                    if(isDiscrete[this.x] == true)//x discon > fixed size barWidth
+                    { 	                    
+	            	    this.boxWidth[0] = (optionObj.boxWidth==undefined)?(this.width/xMainValueArr.length*0.7):(optionObj.boxWidth); 
+                    }else//x con > barWidth is equal to the range of x value
+                    { 
+                        var xMax = findMaxValue(dataArr[this.x]);
+                        var xMin = findMinValue(dataArr[this.x]);
+                        var xTick = 5;
+                        var xTickRange = (xMax-xMin )/xTick;                
+                        var xTmp = Math.ceil( Math.log(xTickRange) / Math.log(10));
+                        xTickRange = setTickRange(xTmp, xTickRange);
+                        xMax = xTickRange * Math.ceil(xMax/xTickRange);              
+                        xMin = xTickRange * Math.floor(xMin/xTickRange);
+                        this.boxWidth[0] = this.width*(findMaxValue(dataArr[this.x])-findMinValue(dataArr[this.x]))/(xMax-xMin);
+                	 }
                 
+                }
                 
-                if(isDiscrete[this.x] == true)
+                if(isDiscrete[this.x] == true)//////////x discon, y con/////////
 	            { 
-	                var boxHasArr = make2DArr(xMainValueArr.length);
-	                
-	                var j=0;
-	                boxHasArr[0][0] = sortedXMainArr[0].b;
-	                for(var i=1; i<sortedXMainArr.length; i++){
-	                    if(sortedXMainArr[i].a != sortedXMainArr[i-1].a){
-	                        j++;
-	                    }
-	                    boxHasArr[j].push(sortedXMainArr[i].b);
-	              //      isSelected[sortedXMainArr[i].b].push(boxUpdate(this, j));
-	                }
-	                
-	                this.boxWidth = new Array();
-	                this.boxWidth[0] = (optionObj.boxWidth==undefined)?(this.width/xMainValueArr.length*0.7):(optionObj.boxWidth); 
-	
-	                //boxHasArr has node number, valueOfHasArr has node value itself
-	                var valueOfHasArr = make2DArr(boxHasArr.length);
-	                for(var k=0; k<boxHasArr.length; k++){
-	                     var j=0;
-	                     
-	                     for(var i=0; i<dataArr[this.y].length; i++)
-	                     {    
-	                         if(i==boxHasArr[k][j] )
-	                         {   
-	                             valueOfHasArr[k].push(dataArr[this.y][i]);
-	                             j++;
-	                         }
-	                     }
-	                     valueOfHasArr[k].sort(function (a, b){ return (a-b);});                
-	                }
-	                
-	                var max = new Array();
-	                var min = new Array();
-	                var median = new Array();
-	                var q3 = new Array();
-	                var q1 = new Array();
-	                var iqr = new Array();
-	                var maxBelowFence = new Array();
-	                var minAboveFence = new Array();
-	                var maxOutliersArr = new Array();
-	                var minOutliersArr = new Array();
-	                var outliersArr = new Array();
-	                var cnt1 = 0;
-	                for(var i=0; i<xMainValueArr.length; i++){
-	                    max[i] = findMaxValue(valueOfHasArr[i]);
-	                    min[i] = findMinValue(valueOfHasArr[i]);
-	                    q3[i] = findQuartile(valueOfHasArr[i], 3);
-	                    median[i] = findQuartile(valueOfHasArr[i], 2);
-	                    q1[i] = findQuartile(valueOfHasArr[i], 1);
-	                    iqr[i] = q3[i] - q1[i];
-	                    var tmpFindMaxBelowFence = findMaxBelowFence(dataArr[this.y], boxHasArr[i], q1[i], q3[i]);
-	                    var tmpFindMinAboveFence = findMinAboveFence(dataArr[this.y], boxHasArr[i], q1[i], q3[i]);
-	                    maxBelowFence[i] = tmpFindMaxBelowFence.max;
-	                    minAboveFence[i] = tmpFindMinAboveFence.min;
-	                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
-	                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
-	                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
-	                    for(j=0; j<outliersArr[i].length; j++) //original boxHasArr contains all nodes, we need to remove outliers from it
-	                    {
-	                    	 boxHasArr[i].splice(boxHasArr[i].indexOf(outliersArr[i][j]),1); //indexOf doesn't work IE8 or below.
-	   	                    isSelected[outliersArr[i][j]].push(boxUpdate(this, xMainValueArr.length+j+cnt1)); //update "outliers" into isSelected 
-	                    }
-	                    cnt1=cnt1+outliersArr[i].length;	  
-	                  //  alert('1');
-	                    for(var j=0; j<boxHasArr[i].length; j++) //update "boxHasArr without outliers" into isSelected 
-	                    {
-		                    isSelected[boxHasArr[i][j]].push(boxUpdate(this, i));
-	                    }	                    
-	                }  
-	                outliersArrLength = cnt1;
-	               // alert('a'+outliersArrLength);
+	               
 	            }//discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 else{//from here, cont X ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 	
                 	 if(isDiscrete[this.y]==false){//////////x con. y con/////////
-                		var cnt1 = 0;
-                		
-	                	var xMainValueArr = new Array();
-	                	xMainValueArr[0] = 'ThisIsContinuousXData';
-	                	var boxHasArr = make2DArr(xMainValueArr.length);
-	                	for(var i=0; i<dataArr[this.y].length; i++){
-	                		boxHasArr[0][i] = i;
-	                	}
-	                	//	alert('boxHasArr : '+boxHasArr[0] );
-		                var sortedYMainArr = new Array();                    
-		                for(var i=0; i<dataArr[this.y].length; i++){        
-		                    sortedYMainArr[i]=dataArr[this.y][i]
-		                }  
-		                sortedYMainArr.sort(function (a, b){ return (a-b);});        
-	                	
-	                	
-	                	var max = new Array();
-		                var min = new Array();
-		                var median = new Array();
-		                var q3 = new Array();
-		                var q1 = new Array();
-		                var iqr = new Array();
-		                var maxBelowFence = new Array();
-		                var minAboveFence = new Array();
-		                var maxOutliersArr = new Array();
-		                var minOutliersArr = new Array();
-		                var outliersArr = new Array();
-		               var cnt1=0;	                
-		                
-		                for(var i=0; i<xMainValueArr.length; i++){
-		                    max[i] = findMaxValue(sortedYMainArr);
-		                    min[i] = findMinValue(sortedYMainArr);
-		                    q3[i] = findQuartile(sortedYMainArr, 3);
-		                    median[i] = findQuartile(sortedYMainArr, 2);
-		                    q1[i] = findQuartile(sortedYMainArr, 1);
-		                    iqr[i] = q3[i] - q1[i];
-		                    var tmpFindMaxBelowFence = findMaxBelowFence(dataArr[this.y], boxHasArr[i], q1[i], q3[i]);
-		                    var tmpFindMinAboveFence = findMinAboveFence(dataArr[this.y], boxHasArr[i]	, q1[i], q3[i]);
-		                    maxBelowFence[i] = tmpFindMaxBelowFence.max;
-		                    minAboveFence[i] = tmpFindMinAboveFence.min;
-		                    maxOutliersArr[i] = tmpFindMaxBelowFence.outliers;
-		                    minOutliersArr[i] = tmpFindMinAboveFence.outliers;
-		                    outliersArr[i] = maxOutliersArr[i].concat(minOutliersArr[i]);
-		                    for(j=0; j<outliersArr[i].length; j++) //original boxHasArr contains all nodes, we need to remove outliers from it
-		                    {
-		                    	 boxHasArr[i].splice(boxHasArr[i].indexOf(outliersArr[i][j]),1); //indexOf doesn't work IE8 or below.
-		   	                    isSelected[outliersArr[i][j]].push(boxUpdate(this, xMainValueArr.length+j+cnt1)); //update "outliers" into isSelected 
-		                    }
-		                    cnt1=cnt1+outliersArr[i].length;	  
-		                    for(var j=0; j<boxHasArr[i].length; j++) //update "boxHasArr without outliers" into isSelected 
-		                    {
-			                    isSelected[boxHasArr[i][j]].push(boxUpdate(this, i));
-		                    }	                    
-		                }  
-		                outliersArrLength = cnt1;
-		                
-		                var xMax = findMaxValue(dataArr[this.x]);
-		                var xMin = findMinValue(dataArr[this.x]);
-		                var xTick = 5;
-		                var xTickRange = (xMax-xMin )/xTick;                
-		                var xTmp = Math.ceil( Math.log(xTickRange) / Math.log(10));
-		                xTickRange = setTickRange(xTmp, xTickRange);
-		                xMax = xTickRange * Math.ceil(xMax/xTickRange);              
-		                xMin = xTickRange * Math.floor(xMin/xTickRange);
-		                
-		               // var xMax=findMaxValue(dataArr[this.x]);
-		              //  var xMin=findMinValue(dataArr[this.x]);
-		                this.boxWidth = new Array();
-		                this.boxWidth[0] = this.width*(findMaxValue(dataArr[this.x])-findMinValue(dataArr[this.x]))/(xMax-xMin);
+                	
+                	
                 	 }
                 	/* else if(isDiscrete[this.y]==true){//con x, y discrete//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	                	
@@ -350,8 +325,10 @@ var Box = {};
 						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + dataArr[j][i]+ "\r\n" ;
 					}
 				}				   
-	                
-	            //////////Make Data Structure of nodes and essential arrays////////
+				
+				///////////////////////////////////////////////////////////////////////////////////////////////////////
+	            ///////////////////////////////////Make Data Structure of nodes and essential arrays//////////////////////////
+				///////////////////////////////////////////////////////////////////////////////////////////////////////
 				this.node = new Array();
 	            this.outlierNode = new Array();
 	            var yMax = findMaxValue(dataArr[this.y]);
@@ -374,7 +351,6 @@ var Box = {};
 				//alert(mainValueArrLength);
 	            for(var i = 0; i < mainValueArrLength ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
 	            {
-	            	//document.writeln("**^^^^^^^^^"+outliersArr.length);
 	            	if(isDiscrete[this.y] ==false){   
 		                medianXPos = this.plotXMargin + (i+1) * (this.width) / (mainValueArrLength+1);
 		                medianYPos = this.height +this.plotYMargin - (median[i]-yMin)*this.height/(yMax - yMin);  
@@ -897,7 +873,7 @@ function boxUpdate(obj, id)
 							obj.node[id].hide();
 						}else{
 							obj.node[id].setFreq(obj.node[id].getFreq()- obj.node[id].getSelectCnt());
-							obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq())); // dependancy with previous line.
+							obj.node[id].setInfo("boxNode : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq())); // dependancy with previous line.
 							obj.node[id].setOpacity(0.5);
 							obj.node[id].setSelected(0);
 							obj.node[id].setSelectCnt(0);
@@ -908,7 +884,7 @@ function boxUpdate(obj, id)
 							obj.node[id].show();	
 						}else{
 							obj.node[id].setFreq(obj.node[id].getHasArr().length);
-							obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length);
+							obj.node[id].setInfo("boxNode : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length);
 							obj.node[id].setSelectCnt(0);
 						}
 					}

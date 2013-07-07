@@ -480,7 +480,7 @@ function hover(Name)
         // update tooltip
         if(isNaN(node.getName()) == false)
 		{
-        //	node.moveToTop();
+       // 	node.moveToTop();
         	document.body.style.cursor = "pointer";	        
 	        var mousePos = node.getStage().getMousePosition();
 	       // Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);

@@ -348,7 +348,6 @@ var Box = {};
 				}else{
 					var mainValueArrLength = yMainValueArr.length;
 				}
-				//alert(mainValueArrLength);
 	            for(var i = 0; i < mainValueArrLength ; i++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
 	            {
 	            	if(isDiscrete[this.y] ==false){   
@@ -364,26 +363,20 @@ var Box = {};
 		        	    		
 	        	    	}
 	        	    	medianYPos = this.height +this.plotYMargin - (i+1) * (this.height) / (yMainValueArr.length+1);
-	            	}
-	                
-	         //       
-	        //        alert(medianXPos+','+q3[i]+','+median[i]+','+this.boxWidth+', boxHasArr : '+boxHasArr[i].length); 
-	         //   	alert('rec');
+	            	}	                
+	         
 	                this.node[i] = new Kinetic.Rect({  	
-	                    //id: i,
 	                    name : i,
 	                    freq: boxHasArr[i].length,
-	                    x: medianXPos, //////////////////////////////////???????????????????????????
-	                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), //this.median[i],
+	                    x: medianXPos,
+	                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), 
 	                    stroke : 'black',
 	                    fill : 'green',
 	                    radius : this.radius,
 	                    width:  this.boxWidth[0],
 	                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
-	                //    strokeWidth : 0.01,
 	                    opacity : 0.5,
 	                    offset : {x: this.boxWidth[0]/2},
-	                //    draggable : false,
 	                    hidden : 0,
 	                    selected : 0,
 	                    selectCnt : 0,
@@ -392,8 +385,6 @@ var Box = {};
 	                });         
 	                for(var j = 0; j < outliersArr[i].length ; j++) //for discontinuous data, this.xPlotArr.length is used, for continuous data, it should be just 1.
 	                {
-	                	//outlierHasArr.push(outliersArr[i][j]);
-	                //	alert('out '+(mainValueArrLength+j+cnt));
 	                    this.node[mainValueArrLength+j+cnt] = new Kinetic.Circle({
 	                        name : mainValueArrLength+j+cnt,
 	                        isOutlier : true,
@@ -408,56 +399,36 @@ var Box = {};
 	                        selected : 0,
 	                        info : "Node : "+outliersArr[i][j]+"\r\nboxNode : "+(mainValueArrLength+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]]+"\r\n",
 	                        hasArr : outliersArr[i][j]
-	                    });                  
-	                   
-	        //            document.writeln("<br>"+outliersArr[i][j]);
+	                    });   
 	                } 
-	                cnt=cnt+outliersArr[i].length;	      
-	                
-	            //    alert('line1 '+(mainValueArrLength+outliersArrLength+i*3));
-	           //     alert('line2 '+(mainValueArrLength+outliersArrLength+i*3+1));
-	            //    alert('line3 '+(mainValueArrLength+outliersArrLength+i*3+2));
-	             //  alert(outliersArrLength);
+	                cnt=cnt+outliersArr[i].length;	
 	                 this.node[mainValueArrLength+outliersArrLength+i*3]= new Kinetic.Line({
-	               //     name : i,
 	                    x: medianXPos,
 	                    y: medianYPos,
 	                    points: [0, 0, this.boxWidth[0], 0],
 	                    opacity : 0.5,
 	                    offset : {x: this.boxWidth[0]/2},
 	                    stroke: 'black',
-	                //    info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
 	                    strokeWidth: '4'
 	                });        
+	             //    this.node[mainValueArrLength+outliersArrLength+i*3].moveToBottom();
 	                this.node[mainValueArrLength+outliersArrLength+i*3+1]= new Kinetic.Line({
-	                 //   name : i,
 	                    x: medianXPos,
 	                    y: medianYPos,
 	                    points: [    0,  (median[i]-maxBelowFence[i])*this.height/(yMax - yMin),
 	                                 0, (median[i]-q3[i])*this.height/(yMax - yMin)],
 	                    opacity : 0.5,
-	              //      info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
 	                    stroke: 'black'
 	                });    
 	                this.node[mainValueArrLength+outliersArrLength+i*3+2]= new Kinetic.Line({
-	             //       name : i,
 	                    x: medianXPos,
 	                    y: medianYPos,
 	                    points: [    0, (median[i]-q1[i])*this.height/(yMax - yMin),
 	                                 0, (median[i]-minAboveFence[i])*this.height/(yMax - yMin)],
 	                    opacity : 0.5,
-	             //       info: "Node : "+i+"\r\n"+"Frequency : "+boxHasArr[i].length,
 	                    stroke: 'black'
 	                });    
-	             //   alert('end');
-	               
-	                          
-	              //  document.write("out+ <br>");                
-	             //   document.writeln("@@boxHasArr : "+boxHasArr[i]);
-	            }    
-	           
-	            
-				
+	            } 
             },
             doIt: function() { 
                 alert('do it'); 
@@ -504,7 +475,7 @@ var Box = {};
                         x: this.plotXMargin+this.xPlotArr[i][0]-30,
                         y: this.plotYMargin+this.height+this.plotLength*2,
                         text: this.xPlotArr[i][1],
-                        fontSize: 15,
+                        fontSize: this.width/40,
                         fontFamily: 'Calibri',
                         fill: 'black',
                         width: 60,
@@ -584,7 +555,8 @@ var Box = {};
                 this.dataLayer = new Kinetic.Layer();    
                 for(var i = 0 ; i < this.node.length ; i ++)
                 {
-                    if(i % parseInt(this.node.length/20) == 0)
+                	
+                    if(i % (parseInt(this.node.length/20)+1) == 0)
                     {
                         this.stage.add(this.dataLayer);
                         this.dataLayer = new Kinetic.Layer();

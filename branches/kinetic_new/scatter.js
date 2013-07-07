@@ -219,7 +219,7 @@ var Scatter = {};
 				        x: this.plotXMargin+this.xPlotArr[i][0]-30,
 				        y: this.plotYMargin+this.height+this.plotLength*2,
 				        text: this.xPlotArr[i][1],
-				        fontSize: 15,
+				        fontSize: this.width/40,
 				        fontFamily: 'Calibri',
 				        fill: 'black',
 				        width: 60,

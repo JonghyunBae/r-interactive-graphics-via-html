@@ -89,7 +89,6 @@ function hideSelected()
 //allGraphUpdate is used for only select & unselect
 function allGraphUpdate(id , select, name) 
 {	
-	//�띠룊�숋옙占쏙옙誘る닔�좑옙�낅슣�섊뙼占썲뜝�쇰맮�숋옙�숈삕�좎럥踰∽옙�우삕占쎈베堉� 
 	if(name._type == "scatter")
 	{
 		if(isSelected[id][0] != 2)//if node is not hidden
@@ -100,7 +99,7 @@ function allGraphUpdate(id , select, name)
 			}
 			isSelected[id][0] = select;
 		}		
-	}else if(name._type == "hist"){	//histogram�좎룞�숅뇦猿뗫윪占쏙옙id�띠룆占쏙옙占퐊ode�좎룞�숂뵓怨뺣쐡占쎈돍�숋옙占쎌삕�β댙�셡asArr占쎌뮋�숋옙�뚮뿫�멨뜝�숈삕�좎럩裕놅옙占�
+	}else if(name._type == "hist"){	
 		var tmp = name.node[id].getHasArr();
 		for(var j = 0 ; j < tmp.length ; j ++)
 		{

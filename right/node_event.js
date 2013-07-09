@@ -599,8 +599,8 @@ function select(Name)
 			var node = evt.targetNode;
 			if(isNaN(node.getName()) == false)
 			{
-				var tmpX = Name.node[node.getName()].getX(); // 占쎌쥙�ε뜝�숈삕�좎뜴�앾옙�됲맀占쎈맮�숋옙醫롫윥筌�쓧��옙怨쀬굲占쎌쥚由� y �좎뜫爰귨옙占쎌춻占쎈갭�뷂옙醫롫쓠�얜챿�숋옙�깅떋 占쎌쥙�ο옙袁ъ삕占쏙옙�뺧옙醫묒삕
-				var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); // Y�좎뜫爰귨옙占쎌춻占쎈９苡몌옙醫롫짗占쎌닂�숋옙源녿뾼占쎌쥙�ο옙�ｋ쐻�좎뜴�앾옙�덉맆�좎럩鍮랃㎗�λ쐻占쎈슣큔 占쎌쥙�ワ옙�듭삕�좎뜴�앾옙��툔占쎈쵎�わ옙�용쐻占쎈슣큔 占쎌쥙�ワ옙�㏉맪占쎈맩�뺧옙釉먮폇�됵옙 
+				var tmpX = Name.node[node.getName()].getX(); 
+				var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); 
 			//	alert(tmpX + " , " + tmpY);
 				if(aPressed){	//select ALL
 					Name.tmpShift = false;

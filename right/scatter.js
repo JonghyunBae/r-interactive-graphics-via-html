@@ -503,8 +503,8 @@ function scatterUpdate(obj, id)
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-function makeAxisArr(dataArr, length, axis, tick)	 //width占쏙옙height占쏙옙獄쏆룄��this.x 占쏙옙this.y�쒙옙獄쏆룄��xtick占쎈�援�ytick占쏙옙獄쏆룆�쀯옙占�
-{														// return占쏙옙x�ル슦紐댐옙占퐔�ル슦紐�占쎈�已ワ옙占쏙㎕�곻옙占쎈뜄��plotArr占쏙옙node揶쏉옙筌〓엨占쏙옙�노막 �ル슦紐닷첎占퐊ode占쏙옙占쏙옙�ｏ옙�뤿선 return占쎌뮆�� 
+function makeAxisArr(dataArr, length, axis, tick)	 
+{														 
 	var node = new Array(dataArr[axis].length);
 	if(isDiscrete[axis] == true)
 	{		

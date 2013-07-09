@@ -43,8 +43,8 @@ var Hist = {};
 	            {
 	            	
 	            	var cnt = 0;
-	            	var xTmp = new Array();  // 獄쏅쵐��揶쏉옙占쏙옙��占쎈�已ワ옙占�	            	
-	            	var freqTmp = new Array();  //frequency�쒙옙占쏙옙��
+	            	var xTmp = new Array();              	
+	            	var freqTmp = new Array();  
 	            	var hasTmp = make2DArr(dataArr[this.x].length);
 	            	freqTmp[cnt] = 1;
 	            	hasTmp[cnt][0] = 0;
@@ -75,7 +75,7 @@ var Hist = {};
 	            	var barGap = barWidth;
 	            	this.xMax = parseInt(this.width/barWidth);
 	            	
-	            	var freqRank =make2DArr(freqTmp.length); 			// 占쎈뜆�わ옙醫됰젃占썩뫁��占썬끇已ワ㎕�λ떄占쏙옙占쎈베�곻옙�띾┛ 占쎄쑵釉��⑥눘��
+	            	var freqRank =make2DArr(freqTmp.length); 			
 	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
 	            		freqRank[i][0] = freqTmp[i];
@@ -83,55 +83,52 @@ var Hist = {};
 	            	}
 	            	freqRank.sort(function(a,b){return a[0] - b[0];});
 	            	var nodeX = new Array(freqTmp.length);
-	            	this.maxNode =freqRank[freqRank.length-1][1]; // Y Axis�쒙옙域밸챶�ワ옙占쏙옙�뽰뵬占쎄쑴肉됪틦��옙 域밸챶�곫묾怨쀬맄占쏙옙野껓옙
+	            	this.maxNode =freqRank[freqRank.length-1][1]; 	            	
 	            	this.xPlotArr = make2DArr(freqTmp.length);
  	            	for(var i  = 0 ; i < freqRank.length ; i ++)
 	            	{
- 	            	//	nodeX[freqRank[i][1]] = i;				// 占쏙옙cntTmp array�쒙옙占쎈챶諭띰옙占퐔揶쏅�諭억옙占쏙옙節뚮선餓ο옙�� 筌앾옙x 占쎄쑴�귨쭕占썼쳸遺쏀벊占쏙옙占쏙퐢�쀯옙占�
+ 	            	//	nodeX[freqRank[i][1]] = i;				 	            		
  	            		this.xPlotArr[i][0] = i*(barWidth+barWidth) + (barWidth+barWidth)/2;
  	            		this.xPlotArr[i][1] = xTmp[freqRank[i][1]];
 	            		nodeX[freqRank[i][1]] = i*(barWidth+barWidth) + (barWidth)/2;
 	            	}	            	
- 	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;  // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
-	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2; // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
+ 	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;   
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2;  
  	            	var firstcnt = 0;
 	            }else{
 	            	
-	            	var xMax = findMaxValue(dataArr[this.x]);			// xMax�쒙옙�믪눘占��닌뗫퉸占쏙옙barwidth�쒙옙�닌뗫퉸餓ο옙占쏙옙占쎈뜄�� 
+	            	var xMax = findMaxValue(dataArr[this.x]);			
 	            	var xMin = findMinValue(dataArr[this.x]);
-	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); // frequency 占쎄쑴�녷에占쏙옙占쎌삢 
-	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);  // has array�λ뜃由곤옙遺얜뮉 占쎌눖��筌ㅼ뮇釉숋옙占썲칰�뚯뒭占쏙옙dataArray[this.x].length嚥∽옙占쎈똻占쏙옙占�
+	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1);
+	            	var hasTmp = (xMin > 0 ) ? make2DArr(parseInt((xMax)/this.bin)+1) : make2DArr(parseInt((xMax -xMin)/this.bin)+1);             	
 	            	var upTmp = new Array(dataArr[this.x].length);
 	            	var cnt = 0;
 	            	for(var i = 0 ; i < freqTmp.length ; i ++ )
 	            	{
-	            		freqTmp[i] = 0;  // frequency 占쏙옙�ｏ옙醫됰낵 �λ뜃由곤옙占�	            		
+	            		freqTmp[i] = 0; 
 	            	}
 	            	
 	            	for(var i = 0 ; i < dataArr[this.x].length ; i++)
 	            	{
-	            		if(xMin < 0)
-	            		{
-	            			cnt = parseInt((dataArr[this.x][i]+Math.abs(xMin))/this.bin);  // 占쎈���獄쏄퀣肉댐옙袁⑺뒄占쏙옙占썬끉堉긷첎�됵옙 野껉퀣��
+	            		if(xMin < 0){
+	            			cnt = parseInt((dataArr[this.x][i]+Math.abs(xMin))/this.bin);              		
 	            		}else{
 	            			cnt = parseInt(dataArr[this.x][i]/this.bin);
 	            		}	            		
-	            		freqTmp[cnt] ++ ; // 占쎈���쳸怨쀫였 frequency 占쎌꼶援뱄옙占쏙옙�롮젻雅뚯눊��
-	            		hasTmp[cnt].push(i); // hasarray占쏙옙占쏙옙�ｏ옙�곻옙占쏙옙
+	            		freqTmp[cnt] ++ ;           		
+	            		hasTmp[cnt].push(i);        		
 	            		upTmp[i] = cnt;
 	            		
 	            	}
 	            	
 	            //	alert(freqTmp.length);
-	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) // 筌ｌ꼷�ч겫占쎄숲 占쎈�逾믤틦��옙 0占쏙옙占쎌꼷�ㅿ옙遺울옙 占쏙옙�� 筌앾옙 frequency揶쏉옙0占쏙옙占쎄쑬��筌ｏ옙占쎈챶諭�野껓옙沅�
-	            	{	            		
+	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++){	            		
 	            		if(freqTmp[firstcnt] != 0)
 	            		{
 	            			break;
 	            		}
 	            	}
-	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--) // 占쎄쑴占�獄쏆꼶占썸에占쏙옙�밸퓠占쎌뮆占쏙옙占퐀requency揶쏉옙0占쏙옙占쎄쑬��筌ｏ옙占쎈챶諭�野껓옙沅�
-	            	{
+	            	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--){
 	            		if(freqTmp[lastcnt] != 0)
 	            		{
 	            			break;
@@ -150,8 +147,8 @@ var Hist = {};
             	//			alert(upTmp[i]);
 	            		isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
 	            	}
-            		var barWidth = this.width /(lastcnt-firstcnt + 3);	// 占쎈쵐�앾옙占�燁삳챷逾�占싼딆��븝옙占쎄퀡�わ옙占�3
-	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); // �ο옙筌〓씮堉깍옙占쏙옙�롫뮉 x�곤옙scale占쏙옙4揶쏉옙占쏙옙占쎈�鍮먲옙占쏙쭕�뚮뼄. 
+            		var barWidth = this.width /(lastcnt-firstcnt + 3);	
+	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4);  
 	           // 	alert(firstcnt);
 	           // 	alert(lastcnt);
 	            	cnt = 0;
@@ -166,8 +163,8 @@ var Hist = {};
 	            			nodeX[cnt++] =  i*(barWidth);	            			
 	            		}
 	            	}	 
-	            	this.firstX = this.xPlotArr[0][0];  // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
-	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]; // x Axis�쒙옙域밸챶�ワ옙占쏙㎗�륁벉�븝옙苑�占쎌빓�댐쭪占썸뉩紐껋젻雅뚯눊由�占쎄쑵鍮�占쎌꼶��野껓옙 
+	            	this.firstX = this.xPlotArr[0][0];   
+	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0];  
 	            	var maxFreq = findMaxValue(freqTmp);
 	            	this.maxNode =0;
 	                for(var i = 0; i<  freqTmp.length ; i++)
@@ -203,7 +200,8 @@ var Hist = {};
 	    		}	    
 	    		/////////////////////////////////// ////////////////////////////////////////
 	           
-	            this.yMax = max; // 占쎌꼶��freqTmp 揶쏆뮇�붷첎占쏙쭗�뺤뻣占쎈챷占�占쎌꼷占쏙옙占썸뤃�釉�占쏙옙占쎈뜆�앲첋占쎌쨮 占썬끉肉됵옙占썸뤃�釉놂옙占�	            this.yMin = 0;	          
+	            this.yMax = max;          
+	            this.yMin = 0;	          
 	            
             	 //////////Make Data Structure of nodes and essential arrays////////            	
             	this.node = new Array();            	
@@ -458,9 +456,9 @@ function histUpdate(obj, id)
 							obj.node[id].setScaleX(1.05);
 							obj.node[id].setSelected(1);
 						}				
-					}else if(selectOn == 2){ // hide
+					}else if(selectOn == 2){ // hide						
 						obj.node[id].setFreq(obj.node[id].getFreq()- obj.node[id].getSelectCnt());
-						obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()- obj.node[id].getSelectCnt()));
+						obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()));	// dependancy with previous line.					
 						obj.node[id].setOffset({ y :  (obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax)/2});
 						obj.node[id].setY(obj.node[id].getY() + (obj.node[id].getSelectCnt())*obj.height/obj.yMax/2);
 						obj.node[id].setHeight(obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax);
@@ -474,7 +472,6 @@ function histUpdate(obj, id)
 						obj.node[id].setOffset({ y :  (obj.node[id].getFreq()*obj.height/obj.yMax)/2});
 						obj.node[id].setY(obj.plotYMargin + obj.height - obj.node[id].getFreq()*obj.height/obj.yMax/2);
 						obj.node[id].setHeight(obj.node[id].getFreq()*obj.height/obj.yMax);
-						obj.node[id].setSelected(0);
 						obj.node[id].setSelectCnt(0);
 					}
 				};

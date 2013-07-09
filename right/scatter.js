@@ -20,7 +20,7 @@ var Scatter = {};
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength= (optionObj.plotLength==undefined)?(this.width*0.02):(optionObj.plotLength); //margin from plot box
-	            this.radius= (optionObj.radius==undefined)?(2):(optionObj.radius); //default radius is 3
+	            this.radius= (optionObj.radius==undefined)?(2):(optionObj.radius); //default radius is 2
 	            
 	            //check the x label
 	            for(var i = 0 ; i < labelArr.length ; i ++)	
@@ -219,7 +219,7 @@ var Scatter = {};
 				        x: this.plotXMargin+this.xPlotArr[i][0]-30,
 				        y: this.plotYMargin+this.height+this.plotLength*2,
 				        text: this.xPlotArr[i][1],
-				        fontSize: 15,
+				        fontSize: this.width/40,
 				        fontFamily: 'Calibri',
 				        fill: 'black',
 				        width: 60,
@@ -503,8 +503,8 @@ function scatterUpdate(obj, id)
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-function makeAxisArr(dataArr, length, axis, tick)	 //width��height��諛쏄퀬 this.x ��this.y瑜�諛쏄퀬 xtick�대굹 ytick��諛쏅뒗�� 
-{														// return��x醫뚰몴��x醫뚰몴 �대쫫��李랁��덈뒗 plotArr��node媛�李랁��쇳븷 醫뚰몴媛�node����옣�섏뼱 return�쒕떎. 
+function makeAxisArr(dataArr, length, axis, tick)	 //width占쏙옙height占쏙옙獄쏆룄��this.x 占쏙옙this.y�쒙옙獄쏆룄��xtick占쎈�援�ytick占쏙옙獄쏆룆�쀯옙占�
+{														// return占쏙옙x�ル슦紐댐옙占퐔�ル슦紐�占쎈�已ワ옙占쏙㎕�곻옙占쎈뜄��plotArr占쏙옙node揶쏉옙筌〓엨占쏙옙�노막 �ル슦紐닷첎占퐊ode占쏙옙占쏙옙�ｏ옙�뤿선 return占쎌뮆�� 
 	var node = new Array(dataArr[axis].length);
 	if(isDiscrete[axis] == true)
 	{		

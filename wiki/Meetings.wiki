@@ -1,7 +1,21 @@
+  # Status update
+  # Deep dive into Shiny and related issues.
+  # *Junghoon will update license over the weekend.*
+  # Deep dive into event handling interface. See EventHandling for more details.
+  # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
+   * Discuss about Hardly Wickham's comments.
+  # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+
+----
+
 Date : 06JULY2013
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
+  # Latest code is collected under the trunk:
+   * Functions with kineticJS 4.5.4
+   * Tagged as version 2.0 (cleaned up version after the senior project presentation)
+  # Decided to change the license from MIT to GPL.
   # Analyse Shiny(Down load shiny from cran)
    * Understand "startApp" of shiny.
    * Understand transferring the image. 
@@ -14,19 +28,6 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
    * divide draw part from data analysis part -> expect for supporting a various visualization.
 
 Next meeting : 09:00 AM (Korea time) on Sat, 7/13
-
-----
-
-  # Collect the latest code:
-   * Put the final code under trunk. If some functionalities are scattered around multiple branches, please collect them into trunk.
-   * Ensure that the code under trunk functions. Do *not* try to make any improvements.
-   * Tag the code under trunk as the final code before the summer.
-   * Remove unnecessary branches.
-  # Can we change the license from MIT to GPL-3 within Google Code? 
-  # Deep dive into event handling interface. See EventHandling for more details.
-  # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
-   * Discuss about Hardly Wickham's comments.
-  # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
 
 ----
 

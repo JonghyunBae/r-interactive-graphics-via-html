@@ -29,10 +29,10 @@
   <div id="content">
    <div id="scatterContainer1" oncontextmenu="return false;"></div>
    <div id="scatterContainer2" oncontextmenu="return false;"></div>
-   <div id="histContainer3" oncontextmenu="return false;"></div>
+   <div id="scatterContainer3" oncontextmenu="return false;"></div>
    <div id="histContainer4" oncontextmenu="return false;"></div>
-   <div id="boxContainer5" oncontextmenu="return false;"></div>
-   <div id="boxContainer6" oncontextmenu="return false;"></div>
+   <div id="histContainer5" oncontextmenu="return false;"></div>
+   <div id="histContainer6" oncontextmenu="return false;"></div>
   </div>
   <script>
    var scatter1 = new Scatter(mainArr,{x: 'x', y: 'price', color: 'color', legend: 'left', width: 250, height: 250});
@@ -41,18 +41,18 @@
    var scatter2 = new Scatter(mainArr,{x: 'clarity', y: 'depth', color: 'depth', legend: 'right', width: 250, height: 250});
    scatter2.draw(2);
    eventTrigger(scatter2);
-   var hist3 = new Hist(mainArr,{bin: 0.5, x: 'color', width: 250, height: 250});
-   hist3.draw(3);
-   eventTrigger(hist3);
-   var hist4 = new Hist(mainArr,{bin: 0.5, x: 'x', width: 250, height: 250});
+   var scatter3 = new Scatter(mainArr,{x: 'table', y: 'cut', color: 'cut', width: 250, height: 250});
+   scatter3.draw(3);
+   eventTrigger(scatter3);
+   var hist4 = new Hist(mainArr,{bin: 0.5, x: 'color', width: 250, height: 250});
    hist4.draw(4);
    eventTrigger(hist4);
-   var box5 = new Box(mainArr,{x: 'cut', y: 'price',  width: 300, height: 300});
-    box5.draw(5);
-    eventTrigger(box5);
-    var box6 = new Box(mainArr,{x: 'carat', y: 'price',  width: 300, height: 300});
-    box6.draw(6);
-    eventTrigger(box6);
+   var hist5 = new Hist(mainArr,{bin: 0.5, x: 'x', width: 250, height: 250});
+   hist5.draw(5);
+   eventTrigger(hist5);
+   var hist6 = new Hist(mainArr,{bin: 0.5, x: 'cut', width: 250, height: 250});
+   hist6.draw(6);
+   eventTrigger(hist6);
   </script>
   <script src="button_event.js"></script>
   <script src="table.js"></script>

@@ -3011,7 +3011,7 @@ var Kinetic = {};
     Kinetic.Node.addGetterSetter(Kinetic.Node, 'hidden', 0, true);
     Kinetic.Node.addGetterSetter(Kinetic.Node, 'info', 0, true);
     Kinetic.Node.addGetterSetter(Kinetic.Node, 'selectCnt', 0, true);
-    Kinetic.Node.addGetterSetter(Kinetic.Node, 'isOutlier', 0, true); 
+    
     
     /**
      * set x position

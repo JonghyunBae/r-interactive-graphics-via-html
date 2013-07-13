@@ -1,10 +1,22 @@
-  # Status update
-  # Deep dive into Shiny and related issues.
   # *Junghoon will update license over the weekend.*
+  # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
   # Deep dive into event handling interface. See EventHandling for more details.
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
    * Discuss about Hardly Wickham's comments.
   # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+
+---
+
+Date: 13JULY2013
+
+Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
+
+  # We managed to accomplish step 2 of the following list for the very toy example. Once this works, we can get back to the prototype problem (linear regression) we started.
+   # Send a JavaScript object holding arrays, e.g. (x, y) values, from the client to server.
+   # Server can perform operations on the received information, treating it as a data.frame object.
+   # Client can receive the information from the server as a JavaScript object holding arrays.
+  # Explored shiny code (shiny.js) and discussed about the general direction we are heading.
+  # TJ's participation will be limited during the week. Also, he will be in new employee orientation in August.
 
 ----
 

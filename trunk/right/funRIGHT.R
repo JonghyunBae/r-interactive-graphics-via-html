@@ -185,7 +185,7 @@ RIGHT <- function(..., fun = {},
   footerObj <- xmlNode("div", attrs = c(id = "footer"),
                        xmlNode("div", attrs = c(class = "wrap2"),
                                xmlNode("p", xmlTextNode(I('Created by <a herf="#">RIGHT</a>'))),
-                               xmlNode("p", xmlTextNode(I('Copyright &copy; 2013 <a herf="#">RIGHT team</a>')))))
+                               xmlNode("p", xmlTextNode(I('Copyright &copy; 2013 <a herf="#">RIGHT Team</a>')))))
   
   # Load libraries:
   libArray <- c("kinetic-v4.3.1.js",

@@ -36,7 +36,7 @@ var Box = {};
                 {
                     if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){  
                     	if(isDiscrete[i] == true){
-                    		alert('y axis should be continuous');
+                    	//	alert('y axis should be continuous');
                     	}else{
                     		this.y = i;
                     	}

@@ -20,46 +20,12 @@ createDiv <- function(inputId) {
   )
 }
 
-#d3IO <- function(inputoutputID) {
-#  div(id=inputoutputID,class="timeseries-output",tag("svg",""));
-#}
 # Define UI for dataset viewer application
-shinyUI(pageWithSidebar(
-  
-  # Application title
-  headerPanel("RIGHT: R Interactive Graphics via HTml"),
-  
-  # Sidebar with controls to select a dataset and specify the number
-  # of observations to view
-  sidebarPanel(
- 
-    selectInput("xAxis", "Choose x axis", 
-                choices = c("carat", "cut", "color", "clarity", "depth")),
-    selectInput("yAxis", "Choose y axis", 
-               choices = c("price", "carat", "cut", "color", "clarity", "depth")),  
-    selectInput("color", "Choose color", 
-                choices = c("price","carat", "cut", "color", "clarity", "depth")),
-    selectInput("legend", "Choose legend", 
-                choices = c("right", "topright", "left", "topleft", "default")),
-    numericInput("width", "width", 300),
-    numericInput("height", "height", 300),
-    numericInput("bin", "bin", 2)
-  ),
-  # Show a summary of the dataset and an HTML table with the requested
-  # number of observations
-  #<script>
-  #$(function() {
-  #    setTimeout(function() {
-  #  	  window.Shiny.onInputChange(\"TestEntry\", {a:[1, 2], b:[3, 4]});
-  #	  }, 10);
-  #	});
-  #</script>
-  mainPanel(
+shinyUI(bootstrapPage(  
     textOutput("TestEntry"),
     ###########################################################################
     ###########################################################################
     HTML("<script src=\"kinetic-v4.5.4.js\"></script>
-
   <script src=\"structure.js\"></script>
   <script src=\"common.js\"></script>
   <script src=\"scatter.js\"></script>
@@ -68,7 +34,6 @@ shinyUI(pageWithSidebar(
   <script src=\"node_event.js\"></script>
   <script>
   createMainStructure('diamonds-from-R_1K.csv');
-//  createMainStructure('Theoph-from-R.csv');
   </script>
   "),
     ###########################################################################
@@ -121,9 +86,6 @@ shinyUI(pageWithSidebar(
                    <p id=\"dont-delete-this\">E-mail : <a href=\"mailto:teamrightjs@gmail.com\">team.right.js@gmail.com</a></p>
                 
                   </div>")
-
-    
-  )
   
   
 ))

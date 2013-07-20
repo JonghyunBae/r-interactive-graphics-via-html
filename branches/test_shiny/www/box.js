@@ -29,6 +29,7 @@ var Box = {};
                     }
                     if(i==labelArr.length-1){
                         alert('retype x label');
+                        this.x = 0;
                     }
                 }
                 for(var i = 0 ; i < labelArr.length ; i ++)
@@ -36,13 +37,14 @@ var Box = {};
                     if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){  
                     	if(isDiscrete[i] == true){
                     		alert('y axis should be continuous');
-                    		return;
+                    	}else{
+                    		this.y = i;
                     	}
-                    	this.y =  i;
                     	break;
                     }
                     if(i==labelArr.length-1){
                         alert('retype y label');
+                        this.y = 0;
                     }
                 }
 

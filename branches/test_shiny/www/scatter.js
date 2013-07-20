@@ -1,8 +1,8 @@
-var Scatter = {};	
+var Scatter = {};
 
-(function() {	
+(function() {
 	
-	Scatter = function(id, dataArr,  optionObj) {
+	Scatter = function(id, dataArr, optionObj) {	
 		
 		this._initScatter(id, dataArr, optionObj);		
 		this._type = 'scatter';		
@@ -13,7 +13,7 @@ var Scatter = {};
     };
     Scatter.prototype = {
     		
-    		_initScatter: function(id, dataArr, optionObj){
+    		_initScatter: function(id, dataArr, optionObj) {
     			//make essential variables	
 	            this.width = optionObj.width || plotWidth; //plot width
 	            this.height = optionObj.height || plotHeight; //plot height
@@ -498,7 +498,7 @@ function scatterUpdate(obj, id)
 						obj.node[id].setScaleY(2);
 						obj.node[id].setSelected(1);
 						obj.node[id].moveToTop();
-					}else if(selectOn == 2 && obj.node[id].getSelected() == 1){	//hide
+					}/*else if(selectOn == 2 && obj.node[id].getSelected() == 1){	//hide
 						obj.node[id].setStroke(obj.node[id].getFill());
 						obj.node[id].setScaleX(1);
 						obj.node[id].setScaleY(1);
@@ -507,7 +507,7 @@ function scatterUpdate(obj, id)
 					}else if(selectOn == 3){		//reset
 						obj.node[id].setSelected(0);
 						obj.node[id].show();						
-					}					
+					}	*/				
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -560,16 +560,21 @@ function makeAxisArr(dataArr, length, axis, tick)
         min = tickRange * Math.floor(min/tickRange);
     	var diff = length * tickRange   / (max - min);
     	plotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));
-    	
 		for(var i = 0 ; i < plotArr.length ; i ++)
 		{
 			plotArr[i][0] = i*diff;
 			if (tickRange.toString().indexOf('.') == -1){
 				plotArr[i][1] = min+i*tickRange;
 			}else{
-				plotArr[i][1] = (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
+				
+				var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
+				if(point > 3){ // for setting the resonable point
+					point = 3;
+				}
+				plotArr[i][1] = (min+i*tickRange).toFixed(point);
 			}
-		}	    
+		}
+		
 		//alert(obj.plotXMargin);
 		for(var i = 0 ; i < node.length ; i ++)
 		{

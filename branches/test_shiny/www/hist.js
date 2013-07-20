@@ -450,7 +450,7 @@ function histUpdate(obj, id)
 						if(obj.node[id].getSelectCnt() == 0)
 						{
 							obj.node[id].setOpacity(0.5);
-							obj.node[id].setScaleX(1);
+							//obj.node[id].setScaleX(1);
 							obj.node[id].setSelected(0);
 						}
 					}else if(selectOn == 1){		// select
@@ -458,10 +458,10 @@ function histUpdate(obj, id)
 						if(obj.node[id].getSelected() == 0)
 						{
 							obj.node[id].setOpacity(1);
-							obj.node[id].setScaleX(1.05);
+							//obj.node[id].setScaleX(1.05);
 							obj.node[id].setSelected(1);
 						}				
-					}else if(selectOn == 2){ // hide
+					}/*else if(selectOn == 2){ // hide
 						obj.node[id].setFreq(obj.node[id].getFreq()- obj.node[id].getSelectCnt());
 						obj.node[id].setInfo("Node : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq()- obj.node[id].getSelectCnt()));
 						obj.node[id].setOffset({ y :  (obj.node[id].getHeight() - (obj.node[id].getSelectCnt())*obj.height/obj.yMax)/2});
@@ -479,7 +479,7 @@ function histUpdate(obj, id)
 						obj.node[id].setHeight(obj.node[id].getFreq()*obj.height/obj.yMax);
 						obj.node[id].setSelected(0);
 						obj.node[id].setSelectCnt(0);
-					}
+					} */
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

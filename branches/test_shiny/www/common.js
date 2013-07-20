@@ -29,19 +29,20 @@ function getCoords(e) {
 		divY = divY - xy_pos['yp'];
 		divOffsetX = xy_pos['xp'];
 		divOffsetY = xy_pos['yp'];
-		 // displays x and y coords in the #coords element		
+		 // displays x and y coords in the #coords element
+		
 
 	document.getElementById('coords');
 }
 //Get X, Y coords, and displays Mouse coordinates
 function getXYpos(elm) {
-	X = elm.offsetLeft;        // set x to elm占쎌쥙�⑼옙占퐋ffsetLeft
-	Y = elm.offsetTop;         // set y to elm占쎌쥙�⑼옙占퐋ffsetTop
+	X = elm.offsetLeft;       
+	Y = elm.offsetTop;        
 	
 	elm = elm.offsetParent;    // set elm to its offsetParent
 	
 	 //use while loop to check if elm is null
-	 // if not then add current elm占쎌쥙�⑼옙占퐋ffsetLeft to x
+	 // if not then add current 
 	 //offsetTop to y and set elm to its offsetParent
 	while(elm != null) {
 		X = parseInt(X) + parseInt(elm.offsetLeft);
@@ -55,17 +56,6 @@ function getXYpos(elm) {
 
 function resetSelected()
 {
-	for(var i = 0 ; i < isSelected.length ; i ++)
-	{
-		if(isSelected[i][0] == 2)
-		{
-/*			for(var j = 1 ; j < isSelected[i].length ; j++)
-			{
-				isSelected[i][j](3);
-			}
-			isSelected[i][0] = 0; */
-		}		
-	}
 	window.Shiny.onInputChange("TestEntry1", "reset");
 //	addRow('dataTable');
 //	refresh();
@@ -78,11 +68,6 @@ function hideSelected()
 		if(isSelected[i][0] == 1)
 		{
 			hiddenArr.push(i);
-/*			for(var j = 1 ; j < isSelected[i].length ; j++)
-			{
-				isSelected[i][j](2);
-			}
-			isSelected[i][0] = 2; */
 		}		
 	}
 	window.Shiny.onInputChange("TestEntry1", hiddenArr);

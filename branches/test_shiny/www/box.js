@@ -33,18 +33,17 @@ var Box = {};
                 }
                 for(var i = 0 ; i < labelArr.length ; i ++)
                 {
-                    if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){                        
-                         this.y =  i;
-                         break;
+                    if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){  
+                    	if(isDiscrete[i] == true){
+                    		alert('y axis should be continuous');
+                    		return;
+                    	}
+                    	this.y =  i;
+                    	break;
                     }
                     if(i==labelArr.length-1){
                         alert('retype y label');
                     }
-                }
-                
-                if(isDiscrete[this.y] == true)
-                {
-                	alert('y axis should be continuous');
                 }
 
                 var nodeX = new Array(dataArr[this.x].length);
@@ -773,19 +772,21 @@ function boxMakeAxisArr(dataArr, length, axis, tick)     //from scatter.js, so t
         
         for(var i = 0 ; i < plotArr.length ; i ++)
         {
-            plotArr[i][0] = i*diff;
-            if (tickRange.toString().indexOf('.') == -1){
-                plotArr[i][1] = min+i*tickRange;
-            }else{
-                plotArr[i][1] = (min+i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
-            }
+        	plotArr[i][0] = i*diff;
+			if (tickRange.toString().indexOf('.') == -1){
+				plotArr[i][1] = min+i*tickRange;
+			}else{
+				var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
+				if(point > 3){	// for setting the resonable point
+					point = 3;
+				}
+				plotArr[i][1] = (min+i*tickRange).toFixed(point);
+			}
         }        
-        //alert(obj.plotXMargin);
         for(var i = 0 ; i < node.length ; i ++)
         {
             node[i] = length* ((dataArr[axis][i]-min)) /((max - min));
         }
-    //    alert(node);
     }
     return { plotArr : plotArr, node : node};
 }
@@ -834,7 +835,7 @@ function boxUpdate(obj, id)
 								obj.node[id].setSelected(1);
 							}
 						}				
-					}else if(selectOn == 2){ // hide
+					}/*else if(selectOn == 2){ // hide
 						if(obj.node[id].getIsOutlier()){//if isOutlier ==true
 							obj.node[id].setStroke(obj.node[id].getFill());
 							obj.node[id].setScaleX(1);
@@ -857,7 +858,7 @@ function boxUpdate(obj, id)
 							obj.node[id].setInfo("boxNode : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length);
 							obj.node[id].setSelectCnt(0);
 						}
-					}
+					} */
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

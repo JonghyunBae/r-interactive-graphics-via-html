@@ -100,7 +100,8 @@ function menu(Name)
 	});
 	Name.menuText = new Array();
 	Name.menuRect = new Array();	
-	var menuName = new Array("Hide", "Reset", "Show Table", "Change X Axis", "Change Y Axis", "Change Color"); //add element you want.
+	var menuName = new Array("Hide", "Reset", "Table", "Change X Axis", "Change Y Axis", "Change Color"); //add element you want.
+	var optionName = ['xAxis', 'yAxis', 'color'];
 	//var menuFunction = [hideSelected, resetSelected, showTable];
 	
 	for(var i=0; i < menuName.length; i++){
@@ -125,12 +126,18 @@ function menu(Name)
 				Name.menuRect[i].setFill('#cfe444');
 				Name.menuText[i].setFill('#black');
 				Name.menuLayer.draw();
-				if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Show Table", no sub menu
-					Name.subMenu.hide();
-					Name.subMenuLayer.draw();
+				if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Show Table", no sub menu	
+					for(var j=0; j<optionName.length; j++){
+						Name.subMenu[j].hide();
+						Name.subMenuLayer[j].draw();	
+					}				
 				}else{
-					Name.subMenu.show();
-					Name.subMenuLayer.draw();
+					for(var j=0; j<optionName.length; j++){
+						Name.subMenu[j].hide();
+						Name.subMenuLayer[j].draw();	
+					}
+					Name.subMenu[i-optionName.length].show();
+					Name.subMenuLayer[i-optionName.length].draw();
 				}
 			});
 			Name.menuRect[i].on('mouseover', function(evt){
@@ -138,11 +145,17 @@ function menu(Name)
 				Name.menuText[i].setFill('#black');
 				Name.menuLayer.draw();
 				if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Show Table", no sub menu
-					Name.subMenu.hide();
-					Name.subMenuLayer.draw();
+					for(var j=0; j<optionName.length; j++){
+						Name.subMenu[j].hide();
+						Name.subMenuLayer[j].draw();	
+					}
 				}else{
-					Name.subMenu.show();
-					Name.subMenuLayer.draw();
+					for(var j=0; j<optionName.length; j++){
+						Name.subMenu[j].hide();
+						Name.subMenuLayer[j].draw();	
+					}
+					Name.subMenu[i-optionName.length].show();
+					Name.subMenuLayer[i-optionName.length].draw();
 				}
 			});
 			Name.menuText[i].on('mouseout', function(evt){
@@ -185,12 +198,12 @@ function menu(Name)
 		if(tableVisible == false){
 			document.getElementById('dataTable').style.display = 'block';
 			document.getElementById('tableScrollableContainer').style.display = 'block';
-			Name.menuText[2].setText(" Hide Table"); 		
+		//	Name.menuText[2].setText(" Hide Table"); 		
 			tableVisible=true;
 		}else{
 			document.getElementById('dataTable').style.display = 'none';
 			document.getElementById('tableScrollableContainer').style.display = 'none';
-			Name.menuText[2].setText(" Show Table"); 		
+		//	Name.menuText[2].setText(" Show Table"); 		
 			tableVisible=false;
 		}		
 		Name.menu.hide();
@@ -200,98 +213,132 @@ function menu(Name)
 		if(tableVisible == false){
 			document.getElementById('dataTable').style.display = 'block';
 			document.getElementById('tableScrollableContainer').style.display = 'block';
-			Name.menuText[2].setText(" Hide Table"); 		
+		//	Name.menuText[2].setText(" Hide Table"); 		
 			tableVisible=true;
 		}else{
 			document.getElementById('dataTable').style.display = 'none';
 			document.getElementById('tableScrollableContainer').style.display = 'none';
-			Name.menuText[2].setText(" Show Table"); 		
+		//	Name.menuText[2].setText(" Show Table"); 		
 			tableVisible=false;
 		}		 
-		document.getElementById('dataTable').style.display = 'none';
-		document.getElementById('tableScrollableContainer').style.display = 'none';
 		Name.menu.hide();
 		Name.menuLayer.draw();	
 	});
 	
-	
-	Name.subMenuLayer = new Kinetic.Layer();
-	Name.subMenu = new Kinetic.Group({
-		opacity: 0.95,
-		visible: false
-	});
-	Name.subMenuText = new Array();
-	Name.subMenuRect = new Array();
-	var subMenuName = labelArr; //add labelArr
-//	alert(subMenuName);
-	for(var i=0; i < labelArr.length; i++){
-		Name.subMenuText[i] = new Kinetic.Text({
-			x: 120,
-			y: -3+menuName.length*13+25 * i,
-			text: '',
-			fontFamily: 'Calibri',
-			fontSize: 15,
-			padding: 5,
-			fill: 'white'
-		})	
-		Name.subMenuRect[i] = new Kinetic.Rect({
-			x: 125,
-			y: -3+menuName.length*13+25 * i,
-			width: 120,
-			height: 25,
-			fill: '#93b21a'
-		});		
-		Name.subMenu.add(Name.subMenuRect[i]).add(Name.subMenuText[i]);
-		Name.subMenuText[i].setText(' '+subMenuName[i]); 	
-		(function (i) { 
-			Name.subMenuText[i].on('click', function(evt){
-				window.Shiny.onInputChange("graphName", Name._id);
-				window.Shiny.onInputChange("changeOption", i);
-			});
-			Name.subMenuRect[i].on('click', function(evt){
-				window.Shiny.onInputChange("graphName", Name._id);
-				window.Shiny.onInputChange("changeOption", i);
-			});
-			Name.subMenuText[i].on('mouseover', function(evt){		
-				Name.subMenuRect[i].setFill('#cfe444');
-				Name.subMenuText[i].setFill('#black');
-				Name.menuLayer.draw();
-				Name.subMenu.show();
-				Name.subMenuLayer.draw();
-			});
-			Name.subMenuRect[i].on('mouseover', function(evt){
-				Name.subMenuRect[i].setFill('#cfe444');
-				Name.subMenuText[i].setFill('#black');
-				Name.menuLayer.draw();
-				Name.subMenu.show();
-				Name.subMenuLayer.draw();
-			});
-			Name.subMenuText[i].on('mouseout', function(evt){
-				Name.subMenuRect[i].setFill('#93b21a');
-				Name.subMenuText[i].setFill('white');
-				Name.menuLayer.draw();
-			});
-			Name.subMenuRect[i].on('mouseout', function(evt){
-				Name.subMenuRect[i].setFill('#93b21a');
-				Name.subMenuText[i].setFill('white');
-				Name.menuLayer.draw();
-			});	
-		}) (i); 
+
+	Name.subMenuLayer = new Array(optionName.length);
+	Name.subMenu = new Array(optionName.length);
+	for(var i=0; i< optionName.length ; i++){
+		Name.subMenuLayer[i] = new Kinetic.Layer();
+		Name.subMenu[i] = new Kinetic.Group({
+			opacity: 0.95,
+			visible: false
+		});
 	}
-	Name.subMenuLayer.add(Name.subMenu);
-	Name.stage.add(Name.subMenuLayer);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Name.subMenuText = make2DArr(optionName.length);
+	Name.subMenuRect = make2DArr(optionName.length);
+	var subMenuName =  make2DArr(optionName.length);
+	for(j=0; j< optionName.length; j++){
+		subMenuName[j]=labelArr;
+		(function (j) { 
+			for(var i=0; i < labelArr.length; i++){
+				Name.subMenuText[j][i] = new Kinetic.Text({
+					x: 120,
+				//	y: 25 * i + 25 * j,
+					y: (menuName.length-optionName.length)*25+25 * i + 25 * j,
+					text: '',
+					fontFamily: 'Calibri',
+					fontSize: 15,
+					padding: 5,
+					fill: 'white'
+				})	
+				Name.subMenuRect[j][i] = new Kinetic.Rect({
+					x: 125,
+					y: (menuName.length-optionName.length)*25+25 * i + 25 * j,
+					width: 120,
+					height: 25,
+					fill: '#93b21a'
+				});	
+				Name.subMenu[j].add(Name.subMenuRect[j][i]).add(Name.subMenuText[j][i]);
+				Name.subMenuText[j][i].setText(' '+subMenuName[j][i]); 	
+				(function (i) { 
+					Name.subMenuText[j][i].on('click', function(evt){
+						window.Shiny.onInputChange("graphName", Name._id);
+						window.Shiny.onInputChange("whichOption", j);
+						window.Shiny.onInputChange("changeOption", i);
+					});
+					Name.subMenuRect[j][i].on('click', function(evt){
+						window.Shiny.onInputChange("graphName", Name._id);
+						window.Shiny.onInputChange("whichOption", j);
+						window.Shiny.onInputChange("changeOption", i);
+					});
+					Name.subMenuText[j][i].on('mouseover', function(evt){		
+					//	Name.menuRect[i+3].setFill('#cfe444');
+					//	Name.menuText[i+3].setFill('#black');
+						Name.subMenuRect[j][i].setFill('#cfe444');
+						Name.subMenuText[j][i].setFill('#black');
+					//	Name.menuLayer[j].draw();
+						Name.subMenu[j].show();
+						Name.subMenuLayer[j].draw();
+					});
+					Name.subMenuRect[j][i].on('mouseover', function(evt){
+					//	Name.menuRect[i+3].setFill('#cfe444');
+					//	Name.menuText[i+3].setFill('#black');
+						Name.subMenuRect[j][i].setFill('#cfe444');
+						Name.subMenuText[j][i].setFill('#black');
+					//	Name.menuLayer.draw();
+						Name.subMenu[j].show();
+						Name.subMenuLayer[j].draw();
+					});
+					Name.subMenuText[j][i].on('mouseout', function(evt){
+						Name.subMenuRect[j][i].setFill('#93b21a');
+						Name.subMenuText[j][i].setFill('white');						
+					//	Name.menuLayer.draw();
+					});
+					Name.subMenuRect[j][i].on('mouseout', function(evt){
+						Name.subMenuRect[j][i].setFill('#93b21a');
+						Name.subMenuText[j][i].setFill('white');
+					//	Name.menuLayer.draw();
+					});	
+				}) (i); 
+			}
+		}) (j); 
+	}
+//	alert(subMenuName); //add labelArr
+//	alert(subMenuName);
+	
+	
+	
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	for(var j=0; j<optionName.length; j++){
+		Name.subMenuLayer[j].add(Name.subMenu[j]);
+		Name.stage.add(Name.subMenuLayer[j]);
+	}
+	
 	
 	Name.stage.on('click', function(evt){ // mouse drag
 		for(var i = 0 ; i < objArr.length ; i ++)
 		{
 			objArr[i].menu.hide();
 			objArr[i].menuLayer.draw();
-			objArr[i].subMenu.hide();
-			objArr[i].subMenuLayer.draw();
+			for(var j=0; j<optionName.length; j++){
+				objArr[i].subMenu[j].hide();
+				objArr[i].subMenuLayer[j].draw();	
+			}
 		}
 		if((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click			
-			Name.subMenu.hide();
-			Name.subMenuLayer.draw();
+			for(var j=0; j<optionName.length; j++){
+				Name.subMenu[j].hide();
+				Name.subMenuLayer[j].draw();	
+			}
 			menuOn=true;
 			//alert('right clicked');
 			var node = evt.targetNode;
@@ -301,16 +348,24 @@ function menu(Name)
 			var mousePos = node.getStage().getMousePosition();
 			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set menu box position
 				Name.menu.setPosition(mousePos.x + 8, mousePos.y + 2);
-				Name.subMenu.setPosition(mousePos.x + 8, mousePos.y + 2);
+				for(var j=0; j<optionName.length; j++){
+					Name.subMenu[j].setPosition(mousePos.x + 8, mousePos.y + 2);
+				}
 			}else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
 				Name.menu.setPosition(mousePos.x + 2, mousePos.y - 2 - menuHeight);
-				Name.subMenu.setPosition(mousePos.x + 2, mousePos.y - 2 - menuHeight);
+				for(var j=0; j<optionName.length; j++){
+					Name.subMenu[0].setPosition(mousePos.x + 2, mousePos.y - 2 - menuHeight);
+				}
 			}else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
 				Name.menu.setPosition(mousePos.x - 2 - menuWidth, mousePos.y + 2);
-				Name.subMenu.setPosition(mousePos.x - 2 - menuWidth, mousePos.y + 2);
+				for(var j=0; j<optionName.length; j++){
+					Name.subMenu[0].setPosition(mousePos.x - 2 - menuWidth, mousePos.y + 2);
+				}
 			}else{
 				Name.menu.setPosition(mousePos.x - 2 - menuWidth , mousePos.y - 2 - menuHeight);
-				Name.subMenu.setPosition(mousePos.x - 2 - menuWidth , mousePos.y - 2 - menuHeight);
+				for(var j=0; j<optionName.length; j++){
+					Name.subMenu[0].setPosition(mousePos.x - 2 - menuWidth , mousePos.y - 2 - menuHeight);
+				}
 			}				
 			Name.menu.show();
 			Name.menuLayer.draw();
@@ -318,8 +373,10 @@ function menu(Name)
 			if(menuOn==true){
 				Name.menu.hide();
 				Name.menuLayer.draw();
-				Name.subMenu.hide();
-				Name.subMenuLayer.draw();
+				for(var j=0; j<optionName.length; j++){
+					Name.subMenu[j].hide();
+					Name.subMenuLayer[j].draw();	
+				}
 			}		
 		}	
 	});

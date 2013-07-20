@@ -38,12 +38,13 @@ shinyServer(function(input, output) {
     bin <-input$bin
     hide <- input$TestEntry1
     
-    graphName <- input$graphName
+    graphName <- input$graphName    
+    whichOption <- input$whichOption
     changeOption <- input$changeOption
     
     #fun <-{as.data.frame(lapply(input$TestEntry1, unlist))}
     #output<-list(xAxis, yAxis, color, legend, width, height, bin);
-    output<-list(xAxis, yAxis, color, legend, width, height, bin, hide, graphName, changeOption);
+    output<-list(xAxis, yAxis, color, legend, width, height, bin, hide, graphName, whichOption, changeOption);
     return(output)
   })
   

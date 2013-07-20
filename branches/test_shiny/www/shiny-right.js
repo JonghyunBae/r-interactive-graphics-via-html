@@ -3,6 +3,8 @@ var tempHidden = new Array();
 var save = new Array();
 var rightOutputBinding = new Shiny.OutputBinding();
 var xAxis=new Array('carat','cut','carat'); //user initial value
+var yAxis=new Array('price','','price'); //user initial value
+var color=new Array('price','',''); //user initial value
 
 var tempHidden = new Array();
 rightOutputBinding.find = function(scope){
@@ -47,19 +49,24 @@ rightOutputBinding.renderValue = function(el, data) {
 				}					
 			window.Shiny.onInputChange("TestEntry1", null); // telling receive message completely.
 		}
-		if(data[8] != null && data[9] != null){
-			xAxis[data[8]-1] = labelArr[data[9]];		
+		if(data[8] != null && data[9] != null && data[10] != null){
+			switch(data[9])
+			{
+				case 0 : xAxis[data[8]-1] = labelArr[data[10]]; break;
+				case 1 : yAxis[data[8]-1] = labelArr[data[10]]; break;
+				case 2 : color[data[8]-1] = labelArr[data[10]]; break;
+			}		
 			window.Shiny.onInputChange("graphName", null); // telling receive message completely.
 			window.Shiny.onInputChange("changeXAxis", null); // telling receive message completely.
 		}
-		scatter1._initScatter(1, tempData, {x: xAxis[0] , y: data[1], color: data[2], legend: data[3], width: data[4], height: data[5]});
+		scatter1._initScatter(1, tempData, {x: xAxis[0] , y: yAxis[0], color: color[0], legend: data[3], width: data[4], height: data[5]});
 		//scatter^id^._initScatter(^id^, tempData, {x: xAxis[^id-1^], y: data[1], color: data[2], legend: data[3], width: data[4], height: data[5]});
 		scatter1.draw(1);
 		eventTrigger(scatter1);	
 		hist2._initHist(2, tempData, {bin: data[6], x: xAxis[1] , width: data[4], height: data[5]});
 		hist2.draw(2);
 		eventTrigger(hist2);	
-		box3._initBox(3, tempData, {x: xAxis[2] , y: data[1], width: data[4], height: data[5]});
+		box3._initBox(3, tempData, {x: xAxis[2] , y: yAxis[2], width: data[4], height: data[5]});
 		box3.draw(3);
 		eventTrigger(box3);
 	}

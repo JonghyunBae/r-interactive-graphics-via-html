@@ -100,8 +100,8 @@ function menu(Name)
         });
         Name.menuText = new Array();
         Name.menuRect = new Array();    
-        var menuName = new Array("Hide", "Reset", "Table", "Change X Axis", "Change Y Axis", "Change Color"); //add element you want.
-        var optionName = ['xAxis', 'yAxis', 'color'];
+        var menuName = new Array("Hide", "Reset", "Table", "Change X Axis", "Change Y Axis", "Change Color",  "Change Legend", "Change Width", "Change Height", "Change Bin"); //add element you want.
+        var optionName = ['xAxis', 'yAxis', 'color', 'legend', 'width', 'height', 'bin'];
         //var menuFunction = [hideSelected, resetSelected, showTable];
         
         for(var i=0; i < menuName.length; i++){
@@ -123,8 +123,12 @@ function menu(Name)
                 Name.menuText[i].setText(' '+menuName[i]);                              
                 (function (i) { 
                         Name.menuText[i].on('mouseover', function(evt){
+                        	for(var k=0; k<menuName.length; k++){
+                        		Name.menuRect[k].setFill('#93b21a');
+                                Name.menuText[k].setFill('white');
+                        	}
                                 Name.menuRect[i].setFill('#cfe444');
-                                Name.menuText[i].setFill('#black');
+                                Name.menuText[i].setFill('black');
                                 Name.menuLayer.draw();
                                 if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Show Table", no sub menu       
                                         for(var j=0; j<optionName.length; j++){
@@ -136,13 +140,17 @@ function menu(Name)
                                                 Name.subMenu[j].hide();
                                                 Name.subMenuLayer[j].draw();    
                                         }
-                                        Name.subMenu[i-optionName.length].show();
-                                        Name.subMenuLayer[i-optionName.length].draw();
+                                        Name.subMenu[i-(menuName.length-optionName.length)].show();
+                                        Name.subMenuLayer[i-(menuName.length-optionName.length)].draw();
                                 }
                         });
                         Name.menuRect[i].on('mouseover', function(evt){
+	                        	for(var k=0; k<menuName.length; k++){
+	                        		Name.menuRect[k].setFill('#93b21a');
+	                                Name.menuText[k].setFill('white');
+	                        	}                        	
                                 Name.menuRect[i].setFill('#cfe444');
-                                Name.menuText[i].setFill('#black');
+                                Name.menuText[i].setFill('black');
                                 Name.menuLayer.draw();
                                 if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Show Table", no sub menu
                                         for(var j=0; j<optionName.length; j++){
@@ -154,8 +162,8 @@ function menu(Name)
                                                 Name.subMenu[j].hide();
                                                 Name.subMenuLayer[j].draw();    
                                         }
-                                        Name.subMenu[i-optionName.length].show();
-                                        Name.subMenuLayer[i-optionName.length].draw();
+                                        Name.subMenu[i-(menuName.length-optionName.length)].show();
+                                        Name.subMenuLayer[i-(menuName.length-optionName.length)].draw();
                                 }
                         });
                         Name.menuText[i].on('mouseout', function(evt){
@@ -243,9 +251,21 @@ function menu(Name)
         Name.subMenuRect = make2DArr(optionName.length);
         var subMenuName =  make2DArr(optionName.length);
         for(j=0; j< optionName.length; j++){
-                subMenuName[j]=labelArr;
+        		switch(j){
+	        		case 0 : 
+	        		case 1 :
+	        		case 2 :
+	                    subMenuName[j]=labelArr;
+	                    break;
+	        		case 4 :
+	        		case 5 :
+	        			subMenuName[j]=['-10px', '+10px'];
+	                    break;
+                    default :
+                    	break;
+        		}
                 (function (j) { 
-                        for(var i=0; i < labelArr.length; i++){
+                        for(var i=0; i < subMenuName[j].length; i++){
                                 Name.subMenuText[j][i] = new Kinetic.Text({
                                         x: 120,
                                 //      y: 25 * i + 25 * j,
@@ -269,30 +289,43 @@ function menu(Name)
                                         Name.subMenuText[j][i].on('click', function(evt){
                                                 window.Shiny.onInputChange("graphName", Name._id);
                                                 window.Shiny.onInputChange("whichOption", j);
-                                                window.Shiny.onInputChange("changeOption", i);
+                                                switch(j){
+	                            	        		case 0 : 
+	                            	        		case 1 :
+	                            	        		case 2 :
+	                            	        			window.Shiny.onInputChange("changeOption", i);
+	                            	                    break;
+	                            	        		case 4 :
+	                            	        		case 5 :
+	                            	        			window.Shiny.onInputChange("changeOption", 20*i-10);
+	                            	                    break;
+	                                                default :
+	                                                	break;
+	                                    		}
+                                                
                                         });
                                         Name.subMenuRect[j][i].on('click', function(evt){
                                                 window.Shiny.onInputChange("graphName", Name._id);
                                                 window.Shiny.onInputChange("whichOption", j);
                                                 window.Shiny.onInputChange("changeOption", i);
                                         });
-                                        Name.subMenuText[j][i].on('mouseover', function(evt){           
-                                        //      Name.menuRect[i+3].setFill('#cfe444');
-                                        //      Name.menuText[i+3].setFill('#black');
+                                        Name.subMenuText[j][i].on('mouseover', function(evt){
                                                 Name.subMenuRect[j][i].setFill('#cfe444');
-                                                Name.subMenuText[j][i].setFill('#black');
-                                        //      Name.menuLayer[j].draw();
+                                                Name.subMenuText[j][i].setFill('black');                                    
                                                 Name.subMenu[j].show();
-                                                Name.subMenuLayer[j].draw();
+                                                Name.subMenuLayer[j].draw();                                                
+                                                Name.menuRect[j+(menuName.length-optionName.length)].setFill('#cfe444');
+                                                Name.menuText[j+(menuName.length-optionName.length)].setFill('#black');
+                                                Name.menuLayer.draw();
                                         });
                                         Name.subMenuRect[j][i].on('mouseover', function(evt){
-                                        //      Name.menuRect[i+3].setFill('#cfe444');
-                                        //      Name.menuText[i+3].setFill('#black');
                                                 Name.subMenuRect[j][i].setFill('#cfe444');
-                                                Name.subMenuText[j][i].setFill('#black');
-                                        //      Name.menuLayer.draw();
+                                                Name.subMenuText[j][i].setFill('black');
                                                 Name.subMenu[j].show();
                                                 Name.subMenuLayer[j].draw();
+                                                Name.menuRect[j+(menuName.length-optionName.length)].setFill('#cfe444');
+                                                Name.menuText[j+(menuName.length-optionName.length)].setFill('#black');
+                                                Name.menuLayer.draw();
                                         });
                                         Name.subMenuText[j][i].on('mouseout', function(evt){
                                                 Name.subMenuRect[j][i].setFill('#93b21a');

@@ -2,14 +2,13 @@ var Scatter = {};
 
 (function() {
 	
-	Scatter = function(id, dataArr, optionObj) {	
-		
+	Scatter = function(id, dataArr, optionObj) {		
 		this._initScatter(id, dataArr, optionObj);		
 		this._type = 'scatter';		
+		this._id = id;
 		objArr.push(this);
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
-		
     };
     Scatter.prototype = {
     		

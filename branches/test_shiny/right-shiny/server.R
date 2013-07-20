@@ -22,8 +22,10 @@ shinyServer(function(input, output) {
   
   
 
-  sad <- reactive({as.data.frame(lapply(input$TestEntry2, unlist))})
-  observe({print(sad())})
+  #sad <- reactive({as.data.frame(lapply(input$TestEntry2, unlist))})
+  #cobserve({print(sad())})
+  
+  xAxis <- 'carat'
   
   output$scatterContainer1 <- reactive(function() {
   #  input$Width    
@@ -35,9 +37,13 @@ shinyServer(function(input, output) {
     height <-input$height
     bin <-input$bin
     hide <- input$TestEntry1
-    fun <-{as.data.frame(lapply(input$TestEntry1, unlist))}
+    
+    graphName <- input$graphName
+    changeOption <- input$changeOption
+    
+    #fun <-{as.data.frame(lapply(input$TestEntry1, unlist))}
     #output<-list(xAxis, yAxis, color, legend, width, height, bin);
-    output<-list(xAxis, yAxis, color, legend, width, height, bin, hide);
+    output<-list(xAxis, yAxis, color, legend, width, height, bin, hide, graphName, changeOption);
     return(output)
   })
   

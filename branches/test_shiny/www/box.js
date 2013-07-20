@@ -5,10 +5,10 @@ var Box = {};
     Box = function(id, dataArr, optionObj) {
         this._initBox(id, dataArr, optionObj);        
         this._type = 'box';
+        this._id = id;
         objArr.push(this);
 		this.tmpShift = false;
-		this.preId = {x : -1, y : -1};
-        
+		this.preId = {x : -1, y : -1};        
     };
     Box.prototype = {
             

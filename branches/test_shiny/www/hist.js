@@ -5,6 +5,7 @@ var Hist = {};
 	Hist = function(id, dataArr, optionObj) {
 		this._initHist(id, dataArr, optionObj);		
 		this._type = 'hist';
+		this._id = id;
 		objArr.push(this);
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};

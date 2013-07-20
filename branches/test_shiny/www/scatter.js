@@ -1,4 +1,3 @@
-var Scatter = {};
 
 (function() {
 	
@@ -70,7 +69,7 @@ var Scatter = {};
 	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
 	  	            		 this.legend = optionObj.legend;
 	  	            }else{
-	  	            	alert('retype legend! (right, left, topright, topleft, or default)');	            		
+	  	            	//alert('retype legend! (right, left, topright, topleft, or default)');	            		
 	  	            }
 	            }
 	            if(this.legend!=undefined){	            	

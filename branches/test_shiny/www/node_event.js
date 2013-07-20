@@ -1,7 +1,7 @@
 //////////////////////////////////////Chk key event Start//////////////////////////////////////   
 
 window.addEventListener('keydown',checkKeyDown,false);	
-window.addEventListener('keyup',checkKeyUp,false);	
+window.addEventListener('keyup',checkKeyUp,false);
 var ctrlPressed = false;
 var shiftPressed = false;
 var aPressed = false;
@@ -89,6 +89,7 @@ function eventTrigger(Name)
 	
 }
 var menuOn = false;
+var tableVisible=false;
 function menu(Name)
 {	
 //////////////////////////////////////Menu Start//////////////////////////////////////
@@ -97,139 +98,145 @@ function menu(Name)
 		opacity: 0.95,
 		visible: false
 	});
-	Name.menuTextHide = new Kinetic.Text({
-		text: '',
-		fontFamily: 'Calibri',
-		fontSize: 15,
-		padding: 5,
-		fill: 'white'
-	});	  
-	Name.menuTextReset = new Kinetic.Text({
-		y:25,
-		text: '',
-		fontFamily: 'Calibri',
-		fontSize: 15,
-		padding: 5,
-		fill: 'white'
-	});	  
-	Name.menuRectHide = new Kinetic.Rect({
-		width: 100,
-		height: 25,
-		fill: '#93b21a'
-	});
-	Name.menuRectReset = new Kinetic.Rect({
-		y:25,
-		width: 100,
-		height: 25,
-		fill: '#93b21a'
-	});
+	Name.menuText = new Array();
+	Name.menuRect = new Array();
 	
-	Name.menu.add(Name.menuRectHide).add(Name.menuTextHide);
-	Name.menu.add(Name.menuRectReset).add(Name.menuTextReset);
+	var menuName = new Array(" Hide", " Reset", " Show Table"); //add element you want.
+	for(var i=0; i < menuName.length; i++){
+		Name.menuText[i] = new Kinetic.Text({
+			y: 25 * i,
+			text: '',
+			fontFamily: 'Calibri',
+			fontSize: 15,
+			padding: 5,
+			fill: 'white'
+		})	
+		Name.menuRect[i] = new Kinetic.Rect({
+			y: 25 * i,
+			width: 100,
+			height: 25,
+			fill: '#93b21a'
+		});
+		Name.menu.add(Name.menuRect[i]).add(Name.menuText[i]);
+		Name.menuText[i].setText(menuName[i]); 		
+	}
 	Name.menuLayer.add(Name.menu);
 	Name.stage.add(Name.menuLayer);
 	
-	Name.menuTextHide.setText(" Hide"); 
-	//menuTextDelete.setText(" Delete"); 
-	Name.menuTextReset.setText(" Reset"); 
-	
-	Name.menuTextHide.on('click', function(evt){
+	Name.menuText[0].on('click', function(evt){
 		hideSelected();
 		Name.menu.hide();
 		Name.menuLayer.draw();	
 	});
-	Name.menuRectHide.on('click', function(evt){
+	Name.menuRect[0].on('click', function(evt){
 		hideSelected();	
 		Name.menu.hide();
 		Name.menuLayer.draw();	
 	});
-	Name.menuTextHide.on('mouseover', function(evt){
-		Name.menuRectHide.setFill('#cfe444');
-		Name.menuTextHide.setFill('#black');
+	Name.menuText[0].on('mouseover', function(evt){
+		Name.menuRect[0].setFill('#cfe444');
+		Name.menuText[0].setFill('#black');
 		Name.menuLayer.draw();
 	});
-	Name.menuRectHide.on('mouseover', function(evt){
-		Name.menuRectHide.setFill('#cfe444');
-		Name.menuTextHide.setFill('#black');
+	Name.menuRect[0].on('mouseover', function(evt){
+		Name.menuRect[0].setFill('#cfe444');
+		Name.menuText[0].setFill('#black');
 		Name.menuLayer.draw();
 	});
-	Name.menuTextHide.on('mouseout', function(evt){
-		Name.menuRectHide.setFill('#93b21a');
-		Name.menuTextHide.setFill('white');
+	Name.menuText[0].on('mouseout', function(evt){
+		Name.menuRect[0].setFill('#93b21a');
+		Name.menuText[0].setFill('white');
 		Name.menuLayer.draw();
 	});
-	Name.menuRectHide.on('mouseout', function(evt){
-		Name.menuRectHide.setFill('#93b21a');
-		Name.menuTextHide.setFill('white');
+	Name.menuRect[0].on('mouseout', function(evt){
+		Name.menuRect[0].setFill('#93b21a');
+		Name.menuText[0].setFill('white');
 		Name.menuLayer.draw();
-	});
-	/*
-	menuTextDelete.on('click', function(evt){
-	deleteSelected();
-	menuOn=false;
-	menu.hide();
-	menuLayer.draw();	
-	});
-	menuRectDelete.on('click', function(evt){
-	deleteSelected();
-	menuOn=false;
-	menu.hide();
-	menuLayer.draw();	
-	});
-	menuTextDelete.on('mouseover', function(evt){
-	menuRectDelete.setFill('#cfe444');
-	menuTextDelete.setFill('#black');
-	menuLayer.draw();
-	});
-	menuRectDelete.on('mouseover', function(evt){
-	menuRectDelete.setFill('#cfe444');
-	menuTextDelete.setFill('#black');
-	menuLayer.draw();
-	});
-	menuTextDelete.on('mouseout', function(evt){
-	menuRectDelete.setFill('#93b21a');
-	menuTextDelete.setFill('white');
-	menuLayer.draw();
-	});
-	menuRectDelete.on('mouseout', function(evt){
-	menuRectDelete.setFill('#93b21a');
-	menuTextDelete.setFill('white');
-	menuLayer.draw();
-	});
-	*/
+	});	
 	
-	Name.menuTextReset.on('click', function(evt){
+	Name.menuText[1].on('click', function(evt){
 		resetSelected();
 		Name.menu.hide();
 		Name.menuLayer.draw();	
 	});
-	Name.menuRectReset.on('click', function(evt){
-		resetSelected();
+	Name.menuRect[1].on('click', function(evt){
+		resetSelected();	
 		Name.menu.hide();
 		Name.menuLayer.draw();	
 	});
-	Name.menuTextReset.on('mouseover', function(evt){
-		Name.menuRectReset.setFill('#cfe444');
-		Name.menuTextReset.setFill('#black');
+	Name.menuText[1].on('mouseover', function(evt){
+		Name.menuRect[1].setFill('#cfe444');
+		Name.menuText[1].setFill('#black');
 		Name.menuLayer.draw();
 	});
-	Name.menuRectReset.on('mouseover', function(evt){
-		Name.menuRectReset.setFill('#cfe444');
-		Name.menuTextReset.setFill('#black');
+	Name.menuRect[1].on('mouseover', function(evt){
+		Name.menuRect[1].setFill('#cfe444');
+		Name.menuText[1].setFill('#black');
 		Name.menuLayer.draw();
 	});
-	Name.menuTextReset.on('mouseout', function(evt){
-		Name.menuRectReset.setFill('#93b21a');
-		Name.menuTextReset.setFill('white');
+	Name.menuText[1].on('mouseout', function(evt){
+		Name.menuRect[1].setFill('#93b21a');
+		Name.menuText[1].setFill('white');
 		Name.menuLayer.draw();
 	});
-	Name.menuRectReset.on('mouseout', function(evt){
-		Name.menuRectReset.setFill('#93b21a');
-		Name.menuTextReset.setFill('white');
+	Name.menuRect[1].on('mouseout', function(evt){
+		Name.menuRect[1].setFill('#93b21a');
+		Name.menuText[1].setFill('white');
 		Name.menuLayer.draw();
-	});
+	});	
 	
-	
+	Name.menuText[2].on('click', function(evt){
+		if(tableVisible == false){
+			document.getElementById('dataTable').style.display = 'block';
+			document.getElementById('tableScrollableContainer').style.display = 'block';
+			Name.menuText[2].setText(" Hide Table"); 		
+			tableVisible=true;
+		}else{
+			document.getElementById('dataTable').style.display = 'none';
+			document.getElementById('tableScrollableContainer').style.display = 'none';
+			Name.menuText[2].setText(" Show Table"); 		
+			tableVisible=false;
+		}		
+		Name.menu.hide();
+		Name.menuLayer.draw();	
+	});
+	Name.menuRect[2].on('click', function(evt){
+		if(tableVisible == false){
+			document.getElementById('dataTable').style.display = 'block';
+			document.getElementById('tableScrollableContainer').style.display = 'block';
+			Name.menuText[2].setText(" Hide Table"); 		
+			tableVisible=true;
+		}else{
+			document.getElementById('dataTable').style.display = 'none';
+			document.getElementById('tableScrollableContainer').style.display = 'none';
+			Name.menuText[2].setText(" Show Table"); 		
+			tableVisible=false;
+		}		 
+		document.getElementById('dataTable').style.display = 'none';
+		document.getElementById('tableScrollableContainer').style.display = 'none';
+		Name.menu.hide();
+		Name.menuLayer.draw();	
+	});
+	Name.menuText[2].on('mouseover', function(evt){
+		Name.menuRect[2].setFill('#cfe444');
+		Name.menuText[2].setFill('#black');
+		Name.menuLayer.draw();
+	});
+	Name.menuRect[2].on('mouseover', function(evt){
+		Name.menuRect[2].setFill('#cfe444');
+		Name.menuText[2].setFill('#black');
+		Name.menuLayer.draw();
+	});
+	Name.menuText[2].on('mouseout', function(evt){
+		Name.menuRect[2].setFill('#93b21a');
+		Name.menuText[2].setFill('white');
+		Name.menuLayer.draw();
+	});
+	Name.menuRect[2].on('mouseout', function(evt){
+		Name.menuRect[2].setFill('#93b21a');
+		Name.menuText[2].setFill('white');
+		Name.menuLayer.draw();
+	});	
 	
 	
 	Name.stage.on('click', function(evt){ // mouse drag

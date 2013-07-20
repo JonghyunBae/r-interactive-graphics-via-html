@@ -5,8 +5,14 @@ var rightOutputBinding = new Shiny.OutputBinding();
 var xAxis=new Array('carat','cut','carat'); //user initial value
 var yAxis=new Array('price','','price'); //user initial value
 var color=new Array('price','',''); //user initial value
+var legend=new Array('price','','');//user initial value
+var legendArr = ['right', 'left', 'topright', 'topleft', 'default'];
 var width=new Array(300, 300, 300); //user initial value
+var widthArr = [-100, -10, -1, 1, 10, 100];
 var height=new Array(300, 300, 300); //user initial value
+var heightArr = [-100, -10, -1, 1, 10, 100];
+var bin=new Array('', 2, ''); //user initial value
+var binArr = [-1, 1];
 
 var tempHidden = new Array();
 rightOutputBinding.find = function(scope){
@@ -57,18 +63,20 @@ rightOutputBinding.renderValue = function(el, data) {
 				case 0 : xAxis[data[8]-1] = labelArr[data[10]]; break;
 				case 1 : yAxis[data[8]-1] = labelArr[data[10]]; break;
 				case 2 : color[data[8]-1] = labelArr[data[10]]; break;
-				case 4 : width[data[8]-1] = width[data[8]-1] + data[10]; break;
-				case 5 : height[data[8]-1] = height[data[8]-1] + data[10]; break;
+				case 3 : legend[data[8]-1] = legendArr[data[10]]; break;
+				case 4 : width[data[8]-1] = width[data[8]-1] + widthArr[data[10]]; break;
+				case 5 : height[data[8]-1] = height[data[8]-1] + heightArr[data[10]]; break;
+				case 6 : bin[data[8]-1] = bin[data[8]-1] + binArr[data[10]]; break;
 				default : break;
 			}		
 			window.Shiny.onInputChange("graphName", null); // telling receive message completely.
 			window.Shiny.onInputChange("changeXAxis", null); // telling receive message completely.
 		}
-		scatter1._initScatter(1, tempData, {x: xAxis[0] , y: yAxis[0], color: color[0], legend: data[3], width: width[0], height: height[0]});
+		scatter1._initScatter(1, tempData, {x: xAxis[0] , y: yAxis[0], color: color[0], legend: legend[0], width: width[0], height: height[0]});
 		//scatter^id^._initScatter(^id^, tempData, {x: xAxis[^id-1^], y: data[1], color: data[2], legend: data[3], width: data[4], height: data[5]});
 		scatter1.draw(1);
 		eventTrigger(scatter1);	
-		hist2._initHist(2, tempData, {bin: data[6], x: xAxis[1] , width: width[1], height: height[1]});
+		hist2._initHist(2, tempData, {bin: bin[1], x: xAxis[1] , width: width[1], height: height[1]});
 		hist2.draw(2);
 		eventTrigger(hist2);
 		if(!isDiscrete[yAxis]){ //only if y axis is continuous, box is updated

@@ -100,7 +100,9 @@ function menu(Name)
         });
         Name.menuText = new Array();
         Name.menuRect = new Array();    
-        var menuName = new Array("Hide", "Reset", "Table", "Change X Axis", "Change Y Axis", "Change Color",  "Change Legend", "Change Width", "Change Height", "Change Bin"); //add element you want.
+       
+        var menuName = new Array("Hide", "Reset", "Table", "X Axis	▶", "Y Axis	▶", "Color		▶",  "Legend	▶", "Width	▶", "Height	▶", "Bin		▶"); //add element you want.
+        var menuNameRev = new Array("Hide", "Reset", "Table", "◀  X Axis", "◀  Y Axis", "◀  Color",  "◀  Legend", "◀  Width", "◀  Height", "◀  Bin"); 
         var optionName = ['xAxis', 'yAxis', 'color', 'legend', 'width', 'height', 'bin'];
         //var menuFunction = [hideSelected, resetSelected, showTable];
         
@@ -115,7 +117,7 @@ function menu(Name)
                 })      
                 Name.menuRect[i] = new Kinetic.Rect({
                         y: 25 * i,
-                        width: 120,
+                        width: 90,
                         height: 25,
                         fill: '#93b21a'
                 });
@@ -273,7 +275,7 @@ function menu(Name)
                 (function (j) { 
                         for(var i=0; i < subMenuName[j].length; i++){
                                 Name.subMenuText[j][i] = new Kinetic.Text({
-                                        x: 120,
+                                        x: 90,
                                   //      y: 25 * i,
                                         y: (menuName.length-optionName.length)*25+25 * i + 25 * j,
                                         text: '',
@@ -283,10 +285,10 @@ function menu(Name)
                                         fill: 'white'
                                 })      
                                 Name.subMenuRect[j][i] = new Kinetic.Rect({
-                                        x: 125,     
+                                        x: 95,     
                                   //      y: 25 * i,
                                         y: (menuName.length-optionName.length)*25+25 * i + 25 * j,
-                                        width: 120,
+                                        width: 90,
                                         height: 25,
                                         fill: '#93b21a'
                                 });     
@@ -371,7 +373,7 @@ function menu(Name)
                         var node = evt.targetNode;
                         //update menu
                         var menuHeight = 25*menuName.length;
-                        var menuWidth = 120;
+                        var menuWidth = 90;
                         var mousePos = node.getStage().getMousePosition();
                         /*******************/
                         /*			2		|		1			*/
@@ -383,20 +385,32 @@ function menu(Name)
                                 for(var j=0; j<optionName.length; j++){
                                         Name.subMenu[j].setPosition(mousePos.x -2 , mousePos.y + 2);
                                 }
+                                for(var i=0; i < menuName.length; i++){                                 
+                                	Name.menuText[i].setText(' '+menuName[i]);   
+                                }
                         }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){//3rd quadrant
                                 Name.menu.setPosition(mousePos.x + 2, mousePos.y - 2 - menuHeight);
                                 for(var j=0; j<optionName.length; j++){
-                                        Name.subMenu[j].setPosition(mousePos.x - 2 , mousePos.y - 2 - 25*subMenuName[0].length);
+                                        Name.subMenu[j].setPosition(mousePos.x - 2 , mousePos.y - 2 - 25*subMenuName[0].length - 25*(subMenuName[j].length-1));
+                                }
+                                for(var i=0; i < menuName.length; i++){                                 
+                                	Name.menuText[i].setText(' '+menuName[i]);   
                                 }
                         }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//1st quadrant
                                 Name.menu.setPosition(mousePos.x - 2 - menuWidth, mousePos.y + 2);
                                 for(var j=0; j<optionName.length; j++){
                                         Name.subMenu[j].setPosition(mousePos.x - 8 - 3*menuWidth, mousePos.y + 2);
                                 }
+                                for(var i=0; i < menuName.length; i++){                                 
+                                	Name.menuText[i].setText(' '+menuNameRev[i]);   
+                                }
                         }else{//4th quadrant
                                 Name.menu.setPosition(mousePos.x - 2 - menuWidth , mousePos.y - 2 - menuHeight);
                                 for(var j=0; j<optionName.length; j++){
-                                        Name.subMenu[j].setPosition(mousePos.x - 8 - 3*menuWidth, mousePos.y - 2 - 25*subMenuName[0].length);
+                                        Name.subMenu[j].setPosition(mousePos.x - 8 - 3*menuWidth, mousePos.y - 2 - 25*subMenuName[0].length  - 25*(subMenuName[j].length-1));
+                                }
+                                for(var i=0; i < menuName.length; i++){                                 
+                                	Name.menuText[i].setText(' '+menuNameRev[i]);   
                                 }
                         }                               
                         Name.menu.show();

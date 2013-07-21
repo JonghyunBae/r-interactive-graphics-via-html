@@ -1,3 +1,18 @@
+----
+
+Date : 21JULY2013
+
+Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
+  
+  # Server offloading. After the server side gets updated array(not hidden nodes), it does calculation for linear regression, and sends back to client side.
+  # Add new plot type. We may build another type of graphs(line chart), or may draw lines and overlap them in previous charts.
+  # Start documentation, 
+  # Start Unit test. For now, we will make test code for making array from css file part.
+  # Using callback function, simple events such as redrawing axis can be handled in client side, not server side.
+  # 
+
+----
+
   # *Junghoon will update license over the weekend.*
   # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
   # Deep dive into event handling interface. See EventHandling for more details.

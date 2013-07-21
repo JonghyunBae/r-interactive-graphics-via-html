@@ -231,7 +231,7 @@ createDiv <- function(inputId) {
   midtemp <- paste0("<script src=\\\"button_event.js\\\"></script>
                     <script src=\\\"table.js\\\"></script>
                     <div id=\\\"footer\\\">
-                   <p id=\\\"copyright\\\">&copy; 2013 - <a href=\\\"#\\\">The RIGHT team</a></p>
+                   <p id=\\\"copyright\\\">&copy; 2013 - <a href=\\\"#\\\">The RIGHT Team</a></p>
                    <p id=\\\"dont-delete-this\\\">E-mail : <a href=\\\"mailto:teamrightjs@gmail.com\\\">team.right.js@gmail.com</a></p>")
   body <- c("</div>", body, midtemp, "</div>")  
   

@@ -9,7 +9,7 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   # Start documentation, 
   # Start Unit test. For now, we will make test code for making array from css file part.
   # Using callback function, simple events such as redrawing axis can be handled in client side, not server side.
-  # 
+  # Switch license term to GPL, so separate our own code from shiny part.
 
 ----
 

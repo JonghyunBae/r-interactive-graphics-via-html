@@ -53,9 +53,16 @@ function getXYpos(elm) {
 	return {'xp':X, 'yp':Y};
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
-
+function sendArr(Name)
+{
+	//alert("dddd");
+	window.Shiny.onInputChange("id", Name._id);
+	window.Shiny.onInputChange("xx", tempData[Name.x]);
+	window.Shiny.onInputChange("yy", tempData[Name.y]);
+}
 function resetSelected()
 {
+	//window.Shiny.onInputChange("TotalArray", tempData);
 	window.Shiny.onInputChange("TestEntry1", "reset");
 //	addRow('dataTable');
 //	refresh();

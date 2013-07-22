@@ -101,8 +101,8 @@ function menu(Name)
         Name.menuText = new Array();
         Name.menuRect = new Array();    
        
-        var menuName = new Array("Hide", "Reset", "Table", "X Axis	▶", "Y Axis	▶", "Color		▶",  "Legend	▶", "Width	▶", "Height	▶", "Bin		▶"); //add element you want.
-        var menuNameRev = new Array("Hide", "Reset", "Table", "◀  X Axis", "◀  Y Axis", "◀  Color",  "◀  Legend", "◀  Width", "◀  Height", "◀  Bin"); 
+        var menuName = new Array("Hide", "Reset", "Table", "X Axis	��", "Y Axis	��", "Color		��",  "Legend	��", "Width	��", "Height	��", "Bin		��"); //add element you want.
+        var menuNameRev = new Array("Hide", "Reset", "Table", "�� X Axis", "�� Y Axis", "�� Color",  "�� Legend", "�� Width", "�� Height", "�� Bin"); 
         var optionName = ['xAxis', 'yAxis', 'color', 'legend', 'width', 'height', 'bin'];
         //var menuFunction = [hideSelected, resetSelected, showTable];
         
@@ -194,12 +194,14 @@ function menu(Name)
                 Name.menuLayer.draw();  
         });
         Name.menuText[1].on('click', function(evt){
-                resetSelected();
+        		sendArr(Name)
+                //resetSelected();
                 Name.menu.hide();
                 Name.menuLayer.draw();  
         });
         Name.menuRect[1].on('click', function(evt){
-                resetSelected();
+        		sendArr(Name)
+        		//resetSelected();
                 Name.menu.hide();
                 Name.menuLayer.draw();                  
         });

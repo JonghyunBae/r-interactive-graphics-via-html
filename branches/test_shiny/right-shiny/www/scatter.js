@@ -103,6 +103,10 @@
 	            var nodeX = new Array(dataArr[this.x].length);
 	            this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);	//default x tick is 5
 	            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick);  
+	            this.xMax = findMaxValue(dataArr[this.x]);
+	            this.xMin = findMinValue(dataArr[this.x]);
+	            this.yMax = findMaxValue(dataArr[this.y]);
+	            this.yMin = findMinValue(dataArr[this.y]);
 	            nodeX = xTmp.node;
 	            this.xPlotArr = xTmp.plotArr;
 	            
@@ -361,6 +365,64 @@
 			},			
 			update: function(){
 				alert('scatter is updated');				
+			},
+			_linear: function(xArr, yArr){
+				//alert(this.xMax);
+				var tickRange = (this.xMax-this.xMin)/this.xTick;	
+				var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
+				tickRange = setTickRange(tmp, tickRange);
+		        var max = tickRange * Math.ceil(this.xMax/tickRange);		      
+		        var min = tickRange * Math.floor(this.xMin/tickRange);
+		        var nodeX = new Array(xArr.length)	
+				for(var i = 0 ; i < nodeX.length ; i ++)
+				{
+					nodeX[i] = this.width* ((xArr[i]-min)) /((max - min));
+				} 
+		        
+		        tickRange = (this.yMax-this.yMin)/this.yTick;	
+				tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
+				tickRange = setTickRange(tmp, tickRange);
+		        max = tickRange * Math.ceil(this.yMax/tickRange);		      
+		        min = tickRange * Math.floor(this.yMin/tickRange);
+		        var nodeY = new Array(yArr.length)	
+				for(var i = 0 ; i < nodeY.length ; i ++)
+				{
+					nodeY[i] = this.height* ((yArr[i]-min)) /((max - min));
+				} 
+		        
+				var node = new Array(xArr.length)
+		        for(var i = 0; i < xArr.length ; i++)
+				{
+					node[i] = new Kinetic.Circle({
+						x: nodeX[i] + this.plotXMargin,
+						y: this.height +this.plotYMargin - nodeY[i],
+						radius: this.radius,
+						fill: 'black',
+					});			
+				}
+				
+				//draw node
+				var dataLayer = new Kinetic.Layer();	
+				for(var i = 0 ; i < node.length ; i ++)
+				{
+					dataLayer.add(node[i]);
+				} 
+				this.stage.add(dataLayer);
+		        
+				
+				/*var line = new Kinetic.Line({
+                    points: [	this.plotXMargin- 10, 
+                                this.plotYMargin+10, 
+                                this.plotXMargin - 10, 
+                                this.plotYMargin+50],
+                   stroke: 'black',
+                   strokeWidth: 2,             
+               });
+               var layer = new Kinetic.Layer();
+               layer.add(line);
+               this.stage.add(layer);
+               */
+               
 			}
 	};
     

@@ -1,24 +1,22 @@
+  # Status update
+  # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
+  # Deep dive into event handling interface. See EventHandling for more details.
+  # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
+   * Discuss about Hardly Wickham's comments.
+  # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+
 ----
 
 Date : 21JULY2013
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   
-  # Server offloading. After the server side gets updated array(not hidden nodes), it does calculation for linear regression, and sends back to client side.
-  # Add new plot type. We may build another type of graphs(line chart), or may draw lines and overlap them in previous charts.
+  # Server offloading. After the server side gets updated array (hidden  or not-hidden nodes), it performs linear regression, and sends (x, y) values for model prediction back to the client. 
+  # Add line chart. Use it to plot model-predicted (x, y) values in a separate plot or overlaying on top of the scatter plot of original data. (Eventually, overlaying should be supported. This may require some code reorganization/refactoring.)
   # Start documentation, 
-  # Start Unit test. For now, we will make test code for making array from css file part.
-  # Using callback function, simple events such as redrawing axis can be handled in client side, not server side.
-  # Switch license term to GPL, so separate our own code from shiny part.
-
-----
-
-  # *Junghoon will update license over the weekend.*
-  # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
-  # Deep dive into event handling interface. See EventHandling for more details.
-  # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
-   * Discuss about Hardly Wickham's comments.
-  # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+  # Start unit testing using [http://qunitjs.com/ QUnit]. Start from the code that makes an array from css file since it does not involve any event generation or processing.
+  # Using callback function, simple operations, such as redrawing axis, can be handled solely by the client without any server involvement. For event handling, see [http://stackoverflow.com/questions/9099555/jquery-bind-events-on-plain-javascript-objects stackoverflow] or [http://api.jquery.com/category/callbacks-object/ API documentation].
+  # Switch license term to GPL, and separate our own code from shiny part.
 
 ----
 

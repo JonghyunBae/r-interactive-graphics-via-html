@@ -73,18 +73,7 @@ rightOutputBinding.renderValue = function(el, data) {
 			window.Shiny.onInputChange("graphName", null); // telling receive message completely.
 			window.Shiny.onInputChange("changeXAxis", null); // telling receive message completely.
 		}
-		scatter1._initScatter(1, tempData, {x: xAxis[0] , y: yAxis[0], color: color[0], legend: legend[0], width: width[0], height: height[0]});
-		//scatter^id^._initScatter(^id^, tempData, {x: xAxis[^id-1^], y: data[1], color: data[2], legend: data[3], width: data[4], height: data[5]});
-		scatter1.draw(1);
-		eventTrigger(scatter1);	
-		hist2._initHist(2, tempData, {bin: bin[1], x: xAxis[1] , width: width[1], height: height[1]});
-		hist2.draw(2);
-		eventTrigger(hist2);
-		if(!isDiscrete[yAxis]){ //only if y axis is continuous, box is updated
-			box3._initBox(3, tempData, {x: xAxis[2] , y: yAxis[2], width: width[2], height: height[2]});
-			box3.draw(3);
-			eventTrigger(box3);
-		}
+		
 		if(data[12] != null){
 			scatter1._linear(data[12].xx, data[12].yy);
 		}

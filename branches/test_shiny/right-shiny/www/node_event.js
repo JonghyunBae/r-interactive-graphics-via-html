@@ -101,8 +101,8 @@ function menu(Name)
         Name.menuText = new Array();
         Name.menuRect = new Array();    
        
-        var menuName = new Array("Hide", "Reset", "Table", "X Axis	��", "Y Axis	��", "Color		��",  "Legend	��", "Width	��", "Height	��", "Bin		��"); //add element you want.
-        var menuNameRev = new Array("Hide", "Reset", "Table", "�� X Axis", "�� Y Axis", "�� Color",  "�� Legend", "�� Width", "�� Height", "�� Bin"); 
+        var menuName = new Array("Hide", "Reset", "Table", "X Axis", "Y Axis", "Color",  "Legend", "Width	", "Height", "Bin	"); //add element you want.
+        var menuNameRev = new Array("Hide", "Reset", "Table", "X Axis", "Y Axis", "Color",  "Legend", "Width", "Height", "Bin"); 
         var optionName = ['xAxis', 'yAxis', 'color', 'legend', 'width', 'height', 'bin'];
         //var menuFunction = [hideSelected, resetSelected, showTable];
         
@@ -259,7 +259,7 @@ function menu(Name)
 	        		case 0 : 
 	        		case 1 :
 	        		case 2 :
-	                    subMenuName[j]=labelArr;
+	                    subMenuName[j]=Name._labelArr; //localize later;
 	                    break;
 	        		case 3 :
 	        			subMenuName[j]=['right', 'left', 'topright', 'topleft', 'default'];
@@ -298,11 +298,15 @@ function menu(Name)
                                 Name.subMenuText[j][i].setText(' '+subMenuName[j][i]);  
                                 (function (i) { 
                                         Name.subMenuText[j][i].on('click', function(evt){
+                                        	array_of_functions[j](Name, i);
+                                        	//	funcMenu(Name,j,i);
                                                 window.Shiny.onInputChange("graphName", Name._id);
                                                 window.Shiny.onInputChange("whichOption", j);
                                                 window.Shiny.onInputChange("changeOption", i);
                                         });
                                         Name.subMenuRect[j][i].on('click', function(evt){
+                                        	array_of_functions[j](Name, i);
+                                        	//	funcMenu(Name,j,i);
                                                 window.Shiny.onInputChange("graphName", Name._id);
                                                 window.Shiny.onInputChange("whichOption", j);
                                                 window.Shiny.onInputChange("changeOption", i);

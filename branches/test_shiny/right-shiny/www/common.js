@@ -1,5 +1,6 @@
-var plotWidth=500;  //default value for plot width
-var plotHeight=500; //default value for plot height   
+var plotWidth = 300;  //default value for plot width
+var plotHeight = 300; //default value for plot height  
+var plotRadius = 2;
 
 ////////////////////////////////////mouse position of each graph////////////////////////////////////
 var mouseName;

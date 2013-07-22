@@ -2,49 +2,88 @@
 (function() {
 	
 	Scatter = function(id, dataArr, optionObj) {		
-		this._initScatter(id, dataArr, optionObj);		
+		this._init(id, dataArr, optionObj);		
 		this._type = 'scatter';		
 		this._id = id;
+		this._labelArr = labelArr; //localize later
 		objArr.push(this);
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
     };
     Scatter.prototype = {
     		
-    		_initScatter: function(id, dataArr, optionObj) {
+    		_init: function(id, dataArr, optionObj) {
     			//make essential variables	
-	            this.width = optionObj.width || plotWidth; //plot width
-	            this.height = optionObj.height || plotHeight; //plot height
+    			if(optionObj.width != undefined){
+    				this.width = optionObj.width;
+    			}else{
+    				if(this.width == undefined){
+    					this.width = plotWidth;
+    				}
+    			}
+    			if(optionObj.height != undefined){
+    				this.height = optionObj.height;
+    			}else{
+    				if(this.height == undefined){
+    					this.height = plotHeight;
+    				}
+    			}
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength= (optionObj.plotLength==undefined)?(this.width*0.02):(optionObj.plotLength); //margin from plot box
-	            this.radius= (optionObj.radius==undefined)?(2):(optionObj.radius); //default radius is 3
-	            
+	            if(optionObj.radius != undefined){
+	    				this.radius = optionObj.radius;
+	    			}else{
+	    				if(this.radius == undefined){
+	    					this.radius = plotRadius;
+	    				}
+	    			}
 	            //check the x label
-	            for(var i = 0 ; i < labelArr.length ; i ++)	
-	            {
-	            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-	            		 this.x =  i;
-	            		 break;
-	            	}
-	            	if(i==labelArr.length-1){
-	            		alert('retype x label');
-	            	}
-	            }
-	            //check the y label
-	            for(var i = 0 ; i < labelArr.length ; i ++)
-	            {
-	            	if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-	            		 this.y =  i;
-	            		 break;
-	            	}
-	            	if(i==labelArr.length-1){
-	            		alert('retype y label');
-	            	}
-	            }
+	            if(optionObj.x != undefined){
+	            	for(var i = 0 ; i < labelArr.length ; i ++)	
+		            {
+		            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+		            		 this.x =  i;
+		            		 break;
+		            	}
+		            	if(i==labelArr.length-1){
+		            		alert('retype x label');
+		            	}
+		            }
+    			}else{
+    				if(this.x == undefined){
+    					alert('x should be defined!');
+    					this.x = 0;
+    				}
+    			}
+	          //check the y label
+	            if(optionObj.y != undefined){
+	            	for(var i = 0 ; i < labelArr.length ; i ++)
+		            {
+		            	if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
+		            		 this.y =  i;
+		            		 break;
+		            	}
+		            	if(i==labelArr.length-1){
+		            		alert('retype y label');
+		            	}
+		            }
+    			}else{
+    				if(this.y == undefined){
+    					alert('y should be defined!');
+    					this.y = 0;
+    				}
+    			}
 	            // set the color type
 	            if(optionObj.color==undefined){
-	            	this.color=-1; //default color
+	            	if(this.color == undefined){
+	            		this.color=-1; //default color
+	            	}else{
+	            		var tmpSetColor =  setColor(dataArr[this.color]);
+	    				var colors = tmpSetColor.colors;
+						var mainValueArr = tmpSetColor.mainValueArr;
+						var tmpColorArr = tmpSetColor.tmpColorArr;
+	            	}	            		
 	            }else{
             		for(var i = 0 ; i < labelArr.length ; i ++)
 	  	            {
@@ -56,15 +95,14 @@
 	  	            		alert('retype colors label');
 	  	            	}
 	  	            }	
-        			var tmpSetColor =  setColor(dataArr[this.color]);
+            		var tmpSetColor =  setColor(dataArr[this.color]);
     				var colors = tmpSetColor.colors;
 					var mainValueArr = tmpSetColor.mainValueArr;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
-
 	    		
 	            //make legend start
-	            if(optionObj.legend!=undefined){
+	            if(optionObj.legend !=undefined){
 	            	var legendChk = optionObj.legend.toLowerCase();
 	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
 	  	            		 this.legend = optionObj.legend;
@@ -72,6 +110,7 @@
 	  	            	//alert('retype legend! (right, left, topright, topleft, or default)');	            		
 	  	            }
 	            }
+	           
 	            if(this.legend!=undefined){	            	
 	            	var legendX = 0;
 					var legendY = 0;

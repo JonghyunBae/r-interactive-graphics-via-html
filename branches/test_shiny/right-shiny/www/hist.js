@@ -3,30 +3,62 @@ var Hist = {};
 (function() {	
 	
 	Hist = function(id, dataArr, optionObj) {
-		this._initHist(id, dataArr, optionObj);		
+		this._init(id, dataArr, optionObj);		
 		this._type = 'hist';
 		this._id = id;
+		this._labelArr = labelArr; //localize later
 		objArr.push(this);
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
     };
 	Hist.prototype = {
 			
-			_initHist: function(id, dataArr, optionObj){
+			_init: function(id, dataArr, optionObj){
 
 				////////// Make essential variables ////////
-				//this.xMax = findMaxValue(dataArr[this.x]);
-				for(var i = 0 ; i < labelArr.length ; i ++)
-	            {
-	            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-	            		 this.x =  i;
-	            		 break;
-	            	}
-	            	if(i==labelArr.length-1){
-	            		alert('retype x label');
-	            	}
-	            }	
-				this.bin = (optionObj.bin==undefined)?(parseInt(findMaxValue(dataArr[this.x])/10)):(optionObj.bin);
+				if(optionObj.width != undefined){
+    				this.width = optionObj.width;
+    			}else{
+    				if(this.width == undefined){
+    					this.width = plotWidth;
+    				}
+    			}
+    			if(optionObj.height != undefined){
+    				this.height = optionObj.height;
+    			}else{
+    				if(this.height == undefined){
+    					this.height = plotHeight;
+    				}
+    			}
+	            this.plotXMargin=this.width*0.2; //canvas left, right margin
+	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
+	            this.plotLength=this.width*0.02; //margin from plot box				
+	          //check the x label
+	            if(optionObj.x != undefined){
+	            	for(var i = 0 ; i < labelArr.length ; i ++)	
+		            {
+		            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+		            		 this.x =  i;
+		            		 break;
+		            	}
+		            	if(i==labelArr.length-1){
+		            		alert('retype x label');
+		            	}
+		            }
+    			}else{
+    				if(this.x == undefined){
+    					alert('x should be defined!');
+    					this.x = 0;
+    				}
+    			}
+	          //check the x label
+	            if(optionObj.bin != undefined){
+	            	this.bin = optionObj.bin;
+    			}else{
+    				if(this.bin == undefined){
+    					this.bin = parseInt(findMaxValue(dataArr[this.x])/10);
+    				}
+    			}
 				this.fixPoint = 0;
 			//	alert(this.bin.toString().indexOf('.'));
 				if(this.bin.toString().indexOf('.') != -1)
@@ -34,11 +66,7 @@ var Hist = {};
 					//alert(this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length);
 					this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
 				}
-	            this.width = optionObj.width || plotWidth; //plot width
-	            this.height = optionObj.height || plotHeight; //plot height
-	            this.plotXMargin=this.width*0.2; //canvas left, right margin
-	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
-	            this.plotLength=this.width*0.02; //margin from plot box
+
 
 	            if(isDiscrete[this.x] == true)
 	            {	            	

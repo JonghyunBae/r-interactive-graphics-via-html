@@ -91,10 +91,16 @@ function getXYpos(elm) {
 //////////////////////////////////////////////////////////////////////////////////////////////
 function sendArr(Name)
 {
-	//alert("dddd");
-	window.Shiny.onInputChange("id", Name._id);
-	window.Shiny.onInputChange("xx", tempData[Name.x]);
-	window.Shiny.onInputChange("yy", tempData[Name.y]);
+	if(Name.linear == true){
+		Name.linear = false;
+		Name.draw(Name._id);
+		eventTrigger(Name);
+	}else{		
+		Name.linear = true;		
+		window.Shiny.onInputChange("id", Name._id);
+		window.Shiny.onInputChange("xx", tempData[Name.x]);
+		window.Shiny.onInputChange("yy", tempData[Name.y]);
+	}
 }
 
 

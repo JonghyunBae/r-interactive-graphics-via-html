@@ -3,13 +3,13 @@ var Hist = {};
 (function() {	
 	
 	Hist = function(id, dataArr, optionObj) {
-		this._init(id, dataArr, optionObj);		
 		this._type = 'hist';
 		this._id = id;
 		this._labelArr = labelArr; //localize later
 		objArr[id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
+		this._init(id, dataArr, optionObj);	
     };
 	Hist.prototype = {
 			
@@ -32,15 +32,15 @@ var Hist = {};
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
 	            this.plotLength=this.width*0.02; //margin from plot box				
-	          //check the x label
+	            //check the x label
 	            if(optionObj.x != undefined){
-	            	for(var i = 0 ; i < labelArr.length ; i ++)	
+	            	for(var i = 0 ; i < this._labelArr.length ; i ++)	
 		            {
-		            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+		            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
 		            		 this.x =  i;
 		            		 break;
 		            	}
-		            	if(i==labelArr.length-1){
+		            	if(i == this._labelArr.length - 1){
 		            		alert('retype x label');
 		            	}
 		            }
@@ -59,10 +59,8 @@ var Hist = {};
     				}
     			}
 				this.fixPoint = 0;
-			//	alert(this.bin.toString().indexOf('.'));
 				if(this.bin.toString().indexOf('.') != -1)
 				{
-					//alert(this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length);
 					this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
 				}
 
@@ -86,7 +84,6 @@ var Hist = {};
 	            			{
 	            				hasTmp[j].push(i);
 	            				isSelected[i][id] = histUpdate(this, j);
-	            				//isSelected[i].push(histUpdate(this, j));
 	            				freqTmp[j] ++; 
 	            				break;
 	            			}	            				
@@ -98,7 +95,6 @@ var Hist = {};
 	            			hasTmp[j].push(i);
 	            			xTmp.push(dataArr[this.x][i]);
 	            			isSelected[i][id] = histUpdate(this, j);
-	            			//isSelected[i].push(histUpdate(this , j));
 	            		}
 	            	}
 	            	var barWidth = this.width/freqTmp.length/2;
@@ -175,15 +171,10 @@ var Hist = {};
 
 	            	for(var i = 0 ; i < dataArr[this.x].length ; i++)
 	            	{
-            //			if(i == 121)
-            	//			alert(upTmp[i]);
 	            		isSelected[i][id] = histUpdate(this , upTmp[i]-firstcnt);
-	            		//isSelected[i].push(histUpdate(this , upTmp[i]-firstcnt));
 	            	}
             		var barWidth = this.width /(lastcnt-firstcnt + 3);	
 	            	this.xPlotArr = make2DArr(lastcnt-firstcnt + 4); 
-	           // 	alert(firstcnt);
-	           // 	alert(lastcnt);
 	            	cnt = 0;
 	            	var nodeX = new Array(lastcnt-firstcnt+1);
 	            	
@@ -428,7 +419,13 @@ var Hist = {};
 				setTooltip(this);			      
 			    this.stage.add(this.tooltipLayer);                
 			},
-			
+			changeX: function(id, dataArr, optionObj){
+						this._init(id, dataArr, optionObj);
+						this.draw(id);
+			},
+			changeY: function(id, dataArr, optionObj){
+						// do nothing.
+			},
 			update: function(){
 				alert('hist is updated');				
 			}

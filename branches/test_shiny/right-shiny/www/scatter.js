@@ -1,18 +1,18 @@
 var Scatter = {};    
 (function() {
 	
-	Scatter = function(id, dataArr, optionObj) {		
-		this._init(id, dataArr, optionObj);		
+	Scatter = function(id, dataArr, optionObj) {			
 		this._type = 'scatter';		
 		this._id = id;
 		this._labelArr = labelArr; //localize later
 		objArr[id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
+		this._init(id, dataArr, optionObj);	
     };
     Scatter.prototype = {
     		
-    		_init: function(id, dataArr, optionObj) {
+    		_init: function(id, dataArr, optionObj){
     			//make essential variables
     			if(optionObj.width != undefined){
     				this.width = optionObj.width;
@@ -30,7 +30,7 @@ var Scatter = {};
     			}
 	            this.plotXMargin=this.width*0.2; //canvas left, right margin
 	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
-	            this.plotLength= (optionObj.plotLength==undefined)?(this.width*0.02):(optionObj.plotLength); //margin from plot box
+	            this.plotLength=this.width*0.02; //margin from plot box
 	            if(optionObj.radius != undefined){
 	    				this.radius = optionObj.radius;
 	    			}else{
@@ -40,13 +40,13 @@ var Scatter = {};
 	    			}
 	            //check the x label
 	            if(optionObj.x != undefined){
-	            	for(var i = 0 ; i < labelArr.length ; i ++)	
+	            	for(var i = 0 ; i < this._labelArr.length ; i ++)	
 		            {
-		            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+		            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
 		            		 this.x =  i;
 		            		 break;
 		            	}
-		            	if(i==labelArr.length-1){
+		            	if(i == this._labelArr.length - 1){
 		            		alert('retype x label');
 		            	}
 		            }
@@ -58,13 +58,13 @@ var Scatter = {};
     			}
 	          //check the y label
 	            if(optionObj.y != undefined){
-	            	for(var i = 0 ; i < labelArr.length ; i ++)
+	            	for(var i = 0 ; i < this._labelArr.length ; i ++)
 		            {
-		            	if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
+		            	if(this._labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
 		            		 this.y =  i;
 		            		 break;
 		            	}
-		            	if(i==labelArr.length-1){
+		            	if(i==this._labelArr.length-1){
 		            		alert('retype y label');
 		            	}
 		            }
@@ -92,13 +92,13 @@ var Scatter = {};
 						var tmpColorArr = tmpSetColor.tmpColorArr;
 	            	}	            		
 	            }else{
-            		for(var i = 0 ; i < labelArr.length ; i ++)
+            		for(var i = 0 ; i < this._labelArr.length ; i ++)
 	  	            {
-	  	            	if(labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
+	  	            	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
 	  	            		 this.color =  i;
 	  	            		 break;
 	  	            	}
-	  	            	if(i==labelArr.length-1){
+	  	            	if(i==this._labelArr.length-1){
 	  	            		alert('retype colors label');
 	  	            	}
 	  	            }	
@@ -166,9 +166,9 @@ var Scatter = {};
 				var tooltipTextGetInfo = new Array();
 				for(var i = 0; i < dataArr[this.x].length ; i++)
 				{
-					tooltipTextGetInfo[i]=labelArr[0]+" : " + dataArr[0][i]+ "\r\n" ;
-					for(var j=1; j< labelArr.length ; j++){
-						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ labelArr[j]+" : " + dataArr[j][i]+ "\r\n" ;
+					tooltipTextGetInfo[i]=this._labelArr[0]+" : " + dataArr[0][i]+ "\r\n" ;
+					for(var j=1; j< this._labelArr.length ; j++){
+						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ this._labelArr[j]+" : " + dataArr[j][i]+ "\r\n" ;
 					}
 				}
 				// set and make information of nodes according to color
@@ -301,17 +301,24 @@ var Scatter = {};
 				        this.legendLayer.draw();
 					}
 				}
+				// check linear regression on/off
+				if(this.linear == true){
+					this.linear = false;
+					sendArr(this);
+				}
 			},
-			changeX: function(id, dataArr, optionObj){				
+			changeX: function(id, dataArr, optionObj){
 		            	for(var i = 0 ; i < this._labelArr.length ; i ++)	
 			            {
 			            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
 			            		 this.x =  i;
 			            		 break;
 			            	}
-			            }		    			
-						this.xMax = findMaxValue(dataArr[this.x]);
-			            this.xMin = findMinValue(dataArr[this.x]);
+			            }
+		            	if(isDiscrete[this.x] == false){
+		            		this.xMax = findMaxValue(dataArr[this.x]);
+				            this.xMin = findMinValue(dataArr[this.x]);
+		            	}						
 			            var nodeX = new Array(dataArr[this.x].length);	            
 			            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick, this.xMax, this.xMin);  
 			            nodeX = xTmp.node;
@@ -332,9 +339,11 @@ var Scatter = {};
 			            		 this.y =  i;
 			            		 break;
 			            	}
-			            }		    			
-						this.yMax = findMaxValue(dataArr[this.y]);
-			            this.yMin = findMinValue(dataArr[this.y]);
+			            }
+		            	if(isDiscrete[this.x] == false){
+							this.yMax = findMaxValue(dataArr[this.y]);
+				            this.yMin = findMinValue(dataArr[this.y]);
+		            	}
 			            var nodeY = new Array(dataArr[this.y].length);	             	            
 			            var yTmp = makeAxisArr(dataArr, this.height, this.y, this.yTick, this.yMax, this.yMin);	            
 			            nodeY = yTmp.node;
@@ -351,7 +360,8 @@ var Scatter = {};
 			update: function(){
 				alert('scatter is updated');				
 			},
-			_linear: function(xArr, yArr){
+			draw_linear: function(xArr, yArr){				
+				this.linear = true;
 				//alert(this.xMax);
 				var tickRange = (this.xMax-this.xMin)/this.xTick;	
 				var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
@@ -362,8 +372,7 @@ var Scatter = {};
 				for(var i = 0 ; i < nodeX.length ; i ++)
 				{
 					nodeX[i] = this.width* ((xArr[i]-min)) /((max - min));
-				} 
-		        
+				} 		        
 		        tickRange = (this.yMax-this.yMin)/this.yTick;	
 				tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
 				tickRange = setTickRange(tmp, tickRange);
@@ -373,9 +382,7 @@ var Scatter = {};
 				for(var i = 0 ; i < nodeY.length ; i ++)
 				{
 					nodeY[i] = this.height* ((yArr[i]-min)) /((max - min));
-				} 
-		       
-		        
+				}		        
 				var node = new Array(xArr.length)
 				var dataLayer = new Kinetic.Layer();
 		        for(var i = 1; i < xArr.length ; i++)

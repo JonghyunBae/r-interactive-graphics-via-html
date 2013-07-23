@@ -606,7 +606,15 @@ var Box = {};
                 // add tooltip
 				setTooltip(this);			      
 			    this.stage.add(this.tooltipLayer);   
-            },            
+            },   
+            changeX: function(id, dataArr, optionObj){
+				this._init(id, dataArr, optionObj);
+				this.draw(id);
+			},
+			changeY: function(id, dataArr, optionObj){
+				this._init(id, dataArr, optionObj);
+				this.draw(id);
+			},
             update: function(){
                 alert('scatter is updated');                
             }

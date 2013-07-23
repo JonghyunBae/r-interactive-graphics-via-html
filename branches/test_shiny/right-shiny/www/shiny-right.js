@@ -6,9 +6,10 @@ rightOutputBinding.find = function(scope){
 rightOutputBinding.renderValue = function(el, data) {
 	if(cnt>0){//if(data change)
 		cnt=0;
-		if(data[1] != null){
-		objArr[data[0]-1]._linear(data[1].xx, data[1].yy);		
-		}		
+		if(data[1] != -1){
+			objArr[data[0]-1].draw_linear(data[1].xx, data[1].yy);	
+			window.Shiny.onInputChange("id",-1);
+		}
 	}
 	cnt++;
 };

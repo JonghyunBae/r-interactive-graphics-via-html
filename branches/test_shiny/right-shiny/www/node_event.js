@@ -194,14 +194,14 @@ function menu(Name)
                 Name.menuLayer.draw();  
         });
         Name.menuText[1].on('click', function(evt){
-        		sendArr(Name)
-                //resetSelected();
+        		//sendArr(Name)
+                resetSelected();
                 Name.menu.hide();
                 Name.menuLayer.draw();  
         });
         Name.menuRect[1].on('click', function(evt){
-        		sendArr(Name)
-        		//resetSelected();
+        		//sendArr(Name)
+        		resetSelected();
                 Name.menu.hide();
                 Name.menuLayer.draw();                  
         });
@@ -554,7 +554,8 @@ function RectRangeSelect(Name, pre, aft)
                 allDeselect();
         }       
         //alert(Name._type);
-        
+        if(Name._type == undefined)
+        	return;
         if(Name._type == "scatter"){
                 if(ctrlPressed == true) {
                         for(var i = 0 ; i < Name.node.length ; i ++)
@@ -768,6 +769,7 @@ function select(Name)
                                         
                                         Name.tmpShift = true;
                                         allDeselect();
+                                        
                                         if(Name._type == "scatter")
                                         {
                                                 if(Name.preId.x >= tmpX){

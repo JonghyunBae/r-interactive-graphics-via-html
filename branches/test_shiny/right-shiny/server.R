@@ -2,17 +2,6 @@ library(shiny)
 
 shinyServer(function(input, output) {
   output$content <- reactive(function() {
-    xAxis <-input$xAxis
-    yAxis <-input$yAxis
-    color <-input$color
-    legend <-input$legend
-    width <-input$width
-    height <-input$height
-    bin <-input$bin
-    hide <- input$TestEntry1    
-    graphName <- input$graphName    
-    whichOption <- input$whichOption
-    changeOption <- input$changeOption
     #linear regression 
     if(length(input$xx) != 0){
       xx <- input$xx
@@ -27,14 +16,15 @@ shinyServer(function(input, output) {
       xArray <- seq(xRange[1], xRange[2], length.out = length(xx))
       yArray <- predict(obj.lm, data.frame(xx = xArray))
       fitArray <- data.frame(xx = xArray, yy = yArray)
-      output<-list(xAxis, yAxis, color, legend, width, height, bin, hide, graphName, whichOption, changeOption, id, fitArray);  
+      output<-list(id, fitArray);  
+      return(output)
       #print(fitArray)
       #output<-list(xAxis, yAxis, color, legend, width, height, bin, hide, graphName, whichOption, changeOption, linearOut);
       #linear regreession End
-    }else{
-      output<-list(xAxis, yAxis, color, legend, width, height, bin, hide, graphName, whichOption, changeOption);    
-    } 
-    
+    }
+    hide <- input$hide
+    output <- list(hide);
     return(output)
+    
   })
 })

@@ -6,7 +6,7 @@
 		this._type = 'scatter';		
 		this._id = id;
 		this._labelArr = labelArr; //localize later
-		objArr.push(this);
+		objArr[id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
     };
@@ -21,6 +21,7 @@
     					this.width = plotWidth;
     				}
     			}
+    			//alert(this.width);
     			if(optionObj.height != undefined){
     				this.height = optionObj.height;
     			}else{

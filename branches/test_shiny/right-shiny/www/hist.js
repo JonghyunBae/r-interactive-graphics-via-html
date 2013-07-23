@@ -7,7 +7,7 @@ var Hist = {};
 		this._type = 'hist';
 		this._id = id;
 		this._labelArr = labelArr; //localize later
-		objArr.push(this);
+		objArr[id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
     };

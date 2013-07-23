@@ -61,27 +61,8 @@ function sendArr(Name)
 	window.Shiny.onInputChange("xx", tempData[Name.x]);
 	window.Shiny.onInputChange("yy", tempData[Name.y]);
 }
-function resetSelected()
-{
-	//window.Shiny.onInputChange("TotalArray", tempData);
-	window.Shiny.onInputChange("TestEntry1", "reset");
-//	addRow('dataTable');
-//	refresh();
-}
-function hideSelected()
-{
-	var hiddenArr = new Array();
-	for(var i = 0 ; i < isSelected.length ; i ++)
-	{
-		if(isSelected[i][0] == 1)
-		{
-			hiddenArr.push(i);
-		}		
-	}
-	window.Shiny.onInputChange("TestEntry1", hiddenArr);
-//	addRow('dataTable');
-//	refresh();
-}
+
+
 //allGraphUpdate is used for only select & unselect
 function allGraphUpdate(id , select, name) 
 {	

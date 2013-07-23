@@ -51,6 +51,7 @@ var changeBin = function (Name, i){
 var tempHidden = new Array();
 function hideSelected()
 {
+	
 	var hiddenArr = new Array();
 	for(var i = 0 ; i < isSelected.length ; i ++)
 	{
@@ -59,7 +60,7 @@ function hideSelected()
 			hiddenArr.push(i);
 		}		
 	}
-	
+//	alert("gggg");
 	if(hiddenArr.length == undefined){
 		isHidden[tempData[tempData.length-1][hiddenArr]] = true;
 		tempHidden.push(tempData[tempData.length-1][hiddenArr]);
@@ -69,6 +70,7 @@ function hideSelected()
 			tempHidden.push(tempData[tempData.length-1][hiddenArr[i]]);
 		}
 	}				
+//	alert("gggg");
 	tempData = make2DArr(mainArr.length);
 	var h = 0;
 	var p = 0;
@@ -83,8 +85,9 @@ function hideSelected()
 		}				
 		h++;
 	}
-	
+//	alert("gggg");
 	window.Shiny.onInputChange("hide", "hide"); // telling receive message completely.
+	//alert("ggghhgggg");
 	
 }
 

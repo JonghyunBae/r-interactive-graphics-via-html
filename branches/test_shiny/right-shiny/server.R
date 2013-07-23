@@ -3,6 +3,7 @@ library(shiny)
 shinyServer(function(input, output) {
   output$content <- reactive(function() {
     #linear regression 
+   # print("tttttt")
     if(length(input$xx) != 0){
       xx <- input$xx
       yy <- input$yy
@@ -17,13 +18,13 @@ shinyServer(function(input, output) {
       yArray <- predict(obj.lm, data.frame(xx = xArray))
       fitArray <- data.frame(xx = xArray, yy = yArray)
       output<-list(id, fitArray);  
+      
       return(output)
-      #print(fitArray)
-      #output<-list(xAxis, yAxis, color, legend, width, height, bin, hide, graphName, whichOption, changeOption, linearOut);
-      #linear regreession End
     }
     hide <- input$hide
-    output <- list(hide);
+   # print("gggggg")
+   # print(hide)
+    output <- list(hide)
     return(output)
     
   })

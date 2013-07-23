@@ -429,40 +429,23 @@
 				{
 					nodeY[i] = this.height* ((yArr[i]-min)) /((max - min));
 				} 
+		       
 		        
 				var node = new Array(xArr.length)
-		        for(var i = 0; i < xArr.length ; i++)
+				var dataLayer = new Kinetic.Layer();
+		        for(var i = 1; i < xArr.length ; i++)
 				{
-					node[i] = new Kinetic.Circle({
-						x: nodeX[i] + this.plotXMargin,
-						y: this.height +this.plotYMargin - nodeY[i],
-						radius: this.radius,
-						fill: 'black',
-					});			
+					node[i-1] = new Kinetic.Line({
+                        points: [	nodeX[i-1] + this.plotXMargin, 
+                                 	this.height +this.plotYMargin - nodeY[i-1], 
+                                 	nodeX[i] + this.plotXMargin,
+                                     this.height +this.plotYMargin - nodeY[i]],
+                        stroke: 'black',
+                        strokeWidth: 2,             
+                    });
+					dataLayer.add(node[i-1]);
 				}
-				
-				//draw node
-				var dataLayer = new Kinetic.Layer();	
-				for(var i = 0 ; i < node.length ; i ++)
-				{
-					dataLayer.add(node[i]);
-				} 
-				this.stage.add(dataLayer);
-		        
-				
-				/*var line = new Kinetic.Line({
-                    points: [	this.plotXMargin- 10, 
-                                this.plotYMargin+10, 
-                                this.plotXMargin - 10, 
-                                this.plotYMargin+50],
-                   stroke: 'black',
-                   strokeWidth: 2,             
-               });
-               var layer = new Kinetic.Layer();
-               layer.add(line);
-               this.stage.add(layer);
-               */
-               
+				this.stage.add(dataLayer);     				
 			}
 	};
     

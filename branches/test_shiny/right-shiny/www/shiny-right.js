@@ -9,23 +9,25 @@ rightOutputBinding.find = function(scope){
 rightOutputBinding.renderValue = function(el, data) {
 	if(cnt>0){//if(data change)
 		cnt=0;
-		
-		if(data[0] != null){						
+		//alert("dddd");
+		//if(data[0] == null)
+		//	alert("dddd");
+		if(data[0] == "hide"){
+			
+			for(var i = 0 ; i < objArr.length ; i ++)
+			{
+				//alert(objArr[i]._type);
+				objArr[i]._init(objArr[i]._id, tempData, {});
+				objArr[i].draw(objArr[i]._id);
+				eventTrigger(objArr[i]);
+				//alert("dddd");
+			}
 			window.Shiny.onInputChange("hide", null); // telling receive message completely.
 		}
-		for(var i = 0 ; i < objArr.length ; i ++)
-		{
-			//alert(objArr[i]._type);
-			objArr[i]._init(objArr[i]._id, tempData, {});
-			objArr[i].draw(objArr[i]._id);
-			eventTrigger(objArr[i]);
-			//alert("dddd");
-		}
 
-		if(data[12] != null){
-			scatter1._linear(data[12].xx, data[12].yy);
-		}
-		
+	/*	if(data[1] != null){
+			objArr[data[0]-1]._linear(data[1].xx, data[1].yy);			
+		}		*/
 	}
 	cnt++;
 };

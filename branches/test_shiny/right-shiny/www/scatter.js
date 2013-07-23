@@ -260,45 +260,17 @@ var Scatter = {};
 					this.plotLayer.add(this.yLine[i]); 
 			        this.plotLayer.add(this.yText[i]);
 				}
-				    
-                this.xLabel = new Kinetic.Text({
-                    name : 'xLabel',
-                    x: this.plotXMargin+this.width/2,
-                    y: this.plotYMargin+this.height+5*this.plotLength,
-                    offset : {x: labelArr[this.x].length/2 * 10, y:0},
-                    text: labelArr[this.x],
-                    fontSize: 15,
-                    fontStyle: 'bold',
-                    fontFamily: 'Calibri',
-                    fill: 'black',
-                });                                   
-                this.plotLayer.add(this.xLabel);
-                this.yLabel = new Kinetic.Text({
-                    x: this.plotXMargin-this.plotLength - 40,
-                    y: this.plotYMargin+this.height/2  - 15,
-                    offset : {x: labelArr[this.y].length/2 * 10},
-                    text: labelArr[this.y],
-                    fontSize: 15,
-                    fontStyle: 'bold',
-                    fontFamily: 'Calibri',
-                    fill: 'black',
-                    rotation: (Math.PI)*3/2
-                });    
+				
+				//add labels.
+				scatterSetXLabel(this);
+				scatterSetYLabel(this);
+				scatterSetMainLabel(this);                                                   
+                this.plotLayer.add(this.xLabel);    
                 this.plotLayer.add(this.yLabel);    
-                this.mainLabel = new Kinetic.Text({
-                    name : 'mainLabel',
-                    x: this.plotXMargin+this.width/2, 
-                    y: this.plotYMargin *0.3 ,
-                    offset : {x: ('Scatter of ' + labelArr[this.x] + ' & ' + labelArr[this.y]).length/2 * 10, y:0},
-                    text: 'Scatter of ' + labelArr[this.x] + ' & ' + labelArr[this.y],
-                    fontSize: 20,
-                    fontStyle: 'bold',
-                    fontFamily: 'Calibri',
-                    fill: 'black',
-                });           
                 this.plotLayer.add(this.mainLabel);
 				 
 				this.stage.add(this.plotLayer);
+				
 				this.plotLayer.on('mouseover mousemove dragmove', function(evt){  
 					document.body.style.cursor = "default";
 				});   
@@ -316,37 +288,10 @@ var Scatter = {};
 					this.dataLayer.add(this.node[i]);
 				} 
 				this.stage.add(this.dataLayer);
-				 //////////////////////////////Tooltip Setting////////////////////////////////////////
-				//new kenetic version -> tooltip setting change using tag
-				this.tooltipLayer = new Kinetic.Layer();			 
-			    this.tooltip = new Kinetic.Label({
-			        opacity: 0.75,
-			        visible: false,
-			        listening: false
-			      });
-			      
-			     this.tooltip.add(new Kinetic.Tag({
-			        fill: 'black',
-			        //pointerDirection: 'down',
-			        pointerWidth: 10,  
-			        pointerHeight: 10, 
-			        lineJoin: 'round',
-			        shadowColor: 'black',
-			        shadowBlur: 10,
-			        shadowOffset: 10,
-			        shadowOpacity: 0.2
-			      }));
-			      
-			      this.tooltip.add(new Kinetic.Text({
-			        text: '',
-			        fontFamily: 'Calibri',
-			        fontSize: 15,
-			        padding: 5,
-			        fill: 'white'
-			      }));			      
-			      this.tooltipLayer.add(this.tooltip);			      
-			      this.stage.add(this.tooltipLayer);                
-                ///////////////////////////////////////////////////////////////////////////////////
+				
+				// add tooltip
+				setTooltip(this);
+				this.stage.add(this.tooltipLayer);
 				
 				//draw legend
 				if(this.legend!=undefined){
@@ -410,69 +355,10 @@ var Scatter = {};
 	};
     
 })();
+			      
+  		      
+                 
 
-// set x axis variables.
-// xPlotArr should be needed.
-function scatterSetXAxis(obj)
-{
-	obj.xLine = new Array();
-	obj.xText = new Array();
-	for(var i = 0; i < obj.xPlotArr.length; i++)
-	{
-		obj.xLine[i] = new Kinetic.Line({
-	        name : "xLine"+i,
-	        points: [	obj.plotXMargin+obj.xPlotArr[i][0],
-	                 	obj.plotYMargin+obj.height+obj.plotLength,
-	                 	obj.plotXMargin+obj.xPlotArr[i][0],
-	                 	obj.plotYMargin+obj.height+2*obj.plotLength],
-	        stroke: 'black',
-	        strokeWidth: 2,             
-	    });
-	                  
-	    obj.xText[i] = new Kinetic.Text({
-	        name : "xText"+i,
-	        x: obj.plotXMargin+obj.xPlotArr[i][0]-30,
-	        y: obj.plotYMargin+obj.height+obj.plotLength*2,
-	        text: obj.xPlotArr[i][1],
-	        fontSize: 15,
-	        fontFamily: 'Calibri',
-	        fill: 'black',
-	        width: 60,
-	        align: 'center'    
-	    });      
-	} 
-}
-
-// set y axis variables.
-// yPlotArr should be needed.
-function scatterSetYAxis(obj)
-{
-	obj.yLine = new Array();
-	obj.yText = new Array();
-   
-    for(var i = 0; i < obj.yPlotArr.length ; i++)
-    {
-    	obj.yLine[i] = new Kinetic.Line({
-            points: [	obj.plotXMargin-obj.plotLength, 
-                     	obj.plotYMargin+obj.height-obj.yPlotArr[i][0], 
-                     	obj.plotXMargin-2*obj.plotLength,
-                     	obj.plotYMargin+obj.height-obj.yPlotArr[i][0]],
-            stroke: 'black',
-            strokeWidth: 2,             
-        });              
-        obj.yText[i] = new Kinetic.Text({
-            x: obj.plotXMargin-obj.plotLength*2-15,
-            y: obj.plotYMargin+obj.height-obj.yPlotArr[i][0]+30,
-            text: obj.yPlotArr[i][1],
-            fontSize: 15,
-            fontFamily: 'Calibri',
-            fill: 'black',
-            width: 60,
-            align: 'center',
-            rotation: (Math.PI)*3/2
-        });        
-    }
-}
 
 function setColor(colorArr) //set color
 {
@@ -803,3 +689,116 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 	}
 	return group;
 }
+
+
+/**  set labels **/
+//set xLabel
+function scatterSetXLabel(obj)
+{
+	obj.xLabel = new Kinetic.Text({
+     name : 'xLabel',
+     x: obj.plotXMargin+obj.width/2,
+     y: obj.plotYMargin+obj.height+5*obj.plotLength,
+     offset : {x: labelArr[obj.x].length/2 * 10, y:0},
+     text: labelArr[obj.x],
+     fontSize: 15,
+     fontStyle: 'bold',
+     fontFamily: 'Calibri',
+     fill: 'black',
+ });
+}
+//set yLabel
+function scatterSetYLabel(obj)
+{
+	obj.yLabel = new Kinetic.Text({
+     x: obj.plotXMargin-obj.plotLength - 40,
+     y: obj.plotYMargin+obj.height/2  - 15,
+     offset : {x: labelArr[obj.y].length/2 * 10},
+     text: labelArr[obj.y],
+     fontSize: 15,
+     fontStyle: 'bold',
+     fontFamily: 'Calibri',
+     fill: 'black',
+     rotation: (Math.PI)*3/2
+ });
+}
+//set Main Label
+function scatterSetMainLabel(obj)
+{
+	obj.mainLabel = new Kinetic.Text({
+     name : 'mainLabel',
+     x: obj.plotXMargin+obj.width/2, 
+     y: obj.plotYMargin *0.3 ,
+     offset : {x: ('Scatter of ' + labelArr[obj.x] + ' & ' + labelArr[obj.y]).length/2 * 10, y:0},
+     text: 'Scatter of ' + labelArr[obj.x] + ' & ' + labelArr[obj.y],
+     fontSize: 20,
+     fontStyle: 'bold',
+     fontFamily: 'Calibri',
+     fill: 'black',
+ });
+}
+/**  set labels end **/
+
+/**  set axis  **/
+//set x axis variables.
+//xPlotArr should be needed.
+function scatterSetXAxis(obj)
+{
+	obj.xLine = new Array();
+	obj.xText = new Array();
+	for(var i = 0; i < obj.xPlotArr.length; i++)
+	{
+		obj.xLine[i] = new Kinetic.Line({
+	        name : "xLine"+i,
+	        points: [	obj.plotXMargin+obj.xPlotArr[i][0],
+	                 	obj.plotYMargin+obj.height+obj.plotLength,
+	                 	obj.plotXMargin+obj.xPlotArr[i][0],
+	                 	obj.plotYMargin+obj.height+2*obj.plotLength],
+	        stroke: 'black',
+	        strokeWidth: 2,             
+	    });
+	                  
+	    obj.xText[i] = new Kinetic.Text({
+	        name : "xText"+i,
+	        x: obj.plotXMargin+obj.xPlotArr[i][0]-30,
+	        y: obj.plotYMargin+obj.height+obj.plotLength*2,
+	        text: obj.xPlotArr[i][1],
+	        fontSize: 15,
+	        fontFamily: 'Calibri',
+	        fill: 'black',
+	        width: 60,
+	        align: 'center'    
+	    });      
+	} 
+}
+//set y axis variables.
+//yPlotArr should be needed.
+function scatterSetYAxis(obj)
+{
+	obj.yLine = new Array();
+	obj.yText = new Array();
+
+ for(var i = 0; i < obj.yPlotArr.length ; i++)
+ {
+ 	obj.yLine[i] = new Kinetic.Line({
+         points: [	obj.plotXMargin-obj.plotLength, 
+                  	obj.plotYMargin+obj.height-obj.yPlotArr[i][0], 
+                  	obj.plotXMargin-2*obj.plotLength,
+                  	obj.plotYMargin+obj.height-obj.yPlotArr[i][0]],
+         stroke: 'black',
+         strokeWidth: 2,             
+     });              
+     obj.yText[i] = new Kinetic.Text({
+         x: obj.plotXMargin-obj.plotLength*2-15,
+         y: obj.plotYMargin+obj.height-obj.yPlotArr[i][0]+30,
+         text: obj.yPlotArr[i][1],
+         fontSize: 15,
+         fontFamily: 'Calibri',
+         fill: 'black',
+         width: 60,
+         align: 'center',
+         rotation: (Math.PI)*3/2
+     });        
+ }
+}
+/**  set axis end  **/

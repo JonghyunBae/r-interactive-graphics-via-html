@@ -2,6 +2,41 @@ var plotWidth = 300;  //default value for plot width
 var plotHeight = 300; //default value for plot height  
 var plotRadius = 2;
 
+
+/** set tooltip  **/
+//new kenetic version -> tooltip setting change using tag
+function setTooltip(obj)
+{
+	obj.tooltipLayer = new Kinetic.Layer();			 
+	obj.tooltip = new Kinetic.Label({
+	    opacity: 0.75,
+	    visible: false,
+	    listening: false
+	  });
+	obj.tooltip.add(new Kinetic.Tag({
+	    fill: 'black',
+	    //pointerDirection: 'down',
+	    pointerWidth: 10,  
+	    pointerHeight: 10, 
+	    lineJoin: 'round',
+	    shadowColor: 'black',
+	    shadowBlur: 10,
+	    shadowOffset: 10,
+	    shadowOpacity: 0.2
+	  }));
+	obj.tooltip.add(new Kinetic.Text({
+	    text: '',
+	    fontFamily: 'Calibri',
+	    fontSize: 15,
+	    padding: 5,
+	    fill: 'white'
+	  }));
+	obj.tooltipLayer.add(obj.tooltip);
+}
+/** set tooltip end  **/ 
+
+
+
 ////////////////////////////////////mouse position of each graph////////////////////////////////////
 var mouseName;
 var divOffsetX, divOffsetY;

@@ -602,37 +602,10 @@ var Box = {};
                     
                 } 
                 this.stage.add(this.dataLayer);
-                //////////////////////////////Tooltip Setting////////////////////////////////////////
-              //new kenetic version -> tooltip setting change using tag
-				this.tooltipLayer = new Kinetic.Layer();			 
-			    this.tooltip = new Kinetic.Label({
-			        opacity: 0.75,
-			        visible: false,
-			        listening: false
-			      });
-			      
-			     this.tooltip.add(new Kinetic.Tag({
-			        fill: 'black',
-			        //pointerDirection: 'down',
-			        pointerWidth: 10,  
-			        pointerHeight: 10, 
-			        lineJoin: 'round',
-			        shadowColor: 'black',
-			        shadowBlur: 10,
-			        shadowOffset: 10,
-			        shadowOpacity: 0.2
-			      }));
-			      
-			      this.tooltip.add(new Kinetic.Text({
-			        text: '',
-			        fontFamily: 'Calibri',
-			        fontSize: 15,
-			        padding: 5,
-			        fill: 'white'
-			      }));			      
-			      this.tooltipLayer.add(this.tooltip);			      
-			      this.stage.add(this.tooltipLayer);                
-               ///////////////////////////////////////////////////////////////////////////////////
+                
+                // add tooltip
+				setTooltip(this);			      
+			    this.stage.add(this.tooltipLayer);   
             },            
             update: function(){
                 alert('scatter is updated');                

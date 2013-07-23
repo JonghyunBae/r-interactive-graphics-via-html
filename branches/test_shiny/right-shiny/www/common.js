@@ -89,19 +89,7 @@ function getXYpos(elm) {
 	return {'xp':X, 'yp':Y};
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
-function sendArr(Name)
-{
-	if(Name.linear == true){
-		Name.linear = false;
-		Name.draw(Name._id);
-		eventTrigger(Name);
-	}else{		
-		Name.linear = true;		
-		window.Shiny.onInputChange("id", Name._id);
-		window.Shiny.onInputChange("xx", tempData[Name.x]);
-		window.Shiny.onInputChange("yy", tempData[Name.y]);
-	}
-}
+
 
 
 //allGraphUpdate is used for only select & unselect

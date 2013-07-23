@@ -304,7 +304,11 @@ var Scatter = {};
 				// check linear regression on/off
 				if(this.linear == true){
 					this.linear = false;
-					sendArr(this);
+					linearSendArr(this);
+				}
+				if(this.loess == true){
+					this.loess = false;
+					loessSendArr(this);
 				}
 			},
 			changeX: function(id, dataArr, optionObj){
@@ -360,9 +364,11 @@ var Scatter = {};
 			update: function(){
 				alert('scatter is updated');				
 			},
-			draw_linear: function(xArr, yArr){				
-				this.linear = true;
-				//alert(this.xMax);
+			draw_regression: function(type, xArr, yArr){
+				if(type == "linear")
+					this.linear = true;
+				if(type == "loess")
+					this.loess = true;
 				var tickRange = (this.xMax-this.xMin)/this.xTick;	
 				var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
 				tickRange = setTickRange(tmp, tickRange);
@@ -397,7 +403,7 @@ var Scatter = {};
                     });
 					dataLayer.add(node[i-1]);
 				}
-				this.stage.add(dataLayer);     				
+				this.stage.add(dataLayer);     	
 			}
 	};
     
@@ -516,7 +522,49 @@ function getLegendColor(n, colors, mainValueArr)
 	}	
 }
 
+/**  Regression functions for scatter  **/
+// linear regression.
+function linearSendArr(Name)
+{
+	if(Name._type == "scatter"){	// only for scatter.
+		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
+			if(Name.linear == true){
+				Name.linear = false;
+				Name.draw(Name._id);
+				eventTrigger(Name);
+			}else{		
+				Name.linear = true;		
+				window.Shiny.onInputChange("id", Name._id);
+				window.Shiny.onInputChange("type", Name._type);
+				window.Shiny.onInputChange("graph", "linear");
+				window.Shiny.onInputChange("xx", tempData[Name.x]);
+				window.Shiny.onInputChange("yy", tempData[Name.y]);
+			}
+		}
+	}
 
+}
+// loess regression.
+function loessSendArr(Name)
+{
+	if(Name._type == "scatter"){	// only for scatter.
+		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
+			if(Name.loess == true){
+				Name.loess = false;
+				Name.draw(Name._id);
+				eventTrigger(Name);
+			}else{		
+				Name.loess = true;		
+				window.Shiny.onInputChange("id", Name._id);
+				window.Shiny.onInputChange("type", Name._type);
+				window.Shiny.onInputChange("graph", "loess");
+				window.Shiny.onInputChange("xx", tempData[Name.x]);
+				window.Shiny.onInputChange("yy", tempData[Name.y]);
+			}
+		}
+	}
+}
+/**  Regression functions for scatter end  **/
 
 
 function makeAxisArr(dataArr, length, axis, tick, max, min)	 

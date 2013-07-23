@@ -6,8 +6,8 @@ rightOutputBinding.find = function(scope){
 rightOutputBinding.renderValue = function(el, data) {
 	if(cnt>0){//if(data change)
 		cnt=0;
-		if(data[1] != -1){
-			objArr[data[0]-1].draw_linear(data[1].xx, data[1].yy);	
+		if(data[0] != -1){
+			objArr[data[0]-1].draw_regression(data[1], data[2].xx, data[2].yy);	
 			window.Shiny.onInputChange("id",-1);
 		}
 	}

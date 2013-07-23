@@ -14,8 +14,7 @@ var Hist = {};
 	Hist.prototype = {
 			
 			_init: function(id, dataArr, optionObj){
-
-				////////// Make essential variables ////////
+				//make essential variables
 				if(optionObj.width != undefined){
     				this.width = optionObj.width;
     			}else{

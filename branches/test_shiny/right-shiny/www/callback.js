@@ -12,13 +12,11 @@ var array_of_functions = [
                           function(Name, i) { changeBin(Name, i) }
                       ]
 var changeXAxis = function (Name, i){
-	Name._init(Name._id, tempData, {x: Name._labelArr[i]});
-	Name.draw(Name._id);
+	Name.changeX(Name._id, tempData, {x: Name._labelArr[i]});
 	eventTrigger(Name);		
 }
 var changeYAxis = function (Name, i){
-	Name._init(Name._id, tempData, {y: Name._labelArr[i]});
-	Name.draw(Name._id);
+	Name.changeY(Name._id, tempData, {y: Name._labelArr[i]});
 	eventTrigger(Name);			
 }
 var changeColor = function (Name, i){

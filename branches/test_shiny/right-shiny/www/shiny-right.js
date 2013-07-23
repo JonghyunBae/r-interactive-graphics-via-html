@@ -58,21 +58,6 @@ rightOutputBinding.renderValue = function(el, data) {
 				}					
 			window.Shiny.onInputChange("TestEntry1", null); // telling receive message completely.
 		}
-		if(data[8] != null && data[9] != null && data[10] != null){
-			switch(data[9])
-			{
-				case 0 : xAxis[data[8]-1] = labelArr[data[10]]; break;
-				case 1 : yAxis[data[8]-1] = labelArr[data[10]]; break;
-				case 2 : color[data[8]-1] = labelArr[data[10]]; break;
-				case 3 : legend[data[8]-1] = legendArr[data[10]]; break;
-				case 4 : width[data[8]-1] = width[data[8]-1] + widthArr[data[10]]; break;
-				case 5 : height[data[8]-1] = height[data[8]-1] + heightArr[data[10]]; break;
-				case 6 : bin[data[8]-1] = bin[data[8]-1] + binArr[data[10]]; break;
-				default : break;
-			}		
-			window.Shiny.onInputChange("graphName", null); // telling receive message completely.
-			window.Shiny.onInputChange("changeXAxis", null); // telling receive message completely.
-		}
 		
 		if(data[12] != null){
 			scatter1._linear(data[12].xx, data[12].yy);

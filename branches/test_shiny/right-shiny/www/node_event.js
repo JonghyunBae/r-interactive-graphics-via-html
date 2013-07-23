@@ -299,17 +299,9 @@ function menu(Name)
                                 (function (i) { 
                                         Name.subMenuText[j][i].on('click', function(evt){
                                         	array_of_functions[j](Name, i);
-                                        	//	funcMenu(Name,j,i);
-                                                window.Shiny.onInputChange("graphName", Name._id);
-                                                window.Shiny.onInputChange("whichOption", j);
-                                                window.Shiny.onInputChange("changeOption", i);
                                         });
                                         Name.subMenuRect[j][i].on('click', function(evt){
                                         	array_of_functions[j](Name, i);
-                                        	//	funcMenu(Name,j,i);
-                                                window.Shiny.onInputChange("graphName", Name._id);
-                                                window.Shiny.onInputChange("whichOption", j);
-                                                window.Shiny.onInputChange("changeOption", i);
                                         });
                                         Name.subMenuText[j][i].on('mouseover', function(evt){
                                                 Name.subMenuRect[j][i].setFill('#cfe444');

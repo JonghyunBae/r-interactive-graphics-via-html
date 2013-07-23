@@ -127,7 +127,7 @@ function refresh()
 
 function allSelect()
 {
-	for(var i = 0 ; i < isSelected.length - hidcnt ; i ++)
+	for(var i = 0 ; i < isSelected.length; i ++)
 	{
 		if(isSelected[i][0] == 0)
 		{
@@ -137,12 +137,14 @@ function allSelect()
 			}
 			isSelected[i][0] = 1;
 		}		
+		if(isSelected[i][0] == 2)	//check the end of the isSelected.
+			break;
 	}
 }
 function allDeselect()
 {
-	for(var i = 0 ; i < isSelected.length - hidcnt ; i ++)
-	{
+	for(var i = 0 ; i < isSelected.length; i ++)
+	{		
 		if(isSelected[i][0] == 1)
 		{
 			for(var j = 1 ; j < isSelected[i].length ; j++)
@@ -150,7 +152,9 @@ function allDeselect()
 				isSelected[i][j](0);
 			}
 			isSelected[i][0] = 0;
-		}		
+		}	
+		if(isSelected[i][0] == 2)	//check the end of the isSelected.
+			break;
 	}
 
 }

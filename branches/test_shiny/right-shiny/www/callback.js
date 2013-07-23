@@ -47,21 +47,33 @@ var changeBin = function (Name, i){
 	eventTrigger(Name);
 }
 
-var hidcnt = 0;
-var tempHidden = new Array();
+//these variables are used for only hideSelected and resetSelected.
+var hideCnt = 0; 
+var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected()
 {
-//	alert("a");
 	var hiddenArr = new Array();
+	// collect nodes' numbers which will be hidden.
 	for(var i = 0 ; i < isSelected.length ; i ++)
 	{
+		//find selected nodes.
 		if(isSelected[i][0] == 1)
 		{
 			hiddenArr.push(i);
-			hidcnt ++;
-		}		
+			hideCnt ++;
+		}
+		//check the end of the isSelected.
+		if(isSelected[i][0] == 2){
+			isSelected[i][0] = 0;	// delete last end check.
+			break;
+		}	
+			
+		isSelected[i][0] = 0;
 	}
-//	alert("gggg");
+	if(hideCnt > 0)
+		isSelected[isSelected.length - hideCnt][0] = 2; // check it as the end of the isSelected.
+	
+	//	set the tempData with non hidden nodes of mainArr.
 	if(hiddenArr.length == undefined){
 		isHidden[tempData[tempData.length-1][hiddenArr]] = true;
 		tempHidden.push(tempData[tempData.length-1][hiddenArr]);
@@ -71,10 +83,8 @@ function hideSelected()
 			tempHidden.push(tempData[tempData.length-1][hiddenArr[i]]);
 		}
 	}				
-	//alert("gggg");
 	tempData = make2DArr(mainArr.length);
 	var h = 0;
-	var p = 0;
 	for(var i = 0 ; i < mainArr[0].length ; i ++){
 		if(isHidden[i]){
 			continue;
@@ -84,41 +94,28 @@ function hideSelected()
 		}				
 		h++;
 	}
-//	for(var i = 0 ; i < mainArr.length ; i ++){
-//		document.write(mainArr[0] + "<br>");
-//	}
-//	document.write("<br>");
-	//for(var i = 0 ; i < mainArr.length ; i ++){
-	//	document.write(tempData[0] + "<br>");
-	//}
 	
-	
-	//tempData = mainArr;
+	// redraw graphs.
 	for(var i = 0 ; i < objArr.length ; i ++)
 	{
-	//	alert(objArr[i]._type);
 		objArr[i]._init(objArr[i]._id, tempData, {});
 		objArr[i].draw(objArr[i]._id);
 		eventTrigger(objArr[i]);
-		//alert("dddd");
 	}
-	//alert(hiddenArr.length);
-	
-	//window.Shiny.onInputChange("hide", "hide"); // telling receive message completely.
-	
-	//alert("ggghhgggg");
-	
 }
 
 function resetSelected()
 {
-	hidcnt = 0;
+	if(hideCnt > 0)
+		isSelected[isSelected.length - hideCnt][0] = 0; // delete last end check.
+	hideCnt = 0; // reset the hideCnt.
 	for(var i = 0 ; i < tempHidden.length ; i ++){
-		isHidden[tempHidden[i]] = false;
+		isHidden[tempHidden[i]] = false;	// make isHidden with false.
 	}
-	tempHidden = new Array();
-	tempData = mainArr; 
+	tempHidden = new Array();	// reset the tempHidden.
+	tempData = mainArr; 	// reset the tempData.
 	
+	// redraw graphs.
 	for(var i = 0 ; i < objArr.length ; i ++)
 	{
 		objArr[i]._init(objArr[i]._id, tempData, {});

@@ -13,7 +13,6 @@ var Scatter = {};
     Scatter.prototype = {
     		
     		_init: function(id, dataArr, optionObj) {
-    			//alert(dataArr[0].length);
     			//make essential variables	
     			if(optionObj.width != undefined){
     				this.width = optionObj.width;
@@ -190,8 +189,8 @@ var Scatter = {};
 							selected : 0,
 							info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
 						});			
-						isSelected[i][id] = scatterUpdate(this, i);
-						//isSelected[i].push(scatterUpdate(this, i));	//save event handler
+						isSelected[i][id] = scatterUpdate(this, i);	//save event handler
+						//isSelected[i].push(scatterUpdate(this, i));	
 					}
 				}else{
 					
@@ -248,60 +247,20 @@ var Scatter = {};
 					strokeWidth: 2
 				});       
 				this.plotLayer.add(this.plotRect);   
-				this.xLine = new Array();
-				this.xText = new Array();
-				for(var i=0; i<this.xPlotArr.length; i++)
-				{
-				    this.xLine[i] = new Kinetic.Line({
-				        name : "xLine"+i,
-				        points: [	this.plotXMargin+this.xPlotArr[i][0],
-				                     this.plotYMargin+this.height+this.plotLength,
-				                     this.plotXMargin+this.xPlotArr[i][0],
-				                     this.plotYMargin+this.height+2*this.plotLength],
-				        stroke: 'black',
-				        strokeWidth: 2,             
-				    });
-				    this.plotLayer.add(this.xLine[i]);               
-				    this.xText[i] = new Kinetic.Text({
-				        name : "xText"+i,
-				        x: this.plotXMargin+this.xPlotArr[i][0]-30,
-				        y: this.plotYMargin+this.height+this.plotLength*2,
-				        text: this.xPlotArr[i][1],
-				        fontSize: 15,
-				        fontFamily: 'Calibri',
-				        fill: 'black',
-				        width: 60,
-				        align: 'center'    
-				    });          
-				    this.plotLayer.add(this.xText[i]);            
-				} 
-				this.yLine = new Array();
-                this.yText = new Array();
-               
-                for(var i=0; i< this.yPlotArr.length ; i++)
-                {
-                    this.yLine[i] = new Kinetic.Line({
-                        points: [	this.plotXMargin-this.plotLength, 
-                                     this.plotYMargin+this.height-this.yPlotArr[i][0], 
-                                     this.plotXMargin-2*this.plotLength,
-                                     this.plotYMargin+this.height-this.yPlotArr[i][0]],
-                        stroke: 'black',
-                        strokeWidth: 2,             
-                    });
-                    this.plotLayer.add(this.yLine[i]);       
-                    this.yText[i] = new Kinetic.Text({
-                        x: this.plotXMargin-this.plotLength*2-15,
-                        y: this.plotYMargin+this.height-this.yPlotArr[i][0]+30,
-                        text: this.yPlotArr[i][1],
-                        fontSize: 15,
-                        fontFamily: 'Calibri',
-                        fill: 'black',
-                        width: 60,
-                        align: 'center',
-                        rotation: (Math.PI)*3/2
-                    });           
-                    this.plotLayer.add(this.yText[i]);        
-                }    
+				
+				//add x axis variables.
+				scatterSetXAxis(this);
+				for(var i = 0 ; i < this.xPlotArr.length ; i ++){
+					this.plotLayer.add(this.xLine[i]); 
+				    this.plotLayer.add(this.xText[i]);
+				}			
+				//add y axis variables.
+				scatterSetYAxis(this);
+				for(var i = 0 ; i < this.yPlotArr.length ; i ++){
+					this.plotLayer.add(this.yLine[i]); 
+			        this.plotLayer.add(this.yText[i]);
+				}
+				    
                 this.xLabel = new Kinetic.Text({
                     name : 'xLabel',
                     x: this.plotXMargin+this.width/2,
@@ -452,6 +411,68 @@ var Scatter = {};
     
 })();
 
+// set x axis variables.
+// xPlotArr should be needed.
+function scatterSetXAxis(obj)
+{
+	obj.xLine = new Array();
+	obj.xText = new Array();
+	for(var i = 0; i < obj.xPlotArr.length; i++)
+	{
+		obj.xLine[i] = new Kinetic.Line({
+	        name : "xLine"+i,
+	        points: [	obj.plotXMargin+obj.xPlotArr[i][0],
+	                 	obj.plotYMargin+obj.height+obj.plotLength,
+	                 	obj.plotXMargin+obj.xPlotArr[i][0],
+	                 	obj.plotYMargin+obj.height+2*obj.plotLength],
+	        stroke: 'black',
+	        strokeWidth: 2,             
+	    });
+	                  
+	    obj.xText[i] = new Kinetic.Text({
+	        name : "xText"+i,
+	        x: obj.plotXMargin+obj.xPlotArr[i][0]-30,
+	        y: obj.plotYMargin+obj.height+obj.plotLength*2,
+	        text: obj.xPlotArr[i][1],
+	        fontSize: 15,
+	        fontFamily: 'Calibri',
+	        fill: 'black',
+	        width: 60,
+	        align: 'center'    
+	    });      
+	} 
+}
+
+// set y axis variables.
+// yPlotArr should be needed.
+function scatterSetYAxis(obj)
+{
+	obj.yLine = new Array();
+	obj.yText = new Array();
+   
+    for(var i = 0; i < obj.yPlotArr.length ; i++)
+    {
+    	obj.yLine[i] = new Kinetic.Line({
+            points: [	obj.plotXMargin-obj.plotLength, 
+                     	obj.plotYMargin+obj.height-obj.yPlotArr[i][0], 
+                     	obj.plotXMargin-2*obj.plotLength,
+                     	obj.plotYMargin+obj.height-obj.yPlotArr[i][0]],
+            stroke: 'black',
+            strokeWidth: 2,             
+        });              
+        obj.yText[i] = new Kinetic.Text({
+            x: obj.plotXMargin-obj.plotLength*2-15,
+            y: obj.plotYMargin+obj.height-obj.yPlotArr[i][0]+30,
+            text: obj.yPlotArr[i][1],
+            fontSize: 15,
+            fontFamily: 'Calibri',
+            fill: 'black',
+            width: 60,
+            align: 'center',
+            rotation: (Math.PI)*3/2
+        });        
+    }
+}
 
 function setColor(colorArr) //set color
 {
@@ -582,16 +603,7 @@ function scatterUpdate(obj, id)
 						obj.node[id].setScaleY(2);
 						obj.node[id].setSelected(1);
 						obj.node[id].moveToTop();
-					}/*else if(selectOn == 2 && obj.node[id].getSelected() == 1){	//hide
-						obj.node[id].setStroke(obj.node[id].getFill());
-						obj.node[id].setScaleX(1);
-						obj.node[id].setScaleY(1);
-						obj.node[id].setSelected(2);
-						obj.node[id].hide();
-					}else if(selectOn == 3){		//reset
-						obj.node[id].setSelected(0);
-						obj.node[id].show();						
-					}	*/				
+					}
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

@@ -871,30 +871,7 @@ function boxUpdate(obj, id)
 								obj.node[id].setSelected(1);
 							}
 						}				
-					}/*else if(selectOn == 2){ // hide
-						if(obj.node[id].getIsOutlier()){//if isOutlier ==true
-							obj.node[id].setStroke(obj.node[id].getFill());
-							obj.node[id].setScaleX(1);
-							obj.node[id].setScaleY(1);
-							obj.node[id].setSelected(2);
-							obj.node[id].hide();
-						}else{
-							obj.node[id].setFreq(obj.node[id].getFreq()- obj.node[id].getSelectCnt());
-							obj.node[id].setInfo("boxNode : "+id+"\r\n"+"Frequency : "+(obj.node[id].getFreq())); // dependancy with previous line.
-							obj.node[id].setOpacity(0.5);
-							obj.node[id].setSelected(0);
-							obj.node[id].setSelectCnt(0);
-						}
-					}else if(selectOn == 3){		// reset
-						if(obj.node[id].getIsOutlier()){//if isOutlier ==true
-							obj.node[id].setSelected(0);
-							obj.node[id].show();	
-						}else{
-							obj.node[id].setFreq(obj.node[id].getHasArr().length);
-							obj.node[id].setInfo("boxNode : "+id+"\r\n"+"Frequency : "+ obj.node[id].getHasArr().length);
-							obj.node[id].setSelectCnt(0);
-						}
-					} */
+					}
 				};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

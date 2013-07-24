@@ -1,7 +1,7 @@
   # Status update
   # Things to improve:
    # Plot overlaying 
-   # Event handling
+   # Event handling for menu and plot update
    # R API for code generation
    # Output packaging for Shiny
   # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.

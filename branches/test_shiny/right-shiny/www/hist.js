@@ -254,6 +254,22 @@ var Hist = {};
 					});
             		
             	}
+            	
+            	//set plotRect.
+				setPlotRect(this);
+            	// set line variables.
+            	//histSetXLine(this);
+            	//histSetYLine(this);            	
+            	// set axis variables.
+            	histSetXAxis(this);
+            	histSetYAxis(this);
+            	//set label variables.
+				histSetXLabel(this);
+				histSetYLabel(this);
+				histSetMainLabel(this);
+				//set tooltip.
+            	setTooltip(this);
+            	
 	            
 	        },				
 			doIt: function() { 
@@ -272,151 +288,41 @@ var Hist = {};
                     height: this.height+this.plotYMargin*2 
                 });
                 this.plotLayer = new Kinetic.Layer();
-                this.plotRect = new Kinetic.Rect({
-                    name : "baseRect",
-                    x: this.plotXMargin-this.plotLength,
-                    y: this.plotYMargin-this.plotLength,
-                    width: this.width+2*this.plotLength,
-                    height: this.height+2*this.plotLength,
-                    stroke: '#fff',
-                    strokeWidth: 2
-                });                
-                this.plotLayer.add(this.plotRect);    
-                
-                this.xAxis = new Kinetic.Line({
-                    name: 'xAxis',
-                    points: [  this.plotXMargin+this.firstX, 
-                                 this.plotYMargin+this.height+this.plotLength, 
-                                 this.plotXMargin+this.lastX, 
-                                 this.plotYMargin+this.height+this.plotLength],
-                    stroke: 'black',
-                    strokeWidth: 2             
-                });
-                
-               
-                this.plotLayer.add(this.xAxis);
-                this.yAxis = new Kinetic.Line({
-                    points: [    this.plotXMargin-this.plotLength, 
-                                 this.plotYMargin+this.height-this.yPlotArr[this.yPlotArr.length-1][0],
-                                 this.plotXMargin-this.plotLength,  
-                                 this.plotYMargin+this.height],
-                    stroke: 'black',
-                    strokeWidth: 2             
-                });                                
-                this.plotLayer.add(this.yAxis);        
-                this.xLine = new Array();
-                this.xText = new Array();
-                var tmp = 0;
-                for(var i = 0 ; i < this.xPlotArr.length ; i ++)
-                {
-                	if((this.node.length < 10) || (this.node.length>=10)&&( i%(parseInt(this.node.length/5))==0) )
-                    {
-	                	this.xLine[tmp] = new Kinetic.Line({
-	                        name : "xLine"+tmp,
-	                        points: [   this.plotXMargin + this.xPlotArr[i][0],
-	                                     this.plotYMargin+this.height+this.plotLength,
-	                                     this.plotXMargin + this.xPlotArr[i][0],
-	                                     this.plotYMargin+this.height+2*this.plotLength],
-	                        stroke: 'black',
-	                        strokeWidth: 2,             
-	                    });
-	                    this.plotLayer.add(this.xLine[tmp]);                	
-	                	this.xText[tmp] = new Kinetic.Text({
-	                        name : "xText"+tmp,
-	                        x: this.plotXMargin + this.xPlotArr[i][0]-30,
-	                        y: this.plotYMargin+this.height+this.plotLength*2,
-	                        text: this.xPlotArr[i][1], ///////////////////////////////////////////
-	                        fontSize: this.width/40,
-	                        fontFamily: 'Calibri',
-	                        fill: 'black',
-	                        width: 60,
-	                        align: 'center'    
-	                    });          
-	                    this.plotLayer.add(this.xText[tmp]);
-	                    tmp++;
-                    }
-                }
-                
-                this.yLine = new Array();
-                this.yText = new Array();
-                for(var i=0; i< this.yPlotArr.length ; i++)
-                {
-
-                    this.yLine[i] = new Kinetic.Line({
-                        points: [	this.plotXMargin-this.plotLength, 
-                                 	this.plotYMargin+this.height-this.yPlotArr[i][0], 
-                                     this.plotXMargin-2*this.plotLength,
-                                     this.plotYMargin+this.height-this.yPlotArr[i][0]],
-                        stroke: 'black',
-                        strokeWidth: 2,             
-                    });
-
-                    this.plotLayer.add(this.yLine[i]);       
-                    this.yText[i] = new Kinetic.Text({
-                        x: this.plotXMargin-this.plotLength*2-15,
-                        y: this.plotYMargin+this.height-this.yPlotArr[i][0]+30,
-                        text: this.yPlotArr[i][1],
-                        fontSize: 15,
-                        fontFamily: 'Calibri',
-                        fill: 'black',
-                        width: 60,
-                        align: 'center',
-                        rotation: (Math.PI)*3/2
-                    });           
-                    this.plotLayer.add(this.yText[i]);        
-                } 
-                this.xLabel = new Kinetic.Text({
-                    name : 'xLabel',
-                    x: this.plotXMargin+this.width/2,
-                    y: this.plotYMargin+this.height+5*this.plotLength,
-                    offset : {x: labelArr[this.x].length/2 * 10, y:0},
-                    text: labelArr[this.x],
-                    fontSize: 15,
-                    fontStyle: 'bold',
-                    fontFamily: 'Calibri',
-                    fill: 'black',
-                });                                   
+                //add base rectangular.
+                this.plotLayer.add(this.plotRect);              
+                //add x, y line
+                //this.plotLayer.add(this.xAxis);
+                //this.plotLayer.add(this.yAxis);              
+                //add x axis layer.
+                for(var i = 0; i < this.xLine.length ; i++){
+                	this.plotLayer.add(this.xLine[i]);
+                    this.plotLayer.add(this.xText[i]);
+                }                
+                //add y axis layer.
+                for(var i = 0; i < this.yLine.length ; i++){
+                	this.plotLayer.add(this.yLine[i]);
+            	    this.plotLayer.add(this.yText[i]);
+                }    	      
+                //add label layers.
                 this.plotLayer.add(this.xLabel);
-                this.yLabel = new Kinetic.Text({
-                    x: this.plotXMargin-this.plotLength - 40,
-                    y: this.plotYMargin+this.height/2  - 15,
-                    offset : {x: 'Frequency'.length/2 * 10},
-                    text: 'Frequency',
-                    fontSize: 15,
-                    fontStyle: 'bold',
-                    fontFamily: 'Calibri',
-                    fill: 'black',
-                    rotation: (Math.PI)*3/2
-                });    
-                this.plotLayer.add(this.yLabel);    
-                this.mainLabel = new Kinetic.Text({
-                    name : 'mainLabel',
-                    x: this.plotXMargin+this.width/2, 
-                    y: this.plotYMargin *0.3 ,
-                    offset : {x: ('Histogram of ' + labelArr[this.x]).length/2 * 10, y:0},
-                    text: 'Histogram of ' + labelArr[this.x],
-                    fontSize: 20,
-                    fontStyle: 'bold',
-                    fontFamily: 'Calibri',
-                    fill: 'black',
-                });           
-                this.plotLayer.add(this.mainLabel);
+                this.plotLayer.add(this.yLabel);
+                this.plotLayer.add(this.mainLabel);            
                 
+                //add plot layer.
                 this.stage.add(this.plotLayer);
+                
                 this.plotLayer.on('mouseover mousemove dragmove', function(evt){  
                     document.body.style.cursor = "default";
-                });      
-				
+                });				
                 //draw node
 				this.dataLayer = new Kinetic.Layer();	
 				for(var i = 0 ; i < this.node.length ; i ++)
 				{
 					this.dataLayer.add(this.node[i]);
 				} 
-				this.stage.add(this.dataLayer);
+				this.stage.add(this.dataLayer);			
 				
 				// add tooltip
-				setTooltip(this);			      
 			    this.stage.add(this.tooltipLayer);                
 			},
 			changeX: function(id, dataArr, optionObj){
@@ -432,7 +338,8 @@ var Hist = {};
 	};
 })();
 
-/////////////////////////////////////////update function //////////////////////////////
+
+/**  update function  **/
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
@@ -459,4 +366,145 @@ function histUpdate(obj, id)
 					}
 				};
 }
-////////////////////////////////////////////////////////////////////////////////////////
+/**  update function end  **/
+
+/**  set labels **/
+//set xLabel
+function histSetXLabel(obj)
+{
+	obj.xLabel = new Kinetic.Text({
+	    name : 'xLabel',
+	    x: obj.plotXMargin+obj.width/2,
+	    y: obj.plotYMargin+obj.height+5*obj.plotLength,
+	    offset : {x: labelArr[obj.x].length/2 * 10, y:0},
+	    text: labelArr[obj.x],
+	    fontSize: 15,
+	    fontStyle: 'bold',
+	    fontFamily: 'Calibri',
+	    fill: 'black',
+	});                       
+}
+//set yLabel
+function histSetYLabel(obj)
+{
+	obj.yLabel = new Kinetic.Text({
+	    x: obj.plotXMargin-obj.plotLength - 40,
+	    y: obj.plotYMargin+obj.height/2  - 15,
+	    offset : {x: 'Frequency'.length/2 * 10},
+	    text: 'Frequency',
+	    fontSize: 15,
+	    fontStyle: 'bold',
+	    fontFamily: 'Calibri',
+	    fill: 'black',
+	    rotation: (Math.PI)*3/2
+	});  
+}
+//set Main Label
+function histSetMainLabel(obj)
+{
+	obj.mainLabel = new Kinetic.Text({
+	    name : 'mainLabel',
+	    x: obj.plotXMargin+obj.width/2, 
+	    y: obj.plotYMargin *0.3 ,
+	    offset : {x: ('Histogram of ' + labelArr[obj.x]).length/2 * 10, y:0},
+	    text: 'Histogram of ' + labelArr[obj.x],
+	    fontSize: 20,
+	    fontStyle: 'bold',
+	    fontFamily: 'Calibri',
+	    fill: 'black',
+	});
+}
+/**  set labels end **/
+
+/**  set axis  **/
+//set xLine
+function histSetXLine(obj)
+{
+	obj.xAxis = new Kinetic.Line({
+        name: 'xAxis',
+        points: [  obj.plotXMargin+obj.firstX, 
+                   obj.plotYMargin+obj.height+obj.plotLength, 
+                   obj.plotXMargin+obj.lastX, 
+                   obj.plotYMargin+obj.height+obj.plotLength],
+        stroke: 'black',
+        strokeWidth: 2             
+    });
+}
+//set yLine
+function histSetYLine(obj)
+{
+	obj.yAxis = new Kinetic.Line({
+		name: 'yAxis',
+        points: [    obj.plotXMargin-obj.plotLength, 
+                     obj.plotYMargin+obj.height-obj.yPlotArr[obj.yPlotArr.length-1][0],
+                     obj.plotXMargin-obj.plotLength,  
+                     obj.plotYMargin+obj.height],
+        stroke: 'black',
+        strokeWidth: 2             
+    });
+}
+//set x axis variables.
+//xPlotArr should be needed.
+function histSetXAxis(obj)
+{
+	obj.xLine = new Array();
+	obj.xText = new Array();
+	var tmp = 0;
+	for(var i = 0 ; i < obj.xPlotArr.length ; i ++)
+	{
+		if((obj.node.length < 10) || (obj.node.length>=10)&&( i%(parseInt(obj.node.length/5))==0) )
+	    {
+			obj.xLine[tmp] = new Kinetic.Line({
+	            name : "xLine"+tmp,
+	            points: [   obj.plotXMargin + obj.xPlotArr[i][0],
+	                        obj.plotYMargin+obj.height+obj.plotLength,
+	                        obj.plotXMargin + obj.xPlotArr[i][0],
+	                        obj.plotYMargin+obj.height+2*obj.plotLength],
+	            stroke: 'black',
+	            strokeWidth: 2,             
+	        });	                        	
+	        obj.xText[tmp] = new Kinetic.Text({
+	            name : "xText"+tmp,
+	            x: obj.plotXMargin + obj.xPlotArr[i][0]-30,
+	            y: obj.plotYMargin+obj.height+obj.plotLength*2,
+	            text: obj.xPlotArr[i][1], ///////////////////////////////////////////
+	            fontSize: obj.width/40,
+	            fontFamily: 'Calibri',
+	            fill: 'black',
+	            width: 60,
+	            align: 'center'    
+	        });
+	        tmp++;
+	    }
+	}
+}
+//set y axis variables.
+//yPlotArr should be needed.
+function histSetYAxis(obj)
+{
+	obj.yLine = new Array();
+	obj.yText = new Array();
+	for(var i=0; i< obj.yPlotArr.length ; i++)
+	{
+		obj.yLine[i] = new Kinetic.Line({
+	        points: [	obj.plotXMargin-obj.plotLength, 
+	                 	obj.plotYMargin+obj.height-obj.yPlotArr[i][0], 
+	                 	obj.plotXMargin-2*obj.plotLength,
+	                 	obj.plotYMargin+obj.height-obj.yPlotArr[i][0]],
+	        stroke: 'black',
+	        strokeWidth: 2,             
+	    });	           
+	    obj.yText[i] = new Kinetic.Text({
+	        x: obj.plotXMargin-obj.plotLength*2-15,
+	        y: obj.plotYMargin+obj.height-obj.yPlotArr[i][0]+30,
+	        text: obj.yPlotArr[i][1],
+	        fontSize: 15,
+	        fontFamily: 'Calibri',
+	        fill: 'black',
+	        width: 60,
+	        align: 'center',
+	        rotation: (Math.PI)*3/2
+	    });     
+	} 
+}
+/**  set axis end  **/

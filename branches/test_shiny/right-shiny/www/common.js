@@ -3,7 +3,7 @@ var plotHeight = 300; //default value for plot height
 var plotRadius = 2;
 
 
-/** set tooltip  **/
+/**  set tooltip  **/
 //new kenetic version -> tooltip setting change using tag
 function setTooltip(obj)
 {
@@ -33,8 +33,22 @@ function setTooltip(obj)
 	  }));
 	obj.tooltipLayer.add(obj.tooltip);
 }
-/** set tooltip end  **/ 
+/**  set tooltip end  **/ 
 
+/**  set plotRect  **/
+function setPlotRect(obj)
+{
+	obj.plotRect = new Kinetic.Rect({
+		name : "baseRect",
+		x: obj.plotXMargin-obj.plotLength,
+		y: obj.plotYMargin-obj.plotLength,
+		width: obj.width+2*obj.plotLength,
+		height: obj.height+2*obj.plotLength,
+		stroke: 'black',
+		strokeWidth: 2
+	});
+}
+/**  set plotRect end **/
 
 
 ////////////////////////////////////mouse position of each graph////////////////////////////////////

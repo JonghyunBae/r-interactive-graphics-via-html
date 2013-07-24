@@ -210,20 +210,16 @@ var Scatter = {};
 					}					
 				}
 				
-				this.plotRect = new Kinetic.Rect({
-					name : "baseRect",
-					x: this.plotXMargin-this.plotLength,
-					y: this.plotYMargin-this.plotLength,
-					width: this.width+2*this.plotLength,
-					height: this.height+2*this.plotLength,
-					stroke: 'black',
-					strokeWidth: 2
-				});
+				//set plotRect.
+				setPlotRect(this);
+				//set axis variables.
 				scatterSetXAxis(this);
 				scatterSetYAxis(this);
+				//set label variables.
 				scatterSetXLabel(this);
 				scatterSetYLabel(this);
-				scatterSetMainLabel(this); 
+				scatterSetMainLabel(this);
+				//set tooltip.
 				setTooltip(this); 
     		},
 			doIt: function() { 
@@ -253,21 +249,22 @@ var Scatter = {};
 				this.plotLayer = new Kinetic.Layer();
 				//add base rectangular.
 				this.plotLayer.add(this.plotRect);				
-				//add x axis variables.				
-				for(var i = 0 ; i < this.xPlotArr.length ; i ++){
+				//add x axis layer.
+				for(var i = 0 ; i < this.xLine.length ; i ++){
 					this.plotLayer.add(this.xLine[i]); 
 				    this.plotLayer.add(this.xText[i]);
 				}			
-				//add y axis variables.				
-				for(var i = 0 ; i < this.yPlotArr.length ; i ++){
+				//add y axis layer.				
+				for(var i = 0 ; i < this.yLine.length ; i ++){
 					this.plotLayer.add(this.yLine[i]); 
 			        this.plotLayer.add(this.yText[i]);
 				}				
-				//add labels.                                                  
+				//add labels layer.
                 this.plotLayer.add(this.xLabel);    
                 this.plotLayer.add(this.yLabel);    
                 this.plotLayer.add(this.mainLabel);
-				 
+				
+                //add plot layer.
 				this.stage.add(this.plotLayer);
 				
 				this.plotLayer.on('mouseover mousemove dragmove', function(evt){  

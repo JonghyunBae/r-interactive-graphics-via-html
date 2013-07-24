@@ -29,6 +29,7 @@ shinyUI(bootstrapPage(
        <script src = \"hist.js\"></script>
        <script src = \"box.js\"></script>
        <script src = \"node_event.js\"></script>
+      <script src = \"menu.js\"></script>
        
        "),
   HTML("<script>createMainStructure('_sub.diamonds.csv');</script>"),

@@ -82,8 +82,7 @@ function make2DArr(rows) {
 }
 
 function createMainStructure(fileName)
-{
-	
+{	
 	var tmpArr = getData(fileName);		
 	var dataArr=tmpArr.dataArr;
 	labelArr=tmpArr.labelArr;	 

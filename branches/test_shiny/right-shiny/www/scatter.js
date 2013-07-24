@@ -13,67 +13,10 @@ var Scatter = {};
     Scatter.prototype = {
     		
     		_init: function(id, dataArr, optionObj){
+    			
+    			//set plot variables.
+    			setPlotVariable(this, optionObj);    			
     			//make essential variables
-    			if(optionObj.width != undefined){
-    				this.width = optionObj.width;
-    			}else{
-    				if(this.width == undefined){
-    					this.width = plotWidth;
-    				}
-    			}
-    			if(optionObj.height != undefined){
-    				this.height = optionObj.height;
-    			}else{
-    				if(this.height == undefined){
-    					this.height = plotHeight;
-    				}
-    			}
-	            this.plotXMargin=this.width*0.2; //canvas left, right margin
-	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
-	            this.plotLength=this.width*0.02; //margin from plot box
-	            if(optionObj.radius != undefined){
-	    				this.radius = optionObj.radius;
-	    			}else{
-	    				if(this.radius == undefined){
-	    					this.radius = plotRadius;
-	    				}
-	    			}
-	            //check the x label
-	            if(optionObj.x != undefined){
-	            	for(var i = 0 ; i < this._labelArr.length ; i ++)	
-		            {
-		            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-		            		 this.x =  i;
-		            		 break;
-		            	}
-		            	if(i == this._labelArr.length - 1){
-		            		alert('retype x label');
-		            	}
-		            }
-    			}else{
-    				if(this.x == undefined){
-    					alert('x should be defined!');
-    					this.x = 0;
-    				}
-    			}
-	          //check the y label
-	            if(optionObj.y != undefined){
-	            	for(var i = 0 ; i < this._labelArr.length ; i ++)
-		            {
-		            	if(this._labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-		            		 this.y =  i;
-		            		 break;
-		            	}
-		            	if(i==this._labelArr.length-1){
-		            		alert('retype y label');
-		            	}
-		            }
-    			}else{
-    				if(this.y == undefined){
-    					alert('y should be defined!');
-    					this.y = 0;
-    				}
-    			}
 	            this.xMax = findMaxValue(dataArr[this.x]);
 	            this.xMin = findMinValue(dataArr[this.x]);
 	            this.yMax = findMaxValue(dataArr[this.y]);
@@ -108,59 +51,36 @@ var Scatter = {};
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
 	    		
-	            //make legend start
+	            //set the legend text.
 	            if(optionObj.legend !=undefined){
 	            	var legendChk = optionObj.legend.toLowerCase();
 	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
 	  	            		 this.legend = optionObj.legend;
 	  	            }
 	            }
-	           
-	            if(this.legend!=undefined){	            	
-	            	this.legendX = 0;
-					var legendY = 0;
-	            	if (this.legend == 'topright' || this.legend == 'right')	{
-	            		this.legendX = this.plotXMargin+this.width+this.plotLength*5;
-	            		this.legendY = this.plotYMargin-this.plotLength;
-	            	}else if(this.legend == 'topleft' ||this.legend == 'left'){
-	            		this.legendX = this.plotLength*5;
-	            		this.legendY = this.plotYMargin-this.plotLength;	            		
-	            	}else{// default is center right
-	            		this.legendX = this.plotXMargin+this.width+this.plotLength*5;
-	            		this.legendY = this.plotYMargin-this.plotLength;
-	            	}	            		            	
-					var myLegend = makeLegend(this.legendX, this.legendY, mainValueArr, this.color, colors);					
-					this.legendGroup = new Kinetic.Group({
-						width: myLegend.getWidth(),
-						height : myLegend.getHeight()
-					});			
-					this.legendGroup.add(myLegend);
+	            if(this.legend != undefined){
+	            	// legend position set is just for once.
+	            	setLegendPosition(this);
+	            	// making legend.
+	            	setLegendMake(this, mainValueArr, colors);
+					// plotXMargin change. This is just for once.
 					if(this.legend == 'topleft' ||this.legend == 'left'){
 	            		this.plotXMargin = this.plotXMargin + myLegend.getWidth() + this.plotLength * 4;
 					}
 	            }
-	            //make legend end
 
-	        	
-	        	
 	        	//nodeX and nodeY is for setting gap of each axis according to tick
 	            var nodeX = new Array(dataArr[this.x].length);	            
 	            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick, this.xMax, this.xMin);  
 	            nodeX = xTmp.node;
 	            this.xPlotArr = xTmp.plotArr;
-	            
 	            var nodeY = new Array(dataArr[this.y].length);	             	            
 	            var yTmp = makeAxisArr(dataArr, this.height, this.y, this.yTick, this.yMax, this.yMin);	            
 	            nodeY = yTmp.node;
-	            this.yPlotArr = yTmp.plotArr;
-	            
-	            
+	            this.yPlotArr = yTmp.plotArr;	            
 	            
 	    		//////////Make Data Structure of nodes and essential arrays////////
-
-	    		
-				this.node = new Array();			
-				
+				this.node = new Array();
 				var tooltipTextGetInfo = new Array();
 				for(var i = 0; i < dataArr[this.x].length ; i++)
 				{
@@ -170,12 +90,9 @@ var Scatter = {};
 					}
 				}
 				// set and make information of nodes according to color
-				//var idCnt = 0;
 				if(this.color==-1 ){
 					for(var i = 0; i < dataArr[this.x].length ; i++)
 					{
-					//	if(isHidden[i] == true)
-					//		continue;
 						this.node[i] = new Kinetic.Circle({
 							name : i,
 							x: nodeX[i] + this.plotXMargin,
@@ -190,7 +107,6 @@ var Scatter = {};
 						isSelected[i][id] = scatterUpdate(this, i);	//save event handler
 					}
 				}else{
-					
 					for(var i = 0; i < dataArr[this.x].length ; i++)
 					{
 						this.node[i] = new Kinetic.Circle({
@@ -205,7 +121,7 @@ var Scatter = {};
 							info : "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
 						});			
 						isSelected[i][id] = scatterUpdate(this,i);	//save event handler
-					}					
+					}
 				}
 				
 				//set plotRect.
@@ -282,20 +198,10 @@ var Scatter = {};
 				this.stage.add(this.dataLayer);
 				// add tooltip
 				this.stage.add(this.tooltipLayer);
-				
 				//draw legend
-				if(this.legend!=undefined){
-					this.legendLayer = new Kinetic.Layer({name:'legendLayer', draggable:true});
-					this.legendLayer.on('mouseover', function(evt){  
-						document.body.style.cursor = "pointer";
-					}); 
-					this.legendLayer.add(this.legendGroup);					
-					this.stage.add(this.legendLayer);				
-					if(this.legend != 'topleft' && this.legend != 'topright'){
-						this.legendLayer.setY((this.height-this.legendGroup.getHeight())/2); //move legend layer to center.
-				        this.legendLayer.draw();
-					}
-				}
+				this.stage.add(this.legendLayer);
+				
+				
 				// check linear regression on/off
 				if(this.linear == true){
 					this.linear = false;
@@ -307,13 +213,7 @@ var Scatter = {};
 				}
 			},
 			changeX: function(id, dataArr, optionObj){
-	        	for(var i = 0 ; i < this._labelArr.length ; i ++)	
-	            {
-	            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-	            		 this.x =  i;
-	            		 break;
-	            	}
-	            }
+	        	this.x = optionObj.x;
 	        	if(isDiscrete[this.x] == false){
 	        		this.xMax = findMaxValue(dataArr[this.x]);
 		            this.xMin = findMinValue(dataArr[this.x]);
@@ -329,16 +229,9 @@ var Scatter = {};
 				scatterSetXAxis(this);
 				scatterSetXLabel(this);
 				scatterSetMainLabel(this);
-				this.draw(id);
 			},
-			changeY: function(id, dataArr, optionObj){				
-	        	for(var i = 0 ; i < this._labelArr.length ; i ++)	
-	            {
-	            	if(this._labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-	            		 this.y =  i;
-	            		 break;
-	            	}
-	            }
+			changeY: function(id, dataArr, optionObj){
+				this.y = optionObj.y;
 	        	if(isDiscrete[this.x] == false){
 					this.yMax = findMaxValue(dataArr[this.y]);
 		            this.yMin = findMinValue(dataArr[this.y]);
@@ -354,31 +247,19 @@ var Scatter = {};
 				scatterSetYAxis(this);
 				scatterSetYLabel(this);
 				scatterSetMainLabel(this);
-				this.draw(id);
 			},
 			changeColor: function(id, dataArr, optionObj){
-				for(var i = 0 ; i < this._labelArr.length ; i ++)	
-	            {
-	            	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
-	            		 this.color =  i;
-	            		 break;
-	            	}
-	            }
+				this.color = optionObj.color;
 				var tmpSetColor =  setColor(dataArr[this.color]);
 				var colors = tmpSetColor.colors;
 				var mainValueArr = tmpSetColor.mainValueArr;
 				var tmpColorArr = tmpSetColor.tmpColorArr;
-				var myLegend = makeLegend(this.legendX, this.legendY, mainValueArr, this.color, colors);					
-				this.legendGroup = new Kinetic.Group({
-					width: myLegend.getWidth(),
-					height : myLegend.getHeight()
-				});			
-				this.legendGroup.add(myLegend);
-				for(var i = 0; i < this.node.length ; i++){
-					this.node[i].setStroke(getColor(i,colors, mainValueArr, tmpColorArr));
-					this.node[i].setFill(getColor(i,colors, mainValueArr, tmpColorArr));
+				setLegendMake(this, mainValueArr, colors);
+				for(var i = 0; i < this.node.length ; i++)
+				{
+	            	this.node[i].setStroke(getColor(i, colors, mainValueArr, tmpColorArr));
+	            	this.node[i].setFill(getColor(i, colors, mainValueArr, tmpColorArr));
 				}
-				this.draw(id);
 			},
 			update: function(){
 				alert('scatter is updated');				
@@ -427,10 +308,74 @@ var Scatter = {};
 	};
     
 })();
-			      
-  		      
-                 
 
+/**  set plot variables  **/
+function setPlotVariable(obj, option)
+{
+	//set width.
+	if(option.width != undefined){
+		obj.width = option.width;
+	}else{
+		if(obj.width == undefined){
+			obj.width = 300;
+		}
+	}
+	//set height.
+	if(option.height != undefined){
+		obj.height = option.height;
+	}else{
+		if(obj.height == undefined){
+			obj.height = 300;
+		}
+	}
+	obj.plotXMargin=obj.width*0.2; //canvas left, right margin
+	obj.plotYMargin=obj.height*0.2; //canvas top, bottom margin
+	obj.plotLength=obj.width*0.02; //margin from plot box
+    if(option.radius != undefined){
+    	obj.radius = option.radius;
+	}else{
+		if(obj.radius == undefined){
+			obj.radius = plotRadius;
+		}
+	}
+    //check the x label
+    if(option.x != undefined){
+    	for(var i = 0 ; i < obj._labelArr.length ; i ++)	
+        {
+        	if(obj._labelArr[i].toLowerCase()==option.x.toLowerCase()){	            		
+        		obj.x =  i;
+        		 break;
+        	}
+        	if(i == obj._labelArr.length - 1){
+        		alert('retype x label');
+        	}
+        }
+	}else{
+		if(obj.x == undefined){
+			alert('x should be defined!');
+			obj.x = 0;
+		}
+	}
+  //check the y label
+    if(option.y != undefined){
+    	for(var i = 0 ; i < obj._labelArr.length ; i ++)
+        {
+        	if(obj._labelArr[i].toLowerCase()==option.y.toLowerCase()){	            		
+        		obj.y =  i;
+        		 break;
+        	}
+        	if(i==obj._labelArr.length-1){
+        		alert('retype y label');
+        	}
+        }
+	}else{
+		if(obj.y == undefined){
+			alert('y should be defined!');
+			obj.y = 0;
+		}
+	}
+}
+/**  set plot variables end  **/
 
 function setColor(colorArr) //set color
 {
@@ -567,7 +512,7 @@ function makeAxisArr(dataArr, length, axis, tick, max, min)
     			node[i] = j;
     			tmp.push(dataArr[axis][i]);
     		}
-    	}	
+    	}
 		var plotArr = make2DArr(tmp.length);
 		var diff = length / (tmp.length+1);
 		for(var i = 1 ; i < plotArr.length+1 ; i ++)
@@ -731,6 +676,43 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 	return group;
 }
 
+/**  legend set functions  **/
+//legend position setting.
+function setLegendPosition(obj)
+{
+	obj.legendX = 0;
+	obj.legendY = 0;
+	if (obj.legend == 'topright' || obj.legend == 'right')	{
+		obj.legendX = obj.plotXMargin+obj.width+obj.plotLength*5;
+		obj.legendY = obj.plotYMargin-obj.plotLength;
+	}else if(obj.legend == 'topleft' ||obj.legend == 'left'){
+		obj.legendX = obj.plotLength*5;
+		obj.legendY = obj.plotYMargin-obj.plotLength;	            		
+	}else{// default is center right
+		obj.legendX = obj.plotXMargin+obj.width+obj.plotLength*5;
+		obj.legendY = obj.plotYMargin-obj.plotLength;
+	}
+}
+//making legend setting.
+function setLegendMake(obj, mainValueArr, colors)
+{
+	var myLegend = makeLegend(obj.legendX, obj.legendY, mainValueArr, obj.color, colors);					
+	obj.legendGroup = new Kinetic.Group({
+		width: myLegend.getWidth(),
+		height : myLegend.getHeight()
+	});
+	obj.legendGroup.add(myLegend);
+	obj.legendLayer = new Kinetic.Layer({name:'legendLayer', draggable:true});
+	obj.legendLayer.on('mouseover', function(evt){  
+		document.body.style.cursor = "pointer";
+	}); 
+	obj.legendLayer.add(obj.legendGroup);
+	if(obj.legend != 'topleft' && obj.legend != 'topright'){
+		obj.legendLayer.setY((obj.height-obj.legendGroup.getHeight())/2); //move legend layer to center.
+	}
+}
+/**  legend set functions end  **/
+
 /**  Regression functions for scatter  **/
 //linear regression.
 function linearSendArr(Name)
@@ -764,11 +746,11 @@ function loessSendArr(Name)
 				eventTrigger(Name);
 			}else{		
 				Name.loess = true;		
-				window.Shiny.onInputChange("id", Name._id);
-				window.Shiny.onInputChange("type", Name._type);
-				window.Shiny.onInputChange("graph", "loess");
-				window.Shiny.onInputChange("xx", tempData[Name.x]);
-				window.Shiny.onInputChange("yy", tempData[Name.y]);
+				window.Shiny.onInputChange("id1", Name._id);
+				window.Shiny.onInputChange("type1", Name._type);
+				window.Shiny.onInputChange("graph1", "loess");
+				window.Shiny.onInputChange("xx1", tempData[Name.x]);
+				window.Shiny.onInputChange("yy1", tempData[Name.y]);
 			}
 		}
 	}

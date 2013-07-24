@@ -71,6 +71,7 @@ function menu(Name)
                                 	}
                                     for(var j=0; j<optionMenuName.length; j++){
                                             Name.optionMenu[j].show();
+                                            Name.optionMenu[j].moveToTop();
                                             Name.optionMenuLayer.draw();
                                     }
                                     Name.optionMenuLayer.draw();
@@ -115,6 +116,7 @@ function menu(Name)
                                 	}
                                     for(var j=0; j<optionMenuName.length; j++){
                                             Name.optionMenu[j].show();
+                                            Name.optionMenu[j].moveToTop();
                                             Name.optionMenuLayer.draw();
                                     }
                                     Name.optionMenuLayer.draw();

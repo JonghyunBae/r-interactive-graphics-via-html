@@ -46,13 +46,14 @@ shinyUI(bootstrapPage(
        </form>
        </div>
        </div>
-       
+       <div id=\"content1\" class = \"right-output1\" >
        <div id=\"content\" class = \"right-output\" >"),
   createDiv("scatterContainer1"),
   createDiv("histContainer2"),
   createDiv("boxContainer3"),
   HTML("
        </div>
+        </div>
        <script>
        var scatter1 = new Scatter(1, mainArr,{x: 'carat', y: 'price', color: 'color', legend: 'right', width: 300, height: 300});
        scatter1.draw(1);

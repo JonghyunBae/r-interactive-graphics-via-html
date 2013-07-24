@@ -32,7 +32,7 @@ function checkKeyDown(e)
         {
                 zPressed = true;
         }
-        if(e.keyCode == 46)//del key pressed
+        if(ctrlPressed == true && e.keyCode == 46)//del key pressed
         {
                 hideSelected();
         }

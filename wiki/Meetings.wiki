@@ -1,4 +1,9 @@
   # Status update
+  # Things to improve:
+   # Plot overlaying 
+   # Event handling
+   # R API for code generation
+   # Output packaging for Shiny
   # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
   # Deep dive into event handling interface. See EventHandling for more details.
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?

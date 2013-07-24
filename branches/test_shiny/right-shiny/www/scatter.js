@@ -113,25 +113,23 @@ var Scatter = {};
 	            	var legendChk = optionObj.legend.toLowerCase();
 	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
 	  	            		 this.legend = optionObj.legend;
-	  	            }else{
-	  	            	//alert('retype legend! (right, left, topright, topleft, or default)');	            		
 	  	            }
 	            }
 	           
 	            if(this.legend!=undefined){	            	
-	            	var legendX = 0;
+	            	this.legendX = 0;
 					var legendY = 0;
 	            	if (this.legend == 'topright' || this.legend == 'right')	{
-	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
-	            		legendY = this.plotYMargin-this.plotLength;
+	            		this.legendX = this.plotXMargin+this.width+this.plotLength*5;
+	            		this.legendY = this.plotYMargin-this.plotLength;
 	            	}else if(this.legend == 'topleft' ||this.legend == 'left'){
-	            		legendX = this.plotLength*5;
-	            		legendY = this.plotYMargin-this.plotLength;	            		
+	            		this.legendX = this.plotLength*5;
+	            		this.legendY = this.plotYMargin-this.plotLength;	            		
 	            	}else{// default is center right
-	            		legendX = this.plotXMargin+this.width+this.plotLength*5;
-	            		legendY = this.plotYMargin-this.plotLength;
+	            		this.legendX = this.plotXMargin+this.width+this.plotLength*5;
+	            		this.legendY = this.plotYMargin-this.plotLength;
 	            	}	            		            	
-					var myLegend = makeLegend(legendX, legendY, mainValueArr, this.color, colors);					
+					var myLegend = makeLegend(this.legendX, this.legendY, mainValueArr, this.color, colors);					
 					this.legendGroup = new Kinetic.Group({
 						width: myLegend.getWidth(),
 						height : myLegend.getHeight()
@@ -309,54 +307,78 @@ var Scatter = {};
 				}
 			},
 			changeX: function(id, dataArr, optionObj){
-		            	for(var i = 0 ; i < this._labelArr.length ; i ++)	
-			            {
-			            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-			            		 this.x =  i;
-			            		 break;
-			            	}
-			            }
-		            	if(isDiscrete[this.x] == false){
-		            		this.xMax = findMaxValue(dataArr[this.x]);
-				            this.xMin = findMinValue(dataArr[this.x]);
-		            	}						
-			            var nodeX = new Array(dataArr[this.x].length);	            
-			            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick, this.xMax, this.xMin);  
-			            nodeX = xTmp.node;
-			            this.xPlotArr = xTmp.plotArr;
-			            for(var i = 0; i < dataArr[this.x].length ; i++)
-						{
-			            	this.node[i].setX(nodeX[i] + this.plotXMargin);
-						}
-						scatterSetXAxis(this);
-						scatterSetXLabel(this);
-						scatterSetMainLabel(this);
-						this.draw(id);
+	        	for(var i = 0 ; i < this._labelArr.length ; i ++)	
+	            {
+	            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+	            		 this.x =  i;
+	            		 break;
+	            	}
+	            }
+	        	if(isDiscrete[this.x] == false){
+	        		this.xMax = findMaxValue(dataArr[this.x]);
+		            this.xMin = findMinValue(dataArr[this.x]);
+	        	}						
+	            var nodeX = new Array(dataArr[this.x].length);	            
+	            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick, this.xMax, this.xMin);  
+	            nodeX = xTmp.node;
+	            this.xPlotArr = xTmp.plotArr;
+	            for(var i = 0; i < this.node.length ; i++)
+				{
+	            	this.node[i].setX(nodeX[i] + this.plotXMargin);
+				}
+				scatterSetXAxis(this);
+				scatterSetXLabel(this);
+				scatterSetMainLabel(this);
+				this.draw(id);
 			},
 			changeY: function(id, dataArr, optionObj){				
-		            	for(var i = 0 ; i < this._labelArr.length ; i ++)	
-			            {
-			            	if(this._labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-			            		 this.y =  i;
-			            		 break;
-			            	}
-			            }
-		            	if(isDiscrete[this.x] == false){
-							this.yMax = findMaxValue(dataArr[this.y]);
-				            this.yMin = findMinValue(dataArr[this.y]);
-		            	}
-			            var nodeY = new Array(dataArr[this.y].length);	             	            
-			            var yTmp = makeAxisArr(dataArr, this.height, this.y, this.yTick, this.yMax, this.yMin);	            
-			            nodeY = yTmp.node;
-			            this.yPlotArr = yTmp.plotArr;
-			            for(var i = 0; i < dataArr[this.y].length ; i++)
-						{
-			            	this.node[i].setY(this.height +this.plotYMargin - nodeY[i]);
-						}
-						scatterSetYAxis(this);
-						scatterSetYLabel(this);
-						scatterSetMainLabel(this);
-						this.draw(id);
+	        	for(var i = 0 ; i < this._labelArr.length ; i ++)	
+	            {
+	            	if(this._labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
+	            		 this.y =  i;
+	            		 break;
+	            	}
+	            }
+	        	if(isDiscrete[this.x] == false){
+					this.yMax = findMaxValue(dataArr[this.y]);
+		            this.yMin = findMinValue(dataArr[this.y]);
+	        	}
+	            var nodeY = new Array(dataArr[this.y].length);	             	            
+	            var yTmp = makeAxisArr(dataArr, this.height, this.y, this.yTick, this.yMax, this.yMin);	            
+	            nodeY = yTmp.node;
+	            this.yPlotArr = yTmp.plotArr;
+	            for(var i = 0; i < this.node.length ; i++)
+				{
+	            	this.node[i].setY(this.height +this.plotYMargin - nodeY[i]);
+				}
+				scatterSetYAxis(this);
+				scatterSetYLabel(this);
+				scatterSetMainLabel(this);
+				this.draw(id);
+			},
+			changeColor: function(id, dataArr, optionObj){
+				for(var i = 0 ; i < this._labelArr.length ; i ++)	
+	            {
+	            	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
+	            		 this.color =  i;
+	            		 break;
+	            	}
+	            }
+				var tmpSetColor =  setColor(dataArr[this.color]);
+				var colors = tmpSetColor.colors;
+				var mainValueArr = tmpSetColor.mainValueArr;
+				var tmpColorArr = tmpSetColor.tmpColorArr;
+				var myLegend = makeLegend(this.legendX, this.legendY, mainValueArr, this.color, colors);					
+				this.legendGroup = new Kinetic.Group({
+					width: myLegend.getWidth(),
+					height : myLegend.getHeight()
+				});			
+				this.legendGroup.add(myLegend);
+				for(var i = 0; i < this.node.length ; i++){
+					this.node[i].setStroke(getColor(i,colors, mainValueArr, tmpColorArr));
+					this.node[i].setFill(getColor(i,colors, mainValueArr, tmpColorArr));
+				}
+				this.draw(id);
 			},
 			update: function(){
 				alert('scatter is updated');				
@@ -519,49 +541,7 @@ function getLegendColor(n, colors, mainValueArr)
 	}	
 }
 
-/**  Regression functions for scatter  **/
-// linear regression.
-function linearSendArr(Name)
-{
-	if(Name._type == "scatter"){	// only for scatter.
-		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
-			if(Name.linear == true){
-				Name.linear = false;
-				Name.draw(Name._id);
-				eventTrigger(Name);
-			}else{		
-				Name.linear = true;		
-				window.Shiny.onInputChange("id", Name._id);
-				window.Shiny.onInputChange("type", Name._type);
-				window.Shiny.onInputChange("graph", "linear");
-				window.Shiny.onInputChange("xx", tempData[Name.x]);
-				window.Shiny.onInputChange("yy", tempData[Name.y]);
-			}
-		}
-	}
 
-}
-// loess regression.
-function loessSendArr(Name)
-{
-	if(Name._type == "scatter"){	// only for scatter.
-		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
-			if(Name.loess == true){
-				Name.loess = false;
-				Name.draw(Name._id);
-				eventTrigger(Name);
-			}else{		
-				Name.loess = true;		
-				window.Shiny.onInputChange("id", Name._id);
-				window.Shiny.onInputChange("type", Name._type);
-				window.Shiny.onInputChange("graph", "loess");
-				window.Shiny.onInputChange("xx", tempData[Name.x]);
-				window.Shiny.onInputChange("yy", tempData[Name.y]);
-			}
-		}
-	}
-}
-/**  Regression functions for scatter end  **/
 
 
 function makeAxisArr(dataArr, length, axis, tick, max, min)	 
@@ -750,6 +730,50 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 	}
 	return group;
 }
+
+/**  Regression functions for scatter  **/
+//linear regression.
+function linearSendArr(Name)
+{
+	if(Name._type == "scatter"){	// only for scatter.
+		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
+			if(Name.linear == true){
+				Name.linear = false;
+				Name.draw(Name._id);
+				eventTrigger(Name);
+			}else{		
+				Name.linear = true;		
+				window.Shiny.onInputChange("id", Name._id);
+				window.Shiny.onInputChange("type", Name._type);
+				window.Shiny.onInputChange("graph", "linear");
+				window.Shiny.onInputChange("xx", tempData[Name.x]);
+				window.Shiny.onInputChange("yy", tempData[Name.y]);
+			}
+		}
+	}
+
+}
+//loess regression.
+function loessSendArr(Name)
+{
+	if(Name._type == "scatter"){	// only for scatter.
+		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
+			if(Name.loess == true){
+				Name.loess = false;
+				Name.draw(Name._id);
+				eventTrigger(Name);
+			}else{		
+				Name.loess = true;		
+				window.Shiny.onInputChange("id", Name._id);
+				window.Shiny.onInputChange("type", Name._type);
+				window.Shiny.onInputChange("graph", "loess");
+				window.Shiny.onInputChange("xx", tempData[Name.x]);
+				window.Shiny.onInputChange("yy", tempData[Name.y]);
+			}
+		}
+	}
+}
+/**  Regression functions for scatter end  **/
 
 /**  update function  **/
 //Kinetic version update

@@ -20,8 +20,8 @@ var changeYAxis = function (Name, i){
 	eventTrigger(Name);			
 }
 var changeColor = function (Name, i){
-	Name._init(Name._id, tempData, {color: Name._labelArr[i]});
-	Name.draw(Name._id);
+	Name.changeColor(Name._id, tempData, {color: Name._labelArr[i]});
+	//Name.draw(Name._id);
 	eventTrigger(Name);
 }
 var changeLegend = function (Name, i){

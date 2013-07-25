@@ -1,6 +1,5 @@
 var Scatter = {};    
 (function() {
-	
 	Scatter = function(id, dataArr, optionObj) {			
 		this._type = 'scatter';		
 		this._id = id;
@@ -12,8 +11,7 @@ var Scatter = {};
     };
     Scatter.prototype = {
     		
-    		_init: function(id, dataArr, optionObj){
-    			
+    		_init: function(id, dataArr, optionObj){    			
     			//set plot variables.
     			setPlotVariable(this, optionObj);    			
     			//make essential variables
@@ -292,7 +290,7 @@ var Scatter = {};
 				tickRange = setTickRange(tmp, tickRange);
 		        var max = tickRange * Math.ceil(this.xMax/tickRange);		      
 		        var min = tickRange * Math.floor(this.xMin/tickRange);
-		        var nodeX = new Array(xArr.length)	
+		        var nodeX = new Array(xArr.length)
 				for(var i = 0 ; i < nodeX.length ; i ++)
 				{
 					nodeX[i] = this.width* ((xArr[i]-min)) /((max - min));

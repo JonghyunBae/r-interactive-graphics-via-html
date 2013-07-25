@@ -1,7 +1,5 @@
-var Hist = {};		
-
+var Hist = {};
 (function() {	
-	
 	Hist = function(id, dataArr, optionObj) {
 		this._type = 'hist';
 		this._id = id;

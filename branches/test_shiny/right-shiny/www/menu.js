@@ -71,7 +71,7 @@ function menu(Name)
                                 	}
                                     for(var j=0; j<optionMenuName.length; j++){
                                             Name.optionMenu[j].show();
-                                            Name.optionMenu[j].moveToTop();
+                                            Name.optionMenuLayer.moveToTop();
                                             Name.optionMenuLayer.draw();
                                     }
                                     Name.optionMenuLayer.draw();
@@ -116,7 +116,7 @@ function menu(Name)
                                 	}
                                     for(var j=0; j<optionMenuName.length; j++){
                                             Name.optionMenu[j].show();
-                                            	
+                                            Name.optionMenuLayer.moveToTop();
                                             Name.optionMenuLayer.draw();
                                     }
                                     Name.optionMenuLayer.draw();
@@ -268,7 +268,7 @@ function menu(Name)
 	    });
         
         // under option.
-        var optionMenuName = ['xAxis', 'yAxis', 'color', 'legend', 'width', 'height', 'bin']; //add option element you want.
+        var optionMenuName = ['xAxis', 'yAxis', 'color', 'width', 'height', 'bin']; //add option element you want.
         Name.optionMenuLayer = new Kinetic.Layer();
         Name.optionMenu = new Array(optionMenuName.length);
         for(var i=0; i< optionMenuName.length ; i++){
@@ -376,13 +376,10 @@ function menu(Name)
 	                    subMenuName[j]=Name._labelArr; //localize later;
 	                    break;
 	        		case 3 :
-	        			subMenuName[j]=['right', 'left', 'topright', 'topleft', 'default'];
-	                    break; 
 	        		case 4 :
-	        		case 5 :
 	        			subMenuName[j]=['-100px', '-10px', '-1px', '+1px', '+10px', '+100px'];
 	                    break;
-	        		case 6 :
+	        		case 5 :
 	        			subMenuName[j]=['-1', '+1'];
 	                    break;
                     default :

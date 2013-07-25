@@ -31,12 +31,11 @@ var Hist = {};
 				{
 					this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
 				}
-
-
+				
 	            if(isDiscrete[this.x] == true)
 	            {	            	
 	            	var cnt = 0;
-	            	var xTmp = new Array();              	
+	            	var xTmp = new Array();
 	            	var freqTmp = new Array(); 
 	            	var hasTmp = make2DArr(dataArr[this.x].length);
 	            	freqTmp[cnt] = 1;
@@ -54,7 +53,7 @@ var Hist = {};
 	            				isSelected[i][id] = histUpdate(this, j);
 	            				freqTmp[j] ++; 
 	            				break;
-	            			}	            				
+	            			}
 	            		}
 	            		
 	            		if(j == xTmp.length)
@@ -88,9 +87,7 @@ var Hist = {};
 	            	}	            	
  	            	this.firstX = this.xPlotArr[0][0]-barWidth/2;  
 	            	this.lastX = this.xPlotArr[this.xPlotArr.length-1][0]+barWidth/2; 
- 	            	var firstcnt = 0;
 	            }else{
-	            	
 	            	var xMax = findMaxValue(dataArr[this.x]);			
 	            	var xMin = findMinValue(dataArr[this.x]);
 	            	var freqTmp = (xMin > 0 ) ? new Array(parseInt((xMax)/this.bin)+1) :  new Array(parseInt((xMax - xMin)/this.bin)+1); 
@@ -162,10 +159,9 @@ var Hist = {};
 	                 	if(freqTmp[i] == maxFreq){
 	                 		this.maxNode=i;
 	                 		break;
-	                 	}                	
-	             	}	     
-	              //  alert(this.maxNode);
-	            }            			
+	                 	}
+	             	}
+	            }
 	            //////////////////////////// y Axis ///////////////////////////////////////////////////
 	            var max = findMaxValue(freqTmp);
 	            var min = 0;
@@ -298,8 +294,11 @@ var Hist = {};
 			changeY: function(id, dataArr, optionObj){
 						// do nothing.
 			},
+			changeColor: function(id, dataArr, optionObj){
+							// do nothing.
+			},
 			update: function(){
-				alert('hist is updated');				
+				alert('hist is updated');
 			}
 	};
 })();

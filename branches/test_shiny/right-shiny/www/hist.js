@@ -30,6 +30,51 @@ var Hist = {};
 					this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
 				}
 				
+				// set the color type
+	            if(optionObj.color==undefined){
+	            	if(this.color == undefined){
+	            		this.color=-1; //default color
+	            	}else{
+	            		var tmpSetColor =  setColor(dataArr[this.color]);
+	    				var colors = tmpSetColor.colors;
+						var mainValueArr = tmpSetColor.mainValueArr;
+						var tmpColorArr = tmpSetColor.tmpColorArr;
+	            	}	            		
+	            }else{
+            		for(var i = 0 ; i < this._labelArr.length ; i ++)
+	  	            {
+	  	            	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
+	  	            		 this.color =  i;
+	  	            		 break;
+	  	            	}
+	  	            	if(i==this._labelArr.length-1){
+	  	            		alert('retype colors label');
+	  	            	}
+	  	            }	
+            		var tmpSetColor =  setColor(dataArr[this.color]);
+    				var colors = tmpSetColor.colors;
+					var mainValueArr = tmpSetColor.mainValueArr;
+					var tmpColorArr = tmpSetColor.tmpColorArr;
+	            }
+	    		
+	            //set the legend text.
+	            if(optionObj.legend !=undefined){
+	            	var legendChk = optionObj.legend.toLowerCase();
+	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
+	  	            		 this.legend = optionObj.legend;
+	  	            }
+	            }
+	            if(this.legend != undefined){
+	            	// legend position set is just for once.
+	            	setLegendPosition(this);
+	            	// making legend.
+	            	setLegendMake(this, mainValueArr, colors);
+					// plotXMargin change. This is just for once.
+					if(this.legend == 'topleft' ||this.legend == 'left'){
+	            		this.plotXMargin = this.plotXMargin + myLegend.getWidth() + this.plotLength * 4;
+					}
+	            }
+				
 	            if(isDiscrete[this.x] == true)
 	            {	            	
 	            	var cnt = 0;
@@ -241,12 +286,20 @@ var Hist = {};
 				document.getElementById('histContainer'+id).onclick = function() {
 			        document.getElementById('regcoords');
 			    };
-				//draw plot
-                this.stage = new Kinetic.Stage({            
-                    container: 'histContainer'+id,            
-                    width: this.width+this.plotXMargin*2,
-                    height: this.height+this.plotYMargin*2 
-                });
+			    var tmpWidth=0;
+				if(this.legend=='left' || this.legend=='topleft'){
+					tmpWidth =  this.width+this.plotXMargin+this.legendGroup.getWidth();
+				}else if(this.legend=='right' || this.legend=='topright' || this.legend){
+					tmpWidth =  this.width+this.plotXMargin*2+this.legendGroup.getWidth();
+				}else{
+					tmpWidth =  this.width+this.plotXMargin*2;
+				}				
+				this.stage = new Kinetic.Stage({            
+					container: 'histContainer'+id,            
+					width : tmpWidth,							
+					height: this.height+this.plotYMargin*2 
+				});
+
                 this.plotLayer = new Kinetic.Layer();
                 //add base rectangular.
                 this.plotLayer.add(this.plotRect);              
@@ -283,7 +336,9 @@ var Hist = {};
 				this.stage.add(this.dataLayer);			
 				
 				// add tooltip
-			    this.stage.add(this.tooltipLayer);                
+			    this.stage.add(this.tooltipLayer); 
+			  //draw legend
+				this.stage.add(this.legendLayer);
 			},
 			changeX: function(id, dataArr, optionObj){
 						this._init(id, dataArr, optionObj);

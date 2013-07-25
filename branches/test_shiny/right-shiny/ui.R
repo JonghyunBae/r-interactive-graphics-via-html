@@ -58,7 +58,7 @@ shinyUI(bootstrapPage(
        var scatter1 = new Scatter(1, mainArr,{x: 'carat', y: 'price', color: 'color', legend: 'right', width: 300, height: 300});
        scatter1.draw(1);
        eventTrigger(scatter1);
-       var hist2 = new Hist(2, mainArr,{bin: 2, x: 'cut', width: 300, height: 300});
+       var hist2 = new Hist(2, mainArr,{bin: 2, x: 'cut', width: 300, height: 300, legend: 'right', color: 'color'});
        hist2.draw(2);
        eventTrigger(hist2);
        var box3 = new Box(3, mainArr,{x: 'carat', y: 'price', width: 300, height: 300});

@@ -14,50 +14,18 @@ var Hist = {};
 	Hist.prototype = {
 			
 			_init: function(id, dataArr, optionObj){
-				//make essential variables
-				if(optionObj.width != undefined){
-    				this.width = optionObj.width;
-    			}else{
-    				if(this.width == undefined){
-    					this.width = plotWidth;
-    				}
-    			}
-    			if(optionObj.height != undefined){
-    				this.height = optionObj.height;
-    			}else{
-    				if(this.height == undefined){
-    					this.height = plotHeight;
-    				}
-    			}
-	            this.plotXMargin=this.width*0.2; //canvas left, right margin
-	            this.plotYMargin=this.height*0.2; //canvas top, bottom margin
-	            this.plotLength=this.width*0.02; //margin from plot box				
-	            //check the x label
-	            if(optionObj.x != undefined){
-	            	for(var i = 0 ; i < this._labelArr.length ; i ++)	
-		            {
-		            	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-		            		 this.x =  i;
-		            		 break;
-		            	}
-		            	if(i == this._labelArr.length - 1){
-		            		alert('retype x label');
-		            	}
-		            }
-    			}else{
-    				if(this.x == undefined){
-    					alert('x should be defined!');
-    					this.x = 0;
-    				}
-    			}
-	          //check the x label
+				//set plot variables.
+    			setPlotVariable(this, optionObj); 
+	            
+    			//check the bin.
 	            if(optionObj.bin != undefined){
 	            	this.bin = optionObj.bin;
-    			}else{
-    				if(this.bin == undefined){
-    					this.bin = parseInt(findMaxValue(dataArr[this.x])/10);
-    				}
-    			}
+	        	}else{
+	        		if(this.bin == undefined){
+	        			this.bin = parseInt(findMaxValue(dataArr[this.x])/10);
+	        		}
+	        	}
+	            //check the fixpoint.
 				this.fixPoint = 0;
 				if(this.bin.toString().indexOf('.') != -1)
 				{
@@ -146,8 +114,6 @@ var Hist = {};
 	            		upTmp[i] = cnt;
 	            		
 	            	}
-	            	
-	            //	alert(freqTmp.length);
 	            	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) 	            	
 	            	{	            		
 	            		if(freqTmp[firstcnt] != 0)

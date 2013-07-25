@@ -3,85 +3,20 @@ var Box = {};
 (function() {    
     
     Box = function(id, dataArr, optionObj) {
-        this._init(id, dataArr, optionObj);        
         this._type = 'box';
         this._id = id;
         this._labelArr = labelArr; //localize later
         objArr[id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};        
+		this._init(id, dataArr, optionObj); 
     };
     Box.prototype = {
             
             _init: function(id, dataArr, optionObj){
-                ////////// Make essential variables ////////                
-            	if(optionObj.width != undefined){
-    				this.width = optionObj.width;
-    			}else{
-    				if(this.width == undefined){
-    					this.width = plotWidth;
-    				}
-    			}
-    			if(optionObj.height != undefined){
-    				this.height = optionObj.height;
-    			}else{
-    				if(this.height == undefined){
-    					this.height = plotHeight;
-    				}
-    			}
-                this.plotXMargin=this.width*0.2; //canvas left, right margin
-                this.plotYMargin=this.height*0.2; //canvas top, bottom margin
-                this.plotLength= (optionObj.plotLength==undefined)?(this.width*0.02):(optionObj.plotLength); //margin from plot box
-                if(optionObj.radius != undefined){
-    				this.radius = optionObj.radius;
-    			}else{
-    				if(this.radius == undefined){
-    					this.radius = plotRadius;
-    				}
-    			}
-	            //check the x label
-	            if(optionObj.x != undefined){
-	            	for(var i = 0 ; i < labelArr.length ; i ++)	
-		            {
-		            	if(labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-		            		 this.x =  i;
-		            		 break;
-		            	}
-		            	if(i==labelArr.length-1){
-		            		alert('retype x label');
-		            	}
-		            }
-				}else{
-					if(this.x == undefined){
-						alert('x should be defined!');
-						this.x = 0;
-					}
-				}
-	          //check the y label
-	            if(optionObj.y != undefined){
-	            	 for(var i = 0 ; i < labelArr.length ; i ++)
-	                 {
-	                     if(labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){  
-	                     	if(isDiscrete[i] == true){
-	                     	//	alert('y axis should be continuous');
-	                     	}else{
-	                     		this.y = i;
-	                     	}
-	                     	break;
-	                     }
-	                     if(i==labelArr.length-1){
-	                         alert('retype y label');
-	                         this.y = 0;
-	                     }
-	                 }
-    			}else{
-    				if(this.y == undefined){
-    					alert('y should be defined!');
-    					this.y = 0;
-    				}
-    			}
-               
-
+            	//set plot variables.
+    			setPlotVariable(this, optionObj);
+    			
                 var nodeX = new Array(dataArr[this.x].length);
                 this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);
                 var xTmp = boxMakeAxisArr(dataArr, this.width, this.x, this.xTick);  

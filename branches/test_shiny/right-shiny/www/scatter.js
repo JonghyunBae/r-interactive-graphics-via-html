@@ -213,7 +213,13 @@ var Scatter = {};
 				}
 			},
 			changeX: function(id, dataArr, optionObj){
-	        	this.x = optionObj.x;
+				for(var i = 0 ; i < this._labelArr.length ; i ++)	
+			     {
+			     	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+			     		this.x =  i;
+			     		 break;
+			     	}
+			     }
 	        	if(isDiscrete[this.x] == false){
 	        		this.xMax = findMaxValue(dataArr[this.x]);
 		            this.xMin = findMinValue(dataArr[this.x]);
@@ -231,7 +237,13 @@ var Scatter = {};
 				scatterSetMainLabel(this);
 			},
 			changeY: function(id, dataArr, optionObj){
-				this.y = optionObj.y;
+				for(var i = 0 ; i < this._labelArr.length ; i ++)	
+			     {
+			     	if(this._labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
+			     		this.y =  i;
+			     		 break;
+			     	}
+			     }
 	        	if(isDiscrete[this.x] == false){
 					this.yMax = findMaxValue(dataArr[this.y]);
 		            this.yMin = findMinValue(dataArr[this.y]);
@@ -249,7 +261,13 @@ var Scatter = {};
 				scatterSetMainLabel(this);
 			},
 			changeColor: function(id, dataArr, optionObj){
-				this.color = optionObj.color;
+				for(var i = 0 ; i < this._labelArr.length ; i ++)	
+			     {
+			     	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
+			     		this.color =  i;
+			     		 break;
+			     	}
+			     }
 				var tmpSetColor =  setColor(dataArr[this.color]);
 				var colors = tmpSetColor.colors;
 				var mainValueArr = tmpSetColor.mainValueArr;
@@ -309,73 +327,7 @@ var Scatter = {};
     
 })();
 
-/**  set plot variables  **/
-function setPlotVariable(obj, option)
-{
-	//set width.
-	if(option.width != undefined){
-		obj.width = option.width;
-	}else{
-		if(obj.width == undefined){
-			obj.width = 300;
-		}
-	}
-	//set height.
-	if(option.height != undefined){
-		obj.height = option.height;
-	}else{
-		if(obj.height == undefined){
-			obj.height = 300;
-		}
-	}
-	obj.plotXMargin=obj.width*0.2; //canvas left, right margin
-	obj.plotYMargin=obj.height*0.2; //canvas top, bottom margin
-	obj.plotLength=obj.width*0.02; //margin from plot box
-    if(option.radius != undefined){
-    	obj.radius = option.radius;
-	}else{
-		if(obj.radius == undefined){
-			obj.radius = plotRadius;
-		}
-	}
-    //check the x label
-    if(option.x != undefined){
-    	for(var i = 0 ; i < obj._labelArr.length ; i ++)	
-        {
-        	if(obj._labelArr[i].toLowerCase()==option.x.toLowerCase()){	            		
-        		obj.x =  i;
-        		 break;
-        	}
-        	if(i == obj._labelArr.length - 1){
-        		alert('retype x label');
-        	}
-        }
-	}else{
-		if(obj.x == undefined){
-			alert('x should be defined!');
-			obj.x = 0;
-		}
-	}
-  //check the y label
-    if(option.y != undefined){
-    	for(var i = 0 ; i < obj._labelArr.length ; i ++)
-        {
-        	if(obj._labelArr[i].toLowerCase()==option.y.toLowerCase()){	            		
-        		obj.y =  i;
-        		 break;
-        	}
-        	if(i==obj._labelArr.length-1){
-        		alert('retype y label');
-        	}
-        }
-	}else{
-		if(obj.y == undefined){
-			alert('y should be defined!');
-			obj.y = 0;
-		}
-	}
-}
-/**  set plot variables end  **/
+
 
 function setColor(colorArr) //set color
 {

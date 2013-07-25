@@ -2,6 +2,77 @@ var plotWidth = 300;  //default value for plot width
 var plotHeight = 300; //default value for plot height  
 var plotRadius = 2;
 
+/**  set plot variables  **/
+//width, height, radius, xlabel, ylabel.
+function setPlotVariable(obj, option)
+{
+	//set width.
+	if(option.width != undefined){
+		obj.width = option.width;
+	}else{
+		if(obj.width == undefined){
+			obj.width = 300;
+		}
+	}
+	//set height.
+	if(option.height != undefined){
+		obj.height = option.height;
+	}else{
+		if(obj.height == undefined){
+			obj.height = 300;
+		}
+	}
+	obj.plotXMargin=obj.width*0.2; //canvas left, right margin
+	obj.plotYMargin=obj.height*0.2; //canvas top, bottom margin
+	obj.plotLength=obj.width*0.02; //margin from plot box
+	//set radius.
+ if(option.radius != undefined){
+ 	obj.radius = option.radius;
+	}else{
+		if(obj.radius == undefined){
+			obj.radius = 2;
+		}
+	}
+ //check the x label
+ if(option.x != undefined){
+ 	for(var i = 0 ; i < obj._labelArr.length ; i ++)	
+     {
+     	if(obj._labelArr[i].toLowerCase()==option.x.toLowerCase()){	            		
+     		obj.x =  i;
+     		 break;
+     	}
+     	if(i == obj._labelArr.length - 1){
+     		alert('retype x label');
+     	}
+     }
+	}else{
+		if(obj.x == undefined){
+			alert('x should be defined!');
+			obj.x = 0;
+		}
+	}
+//check the y label
+ if(option.y != undefined){
+ 	for(var i = 0 ; i < obj._labelArr.length ; i ++)
+     {
+     	if(obj._labelArr[i].toLowerCase()==option.y.toLowerCase()){	            		
+     		obj.y =  i;
+     		 break;
+     	}
+     	if(i==obj._labelArr.length-1){
+     		alert('retype y label');
+     		obj.y = i;
+     	}
+     }
+	}else{
+		if(obj.y == undefined){
+			//alert('y should be defined!');
+			obj.y = 0;
+		}
+	}
+ 
+}
+/**  set plot variables end  **/
 
 /**  set tooltip  **/
 //new kenetic version -> tooltip setting change using tag

@@ -18,6 +18,10 @@ shinyServer(function(input, output) {
             xArray <- seq(xRange[1], xRange[2], length.out = length(xx))
             yArray <- predict(obj.lm, data.frame(xx = xArray))
             fitArray <- data.frame(xx = xArray, yy = yArray)
+            # NEW CODE
+            yRange <- range(yy)
+            fitArray <- fitArray[yRange[1] <= fitArray$yy & fitArray$yy <= yRange[2], ]
+            # END: NEW CODE
             output<-list(id, input$graph, fitArray) 
             return(output)
           }          
@@ -41,6 +45,10 @@ shinyServer(function(input, output) {
           xArray1 <- seq(xRange1[1], xRange1[2], length.out = length(xx1))
           yArray1 <- predict(obj, data.frame(xx1 = xArray1))
           fitArray1 <- data.frame(xx1 = xArray1, yy1 = yArray1)
+          # NEW CODE
+          yRange1 <- range(yy1)
+          fitArray1 <- fitArray1[yRange1[1] <= fitArray1$yy1 & fitArray1$yy1 <= yRange1[2], ]
+          # END: NEW CODE
           output<-list(id1, input$graph1, fitArray1) 
           return(output)            
         }          

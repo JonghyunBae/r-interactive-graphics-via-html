@@ -313,6 +313,7 @@ function hover(Name)
 		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
 		    }
 			Name.tooltip.getText().setText(node.getInfo());
+			Name.tooltipLayer.moveToTop();
 			Name.tooltip.show();
 			Name.tooltipLayer.draw();               
 			if(node.getSelected() == 0)

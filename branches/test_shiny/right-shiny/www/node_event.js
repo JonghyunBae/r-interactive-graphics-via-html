@@ -237,7 +237,7 @@ function RectRangeSelect(Name, pre, aft)
                         }
                 }
                         
-        }else if(Name._type == "hist"){
+        }else if(Name._type == "hist" || name._type == "pie"){
                 if(ctrlPressed == true) {
                         for(var i = 0 ; i < Name.node.length ; i ++)
                         {
@@ -326,6 +326,7 @@ function hover(Name)
 	                    node.draw();
                         break;
                     case 'hist' : 
+                    case 'pie' :
                     	node.setOpacity(1);
 	                    node.draw();
 	                    break;
@@ -366,6 +367,7 @@ function hover(Name)
                 		}).play(); 
                 		break;                                          
                 	case 'hist' : 
+                	case 'pie' :
 				        var tween = new Kinetic.Tween({
 				        	node: node, 
 				        	duration: 0.01,
@@ -465,7 +467,7 @@ function select(Name)
                                                         }
                                                 }
                                                 
-                                        }else if(Name._type == "hist" || Name._type == "box"){
+                                        }else if(Name._type == "hist" || Name._type == "box" || name._type == "pie"){
                                                 //alert(Name.preId.x + " , " + tmpX);
                                                 if(Name.preId.x >= tmpX){
                                                         for(var i = 0 ; i < Name.node.length ; i ++)

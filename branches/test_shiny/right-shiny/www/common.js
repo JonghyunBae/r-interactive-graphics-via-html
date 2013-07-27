@@ -190,7 +190,7 @@ function allGraphUpdate(id , select, name)
 			}
 			isSelected[id][0] = select;
 		}		
-	}else if(name._type == "hist"){	
+	}else if(name._type == "hist" || name._type == "pie"){	
 		var tmp = name.node[id].getHasArr();
 		for(var j = 0 ; j < tmp.length ; j ++)
 		{

@@ -6,7 +6,6 @@ var array_of_functions = [
                           function(Name, i) { changeXAxis(Name, i) },
                           function(Name, i) { changeYAxis(Name, i) },
                           function(Name, i) { changeColor(Name, i) },
-                          function(Name, i) { changeLegend(Name, i) },
                           function(Name, i) { changeWidth(Name, i) },
                           function(Name, i) { changeHeight(Name, i) },
                           function(Name, i) { changeBin(Name, i) }
@@ -23,11 +22,6 @@ var changeYAxis = function (Name, i){
 }
 var changeColor = function (Name, i){
 	Name.changeColor(Name._id, tempData, {color: Name._labelArr[i]});
-	Name.draw(Name._id);
-	eventTrigger(Name);
-}
-var changeLegend = function (Name, i){
-	Name._init(Name._id, tempData, {legend: legendArr[i]});
 	Name.draw(Name._id);
 	eventTrigger(Name);
 }

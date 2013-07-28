@@ -185,14 +185,4 @@
 			<td>_optional_</td>
 			<td>bin(default : 2)</td>
 		</tr>
-		<tr>
-			<td>xTick</td>
-			<td>_optional_</td>
-			<td>x tick (default : 5)</td>
-		</tr>
-		<tr>
-			<td>yTick</td>
-			<td>_optional_</td>
-			<td>y tick (default : 5)</td>
-		</tr>
 </table>

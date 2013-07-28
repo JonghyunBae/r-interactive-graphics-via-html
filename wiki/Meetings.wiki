@@ -15,7 +15,7 @@
   # Line chart will be added once the code is cleaned up.
   # Frequency calculation is used in both histogram and pie charts. Factor the common code out.
   # R API + changing the pop-up menu from R
-  # Let's pass isHidden information rather than x and y.
+  # Pass isHidden information rather than x and y to the server.
   # Example R API code:
 {{{
 obj <- RIGHT(sub.diamonds, fun = {
@@ -29,16 +29,36 @@ obj <- RIGHT(sub.diamonds, fun = {
   
      ...
 
-  }, sub.diamonds)
-  line.RIGHT(regArray, carat, price)
+  })
+  lines.RIGHT(regArray, carat, price)
 })
 }}}
   # How to re-arrange the code:
-   # Clean up mainArr to support multiple input data
-   # OnInputChange should be a callback function from mainArra.isHidden
+   # Clean up mainArr to support multiple input data:
+    * Create InteractiveData class/object that keeps isHidden and isSelected information in addition to data columns. For instance,
+{{{
+
+obj = new InteractiveData(); // returns obj = {isHidden: [], isSelected: []}
+obj.carat = [...]; // add new column
+obj["price"] = [...]; // add new column
+
+}}}
+    * `createMainStructure()` should return the InsteractiveData object excplicitly, e.g. `mainArr = createMainStructure('_sub.diamonds.csv')`.
+   # InteractiveData object should also keep a list of callback functions for any change in inHidden and isSelected. For instance, `onInputChange()` should be a callback function for any change in isHidden. See [http://api.jquery.com/jQuery.Callbacks/ `jQuery.Callbacks()`] to create callback functions.
    # Result of shiny server side code will be returned into regArr.
    # line(regArr, ...) is added to JavaScript.
+  # Overlaying plots: 
+   * R supports two categories of functions. One category, including `plot()`, refreshes the axis, and the other, including `points()` and `lines()` does not. For instance, try the following in R:
+{{{
+subArray <- diamonds[sample(1:nrow(diamonds), 1000, T), ]
 
+plot(price ~ carat, data = subArray, type = "n") # creates a blank axis
+lines(subArray$carat, subArray$price) # overlay points
+points(subArray$carat, subArray$price) # overlay lines
+
+plot(price ~ carat, data = subArray, type = "p") # refreshes axis and plots points
+}}}
+   * We can create similar functions in JavaScript. There should be a function that creates a blank axis, and functions to draw different visual elements (points, lines, boxes, etc) on the axis.
 
 ----
 

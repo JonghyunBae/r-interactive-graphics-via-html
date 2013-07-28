@@ -1,5 +1,7 @@
 #summary Description about types of graphs
 
+<wiki:toc max_depth="2"/>
+
 = Introduction =
 
 There are four types of graph right now. More types will be updated.

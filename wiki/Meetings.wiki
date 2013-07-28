@@ -14,7 +14,6 @@
 
   # Line chart will be added once the code is cleaned up.
   # Frequency calculation is used in both histogram and pie charts. Factor the common code out.
-  # R API + changing the pop-up menu from R
   # Pass isHidden information rather than x and y to the server.
   # Example R API code:
 {{{
@@ -33,6 +32,9 @@ obj <- RIGHT(sub.diamonds, fun = {
   lines.RIGHT(regArray, carat, price)
 })
 }}}
+  # If we are going to let people customize the visualization in R, should we let people to change the pop-up menu, e.g. add turn on/off regression, as well? 
+   * It would be nice to support this. However, if customization from R is easy, people may just recreate the visualization.
+   * Let's keep this as a lower priority objective.
   # How to re-arrange the code:
    # Clean up mainArr to support multiple input data:
     * Create `InteractiveData` class/object that keeps isHidden and isSelected information in addition to data columns. For instance,

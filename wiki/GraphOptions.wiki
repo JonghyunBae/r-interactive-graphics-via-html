@@ -1,5 +1,7 @@
 #summary Description about graph options
 
+<wiki:toc max_depth="2"/>
+
 = Introduction =
  * For all types of graphs, some options are required, and some are optional.
 

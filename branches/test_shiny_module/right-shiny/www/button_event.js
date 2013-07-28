@@ -1,4 +1,4 @@
-tableVisible = true;
+var tableVisible = true;
 document.getElementById('showTable').addEventListener('click', function() {
 	if(tableVisible){
 		tableVisible = false;

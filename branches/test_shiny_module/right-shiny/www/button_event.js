@@ -12,10 +12,13 @@ document.getElementById('showTable').addEventListener('click', function() {
 		document.getElementById('tableScrollableContainer').style.display = 'block';
 	}
 }, false);   
-/*
-document.getElementById('hideTable').addEventListener('click', function() {
-	 document.getElementById('dataTable').style.display = 'none';
-	document.getElementById('tableScrollableContainer').style.display = 'none';
-}, false);   
-*/
-
+document.getElementById('saveImg').addEventListener('click', function() {
+	for(var i = 0 ; i < objArr.length ; i ++)
+	{
+		objArr[i].stage.toDataURL({
+	        callback: function(dataUrl) {         
+	            window.open(dataUrl);
+	          }
+	    });
+	}
+}, false); 

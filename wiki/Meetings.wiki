@@ -35,7 +35,7 @@ obj <- RIGHT(sub.diamonds, fun = {
 }}}
   # How to re-arrange the code:
    # Clean up mainArr to support multiple input data:
-    * Create InteractiveData class/object that keeps isHidden and isSelected information in addition to data columns. For instance,
+    * Create `InteractiveData` class/object that keeps isHidden and isSelected information in addition to data columns. For instance,
 {{{
 
 obj = new InteractiveData(); // returns obj = {isHidden: [], isSelected: []}
@@ -46,7 +46,7 @@ obj["price"] = [...]; // add new column
     * `createMainStructure()` should return the InsteractiveData object excplicitly, e.g. `mainArr = createMainStructure('_sub.diamonds.csv')`.
    # InteractiveData object should also keep a list of callback functions for any change in inHidden and isSelected. For instance, `onInputChange()` should be a callback function for any change in isHidden. See [http://api.jquery.com/jQuery.Callbacks/ `jQuery.Callbacks()`] to create callback functions.
    # Result of shiny server side code will be returned into regArr.
-   # line(regArr, ...) is added to JavaScript.
+   # `lines(regArr, ...)` is added to JavaScript.
   # Overlaying plots: 
    * R supports two categories of functions. One category, including `plot()`, refreshes the axis, and the other, including `points()` and `lines()` does not. For instance, try the following in R:
 {{{

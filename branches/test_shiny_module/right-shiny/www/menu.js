@@ -211,6 +211,9 @@ function menu(Name)
             Name.regressionMenuText[i].setText(' '+regressionMenuName[i]);                              
             (function (i) { 
             	Name.regressionMenuText[i].on('mouseover', function(evt){
+            		Name.menuRect[3].setFill('#cfe444');
+                    Name.menuText[3].setFill('black');  
+                    Name.menuLayer.draw();//menu higlighed		
                 	for(var k=0; k<regressionMenuName.length; k++){
                 		Name.regressionMenuRect[k].setFill('#EEAD0E');
                         Name.regressionMenuText[k].setFill('white');
@@ -220,6 +223,9 @@ function menu(Name)
                     Name.regressionMenuLayer.draw();                        
                 });
                 Name.regressionMenuRect[i].on('mouseover', function(evt){
+                	Name.menuRect[3].setFill('#cfe444');
+                    Name.menuText[3].setFill('black');  
+                    Name.menuLayer.draw();//menu higlighed	
                 	for(var k=0; k<regressionMenuName.length; k++){
                 		Name.regressionMenuRect[k].setFill('#EEAD0E');
                         Name.regressionMenuText[k].setFill('white');
@@ -301,6 +307,9 @@ function menu(Name)
             Name.optionMenuText[i].setText(' '+optionMenuName[i]);                              
             (function (i) { 
             	Name.optionMenuText[i].on('mouseover', function(evt){
+            		Name.menuRect[4].setFill('#cfe444');
+                    Name.menuText[4].setFill('black');  
+                    Name.menuLayer.draw();//menu higlighed	
                 	for(var k=0; k<optionMenuName.length; k++){
                 		Name.optionMenuRect[k].setFill('#EEAD0E');
                         Name.optionMenuText[k].setFill('white');
@@ -318,6 +327,9 @@ function menu(Name)
                         
                 });
                 Name.optionMenuRect[i].on('mouseover', function(evt){
+                	Name.menuRect[4].setFill('#cfe444');
+                    Name.menuText[4].setFill('black');  
+                    Name.menuLayer.draw();//menu higlighed	
                 	for(var k=0; k<optionMenuName.length; k++){
                 		Name.optionMenuRect[k].setFill('#EEAD0E');
                         Name.optionMenuText[k].setFill('white');
@@ -417,6 +429,9 @@ function menu(Name)
                                         	array_of_functions[j](Name, i);
                                         });
                                         Name.subMenuText[j][i].on('mouseover', function(evt){
+                                        	Name.optionMenuRect[j].setFill('#FFD700');
+                                            Name.optionMenuText[j].setFill('black');  
+                                            Name.optionMenuLayer.draw();//option menu higlighed	
                                           //      Name.subMenuRect[j][i].setFill('#cfe444'); 
                                         		Name.subMenuRect[j][i].setFill('#516ca3');
                                                 Name.subMenuText[j][i].setFill('white');     
@@ -427,7 +442,9 @@ function menu(Name)
                                                 Name.menuLayer.draw();
                                         });
                                         Name.subMenuRect[j][i].on('mouseover', function(evt){
-                                        	//  Name.subMenuRect[j][i].setFill('#cfe444'); 
+                                        	Name.optionMenuRect[j].setFill('#FFD700');
+                                            Name.optionMenuText[j].setFill('black');  
+                                            Name.optionMenuLayer.draw();//option menu higlighed	
                                                 Name.subMenuRect[j][i].setFill('#516ca3');
                                                 Name.subMenuText[j][i].setFill('white');
                                                 Name.subMenu[j].show();

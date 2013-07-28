@@ -14,12 +14,11 @@
 		document.write("</a>");	  
 	}			
 	
-	document.write("</p><br>");
+	document.write("<br>");
 	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
 	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a>");
-	document.write("<label  style = \" font-family:Trebuchet MS;font-weight:bold; color : #516ca3;\"> [ans] : </label>");
-	document.write("<label  style = \" font-family:Trebuchet MS;font-weight:bold; color : #516ca3;\" id=\"label1\">undefined</label>");
-	document.write("</p>");
+	document.write("<label> [ans] : </label>");
+	document.write("<label id=\"label1\">undefined</label>");
 	
 	function printAns(){
 		var tmpStr = '';	

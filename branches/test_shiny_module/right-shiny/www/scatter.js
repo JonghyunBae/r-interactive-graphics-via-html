@@ -63,7 +63,7 @@ var Scatter = {};
 	            	setLegendMake(this, mainValueArr, colors);
 					// plotXMargin change. This is just for once.
 					if(this.legend == 'topleft' ||this.legend == 'left'){
-	            		this.plotXMargin = this.plotXMargin + myLegend.getWidth() + this.plotLength * 4;
+						this.plotXMargin = this.plotXMargin + this.legendGroup.getWidth() + this.plotLength * 4;
 					}
 	            }
 

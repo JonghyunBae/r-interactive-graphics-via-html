@@ -7,7 +7,6 @@
 
 body {
 	font: 0.8em/1.5 "arial",sans-serif; 
-	margin : 10px 0px 0px 50px ;
 	background: #fffffe ;
 	min-height: 100%;
 	font-family:Trebuchet MS;
@@ -22,16 +21,18 @@ a {
 
 a:hover {
 	text-decoration: underline;
+	color: #FFFFFF;
 	}
 	
 	
 .wrap {	
 	width: 680px;
 	margin: 0 auto;
-	padding: 15px 15px 15px 15px;
+	padding: 15px 15px 0px 15px;
     border: 2px solid #315ca1;
 	}
-#head {
+#head {	
+	margin : 10px 1px 0px 10px ;
 	width: 0%;
 	background: #FFF ;
 	padding: 0px 0 0px 0;
@@ -57,8 +58,18 @@ a:hover {
         text-decoration:none;
 }
 
+#head label {
+        display:inline-block;
+        font-family:Trebuchet MS;
+        color : #315ca1;
+        font-size:20px;
+        font-weight:bold;
+        padding:0px 0px;
+        text-decoration:none;
+}
+
 #content {
-	margin: 0 0 0 0;
+	margin : 10px 1px 0px 10px ;
 	}
 	
 

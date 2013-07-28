@@ -57,16 +57,16 @@ shinyUI(bootstrapPage(
        </div>
         </div>
        <script>
-       var scatter1 = new Scatter(1, mainArr,{x: 'carat', y: 'price', color: 'color', legend: 'right', width: 300, height: 300});
+       var scatter1 = new Scatter(1, mainArr,{x: 'carat', y: 'price', color: 'carat', legend: 'right', width: 250, height: 250});
        scatter1.draw(1);
        eventTrigger(scatter1);
-       var hist2 = new Hist(2, mainArr,{bin: 2, x: 'cut', width: 300, height: 300, legend: 'right'});
+       var hist2 = new Hist(2, mainArr,{bin: 2, x: 'clarity', width: 250, height: 250, legend: 'right'});
        hist2.draw(2);
        eventTrigger(hist2);
-       var box3 = new Box(3, mainArr,{x: 'carat', y: 'price', width: 300, height: 300});
+       var box3 = new Box(3, mainArr,{x: 'color', y: 'price', width: 250, height: 250, legend: 'right'});
        box3.draw(3);
        eventTrigger(box3);
-       var pie4 = new Pie(4, mainArr,{bin: 2, x: 'cut', width: 300, height: 300, legend: 'right'});
+       var pie4 = new Pie(4, mainArr,{bin: 2, x: 'cut', width: 250, height: 250, legend: 'left'});
        pie4.draw(4);
        eventTrigger(pie4);
        </script>

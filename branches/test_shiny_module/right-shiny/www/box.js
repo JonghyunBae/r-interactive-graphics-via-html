@@ -17,6 +17,33 @@ var Box = {};
             	//set plot variables.
     			setPlotVariable(this, optionObj);
     			
+    			//alert(this.x);
+        		this.color = this.x;
+        		var tmpSetColor =  setColor(dataArr[this.color]);
+				var colors = tmpSetColor.colors;
+				var mainValueArr = tmpSetColor.mainValueArr;
+				var tmpColorArr = tmpSetColor.tmpColorArr;
+
+	            //set the legend text.
+	            if(optionObj.legend !=undefined){
+	            	var legendChk = optionObj.legend.toLowerCase();
+	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
+	  	            		 this.legend = optionObj.legend;
+	  	            }
+	            }
+	            if(this.legend != undefined){
+	            	// legend position set is just for once.
+	            	setLegendPosition(this);
+	            	// making legend.
+	            	setLegendMake(this, mainValueArr, colors);
+					// plotXMargin change. This is just for once.
+					if(this.legend == 'topleft' ||this.legend == 'left'){
+						this.plotXMargin = this.plotXMargin + this.legendGroup.getWidth() + this.plotLength * 4;
+					}
+	            }
+    			
+    			
+    			
                 var nodeX = new Array(dataArr[this.x].length);
                 this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);
                 var xTmp = boxMakeAxisArr(dataArr, this.width, this.x, this.xTick);  
@@ -343,7 +370,7 @@ var Box = {};
 	                    x: medianXPos,
 	                    y: medianYPos-(q3[i]-median[i])*this.height/(yMax - yMin), 
 	                    stroke : 'black',
-	                    fill : 'green',
+	                    fill : (isDiscrete[this.x] == true)?getLegendColor(i ,colors, mainValueArr):'green',
 	                    radius : this.radius,
 	                    width:  this.boxWidth[0],
 	                    height: (q3[i]-q1[i])*this.height/(yMax - yMin),
@@ -363,10 +390,10 @@ var Box = {};
 	                        x: this.plotXMargin + (i+1) * (this.width) / (mainValueArrLength+1), //////////////////////////////////???????????????????????????
 	                        y: this.height +this.plotYMargin - (dataArr[this.y][outliersArr[i][j]]-yMin)*this.height/(yMax - yMin), //this.median[i],
 							radius: this.radius,
-							stroke: 'green',
+							stroke: (isDiscrete[this.x] == true)?getLegendColor(i ,colors, mainValueArr):'green',
 							strokeWidth: 1,
 							opacity : 0.5,
-	                        fill : 'green',
+	                        fill : (isDiscrete[this.x] == true)?getLegendColor(i ,colors, mainValueArr):'green',
 	                        hidden : 0,
 	                        selected : 0,
 	                        info : "Node : "+outliersArr[i][j]+"\r\nboxNode : "+(mainValueArrLength+j+cnt)+"\r\n"+tooltipTextGetInfo[outliersArr[i][j]]+"\r\n",
@@ -412,11 +439,19 @@ var Box = {};
 			        document.getElementById('regcoords');
 			    };
                 //draw plot
-                this.stage = new Kinetic.Stage({            
-                    container: 'boxContainer'+id,            
-                    width: this.width+this.plotXMargin*2,
-                    height: this.height+this.plotYMargin*2 
-                });
+			    var tmpWidth=0;
+				if(this.legend=='left' || this.legend=='topleft'){
+					tmpWidth =  this.width+this.plotXMargin+this.legendGroup.getWidth();
+				}else if(this.legend=='right' || this.legend=='topright' || this.legend){
+					tmpWidth =  this.width+this.plotXMargin*2+this.legendGroup.getWidth();
+				}else{
+					tmpWidth =  this.width+this.plotXMargin*2;
+				}				
+				this.stage = new Kinetic.Stage({            
+					container: 'boxContainer'+id,            
+					width : tmpWidth,							
+					height: this.height+this.plotYMargin*2 
+				});
                 this.plotLayer = new Kinetic.Layer();
                 this.plotRect = new Kinetic.Rect({
                     name : "baseRect",
@@ -541,6 +576,9 @@ var Box = {};
                 // add tooltip
 				setTooltip(this);			      
 			    this.stage.add(this.tooltipLayer);   
+
+			    //draw legend
+				this.stage.add(this.legendLayer);
             },   
             changeX: function(id, dataArr, optionObj){
 				this._init(id, dataArr, optionObj);

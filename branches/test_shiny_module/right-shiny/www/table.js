@@ -11,9 +11,10 @@ document.write("table.selectedInfo .column div { width: "+colWidth+"px; text-ali
 document.write("</style>"); 
 
 
+
 //create dynamic table
 
-document.write("<div id=\"tableScrollableContainer\" class=\"scrollableContainer\" style=\"float: left; position : relative; display:none; margin : 10px 1px 0px 10px ;\">");
+document.write("<div id=\"tableScrollableContainer\" class=\"scrollableContainer\" style=\"float: left; position : relative; display:block; margin : 10px 1px 0px 10px ;\">");
 document.write(" <div class=\"scrollingArea\">");
 	document.write("<table id=\"dataTable\" class=\"selectedInfo scrollable\">");
 		document.write("<thead>");
@@ -82,7 +83,7 @@ function addRow(tableID) {
 				   }
 			}
 		}	
-    }
+}
 function deleteRow(tableID) {
 	try {
 		var table = document.getElementById(tableID);

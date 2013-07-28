@@ -42,8 +42,7 @@ shinyUI(bootstrapPage(
        <input type=\"text\" id=\"searchBox\" name=\"searchId\" placeholder=\"Please input boolean statement...\" onkeydown=\"if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};\"/>
        <a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(searchForm1); printAns(); return false;\">Search</a>
        <a id=\"clearBtn\" href=\"#\" class=\"myButton\" onClick=\"clearSearchBox(); return false;\">Clear</a>
-       <a id=\"showTable\" href=\"#\" class=\"myButton\" onClick=\"return false;\">Show Table</a>
-       <a id=\"hideTable\" href=\"#\" class=\"myButton\" onClick=\"return false;\">Hide Table</a>
+       <a id=\"showTable\" href=\"#\" class=\"myButton\" onClick=\"return false;\">Hide Table</a>
        </form>
        </div>
        </div>

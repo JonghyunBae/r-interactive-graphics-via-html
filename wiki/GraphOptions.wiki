@@ -153,7 +153,8 @@
 		</tr>
 </table>
 
-== Pie chart ==<table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
+== Pie chart ==
+<table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
 <tr>
 			<td>*Name*</td>
 			<td>*Argument*</td>

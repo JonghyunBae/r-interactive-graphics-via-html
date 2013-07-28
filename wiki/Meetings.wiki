@@ -12,6 +12,36 @@
 
 ----
 
+  # Line chart will be added once the code is cleaned up.
+  # Frequency calculation is used in both histogram and pie charts. Factor the common code out.
+  # R API + changing the pop-up menu from R
+  # Let's pass isHidden information rather than x and y.
+  # Example R API code:
+{{{
+obj <- RIGHT(sub.diamonds, fun = {
+  plot.RIGHT(sub.diamonds, carat, price, color, "right", 300, 300)
+  regArray <- runServer.RIGHT({ 
+
+     obj <- loess(price ~ carat, data = sub.diamonds)
+     xRange <- range(sub.diamonds$carat
+     yRange <- range(sub.diamonds$price
+     simARray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100)
+  
+     ...
+
+  }, sub.diamonds)
+  line.RIGHT(regArray, carat, price)
+})
+}}}
+  # How to re-arrange the code:
+   # Clean up mainArr to support multiple input data
+   # OnInputChange should be a callback function from mainArra.isHidden
+   # Result of shiny server side code will be returned into regArr.
+   # line(regArr, ...) is added to JavaScript.
+
+
+----
+
 Date : 21JULY2013
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.

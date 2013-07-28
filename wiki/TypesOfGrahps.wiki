@@ -1,13 +1,51 @@
-#summary One-sentence summary of this page.
+#summary Description about types of graphs
 
 = Introduction =
 
-Add your content here.
+There are four types of graph right now. More types will be updated.
 
+=<font color = 'blue'>Types of graphs</font>=
+<table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
+<tr>
+	<td>*Graph Type*</td>
+	<td>*name*</td>
+	<td>*Description*</td>
+</tr>
+<tr>
+	<td>Scatter chart</td>
+	<td>plot</td>
+	<td></td>
+</tr>
+<tr>
+	<td>Box chart</td>
+	<td>hist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>Box-and-Whisker chart</td>
+	<td>box</td>
+	<td></td>
+</tr>
+<tr>
+	<td>Pie chart</td>
+	<td>pie</td>
+	<td></td>
+</tr>
+</table>
 
-= Details =
+== Scatter chart == 
+ * [http://en.wikipedia.org/wiki/Scatter_plot scatter chart], display values for two variables for a set of data.
+ * Regression (linear, loess) is enabled. The calculation for a regression line is done by the server side with R. (Shiny library is used here)
+<img src="http://thepotter.woobi.co.kr/img/scatter.png">
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Bar chart == 
+ * [http://en.wikipedia.org/wiki/Bar_chart bar chart], rectangular bars with lengths proportional to the values.
+<img src="http://thepotter.woobi.co.kr/img/bar.png">
+
+== Box-and-Whisker chart == 
+ * [http://en.wikipedia.org/wiki/Box_and_whisker box-and-whisker chart], boxes (whiskers) indicating variability outside the upper and lower quartiles, and outliers.
+<img src="http://thepotter.woobi.co.kr/img/box.png">
+
+== Pie chart == 
+ * [http://en.wikipedia.org/wiki/Pie_chart pie chart], circular chart divided into sectors, illustrating numerical proportion.
+<img src="http://thepotter.woobi.co.kr/img/pie.png">

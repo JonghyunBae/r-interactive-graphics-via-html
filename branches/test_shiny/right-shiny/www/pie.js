@@ -201,7 +201,7 @@ var Pie = {};
 						y: this.plotYMargin + this.height/2, 						
 						radius: 100,
 				        angleDeg: freqTmp[cnt]/dataArr[0].length * 360,
-				        fill: 'green',
+				        fill: (isDiscrete[this.x] == true)?getColor(hasTmp[cnt][0] ,colors, mainValueArr, tmpColorArr):'green',
 				        opacity : 0.5,
 				        stroke: 'black',
 				        draggable : false,

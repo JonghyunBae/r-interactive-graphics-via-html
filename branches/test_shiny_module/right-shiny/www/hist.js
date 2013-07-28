@@ -227,7 +227,7 @@ var Hist = {};
 						
 						width: barWidth,
 						height: freqTmp[cnt]*this.height/this.yMax,
-						fill: getLegendColor(freqRank[cnt][1] ,colors, mainValueArr),
+						fill: (isDiscrete[this.x] == true)?getColor(hasTmp[cnt][0] ,colors, mainValueArr, tmpColorArr):'green',
 						stroke: 'black',						
 						opacity : 0.5,
 						draggable : false,

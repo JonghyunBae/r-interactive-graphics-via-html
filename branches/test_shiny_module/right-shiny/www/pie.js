@@ -90,6 +90,7 @@ var Pie = {};
 	            			isSelected[i][id] = pieUpdate(this, j);
 	            		}
 	            	}
+	            	
 	            	var barWidth = this.width/freqTmp.length/2;
 	            	var barGap = barWidth;
 	            	this.xMax = parseInt(this.width/barWidth);
@@ -99,6 +100,7 @@ var Pie = {};
 	            	{
 	            		freqRank[i][0] = freqTmp[i];
 	            		freqRank[i][1] = i;
+	            		
 	            	}
 	            	freqRank.sort(function(a,b){return a[0] - b[0];});
 	            	var nodeX = new Array(freqTmp.length);
@@ -229,7 +231,7 @@ var Pie = {};
 						y: this.plotYMargin + this.height/2, 						
 						radius: 100,
 				        angleDeg: freqTmp[cnt]/dataArr[0].length * 360,
-				        fill: getLegendColor(freqRank[cnt][1] ,colors, mainValueArr),
+				        fill: (isDiscrete[this.x] == true)?getColor(hasTmp[cnt][0] ,colors, mainValueArr, tmpColorArr):'green',
 				        opacity : 0.5,
 				        stroke: 'black',
 				        draggable : false,

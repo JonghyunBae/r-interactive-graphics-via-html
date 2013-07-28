@@ -1,7 +1,7 @@
 library(shiny)
 
 shinyServer(function(input, output) {
-  output$content <- reactive(function() {
+  output$content <- reactive({
     #linear regression 
     if(length(input$yy) != 0){
         if(input$id != -1){
@@ -31,7 +31,7 @@ shinyServer(function(input, output) {
         }
     }
   })
-  output$content1 <- reactive(function() {
+  output$content1 <- reactive({
     if(length(input$yy1) != 0){
       if(input$id1 != -1){
         if(input$type1 == "scatter" && input$graph1 == "loess"){

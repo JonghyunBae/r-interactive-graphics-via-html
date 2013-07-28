@@ -44,7 +44,7 @@ obj["price"] = [...]; // add new column
 
 }}}
     * `createMainStructure()` should return the InsteractiveData object excplicitly, e.g. `mainArr = createMainStructure('_sub.diamonds.csv')`.
-   # `InteractiveData` object should also keep a list of callback functions for any change in `inHidden` and `isSelected`. For instance, `onInputChange()` should be a callback function for any change in `isHidden`. See [http://api.jquery.com/jQuery.Callbacks/ jQuery.Callbacks()] to create callback functions.
+   # `InteractiveData` object should also keep a list of callback functions for any change in `inHidden` and `isSelected`. For instance, `onInputChange()` should be a callback function for any change in `isHidden`. See [http://api.jquery.com/jQuery.Callbacks/ jQuery.Callbacks()] to manage callback functions.
    # Result of shiny server side code will be returned into regArr.
    # `lines(regArr, ...)` is added to JavaScript.
   # Overlaying plots: 

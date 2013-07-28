@@ -218,7 +218,7 @@ function RectRangeSelect(Name, pre, aft)
         //alert(Name._type);
         if(Name._type == undefined)
         	return;
-        if(Name._type == "scatter"){
+        if(Name._type == "scatter"  || Name._type == "pie" ){
                 if(ctrlPressed == true) {
                         for(var i = 0 ; i < Name.node.length ; i ++)
                         {
@@ -237,7 +237,7 @@ function RectRangeSelect(Name, pre, aft)
                         }
                 }
                         
-        }else if(Name._type == "hist" || name._type == "pie"){
+        }else if(Name._type == "hist"){
                 if(ctrlPressed == true) {
                         for(var i = 0 ; i < Name.node.length ; i ++)
                         {
@@ -467,7 +467,7 @@ function select(Name)
                                                         }
                                                 }
                                                 
-                                        }else if(Name._type == "hist" || Name._type == "box" || name._type == "pie"){
+                                        }else if(Name._type == "hist" || Name._type == "box" || Name._type == "pie"){
                                                 //alert(Name.preId.x + " , " + tmpX);
                                                 if(Name.preId.x >= tmpX){
                                                         for(var i = 0 ; i < Name.node.length ; i ++)

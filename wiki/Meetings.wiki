@@ -1,3 +1,4 @@
+  # Complete mid-term evaluation
   # Status update
   # Things to improve:
    # Plot overlaying 
@@ -11,6 +12,10 @@
   # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
 
 ----
+
+Date : 28JULY2013
+
+Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
   # Line chart will be added once the code is cleaned up.
   # Frequency calculation is used in both histogram and pie charts. Factor the common code out.

@@ -197,7 +197,8 @@ var Scatter = {};
 				// add tooltip
 				this.stage.add(this.tooltipLayer);
 				//draw legend
-				this.stage.add(this.legendLayer);
+				if(this.legend != undefined)
+					this.stage.add(this.legendLayer);
 				
 				
 				// check linear regression on/off

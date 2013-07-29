@@ -326,7 +326,8 @@ var Pie = {};
 				// add tooltip
 			    this.stage.add(this.tooltipLayer); 
 			    //draw legend
-				this.stage.add(this.legendLayer);
+				if(this.legend != undefined)
+					this.stage.add(this.legendLayer);
 			},
 			changeX: function(id, dataArr, optionObj){
 					this._init(id, dataArr, optionObj);

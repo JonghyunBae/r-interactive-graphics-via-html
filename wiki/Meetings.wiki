@@ -61,6 +61,8 @@ points(subArray$carat, subArray$price) # overlay lines
 plot(price ~ carat, data = subArray, type = "p") # refreshes axis and plots points
 }}}
    * We can create similar functions in JavaScript. There should be a function that creates a blank axis, and functions to draw different visual elements (points, lines, boxes, etc) on the axis.
+  # Testing
+   * Separate calculation part from drawing part exactly for making adding unit-testing easier.
 
 ----
 

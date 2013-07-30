@@ -1,36 +1,12 @@
 //Once starting, belows will be set up right away.
-var mainArr; // array for all data.
-var labelArr; // character array for the column names.
-var isDiscrete; // array for confirming discrete data
-var isSelected; // array for selected node and save each update function
-var isHidden;
-var sortArr;
+//var mainArr; // array for all data.
+//var labelArr; // character array for the column names.
+//var isDiscrete; // array for confirming discrete data
+//var isSelected; // array for selected node and save each update function
+//var isHidden;
+//var sortArr;
 var objArr = new Array();
-var tempData;
-/*
-function test(i)
-{
-	return function (tt)
-	{
-		alert(i + ", " + tt);
-	};
-}
-*/
-//b = a(1);
-/*
-var b = make2DArr(10);
-for(var i = 0 ; i < 10 ; i++)
-{
-	b[i][0] = 1
-}
-alert(b);
-b[0].push(a(3));
-b[0].push(a(4));
-b[0][1](2);
-b[0][2](5);
-*/
-
-
+//var tempData;
 
 function csv2Arr(data, liveChar)
  {	
@@ -80,17 +56,26 @@ function make2DArr(rows) {
 	  }
 	  return arr;
 }
+function printMakeData(labelArr)
+{
+	document.write("<script>");
+	document.write("var makedata = function (dataArr, labelArr){");
+	for(var i = 0 ; i < labelArr.length ; i ++){
+		document.write("this." + labelArr[i] + "= dataArr[" + i + "];");
+	}
+	document.write("};");
+	document.write("</script>");
+}
 
 function createMainStructure(fileName)
 {	
 	var tmpArr = getData(fileName);		
-	var dataArr=tmpArr.dataArr;
-	labelArr=tmpArr.labelArr;	 
-	
-	isSelected = make2DArr(dataArr.length);
-	isHidden = new Array(dataArr.length);	// false -> not hidden, true -> hidden.
-	mainArr = make2DArr(labelArr.length + 1);		
-	isDiscrete = new Array(labelArr.length);
+	var dataArr=tmpArr.dataArr;	
+	var labelArr=tmpArr.labelArr;	
+	var isSelected = make2DArr(dataArr.length);
+	var isHidden = new Array(dataArr.length);	// false -> not hidden, true -> hidden.
+	var mainArr = make2DArr(labelArr.length + 1);		
+	var isDiscrete = new Array(labelArr.length);
 	for(var j=0; j<dataArr.length; j++)
 	{
 		var tmpArr = dataArr[j].toString().split(',');	
@@ -112,11 +97,15 @@ function createMainStructure(fileName)
 		mainArr[i][j] = j; // save original number.
 		isSelected[j][0] = 0;	
 	}
-	tempData = mainArr;
-
-//	isSelected[0].push(test(1));
-//	alert(isSelected[0][1](3));
+	dataArr = mainArr;
 	
+	return { 
+		'dataArr' 		: dataArr,
+		'labelArr' 		: labelArr,
+		'isSelected'	: isSelected,
+		'isDiscrete'	: isDiscrete,
+		'isHidden'		: isHidden
+		};	
 }		
 
 

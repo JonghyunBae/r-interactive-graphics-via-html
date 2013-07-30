@@ -1,290 +1,64 @@
-var MakeAxis = {};
-(function() {
-	 MakeAxis = function(id, mainArr, optionObj) {
-		this._buildAxis(id, mainArr, optionObj);
-		this._drawAxis(id, mainArr, optionObj);
-	}
-	MakeAxis.prototype = {
-		_buildAxis: function(id, mainArr, optionObj) {
-			//set width.
-			if(optionObj.width != undefined){
-				this.width = optionObj.width;
-			}else{
-				if(optionObj.width == undefined){
-					this.width = 300;
-				}
-			}
-			//set height.
-			if(optionObj.height != undefined){
-				this.height = optionObj.height;
-			}else{
-				if(optionObj.height == undefined){
-					this.height = 300;
-				}
-			}
-			this.plotXMargin=this.width*0.2; //canvas left, right margin
-			this.plotYMargin=this.height*0.2; //canvas top, bottom margin
-			this.plotLength=this.width*0.02; //margin from plot box
-			//check the x label
-			if(optionObj.x != undefined){
-			 	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
-			     {
-			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-			     		this.x =  i;
-			     		 break;
-			     	}
-			     	if(i == mainArr.labelArr.length - 1){
-			     		alert('retype x label');
-			     		this.x = 0;
-			     	}
-			     }
-			}else{
-				alert('x should be defined!');
-				this.x = 0;
-			}
-			//check the y label
-			 if(optionObj.y != undefined){
-				 for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
-			     {
-			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-			     		this.y =  i;
-			     		 break;
-			     	}
-			     	if(i == mainArr.labelArr.length - 1){
-			     		alert('retype y label');
-			     		this.y = 0;
-			     	}
-			     }
-			}else{
-				alert('y should be defined!');
-				this.y = 0;
-			}
-			//check if continuous or discrete.
-			if(mainArr.isDiscrete[this.x] == true){
-				this.xDiscrete = true;
-				var tmp = setAxis_discrete(mainArr.dataArr, this.x, this.width);
-				this.xMax = -1;
-				this.xMin = -1;
-				this.diff = tmp.diff;
-				this.xPlotArr = tmp.array;
-			}else{
-				this.xDiscrete = false;
-				this.xMax = findMaxValue(mainArr.dataArr[this.x]);
-	            this.xMin = findMinValue(mainArr.dataArr[this.x]);	            
-				var tmp = setAxis_continue(this.xMax, this.xMin, 5, this.width);
-				this.xMax = tmp.max;
-				this.xMin = tmp.min;
-				this.xPlotArr= tmp.array;		
-			}
-			if(mainArr.isDiscrete[this.y] == true){
-				this.yDiscrete = true;
-				var tmp = setAxis_discrete(mainArr.dataArr, this.y, this.height);
-				this.yMax = -1;
-				this.yMin = -1;
-				this.diff = tmp.diff;
-				this.yPlotArr = tmp.array;
-			}else{
-				this.yDiscrete = false;
-				this.yMax = findMaxValue(mainArr.dataArr[this.y]);
-	            this.yMin = findMinValue(mainArr.dataArr[this.y]);
-				var tmp = setAxis_continue(this.yMax, this.yMin, 5, this.height);
-				this.yMax = tmp.max;
-				this.yMin = tmp.min;
-				this.diff = -1;
-				this.yPlotArr= tmp.array;				
-			}
-			//set plotRect.
-			setPlotRect(this);
-			//set axis variables.
-			setXAxis(this);
-			setYAxis(this);
-		},
-		
-		_drawAxis: function(id, mainArr, optionObj) {
-			this.stage = new Kinetic.Stage({            
-				container: 'container'+id,            
-				width : this.width+this.plotXMargin*2,						
-				height: this.height+this.plotYMargin*2 
-			});		
-			
-			this.plotLayer = new Kinetic.Layer();
-			//add base rectangular.
-			this.plotLayer.add(this.plotRect);				
-			//add x axis layer.
-			for(var i = 0 ; i < this.xLine.length ; i ++){
-				this.plotLayer.add(this.xLine[i]); 
-			    this.plotLayer.add(this.xText[i]);
-			}			
-			//add y axis layer.				
-			for(var i = 0 ; i < this.yLine.length ; i ++){
-				this.plotLayer.add(this.yLine[i]); 
-		        this.plotLayer.add(this.yText[i]);
-			}
-			this.stage.add(this.plotLayer);
-		}
-	}
-})();
-
-//set axis with continuous data.
-function setAxis_continue(max, min, tick, length)
-{
-	var tickRange = (max - min) / tick;
-	var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
-	tickRange = setTickRange(tmp, tickRange);
-	max = tickRange * Math.ceil(max/tickRange);		      
-	min = tickRange * Math.floor(min/tickRange);
-	var diff = length * tickRange / (max - min);
-	var plotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));
-	for(var i = 0 ; i < plotArr.length ; i ++)
-	{
-		plotArr[i][0] = i*diff;
-		if (tickRange.toString().indexOf('.') == -1){
-			plotArr[i][1] = min+i*tickRange;
-		}else{				
-			var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
-			if(point > 3){ // for setting the resonable point
-				point = 3;
-			}
-			plotArr[i][1] = (min+i*tickRange).toFixed(point);
-		}
-	}
-	return {
-		'max'	: max,
-		'min'	: min,
-		'array'	: plotArr
-	};
-}
-//set axis with dicrete data.
-function setAxis_discrete(dataArr, axis, length)
-{
-	var node = new Array();
-	node[0] = 0;
-	var tmp = new Array();  //the names of each content below
-	tmp[0] = dataArr[axis][0];
-	for(var i = 1 ; i < dataArr[axis].length ; i++)
-	{
-		for(j = 0 ; j < tmp.length ; j ++)
-		{
-			if(tmp[j] == dataArr[axis][i])
-			{
-				node[i] = j;
-				break;
-			}	            				
-		}
-		if(j == tmp.length)
-		{
-			node[i] = j;
-			tmp.push(dataArr[axis][i]);
-		}
-	}
-	var plotArr = make2DArr(tmp.length);
-	var diff = length / (tmp.length+1);
-	
-	for(var i = 1 ; i < plotArr.length+1 ; i ++)
-	{
-		plotArr[i-1][0] = i*diff;
-		plotArr[i-1][1] = tmp[i-1];
-	}
-	
-	return {
-		'diff'	: diff,
-		'node'	: node,
-		'array' : plotArr
-	};	
-}
-
-
-/**  set axis  **/
-//set x axis variables.
-//xPlotArr should be needed.
-function setXAxis(obj)
-{
-	obj.xLine = new Array();
-	obj.xText = new Array();
-	for(var i = 0; i < obj.xPlotArr.length; i++)
-	{
-		obj.xLine[i] = new Kinetic.Line({
-	        name : "xLine"+i,
-	        points: [	obj.plotXMargin+obj.xPlotArr[i][0],
-	                 	obj.plotYMargin+obj.height+obj.plotLength,
-	                 	obj.plotXMargin+obj.xPlotArr[i][0],
-	                 	obj.plotYMargin+obj.height+2*obj.plotLength],
-	        stroke: 'black',
-	        strokeWidth: 2,             
-	    });
-	                  
-	    obj.xText[i] = new Kinetic.Text({
-	        name : "xText"+i,
-	        x: obj.plotXMargin+obj.xPlotArr[i][0]-30,
-	        y: obj.plotYMargin+obj.height+obj.plotLength*2,
-	        text: obj.xPlotArr[i][1],
-	        fontSize: 15,
-	        fontFamily: 'Calibri',
-	        fill: 'black',
-	        width: 60,
-	        align: 'center'    
-	    });      
-	} 
-}
-//set y axis variables.
-//yPlotArr should be needed.
-function setYAxis(obj)
-{
-	obj.yLine = new Array();
-	obj.yText = new Array();
-
-for(var i = 0; i < obj.yPlotArr.length ; i++)
-{
-	obj.yLine[i] = new Kinetic.Line({
-       points: [	obj.plotXMargin-obj.plotLength, 
-                	obj.plotYMargin+obj.height-obj.yPlotArr[i][0], 
-                	obj.plotXMargin-2*obj.plotLength,
-                	obj.plotYMargin+obj.height-obj.yPlotArr[i][0]],
-       stroke: 'black',
-       strokeWidth: 2,             
-   });              
-   obj.yText[i] = new Kinetic.Text({
-       x: obj.plotXMargin-obj.plotLength*2-15,
-       y: obj.plotYMargin+obj.height-obj.yPlotArr[i][0]+30,
-       text: obj.yPlotArr[i][1],
-       fontSize: 15,
-       fontFamily: 'Calibri',
-       fill: 'black',
-       width: 60,
-       align: 'center',
-       rotation: (Math.PI)*3/2
-   });        
-}
-}
-/**  set axis end  **/
-
-
-
+/**  draw sactter  **/
 var Scatter = {};    
 (function() {
-	Scatter = function(id, dataArr, optionObj) {			
+	Scatter = function(id, plotObject, mainArr, optionObj) {			
 		this._type = 'scatter';		
 		this._id = id;
-		this._labelArr = labelArr; //localize later
-		objArr[id-1] = this;
+		this._labelArr = mainArr.labelArr; //localize later
+		//objArr[id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
-		this._init(id, dataArr, optionObj);	
+		this.draw(id, plotObject, mainArr, optionObj);
     };
     Scatter.prototype = {
-    		
-    		_init: function(id, dataArr, optionObj){    			
-    			//set plot variables.
-    			setPlotVariable(this, optionObj);    			
-    			//make essential variables
-	            this.xMax = findMaxValue(dataArr[this.x]);
-	            this.xMin = findMinValue(dataArr[this.x]);
-	            this.yMax = findMaxValue(dataArr[this.y]);
-	            this.yMin = findMinValue(dataArr[this.y]);
-	            this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);	//default x tick is 5
-	            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y tick is 5
-	            
-	            // set the color type
+    		draw : function(id, plotObject, mainArr, optionObj) {
+    			//check radius.
+    			if(optionObj.radius != undefined){
+    				this.radius = optionObj.radius;
+    			}else{
+    				this.radius = 2;
+    			}
+    			//check the x label
+    			if(optionObj.x != undefined){
+    			 	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
+    			     {
+    			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
+    			     		this.x =  i;
+    			     		 break;
+    			     	}
+    			     	if(i == mainArr.labelArr.length - 1){
+    			     		alert('retype x label');
+    			     		this.x = 0;
+    			     	}
+    			     }
+    			}else{
+    				alert('x should be defined!');
+    				this.x = 0;
+    			}
+    			//check the y label
+    			if(optionObj.y != undefined){
+    				 for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
+    			     {
+    			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
+    			     		this.y =  i;
+    			     		 break;
+    			     	}
+    			     	if(i == mainArr.labelArr.length - 1){
+    			     		alert('retype y label');
+    			     		this.y = 0;
+    			     	}
+    			     }
+    			}else{
+    				alert('y should be defined!');
+    				this.y = 0;
+    			}
+    			//check whether each axis is the same type of plotObject.
+    			if(!(plotObject.xDiscrete == mainArr.isDiscrete[this.x] && plotObject.yDiscrete == mainArr.isDiscrete[this.y])){
+    				alert("Can't draw scatter!");
+    				return;
+    			}
+    			
+    			// set the color type
 	            if(optionObj.color==undefined){
 	            	if(this.color == undefined){
 	            		this.color=-1; //default color
@@ -295,299 +69,185 @@ var Scatter = {};
 						var tmpColorArr = tmpSetColor.tmpColorArr;
 	            	}	            		
 	            }else{
-            		for(var i = 0 ; i < this._labelArr.length ; i ++)
+            		for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
 	  	            {
 	  	            	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
 	  	            		 this.color =  i;
 	  	            		 break;
 	  	            	}
-	  	            	if(i==this._labelArr.length-1){
+	  	            	if(i == mainArr.labelArr.length - 1){
 	  	            		alert('retype colors label');
+	  	            		this.color = 0;
 	  	            	}
 	  	            }	
-            		var tmpSetColor =  setColor(dataArr[this.color]);
+            		var tmpSetColor =  setColor(mainArr.dataArr[this.color]);
     				var colors = tmpSetColor.colors;
 					var mainValueArr = tmpSetColor.mainValueArr;
 					var tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
-	    		
 	            //set the legend text.
-	            if(optionObj.legend !=undefined){
-	            	var legendChk = optionObj.legend.toLowerCase();
-	  	            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft' || legendChk == 'default' ){	            		
-	  	            		 this.legend = optionObj.legend;
-	  	            }
-	            }
-	            if(this.legend != undefined){
-	            	// legend position set is just for once.
-	            	setLegendPosition(this);
+	            if(this.color != -1){
+	            	this.lengend = "right";
+	            	this.legendX = plotObject.plotXMargin + plotObject.width + plotObject.plotLength*5;
+	        		this.legendY = plotObject.plotYMargin - plotObject.plotLength;
 	            	// making legend.
-	            	setLegendMake(this, mainValueArr, colors);
-					// plotXMargin change. This is just for once.
-					if(this.legend == 'topleft' ||this.legend == 'left'){
-						this.plotXMargin = this.plotXMargin + this.legendGroup.getWidth() + this.plotLength * 4;
-					}
+	            	setLegendMake(this, mainValueArr, colors);	            	
 	            }
-
-	        	//nodeX and nodeY is for setting gap of each axis according to tick
-	            var nodeX = new Array(dataArr[this.x].length);	            
-	            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick, this.xMax, this.xMin);  
-	            nodeX = xTmp.node;
-	            this.xPlotArr = xTmp.plotArr;
-	            var nodeY = new Array(dataArr[this.y].length);	             	            
-	            var yTmp = makeAxisArr(dataArr, this.height, this.y, this.yTick, this.yMax, this.yMin);	            
-	            nodeY = yTmp.node;
-	            this.yPlotArr = yTmp.plotArr;	            
-	            
-	    		//////////Make Data Structure of nodes and essential arrays////////
-				this.node = new Array();
-				var tooltipTextGetInfo = new Array();
-				for(var i = 0; i < dataArr[this.x].length ; i++)
+    			var nodeX = new Array();
+    			var nodeY = new Array();
+    			//nodeX set.
+    			if(mainArr.isDiscrete[this.x] == true){	// x - discrete
+    				if(this.x != plotObject.x){
+    					alert("x axis is different from plot");
+    					return;
+    				}
+    				for(var i = 0 ; i < mainArr.dataArr[this.x].length ; i ++){
+    					nodeX[i] = plotObject.xPlotArr[plotObject.xNode[i]][0] + plotObject.plotXMargin;    					
+    				}
+    			}else{  // x - continuous
+    				for(var i = 0 ; i < mainArr.dataArr[this.x].length ; i ++){
+    					if(mainArr.dataArr[this.x][i] > plotObject.xMax || mainArr.dataArr[this.x][i] < plotObject.xMin){
+    						nodeX[i] = -1;
+    					}else{
+    						nodeX[i] = plotObject.width * (mainArr.dataArr[this.x][i] - plotObject.xMin) / (plotObject.xMax - plotObject.xMin) + plotObject.plotXMargin;
+    					}
+    				}
+    			}
+    			//nodeY set.
+    			if(mainArr.isDiscrete[this.y] == true){	// y - discrete
+    				if(this.y != plotObject.y){
+    					alert("y axis is different from plot");
+    					return;
+    				}
+    				for(var i = 0 ; i < mainArr.dataArr[this.y].length ; i ++){
+    					if(nodeX[i] == -1){
+    						nodeY[i] = -1;
+    					}else{
+    						nodeY[i] = plotObject.height + plotObject.plotYMargin - plotObject.yPlotArr[plotObject.yNode[i]][0];
+    					}    					
+    				}
+    			}else{  // y - continuous
+    				for(var i = 0 ; i < mainArr.dataArr[this.y].length ; i ++){
+    					if(nodeX[i] == -1){
+    						nodeY[i] = -1;
+    					}else if(mainArr.dataArr[this.y][i] > plotObject.yMax || mainArr.dataArr[this.y][i] < plotObject.yMin){
+    						//alert(plotObject.yMax + "m" + mainArr.dataArr[this.y][i]);
+    						nodeX[i] = -1;
+    						nodeY[i] = -1;
+    					}else{
+    						nodeY[i] = plotObject.height + plotObject.plotYMargin - plotObject.height * (mainArr.dataArr[this.y][i] - plotObject.yMin) / (plotObject.yMax - plotObject.yMin);
+    					}
+    				}
+    			}
+    			//set dots.
+    			this.node = new Array();
+    			var cnt = 0;
+    			var overCnt = 0;
+    			for(var i = 0; i < nodeX.length ; i++)
 				{
-					tooltipTextGetInfo[i]=this._labelArr[0]+" : " + dataArr[0][i]+ "\r\n" ;
-					for(var j=1; j< this._labelArr.length ; j++){
-						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ this._labelArr[j]+" : " + dataArr[j][i]+ "\r\n" ;
-					}
+    				if(nodeX[i] != -1){
+    					this.node[cnt] = new Kinetic.Circle({
+    						name : cnt,
+    						x: nodeX[i],
+    						y: nodeY[i],
+    						radius: this.radius,
+    						stroke: (this.color == -1) ? 'green': getColor(i,colors, mainValueArr, tmpColorArr),
+    						strokeWidth: 1,
+    						fill: (this.color == -1) ? 'green': getColor(i,colors, mainValueArr, tmpColorArr),
+    						selected : 0
+    						//info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
+    					});
+    					//isSelected[i][id] = scatterUpdate(this, i);	//save event handler
+    					cnt ++;
+    				}else{
+    					overCnt ++;
+    				}
 				}
-				// set and make information of nodes according to color
-				if(this.color==-1 ){
-					for(var i = 0; i < dataArr[this.x].length ; i++)
-					{
-						this.node[i] = new Kinetic.Circle({
-							name : i,
-							x: nodeX[i] + this.plotXMargin,
-							y: this.height +this.plotYMargin - nodeY[i],
-							radius: this.radius,
-							stroke: 'green',
-							strokeWidth: 1,
-							fill: 'green',	//different part
-							selected : 0,
-							info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
-						});			
-						isSelected[i][id] = scatterUpdate(this, i);	//save event handler
-					}
-				}else{
-					for(var i = 0; i < dataArr[this.x].length ; i++)
-					{
-						this.node[i] = new Kinetic.Circle({
-							name : i,
-							x: nodeX[i] + this.plotXMargin,
-							y: this.height +this.plotYMargin - nodeY[i],
-							radius: this.radius,
-							stroke: getColor(i,colors, mainValueArr, tmpColorArr),
-							strokeWidth: 1,
-							fill: getColor(i,colors, mainValueArr, tmpColorArr),	//different part
-							selected : 0,
-							info : "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
-						});			
-						isSelected[i][id] = scatterUpdate(this,i);	//save event handler
-					}
-				}
+    			if(overCnt > 0){
+    				alert(overCnt + " nodes can't be draw in this plot range.");
+    			}
+    			// set labels.
+    			setXLabel(this, plotObject);
+				setYLabel(this, plotObject);
+				setMainLabel(this, plotObject);
 				
-				//set plotRect.
-				setPlotRect(this);
-				//set axis variables.
-				scatterSetXAxis(this);
-				scatterSetYAxis(this);
-				//set label variables.
-				scatterSetXLabel(this);
-				scatterSetYLabel(this);
-				scatterSetMainLabel(this);
-				//set tooltip.
-				setTooltip(this); 
-    		},
-			doIt: function() { 
-				alert('do it'); 
-			},
-			draw: function(id){	//draw plot part
-				
-				document.getElementById('scatterContainer'+id).onmousemove =getCoords;
-				document.getElementById('scatterContainer'+id).onclick = function() {
-			        document.getElementById('regcoords');
-			    };
-			    
-				var tmpWidth=0;
-				if(this.legend=='left' || this.legend=='topleft'){
-					tmpWidth =  this.width+this.plotXMargin+this.legendGroup.getWidth();
-				}else if(this.legend=='right' || this.legend=='topright' || this.legend){
-					tmpWidth =  this.width+this.plotXMargin*2+this.legendGroup.getWidth();
-				}else{
-					tmpWidth =  this.width+this.plotXMargin*2;
-				}				
-				this.stage = new Kinetic.Stage({            
-					container: 'scatterContainer'+id,            
-					width : tmpWidth,							
-					height: this.height+this.plotYMargin*2 
-				});		
-				
-				this.plotLayer = new Kinetic.Layer();
-				//add base rectangular.
-				this.plotLayer.add(this.plotRect);				
-				//add x axis layer.
-				for(var i = 0 ; i < this.xLine.length ; i ++){
-					this.plotLayer.add(this.xLine[i]); 
-				    this.plotLayer.add(this.xText[i]);
-				}			
-				//add y axis layer.				
-				for(var i = 0 ; i < this.yLine.length ; i ++){
-					this.plotLayer.add(this.yLine[i]); 
-			        this.plotLayer.add(this.yText[i]);
-				}				
-				//add labels layer.
-                this.plotLayer.add(this.xLabel);    
-                this.plotLayer.add(this.yLabel);    
-                this.plotLayer.add(this.mainLabel);
-				
-                //add plot layer.
-				this.stage.add(this.plotLayer);
-				
-				this.plotLayer.on('mouseover mousemove dragmove', function(evt){  
-					document.body.style.cursor = "default";
-				});				
-				//draw node
-				this.dataLayer = new Kinetic.Layer();	
+				// make dataLayer.
+    			this.dataLayer = new Kinetic.Layer();	
 				for(var i = 0 ; i < this.node.length ; i ++)
 				{
 					if(i % parseInt(this.node.length/20) == 0)
 					{
-						this.stage.add(this.dataLayer);
+						plotObject.stage.add(this.dataLayer);
 						this.dataLayer = new Kinetic.Layer();
 					}
 					this.dataLayer.add(this.node[i]);
-				} 
-				this.stage.add(this.dataLayer);
-				// add tooltip
-				this.stage.add(this.tooltipLayer);
-				//draw legend
-				if(this.legend != undefined)
-					this.stage.add(this.legendLayer);
-				
-				
-				// check linear regression on/off
-				if(this.linear == true){
-					this.linear = false;
-					linearSendArr(this);
-				}
-				if(this.loess == true){
-					this.loess = false;
-					loessSendArr(this);
-				}
-			},
-			changeX: function(id, dataArr, optionObj){
-				for(var i = 0 ; i < this._labelArr.length ; i ++)	
-			     {
-			     	if(this._labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-			     		this.x =  i;
-			     		 break;
-			     	}
-			     }
-	        	if(isDiscrete[this.x] == false){
-	        		this.xMax = findMaxValue(dataArr[this.x]);
-		            this.xMin = findMinValue(dataArr[this.x]);
-	        	}						
-	            var nodeX = new Array(dataArr[this.x].length);	            
-	            var xTmp = makeAxisArr(dataArr, this.width, this.x, this.xTick, this.xMax, this.xMin);  
-	            nodeX = xTmp.node;
-	            this.xPlotArr = xTmp.plotArr;
-	            for(var i = 0; i < this.node.length ; i++)
-				{
-	            	this.node[i].setX(nodeX[i] + this.plotXMargin);
-				}
-				scatterSetXAxis(this);
-				scatterSetXLabel(this);
-				scatterSetMainLabel(this);
-			},
-			changeY: function(id, dataArr, optionObj){
-				for(var i = 0 ; i < this._labelArr.length ; i ++)	
-			     {
-			     	if(this._labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-			     		this.y =  i;
-			     		 break;
-			     	}
-			     }
-	        	if(isDiscrete[this.x] == false){
-					this.yMax = findMaxValue(dataArr[this.y]);
-		            this.yMin = findMinValue(dataArr[this.y]);
-	        	}
-	            var nodeY = new Array(dataArr[this.y].length);	             	            
-	            var yTmp = makeAxisArr(dataArr, this.height, this.y, this.yTick, this.yMax, this.yMin);	            
-	            nodeY = yTmp.node;
-	            this.yPlotArr = yTmp.plotArr;
-	            for(var i = 0; i < this.node.length ; i++)
-				{
-	            	this.node[i].setY(this.height +this.plotYMargin - nodeY[i]);
-				}
-				scatterSetYAxis(this);
-				scatterSetYLabel(this);
-				scatterSetMainLabel(this);
-			},
-			changeColor: function(id, dataArr, optionObj){
-				for(var i = 0 ; i < this._labelArr.length ; i ++)	
-			     {
-			     	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
-			     		this.color =  i;
-			     		 break;
-			     	}
-			     }
-				var tmpSetColor =  setColor(dataArr[this.color]);
-				var colors = tmpSetColor.colors;
-				var mainValueArr = tmpSetColor.mainValueArr;
-				var tmpColorArr = tmpSetColor.tmpColorArr;
-				setLegendMake(this, mainValueArr, colors);
-				for(var i = 0; i < this.node.length ; i++)
-				{
-	            	this.node[i].setStroke(getColor(i, colors, mainValueArr, tmpColorArr));
-	            	this.node[i].setFill(getColor(i, colors, mainValueArr, tmpColorArr));
-				}
-			},
-			update: function(){
-				alert('scatter is updated');				
-			},
-			draw_regression: function(type, xArr, yArr){
-				if(type == "linear")
-					this.linear = true;
-				if(type == "loess")
-					this.loess = true;
-				var tickRange = (this.xMax-this.xMin)/this.xTick;	
-				var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
-				tickRange = setTickRange(tmp, tickRange);
-		        var max = tickRange * Math.ceil(this.xMax/tickRange);		      
-		        var min = tickRange * Math.floor(this.xMin/tickRange);
-		        var nodeX = new Array(xArr.length)
-				for(var i = 0 ; i < nodeX.length ; i ++)
-				{
-					nodeX[i] = this.width* ((xArr[i]-min)) /((max - min));
-				} 		        
-		        tickRange = (this.yMax-this.yMin)/this.yTick;	
-				tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
-				tickRange = setTickRange(tmp, tickRange);
-		        max = tickRange * Math.ceil(this.yMax/tickRange);		      
-		        min = tickRange * Math.floor(this.yMin/tickRange);
-		        var nodeY = new Array(yArr.length)	
-				for(var i = 0 ; i < nodeY.length ; i ++)
-				{
-					nodeY[i] = this.height* ((yArr[i]-min)) /((max - min));
-				}		        
-				var node = new Array(xArr.length)
-				var dataLayer = new Kinetic.Layer();
-		        for(var i = 1; i < xArr.length ; i++)
-				{
-					node[i-1] = new Kinetic.Line({
-                        points: [	nodeX[i-1] + this.plotXMargin, 
-                                 	this.height +this.plotYMargin - nodeY[i-1], 
-                                 	nodeX[i] + this.plotXMargin,
-                                     this.height +this.plotYMargin - nodeY[i]],
-                        stroke: 'black',
-                        strokeWidth: 2,             
-                    });
-					dataLayer.add(node[i-1]);
-				}
-				this.stage.add(dataLayer);     	
-			}
-	};
-    
+				}				
+				//Total layers added to plot stage.
+				addLayer(this, plotObject.stage);				
+    		}
+    }
 })();
-
+function addLayer(obj, stage)
+{
+	obj.plotLayer = new Kinetic.Layer();
+	if(obj.color != -1){
+		stage.setWidth(stage.getWidth() + obj.legendGroup.getWidth());
+		obj.plotLayer.add(obj.legendLayer);
+	}
+	obj.plotLayer.add(obj.xLabel);    
+	obj.plotLayer.add(obj.yLabel);    
+	obj.plotLayer.add(obj.mainLabel);
+	stage.add(obj.plotLayer);
+	stage.add(obj.dataLayer);
+}
+/**  set labels **/
+//set xLabel
+function setXLabel(obj, plot)
+{
+	obj.xLabel = new Kinetic.Text({
+   name : 'xLabel',
+   x: plot.plotXMargin + plot.width / 2,
+   y: plot.plotYMargin + plot.height + 5 * plot.plotLength,
+   offset : {x: obj._labelArr[obj.x].length/2 * 10, y:0},
+   text: obj._labelArr[obj.x],
+   fontSize: 15,
+   fontStyle: 'bold',
+   fontFamily: 'Calibri',
+   fill: 'black',
+});
+}
+//set yLabel
+function setYLabel(obj, plot)
+{
+	obj.yLabel = new Kinetic.Text({
+	 name : 'yLabel',
+   x: plot.plotXMargin - plot.plotLength - 40,
+   y: plot.plotYMargin + plot.height/2  - 15,
+   offset : {x: obj._labelArr[obj.y].length/2 * 10},
+   text: obj._labelArr[obj.y],
+   fontSize: 15,
+   fontStyle: 'bold',
+   fontFamily: 'Calibri',
+   fill: 'black',
+   rotation: (Math.PI)*3/2
+});
+}
+//set Main Label
+function setMainLabel(obj, plot)
+{
+	obj.mainLabel = new Kinetic.Text({
+   name : 'mainLabel',
+   x: plot.plotXMargin + plot.width/2, 
+   y: plot.plotYMargin * 0.3,
+   offset : {x: (obj._type + ' of ' + obj._labelArr[obj.x] + ' & ' + obj._labelArr[obj.y]).length/2 * 10, y:0},
+   text: obj._type + ' of ' + obj._labelArr[obj.x] + ' & ' + obj._labelArr[obj.y],
+   fontSize: 20,
+   fontStyle: 'bold',
+   fontFamily: 'Calibri',
+   fill: 'black',
+});
+}
+/**  set labels end **/
 
 
 function setColor(colorArr) //set color
@@ -652,7 +312,7 @@ function setColor(colorArr) //set color
 	 	var rgbCenter = 128;
 	 	var rgbWidth = 127;
 	 	for (var i = 0; i <24; ++i)
-	 	{isSelected
+	 	{
 	 		rgb.R[i]  = parseInt( Math.sin(rgbFreq*i + 0) * rgbWidth + rgbCenter );
 	 		rgb.G[i] = parseInt( Math.sin(rgbFreq*i + 2) * rgbWidth + rgbCenter );
 	 		rgb.B[i]  = parseInt( Math.sin(rgbFreq*i + 4) * rgbWidth + rgbCenter );
@@ -699,76 +359,7 @@ function getLegendColor(n, colors, mainValueArr)
 	}	
 }
 
-
-
-
-function makeAxisArr(dataArr, length, axis, tick, max, min)	 
-{														
-	var node = new Array(dataArr[axis].length);
-	if(isDiscrete[axis] == true)
-	{		
-		var tmp = new Array();  //the names of each content below
-		tmp[0] = dataArr[axis][0];
-		node[0] = 0;
-		for(var i = 1 ; i < dataArr[axis].length ; i++)
-    	{
-    		for(j = 0 ; j < tmp.length ; j ++)
-    		{
-    			if(tmp[j] == dataArr[axis][i])
-    			{
-    				node[i] = j;
-    				break;
-    			}	            				
-    		}
-    		if(j == tmp.length)
-    		{
-    			node[i] = j;
-    			tmp.push(dataArr[axis][i]);
-    		}
-    	}
-		var plotArr = make2DArr(tmp.length);
-		var diff = length / (tmp.length+1);
-		for(var i = 1 ; i < plotArr.length+1 ; i ++)
-		{
-			plotArr[i-1][0] = i*diff;
-			plotArr[i-1][1] = tmp[i-1];
-		}	
-		for(var i = 0 ; i < node.length ; i++)
-		{
-			node[i] = (node[i]+1)*diff;
-		}
-	}else{	    	
-		var tickRange = (max-min )/tick;	    		
-		var tmp = Math.ceil( Math.log(tickRange) / Math.log(10));
-		tickRange = setTickRange(tmp, tickRange);
-        max = tickRange * Math.ceil(max/tickRange);		      
-        min = tickRange * Math.floor(min/tickRange);
-    	var diff = length * tickRange   / (max - min);
-    	plotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));
-		for(var i = 0 ; i < plotArr.length ; i ++)
-		{
-			plotArr[i][0] = i*diff;
-			if (tickRange.toString().indexOf('.') == -1){
-				plotArr[i][1] = min+i*tickRange;
-			}else{				
-				var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
-				if(point > 3){ // for setting the resonable point
-					point = 3;
-				}
-				plotArr[i][1] = (min+i*tickRange).toFixed(point);
-			}
-		}		
-		for(var i = 0 ; i < node.length ; i ++)
-		{
-			node[i] = length* ((dataArr[axis][i]-min)) /((max - min));
-		}
-	}
-	return { plotArr : plotArr, node : node};
-}
-
-
-
-function makeLegend(legendX, legendY, mainValueArr, color, colors){
+function makeLegend(legendX, legendY, mainValueArr, color, colors, labelArr){
 	if(mainValueArr.length<24){
     	var legendNode = new Array();	
     	var legendText = new Array();	
@@ -890,26 +481,10 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors){
 }
 
 /**  legend set functions  **/
-//legend position setting.
-function setLegendPosition(obj)
-{
-	obj.legendX = 0;
-	obj.legendY = 0;
-	if (obj.legend == 'topright' || obj.legend == 'right')	{
-		obj.legendX = obj.plotXMargin+obj.width+obj.plotLength*5;
-		obj.legendY = obj.plotYMargin-obj.plotLength;
-	}else if(obj.legend == 'topleft' ||obj.legend == 'left'){
-		obj.legendX = obj.plotLength*5;
-		obj.legendY = obj.plotYMargin-obj.plotLength;	            		
-	}else{// default is center right
-		obj.legendX = obj.plotXMargin+obj.width+obj.plotLength*5;
-		obj.legendY = obj.plotYMargin-obj.plotLength;
-	}
-}
 //making legend setting.
 function setLegendMake(obj, mainValueArr, colors)
 {
-	var myLegend = makeLegend(obj.legendX, obj.legendY, mainValueArr, obj.color, colors);					
+	var myLegend = makeLegend(obj.legendX, obj.legendY, mainValueArr, obj.color, colors, obj._labelArr);					
 	obj.legendGroup = new Kinetic.Group({
 		width: myLegend.getWidth(),
 		height : myLegend.getHeight()
@@ -995,52 +570,6 @@ function scatterUpdate(obj, id)
 }
 /**  update function end  **/
 
-/**  set labels **/
-//set xLabel
-function scatterSetXLabel(obj)
-{
-	obj.xLabel = new Kinetic.Text({
-     name : 'xLabel',
-     x: obj.plotXMargin+obj.width/2,
-     y: obj.plotYMargin+obj.height+5*obj.plotLength,
-     offset : {x: labelArr[obj.x].length/2 * 10, y:0},
-     text: labelArr[obj.x],
-     fontSize: 15,
-     fontStyle: 'bold',
-     fontFamily: 'Calibri',
-     fill: 'black',
- });
-}
-//set yLabel
-function scatterSetYLabel(obj)
-{
-	obj.yLabel = new Kinetic.Text({
-     x: obj.plotXMargin-obj.plotLength - 40,
-     y: obj.plotYMargin+obj.height/2  - 15,
-     offset : {x: labelArr[obj.y].length/2 * 10},
-     text: labelArr[obj.y],
-     fontSize: 15,
-     fontStyle: 'bold',
-     fontFamily: 'Calibri',
-     fill: 'black',
-     rotation: (Math.PI)*3/2
- });
-}
-//set Main Label
-function scatterSetMainLabel(obj)
-{
-	obj.mainLabel = new Kinetic.Text({
-     name : 'mainLabel',
-     x: obj.plotXMargin+obj.width/2, 
-     y: obj.plotYMargin *0.3 ,
-     offset : {x: ('Scatter of ' + labelArr[obj.x] + ' & ' + labelArr[obj.y]).length/2 * 10, y:0},
-     text: 'Scatter of ' + labelArr[obj.x] + ' & ' + labelArr[obj.y],
-     fontSize: 20,
-     fontStyle: 'bold',
-     fontFamily: 'Calibri',
-     fill: 'black',
- });
-}
-/**  set labels end **/
+
 
 

@@ -25,6 +25,7 @@ shinyUI(bootstrapPage(
        <script src = \"kinetic-v4.5.4.js\"></script>
        <script src = \"structure.js\"></script>
        <script src = \"common.js\"></script>
+        <script src = \"axis.js\"></script>
        <script src = \"scatter.js\"></script>
        <script src = \"hist.js\"></script>
        <script src = \"box.js\"></script>
@@ -43,15 +44,15 @@ shinyUI(bootstrapPage(
        <div id=\"content1\" class = \"right-output1\" >
        <div id=\"content\" class = \"right-output\" >"),
   createDiv("container1"),
-  createDiv("histContainer2"),
-  createDiv("boxContainer3"),
-  createDiv("pieContainer4"),
+  createDiv("container2"),
+  createDiv("container3"),
+  createDiv("container4"),
   HTML("
        </div>
         </div>
        <script>
-        var axis1 = new MakeAxis(1, mainArr1, {x:'color', y:'cut'});
-        alert(mainArr1);
+        var axis1 = new MakeAxis(1, mainArr1, {x:'cut', y:'table'});
+        var scatter1 = new Scatter(1, axis1, mainArr1, {x:'cut', y:'table', color: 'cut'})
        
        </script>
 

@@ -1,18 +1,19 @@
 /**  draw sactter  **/
 var Scatter = {};    
 (function() {
-	Scatter = function(id, plotObject, mainArr, optionObj) {			
+	Scatter = function(plotObject, mainArr, optionObj) {			
 		this._type = 'scatter';		
-		this._id = id;
+		this._id = mainArr.id;
 		this._labelArr = mainArr.labelArr; //localize later
-		//objArr[id-1] = this;
+		objArr[mainArr.id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
 		this.stage = plotObject.stage;
-		this.draw(id, plotObject, mainArr, optionObj);
+		this.draw(plotObject, mainArr, optionObj);
+		mainArr.id ++;
     };
     Scatter.prototype = {
-    		draw : function(id, plotObject, mainArr, optionObj) {
+    		draw : function(plotObject, mainArr, optionObj) {
     			//check radius.
     			if(optionObj.radius != undefined){
     				this.radius = optionObj.radius;
@@ -166,7 +167,7 @@ var Scatter = {};
     						selected : 0,
     						info :  "Node : " + cnt + "\r\n" + tooltipTextGetInfo[i]
     					});
-    					mainArr.isSelected[i][id] = scatterUpdate(this, cnt);	//save event handler
+    					mainArr.isSelected[i][this._id] = scatterUpdate(this, cnt);	//save event handler
     					cnt ++;
     				}else{
     					overCnt ++;

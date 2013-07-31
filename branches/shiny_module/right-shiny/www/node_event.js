@@ -80,18 +80,18 @@ function checkKeyUp(e)
         }
 }       
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-function eventTrigger(Name)
+function eventTrigger(Name, mainArr)
 {
         hover(Name);
-       // select(Name);
+        select(Name, mainArr);
        // menu(Name);
-        drag(Name);
+        drag(Name, mainArr);
         
 }
 
 
 var dragOn = false;
-function drag(Name)
+function drag(Name, mainArr)
 {
         var preDragMousePos;
         var aftDragMousePos;
@@ -99,8 +99,8 @@ function drag(Name)
         var rangeBox = new Kinetic.Rect({
                 x: 0,
                 y: 0, 
-                width : 100,
-                height : 100,
+                width : 0,
+                height : 0,
                 fill: "blue",
                 stroke: "blue",                                         
                 opacity : 0.3
@@ -182,14 +182,13 @@ function drag(Name)
                                 rangeBox.setHeight(0);
                                 rangeBoxLayer.drawScene();
                                 moving = false;
-                        //      alert(tmpName);
-                             //   RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
+                                RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos, mainArr);
                                 
                         }
                 }
         }, true);
 }
-function RectRangeSelect(Name, pre, aft)
+function RectRangeSelect(Name, pre, aft, mainArr)
 {
         
         var smallX, bigX;
@@ -211,7 +210,7 @@ function RectRangeSelect(Name, pre, aft)
         
         if(ctrlPressed == false)
         {
-                allDeselect();
+                allDeselect(mainArr.isSelected);
         }       
         //alert(Name._type);
         if(Name._type == undefined)
@@ -222,7 +221,7 @@ function RectRangeSelect(Name, pre, aft)
                         {
                                 if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
                                 {
-                                                allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);                      
+                                                allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
                                 }
                         }
                 }else{
@@ -230,7 +229,7 @@ function RectRangeSelect(Name, pre, aft)
                         {
                                 if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
                                 {
-                                                allGraphUpdate(i ,1, Name);                     
+                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);                     
                                 }
                         }
                 }
@@ -241,7 +240,7 @@ function RectRangeSelect(Name, pre, aft)
                         {
                                 if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
                                 {
-                                                allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);                      
+                                                allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
                                 }
                         }
                 }else{
@@ -249,7 +248,7 @@ function RectRangeSelect(Name, pre, aft)
                         {
                                 if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
                                 {
-                                                allGraphUpdate(i ,1, Name);                     
+                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);                     
                                 }
                         }
                 }
@@ -260,12 +259,12 @@ function RectRangeSelect(Name, pre, aft)
                                 if(Name.node[i].getIsOutlier()){
                                         if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
                                         {
-                                                        allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);                      
+                                                        allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
                                         }
                                 }else{
                                         if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
                                         {
-                                                        allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name);                      
+                                                        allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
                                         }
                                 }                               
                         }
@@ -275,19 +274,19 @@ function RectRangeSelect(Name, pre, aft)
                                 if(Name.node[i].getIsOutlier()){
                                         if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
                                         {
-                                                allGraphUpdate(i ,1, Name);
+                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                         }
                                 }else{
                                         if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
                                         {
-                                                allGraphUpdate(i ,1, Name);     
+                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);     
                                         }
                                 }
                         }
                 }
         }
         refresh();
-        addRow('dataTable');
+     //   addRow('dataTable');
         
 }
 
@@ -396,7 +395,7 @@ function hover(Name)
   });    
 }
 
-function select(Name)
+function select(Name, mainArr)
 {
         
         Name.stage.on('click', function(evt){
@@ -415,13 +414,13 @@ function select(Name)
                         //      alert(tmpX + " , " + tmpY);
                                 if(aPressed){   //select ALL
                                         Name.tmpShift = false;
-                                        allSelect();
+                                        allSelect(mainArr.isSelected);
                                 }else if(gPressed){
                                         Name.tmpShift = false;
                                 }else if(shiftPressed && Name.preId.x != -1){                    
                                         
                                         Name.tmpShift = true;
-                                        allDeselect();
+                                        allDeselect(mainArr.isSelected);
                                         
                                         if(Name._type == "scatter")
                                         {
@@ -432,7 +431,7 @@ function select(Name)
                                                                 {
                                                                         if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <=Name.preId.x && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
                                                                         {                                                                       
-                                                                                allGraphUpdate(i ,1, Name);
+                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }else if(Name.preId.y <= tmpY){
@@ -440,7 +439,7 @@ function select(Name)
                                                                 {
                                                                         if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
                                                                         {                                                                       
-                                                                                allGraphUpdate(i ,1, Name);
+                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }
@@ -451,7 +450,7 @@ function select(Name)
                                                                 {
                                                                         if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX  && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
                                                                         {                                                                       
-                                                                                allGraphUpdate(i ,1, Name);
+                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }else if(Name.preId.y <= tmpY){
@@ -459,7 +458,7 @@ function select(Name)
                                                                 {
                                                                         if((Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX) && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
                                                                         {                               
-                                                                                allGraphUpdate(i ,1, Name);
+                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }
@@ -472,7 +471,7 @@ function select(Name)
                                                         {
                                                                 if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x)
                                                                 {
-                                                                        allGraphUpdate(i ,1, Name);
+                                                                        allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                 }
                                                         }
                                                 }else if(Name.preId.x <= tmpX){
@@ -480,7 +479,7 @@ function select(Name)
                                                         {
                                                                 if(tmpX >= Name.node[i].getX() && Name.node[i].getX() >= Name.preId.x)
                                                                 {
-                                                                        allGraphUpdate(i ,1, Name);
+                                                                        allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                 }
                                                         }
                                                 }
@@ -489,15 +488,15 @@ function select(Name)
                                 }else if(ctrlPressed){ //select mutiple node one by one.
                                         if(node.getSelected() == 0)
                                         {
-                                                allGraphUpdate(node.getName(), 1 , Name);
+                                                allGraphUpdate(node.getName(), 1 , Name, mainArr.isSelected);
                                         }else if(node.getSelected() == 1){
-                                                allGraphUpdate(node.getName(), 0 , Name);
+                                                allGraphUpdate(node.getName(), 0 , Name, mainArr.isSelected);
                                         }
                                         Name.tmpShift = false;
                                 }else{  // just one click
                                         Name.tmpShift = false;
-                                        allDeselect();
-                                        allGraphUpdate(node.getName(), 1 , Name);
+                                        allDeselect(mainArr.isSelected);
+                                        allGraphUpdate(node.getName(), 1 , Name, mainArr.isSelected);
                                 }       
                                 if(Name.tmpShift == false)
                                 {
@@ -506,13 +505,13 @@ function select(Name)
                         }else{
                                 if(!(ctrlPressed || shiftPressed || aPressed || gPressed))
                                 {
-                                        allDeselect();
+                                        allDeselect(mainArr.isSelected);
                                         Name.preId = {x : -1 , y : -1};
                                 }                               
                         }
                         
                         refresh();
-                        addRow('dataTable');
+                   //     addRow('dataTable');
                 }
         });
         

@@ -100,6 +100,7 @@ function createMainStructure(fileName)
 	dataArr = mainArr;
 	
 	return { 
+		'id'			: 1,
 		'dataArr' 		: dataArr,
 		'labelArr' 		: labelArr,
 		'isSelected'	: isSelected,

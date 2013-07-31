@@ -178,7 +178,7 @@ function getXYpos(elm) {
 
 
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate(id , select, name) 
+function allGraphUpdate(id , select, name, isSelected) 
 {	
 	if(name._type == "scatter")
 	{
@@ -239,7 +239,7 @@ function refresh()
 	} 
 }
 
-function allSelect()
+function allSelect(isSelected)
 {
 	for(var i = 0 ; i < isSelected.length; i ++)
 	{
@@ -255,7 +255,7 @@ function allSelect()
 			break;
 	}
 }
-function allDeselect()
+function allDeselect(isSelected)
 {
 	for(var i = 0 ; i < isSelected.length; i ++)
 	{		

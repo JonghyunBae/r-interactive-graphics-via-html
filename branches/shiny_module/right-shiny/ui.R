@@ -52,7 +52,8 @@ shinyUI(bootstrapPage(
         </div>
        <script>
         var axis1 = new MakeAxis(1, mainArr1, {x:'cut', y:'table'});
-        var scatter1 = new Scatter(1, axis1, mainArr1, {x:'cut', y:'table', color: 'cut'})
+        var scatter1 = new Scatter(1, axis1, mainArr1, {x:'cut', y:'table', color: 'cut'});
+        eventTrigger(scatter1);
        
        </script>
 

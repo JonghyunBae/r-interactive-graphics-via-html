@@ -8,6 +8,7 @@ var Scatter = {};
 		//objArr[id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
+		this.stage = plotObject.stage;
 		this.draw(id, plotObject, mainArr, optionObj);
     };
     Scatter.prototype = {
@@ -139,6 +140,14 @@ var Scatter = {};
     					}
     				}
     			}
+    			var tooltipTextGetInfo = new Array();
+				for(var i = 0; i < mainArr.dataArr[this.y].length ; i++)
+				{
+					tooltipTextGetInfo[i] = this._labelArr[0]+" : " + mainArr.dataArr[0][i]+ "\r\n" ;
+					for(var j=1; j< this._labelArr.length ; j++){
+						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ this._labelArr[j]+" : " + mainArr.dataArr[j][i]+ "\r\n" ;
+					}
+				}
     			//set dots.
     			this.node = new Array();
     			var cnt = 0;
@@ -154,10 +163,10 @@ var Scatter = {};
     						stroke: (this.color == -1) ? 'green': getColor(i,colors, mainValueArr, tmpColorArr),
     						strokeWidth: 1,
     						fill: (this.color == -1) ? 'green': getColor(i,colors, mainValueArr, tmpColorArr),
-    						selected : 0
-    						//info :  "Node : "+i+"\r\n"+tooltipTextGetInfo[i]
+    						selected : 0,
+    						info :  "Node : " + cnt + "\r\n" + tooltipTextGetInfo[i]
     					});
-    					//isSelected[i][id] = scatterUpdate(this, i);	//save event handler
+    					mainArr.isSelected[i][id] = scatterUpdate(this, cnt);	//save event handler
     					cnt ++;
     				}else{
     					overCnt ++;
@@ -170,6 +179,7 @@ var Scatter = {};
     			setXLabel(this, plotObject);
 				setYLabel(this, plotObject);
 				setMainLabel(this, plotObject);
+				setTooltip(this);
 				
 				// make dataLayer.
     			this.dataLayer = new Kinetic.Layer();	
@@ -183,8 +193,8 @@ var Scatter = {};
 					this.dataLayer.add(this.node[i]);
 				}				
 				//Total layers added to plot stage.
-				addLayer(this, plotObject.stage);				
-    		}
+				addLayer(this, plotObject.stage);
+		}
     }
 })();
 function addLayer(obj, stage)
@@ -193,12 +203,15 @@ function addLayer(obj, stage)
 	if(obj.color != -1){
 		stage.setWidth(stage.getWidth() + obj.legendGroup.getWidth());
 		obj.plotLayer.add(obj.legendLayer);
-	}
+	}	
 	obj.plotLayer.add(obj.xLabel);    
 	obj.plotLayer.add(obj.yLabel);    
 	obj.plotLayer.add(obj.mainLabel);
-	stage.add(obj.plotLayer);
+	stage.add(obj.tooltipLayer);
 	stage.add(obj.dataLayer);
+	stage.add(obj.plotLayer);
+	
+	
 }
 /**  set labels **/
 //set xLabel

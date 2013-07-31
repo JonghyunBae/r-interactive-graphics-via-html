@@ -83,8 +83,8 @@ function checkKeyUp(e)
 function eventTrigger(Name)
 {
         hover(Name);
-        select(Name);
-        menu(Name);
+       // select(Name);
+       // menu(Name);
         drag(Name);
         
 }
@@ -99,21 +99,19 @@ function drag(Name)
         var rangeBox = new Kinetic.Rect({
                 x: 0,
                 y: 0, 
-                width : 0,
-                height : 0,
+                width : 100,
+                height : 100,
                 fill: "blue",
                 stroke: "blue",                                         
                 opacity : 0.3
         });
         var rangeBoxLayer = new Kinetic.Layer();
-        Name.stage.add(rangeBoxLayer);
-        rangeBoxLayer.add(rangeBox);
-        
+        rangeBoxLayer.add(rangeBox); 
+        Name.stage.add(rangeBoxLayer);        
         var moving = false;
         var divid;
-        Name.plotLayer.on('mousedown touchstart', function(evt){
+        Name.stage.on('mousedown touchstart', function(evt){
                 if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-                        //alert(preDragMousePos.x);
                         divid = mouseName;
                         preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
                         if(moving == true){
@@ -185,7 +183,7 @@ function drag(Name)
                                 rangeBoxLayer.drawScene();
                                 moving = false;
                         //      alert(tmpName);
-                                RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
+                             //   RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
                                 
                         }
                 }

@@ -1,71 +1,42 @@
+/**  MakeAxis draws an axis  **/
+// id should be matched with container id.
+// xArr, yArr should be array.
+// xDiscrete, yDiscrete should be true or false.
+// optionObj can be width, height, xTick, yTick, xLabel, yLabel, bin.
+
 var MakeAxis = {};
+
 (function() {
-	 MakeAxis = function(id, mainArr, optionObj) {
-		this._id = id;
-		this._buildAxis(id, mainArr, optionObj);
-		this._drawAxis(id, mainArr, optionObj);
+	
+	MakeAxis = function(id, xArr, yArr, xDiscrete, yDiscrete, optionObj) {
+		
+		this.id = id;
+		this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
+		this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300
+		this.bin = (optionObj.xTick == undefined) ? (2) : (optionObj.xTick); //default bin is 2
+		this.xTick = (optionObj.xTick == undefined) ? (5) : (optionObj.xTick); //default x tick is 5
+        this.yTick = (optionObj.yTick == undefined) ? (5) : (optionObj.yTick); //default y tick is 5
+		this.plotXMargin = this.width*0.2; //canvas left, right margin
+		this.plotYMargin = this.height*0.2; //canvas top, bottom margin
+		this.plotLength = this.width*0.02; //margin from plot box
+		
+		document.getElementById('container'+ id).onmousemove = getCoords;
+		document.getElementById('container'+ id).onclick = function() {
+	        document.getElementById('regcoords');
+	    };
+
+		this._build(xArr, yArr, xDiscrete, yDiscrete, optionObj);
+		this._draw();
 	}
+
 	MakeAxis.prototype = {
-		_buildAxis: function(id, mainArr, optionObj) {
-			this.xTick= (optionObj.xTick==undefined)?(5):(optionObj.xTick);	//default x tick is 5
-            this.yTick= (optionObj.yTick==undefined)?(5):(optionObj.yTick); //default y tick is 5
-			//set width.
-			if(optionObj.width != undefined){
-				this.width = optionObj.width;
-			}else{
-				if(optionObj.width == undefined){
-					this.width = 300;
-				}
-			}
-			//set height.
-			if(optionObj.height != undefined){
-				this.height = optionObj.height;
-			}else{
-				if(optionObj.height == undefined){
-					this.height = 300;
-				}
-			}
-			this.plotXMargin=this.width*0.2; //canvas left, right margin
-			this.plotYMargin=this.height*0.2; //canvas top, bottom margin
-			this.plotLength=this.width*0.02; //margin from plot box
-			//check the x label
-			if(optionObj.x != undefined){
-			 	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
-			     {
-			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-			     		this.x =  i;
-			     		 break;
-			     	}
-			     	if(i == mainArr.labelArr.length - 1){
-			     		alert('retype x label');
-			     		this.x = 0;
-			     	}
-			     }
-			}else{
-				alert('x should be defined!');
-				this.x = 0;
-			}
-			//check the y label
-			 if(optionObj.y != undefined){
-				 for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
-			     {
-			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-			     		this.y =  i;
-			     		 break;
-			     	}
-			     	if(i == mainArr.labelArr.length - 1){
-			     		alert('retype y label');
-			     		this.y = 0;
-			     	}
-			     }
-			}else{
-				alert('y should be defined!');
-				this.y = 0;
-			}
-			//check if continuous or discrete.
-			if(mainArr.isDiscrete[this.x] == true){
+			
+		_build: function(xArr, yArr, xDiscrete, yDiscrete, optionObj) {			
+			
+			// check if continuous or discrete.
+			if(xDiscrete == true){
 				this.xDiscrete = true;
-				var tmp = setAxis_discrete(mainArr.dataArr, this.x, this.width);
+				var tmp = setAxis_discrete(xArr, this.width);
 				this.xMax = -1;
 				this.xMin = -1;
 				this.xNode = tmp.node;
@@ -73,17 +44,18 @@ var MakeAxis = {};
 				this.xPlotArr = tmp.array;
 			}else{
 				this.xDiscrete = false;
-				this.xMax = findMaxValue(mainArr.dataArr[this.x]);
-	            this.xMin = findMinValue(mainArr.dataArr[this.x]);	            
+				var temp = findMaxMinValue(xArr);
+				this.xMax = temp.max;
+	            this.xMin = temp.min;
 				var tmp = setAxis_continue(this.xMax, this.xMin, this.xTick, this.width);
 				this.xMax = tmp.max;
 				this.xMin = tmp.min;
 				this.xdiff = -1;
 				this.xPlotArr= tmp.array;		
 			}
-			if(mainArr.isDiscrete[this.y] == true){
+			if(yDiscrete == true){
 				this.yDiscrete = true;
-				var tmp = setAxis_discrete(mainArr.dataArr, this.y, this.height);
+				var tmp = setAxis_discrete(yArr, this.height);
 				this.yMax = -1;
 				this.yMin = -1;
 				this.yNode = tmp.node;
@@ -91,54 +63,60 @@ var MakeAxis = {};
 				this.yPlotArr = tmp.array;
 			}else{
 				this.yDiscrete = false;
-				this.yMax = findMaxValue(mainArr.dataArr[this.y]);
-	            this.yMin = findMinValue(mainArr.dataArr[this.y]);
+				var temp = findMaxMinValue(yArr);
+				this.yMax = temp.max;
+	            this.yMin = temp.min;
 				var tmp = setAxis_continue(this.yMax, this.yMin, this.yTick, this.height);
 				this.yMax = tmp.max;
 				this.yMin = tmp.min;
 				this.ydiff = -1;
 				this.yPlotArr= tmp.array;				
 			}
-			//set plotRect.
-			setPlotRect(this);
-			//set axis variables.
-			setXAxis(this);
-			setYAxis(this);
+			// make stage.
+			makeStageLayer(this);
+			// make plotRect.
+			makePlotRectLayer(this);
+			// make axis layers.
+			makeXAxisLayer(this);
+			makeYAxisLayer(this);
+			// make label layers.
+			if(optionObj.xLabel != undefined){
+				makeXLabelLayer(this, optionObj.xLabel);
+			}
+			if(optionObj.yLabel != undefined){
+				makeYLabelLayer(this, optionObj.yLabel);
+			}
 		},
-		changeY: function() {
-			setYAxis(this);
-			this._drawAxis(this._id);
-		},
-		_drawAxis: function(id) {
-			document.getElementById('container'+id).onmousemove =getCoords;
-			document.getElementById('container'+id).onclick = function() {
-		        document.getElementById('regcoords');
-		    };
-			this.stage = new Kinetic.Stage({            
-				container: 'container'+id,            
-				width : this.width+this.plotXMargin*2,						
-				height: this.height+this.plotYMargin*2 
-			});		
+		
+		_draw: function() {
 			
 			this.plotLayer = new Kinetic.Layer();
-			//add base rectangular.
+			// add base rectangular.
 			this.plotLayer.add(this.plotRect);				
-			//add x axis layer.
+			// add x axis layer.
 			for(var i = 0 ; i < this.xLine.length ; i ++){
 				this.plotLayer.add(this.xLine[i]); 
 			    this.plotLayer.add(this.xText[i]);
 			}			
-			//add y axis layer.				
+			// add y axis layer.				
 			for(var i = 0 ; i < this.yLine.length ; i ++){
 				this.plotLayer.add(this.yLine[i]); 
 		        this.plotLayer.add(this.yText[i]);
+			}
+			// add x, y label.
+			if(this.xLabel != undefined){
+				this.plotLayer.add(this.xLabel);
+			}
+			if(this.yLabel != undefined){
+				this.plotLayer.add(this.yLabel);
 			}
 			this.stage.add(this.plotLayer);
 		}
 	}
 })();
 
-//set axis with continuous data.
+/**  set axis  **/
+// set axis with continuous data.
 function setAxis_continue(max, min, tick, length)
 {
 	var tickRange = (max - min) / tick;
@@ -167,18 +145,18 @@ function setAxis_continue(max, min, tick, length)
 		'array'	: plotArr
 	};
 }
-//set axis with discrete data.
-function setAxis_discrete(dataArr, axis, length)
+// set axis with discrete data.
+function setAxis_discrete(array, length)
 {
 	var node = new Array();
 	node[0] = 0;
 	var tmp = new Array();  //the names of each content below
-	tmp[0] = dataArr[axis][0];
-	for(var i = 1 ; i < dataArr[axis].length ; i++)
+	tmp[0] = array[0];
+	for(var i = 1 ; i < array.length ; i++)
 	{
 		for(j = 0 ; j < tmp.length ; j ++)
 		{
-			if(tmp[j] == dataArr[axis][i])
+			if(tmp[j] == array[i])
 			{
 				node[i] = j;
 				break;
@@ -187,7 +165,7 @@ function setAxis_discrete(dataArr, axis, length)
 		if(j == tmp.length)
 		{
 			node[i] = j;
-			tmp.push(dataArr[axis][i]);
+			tmp.push(array[i]);
 		}
 	}
 	var plotArr = make2DArr(tmp.length);
@@ -205,31 +183,90 @@ function setAxis_discrete(dataArr, axis, length)
 		'array' : plotArr
 	};	
 }
+/**  set axis end  **/
+/**  make stage  **/
+function makeStageLayer(obj)
+{
+	obj.stage = new Kinetic.Stage({
+		container: 'container'+ obj.id,
+		width : obj.width+obj.plotXMargin*2,
+		height: obj.height+obj.plotYMargin*2
+	});
+}
+/**  make stage end  **/
+/**  make plotRect  **/
+function makePlotRectLayer(obj)
+{
+	obj.plotRect = new Kinetic.Rect({
+		name : "baseRect",
+		x: obj.plotXMargin - obj.plotLength,
+		y: obj.plotYMargin - obj.plotLength,
+		width: obj.width + 2*obj.plotLength,
+		height: obj.height + 2*obj.plotLength,
+		stroke: 'black',
+		strokeWidth: 2
+	});
+}
+/**  make plotRect end **/
+/**  make x, y label layers  **/
+// set xLabel
+function makeXLabelLayer(obj, label)
+{
+	obj.xLabel = new Kinetic.Text({
+	   name : 'xLabel',
+	   x: obj.plotXMargin + obj.width / 2,
+	   y: obj.plotYMargin + obj.height + 5*obj.plotLength,
+	   offset : {x: label.length/2 * 10, y:0},
+	   text: label,
+	   fontSize: 15,
+	   fontStyle: 'bold',
+	   fontFamily: 'Calibri',
+	   fill: 'black',
+	});
+}
+// set yLabel
+function makeYLabelLayer(obj, label)
+{
+	obj.yLabel = new Kinetic.Text({
+		name : 'yLabel',
+		x: obj.plotXMargin - obj.plotLength - 40,
+		y: obj.plotYMargin + obj.height/2  - 15,
+		offset : {x: label.length/2 * 10},
+		text: label,
+		fontSize: 15,
+		fontStyle: 'bold',
+		fontFamily: 'Calibri',
+		fill: 'black',
+		rotation: (Math.PI)*3/2
+	});
+}
+/**  make x, y label layers end  **/
 
-
-/**  set axis  **/
-//set x axis variables.
-//xPlotArr should be needed.
-function setXAxis(obj)
+/**  make axis layers  **/
+// make x axis variables.
+// xPlotArr should be needed.
+function makeXAxisLayer(obj)
 {
 	obj.xLine = new Array();
 	obj.xText = new Array();
-	for(var i = 0; i < obj.xPlotArr.length; i++)
+	for(var i = 0; i < obj.xPlotArr.length ; i ++)
 	{
 		obj.xLine[i] = new Kinetic.Line({
 	        name : "xLine"+i,
-	        points: [	obj.plotXMargin+obj.xPlotArr[i][0],
-	                 	obj.plotYMargin+obj.height+obj.plotLength,
-	                 	obj.plotXMargin+obj.xPlotArr[i][0],
-	                 	obj.plotYMargin+obj.height+2*obj.plotLength],
+	        points: [
+	                 	obj.plotXMargin + obj.xPlotArr[i][0],
+	                 	obj.plotYMargin + obj.height + obj.plotLength,
+	                 	obj.plotXMargin + obj.xPlotArr[i][0],
+	                 	obj.plotYMargin + obj.height + 2*obj.plotLength
+	                 ],
 	        stroke: 'black',
 	        strokeWidth: 2,             
 	    });
 	                  
 	    obj.xText[i] = new Kinetic.Text({
 	        name : "xText"+i,
-	        x: obj.plotXMargin+obj.xPlotArr[i][0]-30,
-	        y: obj.plotYMargin+obj.height+obj.plotLength*2,
+	        x: obj.plotXMargin + obj.xPlotArr[i][0] - 30,
+	        y: obj.plotYMargin + obj.height + 2*obj.plotLength,
 	        text: obj.xPlotArr[i][1],
 	        fontSize: 15,
 	        fontFamily: 'Calibri',
@@ -239,26 +276,28 @@ function setXAxis(obj)
 	    });      
 	} 
 }
-//set y axis variables.
-//yPlotArr should be needed.
-function setYAxis(obj)
+// make y axis variables.
+// yPlotArr should be needed.
+function makeYAxisLayer(obj)
 {
 	obj.yLine = new Array();
 	obj.yText = new Array();
 
-for(var i = 0; i < obj.yPlotArr.length ; i++)
+for(var i = 0; i < obj.yPlotArr.length ; i ++)
 {
 	obj.yLine[i] = new Kinetic.Line({
-       points: [	obj.plotXMargin-obj.plotLength, 
-                	obj.plotYMargin+obj.height-obj.yPlotArr[i][0], 
-                	obj.plotXMargin-2*obj.plotLength,
-                	obj.plotYMargin+obj.height-obj.yPlotArr[i][0]],
+       points: [
+                	obj.plotXMargin - obj.plotLength, 
+                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0], 
+                	obj.plotXMargin - 2*obj.plotLength,
+                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0]
+       			],
        stroke: 'black',
        strokeWidth: 2,             
    });              
    obj.yText[i] = new Kinetic.Text({
-       x: obj.plotXMargin-obj.plotLength*2-15,
-       y: obj.plotYMargin+obj.height-obj.yPlotArr[i][0]+30,
+       x: obj.plotXMargin - obj.plotLength*2-15,
+       y: obj.plotYMargin + obj.height- obj.yPlotArr[i][0] + 30,
        text: obj.yPlotArr[i][1],
        fontSize: 15,
        fontFamily: 'Calibri',
@@ -269,4 +308,4 @@ for(var i = 0; i < obj.yPlotArr.length ; i++)
    });        
 }
 }
-/**  set axis end  **/
+/**  make axis layers end  **/

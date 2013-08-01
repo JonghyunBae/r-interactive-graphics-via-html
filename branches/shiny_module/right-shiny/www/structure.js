@@ -33,7 +33,7 @@ function csv2Arr(data, liveChar)
  		cursor = data.charAt(i++);
  	}
  	return result_array;
- }
+}
 
 function getData(fileName)
 {
@@ -56,16 +56,6 @@ function make2DArr(rows) {
 	  }
 	  return arr;
 }
-function printMakeData(labelArr)
-{
-	document.write("<script>");
-	document.write("var makedata = function (dataArr, labelArr){");
-	for(var i = 0 ; i < labelArr.length ; i ++){
-		document.write("this." + labelArr[i] + "= dataArr[" + i + "];");
-	}
-	document.write("};");
-	document.write("</script>");
-}
 
 function createMainStructure(fileName)
 {	
@@ -76,6 +66,7 @@ function createMainStructure(fileName)
 	var isHidden = new Array(dataArr.length);	// false -> not hidden, true -> hidden.
 	var mainArr = make2DArr(labelArr.length + 1);		
 	var isDiscrete = new Array(labelArr.length);
+	
 	for(var j=0; j<dataArr.length; j++)
 	{
 		var tmpArr = dataArr[j].toString().split(',');	
@@ -97,17 +88,22 @@ function createMainStructure(fileName)
 		mainArr[i][j] = j; // save original number.
 		isSelected[j][0] = 0;	
 	}
-	dataArr = mainArr;
-	
-	return { 
-		'id'			: 1,
-		'dataArr' 		: dataArr,
-		'labelArr' 		: labelArr,
-		'isSelected'	: isSelected,
-		'isDiscrete'	: isDiscrete,
-		'isHidden'		: isHidden
-		};	
-}		
+
+	var totalArr = new Object();
+	var isDisObject = new Object();
+	for(var i = 0 ; i < labelArr.length ; i ++){
+		totalArr[labelArr[i]] = mainArr[i];
+		isDisObject[labelArr[i]] = isDiscrete[i];
+	}
+	var redraw = new Array();
+	totalArr.size = labelArr.length;
+	totalArr.isSelected = isSelected;
+	totalArr.isDiscrete = isDisObject;
+	totalArr.isHidden = isHidden;
+	totalArr.id = 1;
+	totalArr.redraw = redraw;
+	return totalArr;
+}
 
 
 		

@@ -213,43 +213,7 @@ function addLayer(obj, stage)
 	stage.add(obj.plotLayer);	
 }
 /**  set labels **/
-//set xLabel
-function setXLabel(obj, plot)
-{
-	obj.xLabel = new Kinetic.Text({
-   name : 'xLabel',
-   x: plot.plotXMargin + plot.width / 2,
-   y: plot.plotYMargin + plot.height + 5 * plot.plotLength,
-   offset : {x: obj._labelArr[obj.x].length/2 * 10, y:0},
-   text: obj._labelArr[obj.x],
-   fontSize: 15,
-   fontStyle: 'bold',
-   fontFamily: 'Calibri',
-   fill: 'black',
-});
-}
-//set yLabel
-function setYLabel(obj, plot)
-{
-	if(obj._type == "scatter"){
-		var yLabel = obj._labelArr[obj.y];
-	}else if(obj._type == "hist"){
-		var yLabel = "Frequency";
-	}
-	 
-	obj.yLabel = new Kinetic.Text({
-	 name : 'yLabel',
-   x: plot.plotXMargin - plot.plotLength - 40,
-   y: plot.plotYMargin + plot.height/2  - 15,
-   offset : {x: yLabel.length/2 * 10},
-   text: yLabel,
-   fontSize: 15,
-   fontStyle: 'bold',
-   fontFamily: 'Calibri',
-   fill: 'black',
-   rotation: (Math.PI)*3/2
-});
-}
+
 //set Main Label
 function setMainLabel(obj, plot)
 {

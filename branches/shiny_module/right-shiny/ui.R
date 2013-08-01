@@ -51,12 +51,13 @@ shinyUI(bootstrapPage(
        </div>
         </div>
        <script>
-        var axis1 = new MakeAxis(1, mainArr1, {x:'cut', y:'table'});
-        var scatter1 = new Scatter(axis1, mainArr1, {x:'cut', y:'table', color: 'cut'});
-        eventTrigger(scatter1, mainArr1);
-        var axis2 = new MakeAxis(2, mainArr1, {x:'cut', y:'depth'});
-        var hist1 = new Hist(axis2, mainArr1, {x:'cut', color: 'cut'});
-        eventTrigger(hist1, mainArr1);
+        var axis1 = new MakeAxis(1, mainArr1[\"carat\"], mainArr1[\"table\"], mainArr1.isDiscrete[\"carat\"], mainArr1.isDiscrete[\"table\"], {xLabel : \"carat\", yLabel : \"table\"})
+        //var axis1 = new MakeAxis(1, mainArr1, {x:'cut', y:'table'});
+        //var scatter1 = new Scatter(axis1, mainArr1, {x:'cut', y:'table', color: 'cut'});
+        //eventTrigger(scatter1, mainArr1);
+        //var axis2 = new MakeAxis(2, mainArr1, {x:'cut', y:'depth'});
+        //var hist1 = new Hist(axis2, mainArr1, {x:'cut', color: 'cut'});
+        //eventTrigger(hist1, mainArr1);
        
        </script>
 

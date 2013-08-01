@@ -1,6 +1,7 @@
 var MakeAxis = {};
 (function() {
 	 MakeAxis = function(id, mainArr, optionObj) {
+		this._id = id;
 		this._buildAxis(id, mainArr, optionObj);
 		this._drawAxis(id, mainArr, optionObj);
 	}
@@ -68,7 +69,7 @@ var MakeAxis = {};
 				this.xMax = -1;
 				this.xMin = -1;
 				this.xNode = tmp.node;
-				this.diff = tmp.diff;
+				this.xdiff = tmp.diff;
 				this.xPlotArr = tmp.array;
 			}else{
 				this.xDiscrete = false;
@@ -77,6 +78,7 @@ var MakeAxis = {};
 				var tmp = setAxis_continue(this.xMax, this.xMin, this.xTick, this.width);
 				this.xMax = tmp.max;
 				this.xMin = tmp.min;
+				this.xdiff = -1;
 				this.xPlotArr= tmp.array;		
 			}
 			if(mainArr.isDiscrete[this.y] == true){
@@ -85,7 +87,7 @@ var MakeAxis = {};
 				this.yMax = -1;
 				this.yMin = -1;
 				this.yNode = tmp.node;
-				this.diff = tmp.diff;
+				this.ydiff = tmp.diff;
 				this.yPlotArr = tmp.array;
 			}else{
 				this.yDiscrete = false;
@@ -94,7 +96,7 @@ var MakeAxis = {};
 				var tmp = setAxis_continue(this.yMax, this.yMin, this.yTick, this.height);
 				this.yMax = tmp.max;
 				this.yMin = tmp.min;
-				this.diff = -1;
+				this.ydiff = -1;
 				this.yPlotArr= tmp.array;				
 			}
 			//set plotRect.
@@ -103,8 +105,11 @@ var MakeAxis = {};
 			setXAxis(this);
 			setYAxis(this);
 		},
-		
-		_drawAxis: function(id, mainArr, optionObj) {
+		changeY: function() {
+			setYAxis(this);
+			this._drawAxis(this._id);
+		},
+		_drawAxis: function(id) {
 			document.getElementById('container'+id).onmousemove =getCoords;
 			document.getElementById('container'+id).onclick = function() {
 		        document.getElementById('regcoords');

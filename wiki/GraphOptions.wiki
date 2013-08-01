@@ -139,7 +139,7 @@
 		<tr>
 			<td>radius</td>
 			<td>_optional_</td>
-			<td>bin(default : 2)</td>
+			<td>radius of outliers(default : 2)</td>
 		</tr>
 		<tr>
 			<td>xTick</td>

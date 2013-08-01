@@ -7,9 +7,9 @@
 var MakeAxis = {};
 
 (function() {
-	
+
 	MakeAxis = function(id, xArr, yArr, xDiscrete, yDiscrete, optionObj) {
-		
+
 		this.id = id;
 		this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
 		this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300

@@ -1,127 +1,83 @@
 /**  draw sactter  **/
-var Scatter = {};    
+// label array is used for tooltipgetinfo and color setting. --> should be refined!
+
+var Scatter = {};
+
 (function() {
-	Scatter = function(plotObject, mainArr, optionObj) {			
-		this._type = 'scatter';		
-		this._id = mainArr.id;
-		this._labelArr = mainArr.labelArr; //localize later
-		objArr[mainArr.id-1] = this;
+
+	Scatter = function(mainArr, plotObject, xLabel, yLabel, optionObj) {
+		this._type = 'scatter';
+		this.id = mainArr.id;
+		this._labelArr = mainArr.labelArr; // this is for legend make.
+		this._init(mainArr, optionObj);
+		var returnValue = this._build(mainArr, plotObject, xLabel, yLabel);
+		if(returnValue == 1){
+			this._draw(plotObject);
+			mainArr.id ++;
+		}
+		//objArr[mainArr.id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
 		this.stage = plotObject.stage;
-		this.draw(plotObject, mainArr, optionObj);
-		mainArr.id ++;
     };
     Scatter.prototype = {
-    		draw : function(plotObject, mainArr, optionObj) {
-    			//check radius.
-    			if(optionObj.radius != undefined){
-    				this.radius = optionObj.radius;
-    			}else{
-    				this.radius = 2;
-    			}
-    			//check the x label
-    			if(optionObj.x != undefined){
-    			 	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
-    			     {
-    			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-    			     		this.x =  i;
-    			     		 break;
-    			     	}
-    			     	if(i == mainArr.labelArr.length - 1){
-    			     		alert('retype x label');
-    			     		this.x = 0;
-    			     	}
-    			     }
-    			}else{
-    				alert('x should be defined!');
-    				this.x = 0;
-    			}
-    			//check the y label
-    			if(optionObj.y != undefined){
-    				 for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
-    			     {
-    			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.y.toLowerCase()){	            		
-    			     		this.y =  i;
-    			     		 break;
-    			     	}
-    			     	if(i == mainArr.labelArr.length - 1){
-    			     		alert('retype y label');
-    			     		this.y = 0;
-    			     	}
-    			     }
-    			}else{
-    				alert('y should be defined!');
-    				this.y = 0;
-    			}
-    			//check whether each axis is the same type of plotObject.
-    			if(!(plotObject.xDiscrete == mainArr.isDiscrete[this.x] && plotObject.yDiscrete == mainArr.isDiscrete[this.y])){
-    				alert("Can't draw scatter!");
-    				return;
-    			}
+    		
+    		_init: function(mainArr, optionObj) {
     			
+    			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
     			// set the color type
-	            if(optionObj.color==undefined){
-	            	if(this.color == undefined){
-	            		this.color=-1; //default color
-	            	}else{
-	            		var tmpSetColor =  setColor(dataArr[this.color]);
-	    				var colors = tmpSetColor.colors;
-						var mainValueArr = tmpSetColor.mainValueArr;
-						var tmpColorArr = tmpSetColor.tmpColorArr;
-	            	}	            		
+	            if(optionObj.color == undefined){
+	            	this.color=-1; //default color     		
 	            }else{
-            		for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
-	  	            {
-	  	            	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
-	  	            		 this.color =  i;
-	  	            		 break;
-	  	            	}
-	  	            	if(i == mainArr.labelArr.length - 1){
-	  	            		alert('retype colors label');
-	  	            		this.color = 0;
-	  	            	}
-	  	            }	
-            		var tmpSetColor =  setColor(mainArr.dataArr[this.color]);
-    				var colors = tmpSetColor.colors;
-					var mainValueArr = tmpSetColor.mainValueArr;
-					var tmpColorArr = tmpSetColor.tmpColorArr;
+	            	for(var i = 0 ; i < this._labelArr.length ; i ++ ){
+	            		if(this._labelArr[i] == optionObj.color){
+	            			this.color = i;
+	            			break;
+	            		}
+	            	}
+             		var tmpSetColor = setColor(mainArr[optionObj.color]);
+            		this.colors = tmpSetColor.colors;
+            		this.mainValueArr = tmpSetColor.mainValueArr;
+            		this.tmpColorArr = tmpSetColor.tmpColorArr;
 	            }
-	            //set the legend text.
+    			
+    		},
+    		
+    		_build: function(mainArr, plotObject, xLabel, yLabel) {
+    			
+    			//check whether each axis is the same type of plotObject.
+    			if(!(plotObject.xDiscrete == mainArr.isDiscrete[xLabel] && plotObject.yDiscrete == mainArr.isDiscrete[yLabel])){
+    				alert("Can't draw scatter!");
+    				return -1;
+    			}
+    			//set the legend text.
 	            if(this.color != -1){
 	            	this.lengend = "right";
 	            	this.legendX = plotObject.plotXMargin + plotObject.width + plotObject.plotLength*5;
 	        		this.legendY = plotObject.plotYMargin - plotObject.plotLength;
 	            	// making legend.
-	            	setLegendMake(this, mainValueArr, colors);	            	
+	            	setLegendMake(this, this.mainValueArr, this.colors);	            	
 	            }
-    			var nodeX = new Array();
+	            
+	            var nodeX = new Array();
     			var nodeY = new Array();
     			//nodeX set.
-    			if(mainArr.isDiscrete[this.x] == true){	// x - discrete
-    				if(this.x != plotObject.x){
-    					alert("x axis is different from plot");
-    					return;
-    				}
-    				for(var i = 0 ; i < mainArr.dataArr[this.x].length ; i ++){
+    			if(mainArr.isDiscrete[xLabel] == true){	// x - discrete
+    				for(var i = 0 ; i < mainArr[xLabel].length ; i ++){
     					nodeX[i] = plotObject.xPlotArr[plotObject.xNode[i]][0] + plotObject.plotXMargin;    					
     				}
     			}else{  // x - continuous
-    				for(var i = 0 ; i < mainArr.dataArr[this.x].length ; i ++){
-    					if(mainArr.dataArr[this.x][i] > plotObject.xMax || mainArr.dataArr[this.x][i] < plotObject.xMin){
+    				for(var i = 0 ; i < mainArr[xLabel].length ; i ++){
+    					if(mainArr[xLabel][i] > plotObject.xMax || mainArr[xLabel][i] < plotObject.xMin){
     						nodeX[i] = -1;
     					}else{
-    						nodeX[i] = plotObject.width * (mainArr.dataArr[this.x][i] - plotObject.xMin) / (plotObject.xMax - plotObject.xMin) + plotObject.plotXMargin;
+    						nodeX[i] = plotObject.width * (mainArr[xLabel][i] - plotObject.xMin) / (plotObject.xMax - plotObject.xMin) + plotObject.plotXMargin;
     					}
     				}
     			}
     			//nodeY set.
-    			if(mainArr.isDiscrete[this.y] == true){	// y - discrete
-    				if(this.y != plotObject.y){
-    					alert("y axis is different from plot");
-    					return;
-    				}
-    				for(var i = 0 ; i < mainArr.dataArr[this.y].length ; i ++){
+    			if(mainArr.isDiscrete[yLabel] == true){	// y - discrete
+    				for(var i = 0 ; i < mainArr[yLabel].length ; i ++){
     					if(nodeX[i] == -1){
     						nodeY[i] = -1;
     					}else{
@@ -129,24 +85,24 @@ var Scatter = {};
     					}    					
     				}
     			}else{  // y - continuous
-    				for(var i = 0 ; i < mainArr.dataArr[this.y].length ; i ++){
+    				for(var i = 0 ; i < mainArr[yLabel].length ; i ++){
     					if(nodeX[i] == -1){
     						nodeY[i] = -1;
-    					}else if(mainArr.dataArr[this.y][i] > plotObject.yMax || mainArr.dataArr[this.y][i] < plotObject.yMin){
+    					}else if(mainArr[yLabel][i] > plotObject.yMax || mainArr[yLabel][i] < plotObject.yMin){
     						//alert(plotObject.yMax + "m" + mainArr.dataArr[this.y][i]);
     						nodeX[i] = -1;
     						nodeY[i] = -1;
     					}else{
-    						nodeY[i] = plotObject.height + plotObject.plotYMargin - plotObject.height * (mainArr.dataArr[this.y][i] - plotObject.yMin) / (plotObject.yMax - plotObject.yMin);
+    						nodeY[i] = plotObject.height + plotObject.plotYMargin - plotObject.height * (mainArr[yLabel][i] - plotObject.yMin) / (plotObject.yMax - plotObject.yMin);
     					}
     				}
     			}
     			var tooltipTextGetInfo = new Array();
-				for(var i = 0; i < mainArr.dataArr[this.y].length ; i++)
+				for(var i = 0; i < mainArr[yLabel].length ; i++)
 				{
-					tooltipTextGetInfo[i] = this._labelArr[0]+" : " + mainArr.dataArr[0][i]+ "\r\n" ;
-					for(var j=1; j< this._labelArr.length ; j++){
-						tooltipTextGetInfo[i]=tooltipTextGetInfo[i]+ this._labelArr[j]+" : " + mainArr.dataArr[j][i]+ "\r\n" ;
+					tooltipTextGetInfo[i] =  mainArr.labelArr[0] + " : " + mainArr[mainArr.labelArr[0]][i]+ "\r\n" ;
+					for(var j = 1; j < mainArr.labelArr.length ; j ++){
+						tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[0] + " : " + mainArr[mainArr.labelArr[0]][i]+ "\r\n" ;
 					}
 				}
     			//set dots.
@@ -161,9 +117,9 @@ var Scatter = {};
     						x: nodeX[i],
     						y: nodeY[i],
     						radius: this.radius,
-    						stroke: (this.color == -1) ? 'green': getColor(i,colors, mainValueArr, tmpColorArr),
+    						stroke: (this.color == -1) ? 'green': getColor(i, this.colors, this.mainValueArr, this.tmpColorArr),
     						strokeWidth: 1,
-    						fill: (this.color == -1) ? 'green': getColor(i,colors, mainValueArr, tmpColorArr),
+    						fill: (this.color == -1) ? 'green': getColor(i, this.colors, this.mainValueArr, this.tmpColorArr),
     						selected : 0,
     						info :  "Node : " + cnt + "\r\n" + tooltipTextGetInfo[i]
     					});
@@ -176,11 +132,13 @@ var Scatter = {};
     			if(overCnt > 0){
     				alert(overCnt + " nodes can't be draw in this plot range.");
     			}
-    			// set labels.
-    			setXLabel(this, plotObject);
-				setYLabel(this, plotObject);
-				setMainLabel(this, plotObject);
+    			// make main labels.
+				MakeMainLabel(this, plotObject, xLabel, yLabel);
 				setTooltip(this);
+				return 0;
+    		},
+    		
+    		_draw : function(plotObject) {
 				
 				// make dataLayer.
     			this.dataLayer = new Kinetic.Layer();	
@@ -198,6 +156,82 @@ var Scatter = {};
 		}
     }
 })();
+
+/**  Regression functions for scatter  **/
+//linear regression.
+function linearSendArr(Name)
+{
+	if(Name._type == "scatter"){	// only for scatter.
+		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
+			if(Name.linear == true){
+				Name.linear = false;
+				Name.draw(Name._id);
+				eventTrigger(Name);
+			}else{		
+				Name.linear = true;		
+				window.Shiny.onInputChange("id", Name._id);
+				window.Shiny.onInputChange("type", Name._type);
+				window.Shiny.onInputChange("graph", "linear");
+				window.Shiny.onInputChange("xx", tempData[Name.x]);
+				window.Shiny.onInputChange("yy", tempData[Name.y]);
+			}
+		}
+	}
+
+}
+//loess regression.
+function loessSendArr(Name)
+{
+	if(Name._type == "scatter"){	// only for scatter.
+		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
+			if(Name.loess == true){
+				Name.loess = false;
+				Name.draw(Name._id);
+				eventTrigger(Name);
+			}else{		
+				Name.loess = true;		
+				window.Shiny.onInputChange("id1", Name._id);
+				window.Shiny.onInputChange("type1", Name._type);
+				window.Shiny.onInputChange("graph1", "loess");
+				window.Shiny.onInputChange("xx1", tempData[Name.x]);
+				window.Shiny.onInputChange("yy1", tempData[Name.y]);
+			}
+		}
+	}
+}
+/**  Regression functions for scatter end  **/
+
+/**  update function  **/
+//Kinetic version update
+//just remove transitient, and change it with "set" syntax.
+//"set" syntax has not changed during many versions.
+function scatterUpdate(obj, id)
+{
+	return	function(selectOn)
+				{
+					if(selectOn == 0 && obj.node[id].getSelected() == 1)		//unselect
+					{	
+						obj.node[id].setStroke(obj.node[id].getFill());
+						obj.node[id].setScaleX(1);
+						obj.node[id].setScaleY(1);
+						obj.node[id].setSelected(0);
+					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){	//select
+						obj.node[id].setStroke('black');
+						obj.node[id].setScaleX(2);
+						obj.node[id].setScaleY(2);
+						obj.node[id].setSelected(1);
+						obj.node[id].moveToTop();
+					}
+				};
+}
+/**  update function end  **/
+
+
+
+//////////////////////////////////// common used for graph /////////////////////////////////
+
+/**  add layers  **/
+// plotLayer(legend, mainLabel), tooltip, data
 function addLayer(obj, stage)
 {
 	obj.plotLayer = new Kinetic.Layer();
@@ -205,31 +239,29 @@ function addLayer(obj, stage)
 		stage.setWidth(stage.getWidth() + obj.legendGroup.getWidth());
 		obj.plotLayer.add(obj.legendLayer);
 	}	
-	obj.plotLayer.add(obj.xLabel);    
-	obj.plotLayer.add(obj.yLabel);    
 	obj.plotLayer.add(obj.mainLabel);
 	stage.add(obj.tooltipLayer);
 	stage.add(obj.dataLayer);
-	stage.add(obj.plotLayer);	
+	stage.add(obj.plotLayer);
 }
-/**  set labels **/
-
-//set Main Label
-function setMainLabel(obj, plot)
+/**  add layers end  **/
+/**  make Main Label  **/
+function MakeMainLabel(obj, plot, xLabel, yLabel)
 {
+
 	obj.mainLabel = new Kinetic.Text({
-   name : 'mainLabel',
-   x: plot.plotXMargin + plot.width/2, 
-   y: plot.plotYMargin * 0.3,
-   offset : {x: (obj._type + ' of ' + obj._labelArr[obj.x] + ' & ' + obj._labelArr[obj.y]).length/2 * 10, y:0},
-   text: obj._type + ' of ' + obj._labelArr[obj.x] + ' & ' + obj._labelArr[obj.y],
-   fontSize: 20,
-   fontStyle: 'bold',
-   fontFamily: 'Calibri',
-   fill: 'black',
-});
+	   name : 'mainLabel',
+	   x: plot.plotXMargin + plot.width/2, 
+	   y: plot.plotYMargin * 0.3,
+	   offset : {x: (obj._type + ' of ' + xLabel + ' & ' + yLabel).length/2 * 10, y:0},
+	   text: obj._type + ' of ' + xLabel + ' & ' + yLabel,
+	   fontSize: 20,
+	   fontStyle: 'bold',
+	   fontFamily: 'Calibri',
+	   fill: 'black',
+	});
 }
-/**  set labels end **/
+/**  make Main Label end  **/
 
 
 function setColor(colorArr) //set color
@@ -374,9 +406,10 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors, labelArr){
 			}						
 		}		
 	}else{
-		var tick= 5; //default legend ticks is 5      
-        var max = findMaxValue(mainValueArr);		
-        var min = findMinValue(mainValueArr);	
+		var tick= 5; //default legend ticks is 5  
+		var temp = findMaxMinValue(mainValueArr);
+        var max = temp.max;		
+        var min = temp.min;	
         var tickRange = (max - min)/tick;
         tickRange = setTickRange( Math.ceil( Math.log(tickRange) / Math.log(10)) , tickRange);
         var newMax = tickRange * Math.ceil(max/tickRange);     		
@@ -483,74 +516,7 @@ function setLegendMake(obj, mainValueArr, colors)
 }
 /**  legend set functions end  **/
 
-/**  Regression functions for scatter  **/
-//linear regression.
-function linearSendArr(Name)
-{
-	if(Name._type == "scatter"){	// only for scatter.
-		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
-			if(Name.linear == true){
-				Name.linear = false;
-				Name.draw(Name._id);
-				eventTrigger(Name);
-			}else{		
-				Name.linear = true;		
-				window.Shiny.onInputChange("id", Name._id);
-				window.Shiny.onInputChange("type", Name._type);
-				window.Shiny.onInputChange("graph", "linear");
-				window.Shiny.onInputChange("xx", tempData[Name.x]);
-				window.Shiny.onInputChange("yy", tempData[Name.y]);
-			}
-		}
-	}
 
-}
-//loess regression.
-function loessSendArr(Name)
-{
-	if(Name._type == "scatter"){	// only for scatter.
-		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
-			if(Name.loess == true){
-				Name.loess = false;
-				Name.draw(Name._id);
-				eventTrigger(Name);
-			}else{		
-				Name.loess = true;		
-				window.Shiny.onInputChange("id1", Name._id);
-				window.Shiny.onInputChange("type1", Name._type);
-				window.Shiny.onInputChange("graph1", "loess");
-				window.Shiny.onInputChange("xx1", tempData[Name.x]);
-				window.Shiny.onInputChange("yy1", tempData[Name.y]);
-			}
-		}
-	}
-}
-/**  Regression functions for scatter end  **/
-
-/**  update function  **/
-//Kinetic version update
-//just remove transitient, and change it with "set" syntax.
-//"set" syntax has not changed during many versions.
-function scatterUpdate(obj, id)
-{
-	return	function(selectOn)
-				{
-					if(selectOn == 0 && obj.node[id].getSelected() == 1)		//unselect
-					{	
-						obj.node[id].setStroke(obj.node[id].getFill());
-						obj.node[id].setScaleX(1);
-						obj.node[id].setScaleY(1);
-						obj.node[id].setSelected(0);
-					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){	//select
-						obj.node[id].setStroke('black');
-						obj.node[id].setScaleX(2);
-						obj.node[id].setScaleY(2);
-						obj.node[id].setSelected(1);
-						obj.node[id].moveToTop();
-					}
-				};
-}
-/**  update function end  **/
 
 
 

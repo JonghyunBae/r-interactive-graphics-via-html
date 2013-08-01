@@ -51,7 +51,8 @@ shinyUI(bootstrapPage(
        </div>
         </div>
        <script>
-        var axis1 = new MakeAxis(1, mainArr1[\"carat\"], mainArr1[\"table\"], mainArr1.isDiscrete[\"carat\"], mainArr1.isDiscrete[\"table\"], {xLabel : \"carat\", yLabel : \"table\"})
+        var axis1 = new MakeAxis(1, mainArr1[\"carat\"], mainArr1[\"color\"], mainArr1.isDiscrete[\"carat\"], mainArr1.isDiscrete[\"color\"], {xLabel : \"carat\", yLabel : \"table\"})
+        var scatter1 = new Scatter(mainArr1, axis1, 'carat', 'color', {color: 'cut'});
         //var axis1 = new MakeAxis(1, mainArr1, {x:'cut', y:'table'});
         //var scatter1 = new Scatter(axis1, mainArr1, {x:'cut', y:'table', color: 'cut'});
         //eventTrigger(scatter1, mainArr1);

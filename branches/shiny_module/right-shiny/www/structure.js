@@ -97,6 +97,7 @@ function createMainStructure(fileName)
 	}
 	var redraw = new Array();
 	totalArr.size = labelArr.length;
+	totalArr.labelArr = labelArr; // this is for scatter tooltip box only.
 	totalArr.isSelected = isSelected;
 	totalArr.isDiscrete = isDisObject;
 	totalArr.isHidden = isHidden;

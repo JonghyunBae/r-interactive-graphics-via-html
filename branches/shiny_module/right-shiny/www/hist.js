@@ -1,151 +1,176 @@
+/**  make hist object  **/
+// optionObj can be bin, color(double).
+// return : id, bin, xArr, yArr, freqArr, hasArr, isDiscrete, double.
+var MakeHistObj = {};
+
+(function() {
+	
+	MakeHistObj = function(mainArr, xLabel, optionObj) {
+		
+		this.bin = (optionObj.bin == undefined) ? (2) : (optionObj.bin); // default bin is 2
+		this.id = 0;
+		this.double = false;
+		if(mainArr.isDiscrete[xLabel] == true){
+			this.isDiscrete = true;
+			var cnt = 0;
+			var xArr = new Array();
+			var freqArr = new Array();
+			var hasArr = make2DArr(mainArr[xLabel].length);
+			freqArr[cnt] = 1;
+			hasArr[cnt][0] = 0;
+			xArr[cnt++] = mainArr[xLabel][0];
+			for(i = 1 ; i < mainArr[xLabel].length ; i++)
+        	{
+        		for(j = 0 ; j < xArr.length ; j ++)
+        		{
+        			if(xArr[j] == mainArr[xLabel][i])
+        			{
+        				hasArr[j].push(i);
+        				//isSelected[i][id] = histUpdate(this, j);
+        				freqArr[j] ++; 
+        				break;
+        			}
+        		}        		
+        		if(j == xArr.length)
+        		{
+        			freqArr[j] = 1;
+        			hasArr[j].push(i);
+        			xArr.push(mainArr[xLabel][i]);
+        			//isSelected[i][id] = histUpdate(this, j);
+        		}
+        	}
+			this.freqArr = freqArr;
+			this.xArr = xArr;
+			var temp = findMaxMinValue(freqArr);
+			this.yArr = [0, temp.max];
+			this.hasArr = hasArr;
+		}else{
+			this.isDiscrete = false;
+			 //check the fixpoint.
+			this.fixPoint = 0;
+			if(this.bin.toString().indexOf('.') != -1)
+			{
+				this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
+			}
+			
+			var temp = findMaxMinValue(mainArr[xLabel]);
+			var max = temp.max;
+			var min = temp.min;
+			var freqTmp = (min > 0 ) ? new Array(parseInt((max)/this.bin)+1) :  new Array(parseInt((max - min)/this.bin)+1); 
+        	var hasTmp = (min > 0 ) ? make2DArr(parseInt((max)/this.bin)+1) : make2DArr(parseInt((max - min)/this.bin)+1);             	
+        	var upTmp = new Array(mainArr[xLabel].length);
+        	var cnt = 0;
+        	for(var i = 0 ; i < freqTmp.length ; i ++ )
+        	{
+        		freqTmp[i] = 0; 
+        	}
+        	
+        	for(var i = 0 ; i < mainArr[xLabel].length ; i++){
+        		if(min < 0)
+        		{
+        			cnt = parseInt((mainArr[xLabel][i]+Math.abs(min))/this.bin);
+        		}else{
+        			cnt = parseInt(mainArr[xLabel][i]/this.bin);
+        		}
+        		freqTmp[cnt] ++ ;
+        		hasTmp[cnt].push(i);
+        		upTmp[i] = cnt;
+        	}
+        	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) 	            	
+        	{	            		
+        		if(freqTmp[firstcnt] != 0)
+        		{
+        			break;
+        		}
+        	}
+        	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--)            	
+        	{
+        		if(freqTmp[lastcnt] != 0)
+        		{
+        			break;
+        		}
+        	}
+        	var cnt = 0;
+        	var freqArr = new Array(lastcnt-firstcnt+1);
+        	var hasArr = make2DArr(lastcnt-firstcnt+1);
+        	for(var i = firstcnt ; i < lastcnt + 1 ; i ++){
+        		freqArr[cnt] = freqTmp[i];
+        		hasArr[cnt] = hasTmp[i];
+        		cnt ++;
+        	}
+        	this.freqArr = freqArr;
+        	var temp1 = (min > 0 ) ? ((-1)*this.bin + firstcnt*this.bin).toFixed(this.fixPoint) : ((1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint);
+        	var temp2 = (min > 0 ) ? ((lastcnt-firstcnt + 2)*this.bin).toFixed(this.fixPoint) : ((lastcnt-firstcnt + 3 - 1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint); 
+        	this.xArr = [temp1, temp2];
+        	alert(max);
+        	var temp = findMaxMinValue(freqArr);
+			this.yArr = [0, temp.max];
+			this.hasArr = hasArr;
+		}
+	}
+})();
+
+function histObjUpdate(obj)
+{
+	return function(select, id){
+				// if node is not hidden.
+				if(obj.isSelected[id][0] != 2){
+					if(select == 0 && obj.isSelected[id][0] == 1) // unselect
+					for(var i = 0 ; i < obj.isSelected[id].length ; i ++){
+						obj.isSelected[id][i](select);
+					}
+				}
+				
+	};
+}
+
 var Hist = {};
 (function() {	
-	Hist = function(plotObject, mainArr, optionObj) {
+	Hist = function(plotObject, histArr) {
 		this._type = 'hist';
-		this._id = mainArr.id;
-		this._labelArr = mainArr.labelArr; //localize later
-		objArr[mainArr.id-1] = this;
+		this.id = histArr.id;
+		//this._labelArr = mainArr.labelArr; //localize later
+		//objArr[mainArr.id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
 		this.stage = plotObject.stage;
-		this.draw(plotObject, mainArr, optionObj);
-		mainArr.id ++;
+		this.draw(plotObject, histArr);
+		histArr.id ++;
     };
 	Hist.prototype = {
-			draw : function(plotObject, mainArr, optionObj) {
-				//check the x label
-    			if(optionObj.x != undefined){
-    			 	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)	
-    			     {
-    			     	if(mainArr.labelArr[i].toLowerCase()==optionObj.x.toLowerCase()){	            		
-    			     		this.x =  i;
-    			     		 break;
-    			     	}
-    			     	if(i == mainArr.labelArr.length - 1){
-    			     		alert('retype x label');
-    			     		this.x = 0;
-    			     	}
-    			     }
-    			}else{
-    				alert('x should be defined!');
-    				this.x = 0;
-    			}
-    			
-    			//calculate frequency.
-    			if(mainArr.isDiscrete[this.x] == true){	// discrete
-    				if(this.x != plotObject.x){
-    					alert('histogram cannot be drawn!');
-    					return;
-    				}
-    				var tmp = freqCalc_discrete(mainArr.dataArr, plotObject.xPlotArr, plotObject.xNode, this.x);
-    				this.freqArr = tmp.freqArr;
-    				this.hasDataArr = tmp.hasDataArr;
-    				this.hasNumberArr = tmp.hasNumberArr;
-    				alert(plotObject.xdiff);
-    				this.barWidth = plotObject.xdiff/2;
-    				
-    			}else{	// continuous
-    				var tmp = freqCalc_continuous(mainArr.dataArr, plotObject.xPlotArr, plotObject.xMax, plotObject.xMin, this.x);
-    				this.freqArr = tmp.freqArr;
-    				this.hasDataArr = tmp.hasDataArr;
-    				this.hasNumberArr = tmp.hasNumberArr;
-    				this.barWidth = plotObject.xPlotArr[1][0] - plotObject.xPlotArr[0][0];
-    			}
-    			// set the color type
-	            if(optionObj.color==undefined){
-	            	if(this.color == undefined){
-	            		this.color=-1; //default color
-	            	}else{
-	            		var tmpSetColor =  setColor(dataArr[this.color]);
-	    				var colors = tmpSetColor.colors;
-						var mainValueArr = tmpSetColor.mainValueArr;
-						var tmpColorArr = tmpSetColor.tmpColorArr;
-	            	}	            		
-	            }else{
-            		for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
-	  	            {
-	  	            	if(this._labelArr[i].toLowerCase()==optionObj.color.toLowerCase()){	            		
-	  	            		 this.color =  i;
-	  	            		 break;
-	  	            	}
-	  	            	if(i == mainArr.labelArr.length - 1){
-	  	            		alert('retype colors label');
-	  	            		this.color = 0;
-	  	            	}
-	  	            }	
-            		var tmpSetColor =  setColor(mainArr.dataArr[this.color]);
-    				var colors = tmpSetColor.colors;
-					var mainValueArr = tmpSetColor.mainValueArr;
-					var tmpColorArr = tmpSetColor.tmpColorArr;
-	            }
-	            //set the legend text.
-	            if(this.color != -1){
-	            	this.lengend = "right";
-	            	this.legendX = plotObject.plotXMargin + plotObject.width + plotObject.plotLength*5;
-	        		this.legendY = plotObject.plotYMargin - plotObject.plotLength;
-	            	// making legend.
-	            	setLegendMake(this, mainValueArr, colors);	            	
-	            }
-	            if(this.color != plotObject.x && mainArr.isDiscrete[this.color] == true){
-	            	for(var i = 0 ; i < this.freqArr.length ; i ++){
-	            		var cnt = 0;
-	            		var xTmp = new Array();
-		            	var freqTmp = new Array();
-		            	var hasTmp = make2DArr(dataArr[this.x].length);
-		            	freqTmp[cnt] = 1;
-		            	hasTmp[cnt][0] = 0;
-		            	xTmp[cnt++] = dataArr[this.x][0];
-	            		for(var j = 0 ; j < this.freqArr[i].length ; j ++){
-	            			
-	            		}
-	            		var tmp = freqCalc_discrete(this.hasDataArr, plotObject.xPlotArr, plotObject.xNode, this.x);
-	    				this.freqArr = tmp.freqArr;
-	    				this.hasDataArr = tmp.hasDataArr;
-	    				this.hasNumberArr = tmp.hasNumberArr;
-	    				alert(plotObject.xdiff);
-	            	}
-	            }
-	            
-	            if(this.color == plotObject.x){
-	            	 // redraw y axis.
-	    			plotObject.yMax = findMaxValue(this.freqArr);
-	    			plotObject.yMin = 0;
-	    			var tmp = setAxis_continue(plotObject.yMax, plotObject.yMin, plotObject.yTick, plotObject.height);
-	    			plotObject.yMax = tmp.max;
-	    			plotObject.yMin = tmp.min;
-	    			plotObject.diff = -1;
-	    			plotObject.yPlotArr = tmp.array;	
-	    			plotObject.changeY();
-	    			this.stage = plotObject.stage;
-		            this.node = new Array();
-	            	for(var cnt = 0; cnt < this.freqArr.length ; cnt++)
-	            	{
-	            		this.node[cnt] = new Kinetic.Rect({
-	            			name : cnt,
-							freq: this.freqArr[cnt],
-							x: (mainArr.isDiscrete[this.x] == true) ? plotObject.plotXMargin + plotObject.xPlotArr[cnt][0]  : plotObject.plotXMargin + plotObject.xPlotArr[cnt][0] + this.barWidth/2, 
-							y: plotObject.plotYMargin + plotObject.height - this.freqArr[cnt]*plotObject.height/plotObject.yMax/2, 
-							width: this.barWidth,
-							height: this.freqArr[cnt]*plotObject.height/plotObject.yMax,
-							fill: getColor(this.hasNumberArr[cnt][0] ,colors, mainValueArr, tmpColorArr),
-							stroke: 'black',						
-							opacity : 0.5,
-							selected : 0,
-							selectCnt : 0,
-							info : "Node : "+cnt+"\r\n"+"Frequency : " + this.freqArr[cnt],
-							hasArr : this.hasNumberArr[cnt],
-							offset: {x: this.barWidth/2, y: this.freqArr[cnt]*plotObject.height/plotObject.yMax/2},
-						});
-	            	}
-	            }
-	            
-	           
-            	// set labels.
-    			setXLabel(this, plotObject);
-				setYLabel(this, plotObject);
-				setMainLabel(this, plotObject);
+			draw : function(plotObject, histArr) {
+				this.color = -1;
+				if(histArr.double == false){
+					if(histArr.isDiscrete == true){
+						this.barWidth = (plotObject.xPlotArr[2][0] - plotObject.xPlotArr[1][0])/2;
+					}else{
+						this.barWidth = (plotObject.xPlotArr[2][0] - plotObject.xPlotArr[1][0]);
+					}
+					this.node = new Array();
+		            	for(var cnt = 0; cnt < histArr.freqArr.length ; cnt++)
+		            	{
+		            		//alert(plotObject.xPlotArr.length);
+		            		//alert(histArr.freqArr.length);
+		            		this.node[cnt] = new Kinetic.Rect({
+		            			name : cnt,
+								freq: histArr.freqArr[cnt],
+								x: (histArr.isDiscrete == true) ? plotObject.plotXMargin + plotObject.xPlotArr[cnt][0]  : plotObject.plotXMargin + plotObject.xPlotArr[cnt+1][0] + this.barWidth/2, 
+								y: plotObject.plotYMargin + plotObject.height - histArr.freqArr[cnt]*plotObject.height/plotObject.yMax/2, 
+								width: this.barWidth,
+								height: histArr.freqArr[cnt]*plotObject.height/plotObject.yMax,
+								fill: 'green',
+								stroke: 'black',						
+								opacity : 0.5,
+								selected : 0,
+								selectCnt : 0,
+								info : "Node : "+cnt+"\r\n"+"Frequency : " + histArr.freqArr[cnt],
+								hasArr : histArr.hasArr[cnt],
+								offset: {x: this.barWidth/2, y: histArr.freqArr[cnt]*plotObject.height/plotObject.yMax/2},
+							});
+		            	}
+				}
 				setTooltip(this);
-				
+				MakeMainLabel(this, plotObject, "ddd", "ddd");
             	//draw node
 				this.dataLayer = new Kinetic.Layer();	
 				for(var i = 0 ; i < this.node.length ; i ++)
@@ -159,59 +184,6 @@ var Hist = {};
 	};
 })();
 
-function freqCalc_continuous(dataArr, plotArr, max, min, axis)
-{
-	var freqArr = new Array(plotArr.length - 1);
-	var hasDataArr = make2DArr(plotArr.length - 1);
-	var hasNumberArr = make2DArr(plotArr.length - 1);
-	var bin = plotArr[1][1] - plotArr[0][1];
-	var temp = new Array();
-	for(var i = 0 ; i < freqArr.length ; i ++){
-		freqArr[i] = 0;
-	}
-	for(var i = 0 ; i < dataArr[axis].length ; i ++){
-		if(min < 0)
-		{
-			cnt = parseInt((dataArr[axis][i]+Math.abs(min))/bin);     		
-		}else{
-			cnt = parseInt(dataArr[axis][i]/bin);
-		}	            		
-		freqArr[cnt] ++ ;             		
-		hasNumberArr[cnt].push(i);       		
-		for(var j = 0 ; j < dataArr.length ; j ++){
-			temp[j] = dataArr[j][i];
-		}
-		hasDataArr[cnt].push(temp);
-	}
-	return {
-		'freqArr'		: freqArr,
-		'hasDataArr'	: hasDataArr,
-		'hasNumberArr'	: hasNumberArr
-	};
-}
-function freqCalc_discrete(dataArr, plotArr, xNode, axis)
-{
-	var freqArr = new Array(plotArr.length);
-	var hasDataArr = make2DArr(plotArr.length);
-	var hasNumberArr = make2DArr(plotArr.length);
-	var temp = new Array();
-	for(var i = 0 ; i < freqArr.length ; i ++){
-		freqArr[i] = 0;
-	}
-	for(var i = 0 ; i < dataArr[0].length ; i ++){
-		freqArr[xNode[i]] ++ ;
-		hasNumberArr[xNode[i]].push(i);
-		for(var j = 0 ; j < dataArr.length ; j ++){
-			temp[j] = dataArr[j][i];
-		}
-		hasDataArr[xNode[i]].push(temp);
-	}
-	return {
-		'freqArr'		: freqArr,
-		'hasDataArr'	: hasDataArr,
-		'hasNumberArr'	: hasNumberArr
-	};
-}
 
 /**  update function  **/
 //Kinetic version update

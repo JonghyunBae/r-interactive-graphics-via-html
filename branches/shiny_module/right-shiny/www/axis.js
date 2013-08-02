@@ -13,7 +13,6 @@ var MakeAxis = {};
 		this.id = id;
 		this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
 		this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300
-		this.bin = (optionObj.xTick == undefined) ? (2) : (optionObj.xTick); //default bin is 2
 		this.xTick = (optionObj.xTick == undefined) ? (5) : (optionObj.xTick); //default x tick is 5
         this.yTick = (optionObj.yTick == undefined) ? (5) : (optionObj.yTick); //default y tick is 5
 		this.plotXMargin = this.width*0.2; //canvas left, right margin
@@ -39,14 +38,18 @@ var MakeAxis = {};
 				var tmp = setAxis_discrete(xArr, this.width);
 				this.xMax = -1;
 				this.xMin = -1;
-				this.xNode = tmp.node;
 				this.xdiff = tmp.diff;
 				this.xPlotArr = tmp.array;
 			}else{
 				this.xDiscrete = false;
+
 				var temp = findMaxMinValue(xArr);
 				this.xMax = temp.max;
 	            this.xMin = temp.min;
+				if(optionObj.xbin != undefined){
+					this.xbin = optionObj.xbin;
+					this.xTick = Math.round((this.xMax - this.xMin) / this.xbin);
+				}
 				var tmp = setAxis_continue(this.xMax, this.xMin, this.xTick, this.width);
 				this.xMax = tmp.max;
 				this.xMin = tmp.min;
@@ -58,7 +61,6 @@ var MakeAxis = {};
 				var tmp = setAxis_discrete(yArr, this.height);
 				this.yMax = -1;
 				this.yMin = -1;
-				this.yNode = tmp.node;
 				this.ydiff = tmp.diff;
 				this.yPlotArr = tmp.array;
 			}else{
@@ -128,16 +130,16 @@ function setAxis_continue(max, min, tick, length)
 	var plotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));
 	for(var i = 0 ; i < plotArr.length ; i ++)
 	{
-		plotArr[i][0] = i*diff;
-		if (tickRange.toString().indexOf('.') == -1){
-			plotArr[i][1] = min+i*tickRange;
-		}else{				
-			var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
-			if(point > 3){ // for setting the resonable point
-				point = 3;
+			plotArr[i][0] = i*diff;
+			if (tickRange.toString().indexOf('.') == -1){
+				plotArr[i][1] = min+i*tickRange;
+			}else{				
+				var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
+				if(point > 3){ // for setting the resonable point
+					point = 3;
+				}
+				plotArr[i][1] = (min+i*tickRange).toFixed(point);
 			}
-			plotArr[i][1] = (min+i*tickRange).toFixed(point);
-		}
 	}
 	return {
 		'max'	: max,
@@ -148,38 +150,17 @@ function setAxis_continue(max, min, tick, length)
 // set axis with discrete data.
 function setAxis_discrete(array, length)
 {
-	var node = new Array();
-	node[0] = 0;
-	var tmp = new Array();  //the names of each content below
-	tmp[0] = array[0];
-	for(var i = 1 ; i < array.length ; i++)
-	{
-		for(j = 0 ; j < tmp.length ; j ++)
-		{
-			if(tmp[j] == array[i])
-			{
-				node[i] = j;
-				break;
-			}	            				
-		}
-		if(j == tmp.length)
-		{
-			node[i] = j;
-			tmp.push(array[i]);
-		}
-	}
-	var plotArr = make2DArr(tmp.length);
-	var diff = length / (tmp.length+1);
+	var plotArr = make2DArr(array.length);
+	var diff = length / (array.length + 1);
 	
 	for(var i = 1 ; i < plotArr.length+1 ; i ++)
 	{
 		plotArr[i-1][0] = i*diff;
-		plotArr[i-1][1] = tmp[i-1];
+		plotArr[i-1][1] = array[i-1];
 	}
 	
 	return {
 		'diff'	: diff,
-		'node'	: node,
 		'array' : plotArr
 	};	
 }
@@ -249,32 +230,41 @@ function makeXAxisLayer(obj)
 {
 	obj.xLine = new Array();
 	obj.xText = new Array();
+	var cnt = 0;
+	if(obj.xPlotArr.length > 10){
+		var temp = Math.ceil(obj.xPlotArr.length / 10);
+	}else{
+		var temp = 1;
+	}
 	for(var i = 0; i < obj.xPlotArr.length ; i ++)
 	{
-		obj.xLine[i] = new Kinetic.Line({
-	        name : "xLine"+i,
-	        points: [
-	                 	obj.plotXMargin + obj.xPlotArr[i][0],
-	                 	obj.plotYMargin + obj.height + obj.plotLength,
-	                 	obj.plotXMargin + obj.xPlotArr[i][0],
-	                 	obj.plotYMargin + obj.height + 2*obj.plotLength
-	                 ],
-	        stroke: 'black',
-	        strokeWidth: 2,             
-	    });
-	                  
-	    obj.xText[i] = new Kinetic.Text({
-	        name : "xText"+i,
-	        x: obj.plotXMargin + obj.xPlotArr[i][0] - 30,
-	        y: obj.plotYMargin + obj.height + 2*obj.plotLength,
-	        text: obj.xPlotArr[i][1],
-	        fontSize: 15,
-	        fontFamily: 'Calibri',
-	        fill: 'black',
-	        width: 60,
-	        align: 'center'    
-	    });      
-	} 
+		if(i % temp == 0){
+			obj.xLine[cnt] = new Kinetic.Line({
+		        name : "xLine"+i,
+		        points: [
+		                 	obj.plotXMargin + obj.xPlotArr[i][0],
+		                 	obj.plotYMargin + obj.height + obj.plotLength,
+		                 	obj.plotXMargin + obj.xPlotArr[i][0],
+		                 	obj.plotYMargin + obj.height + 2*obj.plotLength
+		                 ],
+		        stroke: 'black',
+		        strokeWidth: 2,             
+		    });
+		                  
+		    obj.xText[cnt] = new Kinetic.Text({
+		        name : "xText"+i,
+		        x: obj.plotXMargin + obj.xPlotArr[i][0] - 30,
+		        y: obj.plotYMargin + obj.height + 2*obj.plotLength,
+		        text: obj.xPlotArr[i][1],
+		        fontSize: 15,
+		        fontFamily: 'Calibri',
+		        fill: 'black',
+		        width: 60,
+		        align: 'center'    
+		    });
+		cnt ++;
+		}
+	}
 }
 // make y axis variables.
 // yPlotArr should be needed.

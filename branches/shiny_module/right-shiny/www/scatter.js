@@ -1,3 +1,11 @@
+/**  make scatter object  **/
+var MakeScatterObj = {};
+(function() {
+	MakeScatterObj = function(mainArr, xLabel, yLabel, optionObj) {
+		
+	}
+})();
+
 /**  draw sactter  **/
 // label array is used for tooltipgetinfo and color setting. --> should be refined!
 

@@ -15,8 +15,10 @@ var MakeHistObj = {};
 			var cnt = 0;
 			var xArr = new Array();
 			var freqArr = new Array();
+			var index = new Array();
 			var hasArr = make2DArr(mainArr[xLabel].length);
 			freqArr[cnt] = 1;
+			index[cnt] = 0;
 			hasArr[cnt][0] = 0;
 			xArr[cnt++] = mainArr[xLabel][0];
 			for(i = 1 ; i < mainArr[xLabel].length ; i++)
@@ -26,6 +28,7 @@ var MakeHistObj = {};
         			if(xArr[j] == mainArr[xLabel][i])
         			{
         				hasArr[j].push(i);
+        				index[i] = j;
         				//isSelected[i][id] = histUpdate(this, j);
         				freqArr[j] ++; 
         				break;
@@ -35,6 +38,7 @@ var MakeHistObj = {};
         		{
         			freqArr[j] = 1;
         			hasArr[j].push(i);
+        			index[i] = j;
         			xArr.push(mainArr[xLabel][i]);
         			//isSelected[i][id] = histUpdate(this, j);
         		}
@@ -102,10 +106,25 @@ var MakeHistObj = {};
         	var temp1 = (min > 0 ) ? ((-1)*this.bin + firstcnt*this.bin).toFixed(this.fixPoint) : ((1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint);
         	var temp2 = (min > 0 ) ? ((lastcnt-firstcnt + 2)*this.bin).toFixed(this.fixPoint) : ((lastcnt-firstcnt + 3 - 1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint); 
         	this.xArr = [temp1, temp2];
-        	alert(max);
         	var temp = findMaxMinValue(freqArr);
 			this.yArr = [0, temp.max];
 			this.hasArr = hasArr;
+		}
+		// check double
+		if(optionObj.color != undefined){
+			this.color = optionObj.color;
+			if(xLabel == this.color && mainArr.isDiscrete[this.color] == true){
+				var tmp = makeColor_discrete(this.xArr, index);
+				var colorArr = tmp.indexArr;
+			}else if(mainArr.isDiscrete[this.color] == true){
+				//under construction.
+				var tmp = setColor(mainArr[this.color], true);
+				var colorArr = tmp.indexArr;
+			}
+			
+			this.colorArr = colorArr;
+		}else{
+			this.color = -1;
 		}
 	}
 })();
@@ -158,12 +177,12 @@ var Hist = {};
 								y: plotObject.plotYMargin + plotObject.height - histArr.freqArr[cnt]*plotObject.height/plotObject.yMax/2, 
 								width: this.barWidth,
 								height: histArr.freqArr[cnt]*plotObject.height/plotObject.yMax,
-								fill: 'green',
+								fill: (histArr.color == -1) ? 'green' : histArr.colorArr[histArr.hasArr[cnt][0]],
 								stroke: 'black',						
 								opacity : 0.5,
 								selected : 0,
 								selectCnt : 0,
-								info : "Node : "+cnt+"\r\n"+"Frequency : " + histArr.freqArr[cnt],
+								info : "Node : " + cnt + "\r\n" + "Frequency : " + histArr.freqArr[cnt],
 								hasArr : histArr.hasArr[cnt],
 								offset: {x: this.barWidth/2, y: histArr.freqArr[cnt]*plotObject.height/plotObject.yMax/2},
 							});

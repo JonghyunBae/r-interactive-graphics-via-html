@@ -1,7 +1,11 @@
 /**  make scatter object  **/
 var MakeScatterObj = {};
+
 (function() {
+	
 	MakeScatterObj = function(mainArr, xLabel, yLabel, optionObj) {
+		
+		this.id = 0;
 		
 	}
 })();
@@ -43,10 +47,8 @@ var Scatter = {};
 	            			break;
 	            		}
 	            	}
-             		var tmpSetColor = setColor(mainArr[optionObj.color]);
-            		this.colors = tmpSetColor.colors;
-            		this.mainValueArr = tmpSetColor.mainValueArr;
-            		this.tmpColorArr = tmpSetColor.tmpColorArr;
+             		this.colArr = setColor(mainArr[optionObj.color]);
+            	
 	            }
     			
     		},
@@ -271,36 +273,122 @@ function MakeMainLabel(obj, plot, xLabel, yLabel)
 }
 /**  make Main Label end  **/
 
+function setColor(dataArr, isDiscrete)
+{
+	if(isDiscrete == true){
+		var temp = this.calcXArr(dataArr);
+		return makeColor_discrete(temp.xArr, temp.index);
+	}else{
+		return makeColor_continuous(); // under construction.
+	}
+}
+function makeColor_continuous(array) // under construction.
+{
+	var color = new Object();
+	color.isDiscrete = false;
+	var j = 0;
+	var sortedColorArr = new Array();	
+	for(var i = 0; i < array.length ; i ++){
+		sortedColorArr[j] = {
+				a : array[i],
+				b : j
+		};
+		j ++;
+	}
+	var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
+	    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1;
+	    if (a.a > b.a) return 1;
+	    return -1;
+	};
+	for (i = 0; i < sortedColorArr.length; i++) {
+		sortedColorArr[i].stableSortKey = i;
+	}
+	sortedColorArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
+	
+	
+}
+function makeColor_discrete(array, index)
+{
+	var color = new Object();
+	color.isDiscrete = true;
+	color.label = new Array();
+	var colors = new Array();
+	var indexArr = new Array(index.length);
+	var rgb = {R: new Array(), G: new Array(), B: new Array()};
+ 	var rgbFreq = 4.8 / array.length;
+ 	var rgbCenter = 128;
+ 	var rgbWidth = 127;
+ 	for(var i = 0 ; i < array.length ; ++ i)
+ 	{
+ 		rgb.R[i]  = parseInt( Math.sin(rgbFreq*i + 0) * rgbWidth + rgbCenter );
+ 		rgb.G[i] = parseInt( Math.sin(rgbFreq*i + 2) * rgbWidth + rgbCenter );
+ 		rgb.B[i]  = parseInt( Math.sin(rgbFreq*i + 4) * rgbWidth + rgbCenter );
+ 		colors[i] = 'rgb('+rgb.R[i]+','+rgb.G[i]+','+ rgb.B[i]+')';
+ 		color[array[i]] = colors[i];
+ 		color.label[i] = array[i];
+ 	}
+ 	for(var i = 0 ; i < index.length ; i ++){ 		
+ 		indexArr[i] = color[color.label[index[i]]];
+ 	}
+ 	color.indexArr = indexArr;
+ 	return color;
+}
+function caclXArr(dataArr)
+{
+	var cnt = 0;
+	var xArr = new Array();
+	var index = new Array();
+	xArr[cnt] = dataArr[0];
+	index[cnt] = 0;
+	cnt ++;
+	for(i = 1 ; i < dataArr.length ; i++)
+	{
+		for(j = 0 ; j < xArr.length ; j ++)
+		{
+			if(xArr[j] == dataArr[i]){
+				index[cnt++] = j;
+				break;
+			}
+		}
+		if(j == xArr.length)
+		{
+			xArr.push(dataArr[i]);
+			index[cnt ++] = j;
+		}
+	}
+	return {
+		'xArr' : xArr,
+		'index': index
+	};
+}
 
-function setColor(colorArr) //set color
+function sfetColor(colorArr) //set color
 {
 	var colors = new Array();
 	var mainValueArr = new Array();
     var tmpColorArr = new Array();
-    
-   
 	var cnt=0;
 	var j = 0;
 	var sortedColorArr = new Array();	
-	for(var i=0; i<colorArr.length; i++){	
-	//	if(isHidden[i] == true)
-	//		continue;
+	for(var i = 0; i < colorArr.length ; i ++){
 		sortedColorArr[j] = {
 				a : colorArr[i],
 				b : j
 		};
 		j ++;
-	}	 
+	}
+	
 	var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
-	    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1; 
+	    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1;
 	    if (a.a > b.a) return 1;
 	    return -1;
 	};
-	for (i = 0; i < sortedColorArr.length; i++) {                     
-		sortedColorArr[i].stableSortKey = i;                           
-	}                                   
 	
-		
+	for (i = 0; i < sortedColorArr.length; i++) {
+		sortedColorArr[i].stableSortKey = i;
+	}
+
+
 	sortedColorArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
 	//alert(sortedColorArr.length);
 	//alert(colorArr.length);
@@ -352,21 +440,26 @@ function setColor(colorArr) //set color
 			rgb.B[i] =parseInt( start.B + (i * (end.B - start.B)) / (mainValueArr.length-1) ); 
 			colors[i] = 'rgb('+rgb.R[i]+','+rgb.G[i]+','+ rgb.B[i]+')';
 		}
-	}	
-	return {colors: colors, mainValueArr: mainValueArr, tmpColorArr: tmpColorArr};
+	}
+	
+	var colArr = new Array();
+	for( var i = 0 ; i < tmpColorArr.length ; i ++){
+		colArr[i] = colors[tmpColorArr[i]];
+	}
+	return colArr;
 }
 
 function getColor(n, colors, mainValueArr, tmpColorArr)
 {
 	if(mainValueArr.length<24){
 		var tmpColor='green';
-		tmpColor= colors[tmpColorArr[n]];	
-		return tmpColor;		
+		tmpColor = colors[tmpColorArr[n]];
+		return tmpColor;
 	}else{
 		var tmpColor='green';
-		tmpColor= colors[tmpColorArr[n]];	
-		return tmpColor;		
-	}	
+		tmpColor = colors[tmpColorArr[n]];
+		return tmpColor;
+	}
 }
 function getLegendColor(n, colors, mainValueArr)
 {

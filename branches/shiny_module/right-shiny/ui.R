@@ -51,7 +51,7 @@ shinyUI(bootstrapPage(
        </div>
         </div>
        <script>
-        var histArr= new MakeHistObj(mainArr1, 'color', {bin:3});
+        var histArr= new MakeHistObj(mainArr1, 'color', {bin:3, color:'color'});
         var axis1 = new MakeAxis(1, histArr.xArr, histArr.yArr, histArr.isDiscrete, 'false', {xLabel : \"cut\", yLabel : \"Frequency\", xbin: histArr.bin});
         var hist1 = new Hist(axis1, histArr);
         // var axis1 = new MakeAxis(1, mainArr1[\"carat\"], mainArr1[\"color\"], mainArr1.isDiscrete[\"carat\"], mainArr1.isDiscrete[\"color\"], {xLabel : \"carat\", yLabel : \"table\"})

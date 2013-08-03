@@ -27,6 +27,7 @@ shinyUI(bootstrapPage(
   includeJS("structure.js"),
   includeJS("common.js"),
   includeJS("axis.js"),
+  includeJS("color.js"),
   includeJS("scatter.js"),
   includeJS("hist.js"),
   includeJS("box.js"),
@@ -53,9 +54,12 @@ shinyUI(bootstrapPage(
         var axis1 = new MakeAxis(1, histArr.xArr, histArr.yArr, histArr.isDiscrete, 'false', {xLabel : histArr.xLabel , yLabel : histArr.yLabel, xbin: histArr.bin});
         var hist1 = new Hist(axis1, histArr);
 
-        var axis2 = new MakeAxis(2, mainArr1['carat'], mainArr1['color'], mainArr1.isDiscrete['carat'], mainArr1.isDiscrete['color'], {xLabel : 'carat', yLabel : 'color'})
-        var scatter1 = new Scatter(mainArr1, axis2, 'carat', 'color', {color: 'cut'});
+        var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['color'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['color'], {xLabel : 'cut', yLabel : 'color'})
+        var scatter1 = new Scatter(mainArr1, axis2, 'cut', 'color', {color: 'cut', legend: 'left'});
        
+       
+        var axis3 = new MakeAxis(3, mainArr1['cut'], mainArr1['price'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['price'], {xLabel : 'cut', yLabel : 'price'})
+        var scatter2 = new Scatter(mainArr1, axis3, 'cut', 'price', {color: 'price', legend: 'topright'});
         //var axis1 = new MakeAxis(1, mainArr1, {x:'cut', y:'table'});
         //var scatter1 = new Scatter(axis1, mainArr1, {x:'cut', y:'table', color: 'cut'});
         //eventTrigger(scatter1, mainArr1);

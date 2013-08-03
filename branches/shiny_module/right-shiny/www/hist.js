@@ -1,12 +1,13 @@
 /**  make hist object  **/
 // optionObj can be bin, color(double).
-// return : id, bin, xArr, yArr, freqArr, hasArr, isDiscrete, double.
+// return : xLabel, yLebel, id, bin, xArr, yArr, freqArr, hasArr, isDiscrete, double.
 var MakeHistObj = {};
 
 (function() {
 	
 	MakeHistObj = function(mainArr, xLabel, optionObj) {
-		
+		this.xLabel = xLabel;
+		this.yLabel = "frequency";
 		this.bin = (optionObj.bin == undefined) ? (2) : (optionObj.bin); // default bin is 2
 		this.id = 0;
 		this.double = false;
@@ -154,11 +155,14 @@ var Hist = {};
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
 		this.stage = plotObject.stage;
-		this.draw(plotObject, histArr);
+		
+		//excute draw
+		this._draw(plotObject, histArr);
+		
 		histArr.id ++;
     };
 	Hist.prototype = {
-			draw : function(plotObject, histArr) {
+			_draw : function(plotObject, histArr) {
 				this.color = -1;
 				if(histArr.double == false){
 					if(histArr.isDiscrete == true){
@@ -190,7 +194,7 @@ var Hist = {};
 		            	}
 				}
 				setTooltip(this);
-				MakeMainLabel(this, plotObject, "ddd", "ddd");
+				MakeMainLabel(this, plotObject, histArr.xLabel, "Frequency");
             	//draw node
 				this.dataLayer = new Kinetic.Layer();	
 				for(var i = 0 ; i < this.node.length ; i ++)

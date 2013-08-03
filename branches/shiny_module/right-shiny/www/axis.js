@@ -1,14 +1,14 @@
 /**  MakeAxis draws an axis  **/
 // id should be matched with container id.
 // xArr, yArr should be array.
-// xDiscrete, yDiscrete should be true or false.
+// isXDiscrete, isYDiscrete should be true or false.
 // optionObj can be width, height, xTick, yTick, xLabel, yLabel, bin.
 
 var MakeAxis = {};
 
 (function() {
 
-	MakeAxis = function(id, xArr, yArr, xDiscrete, yDiscrete, optionObj) {
+	MakeAxis = function(id, xArr, yArr, isXDiscrete, isYDiscrete, optionObj) {
 
 		this.id = id;
 		this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
@@ -23,18 +23,19 @@ var MakeAxis = {};
 		document.getElementById('container'+ id).onclick = function() {
 	        document.getElementById('regcoords');
 	    };
-
-		this._build(xArr, yArr, xDiscrete, yDiscrete, optionObj);
+	    //excute build
+		this._build(xArr, yArr, isXDiscrete, isYDiscrete, optionObj);
+		//excute draw
 		this._draw();
 	}
 
 	MakeAxis.prototype = {
 			
-		_build: function(xArr, yArr, xDiscrete, yDiscrete, optionObj) {			
+		_build: function(xArr, yArr, isXDiscrete, isYDiscrete, optionObj) {			
 			
 			// check if continuous or discrete.
-			if(xDiscrete == true){
-				this.xDiscrete = true;
+			if(isXDiscrete == true){
+				this.isXDiscrete = true;
 				var tmp = setAxis_discrete(xArr, this.width);
 				this.xMax = -1;
 				this.xMin = -1;
@@ -42,7 +43,7 @@ var MakeAxis = {};
 				this.xdiff = tmp.diff;
 				this.xPlotArr = tmp.array;
 			}else{
-				this.xDiscrete = false;
+				this.isXDiscrete = false;
 
 				var temp = findMaxMinValue(xArr);
 				this.xMax = temp.max;
@@ -57,8 +58,8 @@ var MakeAxis = {};
 				this.xdiff = -1;
 				this.xPlotArr= tmp.array;		
 			}
-			if(yDiscrete == true){
-				this.yDiscrete = true;
+			if(isYDiscrete == true){
+				this.isYDiscrete = true;
 				var tmp = setAxis_discrete(yArr, this.height);
 				this.yMax = -1;
 				this.yMin = -1;
@@ -66,7 +67,7 @@ var MakeAxis = {};
 				this.ydiff = tmp.diff;
 				this.yPlotArr = tmp.array;
 			}else{
-				this.yDiscrete = false;
+				this.isYDiscrete = false;
 				var temp = findMaxMinValue(yArr);
 				this.yMax = temp.max;
 	            this.yMin = temp.min;

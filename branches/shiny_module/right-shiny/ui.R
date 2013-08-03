@@ -20,22 +20,20 @@ createDiv <- function(inputId) {
 }
 
 shinyUI(bootstrapPage(
-  textOutput("TestEntry"),
-  HTML("
-       <script src = \"kinetic-v4.5.4.js\"></script>
-       <script src = \"structure.js\"></script>
-       <script src = \"common.js\"></script>
-        <script src = \"axis.js\"></script>
-       <script src = \"scatter.js\"></script>
-       <script src = \"hist.js\"></script>
-       <script src = \"box.js\"></script>
-       <script src = \"pie.js\"></script>
-       <script src = \"node_event.js\"></script>
-      <script src = \"menu.js\"></script>
-       
-       "),
-  HTML("<script>var mainArr1 = createMainStructure('_sub.diamonds.csv');</script>"),
-  includeCSS(), includeJS("shiny-right.js"),includeJS("callback.js"),
+  includeCSS(), 
+  includeJS("shiny-right.js"),
+  includeJS("callback.js"),
+  includeJS("kinetic-v4.5.4.js"),
+  includeJS("structure.js"),
+  includeJS("common.js"),
+  includeJS("axis.js"),
+  includeJS("scatter.js"),
+  includeJS("hist.js"),
+  includeJS("box.js"),
+  includeJS("pie.js"),
+  includeJS("node_event.js"),
+  includeJS("menu.js"),
+  HTML("<script>var mainArr1 = createMainStructure('_sub.diamonds.csv');</script>"), 
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
        
@@ -49,13 +47,15 @@ shinyUI(bootstrapPage(
   createDiv("container4"),
   HTML("
        </div>
-        </div>
+       </div>
        <script>
-        var histArr= new MakeHistObj(mainArr1, 'carat', {bin:0.5});
-        var axis1 = new MakeAxis(1, histArr.xArr, histArr.yArr, histArr.isDiscrete, 'false', {xLabel : \"cut\", yLabel : \"Frequency\", xbin: histArr.bin});
+        var histArr= new MakeHistObj(mainArr1, 'cut', {bin:0.5, color:'cut'});
+        var axis1 = new MakeAxis(1, histArr.xArr, histArr.yArr, histArr.isDiscrete, 'false', {xLabel : histArr.xLabel , yLabel : histArr.yLabel, xbin: histArr.bin});
         var hist1 = new Hist(axis1, histArr);
-         var axis2 = new MakeAxis(2, mainArr1['carat'], mainArr1['color'], mainArr1.isDiscrete['carat'], mainArr1.isDiscrete['color'], {xLabel : 'carat', yLabel : 'color'})
-        var scatter1 = new Scatter(mainArr1, axis2, 'carat', 'color', {});
+
+        var axis2 = new MakeAxis(2, mainArr1['carat'], mainArr1['color'], mainArr1.isDiscrete['carat'], mainArr1.isDiscrete['color'], {xLabel : 'carat', yLabel : 'color'})
+        var scatter1 = new Scatter(mainArr1, axis2, 'carat', 'color', {color: 'cut'});
+       
         //var axis1 = new MakeAxis(1, mainArr1, {x:'cut', y:'table'});
         //var scatter1 = new Scatter(axis1, mainArr1, {x:'cut', y:'table', color: 'cut'});
         //eventTrigger(scatter1, mainArr1);

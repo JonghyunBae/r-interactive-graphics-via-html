@@ -8,10 +8,14 @@ var Scatter = {};
 	Scatter = function(mainArr, plotObject, xLabel, yLabel, optionObj) {
 		this._type = 'scatter';
 		this.id = mainArr.id;
-		this._labelArr = mainArr.labelArr; // this is for legend make.
+		this.labelArr = mainArr.labelArr; // this is for legend make.
 		this._init(mainArr, optionObj);
+		
+		//execute build
 		var returnValue = this._build(mainArr, plotObject, xLabel, yLabel);
+		
 		if(returnValue == 1){
+			//only when excuting build is success, execute draw
 			this._draw(plotObject);
 			mainArr.id ++;
 		}
@@ -26,26 +30,31 @@ var Scatter = {};
     			
     			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
     			// set the color type
-    			this.color=-1; 
+                if(optionObj.color == undefined){
+                    this.color=-1; //default color                  
+                }else{
+                    var tmp = setColor(mainArr[optionObj.color], mainArr.isDiscrete[optionObj.color]);
+                    this.colorArr = tmp.indexArr;
+                }
 	            
     		},
     		
     		_build: function(mainArr, plotObject, xLabel, yLabel) {
     			
     			//check whether each axis is the same type of plotObject.
-    			if(!(plotObject.xDiscrete == mainArr.isDiscrete[xLabel] && plotObject.yDiscrete == mainArr.isDiscrete[yLabel])){
+    			if(!(plotObject.isXDiscrete == mainArr.isDiscrete[xLabel] && plotObject.isYDiscrete == mainArr.isDiscrete[yLabel])){
     				alert("Can't draw scatter!");
     				return -1;
     			}
     			//set the legend text.
-	            if(this.color != -1){
+	        /*    if(this.color != -1){
 	            	this.lengend = "right";
 	            	this.legendX = plotObject.plotXMargin + plotObject.width + plotObject.plotLength*5;
 	        		this.legendY = plotObject.plotYMargin - plotObject.plotLength;
 	            	// making legend.
 	            	setLegendMake(this, this.mainValueArr, this.colors);	            	
 	            }
-	            
+	            */
 	            var nodeX = new Array();
     			var nodeY = new Array();
     			//nodeX set.
@@ -104,9 +113,9 @@ var Scatter = {};
     						x: nodeX[i],
     						y: nodeY[i],
     						radius: this.radius,
-    						stroke: (this.color == -1) ? 'green': getColor(i, this.colors, this.mainValueArr, this.tmpColorArr),
+    						stroke: (this.color == -1) ? 'green': this.colorArr[i],
     						strokeWidth: 1,
-    						fill: (this.color == -1) ? 'green': getColor(i, this.colors, this.mainValueArr, this.tmpColorArr),
+    						fill: (this.color == -1) ? 'green': this.colorArr[i],
     						selected : 0,
     						info :  "Node : " + cnt + "\r\n" + tooltipTextGetInfo[i]
     					});
@@ -222,10 +231,10 @@ function scatterUpdate(obj, id)
 function addLayer(obj, stage)
 {
 	obj.plotLayer = new Kinetic.Layer();
-	if(obj.color != -1){
+/*	if(obj.color != -1){
 		stage.setWidth(stage.getWidth() + obj.legendGroup.getWidth());
 		obj.plotLayer.add(obj.legendLayer);
-	}	
+	}	*/
 	obj.plotLayer.add(obj.mainLabel);
 	stage.add(obj.tooltipLayer);
 	stage.add(obj.dataLayer);
@@ -310,7 +319,7 @@ function makeColor_discrete(array, index)
  	color.indexArr = indexArr;
  	return color;
 }
-function caclXArr(dataArr)
+function calcXArr(dataArr)
 {
 	var cnt = 0;
 	var xArr = new Array();
@@ -577,7 +586,7 @@ function makeLegend(legendX, legendY, mainValueArr, color, colors, labelArr){
 //making legend setting.
 function setLegendMake(obj, mainValueArr, colors)
 {
-	var myLegend = makeLegend(obj.legendX, obj.legendY, mainValueArr, obj.color, colors, obj._labelArr);					
+	var myLegend = makeLegend(obj.legendX, obj.legendY, mainValueArr, obj.color, colors, obj.labelArr);					
 	obj.legendGroup = new Kinetic.Group({
 		width: myLegend.getWidth(),
 		height : myLegend.getHeight()

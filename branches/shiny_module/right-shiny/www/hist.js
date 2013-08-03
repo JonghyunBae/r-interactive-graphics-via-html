@@ -2,6 +2,26 @@
 // optionObj can be bin, color(double).
 // return : xLabel, yLebel, id, bin, xArr, yArr, freqArr, hasArr, isDiscrete, double.
 var MakeHistObj = {};
+function setMapping(index)
+{
+	return function(nodes)
+		{
+			var returnArr;
+			if(nodes.length == undefined){
+				returnArr = index[nodes];
+			}else{
+				for(var i = 0 ; i < nodes.length ; i ++){
+					returnArr.push(index[nodes[i]]);
+				}
+				returnArr = returnArr.reduce(function(a,b){
+					if(a.indexOf(b) < 0) a.push(b);
+					return a;
+				},[]);
+			}
+			
+			return returnArr;
+		};
+}
 
 (function() {
 	
@@ -11,6 +31,12 @@ var MakeHistObj = {};
 		this.bin = (optionObj.bin == undefined) ? (2) : (optionObj.bin); // default bin is 2
 		this.id = 0;
 		this.double = false;
+		this.parent = mainArr;
+		if(mainArr.child == null){
+			mainArr.child = new Array();
+		}
+		mainArr.child.push(this);
+		this.child = null;
 		if(mainArr.isDiscrete[xLabel] == true){
 			this.isDiscrete = true;
 			var cnt = 0;

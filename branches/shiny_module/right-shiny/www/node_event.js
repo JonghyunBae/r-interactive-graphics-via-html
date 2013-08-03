@@ -1,3 +1,58 @@
+function allUpdate(obj, nodes, child, select)
+{
+	// parent update
+	if(obj.parent != null){
+		var parent = obj.parent;
+		var temp = obj.childTOparent(nodes);
+		allUpdate(parent, temp, obj, select);
+	}
+	// my update
+	if(nodes.length == undefined){
+		for(var j = 0 ; j < isSelected[nodes].length ; j ++){
+			isSelected[nodes][j](select);
+		}
+	}else{
+		for(var i = 0 ; i < nodes.length ; i ++){
+			for(var j = 0 ; j < isSelected[nodes[i]].length ; j ++){
+				isSelected[nodes[i]][j](select);
+			}
+		}
+	}
+	// child update
+	if(obj.child != null){
+		for(var i = 0 ; i < obj.child.length ; i ++){
+			if(obj.child[i] != child){	// prevent infinite loop.
+				var temp = obj.parentTOchild[i](nodes);
+				childUpdate(obj.child[i], temp, select);
+			}
+		}
+	}
+}
+function childUpdate(obj, nodes, select)
+{
+	// my update
+	if(nodes.length == undefined){
+		for(var j = 0 ; j < isSelected[nodes].length ; j ++){
+			isSelected[nodes][j](select);
+		}
+	}else{
+		for(var i = 0 ; i < nodes.length ; i ++){
+			for(var j = 0 ; j < isSelected[nodes[i]].length ; j ++){
+				isSelected[nodes[i]][j](select);
+			}
+		}
+	}	
+	//child update
+	if(obj.child != null){
+		for(var i = 0 ; i < obj.child.length ; i ++){
+			if(obj.child[i] != child){	// prevent infinite loop.
+				var temp = parent.parentTOchild[i](nodes);
+				childUpdate(obj.child[i], temp, select);
+			}
+		}
+	}
+}
+
 //////////////////////////////////////Chk key event Start//////////////////////////////////////   
 
 window.addEventListener('keydown',checkKeyDown,false);  

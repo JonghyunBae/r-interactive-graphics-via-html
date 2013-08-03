@@ -103,6 +103,8 @@ function createMainStructure(fileName)
 	totalArr.isHidden = isHidden;
 	totalArr.id = 1;
 	totalArr.redraw = redraw;
+	totalArr.parent = null;
+	totalArr.child = null;
 	return totalArr;
 }
 

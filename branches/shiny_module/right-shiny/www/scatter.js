@@ -1,15 +1,3 @@
-/**  make scatter object  **/
-var MakeScatterObj = {};
-
-(function() {
-	
-	MakeScatterObj = function(mainArr, xLabel, yLabel, optionObj) {
-		
-		this.id = 0;
-		
-	}
-})();
-
 /**  draw sactter  **/
 // label array is used for tooltipgetinfo and color setting. --> should be refined!
 
@@ -38,19 +26,8 @@ var Scatter = {};
     			
     			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
     			// set the color type
-	            if(optionObj.color == undefined){
-	            	this.color=-1; //default color     		
-	            }else{
-	            	for(var i = 0 ; i < this._labelArr.length ; i ++ ){
-	            		if(this._labelArr[i] == optionObj.color){
-	            			this.color = i;
-	            			break;
-	            		}
-	            	}
-             		this.colArr = setColor(mainArr[optionObj.color]);
-            	
-	            }
-    			
+    			this.color=-1; 
+	            
     		},
     		
     		_build: function(mainArr, plotObject, xLabel, yLabel) {
@@ -145,7 +122,7 @@ var Scatter = {};
     			// make main labels.
 				MakeMainLabel(this, plotObject, xLabel, yLabel);
 				setTooltip(this);
-				return 0;
+				return 1;
     		},
     		
     		_draw : function(plotObject) {

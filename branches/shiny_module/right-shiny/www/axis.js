@@ -38,6 +38,7 @@ var MakeAxis = {};
 				var tmp = setAxis_discrete(xArr, this.width);
 				this.xMax = -1;
 				this.xMin = -1;
+				this.xNode = tmp.node;
 				this.xdiff = tmp.diff;
 				this.xPlotArr = tmp.array;
 			}else{
@@ -61,6 +62,7 @@ var MakeAxis = {};
 				var tmp = setAxis_discrete(yArr, this.height);
 				this.yMax = -1;
 				this.yMin = -1;
+				this.yNode = tmp.node;
 				this.ydiff = tmp.diff;
 				this.yPlotArr = tmp.array;
 			}else{
@@ -150,19 +152,40 @@ function setAxis_continue(max, min, tick, length)
 // set axis with discrete data.
 function setAxis_discrete(array, length)
 {
-	var plotArr = make2DArr(array.length);
-	var diff = length / (array.length + 1);
-	
-	for(var i = 1 ; i < plotArr.length+1 ; i ++)
-	{
-		plotArr[i-1][0] = i*diff;
-		plotArr[i-1][1] = array[i-1];
-	}
-	
-	return {
-		'diff'	: diff,
-		'array' : plotArr
-	};	
+	var node = new Array();
+    node[0] = 0;
+    var tmp = new Array();  //the names of each content below
+    tmp[0] = array[0];
+    for(var i = 1 ; i < array.length ; i++)
+    {
+            for(j = 0 ; j < tmp.length ; j ++)
+            {
+                    if(tmp[j] == array[i])
+                    {
+                            node[i] = j;
+                            break;
+                    }                                               
+            }
+            if(j == tmp.length)
+            {
+                    node[i] = j;
+                    tmp.push(array[i]);
+            }
+    }
+    var plotArr = make2DArr(tmp.length);
+    var diff = length / (tmp.length+1);
+    
+    for(var i = 1 ; i < plotArr.length+1 ; i ++)
+    {
+            plotArr[i-1][0] = i*diff;
+            plotArr[i-1][1] = tmp[i-1];
+    }
+    
+    return {
+            'diff'  : diff,
+            'node'  : node,
+            'array' : plotArr
+    };
 }
 /**  set axis end  **/
 /**  make stage  **/

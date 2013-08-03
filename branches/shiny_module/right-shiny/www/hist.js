@@ -120,6 +120,7 @@ var MakeHistObj = {};
 				//under construction.
 				var tmp = setColor(mainArr[this.color], true);
 				var colorArr = tmp.indexArr;
+				
 			}
 			
 			this.colorArr = colorArr;

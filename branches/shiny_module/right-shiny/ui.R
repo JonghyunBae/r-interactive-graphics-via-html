@@ -65,10 +65,9 @@ shinyUI(bootstrapPage(
         var hist1 = new Hist(axis1, histArr1);
         eventTrigger(hist1);
 
-        var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['color'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['color'], {xLabel : 'cut', yLabel : 'color'})
-        var scatter1 = new Scatter(mainArr1, axis2, 'cut', 'color', {color: 'cut', legend: 'left'});
+        var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['table'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['table'], {xLabel : 'cut', yLabel : 'table'})
+        var scatter1 = new Scatter(mainArr1, axis2, 'cut', 'table', {color: 'cut'});
         eventTrigger(scatter1);
-       
         var axis3 = new MakeAxis(3, mainArr1['cut'], mainArr1['price'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['price'], {xLabel : 'cut', yLabel : 'price'})
         var scatter2 = new Scatter(mainArr1, axis3, 'cut', 'price', {color: 'price', legend: 'topright'});
         eventTrigger(scatter2);
@@ -88,8 +87,8 @@ shinyUI(bootstrapPage(
       <script src=\"button_event.js\"></script>
       <script src=\"table.js\"></script>
 
-       <script>makeTable(mainArr1, 'table1')</script>
-       <script>makeTable(mainArr2, 'table2')</script>
+       <script>makeTable('table1', mainArr1, 200)</script>
+       <script>makeTable('table2', mainArr2, 300)</script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>
        <p id=\"dont-delete-this\">E-mail : <a href=\"mailto:teamrightjs@gmail.com\">team.right.js@gmail.com</a></p>

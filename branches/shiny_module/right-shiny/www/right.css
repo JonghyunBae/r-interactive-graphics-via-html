@@ -361,44 +361,41 @@ input[type="button"]:active {
 
 
 /*** SELECTED INFORMATION TABLE ***/
-  table.selectedInfo { 
+  table.scrollable{ 
   /*  font-family: verdana, arial, helvetica, sans-serif;*/
     font-size: 11px;
     cellspacing: 0;     
     border-collapse: collapse; 
-    width: 653px;    
+   
     
     font-family:Trebuchet MS;
 
     }
-  table.selectedInfo td { 
-     border-left: 1px solid #999; 
+  table.scrollable td { 
+     border-right: 1px solid #999; 
     border-top: 1px solid #999;  
-    padding: 2px 4px;
+
     }
-  table.selectedInfo tr:first-child td {
+  table.scrollable tr:first-child td {
     border-top: none;
   }
-  table.selectedInfo th { 
-    border-left: 1px solid #999; 
-    border-bottom: 1px solid #999; 
-    padding: 2px 4px;
+  table.scrollable th { 
   /*  background: #516ca3;*/
     background: #93b21a;
     color: white;
     font-variant: small-caps;
-    
+    border-right: 1px solid #FFF; 
+    border-top: 1px solid #999;    
     }
-  table.selectedInfo td { background: #fff; overflow: hidden; }
+  table.scrollable td { background: #fff; overflow: hidden; }
 
   div.scrollableContainer { 
     position: relative; 
     width: 900px; 
-    padding-top: 2.9em; 
+    padding-top: 2.5em; 
     margin: 0px;    
     border: 1px solid #999;
     background: #fff;
-   
     
     display: none;
     }
@@ -408,11 +405,10 @@ input[type="button"]:active {
     }
 
   table.scrollable  thead tr {
-    left: -1px; top: 0;
-    position: absolute;
-
+    top: 0;
+    position: absolute;   
     }
-
+	
   table.cruises td { background: #eee; overflow: hidden; }
     table.selectedInfo td.node     { background: #cfe444; }  
   table.selectedInfo td.column { background: #cfe444;}

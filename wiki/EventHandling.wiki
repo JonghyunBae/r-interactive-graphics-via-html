@@ -1,3 +1,5 @@
+#sidebar TableOfContents
+
 == 1. Conditions ==
  * Each graph has update function.
  * Update function of each node in each graph is saved in isSelectArr when initializing data.

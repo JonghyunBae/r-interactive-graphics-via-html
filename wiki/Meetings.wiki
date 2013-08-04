@@ -1,3 +1,21 @@
+  # About 90% of code restructuring is done: axis, event handling, scatter, hist
+   # Event handling code is in hist.js and common.js
+   # Axis code is in axis.js. Points overlaid outside of the axis range is cut off for now. We will revisit this issue later.
+  # Let's clean up code for the line plot. We want to test building.
+   # No shiny (just visualization) example
+   # With shiny (regression) example
+  # How to layout search box? We agree that the search box should take minimal space (low priority).
+   # Drop down box to choose between data structures.
+   # Pull-down menu?
+   # Just a box like Google search?
+  # Right-click menu?
+   # hide, reset, x, y, color
+   # shape (good to have)
+   # pull-down menu for axis, color, and shape (good to have)
+  # stacking historgram
+  
+----
+
   # Status update
   # Recruiting a new team member
   # Things to improve:

@@ -1,3 +1,4 @@
+#summary Description about supported types of plots
 #sidebar TableOfContents
 
 <wiki:toc max_depth="2"/>

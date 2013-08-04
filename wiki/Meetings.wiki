@@ -20,21 +20,26 @@
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
-  # About 90% of code restructuring is done: axis, event handling, scatter, hist
-   # Event handling code is in hist.js and common.js
-   # Axis code is in axis.js. Points overlaid outside of the axis range is cut off for now. We will revisit this issue later.
-  # Let's clean up code for the line plot. We want to test building.
-   # No shiny (just visualization) example
-   # With shiny (regression) example
-  # How to layout search box? We agree that the search box should take minimal space (low priority).
-   # Drop down box to choose between data structures.
-   # Pull-down menu?
-   # Just a box like Google search?
+  # About 90% of code restructuring is done for axis, event handling, scatter, and hist.
+   # Event handling code is in hist.js and common.js.
+   # Axis code is in axis.js. Points overlaid outside of the axis range are discarded with warning for now. Let's remove warning, and we will revisit this issue later.
+  # We would like to build our first R package in mid August. For this, 
+   # Let's clean up the code for the line plot. This code will be used to test server offloading with regression example.
+   # The following examples will be created from R and tested:
+    # Simple visualization example without Shiny.
+    # Server offloading example (with Shiny in the background) with regression code running at the server.
+    # Embed RIGHT as Shiny output.
+  # How to layout search box? (lower priority for now)
+   # We agree that the search box should take minimal space, like Google's search box.
+   # Junghoon was originally thinking of providing a search box per root data structure. However, drop down box to choose between data structures can be useful. 
+   # Pull-down menu to choose field names?
+   # If we want to really go minimal, we should have auto complete and some syntax to choose the root data structure.
   # Right-click menu?
-   # hide, reset, x, y, color
-   # shape (good to have)
-   # pull-down menu for axis, color, and shape (good to have)
-  # stacking historgram
+   # Let's keep hide, reset, x-axis, y-axis, and color for now.
+   # Adding shape will be nice (lower priority)
+   # Pull-down menu for axes, color, and shape will be nice (lower priority)
+  # Stacked and parallel bar for histogram should be supported.
+  # Update EventHandling page with updated information.
   
 == 28JUL2013 ==
 

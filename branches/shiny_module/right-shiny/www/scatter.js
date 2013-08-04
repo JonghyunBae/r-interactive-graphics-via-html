@@ -57,14 +57,16 @@ var Scatter = {};
                 	alert("Legend should be \"right\", \"left\", \"topright\" or \"topleft\"!");
                 	return -1;
                 }
-            }      
+            }else{
+             	this.legend = "right"; //if color is set, but legend is not, just set default legend as right
+            }       
             //if color exists, legend should be created.
             if(this.color != -1){
             	//set legend position.
         		setLegendPosition(this, plotObject);    
         		//make legend.
-            	MakeLegend(this);	
-        		//resize plotObject's width. It depends on legendGroup's width.
+        		MakeLegend(this, this.color, this.colorArr, this.legendX, this.legendY, this.mainValueArr);	
+         		//resize plotObject's width. It depends on legendGroup's width.
         		plotObject.stage.setWidth(plotObject.stage.getWidth()+ this.legendGroup.getWidth());        		
         		//When legend is right or left, move legend layer to center. 			        		
         		if(this.legend == 'right' || this.legend == 'left'){
@@ -258,10 +260,6 @@ function scatterUpdate(obj, id)
 function addLayer(obj, stage)
 {
 	obj.plotLayer = new Kinetic.Layer();
-/*	if(obj.color != -1){
-		stage.setWidth(stage.getWidth() + obj.legendGroup.getWidth());
-		obj.plotLayer.add(obj.legendLayer);
-	}	*/
 	obj.plotLayer.add(obj.mainLabel);
 	stage.add(obj.tooltipLayer);
 	stage.add(obj.dataLayer);

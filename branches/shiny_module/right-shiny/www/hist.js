@@ -138,22 +138,33 @@ function setMapping(index)
 			this.hasArr = hasArr;
 		}
 		// check double
-		if(optionObj.color != undefined){
-			this.color = optionObj.color;
-			if(xLabel == this.color && mainArr.isDiscrete[this.color] == true){
-				var tmp = makeColor_discrete(this.xArr, index);
-				var colorArr = tmp.indexArr;
-			}else if(mainArr.isDiscrete[this.color] == true){
+		if(optionObj.color == undefined){
+	         this.color = -1; //default color
+	    }else{
+	    	this.color = optionObj.color;
+	    	if(xLabel == this.color && mainArr.isDiscrete[this.color] == true){
+	    		this.colorArr =  makeColor_discrete(this.xArr, index);
+	    	}else if(mainArr.isDiscrete[this.color] == true){
 				//under construction.
-				var tmp = setColor(mainArr[this.color], true);
-				var colorArr = tmp.indexArr;
-				
-			}
-			
-			this.colorArr = colorArr;
-		}else{
-			this.color = -1;
+			}			
 		}
+		//check option color is assigned if option legend is assined.
+	    if(this.color == -1 && optionObj.legend != undefined){
+	    	alert("Can't draw legend without color!");
+			return -1;                    
+	    }
+    	//check option legend name is appropriate
+	    if(optionObj.legend !=undefined){
+	    	var legendChk = optionObj.legend.toLowerCase();
+	    	if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft'){                           
+	    		this.legend = optionObj.legend;
+	    	}else{
+	    		alert("Legend should be \"right\", \"left\", \"topright\" or \"topleft\"!");
+    			return -1;
+	    	}
+	    }else{
+	    	this.legend = "right"; //if color is set, but legend is not, just set default legend as right
+	    }
 		// set mapping
 		this.parent = mainArr;
 		if(mainArr.child == null){
@@ -185,7 +196,26 @@ var Hist = {};
     };
 	Hist.prototype = {
 			_draw : function(plotObject, histArr) {
-				this.color = -1;
+				//assign this.color as histArr.color because addLayer needs this.color.
+				this.color = histArr.color;				
+				//if color exists, legend should be created.
+	            if(histArr.color != -1){
+	            	//set legend position.
+	        		setLegendPosition(histArr, plotObject);    
+	        		//make legend.
+	            	MakeLegend(this, histArr.color, histArr.colorArr, histArr.legendX, histArr.legendY, histArr.mainValueArr);	
+	        		//resize plotObject's width. It depends on legendGroup's width.
+	        		plotObject.stage.setWidth(plotObject.stage.getWidth()+ this.legendGroup.getWidth());        		
+	        		//When legend is right or left, move legend layer to center. 			        		
+	        		if(histArr.legend == 'right' || histArr.legend == 'left'){
+	        			this.legendLayer.setY((plotObject.height-this.legendGroup.getHeight())/2);
+	        		}        		
+	        		//move plotObject left.
+	        		if(this.legend == 'left' || this.legend == 'topleft'){
+	        			plotObject.plotLayer.setX(plotObject.plotLayer.getX() + this.legendGroup.getWidth() + plotObject.plotLength*5 );
+	            		plotObject.plotLayer.draw();            		
+	        		}       	
+	            }
 				if(histArr.double == false){
 					if(histArr.isDiscrete == true){
 						this.barWidth = (plotObject.xPlotArr[2][0] - plotObject.xPlotArr[1][0])/2;
@@ -204,7 +234,7 @@ var Hist = {};
 								y: plotObject.plotYMargin + plotObject.height - histArr.freqArr[cnt]*plotObject.height/plotObject.yMax/2, 
 								width: this.barWidth,
 								height: histArr.freqArr[cnt]*plotObject.height/plotObject.yMax,
-								fill: (histArr.color == -1) ? 'green' : histArr.colorArr[histArr.hasArr[cnt][0]],
+								fill: (histArr.color == -1) ? 'green' : histArr.colorArr.indexArr[histArr.hasArr[cnt][0]],
 								stroke: 'black',						
 								opacity : 0.5,
 								selected : 0,

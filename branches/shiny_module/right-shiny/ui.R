@@ -50,13 +50,14 @@ shinyUI(bootstrapPage(
        </div>
        </div>
        <script>
-        var histArr= new MakeHistObj(mainArr1, 'cut', {bin:0.5, color:'cut', legend: 'right'});
+        var histArr= new MakeHistObj(mainArr1, 'cut', {bin:0.5, color:'cut'});
         var axis1 = new MakeAxis(1, histArr.xArr, histArr.yArr, histArr.isDiscrete, 'false', {xLabel : histArr.xLabel , yLabel : histArr.yLabel, xbin: histArr.bin});
         var hist1 = new Hist(axis1, histArr);
+        eventTrigger(hist1);
 
         var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['color'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['color'], {xLabel : 'cut', yLabel : 'color'})
         var scatter1 = new Scatter(mainArr1, axis2, 'cut', 'color', {color: 'cut', legend: 'left'});
-       
+        eventTrigger(scatter1);
        
         var axis3 = new MakeAxis(3, mainArr1['cut'], mainArr1['price'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['price'], {xLabel : 'cut', yLabel : 'price'})
         var scatter2 = new Scatter(mainArr1, axis3, 'cut', 'price', {color: 'price', legend: 'topright'});

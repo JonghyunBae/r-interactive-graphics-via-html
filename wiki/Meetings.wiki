@@ -1,6 +1,6 @@
-  #sidebar TableOfContents
+<wiki:toc max_depth="1" />
 
-----
+== Remaining Meeting Items ==
 
   # Status update
   # Things to improve:
@@ -16,9 +16,7 @@
    * Discuss about Hardly Wickham's comments.
   # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
 
-----
-
-== 2013/08/04 ==
+== 04AUG2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
@@ -38,7 +36,7 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
    # pull-down menu for axis, color, and shape (good to have)
   # stacking historgram
   
-== 2013/07/28 ==
+== 28JUL2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
@@ -94,7 +92,7 @@ plot(price ~ carat, data = subArray, type = "p") # refreshes axis and plots poin
   # Testing
    * Separate calculation part from drawing part exactly for making adding unit-testing easier.
 
-== 2013/07/21 ==
+== 21JUL2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   
@@ -105,7 +103,7 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   # Using callback function, simple operations, such as redrawing axis, can be handled solely by the client without any server involvement. For event handling, see [http://stackoverflow.com/questions/9099555/jquery-bind-events-on-plain-javascript-objects stackoverflow] or [http://api.jquery.com/category/callbacks-object/ API documentation].
   # Switch license term to GPL, and separate our own code from shiny part.
 
-== 2013/07/13 == 
+== 13JUL2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
@@ -116,9 +114,7 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   # Explored shiny code (shiny.js) and discussed about the general direction we are heading.
   # TJ's participation will be limited during the week. Also, he will be in new employee orientation in August.
 
-----
-
-Date : 06JULY2013
+== 06JUL2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
@@ -139,9 +135,7 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
 Next meeting : 09:00 AM (Korea time) on Sat, 7/13
 
-----
-
-Date : 02JUN2013
+== 02JUN2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
@@ -177,9 +171,7 @@ Research prior to meeting
   * There is a bug report slot for users  (https://github.com/ericdrowell/KineticJS/issues?page=1&state=open).
   * Keep changing syntax.
 
-----
-
-Date : 28/01/2013
+== 28FEB2013 == 
 
 participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
@@ -200,9 +192,7 @@ Contents
 
 Next meeting : 10:00 AM (Korea time) on Sat, 3/16
 
-----
-
-Date : 24/02/2013
+== 24FEB2013 ==
 
 participants : Jung Hoon Lee, Chung Ha Sung, Taejoon Song.
 
@@ -220,9 +210,7 @@ Contents
  
 Next meeting : TBD.
 
-----
-
-Date : 16/02/2013
+== 16FEB2013 ==
 
 participants : Jae W.Lee, Jung Hoon Lee, Chung Ha Sung.
 
@@ -243,9 +231,7 @@ Contents
 
 Next meeting : 01:00 PM (which is 11:00 PM in NJ Time) on Sun, 2/24 through skype.
 
-----
-
-Date : 28/01/2013
+== 28JAN2013 ==
 
 participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 

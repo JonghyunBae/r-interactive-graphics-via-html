@@ -1,4 +1,4 @@
-#summary Description about graph options
+#summary Description about plotting options
 #sidebar TableOfContents
 
 <wiki:toc max_depth="2"/>

@@ -1,3 +1,23 @@
+#sidebar TableOfContents
+
+----
+
+  # Status update
+  # Things to improve:
+   # Plot overlaying 
+   # Event handling for menu and plot update
+   # R API for code generation
+   # Package surver offloading
+   # Output packaging for Shiny
+   # Testing
+   # Documentation
+  # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
+  # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
+   * Discuss about Hardly Wickham's comments.
+  # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+
+----
+
   # About 90% of code restructuring is done: axis, event handling, scatter, hist
    # Event handling code is in hist.js and common.js
    # Axis code is in axis.js. Points overlaid outside of the axis range is cut off for now. We will revisit this issue later.
@@ -14,26 +34,7 @@
    # pull-down menu for axis, color, and shape (good to have)
   # stacking historgram
   
-----
-
-  # Status update
-  # Recruiting a new team member
-  # Things to improve:
-   # Plot overlaying 
-   # Event handling for menu and plot update
-   # R API for code generation
-   # Package surver offloading
-   # Output packaging for Shiny
-   # Testing
-   # Documentation
-  # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
-  # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
-   * Discuss about Hardly Wickham's comments.
-  # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
-
-----
-
-Date : 28JULY2013
+== 2013/07/28 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
 
@@ -89,9 +90,7 @@ plot(price ~ carat, data = subArray, type = "p") # refreshes axis and plots poin
   # Testing
    * Separate calculation part from drawing part exactly for making adding unit-testing easier.
 
-----
-
-Date : 21JULY2013
+== 2013/07/21 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   

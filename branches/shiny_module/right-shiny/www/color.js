@@ -148,9 +148,9 @@ function setLegendPosition(obj, plotObject)
 }
 /**  legend set functions  **/
 //making legend setting.
-function MakeLegend(obj)
+function MakeLegend(obj, color, colorArr, legendX, legendY, mainValueArr)
 {
-	var myLegend = setLegend(obj);					
+	var myLegend = setLegend(obj, color, colorArr, legendX, legendY, mainValueArr);					
 	obj.legendGroup = new Kinetic.Group({
 		width: myLegend.getWidth(),
 		height : myLegend.getHeight()
@@ -170,23 +170,23 @@ function MakeLegend(obj)
 
 
 
-function setLegend(obj){
-	if(obj.colorArr.isDiscrete == true){
+function setLegend(obj, color, colorArr, legendX, legendY, mainValueArr){
+	if(colorArr.isDiscrete == true){
     	var legendNode = new Array();	
     	var legendText = new Array();	
-		for(var i = 0; i < obj.colorArr.label.length ; i++)
+		for(var i = 0; i < colorArr.label.length ; i++)
 		{						
 			legendNode[i] = new Kinetic.Circle({
-				x: obj.legendX+15,
-				y: obj.legendY+15*i+11+20,
+				x: legendX+15,
+				y: legendY+15*i+11+20,
 				radius: 5,
 				opacity: 0.7,
-				fill: obj.colorArr.colors[i]
+				fill: colorArr.colors[i]
 			});			
 			legendText[i] = new Kinetic.Text({
-				x: obj.legendX+20,
-		        y: obj.legendY+15*i+20,
-				text: obj.colorArr.label[i],
+				x: legendX+20,
+		        y: legendY+15*i+20,
+				text: colorArr.label[i],
 				fontFamily: 'Calibri',
 				fontSize: 13,
 				padding: 5,
@@ -195,7 +195,7 @@ function setLegend(obj){
 			});				
 		}	
 		var maxLengthLegendText = legendText[0].getWidth();
-		for(var i=0; i<obj.colorArr.label.length; i++)
+		for(var i=0; i<colorArr.label.length; i++)
 		{
 			if(legendText[i].getWidth()>maxLengthLegendText)
 			{
@@ -204,7 +204,7 @@ function setLegend(obj){
 		}		
 	}else{
 		var tick= 5; //default legend ticks is 5  
-		var temp = findMaxMinValue(obj.colorArr.mainValueArr);
+		var temp = findMaxMinValue(colorArr.mainValueArr);
         var max = temp.max;		
         var min = temp.min;	
         var tickRange = (max - min)/tick;
@@ -225,8 +225,8 @@ function setLegend(obj){
     	for(var i = 0; i < plotArr.length ; i++)
 		{										
 			legendText[i] = new Kinetic.Text({
-				x: obj.legendX+30,
-		        y: obj.legendY+20*i+15,
+				x: legendX+30,
+		        y: legendY+20*i+15,
 				text: '-  '+plotArr[ (plotArr.length-1)-i ],
 				fontFamily: 'Calibri',
 				fontSize: 13,
@@ -237,8 +237,8 @@ function setLegend(obj){
 		}		    	
     		
     	legendNode[0] = new Kinetic.Rect({
-			x: obj.legendX+15,
-			y: obj.legendY + 47 + 20*((newMax-newMin)/tickRange-1) - 20*(max - min )/tickRange - 20*(min -newMin)/tickRange,
+			x: legendX+15,
+			y: legendY + 47 + 20*((newMax-newMin)/tickRange-1) - 20*(max - min )/tickRange - 20*(min -newMin)/tickRange,
 			width :20,
 			height :  20*(max - min)/tickRange,
 			opacity: 0.7,
@@ -257,9 +257,9 @@ function setLegend(obj){
 	}	
 	
 	var legendMain= new Kinetic.Text({
-		x: obj.legendX,
-        y: obj.legendY+5,
-		text: obj.color,
+		x: legendX,
+        y: legendY+5,
+		text: color,
 		fontFamily: 'Calibri',
 		fontSize: 15,
 		fill: 'black',
@@ -270,10 +270,10 @@ function setLegend(obj){
 		maxLengthLegendText=legendMain.getWidth();
 	}		
 	 var legendRect= new Kinetic.Rect({
-		x:obj.legendX,
-		y:obj.legendY,
+		x:legendX,
+		y:legendY,
 		width: maxLengthLegendText + 30,
-		height: legendText[i-1].getY()-obj.legendY + 30, //i is set by (mainValueArr.length) or  (plotArr.length)
+		height: legendText[i-1].getY()-legendY + 30, //i is set by (mainValueArr.length) or  (plotArr.length)
 		stroke: 'black',
 		fill: '#fff'
 	});			

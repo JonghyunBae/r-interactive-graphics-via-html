@@ -35,6 +35,7 @@ var Scatter = {};
             }else{
             	this.color = optionObj.color;
                 this.colorArr = setColor(mainArr[optionObj.color], mainArr.isDiscrete[optionObj.color]);
+                //this.colorArr = tmpColorArr.indexArr;
             }                  
 		},
 		
@@ -64,7 +65,7 @@ var Scatter = {};
             	//set legend position.
         		setLegendPosition(this, plotObject);    
         		//make legend.
-            	MakeLegend(this);	
+            	MakeLegend(this, this.color, this.colorArr, this.legendX, this.legendY, this.mainValueArr);	
         		//resize plotObject's width. It depends on legendGroup's width.
         		plotObject.stage.setWidth(plotObject.stage.getWidth()+ this.legendGroup.getWidth());        		
         		//When legend is right or left, move legend layer to center. 			        		
@@ -288,4 +289,7 @@ function MakeMainLabel(obj, plot, xLabel, yLabel)
 	});
 }
 /**  make Main Label end  **/
+
+
+
 

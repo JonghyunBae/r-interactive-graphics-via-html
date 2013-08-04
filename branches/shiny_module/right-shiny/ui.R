@@ -50,7 +50,7 @@ shinyUI(bootstrapPage(
        </div>
        </div>
        <script>
-        var histArr= new MakeHistObj(mainArr1, 'cut', {bin:0.5, color:'cut'});
+        var histArr= new MakeHistObj(mainArr1, 'cut', {bin:0.5, color:'cut', legend: 'right'});
         var axis1 = new MakeAxis(1, histArr.xArr, histArr.yArr, histArr.isDiscrete, 'false', {xLabel : histArr.xLabel , yLabel : histArr.yLabel, xbin: histArr.bin});
         var hist1 = new Hist(axis1, histArr);
 

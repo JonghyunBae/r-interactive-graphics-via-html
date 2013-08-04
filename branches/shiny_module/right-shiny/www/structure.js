@@ -61,7 +61,7 @@ function createMainStructure(fileName)
 {	
 	var tmpArr = getData(fileName);		
 	var dataArr=tmpArr.dataArr;	
-	var labelArr=tmpArr.labelArr;	
+	var labelArr=tmpArr.labelArr;
 	var isSelected = make2DArr(dataArr.length);
 	var isHidden = new Array(dataArr.length);	// false -> not hidden, true -> hidden.
 	var mainArr = make2DArr(labelArr.length + 1);		
@@ -109,8 +109,3 @@ function createMainStructure(fileName)
 	totalArr.refreshArr = new Array();
 	return totalArr;
 }
-
-
-		
-
-

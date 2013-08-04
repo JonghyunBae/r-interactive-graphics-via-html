@@ -123,9 +123,10 @@ var Scatter = {};
 			for(var i = 0; i < mainArr[yLabel].length ; i++)
 			{
 				tooltipTextGetInfo[i] =  mainArr.labelArr[0] + " : " + mainArr[mainArr.labelArr[0]][i]+ "\r\n" ;
-				for(var j = 1; j < mainArr.labelArr.length ; j ++){
-					tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[0] + " : " + mainArr[mainArr.labelArr[0]][i]+ "\r\n" ;
+				for(var j = 1; j < mainArr.labelArr.length-1 ; j ++){
+					tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[j] + " : " + mainArr[mainArr.labelArr[0]][j]+ "\r\n" ;
 				}
+				tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[j] + " : " + mainArr[mainArr.labelArr[0]][j];
 			}
 			//set dots.
 			this.node = new Array();

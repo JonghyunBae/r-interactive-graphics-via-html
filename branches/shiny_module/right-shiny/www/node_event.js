@@ -422,7 +422,7 @@ function hover(Name)
   });    
 }
 
-function select(Name, mainArr)
+function select(Name)
 {        
 	var tmpNodeArr = new Array();
 	Name.stage.on('click', function(evt){
@@ -497,9 +497,9 @@ function select(Name, mainArr)
             		Name.preId = {x : -1 , y : -1};
             	}                               
             }
-                
-             //   refresh();
-           //     addRow('dataTable');
+            //   refresh();
+            addRow('table1');
+            addRow('table2');
         }
 	});        
 }

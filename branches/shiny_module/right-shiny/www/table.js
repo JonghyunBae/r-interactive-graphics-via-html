@@ -1,88 +1,84 @@
 //create dynamic css style for dynamic table
+function makeTable(mainArr, tableID){
+	var colWidth=100;
+	document.write("<style>");
+	document.write("table.selectedInfo { width: "+((colWidth+9)*(mainArr.labelArr.length+1)-1)+"px; }");			
+	document.write("div.scrollableContainer { width: "+ ((colWidth+9)*(mainArr.labelArr.length+1)+15) +"px;}");
+	document.write("div.scrollingArea { height: " + 300 + "px;}"); //you can set the height of scrolling area
+	document.write("table.selectedInfo .node     div { width: "+colWidth+"px; text-align:center;  }");
+	document.write("table.selectedInfo .column div { width: "+colWidth+"px; text-align:center;  }");
 
-var colWidth=100;
-document.write("<style>");
-document.write("table.selectedInfo { width: "+((colWidth+9)*(labelArr.length+1)-1)+"px; }");			
-document.write("div.scrollableContainer { width: "+ ((colWidth+9)*(labelArr.length+1)+15) +"px;}");
-document.write("div.scrollingArea { height: " + 300 + "px;}"); //you can set the height of scrolling area
-document.write("table.selectedInfo .node     div { width: "+colWidth+"px; text-align:center;  }");
-document.write("table.selectedInfo .column div { width: "+colWidth+"px; text-align:center;  }");
+	document.write("</style>"); 
+	//create dynamic table
 
-document.write("</style>"); 
-
-
-
-//create dynamic table
-
-document.write("<div id=\"tableScrollableContainer\" class=\"scrollableContainer\" style=\"float: left; position : relative; display:block; margin : 10px 1px 0px 10px ;\">");
-document.write(" <div class=\"scrollingArea\">");
-	document.write("<table id=\"dataTable\" class=\"selectedInfo scrollable\">");
-		document.write("<thead>");
-			document.write("<tr>");
-			document.write("<th class=\"node\"><div>node<br>(number)</div></th>");
-			for(var i=0; i<labelArr.length ; i++)
-			{
-				document.write("<th class=\"column\"><div>"+labelArr[i]+"</div></th>");
-			}	  			
-  	      document.write("</tr>");
-		document.write("</thead>");
-		document.write("<tbody>");		
-		//	for(var i=0; i<3; i++)
-		//	{
-			//	if(scatterData[i].selected==1)
+	document.write("<div id=\"tableScrollableContainer\" class=\"scrollableContainer\" style=\"float: left; position : relative; display:block; margin : 10px 1px 0px 10px ;\">");
+	document.write(" <div class=\"scrollingArea\">");
+		document.write("<table id="+tableID+" class=\"selectedInfo scrollable\">");
+			document.write("<thead>");
+				document.write("<tr>");
+				document.write("<th class=\"node\"><div>node<br>(number)</div></th>");
+				for(var i=0; i<mainArr.labelArr.length ; i++)
+				{
+					document.write("<th class=\"column\"><div>"+mainArr.labelArr[i]+"</div></th>");
+				}	  			
+	  	      document.write("</tr>");
+			document.write("</thead>");
+			document.write("<tbody>");		
+			//	for(var i=0; i<3; i++)
 			//	{
-					document.write("<tr id=\"tr1\" style=\"display:none; \"> ");			//style=\"display:none\">
-						document.write("<td id=\"td1\" class=\"node\"><div>-</div></td>");
-						for(var i=0; i<labelArr.length ; i++)
-						{
-							document.write("<td class=\"column\"><div>-</div></td>");
-						}	  	
-					document.write("</tr>");		
-			//	}					
-		//	}
-			document.write("</tbody>");			
-		document.write("</table>");	
-	document.write(" </div>");
-document.write(" </div>");			
+				//	if(scatterData[i].selected==1)
+				//	{
+						document.write("<tr id=\"tr1\" style=\"display:none; \"> ");			//style=\"display:none\">
+							document.write("<td id=\"td1\" class=\"node\"><div>-</div></td>");
+							for(var i=0; i<mainArr.labelArr.length ; i++)
+							{
+								document.write("<td class=\"column\"><div>-</div></td>");
+							}	  	
+						document.write("</tr>");		
+				//	}					
+			//	}
+				document.write("</tbody>");			
+			document.write("</table>");	
+		document.write(" </div>");
+	document.write(" </div>");		
+}
+
+
+
+
+	
 
 
 function addRow(tableID) {
-	
-	
-	
-	deleteRow(tableID);
     var table = document.getElementById(tableID);
-
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
-
     var colCount = table.rows[0].cells.length;
-   
-    for(var i=0; i<tempData[0].length; i++)
+    var colWidth=100;
+    //for(var i=0; i<tempData[0].length; i++)
+    for(var i=0; i< 10 ; i++)
 	{
-		if(isSelected[i][0] == 1)
-		{
+		//if(isSelected[i][0] == 1)
+		//{
 			rowCount = table.rows.length;
 			row = table.insertRow(rowCount);
-				var newcell = row.insertCell(0);
-				 newcell.align = 'center';
-				
-				newcell.style.backgroundColor = '#cfe444';
+			var newcell = row.insertCell(0);
+			newcell.align = 'center';
+			
+			newcell.style.backgroundColor = '#cfe444';
+			newcell.style.color = 'black';
+			newcell.width = colWidth;
+			newcell.innerHTML = i;
+			for(var j=1; j<colCount; j++) {
+				var newcell = row.insertCell(j);			
+				newcell.align = 'center';
 				newcell.style.color = 'black';
 				newcell.width = colWidth;
-				newcell.innerHTML = i;
-			   for(var j=1; j<colCount; j++) {
-
-		           var newcell = row.insertCell(j);
-		           // newcell.innerHTML = table.rows[0].cells[j].innerHTML;
-		           newcell.align = 'center';
-		           newcell.style.color = 'black';
-			           newcell.width = colWidth;
-			           newcell.innerHTML = tempData[j-1][i];
-			           
-				   }
+				newcell.innerHTML = 1;
+				//newcell.innerHTML = tempData[j-1][i];
 			}
-		}	
+		//}
+	}	
 }
 function deleteRow(tableID) {
 	try {

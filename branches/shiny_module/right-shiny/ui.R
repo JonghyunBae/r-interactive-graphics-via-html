@@ -38,7 +38,13 @@ shinyUI(bootstrapPage(
   HTML("<script>var mainArr2 = createMainStructure('Theoph-from-R.csv');</script>"), 
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
-       
+       <form id=\"searchForm1\">
+       <input type=\"text\" id=\"searchBox\" name=\"searchId\" placeholder=\"Please input boolean statement...\" onkeydown=\"if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};\"/>
+       <a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(searchForm1); printAns(); return false;\">Search</a>
+       <a id=\"clearBtn\" href=\"#\" class=\"myButton\" onClick=\"clearSearchBox(); return false;\">Clear</a>
+       <a id=\"showTable\" href=\"#\" class=\"myButton\" onClick=\"return false;\">Hide Table</a>
+       <a id=\"saveImg\" href=\"#\" class=\"myButton\" onClick=\"return false;\">Save Image</a>
+       </form>
        </div>
        </div>
        <div id=\"content1\" class = \"right-output1\" >
@@ -52,6 +58,7 @@ shinyUI(bootstrapPage(
   HTML("
        </div>
        </div>
+
        <script>
         var histArr1= new MakeHistObj(mainArr1, 'cut', {bin:1, color:'cut'});
         var axis1 = new MakeAxis(1, histArr1.xArr, histArr1.yArr, histArr1.isDiscrete, 'false', {xLabel : histArr1.xLabel , yLabel : histArr1.yLabel, xbin: histArr1.bin});
@@ -78,6 +85,11 @@ shinyUI(bootstrapPage(
         var scatter4 = new Scatter(mainArr2, axis6, 'Dose', 'Subject', {color: 'Subject', legend: 'topright'});
         eventTrigger(scatter4);
        </script>
+      <script src=\"button_event.js\"></script>
+      <script src=\"table.js\"></script>
+
+       <script>makeTable(mainArr1, 'table1')</script>
+       <script>makeTable(mainArr2, 'table2')</script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>
        <p id=\"dont-delete-this\">E-mail : <a href=\"mailto:teamrightjs@gmail.com\">team.right.js@gmail.com</a></p>

@@ -87,13 +87,13 @@ function eventTrigger(Name)
         hover(Name);
         select(Name);
        // menu(Name);
-       // drag(Name, mainArr);
+        drag(Name);
         
 }
 
 
 var dragOn = false;
-function drag(Name, mainArr)
+function drag(Name)
 {
         var preDragMousePos;
         var aftDragMousePos;
@@ -184,112 +184,137 @@ function drag(Name, mainArr)
                                 rangeBox.setHeight(0);
                                 rangeBoxLayer.drawScene();
                                 moving = false;
-                                RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos, mainArr);
+                                RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
                                 
                         }
                 }
         }, true);
 }
-function RectRangeSelect(Name, pre, aft, mainArr)
+function RectRangeSelect(Name, pre, aft)
 {
-        
-        var smallX, bigX;
-        var smallY, bigY;
-        if(pre.x >= aft.x){
-                smallX = aft.x;
-                bigX = pre.x;
-        }else if(pre.x < aft.x){
-                smallX = pre.x;
-                bigX = aft.x;
-        }
-        if(pre.y >= aft.y){
-                smallY = aft.y;
-                bigY = pre.y;
-        }else if(pre.y < aft.y){
-                smallY = pre.y;
-                bigY = aft.y;
-        }
-        
-        if(ctrlPressed == false)
-        {
-                allDeselect(mainArr.isSelected);
-        }       
-        //alert(Name._type);
-        if(Name._type == undefined)
-        	return;
-        if(Name._type == "scatter"  || Name._type == "pie" ){
-                if(ctrlPressed == true) {
-                        for(var i = 0 ; i < Name.node.length ; i ++)
-                        {
-                                if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-                                {
-                                                allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
-                                }
-                        }
-                }else{
-                        for(var i = 0 ; i < Name.node.length ; i ++)
-                        {
-                                if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-                                {
-                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);                     
-                                }
-                                
-                        }
+	var tmpNodeArr = new Array();
+	var tmpNodeArr1 = new Array();
+	var smallX, bigX;
+	var smallY, bigY;
+	if(pre.x >= aft.x){
+		smallX = aft.x;
+		bigX = pre.x;
+	}else if(pre.x < aft.x){
+        smallX = pre.x;
+        bigX = aft.x;
+	}
+	if(pre.y >= aft.y){
+        smallY = aft.y;
+        bigY = pre.y;
+	}else if(pre.y < aft.y){
+        smallY = pre.y;
+        bigY = aft.y;
+	}
+
+	if(ctrlPressed == false)
+	{
+       allDeselect(Name, Name.node);
+	}       
+	//alert(Name._type);
+	if(Name._type == undefined)
+		return;
+	if(Name._type == "scatter"  || Name._type == "pie" ){
+		if(ctrlPressed == true) {
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+                {
+					if(Name.node[i].getSelected()==1){
+						tmpNodeArr.push(i);
+					}else{
+						tmpNodeArr1.push(i);
+					}					                   
                 }
-                        
-        }else if(Name._type == "hist"){
-                if(ctrlPressed == true) {
-                        for(var i = 0 ; i < Name.node.length ; i ++)
-                        {
-                                if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
-                                {
-                                                allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
-                                }
-                        }
-                }else{
-                        for(var i = 0 ; i < Name.node.length ; i ++)
-                        {
-                                if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
-                                {
-                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);                     
-                                }
-                        }
+			}
+			allGraphUpdate(Name, tmpNodeArr, 0);
+			allGraphUpdate(Name, tmpNodeArr1, 1);
+		}else{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+                {
+					tmpNodeArr.push(i);              
+                }                        
+			}
+			allGraphUpdate(Name, tmpNodeArr, 1);
+		}
+                
+	}else if(Name._type == "hist"){
+		if(ctrlPressed == true) {
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
+				{
+					if(Name.node[i].getSelected()==1){
+						tmpNodeArr.push(i);
+					}else{
+						tmpNodeArr1.push(i);
+					}                      
+				}
+			}
+			allGraphUpdate(Name, tmpNodeArr, 0);
+			allGraphUpdate(Name, tmpNodeArr1, 1);
+		}else{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
+                {
+					tmpNodeArr.push(i);                    
                 }
-        }else if(Name._type == "box"){
-                if(ctrlPressed == true) {
-                        for(var i = 0 ; i < Name.node.length ; i ++)
-                        {
-                                if(Name.node[i].getIsOutlier()){
-                                        if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-                                        {
-                                                        allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
-                                        }
-                                }else{
-                                        if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
-                                        {
-                                                        allGraphUpdate(i ,(Name.node[i].getSelected()+1)%2, Name, mainArr.isSelected);                      
-                                        }
-                                }                               
-                        }
-                }else{
-                        for(var i = 0 ; i < Name.node.length ; i ++)
-                        {
-                                if(Name.node[i].getIsOutlier()){
-                                        if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-                                        {
-                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
-                                        }
-                                }else{
-                                        if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
-                                        {
-                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);     
-                                        }
-                                }
-                        }
-                }
+           	}
+			allGraphUpdate(Name, tmpNodeArr, 1);
         }
-        refresh();
-     //   addRow('dataTable');
+	}else if(Name._type == "box"){
+		if(ctrlPressed == true) {
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(Name.node[i].getIsOutlier()){
+					if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+					{
+						if(Name.node[i].getSelected()==1){
+							tmpNodeArr.push(i);
+						}else{
+							tmpNodeArr1.push(i);
+						}                      
+					}
+				}else{
+					if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
+					{
+						if(Name.node[i].getSelected()==1){
+							tmpNodeArr.push(i);
+						}else{
+							tmpNodeArr1.push(i);
+						}                     
+					}
+				}                               
+			}
+			allGraphUpdate(Name, tmpNodeArr, 0);
+			allGraphUpdate(Name, tmpNodeArr1, 1);
+		}else{
+			for(var i = 0 ; i < Name.node.length ; i ++)
+			{
+				if(Name.node[i].getIsOutlier()){
+					if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
+					{
+						tmpNodeArr.push(i);
+					}
+				}else{
+					if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
+					{
+						tmpNodeArr.push(i);     
+					}
+				}
+			}
+			allGraphUpdate(Name, tmpNodeArr, 1);
+		}
+	}
+   // refresh();
+ //   addRow('dataTable');
         
 }
 
@@ -400,6 +425,7 @@ function hover(Name)
 
 function select(Name, mainArr)
 {        
+	var tmpNodeArr = new Array();
 	Name.stage.on('click', function(evt){
         
 		if(dragOn == true)
@@ -415,17 +441,17 @@ function select(Name, mainArr)
                 var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); 
 
                 if(aPressed){   //select ALL
-                	Name.tmpShift = false;
-                	//              allSelect(mainArr.isSelected);
+                	Name.tmpShift = false;                	
+                	allSelect(Name, node);
                 }else if(gPressed){
                 	Name.tmpShift = false;
                 }else if(shiftPressed && Name.preId.x != -1){                    
                 	
                 	Name.tmpShift = true;
-                	//             allDeselect(mainArr.isSelected);
+                	allDeselect(Name, node);
 
                 	if(Name._type == "hist" || Name._type == "box" || Name._type == "pie"){
-                		var tmpNodeArr = new Array();
+                		
                 		if(Name.preId.x >= tmpX){
                 			
                 			for(var i = 0 ; i < Name.node.length ; i ++)
@@ -458,6 +484,7 @@ function select(Name, mainArr)
                 	Name.tmpShift = false;
                 }else{  // just one click
                 	Name.tmpShift = false;
+                	allDeselect(Name, node);
                 	allGraphUpdate(Name, node.getName(), 1);
                 }       
                 if(Name.tmpShift == false)
@@ -467,7 +494,7 @@ function select(Name, mainArr)
             }else{
             	if(!(ctrlPressed || shiftPressed || aPressed || gPressed))
             	{
-            		//   allDeselect(mainArr.isSelected);
+            		allDeselect(Name, node);
             		Name.preId = {x : -1 , y : -1};
             	}                               
             }

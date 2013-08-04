@@ -206,38 +206,23 @@ function makeRefresh(stage){
 		}
 }
 
-function allSelect(obj)
+function allSelect(Name, node)
 {
-	
-	for(var i = 0 ; i < isSelected.length; i ++)
+	var tmpNodeArr = new Array();
+	for(var i = 0 ; i < Name.node.length ; i ++)
 	{
-		if(isSelected[i][0] == 0)
-		{
-			for(var j = 1 ; j < isSelected[i].length ; j++)
-			{
-				isSelected[i][j](1);
-			}
-			isSelected[i][0] = 1;
-		}		
-		if(isSelected[i][0] == 2)	//check the end of the isSelected.
-			break;
+		tmpNodeArr.push(i);
 	}
+	allGraphUpdate(Name, tmpNodeArr, 1);	
 }
-function allDeselect(isSelected)
+function allDeselect(Name, node)
 {
-	for(var i = 0 ; i < isSelected.length; i ++)
-	{		
-		if(isSelected[i][0] == 1)
-		{
-			for(var j = 1 ; j < isSelected[i].length ; j++)
-			{
-				isSelected[i][j](0);
-			}
-			isSelected[i][0] = 0;
-		}	
-		if(isSelected[i][0] == 2)	//check the end of the isSelected.
-			break;
+	var tmpNodeArr = new Array();
+	for(var i = 0 ; i < Name.node.length ; i ++)
+	{
+		tmpNodeArr.push(i);
 	}
+	allGraphUpdate(Name, tmpNodeArr, 0);
 
 }
 function findMaxMinValue(Data)

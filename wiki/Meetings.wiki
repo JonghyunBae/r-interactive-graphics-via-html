@@ -23,6 +23,7 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
   # About 90% of code restructuring is done for axis, event handling, scatter, and hist.
    # Event handling code is in hist.js and common.js.
    # Axis code is in axis.js. Points overlaid outside of the axis range are discarded with warning for now. Let's remove warning, and we will revisit this issue later.
+   # *Junghoon* should review some code.
   # We would like to build our first R package in mid August. For this, 
    # Let's clean up the code for the line plot. This code will be used to test server offloading with regression example.
    # The following examples will be created from R and tested:

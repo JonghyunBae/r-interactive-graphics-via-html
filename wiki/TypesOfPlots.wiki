@@ -40,7 +40,7 @@ Here is a summary of what types of interactivity each plot supports:
 
 LET'S SUMMARIZE WHAT TYPES OF INTERACTIVITY EACH PLOT TYPE SUPPORTS IN A TABLE.
 
-Visit TypesOfInteractivity for more about types of interactivity and GraphOptions for supported plotting options.
+Read more about [TypesOfInteractivity types of supported interactivity] and [PlotOptions supported plotting options].
 
 == Scatter plot == 
  * [http://en.wikipedia.org/wiki/Scatter_plot scatter plot], display values for two variables for a set of data.

@@ -105,6 +105,8 @@ function createMainStructure(fileName)
 	totalArr.redraw = redraw;
 	totalArr.parent = null;
 	totalArr.child = null;
+	totalArr.parentTOchild = null;
+	totalArr.refreshArr = new Array();
 	return totalArr;
 }
 

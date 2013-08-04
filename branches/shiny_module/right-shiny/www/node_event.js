@@ -1,3 +1,40 @@
+function firstUpdate(obj, child)
+{
+	return function(nodes, select)
+		{
+			// parent update
+			if(obj.parent != null){
+				var parent = obj.parent;
+				var temp = obj.childTOparent(nodes);
+				allUpdate(parent, temp, obj, select);
+			}
+			// my update
+			if(nodes.length == undefined){
+				for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
+					obj.isSelected[nodes][j](select);
+					obj.refreshArr[j]();
+				}
+			}else{
+				for(var i = 0 ; i < nodes.length ; i ++){
+					for(var j = 1 ; j < isSelected[nodes[i]].length ; j ++){
+						isSelected[nodes[i]][j](select);
+					}
+				}
+				for(var j = 1 ; j < obj.refreshArr.length ; j ++){
+					obj.refreshArr[j]();
+				}
+			}
+			// child update
+			if(obj.child != null){
+				for(var i = 0 ; i < obj.child.length ; i ++){
+					if(obj.child[i] != child){	// prevent infinite loop.
+						var temp = obj.parentTOchild[i](nodes);
+						childUpdate(obj.child[i], temp, select);
+					}
+				}
+			}
+		};
+}
 function allUpdate(obj, nodes, child, select)
 {
 	// parent update
@@ -8,14 +45,18 @@ function allUpdate(obj, nodes, child, select)
 	}
 	// my update
 	if(nodes.length == undefined){
-		for(var j = 0 ; j < isSelected[nodes].length ; j ++){
-			isSelected[nodes][j](select);
+		for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
+			obj.isSelected[nodes][j](select);
+			obj.refreshArr[j]();
 		}
 	}else{
 		for(var i = 0 ; i < nodes.length ; i ++){
-			for(var j = 0 ; j < isSelected[nodes[i]].length ; j ++){
-				isSelected[nodes[i]][j](select);
+			for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
+				obj.isSelected[nodes[i]][j](select);
 			}
+		}
+		for(var j = 1 ; j < obj.refreshArr.length ; j ++){
+			obj.refreshArr[j]();
 		}
 	}
 	// child update
@@ -32,14 +73,18 @@ function childUpdate(obj, nodes, select)
 {
 	// my update
 	if(nodes.length == undefined){
-		for(var j = 0 ; j < isSelected[nodes].length ; j ++){
-			isSelected[nodes][j](select);
+		for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
+			obj.isSelected[nodes][j](select);
+			obj.refreshArr[j]();
 		}
 	}else{
 		for(var i = 0 ; i < nodes.length ; i ++){
-			for(var j = 0 ; j < isSelected[nodes[i]].length ; j ++){
-				isSelected[nodes[i]][j](select);
+			for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
+				obj.isSelected[nodes[i]][j](select);
 			}
+		}
+		for(var j = 1 ; j < obj.refreshArr.length ; j ++){
+			obj.refreshArr[j]();
 		}
 	}	
 	//child update
@@ -135,12 +180,12 @@ function checkKeyUp(e)
         }
 }       
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-function eventTrigger(Name, mainArr)
+function eventTrigger(Name)
 {
         hover(Name);
-        select(Name, mainArr);
+        select(Name);
        // menu(Name);
-        drag(Name, mainArr);
+       // drag(Name, mainArr);
         
 }
 
@@ -469,13 +514,13 @@ function select(Name, mainArr)
                         //      alert(tmpX + " , " + tmpY);
                                 if(aPressed){   //select ALL
                                         Name.tmpShift = false;
-                                        allSelect(mainArr.isSelected);
+                          //              allSelect(mainArr.isSelected);
                                 }else if(gPressed){
                                         Name.tmpShift = false;
                                 }else if(shiftPressed && Name.preId.x != -1){                    
                                         
                                         Name.tmpShift = true;
-                                        allDeselect(mainArr.isSelected);
+                           //             allDeselect(mainArr.isSelected);
                                         
                                         if(Name._type == "scatter")
                                         {
@@ -486,7 +531,7 @@ function select(Name, mainArr)
                                                                 {
                                                                         if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <=Name.preId.x && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
                                                                         {                                                                       
-                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
+                                                     //                           allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }else if(Name.preId.y <= tmpY){
@@ -494,7 +539,7 @@ function select(Name, mainArr)
                                                                 {
                                                                         if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
                                                                         {                                                                       
-                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
+                                                        //                        allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }
@@ -505,7 +550,7 @@ function select(Name, mainArr)
                                                                 {
                                                                         if(Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX  && (Name.preId.y >= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) >=  tmpY))
                                                                         {                                                                       
-                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
+                                                      //                          allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }else if(Name.preId.y <= tmpY){
@@ -513,7 +558,7 @@ function select(Name, mainArr)
                                                                 {
                                                                         if((Name.preId.x <= Name.node[i].getX() && Name.node[i].getX() <= tmpX) && (Name.preId.y <= (Name.height +Name.plotYMargin - Name.node[i].getY())&& (Name.height +Name.plotYMargin - Name.node[i].getY()) <=  tmpY))
                                                                         {                               
-                                                                                allGraphUpdate(i ,1, Name, mainArr.isSelected);
+                                                      //                          allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                         }
                                                                 }
                                                         }
@@ -526,7 +571,7 @@ function select(Name, mainArr)
                                                         {
                                                                 if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x)
                                                                 {
-                                                                        allGraphUpdate(i ,1, Name, mainArr.isSelected);
+                                                    //                    allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                 }
                                                         }
                                                 }else if(Name.preId.x <= tmpX){
@@ -534,7 +579,7 @@ function select(Name, mainArr)
                                                         {
                                                                 if(tmpX >= Name.node[i].getX() && Name.node[i].getX() >= Name.preId.x)
                                                                 {
-                                                                        allGraphUpdate(i ,1, Name, mainArr.isSelected);
+                                                    //                    allGraphUpdate(i ,1, Name, mainArr.isSelected);
                                                                 }
                                                         }
                                                 }
@@ -543,15 +588,15 @@ function select(Name, mainArr)
                                 }else if(ctrlPressed){ //select mutiple node one by one.
                                         if(node.getSelected() == 0)
                                         {
-                                                allGraphUpdate(node.getName(), 1 , Name, mainArr.isSelected);
+                                     //           allGraphUpdate(node.getName(), 1 , Name, mainArr.isSelected);
                                         }else if(node.getSelected() == 1){
-                                                allGraphUpdate(node.getName(), 0 , Name, mainArr.isSelected);
+                                     //           allGraphUpdate(node.getName(), 0 , Name, mainArr.isSelected);
                                         }
                                         Name.tmpShift = false;
                                 }else{  // just one click
                                         Name.tmpShift = false;
-                                        allDeselect(mainArr.isSelected);
-                                        allGraphUpdate(node.getName(), 1 , Name, mainArr.isSelected);
+                                    //    allDeselect(mainArr.isSelected);
+                                        allGraphUpdate(Name, node.getName(), 1);
                                 }       
                                 if(Name.tmpShift == false)
                                 {
@@ -560,12 +605,12 @@ function select(Name, mainArr)
                         }else{
                                 if(!(ctrlPressed || shiftPressed || aPressed || gPressed))
                                 {
-                                        allDeselect(mainArr.isSelected);
+                                     //   allDeselect(mainArr.isSelected);
                                         Name.preId = {x : -1 , y : -1};
                                 }                               
                         }
                         
-                        refresh();
+                     //   refresh();
                    //     addRow('dataTable');
                 }
         });

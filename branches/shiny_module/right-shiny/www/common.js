@@ -95,69 +95,21 @@ function getXYpos(elm) {
 
 
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate(id , select, name, isSelected) 
+function allGraphUpdate(Name, nodes, select) 
 {	
-	if(name._type == "scatter")
-	{
-		if(isSelected[id][0] != 2)//if node is not hidden
-		{
-			for(var i =1 ; i < isSelected[id].length ; i ++)
-			{
-				isSelected[id][i](select);
-			}
-			isSelected[id][0] = select;
-		}		
-	}else if(name._type == "hist" || name._type == "pie"){	
-		var tmp = name.node[id].getHasArr();
-		for(var j = 0 ; j < tmp.length ; j ++)
-		{
-			if(isSelected[tmp[j]][0] != 2)//if node is not hidden
-			{
-				for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
-				{
-					isSelected[tmp[j]][i](select);
-				}			
-				isSelected[tmp[j]][0] = select;
-			}			
-		}		
-	}else if(name._type == "box"){
-		var tmp = name.node[id].getHasArr();
-		//alert(isSelected[tmp][0]);
-		if(name.node[id].getIsOutlier()){
-			if(isSelected[tmp][0] != 2){//if node is not hidden
-				for(var i =1 ; i < isSelected[id].length ; i ++){
-					//alert(isSelected[tmp][i]);
-					isSelected[tmp][i](select);
-				}				
-				isSelected[tmp][0] = select;
-			}
-		}else{
-			for(var j = 0 ; j < tmp.length ; j ++)
-			{
-				if(isSelected[tmp[j]][0] != 2)//if node is not hidden
-				{
-					for(var i =1 ; i < isSelected[tmp[j]].length ; i ++)
-					{
-						isSelected[tmp[j]][i](select);
-					}			
-					isSelected[tmp[j]][0] = select;
-				}			
-			}
-		}
-	}
-	
-}
-// just remove transition.
-function refresh()
-{
-	for(var i = 0 ; i < objArr.length ; i ++)
-	{
-		objArr[i].stage.draw();
-	} 
+	Name.firstUpdate(nodes, select);
 }
 
-function allSelect(isSelected)
+function makeRefresh(stage){
+	return function()
+		{
+			stage.draw();
+		}
+}
+
+function allSelect(obj)
 {
+	
 	for(var i = 0 ; i < isSelected.length; i ++)
 	{
 		if(isSelected[i][0] == 0)

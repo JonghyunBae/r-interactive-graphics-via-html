@@ -6,7 +6,7 @@ function setMapping(index)
 {
 	return function(nodes)
 		{
-			var returnArr;
+			var returnArr = new Array();
 			if(nodes.length == undefined){
 				returnArr = index[nodes];
 			}else{
@@ -18,7 +18,6 @@ function setMapping(index)
 					return a;
 				},[]);
 			}
-			
 			return returnArr;
 		};
 }
@@ -29,14 +28,10 @@ function setMapping(index)
 		this.xLabel = xLabel;
 		this.yLabel = "frequency";
 		this.bin = (optionObj.bin == undefined) ? (2) : (optionObj.bin); // default bin is 2
-		this.id = 0;
+		this.id = 1;
 		this.double = false;
-		this.parent = mainArr;
-		if(mainArr.child == null){
-			mainArr.child = new Array();
-		}
-		mainArr.child.push(this);
-		this.child = null;
+		
+		this.isSelected = make2DArr(mainArr[xLabel].length);
 		if(mainArr.isDiscrete[xLabel] == true){
 			this.isDiscrete = true;
 			var cnt = 0;
@@ -70,6 +65,7 @@ function setMapping(index)
         			//isSelected[i][id] = histUpdate(this, j);
         		}
         	}
+			
 			this.freqArr = freqArr;
 			this.xArr = xArr;
 			var temp = findMaxMinValue(freqArr);
@@ -129,6 +125,10 @@ function setMapping(index)
         		hasArr[cnt] = hasTmp[i];
         		cnt ++;
         	}
+        	for(var i = 0 ; i < upTmp.length ; i ++){
+        		upTmp[i] = upTmp[i] - firstcnt;
+        	}
+        	var index = upTmp;
         	this.freqArr = freqArr;
         	var temp1 = (min > 0 ) ? ((-1)*this.bin + firstcnt*this.bin).toFixed(this.fixPoint) : ((1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint);
         	var temp2 = (min > 0 ) ? ((lastcnt-firstcnt + 2)*this.bin).toFixed(this.fixPoint) : ((lastcnt-firstcnt + 3 - 1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint); 
@@ -141,9 +141,8 @@ function setMapping(index)
 		if(optionObj.color != undefined){
 			this.color = optionObj.color;
 			if(xLabel == this.color && mainArr.isDiscrete[this.color] == true){
-				this.colorArr =  makeColor_discrete(this.xArr, index);
-				//var colorArr = tmp.indexArr;
-				
+				var tmp = makeColor_discrete(this.xArr, index);
+				var colorArr = tmp.indexArr;
 			}else if(mainArr.isDiscrete[this.color] == true){
 				//under construction.
 				var tmp = setColor(mainArr[this.color], true);
@@ -151,41 +150,24 @@ function setMapping(index)
 				
 			}
 			
-			//this.colorArr = colorArr;
+			this.colorArr = colorArr;
 		}else{
 			this.color = -1;
 		}
-		//check option color is assigned if option legend is assined.
-        if(this.color == -1 && optionObj.legend != undefined){
-        	alert("Can't draw legend without color!");
-			return -1;                    
-        }
-        //check option legend name is appropriate
-        if(optionObj.legend !=undefined){
-            var legendChk = optionObj.legend.toLowerCase();
-            if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft'){                           
-                 this.legend = optionObj.legend;
-            }else{
-            	alert("Legend should be \"right\", \"left\", \"topright\" or \"topleft\"!");
-            	return -1;
-            }
-        }  
+		// set mapping
+		this.parent = mainArr;
+		if(mainArr.child == null){
+			mainArr.child = new Array();
+			mainArr.parentTOchild = new Array();
+		}
+		mainArr.child.push(this);
+		this.child = null;
+		this.parentTOchild = null;
+		this.childTOparent = setMapping(hasArr);
+		this.refreshArr = new Array();
+		mainArr.parentTOchild.push(setMapping(index));
 	}
 })();
-
-function histObjUpdate(obj)
-{
-	return function(select, id){
-				// if node is not hidden.
-				if(obj.isSelected[id][0] != 2){
-					if(select == 0 && obj.isSelected[id][0] == 1) // unselect
-					for(var i = 0 ; i < obj.isSelected[id].length ; i ++){
-						obj.isSelected[id][i](select);
-					}
-				}
-				
-	};
-}
 
 var Hist = {};
 (function() {	
@@ -193,40 +175,17 @@ var Hist = {};
 		this._type = 'hist';
 		this.id = histArr.id;
 		//this._labelArr = mainArr.labelArr; //localize later
-		//objArr[mainArr.id-1] = this;
 		this.tmpShift = false;
 		this.preId = {x : -1, y : -1};
 		this.stage = plotObject.stage;
-		
 		//excute draw
 		this._draw(plotObject, histArr);
-		
+		histArr.refreshArr[this.id] = makeRefresh(this.stage);
 		histArr.id ++;
     };
 	Hist.prototype = {
 			_draw : function(plotObject, histArr) {
-				
-				this.color = histArr.color;				
-				//if color exists, legend should be created.
-	            if(histArr.color != -1){
-	            	//set legend position.
-	        		setLegendPosition(histArr, plotObject);    
-	        		//make legend.
-	            	MakeLegend(this, histArr.color, histArr.colorArr, histArr.legendX, histArr.legendY, histArr.mainValueArr);	
-	        		//resize plotObject's width. It depends on legendGroup's width.
-	        		plotObject.stage.setWidth(plotObject.stage.getWidth()+ this.legendGroup.getWidth());        		
-	        		//When legend is right or left, move legend layer to center. 			        		
-	        		if(histArr.legend == 'right' || histArr.legend == 'left'){
-	        			this.legendLayer.setY((plotObject.height-this.legendGroup.getHeight())/2);
-	        		}        		
-	        		//move plotObject left.
-	        		if(this.legend == 'left' || this.legend == 'topleft'){
-	        			plotObject.plotLayer.setX(plotObject.plotLayer.getX() + this.legendGroup.getWidth() + plotObject.plotLength*5 );
-	            		plotObject.plotLayer.draw();            		
-	        		}       	
-	            }
-				
-				
+				this.color = -1;
 				if(histArr.double == false){
 					if(histArr.isDiscrete == true){
 						this.barWidth = (plotObject.xPlotArr[2][0] - plotObject.xPlotArr[1][0])/2;
@@ -245,7 +204,7 @@ var Hist = {};
 								y: plotObject.plotYMargin + plotObject.height - histArr.freqArr[cnt]*plotObject.height/plotObject.yMax/2, 
 								width: this.barWidth,
 								height: histArr.freqArr[cnt]*plotObject.height/plotObject.yMax,
-								fill: (histArr.color == -1) ? 'green' : histArr.colorArr.indexArr[histArr.hasArr[cnt][0]],
+								fill: (histArr.color == -1) ? 'green' : histArr.colorArr[histArr.hasArr[cnt][0]],
 								stroke: 'black',						
 								opacity : 0.5,
 								selected : 0,
@@ -254,8 +213,11 @@ var Hist = {};
 								hasArr : histArr.hasArr[cnt],
 								offset: {x: this.barWidth/2, y: histArr.freqArr[cnt]*plotObject.height/plotObject.yMax/2},
 							});
+		            		histArr.isSelected[cnt][this.id] = histUpdate(this, cnt);
 		            	}
 				}
+				this.firstUpdate = firstUpdate(histArr, null);
+				//alert(this.allupdate);
 				setTooltip(this);
 				MakeMainLabel(this, plotObject, histArr.xLabel, "Frequency");
             	//draw node
@@ -295,7 +257,7 @@ function histUpdate(obj, id)
 						{
 							obj.node[id].setOpacity(1);
 							obj.node[id].setSelected(1);
-						}				
+						}
 					}
 				};
 }

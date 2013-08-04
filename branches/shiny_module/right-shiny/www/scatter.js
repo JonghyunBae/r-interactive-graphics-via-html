@@ -8,21 +8,20 @@ var Scatter = {};
 	Scatter = function(mainArr, plotObject, xLabel, yLabel, optionObj) {
 		this._type = 'scatter';
 		this.id = mainArr.id;
+		this.stage = plotObject.stage;
 		this.labelArr = mainArr.labelArr; // this is for legend make.
-		this._init(mainArr, optionObj);
-		
+		this._init(mainArr, optionObj);			
 		//execute build
-		var returnValue = this._build(mainArr, plotObject, xLabel, yLabel, optionObj);
-		
+		var returnValue = this._build(mainArr, plotObject, xLabel, yLabel, optionObj);		
 		if(returnValue == 1){
 			//only when excuting build is success, execute draw
 			this._draw(plotObject);
 			mainArr.id ++;
+			mainArr.refreshArr[this.id] = makeRefresh(this.stage);
 		}
 		//objArr[mainArr.id-1] = this;
 		this.tmpShift = false;
-		this.preId = {x : -1, y : -1};
-		this.stage = plotObject.stage;
+		this.preId = {x : -1, y : -1};				
     };
     Scatter.prototype = {
     		
@@ -35,7 +34,6 @@ var Scatter = {};
             }else{
             	this.color = optionObj.color;
                 this.colorArr = setColor(mainArr[optionObj.color], mainArr.isDiscrete[optionObj.color]);
-                //this.colorArr = tmpColorArr.indexArr;
             }                  
 		},
 		
@@ -65,7 +63,7 @@ var Scatter = {};
             	//set legend position.
         		setLegendPosition(this, plotObject);    
         		//make legend.
-            	MakeLegend(this, this.color, this.colorArr, this.legendX, this.legendY, this.mainValueArr);	
+            	MakeLegend(this);	
         		//resize plotObject's width. It depends on legendGroup's width.
         		plotObject.stage.setWidth(plotObject.stage.getWidth()+ this.legendGroup.getWidth());        		
         		//When legend is right or left, move legend layer to center. 			        		
@@ -145,7 +143,7 @@ var Scatter = {};
 						selected : 0,
 						info :  "Node : " + cnt + "\r\n" + tooltipTextGetInfo[i]
 					});
-					mainArr.isSelected[i][this._id] = scatterUpdate(this, cnt);	//save event handler
+					mainArr.isSelected[i][this.id] = scatterUpdate(this, cnt);	//save event handler
 					cnt ++;
 				}else{
 					overCnt ++;
@@ -154,9 +152,11 @@ var Scatter = {};
 			if(overCnt > 0){
 				alert(overCnt + " nodes can't be draw in this plot range.");
 			}
+			this.firstUpdate = firstUpdate(mainArr, null);
 			// make main labels.
 			MakeMainLabel(this, plotObject, xLabel, yLabel);
 			setTooltip(this);
+			mainArr
 			return 1;
 		},
 		
@@ -289,7 +289,4 @@ function MakeMainLabel(obj, plot, xLabel, yLabel)
 	});
 }
 /**  make Main Label end  **/
-
-
-
 

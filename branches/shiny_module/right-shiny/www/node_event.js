@@ -84,11 +84,10 @@ function checkKeyUp(e)
 //////////////////////////////////////Chk key event End//////////////////////////////////////
 function eventTrigger(Name)
 {
-        hover(Name);
-        select(Name);
-       // menu(Name);
-        drag(Name);
-        
+	hover(Name);
+	select(Name);
+    menu(Name);
+    drag(Name);        
 }
 
 

@@ -11,7 +11,7 @@ function setMapping(index)
 				returnArr = index[nodes];
 			}else{
 				for(var i = 0 ; i < nodes.length ; i ++){
-					returnArr.push(index[nodes[i]]);
+					returnArr = returnArr.concat(index[nodes[i]]);
 				}
 				returnArr = returnArr.reduce(function(a,b){
 					if(a.indexOf(b) < 0) a.push(b);

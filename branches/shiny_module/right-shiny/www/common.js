@@ -100,6 +100,105 @@ function allGraphUpdate(Name, nodes, select)
 	Name.firstUpdate(nodes, select);
 }
 
+function firstUpdate(obj, child)
+{
+	return function(nodes, select)
+		{
+			// parent update
+			if(obj.parent != null){
+				var parent = obj.parent;
+				var temp = obj.childTOparent(nodes);
+				allUpdate(parent, temp, obj, select);
+			}
+			// my update
+			if(nodes.length == undefined){
+				for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
+					obj.isSelected[nodes][j](select);
+					obj.refreshArr[j]();
+				}
+			}else{
+				for(var i = 0 ; i < nodes.length ; i ++){
+					for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
+						obj.isSelected[nodes[i]][j](select);
+					}
+				}
+				for(var j = 1 ; j < obj.refreshArr.length ; j ++){
+					obj.refreshArr[j]();
+				}
+			}
+			// child update
+			if(obj.child != null){
+				for(var i = 0 ; i < obj.child.length ; i ++){
+					if(obj.child[i] != child){	// prevent infinite loop.
+						var temp = obj.parentTOchild[i](nodes);
+						childUpdate(obj.child[i], temp, select);
+					}
+				}
+			}
+		};
+}
+function allUpdate(obj, nodes, child, select)
+{
+	// parent update
+	if(obj.parent != null){
+		var parent = obj.parent;
+		var temp = obj.childTOparent(nodes);
+		allUpdate(parent, temp, obj, select);
+	}
+	// my update
+	if(nodes.length == undefined){
+		for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
+			obj.isSelected[nodes][j](select);
+			obj.refreshArr[j]();
+		}
+	}else{
+		for(var i = 0 ; i < nodes.length ; i ++){			
+			for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
+				obj.isSelected[nodes[i]][j](select);
+			}
+		}
+		for(var j = 1 ; j < obj.refreshArr.length ; j ++){
+			obj.refreshArr[j]();
+		}
+	}
+	// child update
+	if(obj.child != null){
+		for(var i = 0 ; i < obj.child.length ; i ++){
+			if(obj.child[i] != child){	// prevent infinite loop.
+				var temp = obj.parentTOchild[i](nodes);
+				childUpdate(obj.child[i], temp, select);
+			}
+		}
+	}
+}
+function childUpdate(obj, nodes, select)
+{
+	// my update
+	if(nodes.length == undefined){
+		for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
+			obj.isSelected[nodes][j](select);
+			obj.refreshArr[j]();
+		}
+	}else{
+		for(var i = 0 ; i < nodes.length ; i ++){
+			for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
+				obj.isSelected[nodes[i]][j](select);
+			}
+		}
+		for(var j = 1 ; j < obj.refreshArr.length ; j ++){
+			obj.refreshArr[j]();
+		}
+	}	
+	//child update
+	if(obj.child != null){
+		for(var i = 0 ; i < obj.child.length ; i ++){
+			if(obj.child[i] != child){	// prevent infinite loop.
+				var temp = parent.parentTOchild[i](nodes);
+				childUpdate(obj.child[i], temp, select);
+			}
+		}
+	}
+}
 function makeRefresh(stage){
 	return function()
 		{

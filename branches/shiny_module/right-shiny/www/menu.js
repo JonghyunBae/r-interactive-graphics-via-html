@@ -42,10 +42,10 @@ function menu(Name)
                 Name.menuLayer.draw();
                 if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Table" no sub menu       
                     for(var j=0; j<optionMenuName.length; j++){
-                            Name.optionMenu[j].hide();
-                            Name.optionMenuLayer.draw();                                            
-                            Name.subMenu[j].hide();
-                            Name.subMenuLayer[j].draw();    
+                        Name.optionMenu[j].hide();
+                        Name.optionMenuLayer.draw();                                            
+                        Name.subMenu[j].hide();
+                        Name.subMenuLayer[j].draw();    
                     }
                     for(var j=0; j<regressionMenuName.length; j++){
                         Name.regressionMenu[j].hide();
@@ -115,9 +115,9 @@ function menu(Name)
                         Name.regressionMenuLayer.draw();
                 	}
                     for(var j=0; j<optionMenuName.length; j++){
-                            Name.optionMenu[j].show();
-                            Name.optionMenuLayer.moveToTop();
-                            Name.optionMenuLayer.draw();
+                        Name.optionMenu[j].show();
+                        Name.optionMenuLayer.moveToTop();
+                        Name.optionMenuLayer.draw();
                     }
                     Name.optionMenuLayer.draw();
                 }

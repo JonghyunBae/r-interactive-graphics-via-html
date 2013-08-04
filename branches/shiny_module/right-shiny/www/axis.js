@@ -32,7 +32,6 @@ var MakeAxis = {};
 	MakeAxis.prototype = {
 			
 		_build: function(xArr, yArr, isXDiscrete, isYDiscrete, optionObj) {			
-			
 			// check if continuous or discrete.
 			if(isXDiscrete == true){
 				this.isXDiscrete = true;

@@ -2,7 +2,7 @@
 
 source("testR.R")
 
-sub.diamonds <- diamonds[sample(1:nrow(diamonds), 50, F), ]
+sub.diamonds <- Theoph
 
 obj <- RIGHT(sub.diamonds, fun = {
   plot.RIGHT(sub.diamonds, carat, price, color, "right", 300, 300)

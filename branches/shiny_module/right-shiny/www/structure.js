@@ -30,7 +30,7 @@ function csv2Arr(data, liveChar)
  		}else{
  			result_row += cursor;
  		}
- 		cursor = data.charAt(i++);
+ 		cursor = data.charAt(i++); 		
  	}
  	return result_array;
 }
@@ -59,7 +59,7 @@ function make2DArr(rows) {
 
 function createMainStructure(fileName)
 {	
-	var tmpArr = getData(fileName);		
+	var tmpArr = getData(fileName);	
 	var dataArr=tmpArr.dataArr;	
 	var labelArr=tmpArr.labelArr;
 	var isSelected = make2DArr(dataArr.length);

@@ -60,7 +60,7 @@ shinyUI(bootstrapPage(
        </div>
 
        <script>
-        var histArr1= new MakeHistObj(mainArr1, 'price', {bin:10});
+        var histArr1= new MakeHistObj(mainArr1, 'color', {});
         var axis1 = new MakeAxis(1, histArr1.xArr, histArr1.yArr, histArr1.isDiscrete, 'false', {xLabel : histArr1.xLabel , yLabel : histArr1.yLabel, xbin: histArr1.bin});
         var hist1 = new Hist(axis1, histArr1);
         eventTrigger(hist1, mainArr1);

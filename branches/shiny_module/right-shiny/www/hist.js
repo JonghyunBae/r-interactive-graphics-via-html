@@ -27,7 +27,6 @@ function setMapping(index)
 	MakeHistObj = function(mainArr, xLabel, optionObj) {
 		this.xLabel = xLabel;
 		this.yLabel = "frequency";
-		this.bin = (optionObj.bin == undefined) ? (2) : (optionObj.bin); // default bin is 2
 		this.id = 1;
 		this.double = false;
 		
@@ -73,15 +72,24 @@ function setMapping(index)
 			this.hasArr = hasArr;
 		}else{
 			this.isDiscrete = false;
+			
+			var temp = findMaxMinValue(mainArr[xLabel]);
+			var tempMax = temp.max;
+			var tempMin = temp.min;
+			if(optionObj.bin == undefined){
+				var tickRange = (tempMax - tempMin) / 5;
+				var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
+				this.bin = setTickRange(tmp, tickRange);
+			}else{
+				this.bin = optionObj.bin;
+			}
 			 //check the fixpoint.
-			this.fixPoint = 0;
+			this.fixPoint = 0;			
 			if(this.bin.toString().indexOf('.') != -1)
 			{
 				this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
 			}
-			var temp = findMaxMinValue(mainArr[xLabel]);
-			var tempMax = temp.max;
-			var tempMin = temp.min;
+			
 			if(tempMax > 0){
 				var max = parseFloat((Math.ceil(tempMax / this.bin) * this.bin).toFixed(this.fixPoint));
 			}else{

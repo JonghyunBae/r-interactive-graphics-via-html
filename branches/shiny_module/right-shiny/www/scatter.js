@@ -125,7 +125,7 @@ var Scatter = {};
 				tooltipTextGetInfo[i] =  mainArr.labelArr[0] + " : " + mainArr[mainArr.labelArr[0]][i]+ "\r\n" ;
 				if(mainArr.labelArr.length>1){
 					for(var j = 1; j < mainArr.labelArr.length-1 ; j ++){
-						tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[j] + " : " + mainArr[mainArr.labelArr[0]][j]+ "\r\n" ;
+						tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[j] + " : " + mainArr[mainArr.labelArr[j]][i]+ "\r\n" ;
 					}
 					tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[mainArr.labelArr.length-1] + " : " + mainArr[mainArr.labelArr[0]][j];
 				}

@@ -43,7 +43,6 @@ var MakeAxis = {};
 				this.xPlotArr = tmp.array;
 			}else{
 				this.isXDiscrete = false;
-
 				var temp = findMaxMinValue(xArr);
 				this.xMax = temp.max;
 	            this.xMin = temp.min;
@@ -126,7 +125,8 @@ function setAxis_continue(max, min, tick, length)
 	var tickRange = (max - min) / tick;
 	var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
 	tickRange = setTickRange(tmp, tickRange);
-	max = tickRange * Math.ceil(max/tickRange);		      
+	max = tickRange * Math.ceil(max/tickRange);	
+	
 	min = tickRange * Math.floor(min/tickRange);
 	var diff = length * tickRange / (max - min);
 	var plotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));

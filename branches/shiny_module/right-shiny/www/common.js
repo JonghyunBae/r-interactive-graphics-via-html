@@ -279,19 +279,23 @@ function allDeselect(Name)
 
 }
 function findMaxMinValue(Data)
-{
-	var maxValue = Data[0];
-	var minValue = Data[0];
-	for(var i = 1 ; i < Data.length ; i ++)
-	{
-		if(Data[i]>maxValue)
-		{
-			maxValue=Data[i];					
+{	
+	if(Data.length != undefined){
+		var maxValue = Data[0];
+		var minValue = Data[0];
+		for(var i = 1 ; i < Data.length ; i ++){
+			if(Data[i]>maxValue)
+			{
+				maxValue=Data[i];					
+			}
+			if(Data[i]<minValue)
+			{
+				minValue=Data[i];					
+			}
 		}
-		if(Data[i]<minValue)
-		{
-			minValue=Data[i];					
-		}
+	}else{
+		var maxValue = Data;
+		var minValue = Data;
 	}
 	return {
 		'max' : maxValue,

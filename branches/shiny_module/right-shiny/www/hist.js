@@ -79,60 +79,34 @@ function setMapping(index)
 			{
 				this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
 			}
-			
 			var temp = findMaxMinValue(mainArr[xLabel]);
-			var max = temp.max;
-			var min = temp.min;
-			var freqTmp = (min > 0 ) ? new Array(parseInt((max)/this.bin)+1) :  new Array(parseInt((max - min)/this.bin)+1); 
-        	var hasTmp = (min > 0 ) ? make2DArr(parseInt((max)/this.bin)+1) : make2DArr(parseInt((max - min)/this.bin)+1);             	
-        	var upTmp = new Array(mainArr[xLabel].length);
+			var tempMax = temp.max;
+			var tempMin = temp.min;
+			if(tempMax > 0){
+				var max = parseFloat((Math.ceil(tempMax / this.bin) * this.bin).toFixed(this.fixPoint));
+			}else{
+				var max = parseFloat((Math.ceil(tempMax / this.bin) * this.bin + this.bin).toFixed(this.fixPoint));
+			}
+			if(max == tempMax){
+				max = max + this.bin;
+			}				
+			var min = parseFloat((Math.floor(tempMin / this.bin) * this.bin).toFixed(this.fixPoint));
+			var freqArr = new Array(parseInt((max - min)/this.bin)); 
+        	var hasArr = make2DArr(parseInt((max - min)/this.bin));             	
+        	var index = new Array(mainArr[xLabel].length);
         	var cnt = 0;
-        	for(var i = 0 ; i < freqTmp.length ; i ++ )
+        	for(var i = 0 ; i < freqArr.length ; i ++ )
         	{
-        		freqTmp[i] = 0; 
+        		freqArr[i] = 0; 
         	}
-        	
         	for(var i = 0 ; i < mainArr[xLabel].length ; i++){
-        		if(min < 0)
-        		{
-        			cnt = parseInt((mainArr[xLabel][i]+Math.abs(min))/this.bin);
-        		}else{
-        			cnt = parseInt(mainArr[xLabel][i]/this.bin);
-        		}
-        		freqTmp[cnt] ++ ;
-        		hasTmp[cnt].push(i);
-        		upTmp[i] = cnt;
+       			cnt = parseInt((mainArr[xLabel][i] - min)/ this.bin);
+        		freqArr[cnt] ++ ;
+        		hasArr[cnt].push(i);
+        		index[i] = cnt;
         	}
-        	for(var firstcnt = 0 ; firstcnt < freqTmp.length ; firstcnt++) 	            	
-        	{	            		
-        		if(freqTmp[firstcnt] != 0)
-        		{
-        			break;
-        		}
-        	}
-        	for(var lastcnt = freqTmp.length-1 ; lastcnt > -1  ;lastcnt--)            	
-        	{
-        		if(freqTmp[lastcnt] != 0)
-        		{
-        			break;
-        		}
-        	}
-        	var cnt = 0;
-        	var freqArr = new Array(lastcnt-firstcnt+1);
-        	var hasArr = make2DArr(lastcnt-firstcnt+1);
-        	for(var i = firstcnt ; i < lastcnt + 1 ; i ++){
-        		freqArr[cnt] = freqTmp[i];
-        		hasArr[cnt] = hasTmp[i];
-        		cnt ++;
-        	}
-        	for(var i = 0 ; i < upTmp.length ; i ++){
-        		upTmp[i] = upTmp[i] - firstcnt;
-        	}
-        	var index = upTmp;
         	this.freqArr = freqArr;
-        	var temp1 = (min > 0 ) ? ((-1)*this.bin + firstcnt*this.bin).toFixed(this.fixPoint) : ((1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint);
-        	var temp2 = (min > 0 ) ? ((lastcnt-firstcnt + 2)*this.bin).toFixed(this.fixPoint) : ((lastcnt-firstcnt + 3 - 1)*this.bin + firstcnt*this.bin -Math.abs(min)).toFixed(this.fixPoint); 
-        	this.xArr = [temp1, temp2];
+        	this.xArr = [min - this.bin, max + this.bin];
         	var temp = findMaxMinValue(freqArr);
 			this.yArr = [0, temp.max];
 			this.hasArr = hasArr;

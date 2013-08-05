@@ -31,7 +31,7 @@ function setMapping(index)
 		this.id = 1;
 		this.double = false;
 		
-		this.isSelected = make2DArr(mainArr[xLabel].length);
+		
 		if(mainArr.isDiscrete[xLabel] == true){
 			this.isDiscrete = true;
 			var cnt = 0;
@@ -111,6 +111,7 @@ function setMapping(index)
 			this.yArr = [0, temp.max];
 			this.hasArr = hasArr;
 		}
+		this.isSelected = make2DArr(this.freqArr.length);
 		// check double
 		if(optionObj.color == undefined){
 	         this.color = -1; //default color
@@ -139,6 +140,7 @@ function setMapping(index)
 	    }else{
 	    	this.legend = "right"; //if color is set, but legend is not, just set default legend as right
 	    }
+	    
 		// set mapping
 		this.parent = mainArr;
 		if(mainArr.child == null){

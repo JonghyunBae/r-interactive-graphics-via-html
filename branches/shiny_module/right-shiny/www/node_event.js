@@ -82,17 +82,17 @@ function checkKeyUp(e)
         }
 }       
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-function eventTrigger(Name)
+function eventTrigger(Name, mainArr)
 {
 	hover(Name);
-	select(Name);
+	select(Name, mainArr);
     menu(Name);
-    drag(Name);        
+    drag(Name, mainArr);        
 }
 
 
 var dragOn = false;
-function drag(Name)
+function drag(Name, mainArr)
 {
         var preDragMousePos;
         var aftDragMousePos;
@@ -212,7 +212,7 @@ function RectRangeSelect(Name, pre, aft)
 
 	if(ctrlPressed == false)
 	{
-       allDeselect(Name, Name.node);
+       allDeselect(Name);
 	}       
 	//alert(Name._type);
 	if(Name._type == undefined)
@@ -313,7 +313,7 @@ function RectRangeSelect(Name, pre, aft)
 		}
 	}
    // refresh();
- //   addRow('dataTable');
+ //   refreshTable('dataTable');
         
 }
 
@@ -422,7 +422,7 @@ function hover(Name)
   });    
 }
 
-function select(Name)
+function select(Name, mainArr)
 {        
 	var tmpNodeArr = new Array();
 	Name.stage.on('click', function(evt){
@@ -441,13 +441,13 @@ function select(Name)
 
                 if(aPressed){   //select ALL
                 	Name.tmpShift = false;                	
-                	allSelect(Name, node);
+                	allSelect(Name);
                 }else if(gPressed){
                 	Name.tmpShift = false;
                 }else if(shiftPressed && Name.preId.x != -1){                    
                 	
                 	Name.tmpShift = true;
-                	allDeselect(Name, node);
+                	allDeselect(Name);
 
                 	if(Name._type == "hist" || Name._type == "box" || Name._type == "pie"){
                 		
@@ -483,7 +483,7 @@ function select(Name)
                 	Name.tmpShift = false;
                 }else{  // just one click
                 	Name.tmpShift = false;
-                	allDeselect(Name, node);
+                	allDeselect(Name);
                 	allGraphUpdate(Name, node.getName(), 1);
                 }       
                 if(Name.tmpShift == false)
@@ -493,13 +493,11 @@ function select(Name)
             }else{
             	if(!(ctrlPressed || shiftPressed || aPressed || gPressed))
             	{
-            		allDeselect(Name, node);
+            		allDeselect(Name);
             		Name.preId = {x : -1 , y : -1};
             	}                               
             }
             //   refresh();
-            addRow('table1');
-            addRow('table2');
         }
 	});        
 }

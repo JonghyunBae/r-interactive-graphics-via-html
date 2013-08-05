@@ -91,7 +91,42 @@ function getXYpos(elm) {
 	return {'xp':X, 'yp':Y};
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
-
+function refreshTable(tableID, mainArr){
+	return function() {
+		deleteRow(tableID); //delete all Row first.
+	    var table = document.getElementById(tableID);
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    var colCount = table.rows[0].cells.length;
+	    var colWidth=100;
+	    //alert(mainArr.isSelected.length);
+	    //for(var i=0; i<tempData[0].length; i++)
+	    for(var i=0; i < mainArr.isSelected.length ; i++)
+		{
+	    	//alert(mainArr.isSelected[i][0]);
+			if(mainArr.isSelected[i][0] == 1)
+			{
+				//alert('1');
+				rowCount = table.rows.length;
+				row = table.insertRow(rowCount);
+				var newcell = row.insertCell(0);
+				newcell.align = 'center';			
+				newcell.style.backgroundColor = '#cfe444';
+				newcell.style.color = 'black';
+				newcell.innerHTML = i;
+				newcell.width = colWidth;
+				
+				for(var j=1; j<colCount; j++) {
+					var newcell = row.insertCell(j);			
+					newcell.align = 'center';
+					newcell.style.color = 'black';
+					newcell.width = colWidth;
+					newcell.innerHTML = mainArr[mainArr.labelArr[j-1]][i];
+				}
+			}
+		}	
+	};
+}
 
 
 //allGraphUpdate is used for only select & unselect
@@ -109,6 +144,15 @@ function firstUpdate(obj, child)
 				var parent = obj.parent;
 				var temp = obj.childTOparent(nodes);
 				allUpdate(parent, temp, obj, select);
+			}else{	// parent == null -> root -> update isSelected[nodes][0] with select or unselect.
+				if(nodes.length == undefined){
+					obj.isSelected[nodes][0] = select;
+				}else{					
+					for(var i = 0 ; i < nodes.length ; i ++){
+						obj.isSelected[nodes[i]][0] = select;
+					}
+					obj.refreshTable();
+				}
 			}
 			// my update
 			if(nodes.length == undefined){
@@ -144,6 +188,15 @@ function allUpdate(obj, nodes, child, select)
 		var parent = obj.parent;
 		var temp = obj.childTOparent(nodes);
 		allUpdate(parent, temp, obj, select);
+	}else{	// parent == null -> root -> update isSelected[nodes][0] with select or unselect.
+		if(nodes.length == undefined){
+			obj.isSelected[nodes][0] = select;
+		}else{			
+			for(var i = 0 ; i < nodes.length ; i ++){
+				obj.isSelected[nodes[i]][0] = select;
+			}
+		}
+		obj.refreshTable();
 	}
 	// my update
 	if(nodes.length == undefined){
@@ -206,7 +259,7 @@ function makeRefresh(stage){
 		}
 }
 
-function allSelect(Name, node)
+function allSelect(Name)
 {
 	var tmpNodeArr = new Array();
 	for(var i = 0 ; i < Name.node.length ; i ++)
@@ -215,7 +268,7 @@ function allSelect(Name, node)
 	}
 	allGraphUpdate(Name, tmpNodeArr, 1);	
 }
-function allDeselect(Name, node)
+function allDeselect(Name)
 {
 	var tmpNodeArr = new Array();
 	for(var i = 0 ; i < Name.node.length ; i ++)

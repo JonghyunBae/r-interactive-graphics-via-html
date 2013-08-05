@@ -45,38 +45,7 @@ function makeTable(tableID, mainArr, height){
 }
 
 
-function addRow(tableID) {
-	deleteRow(tableID);
-    var table = document.getElementById(tableID);
-    var rowCount = table.rows.length;
-    var row = table.insertRow(rowCount);
-    var colCount = table.rows[0].cells.length;
-    var colWidth=100;
-    //for(var i=0; i<tempData[0].length; i++)
-    for(var i=0; i< 100 ; i++)
-	{
-		//if(isSelected[i][0] == 1)
-		//{
-			rowCount = table.rows.length;
-			row = table.insertRow(rowCount);
-			var newcell = row.insertCell(0);
-			newcell.align = 'center';			
-			newcell.style.backgroundColor = '#cfe444';
-			newcell.style.color = 'black';
-			newcell.innerHTML = i;
-			newcell.width = colWidth;
-			
-			for(var j=1; j<colCount; j++) {
-				var newcell = row.insertCell(j);			
-				newcell.align = 'center';
-				newcell.style.color = 'black';
-				newcell.width = colWidth;
-				newcell.innerHTML = 1;
-				//newcell.innerHTML = tempData[j-1][i];
-			}
-		//}
-	}	
-}
+
 function deleteRow(tableID) {
 	try {
 		var table = document.getElementById(tableID);

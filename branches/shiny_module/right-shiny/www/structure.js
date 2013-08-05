@@ -57,7 +57,7 @@ function make2DArr(rows) {
 	  return arr;
 }
 
-function createMainStructure(fileName)
+function createMainStructure(id, fileName)
 {	
 	var tmpArr = getData(fileName);	
 	var dataArr=tmpArr.dataArr;	
@@ -96,6 +96,7 @@ function createMainStructure(fileName)
 		isDisObject[labelArr[i]] = isDiscrete[i];
 	}
 	var redraw = new Array();
+	totalArr.refreshTable = refreshTable("table" + id, totalArr);
 	totalArr.size = labelArr.length;
 	totalArr.labelArr = labelArr; // this is for scatter tooltip box only.
 	totalArr.isSelected = isSelected;

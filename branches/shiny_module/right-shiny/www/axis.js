@@ -82,6 +82,9 @@ var MakeAxis = {};
 			makeXAxisLayer(this);
 			makeYAxisLayer(this);
 			// make label layers.
+			if(optionObj.mainLabel != undefined){
+				MakeMainLabel(this, optionObj.mainLabel);
+			}
 			if(optionObj.xLabel != undefined){
 				makeXLabelLayer(this, optionObj.xLabel);
 			}
@@ -212,6 +215,23 @@ function makePlotRectLayer(obj)
 	});
 }
 /**  make plotRect end **/
+/**  make Main Label  **/
+function MakeMainLabel(obj, label)
+{
+
+	obj.mainLabel = new Kinetic.Text({
+	   name : 'mainLabel',
+	   x: obj.plotXMargin + obj.width/2, 
+	   y: obj.plotYMargin * 0.3,
+	   offset : {x: label.length/2 * 10, y:0},
+	   text: label,
+	   fontSize: 20,
+	   fontStyle: 'bold',
+	   fontFamily: 'Calibri',
+	   fill: 'black',
+	});
+}
+/**  make Main Label end  **/
 /**  make x, y label layers  **/
 // set xLabel
 function makeXLabelLayer(obj, label)

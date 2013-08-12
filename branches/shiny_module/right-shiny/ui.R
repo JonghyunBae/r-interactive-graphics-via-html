@@ -61,14 +61,16 @@ shinyUI(bootstrapPage(
 
        <script>
         var histArr1= new MakeHistObj(mainArr1, 'color', {bin : 0.05});
-        var axis1 = new MakeAxis(1, histArr1.xArr[0], histArr1.yArr, histArr1.isDiscrete, 'false', {xLabel : histArr1.xLabel , yLabel : histArr1.yLabel, xbin: histArr1.bin});
+        var axis1 = new MakeAxis(1, histArr1.xArr[0], histArr1.yArr, histArr1.isDiscrete, 'false', {mainLabel: histArr1.mainLabel, xLabel: histArr1.xLabel , yLabel: histArr1.yLabel, xbin: histArr1.bin});
         var hist1 = new Hist(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
         var scatter2 = new Scatter(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
-        eventTrigger(hist1, mainArr1);
+        eventTrigger(hist1);
+
         var scatterArr1 = new MakeScatterObj(mainArr1, 'carat', 'price', {});
-        var axis2 = new MakeAxis(2, scatterArr1.xArr[0], scatterArr1.yArr[0], scatterArr1.isXDiscrete, scatterArr1.isYDiscrete, {xLabel : scatterArr1.xLabel, yLabel : scatterArr1.yLabel});
+        var axis2 = new MakeAxis(2, scatterArr1.xArr[0], scatterArr1.yArr[0], scatterArr1.isXDiscrete, scatterArr1.isYDiscrete, {mainLabel: histArr1.mainLabel, xLabel : scatterArr1.xLabel, yLabel : scatterArr1.yLabel});
         var scatter1 = new Scatter(axis2, scatterArr1, scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
-        var hist2 = new Hist(axis2, scatterArr1,  scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
+        eventTrigger(scatter1);
+       // var hist2 = new Hist(axis2, scatterArr1,  scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
 
    /*     var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['table'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['table'], {xLabel : 'cut', yLabel : 'table'})
         var scatter1 = new Scatter(mainArr1, axis2, 'cut', 'table', {color: 'cut'});
@@ -92,7 +94,7 @@ shinyUI(bootstrapPage(
       <script src=\"button_event.js\"></script>
       <script src=\"table.js\"></script>
 
-       <script>//makeTable('table1', mainArr1, 200)</script>
+       <script>makeTable('table1', mainArr1, 200)</script>
        <script>//makeTable('table2', mainArr2, 300)</script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>

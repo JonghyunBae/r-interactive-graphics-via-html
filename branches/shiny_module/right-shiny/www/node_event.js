@@ -82,17 +82,17 @@ function checkKeyUp(e)
         }
 }       
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-function eventTrigger(Name, mainArr)
+function eventTrigger(Name)
 {
 	hover(Name);
-	select(Name, mainArr);
+	select(Name);
     menu(Name);
-    drag(Name, mainArr);        
+    drag(Name);        
 }
 
 
 var dragOn = false;
-function drag(Name, mainArr)
+function drag(Name)
 {
         var preDragMousePos;
         var aftDragMousePos;
@@ -214,7 +214,6 @@ function RectRangeSelect(Name, pre, aft)
 	{
        allDeselect(Name);
 	}       
-	//alert(Name._type);
 	if(Name._type == undefined)
 		return;
 	if(Name._type == "scatter"  || Name._type == "pie" ){
@@ -321,7 +320,6 @@ function hover(Name)
 {
 	Name.stage.on('mouseover mousemove dragmove', function(evt) {
 		var node = evt.targetNode;        
-// update tooltip
 		if(isNaN(node.getName()) == false)
 		{
 			document.body.style.cursor = "pointer";
@@ -375,10 +373,8 @@ function hover(Name)
 		document.body.style.cursor = "default";
 		Name.tooltip.hide();
 		Name.tooltipLayer.draw();
-		if(isNaN(node.getName()) == false)
-        {
-			if(node.getSelected() == 0)
-			{
+		if(isNaN(node.getName()) == false){
+			if(node.getSelected() == 0){
                 //new kinetic version using tween for animation.
 				switch(Name._type)
 				{                                       
@@ -422,7 +418,7 @@ function hover(Name)
   });    
 }
 
-function select(Name, mainArr)
+function select(Name)
 {        
 	var tmpNodeArr = new Array();
 	Name.stage.on('click', function(evt){
@@ -434,11 +430,9 @@ function select(Name, mainArr)
         }
         if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
             var node = evt.targetNode;
-            if(isNaN(node.getName()) == false)
-            {
+            if(isNaN(node.getName()) == false){
                 var tmpX = Name.node[node.getName()].getX(); 
                 var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); 
-
                 if(aPressed){   //select ALL
                 	Name.tmpShift = false;                	
                 	allSelect(Name);
@@ -452,20 +446,15 @@ function select(Name, mainArr)
                 	if(Name._type == "hist" || Name._type == "box" || Name._type == "pie"){
                 		
                 		if(Name.preId.x >= tmpX){
-                			
-                			for(var i = 0 ; i < Name.node.length ; i ++)
-                			{
-                				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x)
-                				{
+                			for(var i = 0 ; i < Name.node.length ; i ++){
+                				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x){
                 					tmpNodeArr.push(i);
                 				}
                 			}
                 			allGraphUpdate(Name, tmpNodeArr, 1);
                 		}else if(Name.preId.x <= tmpX){
-                			for(var i = 0 ; i < Name.node.length ; i ++)
-                			{
-                				if(tmpX >= Name.node[i].getX() && Name.node[i].getX() >= Name.preId.x)
-                				{
+                			for(var i = 0 ; i < Name.node.length ; i ++){
+                				if(tmpX >= Name.node[i].getX() && Name.node[i].getX() >= Name.preId.x){
                 					tmpNodeArr.push(i);
                 				}
                 			}
@@ -474,8 +463,7 @@ function select(Name, mainArr)
                 
                 	}
                 }else if(ctrlPressed){ //select mutiple node one by one.
-                	if(node.getSelected() == 0)
-                	{
+                	if(node.getSelected() == 0){
                 		allGraphUpdate(Name, node.getName(), 1);
                 	}else if(node.getSelected() == 1){
                 		allGraphUpdate(Name, node.getName(), 0);
@@ -486,13 +474,11 @@ function select(Name, mainArr)
                 	allDeselect(Name);
                 	allGraphUpdate(Name, node.getName(), 1);
                 }       
-                if(Name.tmpShift == false)
-                {
+                if(Name.tmpShift == false){
     	           Name.preId = {x : tmpX , y : tmpY};
                 }
             }else{
-            	if(!(ctrlPressed || shiftPressed || aPressed || gPressed))
-            	{
+            	if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
             		allDeselect(Name);
             		Name.preId = {x : -1 , y : -1};
             	}                               

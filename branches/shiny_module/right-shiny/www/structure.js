@@ -62,7 +62,7 @@ function createMainStructure(id, fileName)
 	var tmpArr = getData(fileName);	
 	var dataArr=tmpArr.dataArr;	
 	var labelArr=tmpArr.labelArr;
-	var isSelected = make2DArr(dataArr.length);
+	var selectTable = new Array(dataArr.length);
 	var isHidden = new Array(dataArr.length);	// false -> not hidden, true -> hidden.
 	var mainArr = make2DArr(labelArr.length + 1);		
 	var isDiscrete = new Array(labelArr.length);
@@ -86,7 +86,7 @@ function createMainStructure(id, fileName)
 			}			
 		}
 		mainArr[i][j] = j; // save original number.
-		isSelected[j][0] = 0;	
+		selectTable[j] = 0;	
 	}
 
 	var totalArr = new Object();
@@ -95,18 +95,15 @@ function createMainStructure(id, fileName)
 		totalArr[labelArr[i]] = mainArr[i];
 		isDisObject[labelArr[i]] = isDiscrete[i];
 	}
-	var redraw = new Array();
 	totalArr.refreshTable = refreshTable("table" + id, totalArr);
 	totalArr.size = labelArr.length;
 	totalArr.labelArr = labelArr; // this is for scatter tooltip box only.
-	totalArr.isSelected = isSelected;
+	totalArr.selectTable = selectTable;
 	totalArr.isDiscrete = isDisObject;
 	totalArr.isHidden = isHidden;
 	totalArr.id = 1;
-	totalArr.redraw = redraw;
 	totalArr.parent = null;
 	totalArr.child = null;
 	totalArr.parentTOchild = null;
-	totalArr.refreshArr = new Array();
 	return totalArr;
 }

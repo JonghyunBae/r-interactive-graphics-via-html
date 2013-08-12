@@ -8,7 +8,8 @@ var MakeHistObj = {};
 	MakeHistObj = function(mainArr, xLabel, optionObj) {
 		this.xLabel = xLabel;
 		this.yLabel = "frequency";
-		this.id = 1;
+		this.mainLabel = "histogram of " + xLabel;
+		this.id = 0;
 		this.double = false;
 		
 		if(mainArr.isDiscrete[xLabel] == true){
@@ -25,28 +26,23 @@ var MakeHistObj = {};
 			hasArr[cnt][0] = 0;
 			xArr[1][cnt] = cnt;
 			xArr[0][cnt++] = mainArr[xLabel][0];
-			for(i = 1 ; i < mainArr[xLabel].length ; i++)
-        	{
-        		for(j = 0 ; j < xArr[0].length ; j ++)
-        		{
-        			if(xArr[0][j] == mainArr[xLabel][i])
-        			{
+			for(i = 1 ; i < mainArr[xLabel].length ; i++){
+        		for(j = 0 ; j < xArr[0].length ; j ++){
+        			if(xArr[0][j] == mainArr[xLabel][i]){
         				hasArr[j].push(i);
         				index[i] = j;
         				freqArr[j] ++; 
         				break;
         			}
-        		}        		
-        		if(j == xArr[0].length)
-        		{
+        		}
+        		if(j == xArr[0].length){
         			freqArr[j] = 1;
         			hasArr[j].push(i);
         			index[i] = j;
         			xArr[0].push(mainArr[xLabel][i]);
         			xArr[1].push(cnt ++);
         		}
-        	}
-			
+        	}			
 			this.freqArr = freqArr;
 			this.xArr = xArr;
 			freqArr[freqArr.length] = 0;
@@ -67,8 +63,7 @@ var MakeHistObj = {};
 			}
 			 //check the fixpoint.
 			this.fixPoint = 0;
-			if(this.bin.toString().indexOf('.') != -1)
-			{
+			if(this.bin.toString().indexOf('.') != -1){
 				this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
 			}
 			if(tempMax > 0){
@@ -91,8 +86,7 @@ var MakeHistObj = {};
         	var hasArr = make2DArr(parseFloat(Math.ceil((max - min)/this.bin)));             	
         	var index = new Array(mainArr[xLabel].length);
         	var cnt = 0;
-        	for(var i = 0 ; i < freqArr.length ; i ++ )
-        	{
+        	for(var i = 0 ; i < freqArr.length ; i ++ ){
         		freqArr[i] = 0; 
         	}
         	for(var i = 0 ; i < mainArr[xLabel].length ; i++){
@@ -107,8 +101,7 @@ var MakeHistObj = {};
 			this.yArr = freqArr;
 			this.hasArr = hasArr;
 		}
-		this.isSelected = make2DArr(this.freqArr.length - 1);
-		// check double
+		/*// check double
 		if(optionObj.color == undefined){
 	         this.color = -1; //default color
 	    }else{
@@ -136,19 +129,10 @@ var MakeHistObj = {};
 	    }else{
 	    	this.legend = "right"; //if color is set, but legend is not, just set default legend as right
 	    }
-	    
+	    */
+		
 		// set mapping for event handler.
-		this.parent = mainArr;
-		if(mainArr.child == null){
-			mainArr.child = new Array();
-			mainArr.parentTOchild = new Array();
-		}
-		mainArr.child.push(this);
-		this.child = null;
-		this.parentTOchild = null;
-		this.childTOparent = setMapping(hasArr);
-		this.refreshArr = new Array();
-		mainArr.parentTOchild.push(setMapping(index));
+		birthReport(mainArr, this, index, hasArr);		
 	}
 })();
 
@@ -163,6 +147,7 @@ var Hist = {};
 		this.preId = {x : -1, y : -1};
 		this.stage = axisObj.stage;
 		this._draw(axisObj, histObj, xArr, yArr, optionObj);
+		histObj.id ++;
 	};
 	Hist.prototype = {
 		_draw: function(axisObj, histObj, xArr, yArr, optionObj) {
@@ -192,7 +177,6 @@ var Hist = {};
     					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
     					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
     				});
-            		histObj.isSelected[i][this.id] = histUpdate(this, cnt);
 	        	}
 			}else{
 				for(var i = 0; i < xArr.length - 1 ; i ++)
@@ -212,11 +196,14 @@ var Hist = {};
     					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
     					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
     				});
-            	//	histObj.isSelected[i][this.id] = histUpdate(this, cnt);
 	        	}
 			}
+        	// event add
+			histObj.refreshArr[this.id] = makeRefresh(this.stage);
+			histObj.updateArr[this.id] = histUpdate(this.node);
+        	this.firstUpdate = firstUpdate(histObj);
         	
-        	this.firstUpdate = firstUpdate(histObj, null);
+        	
         	setTooltip(this);
         	
         	this.dataLayer = new Kinetic.Layer();	
@@ -236,28 +223,44 @@ var Hist = {};
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
-function histUpdate(obj, id)
+function histUpdate(node)
 {
-	return	function(selectOn)
-				{
-					
-					if(obj.node[id].getSelected() == 1 && selectOn == 0)		//unselect
+	return	function(ids, selectOn)
+		{
+			// if just one node.
+			if(ids.length == undefined){
+				if(node[ids].getSelected() == 1 && selectOn == 0){		//unselect
+					node[ids].setSelectCnt(node[ids].getSelectCnt() - 1);
+					if(node[ids].getSelectCnt() == 0){
+						node[ids].setOpacity(0.5);
+						node[ids].setSelected(0);
+					}
+				}else if(node[ids].getSelected() == 0 && selectOn == 1){		// select
+					node[ids].setSelectCnt(node[ids].getSelectCnt() + 1);						
+					if(node[ids].getSelected() == 0){
+						node[ids].setOpacity(1);
+						node[ids].setSelected(1);
+					}
+				}
+			}else{
+				for(var i = 0 ; i < ids.length ; i ++){
+					if(node[ids[i]].getSelected() == 1 && selectOn == 0)		//unselect
 					{
-						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() - 1);
-						if(obj.node[id].getSelectCnt() == 0)
-						{
-							obj.node[id].setOpacity(0.5);
-							obj.node[id].setSelected(0);
+						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() - 1);
+						if(node[ids[i]].getSelectCnt() == 0){
+							node[ids[i]].setOpacity(0.5);
+							node[ids[i]].setSelected(0);
 						}
 					}else if(selectOn == 1){		// select
-						obj.node[id].setSelectCnt(obj.node[id].getSelectCnt() + 1);						
-						if(obj.node[id].getSelected() == 0)
-						{
-							obj.node[id].setOpacity(1);
-							obj.node[id].setSelected(1);
+						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() + 1);						
+						if(node[ids[i]].getSelected() == 0){
+							node[ids[i]].setOpacity(1);
+							node[ids[i]].setSelected(1);
 						}
 					}
-				};
+				}
+			}
+		};
 }
 /**  update function end  **/
 

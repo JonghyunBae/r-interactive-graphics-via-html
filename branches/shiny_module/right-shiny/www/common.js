@@ -2,26 +2,6 @@ var plotWidth = 300;  //default value for plot width
 var plotHeight = 300; //default value for plot height  
 var plotRadius = 2;
 
-function setMapping(index)
-{
-	return function(nodes)
-		{
-			var returnArr = new Array();
-			if(nodes.length == undefined){
-				returnArr = index[nodes];
-			}else{
-				for(var i = 0 ; i < nodes.length ; i ++){
-					returnArr = returnArr.concat(index[nodes[i]]);
-				}
-				returnArr = returnArr.reduce(function(a,b){
-					if(a.indexOf(b) < 0) a.push(b);
-					return a;
-				},[]);
-			}
-			return returnArr;
-		};
-}
-
 /**  set tooltip  **/
 //new kenetic version -> tooltip setting change using tag
 function setTooltip(obj)
@@ -117,12 +97,9 @@ function refreshTable(tableID, mainArr){
 	    var row = table.insertRow(rowCount);
 	    var colCount = table.rows[0].cells.length;
 	    var colWidth=100;
-	    //alert(mainArr.isSelected.length);
-	    //for(var i=0; i<tempData[0].length; i++)
-	    for(var i=0; i < mainArr.isSelected.length ; i++)
+	    for(var i=0; i < mainArr.selectTable.length ; i++)
 		{
-	    	//alert(mainArr.isSelected[i][0]);
-			if(mainArr.isSelected[i][0] == 1)
+			if(mainArr.selectTable[i] == 1)
 			{
 				//alert('1');
 				rowCount = table.rows.length;
@@ -146,6 +123,36 @@ function refreshTable(tableID, mainArr){
 	};
 }
 
+function birthReport(parent, child, p2cArr, c2pArr){
+	child.parent = parent;
+	if(parent.child == null){
+		parent.child = new Array();
+		parent.parentTOchild = new Array();
+	}
+	parent.child.push(child);
+	parent.parentTOchild.push(setMapping(p2cArr));
+	child.child = null;
+	child.parentTOchild = null;
+	child.childTOparent = setMapping(c2pArr);
+	child.updateArr = new Array();
+	child.refreshArr = new Array();
+}
+
+function setMapping(index)
+{
+	return function(nodes)
+		{
+			var returnArr = new Array();
+			if(nodes.length == undefined){
+				returnArr = index[nodes];
+			}else{
+				for(var i = 0 ; i < nodes.length ; i ++){
+					returnArr = returnArr.concat(index[nodes[i]]);
+				}
+			}
+			return returnArr;
+		};
+}
 
 //allGraphUpdate is used for only select & unselect
 function allGraphUpdate(Name, nodes, select) 
@@ -153,120 +160,49 @@ function allGraphUpdate(Name, nodes, select)
 	Name.firstUpdate(nodes, select);
 }
 
-function firstUpdate(obj, child)
+function firstUpdate(obj)
 {
 	return function(nodes, select)
 		{
-			// parent update
-			if(obj.parent != null){
-				var parent = obj.parent;
-				var temp = obj.childTOparent(nodes);
-				allUpdate(parent, temp, obj, select);
-			}else{	// parent == null -> root -> update isSelected[nodes][0] with select or unselect.
-				if(nodes.length == undefined){
-					obj.isSelected[nodes][0] = select;
-				}else{					
-					for(var i = 0 ; i < nodes.length ; i ++){
-						obj.isSelected[nodes[i]][0] = select;
-					}
-					obj.refreshTable();
-				}
+			var object = obj;
+			var temp = nodes;
+			// find root
+			var cnt = 0;
+			while(object.parent != null){				
+				temp = object.childTOparent(temp);
+				object = object.parent;
 			}
-			// my update
-			if(nodes.length == undefined){
-				for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
-					obj.isSelected[nodes][j](select);
-					obj.refreshArr[j]();
-				}
+			// selectTable update & call refreshTable.
+			if(temp.length == undefined){
+				object.selectTable[temp] = select;
 			}else{
-				for(var i = 0 ; i < nodes.length ; i ++){
-					for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
-						obj.isSelected[nodes[i]][j](select);
-					}
-				}
-				for(var j = 1 ; j < obj.refreshArr.length ; j ++){
-					obj.refreshArr[j]();
+				for(var i = 0 ; i < temp.length ; i ++){
+					object.selectTable[temp[i]] = select;
 				}
 			}
-			// child update
-			if(obj.child != null){
-				for(var i = 0 ; i < obj.child.length ; i ++){
-					if(obj.child[i] != child){	// prevent infinite loop.
-						var temp = obj.parentTOchild[i](nodes);
-						childUpdate(obj.child[i], temp, select);
-					}
+			object.refreshTable();
+			// children update
+			if(object.child != null){
+				for(var i = 0 ; i < object.child.length ; i ++){
+					var temp2 = object.parentTOchild[i](temp);
+					childUpdate(object.child[i], temp2, select);
 				}
 			}
 		};
 }
-function allUpdate(obj, nodes, child, select)
-{
-	// parent update
-	if(obj.parent != null){
-		var parent = obj.parent;
-		var temp = obj.childTOparent(nodes);
-		allUpdate(parent, temp, obj, select);
-	}else{	// parent == null -> root -> update isSelected[nodes][0] with select or unselect.
-		if(nodes.length == undefined){
-			obj.isSelected[nodes][0] = select;
-		}else{			
-			for(var i = 0 ; i < nodes.length ; i ++){
-				obj.isSelected[nodes[i]][0] = select;
-			}
-		}
-		obj.refreshTable();
-	}
-	// my update
-	if(nodes.length == undefined){
-		for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
-			obj.isSelected[nodes][j](select);
-			obj.refreshArr[j]();
-		}
-	}else{
-		for(var i = 0 ; i < nodes.length ; i ++){			
-			for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
-				obj.isSelected[nodes[i]][j](select);
-			}
-		}
-		for(var j = 1 ; j < obj.refreshArr.length ; j ++){
-			obj.refreshArr[j]();
-		}
-	}
-	// child update
-	if(obj.child != null){
-		for(var i = 0 ; i < obj.child.length ; i ++){
-			if(obj.child[i] != child){	// prevent infinite loop.
-				var temp = obj.parentTOchild[i](nodes);
-				childUpdate(obj.child[i], temp, select);
-			}
-		}
-	}
-}
+
 function childUpdate(obj, nodes, select)
 {
 	// my update
-	if(nodes.length == undefined){
-		for(var j = 1 ; j < obj.isSelected[nodes].length ; j ++){
-			obj.isSelected[nodes][j](select);
-			obj.refreshArr[j]();
-		}
-	}else{
-		for(var i = 0 ; i < nodes.length ; i ++){
-			for(var j = 1 ; j < obj.isSelected[nodes[i]].length ; j ++){
-				obj.isSelected[nodes[i]][j](select);
-			}
-		}
-		for(var j = 1 ; j < obj.refreshArr.length ; j ++){
-			obj.refreshArr[j]();
-		}
-	}	
+	for(var i = 0 ; i < obj.updateArr.length ; i ++){
+		obj.updateArr[i](nodes, select);
+		obj.refreshArr[i]();
+	}
 	//child update
 	if(obj.child != null){
 		for(var i = 0 ; i < obj.child.length ; i ++){
-			if(obj.child[i] != child){	// prevent infinite loop.
-				var temp = parent.parentTOchild[i](nodes);
-				childUpdate(obj.child[i], temp, select);
-			}
+			var temp = parent.parentTOchild[i](nodes);
+			childUpdate(obj.child[i], temp, select);
 		}
 	}
 }

@@ -5,7 +5,8 @@ var MakeScatterObj = {};
 	MakeScatterObj = function(mainArr, xLabel, yLabel, optionObj) {
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
-		this.id = 1;
+		this.mainLabel = "scatter of " + xLabel + " & " + yLabel;
+		this.id = 0;
 		this.double = false;
 		
 		if(mainArr.isDiscrete[xLabel] == true){
@@ -73,19 +74,8 @@ var MakeScatterObj = {};
 			this.yArr[0] = mainArr[yLabel];
 			this.yArr[1] = mainArr[yLabel];
 		}
-		
 		// set mapping for event handler.
-		this.parent = mainArr;
-		if(mainArr.child == null){
-			mainArr.child = new Array();
-			mainArr.parentTOchild = new Array();
-		}
-		mainArr.child.push(this);
-		this.child = null;
-		this.parentTOchild = null;
-		this.childTOparent = setMapping(hasArr);
-		this.refreshArr = new Array();
-		mainArr.parentTOchild.push(setMapping(hasArr));
+		birthReport(mainArr, this, hasArr, hasArr);
 	}
 })();
 
@@ -99,6 +89,7 @@ var Scatter = {};
 		this.preId = {x : -1, y : -1};
 		this.stage = axisObj.stage;
 		this._draw(axisObj, scatterObj, xArr, yArr, optionObj);
+		scatterObj.id ++;
 	};
 	Scatter.prototype = {
 		_draw: function(axisObj, scatterObj, xArr, yArr, optionObj) {
@@ -118,11 +109,13 @@ var Scatter = {};
 					selected : 0,
 					info :  "Node : " + i + "\r\n"
 				});
-				//alert(axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff);
-			//	scatterObj.isSelected[i][this.id] = scatterUpdate(this, i);	//save event handler
         	}
+        	// event add
+			scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
+			scatterObj.updateArr[this.id] = scatterUpdate(this.node);
+        	this.firstUpdate = firstUpdate(scatterObj);
         	
-        	this.firstUpdate = firstUpdate(scatterObj, null);
+        	
         	setTooltip(this);
         	
         	this.dataLayer = new Kinetic.Layer();	
@@ -374,24 +367,41 @@ function loessSendArr(Name)
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
-function scatterUpdate(obj, id)
+function scatterUpdate(node)
 {
-	return	function(selectOn)
-				{
-					if(selectOn == 0 && obj.node[id].getSelected() == 1)		//unselect
-					{	
-						obj.node[id].setStroke(obj.node[id].getFill());
-						obj.node[id].setScaleX(1);
-						obj.node[id].setScaleY(1);
-						obj.node[id].setSelected(0);
-					}else if(selectOn == 1 && obj.node[id].getSelected() == 0){	//select
-						obj.node[id].setStroke('black');
-						obj.node[id].setScaleX(2);
-						obj.node[id].setScaleY(2);
-						obj.node[id].setSelected(1);
-						obj.node[id].moveToTop();
+	return	function(ids, selectOn)
+		{
+			if(ids.length == undefined){
+				if(node[ids].getSelected() == 1 && selectOn == 0){		//unselect
+					node[ids].setStroke(node[ids].getFill());
+					node[ids].setScaleX(1);
+					node[ids].setScaleY(1);
+					node[ids].setSelected(0);
+				}else if(node[ids].getSelected() == 0 && selectOn == 1){	//select
+					node[ids].setStroke('black');
+					node[ids].setScaleX(2);
+					node[ids].setScaleY(2);
+					node[ids].setSelected(1);
+					node[ids].moveToTop();
+				}
+			}else{
+				for(var i = 0 ; i < ids.length ; i ++){
+					if(node[ids[i]].getSelected() == 1 && selectOn == 0){		//unselect
+						node[ids[i]].setStroke(node[ids[i]].getFill());
+						node[ids[i]].setScaleX(1);
+						node[ids[i]].setScaleY(1);
+						node[ids[i]].setSelected(0);
+					}else if(node[ids[i]].getSelected() == 0 && selectOn == 1){	//select
+						node[ids[i]].setStroke('black');
+						node[ids[i]].setScaleX(2);
+						node[ids[i]].setScaleY(2);
+						node[ids[i]].setSelected(1);
+						node[ids[i]].moveToTop();
 					}
-				};
+				}
+			}
+			
+		};
 }
 /**  update function end  **/
 
@@ -414,21 +424,5 @@ function addLayer(obj, stage)
 	
 }
 /**  add layers end  **/
-/**  make Main Label  **/
-function MakeMainLabel(obj, plot, xLabel, yLabel)
-{
 
-	obj.mainLabel = new Kinetic.Text({
-	   name : 'mainLabel',
-	   x: plot.plotXMargin + plot.width/2, 
-	   y: plot.plotYMargin * 0.3,
-	   offset : {x: (obj._type + ' of ' + xLabel + ' & ' + yLabel).length/2 * 10, y:0},
-	   text: obj._type + ' of ' + xLabel + ' & ' + yLabel,
-	   fontSize: 20,
-	   fontStyle: 'bold',
-	   fontFamily: 'Calibri',
-	   fill: 'black',
-	});
-}
-/**  make Main Label end  **/
 

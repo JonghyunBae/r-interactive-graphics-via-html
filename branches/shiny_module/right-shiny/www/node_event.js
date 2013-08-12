@@ -218,10 +218,8 @@ function RectRangeSelect(Name, pre, aft)
 		return;
 	if(Name._type == "scatter"  || Name._type == "pie" ){
 		if(ctrlPressed == true) {
-			for(var i = 0 ; i < Name.node.length ; i ++)
-			{
-				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-                {
+			for(var i = 0 ; i < Name.node.length ; i ++){
+				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY){
 					if(Name.node[i].getSelected()==1){
 						tmpNodeArr.push(i);
 					}else{
@@ -232,10 +230,8 @@ function RectRangeSelect(Name, pre, aft)
 			allGraphUpdate(Name, tmpNodeArr, 0);
 			allGraphUpdate(Name, tmpNodeArr1, 1);
 		}else{
-			for(var i = 0 ; i < Name.node.length ; i ++)
-			{
-				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-                {
+			for(var i = 0 ; i < Name.node.length ; i ++){
+				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY){
 					tmpNodeArr.push(i);              
                 }                        
 			}
@@ -244,10 +240,8 @@ function RectRangeSelect(Name, pre, aft)
                 
 	}else if(Name._type == "hist"){
 		if(ctrlPressed == true) {
-			for(var i = 0 ; i < Name.node.length ; i ++)
-			{
-				if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
-				{
+			for(var i = 0 ; i < Name.node.length ; i ++){
+				if((smallX <= Name.node[i].getX() + Name.node[i].getWidth() && Name.node[i].getX() <= bigX) && (smallY <= Name.node[i].getY() + Name.node[i].getHeight() && Name.node[i].getY() <= bigY)){
 					if(Name.node[i].getSelected()==1){
 						tmpNodeArr.push(i);
 					}else{
@@ -258,11 +252,9 @@ function RectRangeSelect(Name, pre, aft)
 			allGraphUpdate(Name, tmpNodeArr, 0);
 			allGraphUpdate(Name, tmpNodeArr1, 1);
 		}else{
-			for(var i = 0 ; i < Name.node.length ; i ++)
-			{
-				if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY()+Name.node[i].getHeight()/2 && Name.node[i].getY()-Name.node[i].getHeight()/2 <= bigY))
-                {
-					tmpNodeArr.push(i);                    
+			for(var i = 0 ; i < Name.node.length ; i ++){
+				if((smallX <= Name.node[i].getX() + Name.node[i].getWidth() && Name.node[i].getX() <= bigX) && (smallY <= Name.node[i].getY() + Name.node[i].getHeight() && Name.node[i].getY() <= bigY)){
+					tmpNodeArr.push(i);
                 }
            	}
 			allGraphUpdate(Name, tmpNodeArr, 1);

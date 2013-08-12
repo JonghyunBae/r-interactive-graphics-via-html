@@ -61,11 +61,11 @@ shinyUI(bootstrapPage(
        </div>
 
        <script>
-        var histArr1= new MakeHistObj(mainArr1, 'color', {bin : 0.05});
+        var histArr1= new MakeHistObj(mainArr1, 'carat', {bin : 0.6});
         var axis1 = new MakeAxis(1, histArr1.xArr[0], histArr1.yArr, histArr1.isDiscrete, 'false', {mainLabel: histArr1.mainLabel, xLabel: histArr1.xLabel , yLabel: histArr1.yLabel, xbin: histArr1.bin});
         var hist1 = new Hist(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
-        var scatter2 = new Scatter(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
-        var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
+       // var scatter2 = new Scatter(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
+       // var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
         eventTrigger(hist1);
 
         var scatterArr1 = new MakeScatterObj(mainArr1, 'carat', 'price', {});

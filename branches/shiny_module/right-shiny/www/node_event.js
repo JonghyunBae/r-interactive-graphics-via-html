@@ -311,9 +311,6 @@ function RectRangeSelect(Name, pre, aft)
 			allGraphUpdate(Name, tmpNodeArr, 1);
 		}
 	}
-   // refresh();
- //   refreshTable('dataTable');
-        
 }
 
 function hover(Name)

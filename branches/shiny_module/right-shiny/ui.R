@@ -32,6 +32,7 @@ shinyUI(bootstrapPage(
   includeJS("hist.js"),
   includeJS("box.js"),
   includeJS("pie.js"),
+  includeJS("line.js"),
   includeJS("node_event.js"),
   includeJS("menu.js"),
   HTML("<script>var mainArr1 = createMainStructure(1, '_sub.diamonds.csv');</script>"), 
@@ -64,11 +65,13 @@ shinyUI(bootstrapPage(
         var axis1 = new MakeAxis(1, histArr1.xArr[0], histArr1.yArr, histArr1.isDiscrete, 'false', {mainLabel: histArr1.mainLabel, xLabel: histArr1.xLabel , yLabel: histArr1.yLabel, xbin: histArr1.bin});
         var hist1 = new Hist(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
         var scatter2 = new Scatter(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
+        var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
         eventTrigger(hist1);
 
         var scatterArr1 = new MakeScatterObj(mainArr1, 'carat', 'price', {});
         var axis2 = new MakeAxis(2, scatterArr1.xArr[0], scatterArr1.yArr[0], scatterArr1.isXDiscrete, scatterArr1.isYDiscrete, {mainLabel: histArr1.mainLabel, xLabel : scatterArr1.xLabel, yLabel : scatterArr1.yLabel});
         var scatter1 = new Scatter(axis2, scatterArr1, scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
+        var line2 = new Line(axis2, scatterArr1, scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
         eventTrigger(scatter1);
        // var hist2 = new Hist(axis2, scatterArr1,  scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
 

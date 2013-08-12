@@ -160,8 +160,7 @@ var Hist = {};
 			this.node = new Array();
 			var cnt = 0;
 			if(axisObj.isXDiscrete == true){
-				for(var i = 0; i < xArr.length ; i ++)
-	        	{
+				for(var i = 0; i < xArr.length ; i ++){
         			this.node[i] = new Kinetic.Rect({
             			name : i,
     					freq: yArr[i],
@@ -179,8 +178,7 @@ var Hist = {};
     				});
 	        	}
 			}else{
-				for(var i = 0; i < xArr.length - 1 ; i ++)
-	        	{
+				for(var i = 0; i < xArr.length - 1 ; i ++){
         			this.node[i] = new Kinetic.Rect({
             			name : i,
     					freq: yArr[i],
@@ -207,8 +205,7 @@ var Hist = {};
         	setTooltip(this);
         	
         	this.dataLayer = new Kinetic.Layer();	
-			for(var i = 0 ; i < this.node.length ; i ++)
-			{
+			for(var i = 0 ; i < this.node.length ; i ++){
 				this.dataLayer.add(this.node[i]);
 			}
 			

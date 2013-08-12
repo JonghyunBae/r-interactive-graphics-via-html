@@ -96,8 +96,7 @@ var Scatter = {};
 			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 			//this.color = colorArr;
 			this.node = new Array();
-			for(var i = 0; i < xArr.length ; i ++)
-	        {
+			for(var i = 0; i < xArr.length ; i ++){
 				this.node[i] = new Kinetic.Circle({
 					name : i,
 					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i] - axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
@@ -119,8 +118,7 @@ var Scatter = {};
         	setTooltip(this);
         	
         	this.dataLayer = new Kinetic.Layer();	
-			for(var i = 0 ; i < this.node.length ; i ++)
-			{
+			for(var i = 0 ; i < this.node.length ; i ++){
 				this.dataLayer.add(this.node[i]);
 			}
 			
@@ -131,6 +129,47 @@ var Scatter = {};
 	};
 })();
 
+/**  update function  **/
+//Kinetic version update
+//just remove transitient, and change it with "set" syntax.
+//"set" syntax has not changed during many versions.
+function scatterUpdate(node)
+{
+	return	function(ids, selectOn)
+		{
+			if(ids.length == undefined){
+				if(node[ids].getSelected() == 1 && selectOn == 0){		//unselect
+					node[ids].setStroke(node[ids].getFill());
+					node[ids].setScaleX(1);
+					node[ids].setScaleY(1);
+					node[ids].setSelected(0);
+				}else if(node[ids].getSelected() == 0 && selectOn == 1){	//select
+					node[ids].setStroke('black');
+					node[ids].setScaleX(2);
+					node[ids].setScaleY(2);
+					node[ids].setSelected(1);
+					node[ids].moveToTop();
+				}
+			}else{
+				for(var i = 0 ; i < ids.length ; i ++){
+					if(node[ids[i]].getSelected() == 1 && selectOn == 0){		//unselect
+						node[ids[i]].setStroke(node[ids[i]].getFill());
+						node[ids[i]].setScaleX(1);
+						node[ids[i]].setScaleY(1);
+						node[ids[i]].setSelected(0);
+					}else if(node[ids[i]].getSelected() == 0 && selectOn == 1){	//select
+						node[ids[i]].setStroke('black');
+						node[ids[i]].setScaleX(2);
+						node[ids[i]].setScaleY(2);
+						node[ids[i]].setSelected(1);
+						node[ids[i]].moveToTop();
+					}
+				}
+			}
+			
+		};
+}
+/**  update function end  **/
 
 /**  draw sactter  **/
 /*
@@ -363,66 +402,6 @@ function loessSendArr(Name)
 }
 /**  Regression functions for scatter end  **/
 
-/**  update function  **/
-//Kinetic version update
-//just remove transitient, and change it with "set" syntax.
-//"set" syntax has not changed during many versions.
-function scatterUpdate(node)
-{
-	return	function(ids, selectOn)
-		{
-			if(ids.length == undefined){
-				if(node[ids].getSelected() == 1 && selectOn == 0){		//unselect
-					node[ids].setStroke(node[ids].getFill());
-					node[ids].setScaleX(1);
-					node[ids].setScaleY(1);
-					node[ids].setSelected(0);
-				}else if(node[ids].getSelected() == 0 && selectOn == 1){	//select
-					node[ids].setStroke('black');
-					node[ids].setScaleX(2);
-					node[ids].setScaleY(2);
-					node[ids].setSelected(1);
-					node[ids].moveToTop();
-				}
-			}else{
-				for(var i = 0 ; i < ids.length ; i ++){
-					if(node[ids[i]].getSelected() == 1 && selectOn == 0){		//unselect
-						node[ids[i]].setStroke(node[ids[i]].getFill());
-						node[ids[i]].setScaleX(1);
-						node[ids[i]].setScaleY(1);
-						node[ids[i]].setSelected(0);
-					}else if(node[ids[i]].getSelected() == 0 && selectOn == 1){	//select
-						node[ids[i]].setStroke('black');
-						node[ids[i]].setScaleX(2);
-						node[ids[i]].setScaleY(2);
-						node[ids[i]].setSelected(1);
-						node[ids[i]].moveToTop();
-					}
-				}
-			}
-			
-		};
-}
-/**  update function end  **/
 
-
-
-//////////////////////////////////// common used for graph /////////////////////////////////
-
-/**  add layers  **/
-// plotLayer(legend, mainLabel), tooltip, data
-function addLayer(obj, stage)
-{
-	obj.plotLayer = new Kinetic.Layer();
-	obj.plotLayer.add(obj.mainLabel);
-	stage.add(obj.tooltipLayer);
-	stage.add(obj.dataLayer);
-	stage.add(obj.plotLayer);
-	if(obj.color != -1){
-		stage.add(obj.legendLayer);
-	}
-	
-}
-/**  add layers end  **/
 
 

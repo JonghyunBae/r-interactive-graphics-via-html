@@ -169,8 +169,8 @@ function firstUpdate(obj, child)
 					for(var i = 0 ; i < nodes.length ; i ++){
 						obj.isSelected[nodes[i]][0] = select;
 					}
+					obj.refreshTable();
 				}
-				obj.refreshTable();
 			}
 			// my update
 			if(nodes.length == undefined){

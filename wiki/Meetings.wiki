@@ -7,7 +7,7 @@
    # Plot overlaying 
    # Event handling for menu and plot update
    # R API for code generation
-   # Package surver offloading
+   # Package server offloading
    # Output packaging for Shiny
    # Testing
    # Documentation

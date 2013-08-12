@@ -165,7 +165,7 @@ var Hist = {};
 		this._draw(axisObj, histObj, xArr, yArr, optionObj);
 	};
 	Hist.prototype = {
-		_draw: function(axisObj, histObj, xArr, yArr, colorArr, optionObj) {
+		_draw: function(axisObj, histObj, xArr, yArr, optionObj) {
 			if(axisObj.isXDiscrete == true){
 				this.barWidth = axisObj.width / xArr.length /2;
 			}else{
@@ -212,7 +212,7 @@ var Hist = {};
     					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
     					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
     				});
-            		histObj.isSelected[i][this.id] = histUpdate(this, cnt);
+            	//	histObj.isSelected[i][this.id] = histUpdate(this, cnt);
 	        	}
 			}
         	

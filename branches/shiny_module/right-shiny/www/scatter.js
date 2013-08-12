@@ -1,6 +1,147 @@
-/**  draw sactter  **/
-// label array is used for tooltipgetinfo and color setting. --> should be refined!
+var MakeScatterObj = {};
 
+(function () {
+	
+	MakeScatterObj = function(mainArr, xLabel, yLabel, optionObj) {
+		this.xLabel = xLabel;
+		this.yLabel = yLabel;
+		this.id = 1;
+		this.double = false;
+		
+		if(mainArr.isDiscrete[xLabel] == true){
+			this.isXDiscrete = true;
+			var xArr = new Array();
+			xArr[0] = new Array();
+			xArr[1] = new Array();
+			var hasArr = new Array();
+			var cnt = 0;
+			hasArr[cnt] = cnt;
+			xArr[1][cnt] = cnt;
+			xArr[0][cnt++] = mainArr[xLabel][0];
+			for(var i = 1 ; i < mainArr[xLabel].length ; i ++ ){
+				hasArr[i] = i;
+				for(var j = 0 ; j < xArr[0].length ; j ++){
+					if(xArr[0][j] == mainArr[xLabel][i])
+        			{
+						xArr[0].push(mainArr[xLabel][i]);
+	        			xArr[1].push(j);
+        				break;
+        			}
+				}
+				if(j == xArr[0].length){
+					xArr[0].push(mainArr[xLabel][i]);
+        			xArr[1].push(j);
+				}
+			}
+			this.xArr = xArr;
+		}else{
+			this.isXDiscrete = false;
+			this.xArr = new Array();
+			this.xArr[0] = mainArr[xLabel];
+			this.xArr[1] = mainArr[xLabel];
+			var hasArr = new Array();
+			for(var i = 0 ; i < mainArr[xLabel].length ; i ++ ){
+				hasArr[i] = i;
+			}
+		}
+		
+		if(mainArr.isDiscrete[yLabel] == true){
+			this.isYDiscrete = true;
+			var yArr = new Array();
+			yArr[0] = new Array();
+			yArr[1] = new Array();
+			var cnt = 0;
+			yArr[1][cnt] = cnt;
+			yArr[0][cnt++] = mainArr[yLabel][0];
+			for(var i = 1 ; i < mainArr[yLabel].length ; i ++ ){
+				for(var j = 0 ; j < yArr[0].length ; j ++){
+					if(yArr[0][j] == mainArr[yLabel][i])
+        			{
+	        			yArr[1].push(j);
+        				break;
+        			}
+				}
+				if(j == yArr[0].length){
+					yArr[0].push(mainArr[yLabel][i]);
+        			yArr[1].push(j);
+				}
+			}
+			this.yArr = yArr;
+		}else{
+			this.isYDiscrete = false;
+			this.yArr = new Array();
+			this.yArr[0] = mainArr[yLabel];
+			this.yArr[1] = mainArr[yLabel];
+		}
+		
+		// set mapping for event handler.
+		this.parent = mainArr;
+		if(mainArr.child == null){
+			mainArr.child = new Array();
+			mainArr.parentTOchild = new Array();
+		}
+		mainArr.child.push(this);
+		this.child = null;
+		this.parentTOchild = null;
+		this.childTOparent = setMapping(hasArr);
+		this.refreshArr = new Array();
+		mainArr.parentTOchild.push(setMapping(hasArr));
+	}
+})();
+
+var Scatter = {};
+
+(function() {
+	
+	Scatter = function(axisObj, scatterObj, xArr, yArr, colorArr,  optionObj) {
+		this._type = 'scatter';
+		this.id = scatterObj.id;
+		this.preId = {x : -1, y : -1};
+		this.stage = axisObj.stage;
+		this._draw(axisObj, scatterObj, xArr, yArr, optionObj);
+	};
+	Scatter.prototype = {
+		_draw: function(axisObj, scatterObj, xArr, yArr, optionObj) {
+			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
+			//this.color = colorArr;
+			this.node = new Array();
+			for(var i = 0; i < xArr.length ; i ++)
+	        {
+				this.node[i] = new Kinetic.Circle({
+					name : i,
+					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i] - axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
+	    			y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - (yArr[i]+1)*axisObj.yDiff  : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin),
+					radius: this.radius,
+					stroke: 'green',
+					strokeWidth: 1,
+					fill: 'green',
+					selected : 0,
+					info :  "Node : " + i + "\r\n"
+				});
+				//alert(axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff);
+			//	scatterObj.isSelected[i][this.id] = scatterUpdate(this, i);	//save event handler
+        	}
+        	
+        	this.firstUpdate = firstUpdate(scatterObj, null);
+        	setTooltip(this);
+        	
+        	this.dataLayer = new Kinetic.Layer();	
+			for(var i = 0 ; i < this.node.length ; i ++)
+			{
+				this.dataLayer.add(this.node[i]);
+			}
+			
+			//add layers
+			axisObj.stage.add(this.tooltipLayer);
+			axisObj.stage.add(this.dataLayer);
+		}
+	};
+})();
+
+
+/**  draw sactter  **/
+/*
+// label array is used for tooltipgetinfo and color setting. --> should be refined!
 var Scatter = {};
 
 (function() {
@@ -184,7 +325,7 @@ var Scatter = {};
 		}
     }
 })();
-
+*/
 /**  Regression functions for scatter  **/
 //linear regression.
 function linearSendArr(Name)

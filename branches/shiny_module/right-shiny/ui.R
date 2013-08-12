@@ -60,12 +60,12 @@ shinyUI(bootstrapPage(
        </div>
 
        <script>
-        var histArr1= new MakeHistObj(mainArr1, 'color', {});
-        var axis1 = new MakeAxis(1, histArr1.xArr, histArr1.yArr, histArr1.isDiscrete, 'false', {xLabel : histArr1.xLabel , yLabel : histArr1.yLabel, xbin: histArr1.bin});
-        var hist1 = new Hist(axis1, histArr1);
+        var histArr1= new MakeHistObj(mainArr1, 'color', {bin : 0.05});
+        var axis1 = new MakeAxis(1, histArr1.xArr[0], histArr1.yArr, histArr1.isDiscrete, 'false', {xLabel : histArr1.xLabel , yLabel : histArr1.yLabel, xbin: histArr1.bin});
+        var hist1 = new Hist(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
         eventTrigger(hist1, mainArr1);
 
-        var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['table'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['table'], {xLabel : 'cut', yLabel : 'table'})
+   /*     var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['table'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['table'], {xLabel : 'cut', yLabel : 'table'})
         var scatter1 = new Scatter(mainArr1, axis2, 'cut', 'table', {color: 'cut'});
         eventTrigger(scatter1, mainArr1);
         var axis3 = new MakeAxis(3, mainArr1['cut'], mainArr1['price'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['price'], {xLabel : 'cut', yLabel : 'price'})
@@ -82,13 +82,13 @@ shinyUI(bootstrapPage(
         eventTrigger(scatter3, mainArr2);
         var axis6 = new MakeAxis(6, mainArr2['Dose'], mainArr2['Subject'], mainArr2.isDiscrete['Dose'], mainArr2.isDiscrete['Subject'], {xLabel : 'Dose', yLabel : 'Subject'})
         var scatter4 = new Scatter(mainArr2, axis6, 'Dose', 'Subject', {color: 'Subject', legend: 'topright'});
-        eventTrigger(scatter4, mainArr2);
+        eventTrigger(scatter4, mainArr2); */
        </script>
       <script src=\"button_event.js\"></script>
       <script src=\"table.js\"></script>
 
-       <script>makeTable('table1', mainArr1, 200)</script>
-       <script>makeTable('table2', mainArr2, 300)</script>
+       <script>//makeTable('table1', mainArr1, 200)</script>
+       <script>//makeTable('table2', mainArr2, 300)</script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>
        <p id=\"dont-delete-this\">E-mail : <a href=\"mailto:teamrightjs@gmail.com\">team.right.js@gmail.com</a></p>

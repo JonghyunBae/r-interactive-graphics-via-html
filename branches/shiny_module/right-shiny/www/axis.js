@@ -9,7 +9,6 @@ var MakeAxis = {};
 (function() {
 
 	MakeAxis = function(id, xArr, yArr, isXDiscrete, isYDiscrete, optionObj) {
-
 		this.id = id;
 		this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
 		this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300
@@ -39,13 +38,13 @@ var MakeAxis = {};
 				this.xMax = -1;
 				this.xMin = -1;
 				this.xNode = tmp.node;
-				this.xdiff = tmp.diff;
+				this.xDiff = tmp.diff;
 				this.xPlotArr = tmp.array;
 			}else{
 				this.isXDiscrete = false;
 				var temp = findMaxMinValue(xArr);
 				this.xMax = temp.max;
-	            this.xMin = temp.min;
+	            this.xMin = temp.min;	            
 				if(optionObj.xbin != undefined){
 					this.xbin = optionObj.xbin;
 					this.xTick = Math.round((this.xMax - this.xMin) / this.xbin);
@@ -53,7 +52,7 @@ var MakeAxis = {};
 				var tmp = setAxis_continue(this.xMax, this.xMin, this.xTick, this.width);
 				this.xMax = tmp.max;
 				this.xMin = tmp.min;
-				this.xdiff = -1;
+				this.xDiff = -1;
 				this.xPlotArr= tmp.array;		
 			}
 			if(isYDiscrete == true){
@@ -62,7 +61,7 @@ var MakeAxis = {};
 				this.yMax = -1;
 				this.yMin = -1;
 				this.yNode = tmp.node;
-				this.ydiff = tmp.diff;
+				this.yDiff = tmp.diff;
 				this.yPlotArr = tmp.array;
 			}else{
 				this.isYDiscrete = false;
@@ -72,7 +71,7 @@ var MakeAxis = {};
 				var tmp = setAxis_continue(this.yMax, this.yMin, this.yTick, this.height);
 				this.yMax = tmp.max;
 				this.yMin = tmp.min;
-				this.ydiff = -1;
+				this.yDiff = -1;
 				this.yPlotArr= tmp.array;				
 			}
 			// make stage.
@@ -123,6 +122,7 @@ var MakeAxis = {};
 function setAxis_continue(max, min, tick, length)
 {
 	var tickRange = (max - min) / tick;
+	
 	var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
 	tickRange = setTickRange(tmp, tickRange);
 	max = tickRange * Math.ceil(max/tickRange);	
@@ -137,8 +137,8 @@ function setAxis_continue(max, min, tick, length)
 				plotArr[i][1] = min+i*tickRange;
 			}else{				
 				var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
-				if(point > 3){ // for setting the resonable point
-					point = 3;
+				if(point > 2){ // for setting the resonable point
+					point = 2;
 				}
 				plotArr[i][1] = (min+i*tickRange).toFixed(point);
 			}

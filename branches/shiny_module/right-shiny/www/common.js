@@ -2,7 +2,25 @@ var plotWidth = 300;  //default value for plot width
 var plotHeight = 300; //default value for plot height  
 var plotRadius = 2;
 
-
+function setMapping(index)
+{
+	return function(nodes)
+		{
+			var returnArr = new Array();
+			if(nodes.length == undefined){
+				returnArr = index[nodes];
+			}else{
+				for(var i = 0 ; i < nodes.length ; i ++){
+					returnArr = returnArr.concat(index[nodes[i]]);
+				}
+				returnArr = returnArr.reduce(function(a,b){
+					if(a.indexOf(b) < 0) a.push(b);
+					return a;
+				},[]);
+			}
+			return returnArr;
+		};
+}
 
 /**  set tooltip  **/
 //new kenetic version -> tooltip setting change using tag

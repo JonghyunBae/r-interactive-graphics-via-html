@@ -82,12 +82,15 @@ function checkKeyUp(e)
         }
 }       
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-function eventTrigger(Name)
+function eventTrigger(NameArr)
 {
-	hover(Name);
-	select(Name);
-    menu(Name);
-    drag(Name);        
+	for(var i = 0 ; i < NameArr.length ; i ++){
+		hover(NameArr[i]);
+	}
+	
+	//select(Name);
+   // menu(Name);
+   // drag(Name);        
 }
 
 
@@ -307,104 +310,115 @@ function RectRangeSelect(Name, pre, aft)
 
 function hover(Name)
 {
-	Name.stage.on('mouseover mousemove dragmove', function(evt) {
-		var node = evt.targetNode;        
-		if(isNaN(node.getName()) == false)
+	Name.dataLayer.on('mouseover mousemove dragmove', function(evt) {
+		var node = evt.targetNode;
+		document.body.style.cursor = "pointer";
+		var mousePos = node.getStage().getMousePosition();
+		var mousePos = node.getStage().getMousePosition();
+		// Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
+		if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
+            Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
+	    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
+	            Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
+	    }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
+	            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
+	    }else{
+	            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
+	    }
+		Name.tooltip.getText().setText(node.getInfo());
+		Name.tooltipLayer.moveToTop();
+		Name.tooltip.show();
+		Name.tooltipLayer.draw();
+		if(node.getSelected() == 0)
 		{
-			document.body.style.cursor = "pointer";
-			var mousePos = node.getStage().getMousePosition();
-			// Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
-			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
-                Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
-		    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
-		            Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
-		    }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
-		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
-		    }else{
-		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
-		    }
-			Name.tooltip.getText().setText(node.getInfo());
-			Name.tooltipLayer.moveToTop();
-			Name.tooltip.show();
-			Name.tooltipLayer.draw();               
-			if(node.getSelected() == 0)
+			switch(Name._type)
 			{
-				switch(Name._type)
-				{
-                    case 'scatter' : 
-	                    node.setScaleX(1.5);
-	                    node.setScaleY(1.5);
-	                    node.draw();
-                        break;
-                    case 'hist' : 
-                    case 'pie' :
-                    	node.setOpacity(1);
-	                    node.draw();
-	                    break;
-                    case 'box' : 
-                        if(node.getIsOutlier()){
-                            node.setScaleX(1.5);
-	                        node.setScaleY(1.5);
-	                        node.draw();
-                        }else{
-                            node.setOpacity(1);
-                            node.draw();
-                        }
-                        break;
-                    default:
-                    	break;
-                }
+                case 'scatter' : 
+                	//alert("ddd");
+                    node.setScaleX(1.5);
+                    node.setScaleY(1.5);
+                    node.draw();
+                    break;
+                case 'hist' : 
+                case 'pie' :
+                	node.setOpacity(1);
+                    node.draw();
+                    break;
+                case 'box' : 
+                    if(node.getIsOutlier()){
+                        node.setScaleX(1.5);
+                        node.setScaleY(1.5);
+                        node.draw();
+                    }else{
+                        node.setOpacity(1);
+                        node.draw();
+                    }
+                    break;
+                case 'line' :
+                	node.setOpacity(1);
+                	node.setStroke('red');
+                	node.draw();
+                	break;
+                default:
+                	break;
             }
         }
 	});
-	Name.stage.on('mouseout', function(evt) {
+	
+	Name.dataLayer.on('mouseout', function(evt) {
 		var node = evt.targetNode;
 		document.body.style.cursor = "default";
 		Name.tooltip.hide();
 		Name.tooltipLayer.draw();
-		if(isNaN(node.getName()) == false){
-			if(node.getSelected() == 0){
-                //new kinetic version using tween for animation.
-				switch(Name._type)
-				{                                       
-                	case 'scatter' : 
-                		var tween = new Kinetic.Tween({
-                			node: node, 
+		if(node.getSelected() == 0){
+            //new kinetic version using tween for animation.
+			switch(Name._type)
+			{                                       
+            	case 'scatter' : 
+            		var tween = new Kinetic.Tween({
+            			node: node, 
+				        duration: 0.01,
+				        scaleX: 1,
+				        scaleY: 1
+            		}).play(); 
+            		break;                                          
+            	case 'hist' : 
+            	case 'pie' :
+			        var tween = new Kinetic.Tween({
+			        	node: node, 
+			        	duration: 0.01,
+			        	opacity: 0.5
+			        }).play();
+			        break;                  
+            	case 'box' : 
+            		if(node.getIsOutlier()){
+				        var tween = new Kinetic.Tween({
+					        node: node, 
 					        duration: 0.01,
 					        scaleX: 1,
 					        scaleY: 1
-                		}).play(); 
-                		break;                                          
-                	case 'hist' : 
-                	case 'pie' :
-				        var tween = new Kinetic.Tween({
-				        	node: node, 
-				        	duration: 0.01,
-				        	opacity: 0.5
-				        }).play();
-				        break;                  
-                	case 'box' : 
-                		if(node.getIsOutlier()){
-					        var tween = new Kinetic.Tween({
-						        node: node, 
-						        duration: 0.01,
-						        scaleX: 1,
-						        scaleY: 1
-					        }).play(); 
-                		}else{
-                			var tween = new Kinetic.Tween({
-						        node: node, 
-						        duration: 0.01,
-						        opacity: 0.5
-                            }).play(); 
-                        }
-                        break;
-                    default:
-                        break;
-                }
-			}
-        }
-  });    
+				        }).play(); 
+            		}else{
+            			var tween = new Kinetic.Tween({
+					        node: node, 
+					        duration: 0.01,
+					        opacity: 0.5
+                        }).play(); 
+                    }
+                    break;
+            	case 'line':
+            		var tween = new Kinetic.Tween({
+            			node: node, 
+				        duration: 0.01,
+				        opacity: 0.5,
+				        stroke: 'black'
+            		}).play();
+            		break;
+                default:                	
+                    break;
+            }
+		}
+	});
 }
 
 function select(Name)

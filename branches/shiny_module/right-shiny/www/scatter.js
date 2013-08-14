@@ -88,27 +88,55 @@ var Scatter = {};
 		this.id = scatterObj.id;
 		this.preId = {x : -1, y : -1};
 		this.stage = axisObj.stage;
-		this._draw(axisObj, scatterObj, xArr, yArr, optionObj);
+		this._draw(axisObj, scatterObj, xArr, yArr, colorArr, optionObj);
 		scatterObj.id ++;
 	};
 	Scatter.prototype = {
-		_draw: function(axisObj, scatterObj, xArr, yArr, optionObj) {
+		_draw: function(axisObj, scatterObj, xArr, yArr, colorArr, optionObj) {
 			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
-			//this.color = colorArr;
-			this.node = new Array();
-			for(var i = 0; i < xArr.length ; i ++){
-				this.node[i] = new Kinetic.Circle({
-					name : i,
-					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i] - axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
-	    			y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - (yArr[i]+1)*axisObj.yDiff  : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin),
-					radius: this.radius,
-					stroke: 'green',
-					strokeWidth: 1,
-					fill: 'green',
-					selected : 0,
-					info :  "Node : " + i + "\r\n"
-				});
-        	}
+			if(optionObj.double == true){
+				var x = 0;
+				var y = 0;			
+				var tempData = -1;
+				this.node = new Array();
+				for(var i = 0; i < xArr.length ; i ++){
+					x = (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin;
+					if(x != tempData){
+						y = (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin);
+					}
+					this.node[i] = new Kinetic.Circle({
+						name : i,
+						x: x,
+		    			y: y,
+						radius: this.radius,
+						stroke: colorArr[i],
+						strokeWidth: 1,
+						fill: colorArr[i],
+						selected : 0,
+						info :  "Node : " + i + "\r\n"
+					});
+					if(i < yArr.length){
+        				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
+        			}	        				
+        			tempData = this.node[i].getX();
+	        	}
+			}else{
+				this.node = new Array();
+				for(var i = 0; i < xArr.length ; i ++){
+					this.node[i] = new Kinetic.Circle({
+						name : i,
+						x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i] - axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
+		    			y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - (yArr[i]+1)*axisObj.yDiff  : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin),
+						radius: this.radius,
+						stroke: colorArr[i],
+						strokeWidth: 1,
+						fill: colorArr[i],
+						selected : 0,
+						info :  "Node : " + i + "\r\n"
+					});
+	        	}
+			}
+			
         	// event add
 			scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
 			scatterObj.updateArr[this.id] = scatterUpdate(this.node);
@@ -121,7 +149,7 @@ var Scatter = {};
 			for(var i = 0 ; i < this.node.length ; i ++){
 				this.dataLayer.add(this.node[i]);
 			}
-			
+			axisObj.dataLayerArr.push(this.dataLayer);
 			//add layers
 			axisObj.stage.add(this.tooltipLayer);
 			axisObj.stage.add(this.dataLayer);

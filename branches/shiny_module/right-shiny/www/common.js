@@ -167,24 +167,32 @@ function firstUpdate(obj)
 			var object = obj;
 			var temp = nodes;
 			// find root
-			var cnt = 0;
 			while(object.parent != null){				
 				temp = object.childTOparent(temp);
 				object = object.parent;
 			}
 			// selectTable update & call refreshTable.
+			var refineArr = new Array();
+			var cnt = 0;
 			if(temp.length == undefined){
-				object.selectTable[temp] = select;
+				if(select != object.selectTable[temp]){ // prevent duplicate
+					object.selectTable[temp] = select;
+					refineArr[cnt++] = temp;
+				}
+				
 			}else{
 				for(var i = 0 ; i < temp.length ; i ++){
-					object.selectTable[temp[i]] = select;
+					if(select != object.selectTable[temp[i]]){ // prevent duplicate
+						object.selectTable[temp[i]] = select;
+						refineArr[cnt++] = temp[i];
+					}
 				}
 			}
 			object.refreshTable();
 			// children update
 			if(object.child != null){
 				for(var i = 0 ; i < object.child.length ; i ++){
-					var temp2 = object.parentTOchild[i](temp);
+					var temp2 = object.parentTOchild[i](refineArr);
 					childUpdate(object.child[i], temp2, select);
 				}
 			}

@@ -1,4 +1,121 @@
 var Pie = {};
+/*
+(function() {
+	
+	Pie = function(axisObj, pieObj, xArr, yArr, colorArr,  optionObj) {
+		this._type = 'pie';
+		this.id = pieObj.id;
+		this.preId = {x : -1, y : -1};
+		this.stage = axisObj.stage;
+		this._draw(axisObj, pieObj, xArr, yArr, optionObj);
+		histObj.id ++;
+	};
+	Pie.prototype = {
+		_draw: function(axisObj, pieObj, xArr, yArr, optionObj) {
+
+			//this.color = colorArr;
+			this.node = new Array();
+			var cnt = 0;
+			var defree = 0;
+			// calculate total frequency.
+			var totalFreq = 0;
+			for(var i = 0 ; i < xArr.length ; i ++){
+				totalFreq = totalFreq + yArr[i];
+			}
+			
+			if(axisObj.isXDiscrete == true){
+				for(var i = 0; i < xArr.length ; i ++){
+        			this.node[i] = new Kinetic.Rect({						
+            			name : i,
+    					freq: yArr[i],
+    					x: this.plotXMargin + this.width/2,
+    					y: this.plotYMargin + this.height/2,
+    					radius: 100,
+    					rotationDeg: -90 + degree,	
+    					angleDeg: freqTmp[cnt]/dataArr[0].length * 360,
+    					height: yArr[i]*axisObj.height/axisObj.yMax,
+    					fill: 'green',
+    					stroke: 'black',
+    					strokeWidth: 2,
+    					opacity : 0.5,
+    					selected : 0,
+    					selectCnt : 0,
+    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
+    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+    				});
+	        	}
+			}else{
+				for(var i = 0; i < xArr.length - 1 ; i ++){
+        			this.node[i] = new Kinetic.Rect({
+            			name : i,
+    					freq: yArr[i],
+    					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
+    					y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.height/axisObj.yMax,  
+    					width: this.barWidth,
+    					height: yArr[i]*axisObj.height/axisObj.yMax,
+    					fill: 'green',
+    					stroke: 'black',						
+    					opacity : 0.5,
+    					selected : 0,
+    					selectCnt : 0,
+    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
+    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+    				});
+	        	}
+			}
+        	// event add
+			histObj.refreshArr[this.id] = makeRefresh(this.stage);
+			histObj.updateArr[this.id] = histUpdate(this.node);
+        	this.firstUpdate = firstUpdate(histObj);
+        	
+        	
+        	setTooltip(this);
+        	
+        	this.dataLayer = new Kinetic.Layer();	
+			for(var i = 0 ; i < this.node.length ; i ++){
+				this.dataLayer.add(this.node[i]);
+			}
+			
+			//add layers
+			axisObj.stage.add(this.tooltipLayer);
+			axisObj.stage.add(this.dataLayer);
+		}
+	};
+})();
+
+this.node = new Array();  
+var degree = 0;
+for(var cnt = 0; cnt< nodeX.length ; cnt++)
+{
+//	alert(freqTmp[cnt]);
+	this.node[cnt] = new Kinetic.Wedge({
+		//id : cnt,
+		name : cnt,
+		freq: freqTmp[cnt],
+		x: this.plotXMargin + this.width/2, 
+		y: this.plotYMargin + this.height/2, 						
+		radius: 100,
+        angleDeg: freqTmp[cnt]/dataArr[0].length * 360,
+        fill: (isDiscrete[this.x] == true)?getColor(hasTmp[cnt][0] ,colors, mainValueArr, tmpColorArr):'green',
+        opacity : 0.5,
+        stroke: 'black',
+        draggable : false,
+        strokeWidth: 2,
+        rotationDeg: -90 + degree,			
+		hidden : false,
+		selected : 0,
+		selectCnt : 0,
+		//info : "Node : "+cnt+ "\r\n" + "X : " + dataArr[this.x][hasTmp[cnt][0]] + "\r\n"+"Frequency : "+freqTmp[cnt],
+		info : (isDiscrete[this.x] == true)?("Node : "+cnt+ "\r\n" + "X : " + dataArr[this.x][hasTmp[cnt][0]] + "\r\n"+"Frequency : "+freqTmp[cnt]):( "Node : "+cnt+ "\r\n" + "X : " + this.xPlotArr[cnt+1][1] + "-" + this.xPlotArr[cnt+2][1] +  "\r\n"+"Frequency : "+freqTmp[cnt]),
+		hasArr : hasTmp[cnt]
+		//offset: {x: barWidth/2, y: freqTmp[cnt]*this.height/this.yMax/2},
+	});
+	degree = degree + freqTmp[cnt]/dataArr[0].length * 360;            		
+}
+
+
+*/
+var Pie = {};
 (function() {	
 	Pie = function(id, dataArr, optionObj) {
 		this._type = 'pie';
@@ -344,6 +461,7 @@ var Pie = {};
 			}
 	};
 })();
+
 
 
 /**  update function  **/

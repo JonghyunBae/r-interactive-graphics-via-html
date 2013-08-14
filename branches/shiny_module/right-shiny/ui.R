@@ -61,19 +61,21 @@ shinyUI(bootstrapPage(
        </div>
 
        <script>
-        var histArr1= new MakeHistObj(mainArr1, 'carat', {bin : 0.6});
-        var axis1 = new MakeAxis(1, histArr1.xArr[0], histArr1.yArr, histArr1.isDiscrete, 'false', {mainLabel: histArr1.mainLabel, xLabel: histArr1.xLabel , yLabel: histArr1.yLabel, xbin: histArr1.bin});
-        var hist1 = new Hist(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
-        var scatter2 = new Scatter(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
-        var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr, null, {});
-        eventTrigger([hist1, scatter2, line1]);
+        var histArr1= new MakeHistObj(mainArr1, 'color', {bin : 0.6, color: 'clarity'});
+        var axis1 = new MakeAxis(1, histArr1.xArr[0], histArr1.yArr[0], histArr1.isDiscrete, 'false', {mainLabel: histArr1.mainLabel, xLabel: histArr1.xLabel , yLabel: histArr1.yLabel, xbin: histArr1.bin});
+       var axis2 = new MakeAxis(2, histArr1.xArr[0], histArr1.yArr[0], histArr1.isDiscrete, 'false', {mainLabel: histArr1.mainLabel, xLabel: histArr1.xLabel , yLabel: histArr1.yLabel, xbin: histArr1.bin});
+         var hist1 = new Hist(axis2, histArr1, histArr1.xArr[1], histArr1.yArr[1], histArr1.colorArr, {double: histArr1.double});
+        var scatter2 = new Scatter(axis1, histArr1, histArr1.xArr[1], histArr1.yArr[1], histArr1.colorArr, {double: histArr1.double});
+       // var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr[1], histArr1.colorArr, {double: histArr1.double});
+      //  eventTrigger(axis1);
+       // eventTrigger([hist1, scatter2, line1]);
 
-        var scatterArr1 = new MakeScatterObj(mainArr1, 'carat', 'price', {});
-        var axis2 = new MakeAxis(2, scatterArr1.xArr[0], scatterArr1.yArr[0], scatterArr1.isXDiscrete, scatterArr1.isYDiscrete, {mainLabel: histArr1.mainLabel, xLabel : scatterArr1.xLabel, yLabel : scatterArr1.yLabel});
-        var scatter1 = new Scatter(axis2, scatterArr1, scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
-        var line2 = new Line(axis2, scatterArr1, scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
-        eventTrigger([scatter1]);
-        eventTrigger([line2]);
+      //  var scatterArr1 = new MakeScatterObj(mainArr1, 'carat', 'price', {});
+      //  var axis2 = new MakeAxis(2, scatterArr1.xArr[0], scatterArr1.yArr[0], scatterArr1.isXDiscrete, scatterArr1.isYDiscrete, {mainLabel: scatterArr1.mainLabel, xLabel : scatterArr1.xLabel, yLabel : scatterArr1.yLabel});
+      //  var scatter1 = new Scatter(axis2, scatterArr1, scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
+       // var line2 = new Line(axis2, scatterArr1, scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
+        //eventTrigger([scatter1]);
+      //  eventTrigger([line2]);
        // var hist2 = new Hist(axis2, scatterArr1,  scatterArr1.xArr[1], scatterArr1.yArr[1], null, {});
 
    /*     var axis2 = new MakeAxis(2, mainArr1['cut'], mainArr1['table'], mainArr1.isDiscrete['cut'], mainArr1.isDiscrete['table'], {xLabel : 'cut', yLabel : 'table'})

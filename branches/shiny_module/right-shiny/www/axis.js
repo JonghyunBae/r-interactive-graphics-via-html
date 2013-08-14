@@ -17,7 +17,7 @@ var MakeAxis = {};
 		this.plotXMargin = this.width*0.2; //canvas left, right margin
 		this.plotYMargin = this.height*0.2; //canvas top, bottom margin
 		this.plotLength = this.width*0.02; //margin from plot box
-		
+		this.dataLayerArr = new Array();
 		document.getElementById('container'+ id).onmousemove = getCoords;
 		document.getElementById('container'+ id).onclick = function() {
 	        document.getElementById('regcoords');
@@ -74,6 +74,12 @@ var MakeAxis = {};
 				this.yDiff = -1;
 				this.yPlotArr= tmp.array;				
 			}
+			// set barWidth.
+			if(this.isXDiscrete == true){
+				this.barWidth = this.width / xArr.length /2;
+			}else{
+				this.barWidth = (xArr[1] - xArr[0])*this.width/this.xMax;
+			}
 			// make stage.
 			makeStageLayer(this);
 			// make plotRect.
@@ -83,7 +89,7 @@ var MakeAxis = {};
 			makeYAxisLayer(this);
 			// make label layers.
 			if(optionObj.mainLabel != undefined){
-				MakeMainLabel(this, optionObj.mainLabel);
+				MakeMainLabelLayer(this, optionObj.mainLabel);
 			}
 			if(optionObj.xLabel != undefined){
 				makeXLabelLayer(this, optionObj.xLabel);
@@ -108,7 +114,10 @@ var MakeAxis = {};
 				this.plotLayer.add(this.yLine[i]); 
 		        this.plotLayer.add(this.yText[i]);
 			}
-			// add x, y label.
+			// add main, x, y label.
+			if(this.mainLabel != undefined){
+				this.plotLayer.add(this.mainLabel);
+			}
 			if(this.xLabel != undefined){
 				this.plotLayer.add(this.xLabel);
 			}
@@ -215,8 +224,8 @@ function makePlotRectLayer(obj)
 	});
 }
 /**  make plotRect end **/
-/**  make Main Label  **/
-function MakeMainLabel(obj, label)
+/**  make Main Label layer  **/
+function MakeMainLabelLayer(obj, label)
 {
 
 	obj.mainLabel = new Kinetic.Text({

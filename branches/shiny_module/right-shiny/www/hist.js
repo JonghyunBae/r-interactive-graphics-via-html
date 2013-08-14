@@ -42,11 +42,14 @@ var MakeHistObj = {};
         			xArr[0].push(mainArr[xLabel][i]);
         			xArr[1].push(cnt ++);
         		}
-        	}			
+        	}
+			this.index = index;
 			this.freqArr = freqArr;
 			this.xArr = xArr;
 			freqArr[freqArr.length] = 0;
-			this.yArr = freqArr;
+			this.yArr = new Array();
+			this.yArr[0] = freqArr;
+			this.yArr[1] = freqArr;
 			this.hasArr = hasArr;
 		}else{
 			this.isDiscrete = false;
@@ -95,44 +98,93 @@ var MakeHistObj = {};
         		hasArr[cnt].push(i);
         		index[i] = cnt;
         	}
+        	this.index = index;
         	this.freqArr = freqArr;
         	this.xArr = xArr;
         	freqArr[freqArr.length] = 0;
-			this.yArr = freqArr;
+        	this.yArr = new Array();
+			this.yArr[0] = freqArr;
+			this.yArr[1] = freqArr;
 			this.hasArr = hasArr;
 		}
-		/*// check double
-		if(optionObj.color == undefined){
-	         this.color = -1; //default color
-	    }else{
-	    	this.color = optionObj.color;
-	    	if(xLabel == this.color && mainArr.isDiscrete[this.color] == true){
-	    		this.colorArr =  makeColor_discrete(this.xArr, index);
-	    	}else if(mainArr.isDiscrete[this.color] == true){
-				//under construction.
-			}			
+		// check color.
+		if(optionObj.color != undefined){
+			this.color = optionObj.color;
+			if(this.xLabel != optionObj.color && mainArr.isDiscrete[this.color] == true){ // double dimension.
+				this.double = true;
+				// find number of colors.
+				var tempColorArr = new Array();
+				var numberIndex = new Array();
+				tempColorArr[0] = mainArr[this.color][0];
+				numberIndex[0] = 0;
+				for(var i = 1 ; i < mainArr[this.color].length ; i ++){
+					for(var j = 0 ; j < tempColorArr.length ; j ++){
+						if(mainArr[this.color][i] == tempColorArr[j]){
+							numberIndex[i] = j;
+							break;
+						}
+					}
+					if(j == tempColorArr.length){
+						numberIndex[i] = j;
+						tempColorArr.push(mainArr[this.color][i]);
+					}					
+				}
+				// get colorObj according to tempColorArr.
+				this.colorObj = makeColor_discrete(tempColorArr);
+				var colorArr = new Array();
+				var freqArr = new Array();
+				var xArr = new Array();
+				var hasArr = new Array();
+				var hasColorArr = new Array();
+				var index = new Array(mainArr[this.color].length);
+				var cnt = 0;
+				for(var i = 0 ; i < this.hasArr.length ; i ++){					
+					var tempFreqArr = new Array(this.colorObj.colors.length);
+					var tempHasArr = new Array(this.colorObj.colors.length);
+					for(var j = 0 ; j < tempFreqArr.length ; j ++){
+						tempFreqArr[j] = 0;
+						tempHasArr[j] = new Array();
+					}
+					// parse the one bar.
+					for(var j = 0 ; j < this.hasArr[i].length ; j ++){
+						tempFreqArr[numberIndex[this.hasArr[i][j]]] ++;
+						tempHasArr[numberIndex[this.hasArr[i][j]]].push(this.hasArr[i][j]);
+					}
+					// save values.
+					for(var j = 0 ; j < tempFreqArr.length ; j ++){
+						if(tempFreqArr[j] != 0){
+							freqArr[cnt] = tempFreqArr[j];
+							xArr[cnt] = this.xArr[1][i];
+							hasArr[cnt] = tempHasArr[j];
+							colorArr[cnt] = this.colorObj.colors[j];							
+							for(var t = 0 ; t < tempHasArr[j].length ; t ++){
+								index[tempHasArr[j][t]] = cnt;
+							}
+							cnt ++;
+						}
+					}
+				}
+				this.index = index;
+				this.hasArr = hasArr;
+				this.xArr[1] = xArr;
+				this.yArr[1] = freqArr;
+				this.colorArr = colorArr;
+			}else if(this.xLabel == optionObj.color && mainArr.isDiscrete[this.color] == true){ // just same color with xAxis.
+				this.colorArr = makeColor_discrete(this.xArr[0]).colors;
+			}else{ // color -> continuous , just draw a legend.
+				this.colorArr = new Array();
+				for(var i = 0 ; i < this.xArr[0].length ; i ++){
+					this.colorArr[i] = 'green';
+				}
+			}
+		}else{ // just green color
+			this.colorArr = new Array();
+			for(var i = 0 ; i < this.xArr[0].length ; i ++){
+				this.colorArr[i] = 'green';
+			}
 		}
-		//check option color is assigned if option legend is assined.
-	    if(this.color == -1 && optionObj.legend != undefined){
-	    	alert("Can't draw legend without color!");
-			return -1;                    
-	    }
-    	//check option legend name is appropriate
-	    if(optionObj.legend !=undefined){
-	    	var legendChk = optionObj.legend.toLowerCase();
-	    	if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft'){                           
-	    		this.legend = optionObj.legend;
-	    	}else{
-	    		alert("Legend should be \"right\", \"left\", \"topright\" or \"topleft\"!");
-    			return -1;
-	    	}
-	    }else{
-	    	this.legend = "right"; //if color is set, but legend is not, just set default legend as right
-	    }
-	    */
-		
 		// set mapping for event handler.
-		birthReport(mainArr, this, index, hasArr);		
+		birthReport(mainArr, this, this.index, this.hasArr);		
 	}
 })();
 
@@ -146,56 +198,113 @@ var Hist = {};
 		this.id = histObj.id;
 		this.preId = {x : -1, y : -1};
 		this.stage = axisObj.stage;
-		this._draw(axisObj, histObj, xArr, yArr, optionObj);
+		this._draw(axisObj, histObj, xArr, yArr, colorArr, optionObj);
 		histObj.id ++;
 	};
 	Hist.prototype = {
-		_draw: function(axisObj, histObj, xArr, yArr, optionObj) {
-			if(axisObj.isXDiscrete == true){
-				this.barWidth = axisObj.width / xArr.length /2;
+		_draw: function(axisObj, histObj, xArr, yArr, colorArr, optionObj) {
+			this.barWidth = axisObj.barWidth;
+			if(optionObj.double == true){
+				var x = 0;
+				var y = 0;			
+				var tempData = -1;
+				this.node = new Array();				
+				if(axisObj.isXDiscrete == true){
+					for(var i = 0; i < xArr.length ; i ++){
+						x = (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin;
+						if(x != tempData){
+							y = (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin);
+						}
+	        			this.node[i] = new Kinetic.Rect({
+	            			name : i,
+	    					freq: yArr[i],
+	    					x: x,
+	    					y: y,  
+	    					width: this.barWidth,
+	    					height: yArr[i]*axisObj.height/axisObj.yMax,
+	    					fill: colorArr[i],
+	    					stroke: 'black',
+	    					strokeWidth: 0.2,
+	    					opacity : 0.5,
+	    					selected : 0,
+	    					selectCnt : 0,
+	    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
+	    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+	    				});
+	        			if(i < yArr.length){
+	        				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
+	        			}	        				
+	        			tempData = this.node[i].getX();
+		        	}
+				}else{
+					for(var i = 0; i < xArr.length - 1 ; i ++){
+						x = (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin;
+						if(x != tempData){
+							y = (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.height/axisObj.yMax;
+						}
+	        			this.node[i] = new Kinetic.Rect({
+	            			name : i,
+	    					freq: yArr[i],
+	    					x: x,
+	    					y: y,
+	    					width: this.barWidth,
+	    					height: yArr[i]*axisObj.height/axisObj.yMax,
+	    					fill: colorArr[i],
+	    					stroke: 'black',
+	    					strokeWidth: 0.2,
+	    					opacity : 0.5,
+	    					selected : 0,
+	    					selectCnt : 0,
+	    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
+	    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+	    				});
+	        			if(i < yArr.length){
+	        				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
+	        			}	        				
+	        			tempData = this.node[i].getX();
+		        	}
+				}
 			}else{
-				this.barWidth = (xArr[1] - xArr[0])*axisObj.width/axisObj.xMax;
+				this.node = new Array();
+				if(axisObj.isXDiscrete == true){
+					for(var i = 0; i < xArr.length ; i ++){
+	        			this.node[i] = new Kinetic.Rect({
+	            			name : i,
+	    					freq: yArr[i],
+	    					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
+	    					y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.height/axisObj.yMax,  
+	    					width: this.barWidth,
+	    					height: yArr[i]*axisObj.height/axisObj.yMax,
+	    					fill: colorArr[i],
+	    					stroke: 'black',						
+	    					opacity : 0.5,
+	    					selected : 0,
+	    					selectCnt : 0,
+	    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
+	    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+	    				});
+		        	}
+				}else{
+					for(var i = 0; i < xArr.length - 1 ; i ++){
+	        			this.node[i] = new Kinetic.Rect({
+	            			name : i,
+	    					freq: yArr[i],
+	    					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
+	    					y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.height/axisObj.yMax,  
+	    					width: this.barWidth,
+	    					height: yArr[i]*axisObj.height/axisObj.yMax,
+	    					fill: colorArr[i],
+	    					stroke: 'black',						
+	    					opacity : 0.5,
+	    					selected : 0,
+	    					selectCnt : 0,
+	    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
+	    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+	    				});
+		        	}
+				}
 			}
-			//this.color = colorArr;
-			this.node = new Array();
-			var cnt = 0;
-			if(axisObj.isXDiscrete == true){
-				for(var i = 0; i < xArr.length ; i ++){
-        			this.node[i] = new Kinetic.Rect({
-            			name : i,
-    					freq: yArr[i],
-    					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
-    					y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.height/axisObj.yMax,  
-    					width: this.barWidth,
-    					height: yArr[i]*axisObj.height/axisObj.yMax,
-    					fill: 'green',
-    					stroke: 'black',						
-    					opacity : 0.5,
-    					selected : 0,
-    					selectCnt : 0,
-    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
-    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-    				});
-	        	}
-			}else{
-				for(var i = 0; i < xArr.length - 1 ; i ++){
-        			this.node[i] = new Kinetic.Rect({
-            			name : i,
-    					freq: yArr[i],
-    					x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
-    					y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.height/axisObj.yMax,  
-    					width: this.barWidth,
-    					height: yArr[i]*axisObj.height/axisObj.yMax,
-    					fill: 'green',
-    					stroke: 'black',						
-    					opacity : 0.5,
-    					selected : 0,
-    					selectCnt : 0,
-    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
-    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-    				});
-	        	}
-			}
+			
         	// event add
 			histObj.refreshArr[this.id] = makeRefresh(this.stage);
 			histObj.updateArr[this.id] = histUpdate(this.node);
@@ -208,7 +317,7 @@ var Hist = {};
 			for(var i = 0 ; i < this.node.length ; i ++){
 				this.dataLayer.add(this.node[i]);
 			}
-			
+			axisObj.dataLayerArr.push(this.dataLayer);
 			//add layers
 			axisObj.stage.add(this.tooltipLayer);
 			axisObj.stage.add(this.dataLayer);
@@ -232,7 +341,7 @@ function histUpdate(node)
 						node[ids].setOpacity(0.5);
 						node[ids].setSelected(0);
 					}
-				}else if(node[ids].getSelected() == 0 && selectOn == 1){		// select
+				}else if(selectOn == 1){		// select
 					node[ids].setSelectCnt(node[ids].getSelectCnt() + 1);						
 					if(node[ids].getSelected() == 0){
 						node[ids].setOpacity(1);
@@ -249,13 +358,14 @@ function histUpdate(node)
 							node[ids[i]].setSelected(0);
 						}
 					}else if(selectOn == 1){		// select
-						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() + 1);						
+						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() + 1);	
 						if(node[ids[i]].getSelected() == 0){
 							node[ids[i]].setOpacity(1);
 							node[ids[i]].setSelected(1);
 						}
 					}
 				}
+			//	alert(node[2].getSelectCnt());
 			}
 		};
 }

@@ -77,13 +77,13 @@ function makeColor_continuous(array) // under construction.
 	ret.indexArr = indexArr;
  	return ret;
 }
-function makeColor_discrete(array, index)
+function makeColor_discrete(array)
 {
 	var ret = new Object();
 	ret.isDiscrete = true;
 	ret.label = new Array();
 	var colors = new Array();
-	var indexArr = new Array(index.length);
+	var indexArr = new Array(array.length);
 	var rgb = {R: new Array(), G: new Array(), B: new Array()};
  	var rgbFreq = 4.8 / array.length;
  	var rgbCenter = 128;
@@ -97,11 +97,7 @@ function makeColor_discrete(array, index)
  		ret[array[i]] = colors[i];
  		ret.label[i] = array[i];
  	}
- 	for(var i = 0 ; i < index.length ; i ++){ 		
- 		indexArr[i] = ret[ret.label[index[i]]];
- 	}
  	ret.colors = colors;
- 	ret.indexArr = indexArr;
  	return ret;
 }
 function calcXArr(dataArr)

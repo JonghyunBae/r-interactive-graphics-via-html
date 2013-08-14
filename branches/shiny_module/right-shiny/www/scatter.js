@@ -9,31 +9,17 @@ var MakeScatterObj = {};
 		this.id = 0;
 		this.double = false;
 		
+		// basic calculation.
 		if(mainArr.isDiscrete[xLabel] == true){
 			this.isXDiscrete = true;
+			var temp = findDiscreteNum(mainArr[xLabel]);
 			var xArr = new Array();
-			xArr[0] = new Array();
-			xArr[1] = new Array();
+			xArr[0] = temp.discreteArr;
+			xArr[1] = temp.mapping;
 			var hasArr = new Array();
-			var cnt = 0;
-			hasArr[cnt] = cnt;
-			xArr[1][cnt] = cnt;
-			xArr[0][cnt++] = mainArr[xLabel][0];
-			for(var i = 1 ; i < mainArr[xLabel].length ; i ++ ){
+			for(var i = 0 ; i < mainArr[xLabel].length ; i ++ ){
 				hasArr[i] = i;
-				for(var j = 0 ; j < xArr[0].length ; j ++){
-					if(xArr[0][j] == mainArr[xLabel][i])
-        			{
-						xArr[0].push(mainArr[xLabel][i]);
-	        			xArr[1].push(j);
-        				break;
-        			}
-				}
-				if(j == xArr[0].length){
-					xArr[0].push(mainArr[xLabel][i]);
-        			xArr[1].push(j);
-				}
-			}
+			}			
 			this.xArr = xArr;
 		}else{
 			this.isXDiscrete = false;
@@ -48,25 +34,10 @@ var MakeScatterObj = {};
 		
 		if(mainArr.isDiscrete[yLabel] == true){
 			this.isYDiscrete = true;
+			var temp = findDiscreteNum(mainArr[yLabel]);
 			var yArr = new Array();
-			yArr[0] = new Array();
-			yArr[1] = new Array();
-			var cnt = 0;
-			yArr[1][cnt] = cnt;
-			yArr[0][cnt++] = mainArr[yLabel][0];
-			for(var i = 1 ; i < mainArr[yLabel].length ; i ++ ){
-				for(var j = 0 ; j < yArr[0].length ; j ++){
-					if(yArr[0][j] == mainArr[yLabel][i])
-        			{
-	        			yArr[1].push(j);
-        				break;
-        			}
-				}
-				if(j == yArr[0].length){
-					yArr[0].push(mainArr[yLabel][i]);
-        			yArr[1].push(j);
-				}
-			}
+			yArr[0] = temp.discreteArr;
+			yArr[1] = temp.mapping;
 			this.yArr = yArr;
 		}else{
 			this.isYDiscrete = false;
@@ -74,10 +45,59 @@ var MakeScatterObj = {};
 			this.yArr[0] = mainArr[yLabel];
 			this.yArr[1] = mainArr[yLabel];
 		}
+		
+		// check color.
+		if(optionObj.color != undefined){
+			this.color = optionObj.color;
+			if(this.color != this.xLabel && this.color != this.yLabel && mainArr.isDiscrete[this.color] == true){ // another color axis.
+				// find number of colors.
+				var temp = findDiscreteNum(mainArr[this.color]);
+				var tempColorArr = temp.discreteArr;
+				var numberIndex = temp.mapping;
+				// get colorObj according to tempColorArr.
+				this.colorObj = makeColor_discrete(tempColorArr);
+				// make colorArr
+				var colorArr = new Array();
+				for(var i = 0 ; i < numberIndex.length ; i ++){
+					colorArr[i] = this.colorObj.colors[numberIndex[i]];
+				}				
+				this.colorArr = colorArr;
+			}else if(this.color == this.xLabel && mainArr.isDiscrete[this.color] == true){ // matches with xAxis.
+				// get colorObj according to tempColorArr.
+				this.colorObj = makeColor_discrete(xArr[0]);
+				// make colorArr
+				var colorArr = new Array();
+				for(var i = 0 ; i < xArr[1].length ; i ++){
+					colorArr[i] = this.colorObj.colors[xArr[1][i]];
+				}				
+				this.colorArr = colorArr;
+			}else if(this.color == this.yLabel && mainArr.isDiscrete[this.color] == true){ // matches with yAxis.
+				// get colorObj according to tempColorArr.
+				this.colorObj = makeColor_discrete(yArr[0]);
+				// make colorArr
+				var colorArr = new Array();
+				for(var i = 0 ; i < yArr[1].length ; i ++){
+					colorArr[i] = this.colorObj.colors[yArr[1][i]];
+				}				
+				this.colorArr = colorArr;
+			}else if(mainArr.isDiscrete[this.color] == false){ // continuous color.
+				
+			}
+		}else{ // no color.
+			this.colorArr = new Array();
+			for(var i = 0 ; i < this.xArr[0].length ; i ++){
+				this.colorArr[i] = 'green';
+			}
+		}
+		
 		// set mapping for event handler.
 		birthReport(mainArr, this, hasArr, hasArr);
 	}
 })();
+
+
+
+
 
 var Scatter = {};
 

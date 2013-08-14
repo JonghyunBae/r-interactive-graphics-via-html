@@ -10,10 +10,12 @@ var MakeHistObj = {};
 		this.yLabel = "frequency";
 		this.mainLabel = "histogram of " + xLabel;
 		this.id = 0;
+		this.isYDiscrete = false;
 		this.double = false;
 		
+		// basic calculation.
 		if(mainArr.isDiscrete[xLabel] == true){
-			this.isDiscrete = true;
+			this.isXDiscrete = true;
 			var cnt = 0;
 			var xArr = new Array();
 			xArr[0] = new Array();
@@ -52,8 +54,7 @@ var MakeHistObj = {};
 			this.yArr[1] = freqArr;
 			this.hasArr = hasArr;
 		}else{
-			this.isDiscrete = false;
-			
+			this.isXDiscrete = false;			
 			var temp = findMaxMinValue(mainArr[xLabel]);
 			var tempMax = temp.max;
 			var tempMin = temp.min;
@@ -107,28 +108,16 @@ var MakeHistObj = {};
 			this.yArr[1] = freqArr;
 			this.hasArr = hasArr;
 		}
+		
 		// check color.
 		if(optionObj.color != undefined){
 			this.color = optionObj.color;
-			if(this.xLabel != optionObj.color && mainArr.isDiscrete[this.color] == true){ // double dimension.
+			if(this.color != this.xLabel && mainArr.isDiscrete[this.color] == true){ // double dimension.
 				this.double = true;
 				// find number of colors.
-				var tempColorArr = new Array();
-				var numberIndex = new Array();
-				tempColorArr[0] = mainArr[this.color][0];
-				numberIndex[0] = 0;
-				for(var i = 1 ; i < mainArr[this.color].length ; i ++){
-					for(var j = 0 ; j < tempColorArr.length ; j ++){
-						if(mainArr[this.color][i] == tempColorArr[j]){
-							numberIndex[i] = j;
-							break;
-						}
-					}
-					if(j == tempColorArr.length){
-						numberIndex[i] = j;
-						tempColorArr.push(mainArr[this.color][i]);
-					}					
-				}
+				var temp = findDiscreteNum(mainArr[this.color]);
+				var tempColorArr = temp.discreteArr;
+				var numberIndex = temp.mapping;
 				// get colorObj according to tempColorArr.
 				this.colorObj = makeColor_discrete(tempColorArr);
 				var colorArr = new Array();
@@ -183,8 +172,9 @@ var MakeHistObj = {};
 				this.colorArr[i] = 'green';
 			}
 		}
+
 		// set mapping for event handler.
-		birthReport(mainArr, this, this.index, this.hasArr);		
+		birthReport(mainArr, this, this.index, this.hasArr);
 	}
 })();
 

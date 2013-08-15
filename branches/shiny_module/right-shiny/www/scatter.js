@@ -199,20 +199,39 @@ var Scatter = {};
         	this.firstUpdate = firstUpdate(scatterObj);
         	
         	
-        	setTooltip(this);
+        	//setTooltip(this);
         	
         	this.dataLayer = new Kinetic.Layer();	
-			for(var i = 0 ; i < this.node.length ; i ++){
+        	for(var i = 0 ; i < this.node.length ; i ++){
 				this.dataLayer.add(this.node[i]);
 			}
 			axisObj.dataLayerArr.push(this.dataLayer);
+			axisObj.hoverArr.push(scatterHover());
+			//alert(axisObj.hoverArr[1]);
 			//add layers
-			axisObj.stage.add(this.tooltipLayer);
+		//	axisObj.stage.add(this.tooltipLayer);
 			axisObj.stage.add(this.dataLayer);
 		}
 	};
 })();
-
+function scatterHover()
+{
+	return function(node, overOff) // over: 1 , off: 0
+		{
+			if(overOff == 1){
+				node.setScaleX(1.5);
+                node.setScaleY(1.5);
+                node.draw();
+			}else if(overOff == 0){
+				var tween = new Kinetic.Tween({
+        			node: node, 
+			        duration: 0.01,
+			        scaleX: 1,
+			        scaleY: 1
+        		}).play(); 
+			}
+		};
+}
 /**  update function  **/
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
@@ -255,190 +274,7 @@ function scatterUpdate(node)
 }
 /**  update function end  **/
 
-/**  draw sactter  **/
-/*
-// label array is used for tooltipgetinfo and color setting. --> should be refined!
-var Scatter = {};
 
-(function() {
-
-	Scatter = function(mainArr, plotObject, xLabel, yLabel, optionObj) {
-		this._type = 'scatter';
-		this.id = mainArr.id;
-		this.stage = plotObject.stage;
-		this.labelArr = mainArr.labelArr; // this is for legend make.
-		this._init(mainArr, optionObj);			
-		//execute build
-		var returnValue = this._build(mainArr, plotObject, xLabel, yLabel, optionObj);		
-		if(returnValue == 1){
-			//only when excuting build is success, execute draw
-			this._draw(plotObject);
-			mainArr.id ++;
-			mainArr.refreshArr[this.id] = makeRefresh(this.stage);
-		}
-		//objArr[mainArr.id-1] = this;
-		this.tmpShift = false;
-		this.preId = {x : -1, y : -1};				
-    };
-    Scatter.prototype = {
-    		
-		_init: function(mainArr, optionObj) {
-			
-			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
-			// set the color type
-            if(optionObj.color == undefined){
-                this.color = -1; //default color                  
-            }else{
-            	this.color = optionObj.color;
-                this.colorArr = setColor(mainArr[optionObj.color], mainArr.isDiscrete[optionObj.color]);
-            }                  
-		},
-		
-		_build: function(mainArr, plotObject, xLabel, yLabel, optionObj) {
-			//check whether each axis is the same type of plotObject.
-			
-			//check option color is assigned if option legend is assined.
-            if(this.color == -1 && optionObj.legend != undefined){
-            	alert("Can't draw legend without color!");
-				return -1;                    
-            }
-            //check option legend name is appropriate
-            if(optionObj.legend !=undefined){
-                var legendChk = optionObj.legend.toLowerCase();
-                if( legendChk == 'right' || legendChk == 'left' || legendChk == 'topright' || legendChk == 'topleft'){                           
-                     this.legend = optionObj.legend;
-                }else{
-                	alert("Legend should be \"right\", \"left\", \"topright\" or \"topleft\"!");
-                	return -1;
-                }
-            }else{
-             	this.legend = "right"; //if color is set, but legend is not, just set default legend as right
-            }       
-            //if color exists, legend should be created.
-            if(this.color != -1){
-            	//set legend position.
-        		setLegendPosition(this, plotObject);    
-        		//make legend.
-        		MakeLegend(this, this.color, this.colorArr, this.legendX, this.legendY, this.mainValueArr);	
-         		//resize plotObject's width. It depends on legendGroup's width.
-        		plotObject.stage.setWidth(plotObject.stage.getWidth()+ this.legendGroup.getWidth());        		
-        		//When legend is right or left, move legend layer to center. 			        		
-        		if(this.legend == 'right' || this.legend == 'left'){
-        			this.legendLayer.setY((plotObject.height-this.legendGroup.getHeight())/2);
-        		}        		
-        		//move plotObject left.
-        		if(this.legend == 'left' || this.legend == 'topleft'){
-        			plotObject.plotLayer.setX(plotObject.plotLayer.getX() + this.legendGroup.getWidth() + plotObject.plotLength*5 );
-            		plotObject.plotLayer.draw();            		
-        		}       	
-            }
-               
-            
-            
-            var nodeX = new Array();
-			var nodeY = new Array();
-			//nodeX set.
-			if(mainArr.isDiscrete[xLabel] == true){	// x - discrete
-				for(var i = 0 ; i < mainArr[xLabel].length ; i ++){
-					nodeX[i] = plotObject.xPlotArr[plotObject.xNode[i]][0] + plotObject.plotXMargin;    					
-				}
-			}else{  // x - continuous
-				for(var i = 0 ; i < mainArr[xLabel].length ; i ++){
-					if(mainArr[xLabel][i] > plotObject.xMax || mainArr[xLabel][i] < plotObject.xMin){
-						nodeX[i] = -1;
-					}else{
-						nodeX[i] = plotObject.width * (mainArr[xLabel][i] - plotObject.xMin) / (plotObject.xMax - plotObject.xMin) + plotObject.plotXMargin;
-					}
-				}
-			}
-			//nodeY set.
-			if(mainArr.isDiscrete[yLabel] == true){	// y - discrete
-				for(var i = 0 ; i < mainArr[yLabel].length ; i ++){
-					if(nodeX[i] == -1){
-						nodeY[i] = -1;
-					}else{
-						nodeY[i] = plotObject.height + plotObject.plotYMargin - plotObject.yPlotArr[plotObject.yNode[i]][0];
-					}    					
-				}
-			}else{  // y - continuous
-				for(var i = 0 ; i < mainArr[yLabel].length ; i ++){
-					if(nodeX[i] == -1){
-						nodeY[i] = -1;
-					}else if(mainArr[yLabel][i] > plotObject.yMax || mainArr[yLabel][i] < plotObject.yMin){
-						//alert(plotObject.yMax + "m" + mainArr.dataArr[this.y][i]);
-						nodeX[i] = -1;
-						nodeY[i] = -1;
-					}else{
-						nodeY[i] = plotObject.height + plotObject.plotYMargin - plotObject.height * (mainArr[yLabel][i] - plotObject.yMin) / (plotObject.yMax - plotObject.yMin);
-					}
-				}
-			}
-			var tooltipTextGetInfo = new Array();
-			for(var i = 0; i < mainArr[yLabel].length ; i++)
-			{
-				tooltipTextGetInfo[i] =  mainArr.labelArr[0] + " : " + mainArr[mainArr.labelArr[0]][i]+ "\r\n" ;
-				if(mainArr.labelArr.length>1){
-					for(var j = 1; j < mainArr.labelArr.length-1 ; j ++){
-						tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[j] + " : " + mainArr[mainArr.labelArr[j]][i]+ "\r\n" ;
-					}
-					tooltipTextGetInfo[i] = tooltipTextGetInfo[i] + mainArr.labelArr[mainArr.labelArr.length-1] + " : " + mainArr[mainArr.labelArr[0]][j];
-				}
-			}
-			//set dots.
-			this.node = new Array();
-			var cnt = 0;
-			var overCnt = 0;
-			for(var i = 0; i < nodeX.length ; i++)
-			{
-				if(nodeX[i] != -1){
-					this.node[cnt] = new Kinetic.Circle({
-						name : cnt,
-						x: (this.legend == "topleft" || this.legend =="left") ? nodeX[i] + this.legendGroup.getWidth() + plotObject.plotLength*5 : nodeX[i],
-						y: nodeY[i],
-						radius: this.radius,
-						stroke: (this.color == -1) ? 'green': this.colorArr.indexArr[i],
-						strokeWidth: 1,
-						fill: (this.color == -1) ? 'green': this.colorArr.indexArr[i],
-						selected : 0,
-						info :  "Node : " + cnt + "\r\n" + tooltipTextGetInfo[i]
-					});
-					mainArr.isSelected[i][this.id] = scatterUpdate(this, cnt);	//save event handler
-					cnt ++;
-				}else{
-					overCnt ++;
-				}
-			}
-			if(overCnt > 0){
-				alert(overCnt + " nodes can't be draw in this plot range.");
-			}
-			this.firstUpdate = firstUpdate(mainArr, null);
-			// make main labels.
-			MakeMainLabel(this, plotObject, xLabel, yLabel);
-			setTooltip(this);
-			mainArr
-			return 1;
-		},
-		
-		_draw : function(plotObject) {
-			
-			// make dataLayer.
-			this.dataLayer = new Kinetic.Layer();	
-			for(var i = 0 ; i < this.node.length ; i ++)
-			{
-				if(i % parseInt(this.node.length/20) == 0)
-				{
-					plotObject.stage.add(this.dataLayer);
-					this.dataLayer = new Kinetic.Layer();
-				}
-				this.dataLayer.add(this.node[i]);
-			}			
-
-			//Total layers added to plot stage.
-			addLayer(this, plotObject.stage);
-		}
-    }
-})();
-*/
 /**  Regression functions for scatter  **/
 //linear regression.
 function linearSendArr(Name)

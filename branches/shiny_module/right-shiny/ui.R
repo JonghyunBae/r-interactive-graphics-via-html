@@ -76,9 +76,10 @@ shinyUI(bootstrapPage(
         var sobj1 = new MakeScatterObj(mainArr1, 'cut', 'depth', {color: 'depth', legend: 'topright'});
         //var axis3 = new MakeAxis(3, sobj1.xArr[0], sobj1.yArr[0], sobj1.isXDiscrete, sobj1.isYDiscrete, {mainLabel: sobj1.mainLabel, xLabel: sobj1.xLabel, yLabel: sobj1.yLabel, legend: sobj1.legend});
        // var scatter2 = new Scatter(axis3, sobj1, sobj1.xArr[1], sobj1.yArr[1], sobj1.colorArr, {double: sobj1.double});
-        var line2 = new Line(axis1, sobj1, sobj1.xArr[1], sobj1.yArr[1], sobj1.colorArr,{double: sobj1.double});
+       // var line2 = new Line(axis1, sobj1, sobj1.xArr[1], sobj1.yArr[1], sobj1.colorArr,{double: sobj1.double});
         var scatter3 = new Scatter(axis1, sobj1, sobj1.xArr[1], sobj1.yArr[1], sobj1.colorArr, {double: sobj1.double});
         
+        eventTrigger([axis1,axis2, axis3]);
         
         
        // var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr[1], histArr1.colorArr, {double: histArr1.double});

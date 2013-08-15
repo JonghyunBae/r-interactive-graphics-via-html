@@ -82,16 +82,11 @@ function checkKeyUp(e)
         }
 }       
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-function eventTrigger(Name)
+function eventTrigger(NameArr)
 {
-	hover(Name);
-	/*for(var i = 0 ; i < NameArr.length ; i ++){
+	for(var i = 0 ; i < NameArr.length ; i ++){
 		hover(NameArr[i]);
-		select(NameArr[i]);
-		drag(NameArr[i]);
-		
-	}*/
-	
+	}	
 	//select(Name);
    // menu(Name);
    // drag(Name);        
@@ -315,6 +310,7 @@ function RectRangeSelect(Name, pre, aft)
 function hover(Name)
 {
 	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
+		(function (i) { 
 		Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
 			var node = evt.targetNode;
 			document.body.style.cursor = "pointer";
@@ -328,103 +324,27 @@ function hover(Name)
 		    }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
 		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
 		    }else{
-		            Name.stage.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
+		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
 		    }
 			Name.tooltip.getText().setText(node.getInfo());
 			Name.tooltipLayer.moveToTop();
 			Name.tooltip.show();
 			Name.tooltipLayer.draw();
-			if(node.getSelected() == 0)
-			{
-				switch(Name._type)
-				{
-	                case 'scatter' : 
-	                    node.setScaleX(1.5);
-	                    node.setScaleY(1.5);
-	                    node.draw();
-	                    break;
-	                case 'hist' : 
-	                case 'pie' :
-	                	node.setOpacity(1);
-	                    node.draw();
-	                    break;
-	                case 'box' : 
-	                    if(node.getIsOutlier()){
-	                        node.setScaleX(1.5);
-	                        node.setScaleY(1.5);
-	                        node.draw();
-	                    }else{
-	                        node.setOpacity(1);
-	                        node.draw();
-	                    }
-	                    break;
-	                case 'line' :
-	                	node.setOpacity(1);
-	                	node.setStroke('red');
-	                	node.draw();
-	                	break;
-	                default:
-	                	break;
-	            }
+			if(node.getSelected() == 0){
+				Name.hoverArr[i](node, 1)
 	        }
 		});
-		
 		Name.dataLayerArr[i].on('mouseout', function(evt) {
 			var node = evt.targetNode;
 			document.body.style.cursor = "default";
 			Name.tooltip.hide();
 			Name.tooltipLayer.draw();
 			if(node.getSelected() == 0){
-	            //new kinetic version using tween for animation.
-				switch(Name._type)
-				{                                       
-	            	case 'scatter' : 
-	            		var tween = new Kinetic.Tween({
-	            			node: node, 
-					        duration: 0.01,
-					        scaleX: 1,
-					        scaleY: 1
-	            		}).play(); 
-	            		break;                                          
-	            	case 'hist' : 
-	            	case 'pie' :
-				        var tween = new Kinetic.Tween({
-				        	node: node, 
-				        	duration: 0.01,
-				        	opacity: 0.5
-				        }).play();
-				        break;                  
-	            	case 'box' : 
-	            		if(node.getIsOutlier()){
-					        var tween = new Kinetic.Tween({
-						        node: node, 
-						        duration: 0.01,
-						        scaleX: 1,
-						        scaleY: 1
-					        }).play(); 
-	            		}else{
-	            			var tween = new Kinetic.Tween({
-						        node: node, 
-						        duration: 0.01,
-						        opacity: 0.5
-	                        }).play(); 
-	                    }
-	                    break;
-	            	case 'line':
-	            		var tween = new Kinetic.Tween({
-	            			node: node, 
-					        duration: 0.01,
-					        opacity: 0.5,
-					        stroke: 'black'
-	            		}).play();
-	            		break;
-	                default:                	
-	                    break;
-	            }
+				Name.hoverArr[i](node, 0);
 			}
 		});
+		})(i);
 	}
-	
 }
 
 function select(Name)
@@ -440,7 +360,16 @@ function select(Name)
 			}
 		}
 	});
-	
+	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
+		(function (i) {
+			Name.dataLayerArr[i].on('click', function(evt){
+				if(dragOn == true){                       
+		            dragOn = false;
+		            return;
+		        }
+			});
+		})(i);
+	}
 	Name.dataLayer.on('click', function(evt){
 		if(dragOn == true)
         {                       

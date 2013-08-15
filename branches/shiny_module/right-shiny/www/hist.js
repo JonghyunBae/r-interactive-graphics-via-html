@@ -243,7 +243,7 @@ var Hist = {};
     					width: this.barWidth,
     					height: yArr[i]*axisObj.height/axisObj.yMax,
     					fill: colorArr[i],
-    					stroke: 'black',
+    					stroke: colorArr[i],
     					strokeWidth: 0.2,
     					opacity : 0.5,
     					selected : 0,
@@ -268,7 +268,8 @@ var Hist = {};
 	    					width: this.barWidth,
 	    					height: yArr[i]*axisObj.height/axisObj.yMax,
 	    					fill: colorArr[i],
-	    					stroke: colorArr[i],						
+	    					stroke: colorArr[i],
+	    					strokeWidth: 0.2,
 	    					opacity : 0.5,
 	    					selected : 0,
 	    					selectCnt : 0,
@@ -286,7 +287,8 @@ var Hist = {};
 	    					width: this.barWidth,
 	    					height: yArr[i]*axisObj.height/axisObj.yMax,
 	    					fill: colorArr[i],
-	    					stroke: colorArr[i],						
+	    					stroke: colorArr[i],
+	    					strokeWidth: 0.2,
 	    					opacity : 0.5,
 	    					selected : 0,
 	    					selectCnt : 0,
@@ -301,22 +303,36 @@ var Hist = {};
 			histObj.refreshArr[this.id] = makeRefresh(this.stage);
 			histObj.updateArr[this.id] = histUpdate(this.node);
         	this.firstUpdate = firstUpdate(histObj);
-        	
-        	
-        	setTooltip(this);
-        	
         	this.dataLayer = new Kinetic.Layer();	
 			for(var i = 0 ; i < this.node.length ; i ++){
 				this.dataLayer.add(this.node[i]);
 			}
 			axisObj.dataLayerArr.push(this.dataLayer);
+			axisObj.hoverArr.push(histHover());
 			//add layers
-			axisObj.stage.add(this.tooltipLayer);
+			//axisObj.stage.add(this.tooltipLayer);
 			axisObj.stage.add(this.dataLayer);
 		}
 	};
 })();
-
+function histHover()
+{
+	return function(node, overOff) // over: 1 , off: 0
+		{
+			if(overOff == 1){
+				node.setOpacity(1);
+				node.setStroke('black');
+				node.draw();
+			}else if(overOff == 0){
+				var tween = new Kinetic.Tween({
+		        	node: node, 
+		        	duration: 0.01,
+		        	stroke: node.getFill(),
+		        	opacity: 0.5
+		        }).play();
+			}			
+		};
+}
 /**  update function  **/
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.

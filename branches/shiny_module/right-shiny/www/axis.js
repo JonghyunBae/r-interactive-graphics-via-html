@@ -20,11 +20,14 @@ var MakeAxis = {};
 		if(!(optionObj.legend == undefined || optionObj.legend == false)){
 			makeLegendLayer(this, optionObj.legend);
 		}
+		// for supporting event handle: dataLayerArr, hoverArr
 		this.dataLayerArr = new Array();
+		this.hoverArr = new Array();
 		document.getElementById('container'+ id).onmousemove = getCoords;
 		document.getElementById('container'+ id).onclick = function() {
 	        document.getElementById('regcoords');
 	    };
+	    
 	    //excute build
 		this._build(xArr, yArr, isXDiscrete, isYDiscrete, optionObj);
 		//excute draw
@@ -90,6 +93,8 @@ var MakeAxis = {};
 			// make axis layers.
 			makeXAxisLayer(this);
 			makeYAxisLayer(this);
+			// make tooltip layer.
+			setTooltip(this);
 			// make label layers.
 			if(optionObj.mainLabel != undefined){
 				MakeMainLabelLayer(this, optionObj.mainLabel);
@@ -134,9 +139,42 @@ var MakeAxis = {};
 			if(this.legendLayer != undefined){
 				this.stage.add(this.legendLayer);
 			}
+			this.stage.add(this.tooltipLayer);
 		}
 	}
 })();
+
+/**  set tooltip  **/
+//new kenetic version -> tooltip setting change using tag
+function setTooltip(obj)
+{
+	obj.tooltipLayer = new Kinetic.Layer();			 
+	obj.tooltip = new Kinetic.Label({
+	    opacity: 0.75,
+	    visible: false,
+	    listening: false
+	  });
+	obj.tooltip.add(new Kinetic.Tag({
+	    fill: 'black',
+	    //pointerDirection: 'down',
+	    pointerWidth: 10,  
+	    pointerHeight: 10, 
+	    lineJoin: 'round',
+	    shadowColor: 'black',
+	    shadowBlur: 10,
+	    shadowOffset: 10,
+	    shadowOpacity: 0.2
+	  }));
+	obj.tooltip.add(new Kinetic.Text({
+	    text: '',
+	    fontFamily: 'Calibri',
+	    fontSize: 15,
+	    padding: 5,
+	    fill: 'white'
+	  }));
+	obj.tooltipLayer.add(obj.tooltip);
+}
+/**  set tooltip end  **/ 
 
 /**  set axis  **/
 // set axis with continuous data.
@@ -209,6 +247,7 @@ function setAxis_discrete(array, length)
     };
 }
 /**  set axis end  **/
+
 /**  make stage  **/
 function makeStageLayer(obj)
 {

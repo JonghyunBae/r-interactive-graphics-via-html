@@ -1,4 +1,4 @@
-#summary Description about supported types of plots
+#summary Description about supported plot types with data types
 #sidebar TableOfContents
 
 <wiki:toc max_depth="2"/>

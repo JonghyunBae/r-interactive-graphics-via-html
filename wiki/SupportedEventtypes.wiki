@@ -1,0 +1,65 @@
+#summary Description about supported plot types with data types
+#sidebar TableOfContents
+
+<wiki:toc max_depth="2"/>
+
+= Introduction =
+
+There are four types of graph right now. More types will be updated.
+
+=<font color = 'blue'>Types of graphs</font>=
+<table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
+<tr>
+	<td>*Graph type / event type*</td>
+	<td>*Hover*</td>
+        <td>*Select(click)*</td>
+        <td>*Multi-select(ctrl+click)*</td>
+        <td>*Box-select(drag)*</td>
+	<td>*change axis*</td>
+        <td>*change color*</td>
+</tr>
+<tr>
+	<td>*Scatter*</td>
+	<td>support</td>
+        <td>support</td>
+        <td>support</td>
+        <td>support</td>
+	<td>support</td>
+        <td>support</td>
+</tr>
+<tr>
+	<td>*Histogram*</td>
+	<td>support</td>
+        <td>not logical</td>
+        <td>support</td>
+        <td>not logical</td>
+	<td>not support</td>
+        <td>support</td>
+</tr>
+<tr>
+	<td>*Line*</td>
+	<td>support</td>
+        <td>support</td>
+        <td>support</td>
+        <td>support</td>
+	<td>not support</td>
+        <td>not support</td>
+</tr>
+<tr>
+	<td>*Pie*</td>
+	<td>under construction</td>
+        <td>under construction</td>
+        <td>under construction</td>
+        <td>under construction</td>
+	<td>under construction</td>
+        <td>under construction</td>
+</tr>
+<tr>
+	<td>*Box-Whisker*</td>
+	<td>under construction</td>
+        <td>under construction</td>
+        <td>under construction</td>
+        <td>under construction</td>
+	<td>under construction</td>
+        <td>under construction</td>
+</tr>

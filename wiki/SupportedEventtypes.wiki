@@ -1,4 +1,4 @@
-#summary Description about supported plot types with data types
+#summary Description about supported plot types with event types
 #sidebar TableOfContents
 
 <wiki:toc max_depth="2"/>
@@ -7,7 +7,7 @@
 
 There are four types of graph right now. More types will be updated.
 
-=<font color = 'blue'>Types of graphs</font>=
+=<font color = 'blue'>Types of events</font>=
 <table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
 <tr>
 	<td>*Graph type / event type*</td>

@@ -7,11 +7,12 @@ var MakeHistObj = {};
 	
 	MakeHistObj = function(mainArr, xLabel, optionObj) {
 		this.xLabel = xLabel;
-		this.yLabel = "frequency";
+		this.yLabel = "Frequency";
 		this.mainLabel = "histogram of " + xLabel;
 		this.id = 0;
 		this.isYDiscrete = false;
 		this.double = false;
+		this.legend = false;
 		
 		// basic calculation.
 		if(mainArr.isDiscrete[xLabel] == true){
@@ -111,11 +112,14 @@ var MakeHistObj = {};
 		
 		// check color.
 		if(optionObj.color != undefined){
-			this.color = optionObj.color;
-			if(this.color != this.xLabel && mainArr.isDiscrete[this.color] == true){ // double dimension.
+			this.colorLabel = optionObj.color;
+			// set legend.
+			this.legend = new Object();
+			// set color.
+			if(this.colorLabel != this.xLabel && mainArr.isDiscrete[this.colorLabel] == true){ // double dimension.
 				this.double = true;
 				// find number of colors.
-				var temp = findDiscreteNum(mainArr[this.color]);
+				var temp = findDiscreteNum(mainArr[this.colorLabel]);
 				var tempColorArr = temp.discreteArr;
 				var numberIndex = temp.mapping;
 				// get colorObj according to tempColorArr.
@@ -125,7 +129,7 @@ var MakeHistObj = {};
 				var xArr = new Array();
 				var hasArr = new Array();
 				var hasColorArr = new Array();
-				var index = new Array(mainArr[this.color].length);
+				var index = new Array(mainArr[this.colorLabel].length);
 				var cnt = 0;
 				for(var i = 0 ; i < this.hasArr.length ; i ++){					
 					var tempFreqArr = new Array(this.colorObj.colors.length);
@@ -158,14 +162,41 @@ var MakeHistObj = {};
 				this.xArr[1] = xArr;
 				this.yArr[1] = freqArr;
 				this.colorArr = colorArr;
-			}else if(this.xLabel == optionObj.color && mainArr.isDiscrete[this.color] == true){ // just same color with xAxis.
+				// for legend(colorArr and each label of each color needed).
+				var legend_isDiscrete = true;
+				var legend_labels = tempColorArr;
+				var legend_colorArr = this.colorObj.colors;
+			}else if(this.xLabel == this.colorLabel && mainArr.isDiscrete[this.colorLabel] == true){ // just same color with xAxis.
 				this.colorArr = makeColor_discrete(this.xArr[0]).colors;
+				// for legend(colorArr and each label of each color needed).
+				var legend_isDiscrete = true;
+				var legend_labels = this.xArr[0];
+				var legend_colorArr = this.colorArr;
 			}else{ // color -> continuous , just draw a legend.
 				this.colorArr = new Array();
 				for(var i = 0 ; i < this.xArr[0].length ; i ++){
 					this.colorArr[i] = 'green';
 				}
+				// for legend(colorArr and each label of each color needed).
+				this.colorObj = makeColor_continuous(mainArr[this.colorLabel]);
+				var legend_colorArr = this.colorObj.mainValueArr;
+				var legend_isDiscrete = false;
+				var temp = findMaxMinValue(mainArr[this.colorLabel]);
+		        this.legend.max = temp.max;
+		        this.legend.min = temp.min;
+				var legend_labels = null;
 			}
+			// set legend.
+			if(optionObj.legend != undefined){				
+				this.legend.position = optionObj.legend;
+			}else{
+				this.legend.position = 'right';
+			}
+			this.legend.isDiscrete = legend_isDiscrete;
+			this.legend.colorArr = legend_colorArr;
+			this.legend.labels = legend_labels;
+			this.legend.colorLabel = this.colorLabel;
+			
 		}else{ // just green color
 			this.colorArr = new Array();
 			for(var i = 0 ; i < this.xArr[0].length ; i ++){
@@ -199,61 +230,32 @@ var Hist = {};
 				var y = 0;			
 				var tempData = -1;
 				this.node = new Array();				
-				if(axisObj.isXDiscrete == true){
-					for(var i = 0; i < xArr.length ; i ++){
-						x = (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin;
-						if(x != tempData){
-							y = (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin);
-						}
-	        			this.node[i] = new Kinetic.Rect({
-	            			name : i,
-	    					freq: yArr[i],
-	    					x: x,
-	    					y: y,  
-	    					width: this.barWidth,
-	    					height: yArr[i]*axisObj.height/axisObj.yMax,
-	    					fill: colorArr[i],
-	    					stroke: 'black',
-	    					strokeWidth: 0.2,
-	    					opacity : 0.5,
-	    					selected : 0,
-	    					selectCnt : 0,
-	    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
-	    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-	    				});
-	        			if(i < yArr.length){
-	        				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
-	        			}	        				
-	        			tempData = this.node[i].getX();
-		        	}
-				}else{
-					for(var i = 0; i < xArr.length - 1 ; i ++){
-						x = (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin;
-						if(x != tempData){
-							y = (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.height/axisObj.yMax;
-						}
-	        			this.node[i] = new Kinetic.Rect({
-	            			name : i,
-	    					freq: yArr[i],
-	    					x: x,
-	    					y: y,
-	    					width: this.barWidth,
-	    					height: yArr[i]*axisObj.height/axisObj.yMax,
-	    					fill: colorArr[i],
-	    					stroke: 'black',
-	    					strokeWidth: 0.2,
-	    					opacity : 0.5,
-	    					selected : 0,
-	    					selectCnt : 0,
-	    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
-	    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-	    				});
-	        			if(i < yArr.length){
-	        				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
-	        			}	        				
-	        			tempData = this.node[i].getX();
-		        	}
-				}
+				for(var i = 0; i < xArr.length ; i ++){
+					x = (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin;
+					if(x != tempData){
+						y = (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin);
+					}
+        			this.node[i] = new Kinetic.Rect({
+            			name : i,
+    					freq: yArr[i],
+    					x: x,
+    					y: y,  
+    					width: this.barWidth,
+    					height: yArr[i]*axisObj.height/axisObj.yMax,
+    					fill: colorArr[i],
+    					stroke: 'black',
+    					strokeWidth: 0.2,
+    					opacity : 0.5,
+    					selected : 0,
+    					selectCnt : 0,
+    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
+    					offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+    				});
+        			if(i < yArr.length){
+        				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
+        			}	        				
+        			tempData = this.node[i].getX();
+	        	}
 			}else{
 				this.node = new Array();
 				if(axisObj.isXDiscrete == true){
@@ -266,7 +268,7 @@ var Hist = {};
 	    					width: this.barWidth,
 	    					height: yArr[i]*axisObj.height/axisObj.yMax,
 	    					fill: colorArr[i],
-	    					stroke: 'black',						
+	    					stroke: colorArr[i],						
 	    					opacity : 0.5,
 	    					selected : 0,
 	    					selectCnt : 0,
@@ -284,7 +286,7 @@ var Hist = {};
 	    					width: this.barWidth,
 	    					height: yArr[i]*axisObj.height/axisObj.yMax,
 	    					fill: colorArr[i],
-	    					stroke: 'black',						
+	    					stroke: colorArr[i],						
 	    					opacity : 0.5,
 	    					selected : 0,
 	    					selectCnt : 0,

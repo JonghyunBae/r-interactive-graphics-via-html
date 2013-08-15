@@ -8,6 +8,7 @@ var MakeScatterObj = {};
 		this.mainLabel = "scatter of " + xLabel + " & " + yLabel;
 		this.id = 0;
 		this.double = false;
+		this.legend = false;
 		
 		// basic calculation.
 		if(mainArr.isDiscrete[xLabel] == true){
@@ -48,10 +49,14 @@ var MakeScatterObj = {};
 		
 		// check color.
 		if(optionObj.color != undefined){
-			this.color = optionObj.color;
-			if(this.color != this.xLabel && this.color != this.yLabel && mainArr.isDiscrete[this.color] == true){ // another color axis.
+			this.colorLabel = optionObj.color;
+			// set legend.
+			this.legend = new Object();
+			// set color.
+			// making color part.
+			if(this.colorLabel != this.xLabel && this.colorLabel != this.yLabel && mainArr.isDiscrete[this.colorLabel] == true){ // another color axis.
 				// find number of colors.
-				var temp = findDiscreteNum(mainArr[this.color]);
+				var temp = findDiscreteNum(mainArr[this.colorLabel]);
 				var tempColorArr = temp.discreteArr;
 				var numberIndex = temp.mapping;
 				// get colorObj according to tempColorArr.
@@ -62,7 +67,11 @@ var MakeScatterObj = {};
 					colorArr[i] = this.colorObj.colors[numberIndex[i]];
 				}				
 				this.colorArr = colorArr;
-			}else if(this.color == this.xLabel && mainArr.isDiscrete[this.color] == true){ // matches with xAxis.
+				// for legend(colorArr and each label of each color needed).
+				var legend_colorArr = this.colorObj.colors;
+				var legend_labels = tempColorArr;
+				var legend_isDiscrete = true;
+			}else if(this.colorLabel == this.xLabel && mainArr.isDiscrete[this.colorLabel] == true){ // matches with xAxis.
 				// get colorObj according to tempColorArr.
 				this.colorObj = makeColor_discrete(xArr[0]);
 				// make colorArr
@@ -71,7 +80,11 @@ var MakeScatterObj = {};
 					colorArr[i] = this.colorObj.colors[xArr[1][i]];
 				}				
 				this.colorArr = colorArr;
-			}else if(this.color == this.yLabel && mainArr.isDiscrete[this.color] == true){ // matches with yAxis.
+				// for legend(colorArr and each label of each color needed).
+				var legend_colorArr = this.colorObj.colors;
+				var legend_labels = xArr[0];
+				var legend_isDiscrete = true;
+			}else if(this.colorLabel == this.yLabel && mainArr.isDiscrete[this.colorLabel] == true){ // matches with yAxis.
 				// get colorObj according to tempColorArr.
 				this.colorObj = makeColor_discrete(yArr[0]);
 				// make colorArr
@@ -80,9 +93,32 @@ var MakeScatterObj = {};
 					colorArr[i] = this.colorObj.colors[yArr[1][i]];
 				}				
 				this.colorArr = colorArr;
-			}else if(mainArr.isDiscrete[this.color] == false){ // continuous color.
-				
+				// for legend(colorArr and each label of each color needed).
+				var legend_colorArr = this.colorObj.colors;
+				var legend_labels = yArr[0];
+				var legend_isDiscrete = true;
+			}else if(mainArr.isDiscrete[this.colorLabel] == false){ // continuous color.
+				this.colorObj = makeColor_continuous(mainArr[this.colorLabel]);
+				this.colorArr = this.colorObj.indexArr;
+				// for legend(colorArr and each range label in continuous legend).
+				var legend_colorArr = this.colorObj.mainValueArr;
+				var legend_isDiscrete = false;
+				var temp = findMaxMinValue(mainArr[this.colorLabel]);
+		        this.legend.max = temp.max;
+		        this.legend.min = temp.min;
+				var legend_labels = null;
 			}
+			
+			// set legend.
+			if(optionObj.legend != undefined){				
+				this.legend.position = optionObj.legend;
+			}else{
+				this.legend.position = 'right';
+			}
+			this.legend.isDiscrete = legend_isDiscrete;
+			this.legend.colorArr = legend_colorArr;
+			this.legend.labels = legend_labels;
+			this.legend.colorLabel = this.colorLabel;
 		}else{ // no color.
 			this.colorArr = new Array();
 			for(var i = 0 ; i < this.xArr[0].length ; i ++){
@@ -137,7 +173,7 @@ var Scatter = {};
 					});
 					if(i < yArr.length){
         				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
-        			}	        				
+        			}
         			tempData = this.node[i].getX();
 	        	}
 			}else{
@@ -260,10 +296,7 @@ var Scatter = {};
 		
 		_build: function(mainArr, plotObject, xLabel, yLabel, optionObj) {
 			//check whether each axis is the same type of plotObject.
-			if(!(plotObject.isXDiscrete == mainArr.isDiscrete[xLabel] && plotObject.isYDiscrete == mainArr.isDiscrete[yLabel])){
-				alert("Can't draw scatter!");
-				return -1;
-			}
+			
 			//check option color is assigned if option legend is assined.
             if(this.color == -1 && optionObj.legend != undefined){
             	alert("Can't draw legend without color!");

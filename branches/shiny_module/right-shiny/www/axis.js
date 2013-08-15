@@ -17,6 +17,9 @@ var MakeAxis = {};
 		this.plotXMargin = this.width*0.2; //canvas left, right margin
 		this.plotYMargin = this.height*0.2; //canvas top, bottom margin
 		this.plotLength = this.width*0.02; //margin from plot box
+		if(!(optionObj.legend == undefined || optionObj.legend == false)){
+			makeLegendLayer(this, optionObj.legend);
+		}
 		this.dataLayerArr = new Array();
 		document.getElementById('container'+ id).onmousemove = getCoords;
 		document.getElementById('container'+ id).onclick = function() {
@@ -101,6 +104,7 @@ var MakeAxis = {};
 		
 		_draw: function() {
 			
+			
 			this.plotLayer = new Kinetic.Layer();
 			// add base rectangular.
 			this.plotLayer.add(this.plotRect);				
@@ -124,7 +128,12 @@ var MakeAxis = {};
 			if(this.yLabel != undefined){
 				this.plotLayer.add(this.yLabel);
 			}
+			
 			this.stage.add(this.plotLayer);
+			// add legend layer.
+			if(this.legendLayer != undefined){
+				this.stage.add(this.legendLayer);
+			}
 		}
 	}
 })();
@@ -203,9 +212,14 @@ function setAxis_discrete(array, length)
 /**  make stage  **/
 function makeStageLayer(obj)
 {
+	var addtionalMargin = 0;
+	if(obj.legendLayer != undefined){
+		addtionalMargin = obj.legendLayer.getWidth();
+	}
+	
 	obj.stage = new Kinetic.Stage({
 		container: 'container'+ obj.id,
-		width : obj.width+obj.plotXMargin*2,
+		width : obj.width + obj.plotXMargin*2 + addtionalMargin,
 		height: obj.height+obj.plotYMargin*2
 	});
 }

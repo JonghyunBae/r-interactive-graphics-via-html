@@ -68,10 +68,11 @@ shinyUI(bootstrapPage(
         var scatter1 = new Scatter(axis1, hObj1, hObj1.xArr[1], hObj1.yArr[1], hObj1.colorArr, {double: hObj1.double});
         var hist1 = new Hist(axis2, hObj1, hObj1.xArr[1], hObj1.yArr[1], hObj1.colorArr, {double: hObj1.double});
         var line1 = new Line(axis2, hObj1, hObj1.xArr[1], hObj1.yArr[1], hObj1.colorArr, {double: hObj1.double});
-        var hObj2= new MakeHistObj(mainArr1, 'cut', {color:'cut', legend: 'left'});
+        var hObj2= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});
         var axis3 = new MakeAxis(3, hObj2.xArr[0], hObj2.yArr[0], hObj2.isXDiscrete, hObj2.isYDiscrete, {mainLabel: hObj2.mainLabel, xLabel: hObj2.xLabel, yLabel: hObj2.yLabel, xbin: hObj2.bin, legend: hObj2.legend});
-        var hist2 = new Hist(axis3, hObj2, hObj2.xArr[1], hObj2.yArr[1], hObj2.colorArr, {double: hObj2.double});
-        var line3 = new Line(axis3, hObj2, hObj2.xArr[1], hObj2.yArr[1], hObj2.colorArr,{double: hObj2.double});
+        var pie1 = new Pie(axis3, hObj2, hObj2.xArr[1], hObj2.yArr[1], hObj2.colorArr, {double: hObj2.double});
+        //var hist2 = new Hist(axis3, hObj2, hObj2.xArr[1], hObj2.yArr[1], hObj2.colorArr, {double: hObj2.double});
+        //var line3 = new Line(axis3, hObj2, hObj2.xArr[1], hObj2.yArr[1], hObj2.colorArr,{double: hObj2.double});
         // scatter related.
         var sobj1 = new MakeScatterObj(mainArr1, 'cut', 'depth', {color: 'depth', legend: 'topright'});
         //var axis3 = new MakeAxis(3, sobj1.xArr[0], sobj1.yArr[0], sobj1.isXDiscrete, sobj1.isYDiscrete, {mainLabel: sobj1.mainLabel, xLabel: sobj1.xLabel, yLabel: sobj1.yLabel, legend: sobj1.legend});

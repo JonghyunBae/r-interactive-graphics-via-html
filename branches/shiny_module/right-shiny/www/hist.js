@@ -358,19 +358,18 @@ function histUpdate(node)
 				}
 			}else{
 				for(var i = 0 ; i < ids.length ; i ++){
-					if(node[ids[i]].getSelected() == 1 && selectOn == 0)		//unselect
-					{
+					if(node[ids[i]].getSelected() == 1 && selectOn == 0){		//unselect
 						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() - 1);
 						if(node[ids[i]].getSelectCnt() == 0){
 							node[ids[i]].setOpacity(0.5);
 							node[ids[i]].setSelected(0);
 						}
 					}else if(selectOn == 1){		// select
-						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() + 1);	
 						if(node[ids[i]].getSelected() == 0){
 							node[ids[i]].setOpacity(1);
 							node[ids[i]].setSelected(1);
 						}
+						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() + 1);	
 					}
 				}
 			//	alert(node[2].getSelectCnt());

@@ -1,0 +1,39 @@
+#summary Description about supported plot types with event types
+#sidebar TableOfContents
+
+<wiki:toc max_depth="2"/>
+
+= Introduction =
+
+This is just for helping to rebuild code.
+This page can be modified while being designed.
+
+= Data Structure =
+
+ # Refine discrete data
+  * Example
+   * Input: mainArr.cut = [A, C, B, D, C, B, A, D];
+   * Result of "mainArr.cut = discreteFactor(mainArr.carat);"
+    * mainArr.cut = [0, 2, 1, 3, 2, 1, 0, 3];
+    * mainArr.cut.isDiscrete = "true";
+    * mainArr.index = [A, B, C, D]; (sorted)
+ # Input of axis
+  * Example
+   * Axis(dataObj, 'xLabel', 'yLabel', 'colorLabel', {legend: position});
+ # Input of MakeHistObj
+  * "MakeHistObj" caculates the frequency of xLabel.
+  * Example
+   * MakeHistObj(dataObj, 'xLabel', 'yLabel', 'colorLabel', {bin: 2});
+  * Return object
+   * histArr.frequency, histArr.xLabel, histArr.colorLabel, histArr.$isHidden, histArr.$isSelected
+ # Input of scatter & hist
+  * Example
+   * Scatter(dataObj, 'xLabel', 'yLabel', 'colorLable');
+   * Hist(dataObj, 'xLabel', 'yLabel', 'colorLabel');
+
+
+= Schedule =
+ * TO DO
+  * Refine discrete data
+ * DONE
+  * not yet.

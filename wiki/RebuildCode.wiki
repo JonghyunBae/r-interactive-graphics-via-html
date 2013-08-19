@@ -10,13 +10,19 @@ This page can be modified while being designed.
 
 = Data Structure =
 
- # Refine discrete data
-  * Example
+ # Refine "createMainStructure"
+  * Example of discrete data
    * Input: mainArr.cut = [A, C, B, D, C, B, A, D];
-   * Result of "mainArr.cut = discreteFactor(mainArr.carat);"
+   * Result of "mainArr.cut = discreteFactor(mainArr.cut);"
     * mainArr.cut = [0, 2, 1, 3, 2, 1, 0, 3];
     * mainArr.cut.isDiscrete = "true";
-    * mainArr.index = [A, B, C, D]; (sorted)
+    * mainArr.cut.index = [A, B, C, D]; (sorted index)
+  * Example of continuous data
+   * Input: mainArr.carat = [0.1, 0.45, ...];
+   * Result
+    * mainArr.carat = [0.1, 0.45, ...];
+    * mainArr.carat.isDiscrete = "false";
+    * mainArr.carat.index = undefined;
  # Input of axis
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', 'colorLabel', {legend: position});

@@ -11,33 +11,33 @@ This page can be modified while being designed.
 = Data Structure =
 
  # Refine "createMainStructure"
-     * Can we make this function explicitly return mainArr, so that we can support more than one data to begin with?
+  * *junghoon*: can we make this function explicitly return mainArr, so that we can support more than one data to begin with?
   * Example of discrete data
    * Input: mainArr.cut = [A, C, B, D, C, B, A, D];
    * Result of "mainArr.$cut = discreteFactor(mainArr.cut);"
-     * Why do you want to use `$cut` instead of just `cut`? I was suggesting $isSelected to avoid name collision, in case a user defines a column named isSelected. I don't think you have to add $ for columns that the user defines.
+     * *junghoon*: why do you want to use `$cut` instead of just `cut`? I was suggesting $isSelected to avoid name collision, in case a user defines a column named isSelected. I don't think you have to add $ for columns that the user defines.
     * mainArr.$cut = [0, 2, 1, 3, 2, 1, 0, 3];
     * mainArr.$cut.isDiscrete = "true";
     * mainArr.$cut.index = [A, B, C, D]; (sorted index)
     * mainArr.$cut.index[__A] = 0; mainArr.$cut.index[__B] = 1; ...
-     * I am not sure whether you need this since you can use `indexOf` or its jQuery cousin `inArray` if you are worried about browser compatibility. See [http://stackoverflow.com/questions/7346827/javascript-find-array-index-with-value this].
+     * *junghoon*: I am not sure whether you need this since you can use `indexOf` or its jQuery cousin `inArray` if you are worried about browser compatibility. See [http://stackoverflow.com/questions/7346827/javascript-find-array-index-with-value this].
   * Example of continuous data
    * Input: mainArr.carat = [0.1, 0.45, ...];
    * Result
     * mainArr.$carat = [0.1, 0.45, ...];
     * mainArr.$carat.isDiscrete = "false";
-     * You may not need this since `mainArr.$carat.isDiscrete` will return `undefined` if you do not define it. However, this is a cleaner way to do this, and I will leave the choice up to you.
+     * *junghoon*: you may not need this since `mainArr.$carat.isDiscrete` will return `undefined` if you do not define it at all. So, you just keep a usual array for continuous data, which can make things simpler. However, this is a more consistent way to do things, and I will leave the choice up to you.
     * mainArr.$carat.index = undefined;
  # Input of axis
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', 'colorLabel', {legend: position});
-    * Why does the axis have to know anything about the color?
+    * *junghoon*: why does the axis have to know anything about the color?
  # Input of MakeHistObj
   * "MakeHistObj" caculates the frequency of xLabel.
-   * Can we generalize this idea to something like `MakeHistObj(dataObj, ['colName1, 'colName2', 'colName3'])` so that the frequency is calculated by all the columns suppoed. For instance, we can do `MakeHistObj(dataObj, ['carat', 'cut'])` and the function returns a InteractiveData object (`summaryObj`) with carat, cut, and frequency ($isSelected and $isHidden). Then, `Hist(summaryObj, 'carat', 'frequency', 'cut')` to draw the histogram. If `Hist(summaryObj, 'carat', 'frequency')` then, `Hist` function adds frequency for all the rows with the same carat value. What do you think?
+   * *junghoon*: Can we generalize this idea to something like `MakeHistObj(dataObj, ['colName1, 'colName2', 'colName3'])` so that the frequency is calculated by all the columns suppoed. For instance, we can do `MakeHistObj(dataObj, ['carat', 'cut'])` and the function returns a InteractiveData object (`summaryObj`) with carat, cut, and frequency ($isSelected and $isHidden). Then, `Hist(summaryObj, 'carat', 'frequency', 'cut')` to draw the histogram. If `Hist(summaryObj, 'carat', 'frequency')` then, `Hist` function adds frequency for all the rows with the same carat value. What do you think?
   * Example
    * MakeHistObj(dataObj, 'xLabel', 'yLabel', 'colorLabel', {bin: 2});
-    * Why does `MakeHistObj` have to know about yLabel?
+    * *junghoon*: why does `MakeHistObj` have to know about yLabel?
   * Return object
    * histArr.frequency, histArr.xLabel, histArr.colorLabel, histArr.$isHidden, histArr.$isSelected
  # Input of scatter & hist

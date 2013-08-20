@@ -1,4 +1,4 @@
-#Description about rebuilding code.
+#summary Description about rebuilding code.
 #sidebar TableOfContents
 
 <wiki:toc max_depth="2"/>

@@ -1,4 +1,4 @@
-#summary Description about supported plot types with event types
+#Description about rebuilding code.
 #sidebar TableOfContents
 
 <wiki:toc max_depth="2"/>

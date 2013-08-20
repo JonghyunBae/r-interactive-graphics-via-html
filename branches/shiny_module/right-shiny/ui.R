@@ -35,7 +35,7 @@ shinyUI(bootstrapPage(
   includeJS("line.js"),
   includeJS("node_event.js"),
   includeJS("menu.js"),
-  HTML("<script> createMainStructure(1, '_sub.diamonds.csv');</script>"), 
+  HTML("<script> var mainArr1 = createMainStructure(1, '_sub.diamonds.csv');</script>"), 
   HTML("<script>//var mainArr2 = createMainStructure(2, 'Theoph-from-R.csv');</script>"), 
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
@@ -61,6 +61,7 @@ shinyUI(bootstrapPage(
        </div>
 
        <script>
+        var axis1 = new Axis(1, mainArr1, 'cut', 'price', {});
         // hist releated.
       /*  var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});
         var axis1 = new MakeAxis(1, hObj1.xArr[0], hObj1.yArr[0], hObj1.isXDiscrete, hObj1.isYDiscrete, {mainLabel: hObj1.mainLabel, xLabel: hObj1.xLabel , yLabel: hObj1.yLabel, xbin: hObj1.bin, legend: hObj1.legend});

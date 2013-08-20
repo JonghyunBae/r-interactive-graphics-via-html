@@ -35,8 +35,8 @@ shinyUI(bootstrapPage(
   includeJS("line.js"),
   includeJS("node_event.js"),
   includeJS("menu.js"),
-  HTML("<script>var mainArr1 = createMainStructure(1, '_sub.diamonds.csv');</script>"), 
-  HTML("<script>var mainArr2 = createMainStructure(2, 'Theoph-from-R.csv');</script>"), 
+  HTML("<script> createMainStructure(1, '_sub.diamonds.csv');</script>"), 
+  HTML("<script>//var mainArr2 = createMainStructure(2, 'Theoph-from-R.csv');</script>"), 
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
        <form id=\"searchForm1\">
@@ -62,7 +62,7 @@ shinyUI(bootstrapPage(
 
        <script>
         // hist releated.
-        var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});
+      /*  var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});
         var axis1 = new MakeAxis(1, hObj1.xArr[0], hObj1.yArr[0], hObj1.isXDiscrete, hObj1.isYDiscrete, {mainLabel: hObj1.mainLabel, xLabel: hObj1.xLabel , yLabel: hObj1.yLabel, xbin: hObj1.bin, legend: hObj1.legend});
         var axis2 = new MakeAxis(2, hObj1.xArr[0], hObj1.yArr[0], hObj1.isXDiscrete, hObj1.isYDiscrete, {mainLabel: hObj1.mainLabel, xLabel: hObj1.xLabel , yLabel: hObj1.yLabel, xbin: hObj1.bin, legend: hObj1.legend});
         var scatter1 = new Scatter(axis1, hObj1, hObj1.xArr[1], hObj1.yArr[1], hObj1.colorArr, {double: hObj1.double});
@@ -81,7 +81,7 @@ shinyUI(bootstrapPage(
         var scatter3 = new Scatter(axis1, sobj1, sobj1.xArr[1], sobj1.yArr[1], sobj1.colorArr, {double: sobj1.double});
         
         eventTrigger([axis1,axis2, axis3]);
-        
+        */
         
        // var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr[1], histArr1.colorArr, {double: histArr1.double});
       //  eventTrigger(axis1);
@@ -117,7 +117,7 @@ shinyUI(bootstrapPage(
       <script src=\"button_event.js\"></script>
       <script src=\"table.js\"></script>
 
-       <script>makeTable('table1', mainArr1, 200)</script>
+       <script>//makeTable('table1', mainArr1, 200)</script>
        <script>//makeTable('table2', mainArr2, 300)</script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>

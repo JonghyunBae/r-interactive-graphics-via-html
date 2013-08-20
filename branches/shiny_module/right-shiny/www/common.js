@@ -93,34 +93,6 @@ function refreshTable(tableID, mainArr){
 	};
 }
 
-/**  find number of discrete data function  **/
-//find number of origin discrete data &
-//make index of each data to discrete number.
-function findDiscreteNum(dataArr)
-{
-	var discreteArr = new Array();
-	var numberArr = new Array();
-	discreteArr[0] = dataArr[0];
-	numberArr[0] = 0;
-	for(var i = 0 ; i < dataArr.length ; i ++){
-		for(var j = 0 ; j < discreteArr.length ; j ++){
-			if(dataArr[i] == discreteArr[j]){
-				numberArr[i] = j;
-				break;
-			}
-		}
-		if(j == discreteArr.length){
-			numberArr[i] = j;
-			discreteArr.push(dataArr[i]);
-		}
-	}
-	return {
-		'discreteArr'	: discreteArr,
-		'mapping'		: numberArr
-	};
-}
-
-
 function birthReport(parent, child, p2cArr, c2pArr){
 	child.parent = parent;
 	if(parent.child == null){

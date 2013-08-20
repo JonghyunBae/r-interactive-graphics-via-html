@@ -370,7 +370,7 @@ function select(Name)
 			});
 		})(i);
 	}
-	Name.dataLayer.on('click', function(evt){
+	Name.stage.on('click', function(evt){
 		if(dragOn == true)
         {                       
             dragOn = false;
@@ -378,6 +378,11 @@ function select(Name)
         }		
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
             var node = evt.targetNode;
+            if(isNaN(node.getName() == false)){
+            	if(aPressed){
+            		allSelect(Name.dataLayerArr[0])
+            	}
+            }
             var tmpX = Name.node[node.getName()].getX(); 
             var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); 
             if(aPressed){   //select ALL

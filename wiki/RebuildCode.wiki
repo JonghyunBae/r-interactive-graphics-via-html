@@ -24,7 +24,7 @@ This page can be modified while being designed.
      * mainArr.carat = [0.1, 0.45, ...];
      * mainArr.carat.isDiscrete = undefined;
      * mainArr.carat.index = undefined;
-  * Event Aspect
+  * Event Aspect.
    * not yet designed.
  # Input of axis
   * Example

@@ -15,24 +15,25 @@ This page can be modified while being designed.
    * *chungha*: Yes we can. So syntax is like this "mainArr = createMainStructure(...);".
   * Example of discrete data
    * Input: mainArr.cut = [A, C, B, D, C, B, A, D];
-   * Result of "mainArr.$cut = discreteFactor(mainArr.cut);"
+   * Result of "mainArr.cut = discreteFactor(mainArr.cut);"
      * *junghoon*: why do you want to use `$cut` instead of just `cut`? I was suggesting $isSelected to avoid name collision, in case a user defines a column named isSelected. I don't think you have to add $ for columns that the user defines.
       * *chungha*: I am just worried about the column name like "length". If one of the column name is "length", it will replace length(length of the array) field.
        * *junghoon*: that is a good point. However, let's assume that a JavaScript programmer will not do it. If you have a list of names you want to avoid, I can check them in R for R programmers.
-    * mainArr.$cut = [0, 2, 1, 3, 2, 1, 0, 3];
-    * mainArr.$cut.isDiscrete = "true";
-    * mainArr.$cut.index = [A, B, C, D]; (sorted index)
+        * *chungha*: Yes. I will remove "$".
+    * mainArr.cut = [0, 2, 1, 3, 2, 1, 0, 3];
+    * mainArr.cut.isDiscrete = "true";
+    * mainArr.cut.index = [A, B, C, D]; (sorted index)
     * not using, but use 'indexOf'. -> mainArr.cut.index[__A] = 0; mainArr.cut.index[__B] = 1; ...
      * *junghoon*: I am not sure whether you need this since you can use `indexOf` or its jQuery cousin `inArray` if you are worried about browser compatibility. See [http://stackoverflow.com/questions/7346827/javascript-find-array-index-with-value this].
       * *chungha*: OK, I will use 'indexOf'.
   * Example of continuous data
-   * Input: mainArr.$carat = [0.1, 0.45, ...];
+   * Input: mainArr.carat = [0.1, 0.45, ...];
    * Result
-    * mainArr.$carat = [0.1, 0.45, ...];
-    * mainArr.$carat.isDiscrete = "false";
-     * *junghoon*: you may not need this since `mainArr.$carat.isDiscrete` will return `undefined` if you do not define it at all. So, you just keep a usual array for continuous data, which can make things simpler. However, this is a more consistent way to do things, and I will leave the choice up to you.
+    * mainArr.carat = [0.1, 0.45, ...];
+    * mainArr.carat.isDiscrete = "false";
+     * *junghoon*: you may not need this since `mainArr.carat.isDiscrete` will return `undefined` if you do not define it at all. So, you just keep a usual array for continuous data, which can make things simpler. However, this is a more consistent way to do things, and I will leave the choice up to you.
       * *chungha*: Yes. I will just leave it as undefined.
-    * mainArr.$carat.index = undefined;
+    * mainArr.carat.index = undefined;
  # Input of axis
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', 'colorLabel', {legend: position});

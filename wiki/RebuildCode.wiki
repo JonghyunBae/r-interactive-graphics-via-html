@@ -26,12 +26,23 @@ This page can be modified while being designed.
      * mainArr.carat.index = undefined;
   * Event Aspect.
    * not yet designed.
+ # Color(just CH's idea)
+  * function(dataObj, colorLabel);
+  * Example of discrete data: function(mainArr, cut);
+  * Result
+   * mainArr.cut.color = [RGB, RGB, RGB, ...]; (length of mainArr.cut.length)
+   * mainArr.cut.colorIndex = [RGB, RGB, RGB, ...]; (length of mainArr.cut.index.length)
+  * Example of continuous data: function(mainArr, carat);
+  * Result
+   * mainArr.carat.color = [RGB, RGB, RGB, ...]; (length of mainArr.carat.length)
+   * mainArr.carat.colorIndex = undefined;
+   * + some data about making a legend such as max, min of RGB point.
  # Input of axis
   * Issues
    * How do I set the mainLabel of axis?
-   * 
+   * How do I set the legend?
   * Example
-   * Axis(dataObj, 'xLabel', 'yLabel', 'colorLabel', {legend: position});
+   * Axis(dataObj, 'xLabel', 'yLabel', {legend: position});
     * *junghoon*: why does the axis have to know anything about the color?
      * *chungha*: I think axis draws legend for now. So color is needed.
  # Input of MakeHistObj
@@ -50,6 +61,7 @@ This page can be modified while being designed.
 
 = Schedule =
  * TO DO
-  * draw Axis.
+  * MakeHistObj.
  * DONE
-  * Refine "createMainStructure" of data aspect.(8/20).
+  * Refine "createMainStructure" of data aspect.(8/20)
+  * just draw "Axis" with all data type.(8/20)

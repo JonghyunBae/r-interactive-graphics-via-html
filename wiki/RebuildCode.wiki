@@ -23,17 +23,20 @@ This page can be modified while being designed.
     * mainArr.cut.index = [A, B, C, D]; (sorted index)
     * mainArr.cut.index[__A] = 0; mainArr.cut.index[__B] = 1; ...
      * *junghoon*: I am not sure whether you need this since you can use `indexOf` or its jQuery cousin `inArray` if you are worried about browser compatibility. See [http://stackoverflow.com/questions/7346827/javascript-find-array-index-with-value this].
+      * *chungha*: OK, I will use 'indexOf'.
   * Example of continuous data
    * Input: mainArr.carat = [0.1, 0.45, ...];
    * Result
-    * mainArr.$carat = [0.1, 0.45, ...];
-    * mainArr.$carat.isDiscrete = "false";
-     * *junghoon*: you may not need this since `mainArr.$carat.isDiscrete` will return `undefined` if you do not define it at all. So, you just keep a usual array for continuous data, which can make things simpler. However, this is a more consistent way to do things, and I will leave the choice up to you.
-    * mainArr.$carat.index = undefined;
+    * mainArr.carat = [0.1, 0.45, ...];
+    * mainArr.carat.isDiscrete = "false";
+     * *junghoon*: you may not need this since `mainArr.carat.isDiscrete` will return `undefined` if you do not define it at all. So, you just keep a usual array for continuous data, which can make things simpler. However, this is a more consistent way to do things, and I will leave the choice up to you.
+      * *chungha*: Yes. I will just leave it as undefined.
+    * mainArr.carat.index = undefined;
  # Input of axis
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', 'colorLabel', {legend: position});
     * *junghoon*: why does the axis have to know anything about the color?
+     * *chungha*: I think axis draws legend for now. So color is needed.
  # Input of MakeHistObj
   * "MakeHistObj" caculates the frequency of xLabel.
    * *junghoon*: Can we generalize this idea to something like `MakeHistObj(dataObj, ['colName1, 'colName2', 'colName3'])` so that the frequency is calculated by all the given columns. For instance, we can do `MakeHistObj(dataObj, ['carat', 'cut'])` and the function returns a InteractiveData object (`summaryObj`) with carat, cut, and frequency ($isSelected and $isHidden). Then, `Hist(summaryObj, 'carat', 'frequency', 'cut')` to draw the histogram. If `Hist(summaryObj, 'carat', 'frequency')` then, `Hist` function adds frequency for all the rows with the same carat value. What do you think?

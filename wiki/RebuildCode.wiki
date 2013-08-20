@@ -27,6 +27,9 @@ This page can be modified while being designed.
   * Event Aspect.
    * not yet designed.
  # Input of axis
+  * Issues
+   * How do I set the mainLabel of axis?
+   * 
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', 'colorLabel', {legend: position});
     * *junghoon*: why does the axis have to know anything about the color?

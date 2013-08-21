@@ -45,14 +45,26 @@ This page can be modified while being designed.
    * Axis(dataObj, 'xLabel', 'yLabel', {legend: position});
     * *junghoon*: why does the axis have to know anything about the color?
      * *chungha*: I think axis draws legend for now. So color is needed.
- # Input of MakeHistObj
-  * "MakeHistObj" caculates the frequency of xLabel.
+ # Input of !MakeHistObj
+  * "!MakeHistObj" caculates the frequency of xLabel.
    * *junghoon*: Can we generalize this idea to something like `MakeHistObj(dataObj, ['colName1, 'colName2', 'colName3'])` so that the frequency is calculated by all the given columns. For instance, we can do `MakeHistObj(dataObj, ['carat', 'cut'])` and the function returns a InteractiveData object (`summaryObj`) with carat, cut, and frequency ($isSelected and $isHidden). Then, `Hist(summaryObj, 'carat', 'frequency', 'cut')` to draw the histogram. If `Hist(summaryObj, 'carat', 'frequency')` then, `Hist` function adds frequency for all the rows with the same carat value. What do you think?
   * Example
-   * MakeHistObj(dataObj, 'xLabel', 'yLabel', 'colorLabel', {bin: 2});
-    * *junghoon*: why does `MakeHistObj` have to know about yLabel?
+   * histObj = !MakeHistObj(mainArr, ['cut'], color, {});
+   * Result
+    * histObj.cut.frequency = [freq0, freq1, freq2, ...];
+    * histObj.cut.frequency.D = [!freqD of freq0, freqD of freq1, ... ];
+    * above is same as histObj.cut.frequency[mainArr.color.index[0];
+    * histObj.cut.frequency.E = [!freqE of freq0, freqE of freq1, ...];
+   * histObj = !MakeHistObj(mainArr, ['cut', 'carat'], {bin: 0.2});
+   * Result
+    * histObj.cut = mainArr.cut;
+    * histObj.cut.index = mainArr.cut.index;
+    * histObj.cut.isDiscrete = mainArr.cut.isDiscrete;
+    * histObj.cut.frequency = [freq0, freq1, freq2, ...];
+    * histObj.carat.frequency = [freq0, freq1, freq2, ...];(binned by 0.2)
+   * !MakeHistObj(dataObj, ['xLabel1', 'xLabel2' ...], 'colorLabel', {bin: option});
   * Return object
-   * histArr.frequency, histArr.xLabel, histArr.colorLabel, histArr.$isHidden, histArr.$isSelected
+   * histArr.xLabel.frequency, histArr.xLabel, histArr.$isHidden, histArr.$isSelected
  # Input of scatter & hist
   * Example
    * Scatter(dataObj, 'xLabel', 'yLabel', 'colorLable');

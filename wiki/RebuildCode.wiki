@@ -55,7 +55,7 @@ This page can be modified while being designed.
     * histObj.cut.frequency.D = [!freqD of freq0, freqD of freq1, ... ];
     * above is same as histObj.cut.frequency[mainArr.color.index[0];
     * histObj.cut.frequency.E = [!freqE of freq0, freqE of freq1, ...];
-   * histObj = !MakeHistObj(mainArr, ['cut', 'carat'], {bin: 0.2});
+   * histObj = !MakeHistObj(mainArr, ['cut', 'carat'], null, {bin: 0.2});
    * Result
     * histObj.cut = mainArr.cut;
     * histObj.cut.index = mainArr.cut.index;

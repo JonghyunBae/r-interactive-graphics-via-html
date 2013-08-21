@@ -10,7 +10,8 @@ This page can be modified while being designed.
 
 = Data Structure =
 
- # "mainArr1 = createMainStructure(id, subData);"
+ # createMainStructure
+  * "mainArr1 = createMainStructure(id, subData);"
   * Data Aspect.
    * Example of discrete data
     * Input: mainArr.cut = [A, C, B, D, C, B, A, D];
@@ -26,18 +27,7 @@ This page can be modified while being designed.
      * mainArr.carat.index = undefined;
   * Event Aspect.
    * not yet designed.
- # Color(just CH's idea - not doing this)
-  * function(dataObj, colorLabel);
-  * Example of discrete data: function(mainArr, cut);
-  * Result
-   * mainArr.cut.color = [RGB, RGB, RGB, ...]; (length of mainArr.cut.length)
-   * mainArr.cut.colorIndex = [RGB, RGB, RGB, ...]; (length of mainArr.cut.index.length)
-  * Example of continuous data: function(mainArr, carat);
-  * Result
-   * mainArr.carat.color = [RGB, RGB, RGB, ...]; (length of mainArr.carat.length)
-   * mainArr.carat.colorIndex = undefined;
-   * + some data about making a legend such as max, min of RGB point.
- # Input of axis
+ # Axis
   * Issues
    * How do I set the mainLabel of axis?
    * How do I set the legend?
@@ -45,38 +35,28 @@ This page can be modified while being designed.
    * Axis(dataObj, 'xLabel', 'yLabel', {legend: position});
     * *junghoon*: why does the axis have to know anything about the color?
      * *chungha*: I think axis draws legend for now. So color is needed.
- # Input of !MakeHistObj
+ # ddply
   * Issues
-   * How do I set the format of isSelected of histobj?(If multiple columns are allowed, the number of nodes would be different each other)
-  * "!MakeHistObj" caculates the frequency of xLabel.
-   * *junghoon*: Can we generalize this idea to something like `MakeHistObj(dataObj, ['colName1, 'colName2', 'colName3'])` so that the frequency is calculated by all the given columns. For instance, we can do `MakeHistObj(dataObj, ['carat', 'cut'])` and the function returns a InteractiveData object (`summaryObj`) with carat, cut, and frequency ($isSelected and $isHidden). Then, `Hist(summaryObj, 'carat', 'frequency', 'cut')` to draw the histogram. If `Hist(summaryObj, 'carat', 'frequency')` then, `Hist` function adds frequency for all the rows with the same carat value. What do you think?
+   * How do I set the format of isSelected?
+  * ddply splits data frame like "ddply" in R.
   * Example
-   * histObj = !MakeHistObj(mainArr, ['cut'], color, {});
-   * Result
-    * histObj.cut.frequency = [freq0, freq1, freq2, ...];
-    * histObj.cut.frequency.D = [!freqD of freq0, freqD of freq1, ... ];
-    * above is same as histObj.cut.frequency[mainArr.color.index[!0];
-    * histObj.cut.frequency.E = [!freqE of freq0, freqE of freq1, ...];
-   * histObj = !MakeHistObj(mainArr, ['cut', 'carat'], null, {bin: 0.2});
-   * Result
-    * histObj.cut = mainArr.cut;
-    * histObj.cut.index = mainArr.cut.index;
-    * histObj.cut.isDiscrete = mainArr.cut.isDiscrete;
-    * histObj.cut.frequency = [freq0, freq1, freq2, ...];
-    * histObj.carat.frequency = [freq0, freq1, freq2, ...];(binned by 0.2)
-   * !MakeHistObj(dataObj, ['xLabel1', 'xLabel2' ...], 'colorLabel', {bin: option});
-  * Return object
-   * histArr.xLabel.frequency, histArr.xLabel, histArr.$isHidden, histArr.$isSelected
+   * obj = ddply(dataObj, ['depth', 'price', 'cut'], color, {bin: option});
+   * Return object
+    * obj.depth, obj.price, obj.cut, obj.frequency.(all length of all fields is same)
  # Input of scatter & hist
   * Example
    * Scatter(dataObj, 'xLabel', 'yLabel', 'colorLable');
    * Hist(dataObj, 'xLabel', 'yLabel', 'colorLabel');
+ # Color
+   * not yet designed.
 
 
 = Schedule =
  * TO DO
+  * Make "scatter" and "hist".
   * design event handler part.
  * DONE
-  * Refine data aspect of "!MakeHistObj", but not for continuous colorLabel.(8/21)
+  * Make "ddply".(8/22)
+  * Refine data aspect of "!MakeHistObj", but not for continuous colorLabel.(8/21) -> this function has been removed.(8/22)
   * Refine data aspect of "createMainStructure".(8/20)
   * just draw "Axis" with all data type.(8/20)

@@ -26,7 +26,7 @@ This page can be modified while being designed.
      * mainArr.carat.index = undefined;
   * Event Aspect.
    * not yet designed.
- # Color(just CH's idea)
+ # Color(just CH's idea - not doing this)
   * function(dataObj, colorLabel);
   * Example of discrete data: function(mainArr, cut);
   * Result
@@ -46,6 +46,8 @@ This page can be modified while being designed.
     * *junghoon*: why does the axis have to know anything about the color?
      * *chungha*: I think axis draws legend for now. So color is needed.
  # Input of !MakeHistObj
+  * Issues
+   * How do I set the format of isSelected of histobj?(If multiple columns are allowed, the number of nodes would be different each other)
   * "!MakeHistObj" caculates the frequency of xLabel.
    * *junghoon*: Can we generalize this idea to something like `MakeHistObj(dataObj, ['colName1, 'colName2', 'colName3'])` so that the frequency is calculated by all the given columns. For instance, we can do `MakeHistObj(dataObj, ['carat', 'cut'])` and the function returns a InteractiveData object (`summaryObj`) with carat, cut, and frequency ($isSelected and $isHidden). Then, `Hist(summaryObj, 'carat', 'frequency', 'cut')` to draw the histogram. If `Hist(summaryObj, 'carat', 'frequency')` then, `Hist` function adds frequency for all the rows with the same carat value. What do you think?
   * Example

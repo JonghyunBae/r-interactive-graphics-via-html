@@ -1,10 +1,8 @@
-/**  make hist object  **/
-// optionObj can be bin, color(double).
-// return : xLabel, yLebel, id, bin, xArr, yArr, freqArr, hasArr, isDiscrete, double.
-var Ddply = {};
+/**  ddply  **/
+// optionObj can be bin.
+var ddply = {};
 (function() {
-	Ddply = function(dataObj, labels, optionObj) {
-		this._init();		
+	ddply = function(dataObj, labels, optionObj) {	
 		var maxArr = new Array(labels.length);
 		var minArr = new Array(labels.length);
 		var binArr = new Array(labels.length);
@@ -100,7 +98,8 @@ var Ddply = {};
 		document.write("Total frequency: " + cnt);*/
 	};
 })();
-
+/**  setNode  **/
+// set the fields of the root object recursively. 
 function setNode(myNumber, endNumber, labels, indexArr, temp, root){
 	if(endNumber > 1){
 		var cnt1 = 0;
@@ -132,7 +131,9 @@ function setNode(myNumber, endNumber, labels, indexArr, temp, root){
 		return cnt;
 	}
 }
-
+/**  setNode End  **/
+/**  addField  **/
+// add new field and return added field.
 function addField(obj, fieldName){
 	// for debugging
 	// document.write(fieldName + " ");
@@ -141,6 +142,7 @@ function addField(obj, fieldName){
 	}
 	return obj[fieldName];
 }
+/**  addField End  **/
 /*
 (function() {
 	

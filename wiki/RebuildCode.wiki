@@ -77,5 +77,5 @@ This page can be modified while being designed.
  * TO DO
   * MakeHistObj.
  * DONE
-  * Refine "createMainStructure" of data aspect.(8/20)
+  * Refine data aspect of "createMainStructure".(8/20)
   * just draw "Axis" with all data type.(8/20)

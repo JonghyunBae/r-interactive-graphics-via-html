@@ -1,128 +1,146 @@
 /**  make hist object  **/
 // optionObj can be bin, color(double).
 // return : xLabel, yLebel, id, bin, xArr, yArr, freqArr, hasArr, isDiscrete, double.
-var MakeHistObj = {};
+var Ddply = {};
 (function() {
-	MakeHistObj = function(dataObj, xLabelArr, colorLabel, optionObj) {
-		this._init();
-		for(var i = 0 ; i < xLabelArr.length ; i ++){
-			this._build(dataObj, xLabelArr[i], colorLabel, optionObj);
-		}
-	};
-	
-	MakeHistObj.prototype = {
-			
-			_init: function () {
-				this.id = 0;
-			},
-			
-			_build: function (dataObj, xLabel, colorLabel, optionObj) {
-				this[xLabel] = dataObj[xLabel];
-				//alert(this.cut);
-				if(colorLabel != null){
-					this[colorLabel] = dataObj[colorLabel];
-					for(var key in dataObj[colorLabel]){
-						this[colorLabel][key] = dataObj[colorLabel][key];
-					}
+	Ddply = function(dataObj, labels, optionObj) {
+		this._init();		
+		var maxArr = new Array(labels.length);
+		var minArr = new Array(labels.length);
+		var binArr = new Array(labels.length);
+		var indexArr = make2DArr(labels.length);
+		// find max, index of continuous labels.
+		for(var i = 0 ; i < labels.length ; i ++){
+			if(dataObj[labels[i]].isDiscrete == undefined){
+				var temp = findMaxMinValue(dataObj[labels[i]]);
+				var tempMax = temp.max;
+				var tempMin = temp.min;
+				if(optionObj.bin == undefined){
+					var tickRange = (tempMax - tempMin) / 5;
+					var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
+					binArr[i] = setTickRange(tmp, tickRange);
+				}else{
+					binArr[i] = optionObj.bin;
 				}
-				if(dataObj[xLabel].isDiscrete == undefined){ // continuous
-					var temp = findMaxMinValue(this[xLabel]);
-					var tempMax = temp.max;
-					var tempMin = temp.min;
-					if(optionObj.bin == undefined){
-						var tickRange = (tempMax - tempMin) / 5;
-						var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
-						this.bin = setTickRange(tmp, tickRange);
-					}else{
-						this.bin = optionObj.bin;
-					}
-					//check the fixpoint.
-					this.fixPoint = 0;
-					if(this.bin.toString().indexOf('.') != -1){
-						this.fixPoint = this.bin.toString().substring(this.bin.toString().indexOf('.')+1, this.bin.toString().length).length;
-					}
-					if(tempMax > 0){
-						var max = parseFloat((Math.ceil(tempMax / this.bin) * this.bin).toFixed(this.fixPoint));
-					}else{
-						var max = parseFloat((Math.ceil(tempMax / this.bin) * this.bin + this.bin).toFixed(this.fixPoint));
-					}
-					if(tempMax == max){
-						max = max + this.bin;
-					}
-					var min = parseFloat((Math.floor(tempMin / this.bin) * this.bin).toFixed(this.fixPoint));
-					this[xLabel].frequency = new Array(parseFloat(Math.ceil((max - min)/this.bin)));
-					for(var i = 0 ; i < this[xLabel].frequency.length ; i ++){
-						this[xLabel].frequency[i] = 0;
-					}
-					// make freqeuncy.color field, if colorLabel isn't null.
-					if(this[colorLabel] != undefined){
-						if(this[colorLabel].isDiscrete == undefined){ // color is continuous
-							// doing nothing yet.
-							delete this[colorLabel];
-						}else{ // color is discrete
-							for(var i = 0 ; i < this[colorLabel].index.length ; i ++){
-								// ex) histObj.cut.frequency.D = [freqD of freq0, freqD of freq1, ...];
-								this[xLabel].frequency[this[colorLabel].index[i]] = new Array(this[xLabel].frequency.length);
-								for(var j = 0 ; j < this[xLabel].frequency[this[colorLabel].index[i]].length ; j ++){
-									this[xLabel].frequency[this[colorLabel].index[i]][j] = 0;
-								}
-							}
-						}
-					}
-		        	// calculate frequency
-					if(this[colorLabel] == undefined){
-		        		for(var i = 0 ; i < this[xLabel].length ; i ++){
-		        			var cnt = parseInt((this[xLabel][i] - min) / this.bin);
-		        			this[xLabel].frequency[cnt] ++;
-		        		}
-		        	}else{
-		        		for(var i = 0 ; i < this[xLabel].length ; i ++){
-		        			var cnt = parseInt((this[xLabel][i] - min) / this.bin);
-		        			this[xLabel].frequency[cnt] ++;
-		        			this[xLabel].frequency[this[colorLabel].index[this[colorLabel][i]]][cnt] ++;
-		        		}
-		        	}					
-				}else{ // discrete
-					// copy basic field.
-					this[xLabel].isDiscrete = dataObj[xLabel].isDiscrete;
-					this[xLabel].index = dataObj[xLabel].index;
-					// make frequency field.
-					this[xLabel].frequency = new Array(this[xLabel].index.length);
-					for(var i = 0 ; i < this[xLabel].frequency.length ; i ++){
-						this[xLabel].frequency[i] = 0;
-					}
-					// make freqeuncy.color field, if colorLabel isn't null.
-					if(this[colorLabel] != undefined){
-						if(this[colorLabel].isDiscrete == undefined){ // color is continuous
-							// doing nothing yet.
-							delete this[colorLabel];
-						}else{ // color is discrete
-							for(var i = 0 ; i < this[colorLabel].index.length ; i ++){
-								// ex) histObj.cut.frequency.D = [freqD of freq0, freqD of freq1, ...];
-								this[xLabel].frequency[this[colorLabel].index[i]] = new Array(this[xLabel].frequency.length);
-								for(var j = 0 ; j < this[xLabel].frequency[this[colorLabel].index[i]].length ; j ++){
-									this[xLabel].frequency[this[colorLabel].index[i]][j] = 0;
-								}
-							}
-						}
-					}
-					// calculate frequency.
-					if(this[colorLabel] == undefined){
-						for(var i = 0 ; i < this[xLabel].length ; i ++){
-							this[xLabel].frequency[this[xLabel][i]] ++;
-						}
-					}else{
-						for(var i = 0 ; i < this[xLabel].length ; i ++){
-							this[xLabel].frequency[this[xLabel][i]] ++;
-							this[xLabel].frequency[this[colorLabel].index[this[colorLabel][i]]][this[xLabel][i]] ++;
-						}
-					}
-					
+				//check the fixpoint.
+				var fixPoint = 0;
+				if(binArr[i].toString().indexOf('.') != -1){
+					fixPoint = binArr[i].toString().substring(binArr[i].toString().indexOf('.')+1, binArr[i].toString().length).length;
 				}
+				if(tempMax > 0){
+					var max = parseFloat((Math.ceil(tempMax / binArr[i]) * binArr[i]).toFixed(fixPoint));
+				}else{
+					var max = parseFloat((Math.ceil(tempMax / binArr[i]) * binArr[i] + binArr[i]).toFixed(fixPoint));
+				}
+				if(tempMax == max){
+					max = max + binArr[i];
+				}
+				var min = parseFloat((Math.floor(tempMin / binArr[i]) * binArr[i]).toFixed(fixPoint));
+				maxArr[i] = max;
+				minArr[i] = min;
+				for(var j = 0 ; ; j ++){
+					indexArr[i][j] = min + j * binArr[i];
+					if(indexArr[i][j] == max)
+						break;
+				}
+				// for debugging
+				// document.write('max: '+ max + ', min: ' + min + ', indexArr: ' + indexArr[i] + "<br>");
+			}else{
+				for(var j = 0 ; j < dataObj[labels[i]].index.length ; j ++){
+					indexArr[i][j] = j;
+				}
+				// for debugging
+				// document.write('indexArr: ' + indexArr[i] + "<br>");
 			}
-	}
+		}
+		// calculate frequency
+		var tmpObj = new Object();
+		for(var i = 0 ; i < dataObj[labels[0]].length ; i ++){
+			var temp = tmpObj;
+			for(var j = 0 ; j < labels.length ; j ++){
+				if(dataObj[labels[j]].isDiscrete == undefined){
+					var cnt = parseInt((dataObj[labels[j]][i] - minArr[j]) / binArr[j]);
+					cnt = indexArr[j][cnt];
+				}else{
+					cnt = dataObj[labels[j]][i];
+				}
+				temp = addField(temp, cnt);
+			}
+			// for debugging
+			// document.write("<br>");
+			if(temp['frequency']== undefined){
+				temp['frequency'] = 1;
+			}else{
+				temp['frequency'] ++;
+			}
+		}
+		// make new fields of ddply object
+		for(var i = 0 ; i < labels.length ; i ++){
+			this[labels[i]] = new Array();
+		}
+		this['frequency'] = new Array();
+		
+		// set the array of fields by using recursive function.
+		setNode(0, labels.length, labels, indexArr, tmpObj, this);
+		
+		/* for debugging
+		document.write("<br>");
+		for(var j = 0 ; j < labels.length ; j ++){
+			document.write(labels[j] + " ");
+		}
+		document.write("frequency <br>");
+		var cnt = 0;
+		for(var i = 0 ; i < this[labels[0]].length ; i ++){
+			for(var j = 0 ; j < labels.length ; j ++){
+				document.write(this[labels[j]][i] + " ,  ");
+			}
+			document.write(this.frequency[i] + "<br>");
+			cnt = cnt + this.frequency[i];
+		}
+		document.write("Total frequency: " + cnt);*/
+	};
 })();
 
+function setNode(myNumber, endNumber, labels, indexArr, temp, root){
+	if(endNumber > 1){
+		var cnt1 = 0;
+		var cnt2 = 0;
+		for(var i = 0 ; i < indexArr[myNumber].length ; i ++){
+			// for debugging
+			// document.write(indexArr[myNumber][i] + " ");
+			if(temp[indexArr[myNumber][i]] != undefined){
+				cnt1 = setNode(myNumber + 1, endNumber - 1, labels, indexArr, temp[indexArr[myNumber][i]], root);
+				for(t = 0 ; t < cnt1 ; t ++){
+					root[labels[myNumber]].push(indexArr[myNumber][i]);
+				}
+				cnt2 = cnt2 + cnt1;
+			}
+		}
+		return cnt2;
+	}else{
+		var cnt = 0;
+		for(var i = 0 ; i < indexArr[myNumber].length ; i ++){
+			// for debugging
+			// document.write(indexArr[myNumber][i] + " ");
+			if(temp[indexArr[myNumber][i]] != undefined){
+				var frequency = temp[indexArr[myNumber][i]].frequency;
+				cnt ++;
+				root[labels[myNumber]].push(indexArr[myNumber][i]);
+				root['frequency'].push(frequency);
+			}
+		}
+		return cnt;
+	}
+}
+
+function addField(obj, fieldName){
+	// for debugging
+	// document.write(fieldName + " ");
+	if(obj[fieldName] == undefined){
+		obj[fieldName] = new Object();
+	}
+	return obj[fieldName];
+}
 /*
 (function() {
 	

@@ -62,7 +62,7 @@ shinyUI(bootstrapPage(
 
        <script>
         var axis1 = new Axis(1, mainArr1, 'cut', 'price', {});
-        var hobj1 = new MakeHistObj(mainArr1, ['table', 'depth'], 'color', {bin: 5});
+        var hobj1 = new MakeHistObj(mainArr1, ['cut', 'depth', 'price'], {});
        // alert(hobj1.table.frequency.D);
         // hist releated.
       /*  var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});

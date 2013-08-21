@@ -100,6 +100,6 @@ function createMainStructure(id, fileName)
 		}else{
 			delete mainArr[labelArr[i]].isDiscrete;
 		}
-	}	
+	}
 	return mainArr;
 }

@@ -30,6 +30,7 @@ This page can be modified while being designed.
  # Axis
   * Issues
    * How do I set the mainLabel of axis?
+   * Do I need to control font size of lable?
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', {legend: 'legendLabel', position: 'option'});
  # ddply

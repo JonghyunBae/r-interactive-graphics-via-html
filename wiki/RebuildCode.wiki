@@ -48,7 +48,13 @@ This page can be modified while being designed.
    * Scatter(dataObj, 'xLabel', 'yLabel', 'colorLable');
    * Hist(dataObj, 'xLabel', 'yLabel', 'colorLabel');
  # Color
-   * not yet designed.
+   * "addColorField(labelObj)" adds "color" or "colorIndex" field into labelobj.
+   * Should be called before drawing legend in Axis.
+   * Example
+     * discrete: addColorField(mainArr1.cut);
+     * result: mainArr1.cut.colorIndex = [RGB, RGB, ...];(length of mainArr1.cut.index)
+     * continuous: addColorField(mainArr1.carat);
+     * result: mainArr1.carat.color = [RGB, RGB, ...];(length of mainArr.carat)
 
 
 = Schedule =

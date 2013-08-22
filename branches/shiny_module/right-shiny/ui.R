@@ -61,8 +61,12 @@ shinyUI(bootstrapPage(
        </div>
        
        <script>
-       var axis1 = new Axis(1, mainArr1, 'cut', 'price', {});
-       var hobj1 = new ddply(mainArr1, ['price', 'carat'], {bin:1});
+      addColorField(mainArr1.cut);
+       var axis1 = new Axis(1, mainArr1, 'cut', 'price', {legend: 'cut', position: 'topleft'});
+       
+       var hobj1 = new ddply(mainArr1, ['price','cut', 'carat'], {bin:1});
+        addColorField(hobj1.carat);
+        var axis2 = new Axis(2, hobj1, 'price', 'cut', {legend:'carat', position: 'left'});
        // alert(hobj1.table.frequency.D);
        // hist releated.
        /*  var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});

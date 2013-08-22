@@ -1,4 +1,15 @@
-var MakeScatterObj = {};
+var Scatter = {};
+
+(function() {
+	Scatter = function(dataObj, xLabel, yLabel, optionObj) {
+		
+	};
+	Scatter.prototype = {
+			
+	}
+})();
+
+/*var MakeScatterObj = {};
 
 (function () {
 	
@@ -138,8 +149,18 @@ var MakeScatterObj = {};
 var Scatter = {};
 
 (function() {
+	Scatter = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+		
+	};
+	Scatter.prototype = {
+			
+	}
+})();
+
+
+(function() {
 	
-	Scatter = function(axisObj, scatterObj, xArr, yArr, colorArr,  optionObj) {
+	Scatter = function(axisObj, dataObj, xLabel, , colorArr,  optionObj) {
 		this._type = 'scatter';
 		this.id = scatterObj.id;
 		this.preId = {x : -1, y : -1};
@@ -214,6 +235,7 @@ var Scatter = {};
 		}
 	};
 })();
+*/
 function scatterHover()
 {
 	return function(node, overOff) // over: 1 , off: 0

@@ -1,13 +1,11 @@
 /**  Axis draws an axis  **/
-// id should be matched with container id.
-// xArr, yArr should be array.
-// isXDiscrete, isYDiscrete should be true or false.
-// optionObj can be width, height, xTick, yTick, xLabel, yLabel, bin.
-
 var Axis = {};
+
 (function() {
+	
 	Axis = function(id, dataObj, xLabel, yLabel, optionObj) {
 		this._init(id, optionObj);
+		this._addLegend(dataObj, optionObj);
 		this._build(dataObj, xLabel, yLabel, optionObj);
 		this._draw();
 	};
@@ -28,6 +26,19 @@ var Axis = {};
 				document.getElementById('container'+ id).onclick = function() {
 			        document.getElementById('regcoords');
 			    };
+			},
+			
+			_addLegend: function(dataObj, optionObj) {
+				if(optionObj.legend != undefined && dataObj[optionObj.legend] != undefined){
+					var check = makeLegendLayer(this, dataObj[optionObj.legend], optionObj.position, optionObj.legend);
+					if(check == 1){ // if makeLegendLayer is done right, set the legend for grpahs(scatter, bar, ...)
+						this.legendLabel = optionObj.legend;
+					}else{
+						alert("makeLegendLayer isn't done right");
+					}					
+				}else{
+					// don't draw legend.	
+				}
 			},
 			
 			_build: function(dataObj, xLabel, yLabel, optionObj) {
@@ -131,145 +142,7 @@ var Axis = {};
 			}
 	}
 })();
-/*
-(function() {
 
-	MakeAxis = function(id, xArr, yArr, isXDiscrete, isYDiscrete, optionObj) {
-		this.id = id;
-		this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
-		this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300
-		this.xTick = (optionObj.xTick == undefined) ? (5) : (optionObj.xTick); //default x tick is 5
-        this.yTick = (optionObj.yTick == undefined) ? (5) : (optionObj.yTick); //default y tick is 5
-		this.plotXMargin = this.width*0.2; //canvas left, right margin
-		this.plotYMargin = this.height*0.2; //canvas top, bottom margin
-		this.plotLength = this.width*0.02; //margin from plot box
-		if(!(optionObj.legend == undefined || optionObj.legend == false)){
-			makeLegendLayer(this, optionObj.legend);
-		}
-		// for supporting event handle: dataLayerArr, hoverArr
-		this.dataLayerArr = new Array();
-		this.hoverArr = new Array();
-		document.getElementById('container'+ id).onmousemove = getCoords;
-		document.getElementById('container'+ id).onclick = function() {
-	        document.getElementById('regcoords');
-	    };
-	    
-	    //excute build
-		this._build(xArr, yArr, isXDiscrete, isYDiscrete, optionObj);
-		//excute draw
-		this._draw();
-	}
-
-	MakeAxis.prototype = {
-			
-		_build: function(xArr, yArr, isXDiscrete, isYDiscrete, optionObj) {			
-			// check if continuous or discrete.
-			if(isXDiscrete == true){
-				this.isXDiscrete = true;
-				var tmp = setAxis_discrete(xArr, this.width);
-				this.xMax = -1;
-				this.xMin = -1;
-				this.xNode = tmp.node;
-				this.xDiff = tmp.diff;
-				this.xPlotArr = tmp.array;
-			}else{
-				this.isXDiscrete = false;
-				var temp = findMaxMinValue(xArr);
-				this.xMax = temp.max;
-	            this.xMin = temp.min;	            
-				if(optionObj.xbin != undefined){
-					this.xbin = optionObj.xbin;
-					this.xTick = Math.round((this.xMax - this.xMin) / this.xbin);
-				}
-				var tmp = setAxis_continue(this.xMax, this.xMin, this.xTick, this.width);
-				this.xMax = tmp.max;
-				this.xMin = tmp.min;
-				this.xDiff = -1;
-				this.xPlotArr= tmp.array;		
-			}
-			if(isYDiscrete == true){
-				this.isYDiscrete = true;
-				var tmp = setAxis_discrete(yArr, this.height);
-				this.yMax = -1;
-				this.yMin = -1;
-				this.yNode = tmp.node;
-				this.yDiff = tmp.diff;
-				this.yPlotArr = tmp.array;
-			}else{
-				this.isYDiscrete = false;
-				var temp = findMaxMinValue(yArr);
-				this.yMax = temp.max;
-	            this.yMin = temp.min;
-				var tmp = setAxis_continue(this.yMax, this.yMin, this.yTick, this.height);
-				this.yMax = tmp.max;
-				this.yMin = tmp.min;
-				this.yDiff = -1;
-				this.yPlotArr= tmp.array;				
-			}
-			// set barWidth.
-			if(this.isXDiscrete == true){
-				this.barWidth = this.width / xArr.length /2;
-			}else{
-				this.barWidth = (xArr[1] - xArr[0])*this.width/this.xMax;
-			}
-			// make stage.
-			makeStageLayer(this);
-			// make plotRect.
-			makePlotRectLayer(this);
-			// make axis layers.
-			makeXAxisLayer(this);
-			makeYAxisLayer(this);
-			// make tooltip layer.
-			setTooltip(this);
-			// make label layers.
-			if(optionObj.mainLabel != undefined){
-				MakeMainLabelLayer(this, optionObj.mainLabel);
-			}
-			if(optionObj.xLabel != undefined){
-				makeXLabelLayer(this, optionObj.xLabel);
-			}
-			if(optionObj.yLabel != undefined){
-				makeYLabelLayer(this, optionObj.yLabel);
-			}
-		},
-		
-		_draw: function() {
-			
-			
-			this.plotLayer = new Kinetic.Layer();
-			// add base rectangular.
-			this.plotLayer.add(this.plotRect);				
-			// add x axis layer.
-			for(var i = 0 ; i < this.xLine.length ; i ++){
-				this.plotLayer.add(this.xLine[i]); 
-			    this.plotLayer.add(this.xText[i]);
-			}			
-			// add y axis layer.				
-			for(var i = 0 ; i < this.yLine.length ; i ++){
-				this.plotLayer.add(this.yLine[i]); 
-		        this.plotLayer.add(this.yText[i]);
-			}
-			// add main, x, y label.
-			if(this.mainLabel != undefined){
-				this.plotLayer.add(this.mainLabel);
-			}
-			if(this.xLabel != undefined){
-				this.plotLayer.add(this.xLabel);
-			}
-			if(this.yLabel != undefined){
-				this.plotLayer.add(this.yLabel);
-			}
-			
-			this.stage.add(this.plotLayer);
-			// add legend layer.
-			if(this.legendLayer != undefined){
-				this.stage.add(this.legendLayer);
-			}
-			this.stage.add(this.tooltipLayer);
-		}
-	}
-})();
-*/
 /**  set tooltip  **/
 //new kenetic version -> tooltip setting change using tag
 function setTooltip(obj)
@@ -349,45 +222,6 @@ function setAxis_discrete(index, plotLength)
 			'plotArr' : plotArr
 	};
 }
-/*
-function setAxis_discrete(array, length)
-{
-	var node = new Array();
-    node[0] = 0;
-    var tmp = new Array();  //the names of each content below
-    tmp[0] = array[0];
-    for(var i = 1 ; i < array.length ; i++)
-    {
-            for(j = 0 ; j < tmp.length ; j ++)
-            {
-                    if(tmp[j] == array[i])
-                    {
-                            node[i] = j;
-                            break;
-                    }                                               
-            }
-            if(j == tmp.length)
-            {
-                    node[i] = j;
-                    tmp.push(array[i]);
-            }
-    }
-    var plotArr = make2DArr(tmp.length);
-    var diff = length / (tmp.length+1);
-    
-    for(var i = 1 ; i < plotArr.length+1 ; i ++)
-    {
-            plotArr[i-1][0] = i*diff;
-            plotArr[i-1][1] = tmp[i-1];
-    }
-    
-    return {
-            'diff'  : diff,
-            'node'  : node,
-            'array' : plotArr
-    };
-}
-*/
 /**  set axis end  **/
 
 /**  make stage  **/
@@ -536,7 +370,7 @@ for(var i = 0; i < obj.yPlotArr.length ; i ++)
        x: obj.plotXMargin - obj.plotLength*2-15,
        y: obj.plotYMargin + obj.height- obj.yPlotArr[i][0] + 30,
        text: obj.yPlotArr[i][1],
-       fontSize: 15,
+       fontSize: 12,
        fontFamily: 'Calibri',
        fill: 'black',
        width: 60,

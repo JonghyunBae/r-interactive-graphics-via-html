@@ -1,16 +1,29 @@
+/**  addColorField  **/
+// ex) mainArr1.carat.color 
+//     mainArr1.cut.colorIndex
+function addColorField(labelObj)
+{
+	if(labelObj.isDiscrete == undefined){
+		// continuous
+		labelObj['color'] = makeColor_continuous(labelObj);
+	}else{
+		// discrete
+		labelObj['colorIndex'] = makeColor_discrete(labelObj.index);
+	}
+}
+/**  addColorField End  **/
+
+/**  return color part  **/
+// TJ designed core.
 function makeColor_continuous(array) // under construction.
 {
-
-	var ret = new Object(); //return object
-	ret.isDiscrete = false;
-	
-	var colors = new Array();	
+	var colors = new Array();
 	var mainValueArr = new Array();
     var tmpColorArr = new Array();
 	var reTmpColorArr = new Array();
-	var cnt=0;
+	var cnt = 0;
 	var j = 0;
-	var sortedColorArr = new Array();	
+	var sortedColorArr = new Array();
 	for(var i = 0; i < array.length ; i ++){
 		sortedColorArr[j] = {
 				a : array[i],
@@ -27,23 +40,23 @@ function makeColor_continuous(array) // under construction.
 		sortedColorArr[i].stableSortKey = i;
 	}
 	sortedColorArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
-	for(var i=0; i<sortedColorArr.length; i++){		
-		if(i==0){
-			mainValueArr[cnt]=sortedColorArr[0].a;
-			tmpColorArr[0]=0;
+	for(var i = 0 ; i < sortedColorArr.length ; i ++){		
+		if(i == 0){
+			mainValueArr[cnt] = sortedColorArr[0].a;
+			tmpColorArr[0] = 0;
 		}else{
-			if(sortedColorArr[i].a==sortedColorArr[i-1].a){
+			if(sortedColorArr[i].a == sortedColorArr[i-1].a){
 				
 				tmpColorArr[i]=cnt;
 			}else{
-				cnt++;
-				mainValueArr[cnt]=sortedColorArr[i].a;
-				tmpColorArr[i]=cnt;
+				cnt ++;
+				mainValueArr[cnt] = sortedColorArr[i].a;
+				tmpColorArr[i] = cnt;
 			}
 		}
 	}
 	for(var i = 0; i < sortedColorArr.length ; i ++){		// re assign
-		reTmpColorArr[sortedColorArr[i].b]=tmpColorArr[ i ]; 
+		reTmpColorArr[sortedColorArr[i].b] = tmpColorArr[ i ]; 
 	}
 	for(var i = 0; i < sortedColorArr.length ; i ++){		//re re assign
 		tmpColorArr[i] = reTmpColorArr[i];
@@ -51,29 +64,21 @@ function makeColor_continuous(array) // under construction.
 	var rgb = {R: new Array(), G: new Array(), B: new Array()};
 	var start = {R: 0, G: 128, B: 0};
 	var end = {R: 0, G: 255, B: 0};
-	for(i = 0 ; i < mainValueArr.length ; i++)
-	{
-		rgb.R[i] = parseInt( start.R + (i * (end.R - start.R)) / (mainValueArr.length-1) );
-		rgb.G[i] = parseInt( start.G + (i * (end.G - start.G)) / (mainValueArr.length-1) );
-		rgb.B[i] = parseInt( start.B + (i * (end.B - start.B)) / (mainValueArr.length-1) ); 
+	for(i = 0 ; i < mainValueArr.length ; i ++){
+		rgb.R[i] = parseInt( start.R + (i * (end.R - start.R)) / (mainValueArr.length - 1) );
+		rgb.G[i] = parseInt( start.G + (i * (end.G - start.G)) / (mainValueArr.length - 1) );
+		rgb.B[i] = parseInt( start.B + (i * (end.B - start.B)) / (mainValueArr.length - 1) ); 
 		colors[i] = 'rgb('+rgb.R[i]+','+rgb.G[i]+','+ rgb.B[i]+')';
 	}
 	var indexArr = new Array(array.length);
-	for(i = 0 ; i < array.length; i ++){
+	for(i = 0 ; i < array.length ; i ++){
 		indexArr[i] = colors[tmpColorArr[i]]
 	}
-	ret.mainValueArr = mainValueArr;
- 	ret.colors = colors;
-	ret.indexArr = indexArr;
- 	return ret;
+ 	return indexArr;
 }
 function makeColor_discrete(array)
 {
-	var ret = new Object();
-	ret.isDiscrete = true;
-	ret.label = new Array();
 	var colors = new Array();
-	var indexArr = new Array(array.length);
 	var rgb = {R: new Array(), G: new Array(), B: new Array()};
  	var rgbFreq = 4.8 / array.length;
  	var rgbCenter = 128;
@@ -84,23 +89,18 @@ function makeColor_discrete(array)
  		rgb.G[i] = parseInt( Math.sin(rgbFreq*i + 2) * rgbWidth + rgbCenter );
  		rgb.B[i]  = parseInt( Math.sin(rgbFreq*i + 4) * rgbWidth + rgbCenter );
  		colors[i] = 'rgb('+rgb.R[i]+','+rgb.G[i]+','+ rgb.B[i]+')';
- 		ret[array[i]] = colors[i];
- 		ret.label[i] = array[i];
  	}
- 	ret.colors = colors;
- 	return ret;
+ 	return colors;
 }
-function makeLegendLayer(axisObj, legendObj)
+/**  return color part End  **/
+
+/**  legend part  **/
+function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 {
 	// get values from legend object.
-	var position = legendObj.position;
-	var colorArr = legendObj.colorArr; // the length of colorArr should be same with the length of labels.
-	var colorLabel = legendObj.colorLabel;
-	var labels = legendObj.labels;
-	var isDiscrete = legendObj.isDiscrete;
+	var position = (legendPosition == undefined) ? 'right' : legendPosition;
 	var legendX = 0;
 	var legendY = 0;
-	
 	// set legend position.
 	if (position == 'topright' || position == 'right' || position == 'bottomright')  {
         legendX = axisObj.plotXMargin + axisObj.width + axisObj.plotLength*5;
@@ -121,26 +121,32 @@ function makeLegendLayer(axisObj, legendObj)
         	legendY = axisObj.plotYMargin - axisObj.plotLength + axisObj.height/4;
         }                         
 	}else{ // if other words -> just set position as right.
+		position = 'right';
 		legendX = axisObj.plotXMargin+axisObj.width+axisObj.plotLength*5;
         legendY = axisObj.plotYMargin-axisObj.plotLength;
 	}
+	
 	// set legend layers.
 	var legendNode = new Array();	
 	var legendText = new Array();
-	if(isDiscrete == true){ // discrete
-		for(var i = 0 ; i < colorArr.length ; i ++)
+	if(legendObj.isDiscrete == true){ // discrete
+		if(legendObj.colorIndex == undefined){
+			alert("addColorField should be called before drawing legend");
+			return -1;
+		}		
+		for(var i = 0 ; i < legendObj.index.length ; i ++)
 		{						
 			legendNode[i] = new Kinetic.Circle({
 				x: legendX + 15,
 				y: legendY + 15*i + 11 + 20,
 				radius: 5,
 				opacity: 0.7,
-				fill: colorArr[i]
+				fill: legendObj.colorIndex[i]
 			});			
 			legendText[i] = new Kinetic.Text({
 				x: legendX + 20,
 		        y: legendY + 15*i + 20,
-				text: labels[i],
+				text: legendObj.index[i],
 				fontFamily: 'Calibri',
 				fontSize: 13,
 				padding: 5,
@@ -148,9 +154,14 @@ function makeLegendLayer(axisObj, legendObj)
 				align:'center'
 			});
 		}
-	}else{ // continuous.	
-		var max = legendObj.max;
-		var min = legendObj.min;
+	}else{ // continuous.
+		if(legendObj.color == undefined){
+			alert("addColorField should be called before drawing legend");
+			return -1;
+		}
+		var temp = findMaxMinValue(legendObj);
+		var max = temp.max;
+		var min = temp.min;
 		var tick = 5; //default legend ticks is 5  
 		var tickRange = (max - min) / tick;
 		tickRange = setTickRange( Math.ceil( Math.log(tickRange) / Math.log(10)) , tickRange);
@@ -204,7 +215,7 @@ function makeLegendLayer(axisObj, legendObj)
 	var legendMain= new Kinetic.Text({
 		x: legendX,
         y: legendY + 5,
-		text: colorLabel,
+		text: legendName,
 		fontFamily: 'Calibri',
 		fontSize: 15,
 		fill: 'black',
@@ -257,6 +268,6 @@ function makeLegendLayer(axisObj, legendObj)
 		document.body.style.cursor = "default";
 	});
 	axisObj.legendLayer.add(group);
-	
+	return 1;	
 }
 

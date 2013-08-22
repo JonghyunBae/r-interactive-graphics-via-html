@@ -145,7 +145,7 @@ function setNode(myNumber, endNumber, labels, indexArr, temp, root){
 			if(temp[indexArr[myNumber][i]] != undefined){
 				cnt1 = setNode(myNumber + 1, endNumber - 1, labels, indexArr, temp[indexArr[myNumber][i]], root);
 				for(t = 0 ; t < cnt1 ; t ++){
-					root[labels[myNumber]].push(indexArr[myNumber][i]);
+					root[labels[myNumber]].push(parseFloat(indexArr[myNumber][i]));
 				}
 				cnt2 = cnt2 + cnt1;
 			}
@@ -159,7 +159,7 @@ function setNode(myNumber, endNumber, labels, indexArr, temp, root){
 			if(temp[indexArr[myNumber][i]] != undefined){
 				var frequency = temp[indexArr[myNumber][i]].frequency;
 				cnt ++;
-				root[labels[myNumber]].push(indexArr[myNumber][i]);
+				root[labels[myNumber]].push(parseFloat(indexArr[myNumber][i]));
 				root['frequency'].push(frequency);
 			}
 		}

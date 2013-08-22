@@ -29,11 +29,10 @@ This page can be modified while being designed.
    * not yet designed.
  # Axis
   * Issues
-   * How do I set the mainLabel of axis?
+   * How do I set the mainLabel of axis? -> mainLabel is option, because there will be higher lever API which can provide mailLabel(CH's temporary idea)
    * Do I need to control font size of lable?
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', {legend: 'legendLabel', position: 'option', mainLabel:'option'});
-    * mainLabel is option, because there will be higher lever API which can provide mailLabel(CH's temporary idea)
  # ddply
   * Issues
    * How do I set the format of isSelected?
@@ -58,7 +57,7 @@ This page can be modified while being designed.
 
 = Schedule =
  * TO DO
-  * Make "scatter" and "hist".
+  * Make "scatter" and "bar".
   * design event handler part.
  * DONE
   * 

@@ -48,7 +48,7 @@ This page can be modified while being designed.
    * Hist(dataObj, 'xLabel', 'yLabel', 'colorLabel');
  # Color
    * "addColorField(labelObj)" adds "color" or "colorIndex" field into labelobj.
-   * Should be called before drawing legend in Axis.
+   * *Should be called before drawing legend in Axis.*
    * Example
      * discrete: addColorField(mainArr1.cut);
      * result: mainArr1.cut.colorIndex = [RGB, RGB, ...];(length of mainArr1.cut.index)

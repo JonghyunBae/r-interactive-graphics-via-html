@@ -29,7 +29,7 @@ shinyUI(bootstrapPage(
   includeJS("axis.js"),
   includeJS("color.js"),
   includeJS("scatter.js"),
-  includeJS("hist.js"),
+  includeJS("bar.js"),
   includeJS("box.js"),
   includeJS("pie.js"),
   includeJS("line.js"),

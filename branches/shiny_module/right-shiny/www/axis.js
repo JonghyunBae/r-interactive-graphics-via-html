@@ -99,9 +99,9 @@ var Axis = {};
 				}
 				// set barWidth.
 				if(this.isXDiscrete == true){
-					this.xbarWidth = this.xDiff;
+					this.xbarWidth = this.xDiff/2;
 				}else{
-					this.xbarWidth = (this.xPlotArr[1][0] - this.xPlotArr[0][0])*this.width/this.xMax;
+					this.xbarWidth = (this.xPlotArr[1][0] - this.xPlotArr[0][0]) - 3;
 				}
 				// make stage.
 				makeStageLayer(this);
@@ -237,29 +237,30 @@ function setTooltip(obj)
 
 /**  set axis  **/
 // set axis with continuous data.
-function setAxis_continue(max, min, tick, length)
+function setAxis_continue(tempMax, tempMin, tick, length)
 {
-	var tickRange = (max - min) / tick;
-	
+	var tickRange = (tempMax - tempMin) / tick;
 	var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
-	tickRange = setTickRange(tmp, tickRange);
-	max = tickRange * Math.ceil(max/tickRange);	
-	
-	min = tickRange * Math.floor(min/tickRange);
+	var bin = setTickRange(tmp, tickRange);
+	//check the fixpoint.
+	var fixPoint = 0;
+	if(bin.toString().indexOf('.') != -1){
+		fixPoint = bin.toString().substring(bin.toString().indexOf('.')+1, bin.toString().length).length;
+	}
+	if(tempMax > 0){
+		var max = parseFloat((Math.ceil(tempMax / bin) * bin).toFixed(fixPoint));
+	}else{
+		var max = parseFloat((Math.ceil(tempMax / bin) * bin + bin).toFixed(fixPoint));
+	}
+	if(tempMax == max){
+		max = max + bin;
+	}
+	var min = parseFloat((Math.floor(tempMin / bin) * bin).toFixed(fixPoint));
 	var diff = length * tickRange / (max - min);
-	var plotArr = make2DArr(  Math.round ((max - min)/tickRange + 1 ));
-	for(var i = 0 ; i < plotArr.length ; i ++)
-	{
+	var plotArr = make2DArr(parseInt(Math.round((max - min)/bin) + 1));
+	for(var i = 0 ; i < plotArr.length ; i ++){
 			plotArr[i][0] = i*diff;
-			if (tickRange.toString().indexOf('.') == -1){
-				plotArr[i][1] = min+i*tickRange;
-			}else{				
-				var point = tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length;
-				if(point > 2){ // for setting the resonable point
-					point = 2;
-				}
-				plotArr[i][1] = (min+i*tickRange).toFixed(point);
-			}
+			plotArr[i][1] = (min + bin*i).toFixed(fixPoint);
 	}
 	return {
 		'max'	: max,
@@ -414,29 +415,28 @@ function makeYAxisLayer(obj)
 	obj.yLine = new Array();
 	obj.yText = new Array();
 
-for(var i = 0; i < obj.yPlotArr.length ; i ++)
-{
-	obj.yLine[i] = new Kinetic.Line({
-       points: [
-                	obj.plotXMargin - obj.plotLength, 
-                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0], 
-                	obj.plotXMargin - 2*obj.plotLength,
-                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0]
-       			],
-       stroke: 'black',
-       strokeWidth: 2,             
-   });              
-   obj.yText[i] = new Kinetic.Text({
-       x: obj.plotXMargin - obj.plotLength*2-15,
-       y: obj.plotYMargin + obj.height- obj.yPlotArr[i][0] + 30,
-       text: obj.yPlotArr[i][1],
-       fontSize: 12,
-       fontFamily: 'Calibri',
-       fill: 'black',
-       width: 60,
-       align: 'center',
-       rotation: (Math.PI)*3/2
-   });        
-}
+	for(var i = 0; i < obj.yPlotArr.length ; i ++){
+		obj.yLine[i] = new Kinetic.Line({
+	       points: [
+	                	obj.plotXMargin - obj.plotLength, 
+	                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0], 
+	                	obj.plotXMargin - 2*obj.plotLength,
+	                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0]
+	       			],
+	       stroke: 'black',
+	       strokeWidth: 2,             
+	   });              
+	   obj.yText[i] = new Kinetic.Text({
+	       x: obj.plotXMargin - obj.plotLength*2-15,
+	       y: obj.plotYMargin + obj.height- obj.yPlotArr[i][0] + 30,
+	       text: obj.yPlotArr[i][1],
+	       fontSize: 12,
+	       fontFamily: 'Calibri',
+	       fill: 'black',
+	       width: 60,
+	       align: 'center',
+	       rotation: (Math.PI)*3/2
+	   });
+	}
 }
 /**  make axis layers end  **/

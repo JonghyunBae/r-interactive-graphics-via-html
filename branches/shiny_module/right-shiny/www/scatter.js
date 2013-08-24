@@ -1,11 +1,11 @@
-var Scatter = {};
-
+/**  Draw Dot graph(scatter)  **/
+var Dot = {};
 (function() {
-	Scatter = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this._init(axisObj, dataObj, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
 	};
-	Scatter.prototype = {
+	Dot.prototype = {
 			_init: function(axisObj, dataObj, optionObj) {
 				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 				// check color
@@ -40,6 +40,7 @@ var Scatter = {};
 								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
 								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
 								selected: 0,
+								opacity: 0.5,
 								info: "Node: " + cnt 
 							});
 							cnt ++;
@@ -56,6 +57,7 @@ var Scatter = {};
 								stroke: 'green',
 								fill: 'green',
 								selected: 0,
+								opacity: 0.5,
 								info: "Node: " + cnt 
 							});
 							cnt ++;
@@ -80,234 +82,11 @@ var Scatter = {};
 			}
 	}
 })();
-
-/*var MakeScatterObj = {};
-
-(function () {
-	
-	MakeScatterObj = function(mainArr, xLabel, yLabel, optionObj) {
-		this.xLabel = xLabel;
-		this.yLabel = yLabel;
-		this.mainLabel = "scatter of " + xLabel + " & " + yLabel;
-		this.id = 0;
-		this.double = false;
-		this.legend = false;
-		
-		// basic calculation.
-		if(mainArr.isDiscrete[xLabel] == true){
-			this.isXDiscrete = true;
-			var temp = findDiscreteNum(mainArr[xLabel]);
-			var xArr = new Array();
-			xArr[0] = temp.discreteArr;
-			xArr[1] = temp.mapping;
-			var hasArr = new Array();
-			for(var i = 0 ; i < mainArr[xLabel].length ; i ++ ){
-				hasArr[i] = i;
-			}			
-			this.xArr = xArr;
-		}else{
-			this.isXDiscrete = false;
-			this.xArr = new Array();
-			this.xArr[0] = mainArr[xLabel];
-			this.xArr[1] = mainArr[xLabel];
-			var hasArr = new Array();
-			for(var i = 0 ; i < mainArr[xLabel].length ; i ++ ){
-				hasArr[i] = i;
-			}
-		}
-		
-		if(mainArr.isDiscrete[yLabel] == true){
-			this.isYDiscrete = true;
-			var temp = findDiscreteNum(mainArr[yLabel]);
-			var yArr = new Array();
-			yArr[0] = temp.discreteArr;
-			yArr[1] = temp.mapping;
-			this.yArr = yArr;
-		}else{
-			this.isYDiscrete = false;
-			this.yArr = new Array();
-			this.yArr[0] = mainArr[yLabel];
-			this.yArr[1] = mainArr[yLabel];
-		}
-		
-		// check color.
-		if(optionObj.color != undefined){
-			this.colorLabel = optionObj.color;
-			// set legend.
-			this.legend = new Object();
-			// set color.
-			// making color part.
-			if(this.colorLabel != this.xLabel && this.colorLabel != this.yLabel && mainArr.isDiscrete[this.colorLabel] == true){ // another color axis.
-				// find number of colors.
-				var temp = findDiscreteNum(mainArr[this.colorLabel]);
-				var tempColorArr = temp.discreteArr;
-				var numberIndex = temp.mapping;
-				// get colorObj according to tempColorArr.
-				this.colorObj = makeColor_discrete(tempColorArr);
-				// make colorArr
-				var colorArr = new Array();
-				for(var i = 0 ; i < numberIndex.length ; i ++){
-					colorArr[i] = this.colorObj.colors[numberIndex[i]];
-				}				
-				this.colorArr = colorArr;
-				// for legend(colorArr and each label of each color needed).
-				var legend_colorArr = this.colorObj.colors;
-				var legend_labels = tempColorArr;
-				var legend_isDiscrete = true;
-			}else if(this.colorLabel == this.xLabel && mainArr.isDiscrete[this.colorLabel] == true){ // matches with xAxis.
-				// get colorObj according to tempColorArr.
-				this.colorObj = makeColor_discrete(xArr[0]);
-				// make colorArr
-				var colorArr = new Array();
-				for(var i = 0 ; i < xArr[1].length ; i ++){
-					colorArr[i] = this.colorObj.colors[xArr[1][i]];
-				}				
-				this.colorArr = colorArr;
-				// for legend(colorArr and each label of each color needed).
-				var legend_colorArr = this.colorObj.colors;
-				var legend_labels = xArr[0];
-				var legend_isDiscrete = true;
-			}else if(this.colorLabel == this.yLabel && mainArr.isDiscrete[this.colorLabel] == true){ // matches with yAxis.
-				// get colorObj according to tempColorArr.
-				this.colorObj = makeColor_discrete(yArr[0]);
-				// make colorArr
-				var colorArr = new Array();
-				for(var i = 0 ; i < yArr[1].length ; i ++){
-					colorArr[i] = this.colorObj.colors[yArr[1][i]];
-				}				
-				this.colorArr = colorArr;
-				// for legend(colorArr and each label of each color needed).
-				var legend_colorArr = this.colorObj.colors;
-				var legend_labels = yArr[0];
-				var legend_isDiscrete = true;
-			}else if(mainArr.isDiscrete[this.colorLabel] == false){ // continuous color.
-				this.colorObj = makeColor_continuous(mainArr[this.colorLabel]);
-				this.colorArr = this.colorObj.indexArr;
-				// for legend(colorArr and each range label in continuous legend).
-				var legend_colorArr = this.colorObj.mainValueArr;
-				var legend_isDiscrete = false;
-				var temp = findMaxMinValue(mainArr[this.colorLabel]);
-		        this.legend.max = temp.max;
-		        this.legend.min = temp.min;
-				var legend_labels = null;
-			}
-			
-			// set legend.
-			if(optionObj.legend != undefined){				
-				this.legend.position = optionObj.legend;
-			}else{
-				this.legend.position = 'right';
-			}
-			this.legend.isDiscrete = legend_isDiscrete;
-			this.legend.colorArr = legend_colorArr;
-			this.legend.labels = legend_labels;
-			this.legend.colorLabel = this.colorLabel;
-		}else{ // no color.
-			this.colorArr = new Array();
-			for(var i = 0 ; i < this.xArr[0].length ; i ++){
-				this.colorArr[i] = 'green';
-			}
-		}
-		
-		// set mapping for event handler.
-		birthReport(mainArr, this, hasArr, hasArr);
-	}
-})();
+/**  Draw Dot graph(scatter) End  **/
 
 
 
 
-
-var Scatter = {};
-
-(function() {
-	Scatter = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-		
-	};
-	Scatter.prototype = {
-			
-	}
-})();
-
-
-(function() {
-	
-	Scatter = function(axisObj, dataObj, xLabel, , colorArr,  optionObj) {
-		this._type = 'scatter';
-		this.id = scatterObj.id;
-		this.preId = {x : -1, y : -1};
-		this.stage = axisObj.stage;
-		this._draw(axisObj, scatterObj, xArr, yArr, colorArr, optionObj);
-		scatterObj.id ++;
-	};
-	Scatter.prototype = {
-		_draw: function(axisObj, scatterObj, xArr, yArr, colorArr, optionObj) {
-			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
-			if(optionObj.double == true){
-				var x = 0;
-				var y = 0;			
-				var tempData = -1;
-				this.node = new Array();
-				for(var i = 0; i < xArr.length ; i ++){
-					x = (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i]-axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin;
-					if(x != tempData){
-						y = (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - yArr[i]*axisObj.yDiff : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin);
-					}
-					this.node[i] = new Kinetic.Circle({
-						name : i,
-						x: x,
-		    			y: y,
-						radius: this.radius,
-						stroke: colorArr[i],
-						strokeWidth: 1,
-						fill: colorArr[i],
-						selected : 0,
-						info :  "Node : " + i + "\r\n"
-					});
-					if(i < yArr.length){
-        				y = y - yArr[i+1]*axisObj.height/axisObj.yMax;
-        			}
-        			tempData = this.node[i].getX();
-	        	}
-			}else{
-				this.node = new Array();
-				for(var i = 0; i < xArr.length ; i ++){
-					this.node[i] = new Kinetic.Circle({
-						name : i,
-						x: (axisObj.isXDiscrete == true) ? (xArr[i]+1)*axisObj.xDiff + axisObj.plotXMargin : (xArr[i] - axisObj.xMin)*axisObj.width/(axisObj.xMax - axisObj.xMin) + axisObj.plotXMargin,
-		    			y: (axisObj.isYDiscrete == true) ? axisObj.plotYMargin + axisObj.height - (yArr[i]+1)*axisObj.yDiff  : axisObj.plotYMargin + axisObj.height - (yArr[i] - axisObj.yMin)*axisObj.height/(axisObj.yMax - axisObj.yMin),
-						radius: this.radius,
-						stroke: colorArr[i],
-						strokeWidth: 1,
-						fill: colorArr[i],
-						selected : 0,
-						info :  "Node : " + i + "\r\n"
-					});
-	        	}
-			}
-			
-        	// event add
-			scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
-			scatterObj.updateArr[this.id] = scatterUpdate(this.node);
-        	this.firstUpdate = firstUpdate(scatterObj);
-        	
-        	
-        	//setTooltip(this);
-        	
-        	this.dataLayer = new Kinetic.Layer();	
-        	for(var i = 0 ; i < this.node.length ; i ++){
-				this.dataLayer.add(this.node[i]);
-			}
-			axisObj.dataLayerArr.push(this.dataLayer);
-			axisObj.hoverArr.push(scatterHover());
-			//alert(axisObj.hoverArr[1]);
-			//add layers
-		//	axisObj.stage.add(this.tooltipLayer);
-			axisObj.stage.add(this.dataLayer);
-		}
-	};
-})();
-*/
 function scatterHover()
 {
 	return function(node, overOff) // over: 1 , off: 0

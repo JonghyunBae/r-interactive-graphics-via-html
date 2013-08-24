@@ -103,3 +103,188 @@ function createMainStructure(id, fileName)
 	}
 	return mainArr;
 }
+/**  create main structure of data End  **/
+
+/**  binning  **/
+//only for continuous object.
+function binning(labelObj, bin)
+{
+	// only work for continuous object.
+	if(labelObj.isDiscrete == undefined){
+		var temp = findMaxMinValue(labelObj);
+		var tempMax = temp.max;
+		var tempMin = temp.min;
+		if(bin == undefined){
+			var tickRange = (tempMax - tempMin) / 5;
+			var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
+			bin = setTickRange(tmp, tickRange);
+		}
+		//check the fixpoint.
+		var fixPoint = 0;
+		if(bin.toString().indexOf('.') != -1){
+			fixPoint = bin.toString().substring(bin.toString().indexOf('.')+1, bin.toString().length).length;
+		}
+		if(tempMax > 0){
+			var max = parseFloat((Math.ceil(tempMax / bin) * bin).toFixed(fixPoint));
+		}else{
+			var max = parseFloat((Math.ceil(tempMax / bin) * bin + bin).toFixed(fixPoint));
+		}
+		if(tempMax == max){
+			max = max + bin;
+		}
+		var min = parseFloat((Math.floor(tempMin / bin) * bin).toFixed(fixPoint));
+		var indexArr = new Array();
+		// set index
+		for(var i = 0 ; ; i ++){
+			indexArr[i] =  parseFloat(min + i * bin).toFixed(fixPoint);
+			if(indexArr[i] == max)
+				break;
+			if(indexArr[i] > max){
+				alert("Error in \"binning\": javascript calculation error!");
+				break;
+			}
+		}
+		var factoredArr = new Array();
+		for(var i = 0 ; i < labelObj.length ; i ++){
+			var cnt = parseInt((labelObj[i] - min) / bin);
+			factoredArr[i] = cnt;
+		}
+		return {
+			'max': max,
+			'min': min,
+			'indexArr': indexArr,
+			'factoredArr': factoredArr
+		};
+	}else{
+		alert("The input of the binning should be continuous.");
+		return;
+	}
+}
+/**  binning End  **/
+
+/**  setNode  **/
+//set the fields of the root object recursively. 
+function setNode(myNumber, endNumber, labels, indexArr, temp, root){
+	if(endNumber > 1){
+		var cnt1 = 0;
+		var cnt2 = 0;
+		for(var i = 0 ; i < indexArr[myNumber].length ; i ++){
+			// for debugging
+			// document.write(indexArr[myNumber][i] + " ");
+			if(temp[indexArr[myNumber][i]] != undefined){
+				cnt1 = setNode(myNumber + 1, endNumber - 1, labels, indexArr, temp[indexArr[myNumber][i]], root);
+				for(t = 0 ; t < cnt1 ; t ++){
+					root[labels[myNumber]].push(parseFloat(indexArr[myNumber][i]));
+				}
+				cnt2 = cnt2 + cnt1;
+			}
+		}
+		return cnt2;
+	}else{
+		var cnt = 0;
+		for(var i = 0 ; i < indexArr[myNumber].length ; i ++){
+			// for debugging
+			// document.write(indexArr[myNumber][i] + " ");
+			if(temp[indexArr[myNumber][i]] != undefined){
+				var frequency = temp[indexArr[myNumber][i]].frequency;
+				cnt ++;
+				root[labels[myNumber]].push(parseFloat(indexArr[myNumber][i]));
+				root['frequency'].push(frequency);
+			}
+		}
+		return cnt;
+	}
+}
+/**  setNode End  **/
+
+/**  addField  **/
+//add new field and return added field.
+function addField(obj, fieldName){
+	// for debugging
+	// document.write(fieldName + " ");
+	if(obj[fieldName] == undefined){
+		obj[fieldName] = new Object();
+	}
+	return obj[fieldName];
+}
+/**  addField End  **/
+
+/**  ddply  **/
+//optionObj can be bin.
+var ddply = {};
+(function() {
+	ddply = function(dataObj, labels, optionObj) {	
+		// make new fields of ddply object
+		for(var i = 0 ; i < labels.length ; i ++){
+			this[labels[i]] = new Array();
+			if(dataObj[labels[i]].isDiscrete != undefined){
+				this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
+				this[labels[i]].index = dataObj[labels[i]].index;
+			}
+		}
+		this['frequency'] = new Array();
+		
+		// binning continuous data.
+		var binArr = new Array(labels.length);
+		var indexArr = make2DArr(labels.length);
+		var factoredArr = make2DArr(labels.length);
+		for(var i = 0 ; i < labels.length ; i ++){
+			if(dataObj[labels[i]].isDiscrete == undefined){
+				// find indexArr, factoredArr of continuous labels.
+				var temp = binning(dataObj[labels[i]], optionObj.bin);
+				indexArr[i] = temp.indexArr;
+				factoredArr[i] = temp.factoredArr;
+			}else{
+				// make indexArr of discrete label.
+				for(var j = 0 ; j < dataObj[labels[i]].index.length ; j ++){
+					indexArr[i][j] = j;
+				}
+			}
+		}
+		
+		// calculate frequency
+		var tmpObj = new Object();
+		for(var i = 0 ; i < dataObj[labels[0]].length ; i ++){
+			var temp = tmpObj;
+			for(var j = 0 ; j < labels.length ; j ++){
+				
+				if(dataObj[labels[j]].isDiscrete == undefined){
+					cnt = indexArr[j][factoredArr[j][i]];
+				}else{
+					cnt = dataObj[labels[j]][i];
+				}
+				temp = addField(temp, cnt);
+			}
+			// for debugging
+			// document.write("<br>");
+			if(temp['frequency']== undefined){
+				temp['frequency'] = 1;
+			}else{
+				temp['frequency'] ++;
+			}
+		}
+		
+		
+		// set the array of fields by using recursive function.
+		setNode(0, labels.length, labels, indexArr, tmpObj, this);
+		
+		// for debugging
+		/*
+		document.write("<br>");
+		for(var j = 0 ; j < labels.length ; j ++){
+			document.write(labels[j] + " ");
+		}
+		document.write("frequency <br>");
+		var cnt = 0;
+		for(var i = 0 ; i < this[labels[0]].length ; i ++){
+			for(var j = 0 ; j < labels.length ; j ++){
+				document.write(this[labels[j]][i] + " ,  ");
+			}
+			document.write(this.frequency[i] + "<br>");
+			cnt = cnt + this.frequency[i];
+		}
+		document.write("Total frequency: " + cnt);
+		*/
+	};
+})();
+/**  ddply End  **/

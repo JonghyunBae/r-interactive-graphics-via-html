@@ -58,8 +58,7 @@ This page can be modified while being designed.
   * Bar - stacking design.
   * design event handler part.
  * DONE
-  * Make "Bar".(8/24)
-  * Make "Dot".(8/24)
+  * Make "Dot" and "Bar" with color.(8/24)
   * Make "addColorField" and legend in Axis.(8/22)
   * Make "ddply".(8/22)
    * Extract "binning" from "ddply".(8/22)

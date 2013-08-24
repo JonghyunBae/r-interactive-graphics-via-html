@@ -131,8 +131,9 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	var legendText = new Array();
 	if(legendObj.isDiscrete == true){ // discrete
 		if(legendObj.colorIndex == undefined){
-			alert("addColorField should be called before drawing legend");
-			return -1;
+			addColorField(legendObj);
+			//alert("addColorField should be called before drawing legend");
+			//return -1;
 		}		
 		for(var i = 0 ; i < legendObj.index.length ; i ++)
 		{						
@@ -156,8 +157,9 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 		}
 	}else{ // continuous.
 		if(legendObj.color == undefined){
-			alert("addColorField should be called before drawing legend");
-			return -1;
+			addColorField(legendObj);
+			//alert("addColorField should be called before drawing legend");
+			//return -1;
 		}
 		var temp = findMaxMinValue(legendObj);
 		var max = temp.max;

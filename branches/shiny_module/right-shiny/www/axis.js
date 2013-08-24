@@ -49,6 +49,10 @@ var Axis = {};
 					var temp = findMaxMinValue(dataObj[xLabel]);
 					this.xMax = temp.max;
 		            this.xMin = temp.min;
+		            // frequency's min value should be 0
+		            if(xLabel == 'frequency'){
+		            	this.yMin = 0;
+		            }
 					if(optionObj.xbin != undefined){
 						this.xbin = optionObj.xbin;
 						this.xTick = Math.round((this.xMax - this.xMin) / this.xbin);
@@ -72,6 +76,10 @@ var Axis = {};
 					var temp = findMaxMinValue(dataObj[yLabel]);
 					this.yMax = temp.max;
 		            this.yMin = temp.min;
+		            // frequency's min value should be 0
+		            if(yLabel == 'frequency'){
+		            	this.yMin = 0;
+		            }
 					if(optionObj.ybin != undefined){
 						this.ybin = optionObj.ybin;
 						this.yTick = Math.round((this.yMax - this.yMin) / this.ybin);
@@ -139,6 +147,58 @@ var Axis = {};
 					this.stage.add(this.legendLayer);
 				}
 				this.stage.add(this.tooltipLayer);
+			},
+			
+			_getPixel: function(xArr, yArr) {
+				var xPixelArr = new Array();
+				var yPixelArr = new Array();
+				var outNumber = new Array();
+				if(this.isXDiscrete == true){
+					var temp;
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(xArr[i] < 0 || xArr[i] > xArr.index.length){
+							temp = -1;
+						}else{
+							temp = (xArr[i]+1)*this.xDiff + this.plotXMargin;
+						}
+						xPixelArr[i] = temp;
+					}
+				}else{
+					var temp;
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(xArr[i] < this.xMin || xArr[i] > this.xMax){
+							temp = -1;
+						}else{
+							temp = (xArr[i]-this.xMin)*this.width/(this.xMax - this.xMin) + this.plotXMargin;
+						}
+						xPixelArr[i] = temp;
+					}
+				}
+				if(this.isYDiscrete == true){
+					var temp;
+					for(var i = 0 ; i < yArr.length ; i ++){
+						if(yArr[i] < 0 || yArr[i] > yArr.index.length || xPixelArr[i] == -1){
+							temp = -1;
+						}else{
+							temp = this.plotYMargin + this.height - yArr[i]*this.yDiff;
+						}
+						yPixelArr[i] = temp;
+					}
+				}else{
+					var temp;
+					for(var i = 0 ; i < yArr.length ; i ++){
+						if(yArr[i] < this.yMin || yArr[i] > this.yMax || xPixelArr[i] == -1){
+							temp = -1;
+						}else{
+							temp = this.plotYMargin + this.height - (yArr[i] - this.yMin)*this.height/(this.yMax - this.yMin);
+						}
+						yPixelArr[i] = temp;
+					}
+				}
+				return {
+					'xArr': xPixelArr,
+					'yArr': yPixelArr
+				};
 			}
 	}
 })();
@@ -337,7 +397,7 @@ function makeXAxisLayer(obj)
 		        x: obj.plotXMargin + obj.xPlotArr[i][0] - 30,
 		        y: obj.plotYMargin + obj.height + 2*obj.plotLength,
 		        text: obj.xPlotArr[i][1],
-		        fontSize: 15,
+		        fontSize: 12,
 		        fontFamily: 'Calibri',
 		        fill: 'black',
 		        width: 60,

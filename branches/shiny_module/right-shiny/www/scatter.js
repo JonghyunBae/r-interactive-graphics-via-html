@@ -1,11 +1,83 @@
 var Scatter = {};
 
 (function() {
-	Scatter = function(dataObj, xLabel, yLabel, optionObj) {
-		
+	Scatter = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+		this._init(axisObj, dataObj, optionObj);
+		this._draw(axisObj, dataObj, xLabel, yLabel);
 	};
 	Scatter.prototype = {
-			
+			_init: function(axisObj, dataObj, optionObj) {
+				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
+				// check color
+				if(axisObj.legendLabel != undefined){
+					var legendLabel = axisObj.legendLabel;
+					if(dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined){
+						addColorField(dataObj[legendLabel]);
+					}else if(dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined){
+						addColorField(dataObj[legendLabel]);
+					}
+					this.colorOn = true;
+				}else{
+					this.colorOn = false;
+				}
+				this.colorLabel = legendLabel;
+			},
+			_draw: function(axisObj, dataObj, xLabel, yLabel) {
+				// get pixel values from axis
+				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
+				var xArr = temp.xArr;
+				var yArr = temp.yArr;
+				var cnt = 0;
+				this.node = new Array();
+				if(this.colorOn == true){
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(!(xArr[i] == -1 || yArr[i] == -1)){
+							this.node[cnt] = new Kinetic.Circle({
+								name: cnt,
+								x: xArr[i],
+								y: yArr[i],
+								radius: this.radius,
+								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								selected: 0,
+								info: "Node: " + cnt 
+							});
+							cnt ++;
+						}
+					}
+				}else{
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(!(xArr[i] == -1 || yArr[i] == -1)){
+							this.node[cnt] = new Kinetic.Circle({
+								name: cnt,
+								x: xArr[i],
+								y: yArr[i],
+								radius: this.radius,
+								stroke: 'green',
+								fill: 'green',
+								selected: 0,
+								info: "Node: " + cnt 
+							});
+							cnt ++;
+						}
+					}
+				}
+	        	// event add
+				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
+				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
+	        	//this.firstUpdate = firstUpdate(scatterObj);
+	        	
+	        	this.dataLayer = new Kinetic.Layer();	
+	        	for(var i = 0 ; i < this.node.length ; i ++){
+					this.dataLayer.add(this.node[i]);
+				}
+				//axisObj.dataLayerArr.push(this.dataLayer);
+				//axisObj.hoverArr.push(scatterHover());
+				//alert(axisObj.hoverArr[1]);
+				//add layers
+			//	axisObj.stage.add(this.tooltipLayer);
+				axisObj.stage.add(this.dataLayer);
+			}
 	}
 })();
 

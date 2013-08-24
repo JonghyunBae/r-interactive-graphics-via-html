@@ -61,13 +61,15 @@ shinyUI(bootstrapPage(
        </div>
        
        <script>
-      addColorField(mainArr1.cut);
-       var axis1 = new Axis(1, mainArr1, 'cut', 'price', {legend: 'cut', position: 'topleft'});
-       
+       var axis1 = new Axis(1, mainArr1, 'cut', 'table', {legend: 'carat', position: 'topleft'});
+       var s1 = new Scatter(axis1, mainArr1, 'cut', 'depth',{});
+        var s2 = new Scatter(axis1, mainArr1, 'cut', 'table',{});
        var hobj1 = new ddply(mainArr1, ['price','cut', 'carat'], {bin:1});
-        addColorField(hobj1.carat);
-        var axis2 = new Axis(2, hobj1, 'price', 'cut', {legend:'carat', position: 'left'});
-       // alert(hobj1.table.frequency.D);
+        var axis2 = new Axis(2, hobj1, 'price', 'frequency', {legend:'price', position: 'left'});
+       var s3 = new Scatter(axis2, hobj1, 'price', 'frequency',{});
+      var hobj2 = new ddply(mainArr1, ['price'] , {});
+      var axis3 = new Axis(3, hobj2, 'price', 'frequency', {legend:'cut', position: 'left'});
+      var s4 = new Scatter(axis3, hobj2, 'price', 'frequency',{});
        // hist releated.
        /*  var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});
        var axis1 = new MakeAxis(1, hObj1.xArr[0], hObj1.yArr[0], hObj1.isXDiscrete, hObj1.isYDiscrete, {mainLabel: hObj1.mainLabel, xLabel: hObj1.xLabel , yLabel: hObj1.yLabel, xbin: hObj1.bin, legend: hObj1.legend});

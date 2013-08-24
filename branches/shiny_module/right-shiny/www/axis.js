@@ -91,6 +91,7 @@ var Axis = {};
 					this.yPlotArr= tmp.plotArr;
 				}else{ // discrete
 					this.isYDiscrete = true;
+					
 					var tmp = setAxis_discrete(dataObj[yLabel].index, this.height);
 					this.yMax = -1;
 					this.yMin = -1;
@@ -256,7 +257,7 @@ function setAxis_continue(tempMax, tempMin, tick, length)
 		max = max + bin;
 	}
 	var min = parseFloat((Math.floor(tempMin / bin) * bin).toFixed(fixPoint));
-	var diff = length * tickRange / (max - min);
+	var diff = length * bin / (max - min);
 	var plotArr = make2DArr(parseInt(Math.round((max - min)/bin) + 1));
 	for(var i = 0 ; i < plotArr.length ; i ++){
 			plotArr[i][0] = i*diff;

@@ -58,6 +58,7 @@ function createMainStructure(id, fileName)
 	var mainArr = new Object();
 	var cntArr = new Array();
 	var isNumArr = new Array();
+	var isSelected = make2DArr(dataArr.length);
 	// initialization.
 	for(var i = 0 ; i < labelArr.length ; i ++){
 		cntArr[i] = 0;
@@ -88,7 +89,13 @@ function createMainStructure(id, fileName)
 				mainArr[labelArr[j]][i] = parseFloat(tmpArr[j]);
 			}
 		}
+		isSelected[i][0] = 0;
 	}
+	// event components
+	mainArr.parent = null;
+	mainArr.child = null;
+	mainArr.$isSelected = isSelected;
+	mainArr.$id = 1;
 	// factoring of discrete data.
 	for(var i = 0 ; i < labelArr.length ; i ++){
 		delete mainArr[labelArr[i]]["tempField"];
@@ -190,6 +197,7 @@ function setNode(myNumber, endNumber, labels, indexArr, temp, root){
 				cnt ++;
 				root[labels[myNumber]].push(parseFloat(indexArr[myNumber][i]));
 				root['frequency'].push(frequency);
+				root['hasArr'].push(temp[indexArr[myNumber][i]].hasArr);
 			}
 		}
 		return cnt;
@@ -213,7 +221,7 @@ function addField(obj, fieldName){
 //optionObj can be bin.
 var ddply = {};
 (function() {
-	ddply = function(dataObj, labels, optionObj) {	
+	ddply = function(dataObj, labels, optionObj) {
 		// make new fields of ddply object
 		for(var i = 0 ; i < labels.length ; i ++){
 			this[labels[i]] = new Array();
@@ -223,7 +231,7 @@ var ddply = {};
 			}
 		}
 		this['frequency'] = new Array();
-		
+		this['hasArr'] = new Array();
 		// binning continuous data.
 		var binArr = new Array(labels.length);
 		var indexArr = make2DArr(labels.length);
@@ -259,14 +267,32 @@ var ddply = {};
 			// document.write("<br>");
 			if(temp['frequency']== undefined){
 				temp['frequency'] = 1;
+				temp['dataNumber'] = 
+				temp['hasArr'] = new Array();
+				temp['hasArr'].push(i);
 			}else{
 				temp['frequency'] ++;
+				temp['hasArr'].push(i);
 			}
 		}
 		
 		
 		// set the array of fields by using recursive function.
 		setNode(0, labels.length, labels, indexArr, tmpObj, this);
+		
+		var hasArr = this['hasArr'];
+		delete this['hasArr'];
+		// make event handle part
+		var p2cArr = new Array(dataObj[labels[0]].length);
+		var isSelected = make2DArr(hasArr.length);
+		for(var i = 0 ; i < hasArr.length ; i ++){
+			isSelected[i][0] = 0;
+			for(var j = 0 ; j < hasArr[i].length ; j ++){
+				p2cArr[hasArr[i][j]] = i;
+			}
+		}
+		this.$isSelected = isSelected;
+		birthReport(dataObj, this, p2cArr, hasArr);
 		
 		// for debugging
 		/*

@@ -4,9 +4,11 @@ var Bar = {};
 	Bar = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this._init(axisObj, dataObj, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
+		dataObj.$id ++;
 	};
 	Bar.prototype = {
 			_init: function(axisObj, dataObj, optionObj) {
+				this.id = dataObj.$id;
 				this.barWidth = axisObj.xbarWidth;
 				// check color
 				if(axisObj.legendLabel != undefined){
@@ -47,7 +49,10 @@ var Bar = {};
 								offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 								info: "Node: " + cnt 
 							});
+							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 							cnt ++;
+						}else{
+							dataObj.$isSelected[i][this.id] = nullUpdate(0);
 						}
 					}
 				}else{
@@ -68,7 +73,10 @@ var Bar = {};
 								offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 								info: "Node: " + cnt 
 							});
+							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 							cnt ++;
+						}else{
+							dataObj.$isSelected[i][this.id] = nullUpdate(0);
 						}
 					}
 				}
@@ -96,42 +104,22 @@ var Bar = {};
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
-function histUpdate(node)
+function barUpdate(node)
 {
-	return	function(ids, selectOn)
+	return	function(selectOn)
 		{
-			// if just one node.
-			if(ids.length == undefined){
-				if(node[ids].getSelected() == 1 && selectOn == 0){		//unselect
-					node[ids].setSelectCnt(node[ids].getSelectCnt() - 1);
-					if(node[ids].getSelectCnt() == 0){
-						node[ids].setOpacity(0.5);
-						node[ids].setSelected(0);
-					}
-				}else if(selectOn == 1){		// select
-					node[ids].setSelectCnt(node[ids].getSelectCnt() + 1);						
-					if(node[ids].getSelected() == 0){
-						node[ids].setOpacity(1);
-						node[ids].setSelected(1);
-					}
+			if(node.getSelected() == 1 && selectOn == 0){		//unselect
+				node.setSelectCnt(node.getSelectCnt() - 1);
+				if(node.getSelectCnt() == 0){
+					node.setOpacity(0.5);
+					node.setSelected(0);
 				}
-			}else{
-				for(var i = 0 ; i < ids.length ; i ++){
-					if(node[ids[i]].getSelected() == 1 && selectOn == 0){		//unselect
-						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() - 1);
-						if(node[ids[i]].getSelectCnt() == 0){
-							node[ids[i]].setOpacity(0.5);
-							node[ids[i]].setSelected(0);
-						}
-					}else if(selectOn == 1){		// select
-						if(node[ids[i]].getSelected() == 0){
-							node[ids[i]].setOpacity(1);
-							node[ids[i]].setSelected(1);
-						}
-						node[ids[i]].setSelectCnt(node[ids[i]].getSelectCnt() + 1);	
-					}
+			}else if(selectOn == 1){		// select
+				node.setSelectCnt(node.getSelectCnt() + 1);						
+				if(node.getSelected() == 0){
+					node.setOpacity(1);
+					node.setSelected(1);
 				}
-			//	alert(node[2].getSelectCnt());
 			}
 		};
 }

@@ -62,9 +62,9 @@ shinyUI(bootstrapPage(
        
        <script>
        var axis1 = new Axis(1, mainArr1, 'cut', 'table', {legend: 'carat', position: 'topleft'});
-       var s1 = new Dot(axis1, mainArr1, 'cut', 'depth',{});
+       var s1 = new Bar(axis1, mainArr1, 'cut', 'depth',{});
         var s2 = new Dot(axis1, mainArr1, 'cut', 'table',{});
-       var hobj1 = new ddply(mainArr1, ['price','cut', 'carat'], {bin:1});
+       var hobj1 = new ddply(mainArr1, ['price','cut', 'carat'], {});
         var axis2 = new Axis(2, hobj1, 'price', 'frequency', {legend:'price', position: 'left'});
        var s3 = new Dot(axis2, hobj1, 'price', 'frequency',{});
       var hobj2 = new ddply(mainArr1, ['cut','carat'] , {});

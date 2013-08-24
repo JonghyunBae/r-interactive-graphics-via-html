@@ -4,9 +4,11 @@ var Dot = {};
 	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this._init(axisObj, dataObj, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
+		dataObj.$id ++;
 	};
 	Dot.prototype = {
 			_init: function(axisObj, dataObj, optionObj) {
+				this.id = dataObj.$id;
 				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 				// check color
 				if(axisObj.legendLabel != undefined){
@@ -42,8 +44,11 @@ var Dot = {};
 								selected: 0,
 								opacity: 0.5,
 								info: "Node: " + cnt 
-							});
+							});							
+							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 							cnt ++;
+						}else{
+							dataObj.$isSelected[i][this.id] = nullUpdate(0);
 						}
 					}
 				}else{
@@ -60,7 +65,10 @@ var Dot = {};
 								opacity: 0.5,
 								info: "Node: " + cnt 
 							});
+							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 							cnt ++;
+						}else{
+							dataObj.$isSelected[i][this.id] = nullUpdate(0);
 						}
 					}
 				}
@@ -109,41 +117,27 @@ function scatterHover()
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
-function scatterUpdate(node)
+function dotUpdate(node)
 {
-	return	function(ids, selectOn)
+	return	function(selectOn)
 		{
-			if(ids.length == undefined){
-				if(node[ids].getSelected() == 1 && selectOn == 0){		//unselect
-					node[ids].setStroke(node[ids].getFill());
-					node[ids].setScaleX(1);
-					node[ids].setScaleY(1);
-					node[ids].setSelected(0);
-				}else if(node[ids].getSelected() == 0 && selectOn == 1){	//select
-					node[ids].setStroke('black');
-					node[ids].setScaleX(2);
-					node[ids].setScaleY(2);
-					node[ids].setSelected(1);
-					node[ids].moveToTop();
-				}
-			}else{
-				for(var i = 0 ; i < ids.length ; i ++){
-					if(node[ids[i]].getSelected() == 1 && selectOn == 0){		//unselect
-						node[ids[i]].setStroke(node[ids[i]].getFill());
-						node[ids[i]].setScaleX(1);
-						node[ids[i]].setScaleY(1);
-						node[ids[i]].setSelected(0);
-					}else if(node[ids[i]].getSelected() == 0 && selectOn == 1){	//select
-						node[ids[i]].setStroke('black');
-						node[ids[i]].setScaleX(2);
-						node[ids[i]].setScaleY(2);
-						node[ids[i]].setSelected(1);
-						node[ids[i]].moveToTop();
-					}
-				}
+			if(node.getSelected() == 1 && selectOn == 0){		//unselect
+				node.setStroke(node.getFill());
+				node.setScaleX(1);
+				node.setScaleY(1);
+				node.setSelected(0);
+			}else if(node.getSelected() == 0 && selectOn == 1){	//select
+				node.setStroke('black');
+				node.setScaleX(2);
+				node.setScaleY(2);
+				node.setSelected(1);
+				node.moveToTop();
 			}
-			
 		};
+}
+function nullUpdate(node)
+{
+	return;
 }
 /**  update function end  **/
 

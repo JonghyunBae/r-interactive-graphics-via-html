@@ -34,17 +34,15 @@ This page can be modified while being designed.
   * Example
    * Axis(dataObj, 'xLabel', 'yLabel', {legend: 'legendLabel', position: 'option', mainLabel:'option'});
  # ddply
-  * Issues
-   * How do I set the format of isSelected?
   * ddply splits data frame like "ddply" in R.
   * Example
    * obj = ddply(dataObj, ['depth', 'price', 'cut'], color, {bin: option});
    * Return object
     * obj.depth, obj.price, obj.cut, obj.frequency.(all length of all fields is same)
- # Input of scatter & hist
+ # Graphs
   * Example
-   * Scatter(dataObj, 'xLabel', 'yLabel', 'colorLable');
-   * Hist(dataObj, 'xLabel', 'yLabel', 'colorLabel');
+   * Dot(dataObj, 'xLabel', 'yLabel', 'colorLable');
+   * Bar(dataObj, 'xLabel', 'yLabel', 'colorLabel');
  # Color
    * "addColorField(labelObj)" adds "color" or "colorIndex" field into labelobj.
    * Called in Axis when checking legendLabel
@@ -57,10 +55,11 @@ This page can be modified while being designed.
 
 = Schedule =
  * TO DO
-  * Make "scatter" and "bar".
+  * Bar - stacking design.
   * design event handler part.
  * DONE
-  * 
+  * Make "Bar".(8/24)
+  * Make "Dot".(8/24)
   * Make "addColorField" and legend in Axis.(8/22)
   * Make "ddply".(8/22)
    * Extract "binning" from "ddply".(8/22)

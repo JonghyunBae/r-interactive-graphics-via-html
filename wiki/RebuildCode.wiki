@@ -25,8 +25,6 @@ This page can be modified while being designed.
      * mainArr.carat = [0.1, 0.45, ...];
      * mainArr.carat.isDiscrete = undefined;
      * mainArr.carat.index = undefined;
-  * Event Aspect.
-   * not yet designed.
  # Axis
   * Issues
    * How do I set the mainLabel of axis? -> mainLabel is option, because there will be higher lever API which can provide mailLabel(CH's temporary idea)
@@ -51,6 +49,9 @@ This page can be modified while being designed.
      * result: mainArr1.cut.colorIndex = [RGB, RGB, ...];(length of mainArr1.cut.index)
      * continuous: addColorField(mainArr1.carat);
      * result: mainArr1.carat.color = [RGB, RGB, ...];(length of mainArr.carat)
+ # Event Part
+  * Issues
+   * How should I set the information of nodes?
 
 
 = Schedule =

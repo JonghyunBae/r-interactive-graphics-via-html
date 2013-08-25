@@ -26,6 +26,9 @@ var Axis = {};
 				document.getElementById('container'+ id).onclick = function() {
 			        document.getElementById('regcoords');
 			    };
+			    
+			    this.dataLayerArr = new Array();
+			    this.hoverArr = new Array();
 			},
 			
 			_addLegend: function(dataObj, optionObj) {

@@ -81,38 +81,15 @@ var Dot = {};
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
 				}
-				//axisObj.dataLayerArr.push(this.dataLayer);
-				//axisObj.hoverArr.push(scatterHover());
-				//alert(axisObj.hoverArr[1]);
-				//add layers
-			//	axisObj.stage.add(this.tooltipLayer);
+				axisObj.dataLayerArr.push(this.dataLayer);
+				axisObj.hoverArr.push(dotHover());
+				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
 	}
 })();
 /**  Draw Dot graph(scatter) End  **/
 
-
-
-
-function scatterHover()
-{
-	return function(node, overOff) // over: 1 , off: 0
-		{
-			if(overOff == 1){
-				node.setScaleX(1.5);
-                node.setScaleY(1.5);
-                node.draw();
-			}else if(overOff == 0){
-				var tween = new Kinetic.Tween({
-        			node: node, 
-			        duration: 0.01,
-			        scaleX: 1,
-			        scaleY: 1
-        		}).play(); 
-			}
-		};
-}
 /**  update function  **/
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
@@ -140,6 +117,24 @@ function nullUpdate(node)
 	return;
 }
 /**  update function end  **/
+function dotHover()
+{
+	return function(node, overOff) // over: 1 , off: 0
+		{
+			if(overOff == 1){
+				node.setScaleX(1.5);
+                node.setScaleY(1.5);
+                node.draw();
+			}else if(overOff == 0){
+				var tween = new Kinetic.Tween({
+        			node: node, 
+			        duration: 0.01,
+			        scaleX: 1,
+			        scaleY: 1
+        		}).play(); 
+			}
+		};
+}
 
 
 /**  Regression functions for scatter  **/

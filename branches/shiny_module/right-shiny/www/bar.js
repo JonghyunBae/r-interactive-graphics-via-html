@@ -89,11 +89,9 @@ var Bar = {};
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
 				}
-				//axisObj.dataLayerArr.push(this.dataLayer);
-				//axisObj.hoverArr.push(scatterHover());
-				//alert(axisObj.hoverArr[1]);
-				//add layers
-			//	axisObj.stage.add(this.tooltipLayer);
+				axisObj.dataLayerArr.push(this.dataLayer);
+				axisObj.hoverArr.push(barHover());
+				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
 	}
@@ -124,4 +122,19 @@ function barUpdate(node)
 		};
 }
 /**  update function end  **/
-
+function barHover()
+{
+	return function(node, overOff) // over: 1 , off: 0
+		{
+			if(overOff == 1){
+				node.setOpacity(1);
+                node.draw();
+			}else if(overOff == 0){
+				var tween = new Kinetic.Tween({
+        			node: node, 
+			        duration: 0.01,
+			        opacity: 0.5
+        		}).play(); 
+			}
+		};
+}

@@ -16,6 +16,29 @@
    * Discuss about Hardly Wickham's comments.
   # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
 
+== 25AUG2013 ==
+
+  # Update from CH:
+   # Scatter and histogram works.
+   # Hovering works. 
+   # Currently fixing event handling. No technical challenges expected.
+   # Will work on line plot once event handling is done. Think about grouping.
+  # Update from JH:
+   # R package development will be done in three steps:
+    # Plots requiring only client-side code.
+    # Plots requiring server-
+   # Huan Sun will be our new member in September.
+  # Event handler for line plots.
+  # Follow-up plan:
+   # Finish GSoC successfully.
+   # Announce the package in R-Blogs and other mailing lists.
+   # Target a few conferences in 2014:
+    * [http://www.amstat.org/meetings/jsm.cfm Joint Statistical Meeting JSM 2014]
+    * [http://user2014.stat.ucla.edu/ UseR! Conference 2014]
+    * [http://www.page-meeting.org/ PAGE Conference 2014]
+   # Target a journal, e.g. [http://www.jstatsoft.org/ Journal of Statistical Software] or [http://journal.r-project.org/ The R Journal], once the package is fully refined. 
+   # RIGHT will become a benchmark problem for the upcoming JavaScript acceleration project.
+
 == 04AUG2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.

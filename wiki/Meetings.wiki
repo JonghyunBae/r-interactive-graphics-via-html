@@ -26,9 +26,11 @@
   # Update from JH:
    # R package development will be done in three steps:
     # Plots requiring only client-side code.
-    # Plots requiring server-
+    # Plots requiring server-side offloading, which requires Shiny but does not uses any of its inputs.
+    # Support RIGHT as Shiny output.
    # Huan Sun will be our new member in September.
   # Event handler for line plots.
+  # Histogram stacking.
   # Follow-up plan:
    # Finish GSoC successfully.
    # Announce the package in R-Blogs and other mailing lists.

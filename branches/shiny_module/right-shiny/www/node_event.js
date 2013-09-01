@@ -348,9 +348,8 @@ function hover(Name)
 }
 
 function select(Name)
-{        
+{
 	var tmpNodeArr = new Array();
-	
 	// temporary method for unselecting nodes.
 	Name.stage.on('click', function(evt){
 		if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
@@ -383,18 +382,16 @@ function select(Name)
             		allSelect(Name.dataLayerArr[0])
             	}
             }
-            var tmpX = Name.node[node.getName()].getX(); 
-            var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY(); 
+            var tmpX = Name.node[node.getName()].getX();
+            var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY();
             if(aPressed){   //select ALL
-            	Name.tmpShift = false;                	
+            	Name.tmpShift = false;
             	allSelect(Name);
             }else if(gPressed){
             	Name.tmpShift = false;
-            }else if(shiftPressed && Name.preId.x != -1){                    
-            	
+            }else if(shiftPressed && Name.preId.x != -1){
             	Name.tmpShift = true;
             	allDeselect(Name);
-
             	if(Name._type == "hist" || Name._type == "box" || Name._type == "pie"){
             		if(Name.preId.x >= tmpX){
             			for(var i = 0 ; i < Name.node.length ; i ++){
@@ -411,7 +408,6 @@ function select(Name)
             			}
             			allGraphUpdate(Name, tmpNodeArr, 1);
             		}
-            
             	}
             }else if(ctrlPressed){ //select mutiple node one by one.
             	if(node.getSelected() == 0){
@@ -424,12 +420,12 @@ function select(Name)
             	Name.tmpShift = false;
             	allDeselect(Name);
             	allGraphUpdate(Name, node.getName(), 1);
-            }       
+            }
         }else{
         	if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
         		allDeselect(Name);
         		Name.preId = {x : -1 , y : -1};
-        	}                               
+        	}
         }
 	});
 }

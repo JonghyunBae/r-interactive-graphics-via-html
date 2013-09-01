@@ -87,19 +87,10 @@ var Axis = {};
 						this.ybin = optionObj.ybin;
 						this.yTick = Math.round((this.yMax - this.yMin) / this.ybin);
 					}
-					var tmp = setAxis_continue(this.yMax, this.yMin, this.yTick, this.height);
-					this.yMax = tmp.max;
-					this.yMin = tmp.min;
-					this.yDiff = -1;
-					this.yPlotArr= tmp.plotArr;
+					this._setYContinuous(this.yMax, this.yMin);
 				}else{ // discrete
 					this.isYDiscrete = true;
-					
-					var tmp = setAxis_discrete(dataObj[yLabel].index, this.height);
-					this.yMax = -1;
-					this.yMin = -1;
-					this.yDiff = tmp.diff;
-					this.yPlotArr = tmp.plotArr;
+					this._setYDiscrete(dataObj[yLabel].index);
 				}
 				// set barWidth.
 				if(this.isXDiscrete == true){
@@ -107,13 +98,10 @@ var Axis = {};
 				}else{
 					this.xbarWidth = (this.xPlotArr[1][0] - this.xPlotArr[0][0]) - 3;
 				}
-				// make stage.
-				makeStageLayer(this);
-				// make plotRect.
-				makePlotRectLayer(this);
+				
 				// make axis layers.
 				makeXAxisLayer(this);
-				makeYAxisLayer(this);
+				
 				// make tooltip layer.
 				setTooltip(this);
 				// make label layers.
@@ -124,7 +112,30 @@ var Axis = {};
 				makeYLabelLayer(this, yLabel);
 			},
 			
+			_setYContinuous: function(max, min) {
+				var tmp = setAxis_continue(max, min, this.yTick, this.height);
+				this.yMax = tmp.max;
+				this.yMin = tmp.min;
+				this.yDiff = -1;
+				this.yPlotArr= tmp.plotArr;
+				makeYAxisLayer(this);
+			},
+			
+			_setYDiscrete: function(index) {
+				var tmp = setAxis_discrete(index, this.height);
+				this.yMax = -1;
+				this.yMin = -1;
+				this.yDiff = tmp.diff;
+				this.yPlotArr = tmp.plotArr;
+				makeYAxisLayer(this);
+			},
+			
 			_draw: function() {
+				// make stage.
+				makeStageLayer(this);
+				// make plotRect.
+				makePlotRectLayer(this);
+				
 				this.plotLayer = new Kinetic.Layer();
 				// add base rectangular.
 				this.plotLayer.add(this.plotRect);				

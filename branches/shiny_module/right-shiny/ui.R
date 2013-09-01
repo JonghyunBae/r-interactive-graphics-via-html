@@ -74,7 +74,12 @@ shinyUI(bootstrapPage(
       var hobj3 = new ddply(mainArr1, ['color', 'cut'], {});
       var axis4 = new Axis(4, hobj3, 'cut', 'frequency', {legend:'color', position: 'left'});
       var s5 = new Bar(axis4, hobj3, 'cut', 'frequency', {});
-      eventTrigger([axis1, axis2, axis3, axis4]);
+
+       var hobj4 = new ddply(mainArr1, ['cut'], {});
+      var axis5 = new Axis(5, hobj4, 'cut', 'frequency', {legend:'cut', position: 'left'});
+      var p1 = new Pie(axis5, hobj4, 'cut', 'frequency', {});
+          
+      eventTrigger([axis1, axis2, axis3, axis4, axis5]);
        // hist releated.
        /*  var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});
        var axis1 = new MakeAxis(1, hObj1.xArr[0], hObj1.yArr[0], hObj1.isXDiscrete, hObj1.isYDiscrete, {mainLabel: hObj1.mainLabel, xLabel: hObj1.xLabel , yLabel: hObj1.yLabel, xbin: hObj1.bin, legend: hObj1.legend});

@@ -1,80 +1,122 @@
+/**  Draw Pie graph  **/
 var Pie = {};
-
-(function() {
-	
-	Pie = function(axisObj, pieObj, xArr, yArr, colorArr, optionObj) {
-		this._type = 'pie';
-		this.id = pieObj.id;
-		this.preId = {x : -1, y : -1};
-		this.stage = axisObj.stage;
-		this._draw(axisObj, pieObj, xArr, yArr, colorArr, optionObj);
-		pieObj.id ++;
+(function() {	
+	Pie = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+		this._init(axisObj, dataObj, optionObj);
+		this._checkStacking(axisObj, dataObj, xLabel, yLabel);
+		this._draw(axisObj, dataObj, xLabel, yLabel);
+		dataObj.$id ++;
 	};
 	Pie.prototype = {
-		_draw: function(axisObj, pieObj, xArr, yArr, colorArr, optionObj) {
-
-			this.node = new Array();
-			var cnt = 0;
-			var degree = 0;
-			// calculate total frequency.
-			var totalFreq = 0;
-			for(var i = 0 ; i < xArr.length ; i ++){
-				totalFreq = totalFreq + yArr[i];
+			_init: function(axisObj, dataObj, optionObj) {
+				this.id = dataObj.$id;
+				this.barWidth = axisObj.xbarWidth;
+				// check color
+				if(axisObj.legendLabel != undefined){
+					var legendLabel = axisObj.legendLabel;
+					if(dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined){
+						addColorField(dataObj[legendLabel]);
+					}else if(dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined){
+						addColorField(dataObj[legendLabel]);
+					}
+					this.colorOn = true;
+				}else{
+					this.colorOn = false;
+				}
+				this.colorLabel = legendLabel;
+			},
+			
+			_checkStacking: function(axisObj, dataObj, xLabel, yLabel) {
+				if(dataObj[yLabel].isDiscrete == undefined){
+					var temp = new Object();
+					var max = dataObj[yLabel][0];
+					var min = dataObj[yLabel][0];
+					for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+						// frequency max count, stacking on...
+						if(temp[dataObj[xLabel][i]] == undefined){
+							temp[dataObj[xLabel][i]] = dataObj[yLabel][i];
+						}else{
+							temp[dataObj[xLabel][i]] = temp[dataObj[xLabel][i]] + dataObj[yLabel][i];
+							if(temp[dataObj[xLabel][i]] > max){
+								max = temp[dataObj[xLabel][i]];
+							}else if(temp[dataObj[xLabel][i]] < min){
+								min = temp[dataObj[xLabel][i]];
+							}
+							this.stacking = true;
+						}
+					}
+					if(this.stacking == true){
+						if(yLabel == 'freqeuncy'){
+							axisObj._setYContinuous(max, 0);
+						}else{
+							axisObj._setYContinuous(max, min);
+						}
+						axisObj._draw();
+					}
+					delete temp;
+					//this.xFreq = temp;
+					//alert(this.xFreq[0.6]);
+				}
+			},
+			_draw: function(axisObj, dataObj, xLabel, yLabel) {
+				this.node = new Array();
+				var cnt = 0;
+				var degree = 0;
+				// calculate total frequency.
+				var totalFreq = 0;
+				for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+					totalFreq = totalFreq + dataObj[yLabel][i];
+				}
+				if(this.colorOn == true){
+					for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+						this.node[i] = new Kinetic.Wedge({						
+	            			name : i,
+	    					freq: dataObj[yLabel][i],
+	    					x: axisObj.plotXMargin + axisObj.width/2,
+	    					y: axisObj.plotYMargin + axisObj.height/2,
+	    					radius: 100,
+	    					rotationDeg: -90 + degree,	
+	    					angleDeg: dataObj[yLabel][i]/totalFreq * 360,
+	    					fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+	    					stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+	    					strokeWidth: 0.2,
+	    					opacity : 0.5,
+	    					selected : 0,
+	    					selectCnt : 0,
+	    					info : "Node : " + i
+	    				});
+	        			degree = degree + dataObj[yLabel][i]/totalFreq * 360;
+					}
+				}else{
+					for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+						this.node[i] = new Kinetic.Wedge({						
+	            			name : i,
+	    					freq: dataObj[yLabel][i],
+	    					x: axisObj.plotXMargin + axisObj.width/2,
+	    					y: axisObj.plotYMargin + axisObj.height/2,
+	    					radius: 100,
+	    					rotationDeg: -90 + degree,	
+	    					angleDeg: dataObj[yLabel][i]/totalFreq * 360,
+	    					fill: 'green',
+	    					stroke: 'green',
+	    					strokeWidth: 0.2,
+	    					opacity : 0.5,
+	    					selected : 0,
+	    					selectCnt : 0,
+	    					info : "Node : " + i
+	    				});
+	        			degree = degree + dataObj[yLabel][i]/totalFreq * 360;
+					}
+				}
+				this.dataLayer = new Kinetic.Layer();	
+	        	for(var i = 0 ; i < this.node.length ; i ++){
+					this.dataLayer.add(this.node[i]);
+				}
+				axisObj.dataLayerArr.push(this.dataLayer);
+				axisObj.hoverArr.push(pieHover());
+				//add layer
+				axisObj.stage.add(this.dataLayer);
 			}
-			if(axisObj.isXDiscrete == true){
-				for(var i = 0; i < xArr.length ; i ++){
-        			this.node[i] = new Kinetic.Wedge({						
-            			name : i,
-    					freq: yArr[i],
-    					x: axisObj.plotXMargin + axisObj.width/2,
-    					y: axisObj.plotYMargin + axisObj.height/2,
-    					radius: 100,
-    					rotationDeg: -90 + degree,	
-    					angleDeg: yArr[i]/totalFreq * 360,
-    					fill: colorArr[i],
-    					stroke: 'black',
-    					strokeWidth: 0.2,
-    					opacity : 0.5,
-    					selected : 0,
-    					selectCnt : 0,
-    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
-    				});
-        			degree = degree + yArr[i]/totalFreq * 360;
-	        	}
-			}else{
-				for(var i = 0; i < xArr.length - 1 ; i ++){
-					this.node[i] = new Kinetic.Wedge({						
-            			name : i,
-    					freq: yArr[i],
-    					x: axisObj.plotXMargin + axisObj.width/2,
-    					y: axisObj.plotYMargin + axisObj.height/2,
-    					radius: 100,
-    					rotationDeg: -90 + degree,	
-    					angleDeg: yArr[i]/totalFreq * 360,
-    					fill: colorArr[i],
-    					stroke: 'black',
-    					strokeWidth: 0.2,
-    					opacity : 0.5,
-    					selected : 0,
-    					selectCnt : 0,
-    					info : "Node : " + i + "\r\n" + "Frequency : " + yArr[i] + "\r\n" + "Range : ",
-    				});
-        			degree = degree + yArr[i]/totalFreq * 360;
-	        	}
-			}
-        	// event add
-			pieObj.refreshArr[this.id] = makeRefresh(this.stage);
-			pieObj.updateArr[this.id] = pieUpdate(this.node);
-        	this.firstUpdate = firstUpdate(pieObj);        	
-        	this.dataLayer = new Kinetic.Layer();	
-			for(var i = 0 ; i < this.node.length ; i ++){
-				this.dataLayer.add(this.node[i]);
-			}
-			axisObj.dataLayerArr.push(this.dataLayer);
-			axisObj.hoverArr.push(pieHover());
-			//add layers
-			axisObj.stage.add(this.dataLayer);
-		}
 	};
 })();
 function pieHover()
@@ -83,13 +125,11 @@ function pieHover()
 		{
 			if(overOff == 1){
 				node.setOpacity(1);
-				node.setStroke('black');
 				node.draw();
 			}else if(overOff == 0){
 				var tween = new Kinetic.Tween({
 		        	node: node, 
 		        	duration: 0.01,
-		        	stroke: node.getFill(),
 		        	opacity: 0.5
 		        }).play();
 			}			

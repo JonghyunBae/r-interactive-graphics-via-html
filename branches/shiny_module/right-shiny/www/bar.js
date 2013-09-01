@@ -191,7 +191,7 @@ var Bar = {};
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
-	}
+	};
 })();
 /**  Draw Bar graph(histogram) End  **/
 

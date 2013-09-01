@@ -61,8 +61,9 @@ shinyUI(bootstrapPage(
        </div>
        
        <script>
-       var axis1 = new Axis(1, mainArr1, 'cut', 'table', {legend: 'carat', position: 'topleft'});
-       var s1 = new Dot(axis1, mainArr1, 'cut', 'depth',{});
+       var axis1 = new Axis(1, mainArr1, 'carat', 'price', {legend: 'carat', position: 'topleft'});
+       var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
+        var l1 = new Line(axis1, mainArr1, 'carat', 'price', {});
      //   var s2 = new Dot(axis1, mainArr1, 'cut', 'table',{});
        var hobj1 = new ddply(mainArr1, ['price','cut', 'carat'], {});
         var axis2 = new Axis(2, hobj1, 'price', 'frequency', {legend:'price', position: 'left'});
@@ -70,14 +71,15 @@ shinyUI(bootstrapPage(
       var hobj2 = new ddply(mainArr1, ['cut','carat'] , {});
       var axis3 = new Axis(3, hobj2, 'carat', 'frequency', {legend:'cut', position: 'left'});
       var s4 = new Bar(axis3, hobj2, 'carat', 'frequency',{});
+      var l2 = new Line(axis3, hobj2, 'carat', 'frequency',{});
 
       var hobj3 = new ddply(mainArr1, ['color', 'cut'], {});
       var axis4 = new Axis(4, hobj3, 'cut', 'frequency', {legend:'color', position: 'left'});
       var s5 = new Bar(axis4, hobj3, 'cut', 'frequency', {});
 
-       var hobj4 = new ddply(mainArr1, ['cut'], {});
-      var axis5 = new Axis(5, hobj4, 'cut', 'frequency', {legend:'cut', position: 'left'});
-      var p1 = new Pie(axis5, hobj4, 'cut', 'frequency', {});
+       var hobj4 = new ddply(mainArr1, ['carat'], {});
+      var axis5 = new Axis(5, hobj4, 'carat', 'frequency', {legend:'carat', position: 'left'});
+      var p1 = new Pie(axis5, hobj4, 'carat', 'frequency', {});
           
       eventTrigger([axis1, axis2, axis3, axis4, axis5]);
        // hist releated.

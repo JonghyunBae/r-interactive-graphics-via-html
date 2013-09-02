@@ -369,7 +369,18 @@ function select(Name)
 		            return;
 		        }
 				if(!isNaN(node.getName())){
-					allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
+					if(aPressed){
+	            		allSelect(Name.graphObjArr[0]);
+	            	}else if(ctrlPressed){
+	            		if(node.getSelected() == 0){
+	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
+	                	}else if(node.getSelected() == 1){
+	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 0);
+	                	}
+	            	}else{
+	            		allDeselect(Name.graphObjArr[0]);
+						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
+	            	}					
 				}
 			});
 		})(i);

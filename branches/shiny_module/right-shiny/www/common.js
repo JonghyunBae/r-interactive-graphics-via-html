@@ -174,7 +174,6 @@ function firstUpdate(obj)
 					object.$isSelected[temp][0] = selectOn;
 					for(var i = 1 ; i < object.$isSelected[temp].length ; i ++){
 						object.$isSelected[temp][i](selectOn);
-						object.refreshArr[i](); // refresh
 					}
 					refineArr[cnt++] = temp;
 				}
@@ -184,11 +183,14 @@ function firstUpdate(obj)
 						object.$isSelected[temp[j]][0] = selectOn;
 						for(var i = 1 ; i < object.$isSelected[temp[j]].length ; i ++){
 							object.$isSelected[temp[j]][i](selectOn);
-							object.refreshArr[i](); // refresh
 						}
 						refineArr[cnt++] = temp[j];
 					}
 				}
+			}
+			// refresh
+			for(var i = 1 ; i < object.refreshArr.length ; i ++){
+				object.refreshArr[i]();
 			}
 			// child update
 			if(object.child != null && cnt > 0){
@@ -207,16 +209,18 @@ function childUpdate(object, nodes, selectOn)
 		object.$isSelected[nodes][0] = selectOn;
 		for(var i = 1 ; i < object.$isSelected[nodes].length ; i ++){
 			object.$isSelected[nodes][i](selectOn);
-			object.refreshArr[i](); // refresh
 		}
 	}else{
 		for(var j = 0 ; j < nodes.length ; j ++){
 			object.$isSelected[nodes[j]][0] = selectOn;
 			for(var i = 1 ; i < object.$isSelected[nodes[j]].length ; i ++){
 				object.$isSelected[nodes[j]][i](selectOn);
-				object.refreshArr[i](); // refresh
 			}
 		}
+	}
+	// refresh
+	for(var i = 1 ; i < object.refreshArr.length ; i ++){
+		object.refreshArr[i]();
 	}
 	//child update
 	if(object.child != null){

@@ -39,8 +39,10 @@ This page can be modified while being designed.
     * obj.depth, obj.price, obj.cut, obj.frequency.(all length of all fields is same)
  # Graphs
   * Example
-   * Dot(dataObj, 'xLabel', 'yLabel', 'colorLable');
-   * Bar(dataObj, 'xLabel', 'yLabel', 'colorLabel');
+   * Dot(axisObj, dataObj, 'xLabel', 'yLabel', {});
+   * Bar(axisObj, dataObj, 'xLabel', 'yLabel', {});
+   * Line(axisObj, dataObj, 'xLabel', 'yLabel', {});
+   * Pie(axisObj, dataObj, 'xLabel', 'yLabel', {});
  # Color
    * "addColorField(labelObj)" adds "color" or "colorIndex" field into labelobj.
    * Called in Axis when checking legendLabel
@@ -56,9 +58,10 @@ This page can be modified while being designed.
 
 = Schedule =
  * TO DO
-  * Bar - stacking design.
   * design event handler part.
  * DONE
+  * basic pie & line.(9/1)
+  * Bar stacking.(9/1)
   * Make "Dot" and "Bar" with color.(8/24)
   * Make "addColorField" and legend in Axis.(8/22)
   * Make "ddply".(8/22)

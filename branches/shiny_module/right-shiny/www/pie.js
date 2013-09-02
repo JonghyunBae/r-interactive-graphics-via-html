@@ -83,7 +83,7 @@ var Pie = {};
 	    					opacity : 0.5,
 	    					selected : 0,
 	    					selectCnt : 0,
-	    					info : "Node : " + i
+	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
 	        			degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}
@@ -103,7 +103,7 @@ var Pie = {};
 	    					opacity : 0.5,
 	    					selected : 0,
 	    					selectCnt : 0,
-	    					info : "Node : " + i
+	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
 	        			degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}

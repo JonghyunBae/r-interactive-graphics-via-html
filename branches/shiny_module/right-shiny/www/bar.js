@@ -91,7 +91,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt 
+									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 								cnt ++;
@@ -115,7 +115,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt 
+									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 								cnt ++;
@@ -143,7 +143,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt 
+									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 								cnt ++;
@@ -167,7 +167,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt 
+									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 								cnt ++;

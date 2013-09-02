@@ -43,7 +43,7 @@ var Dot = {};
 								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
 								selected: 0,
 								opacity: 0.5,
-								info: "Node: " + cnt 
+								info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 							});							
 							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 							cnt ++;
@@ -63,7 +63,7 @@ var Dot = {};
 								fill: 'green',
 								selected: 0,
 								opacity: 0.5,
-								info: "Node: " + cnt 
+								info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 							});
 							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 							cnt ++;

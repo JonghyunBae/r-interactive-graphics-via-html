@@ -4,7 +4,32 @@ var plotRadius = 2;
 
 
 
-
+function getNodeinfo(dataObj, id)
+{
+	var cnt = 0;
+	for(var name in dataObj){
+		if(cnt == 0){
+			if(!(name == 'parent' || name == 'child' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+				if(dataObj[name].isDiscrete == true){
+					var info =  name + ': ' + dataObj[name].index[dataObj[name][id]];
+				}else{
+					var info =  name + ': ' + dataObj[name][id];
+				}
+			}
+				
+			cnt ++;
+		}else{
+			if(!(name == 'parent' || name == 'child' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+				if(dataObj[name].isDiscrete == true){
+					info = info + "\r\n" + name + ': ' + dataObj[name].index[dataObj[name][id]];
+				}else{
+					info = info + "\r\n" + name + ': ' + dataObj[name][id];
+				}
+			}
+		}
+	}
+	return info;
+}
 
 
 ////////////////////////////////////mouse position of each graph////////////////////////////////////

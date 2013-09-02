@@ -96,6 +96,8 @@ function createMainStructure(id, fileName)
 	mainArr.child = null;
 	mainArr.$isSelected = isSelected;
 	mainArr.$id = 1;
+	mainArr.refreshArr = new Array();
+	mainArr.refreshArr[0] = null;
 	// factoring of discrete data.
 	for(var i = 0 ; i < labelArr.length ; i ++){
 		delete mainArr[labelArr[i]]["tempField"];
@@ -291,6 +293,7 @@ var ddply = {};
 				p2cArr[hasArr[i][j]] = i;
 			}
 		}
+		this.$id = 1;
 		this.$isSelected = isSelected;
 		birthReport(dataObj, this, p2cArr, hasArr);
 		

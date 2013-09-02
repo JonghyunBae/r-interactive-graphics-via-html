@@ -5,11 +5,13 @@ var Bar = {};
 		this._init(axisObj, dataObj, optionObj);
 		this._checkStacking(axisObj, dataObj, xLabel, yLabel);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
+		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
 	Bar.prototype = {
 			_init: function(axisObj, dataObj, optionObj) {
-				this.id = dataObj.$id;
+				this.dataId = dataObj.$id;
+				this.graphId = axisObj.numberOfGraph;
 				this.barWidth = axisObj.xbarWidth;
 				// check color
 				if(axisObj.legendLabel != undefined){
@@ -93,10 +95,10 @@ var Bar = {};
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
-								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
+								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
 							}else{
-								dataObj.$isSelected[i][this.id] = nullUpdate(0);
+								dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 							}
 						}
 					}else{
@@ -117,10 +119,10 @@ var Bar = {};
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
-								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
+								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
 							}else{
-								dataObj.$isSelected[i][this.id] = nullUpdate(0);
+								dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 							}
 						}
 					}					
@@ -145,10 +147,10 @@ var Bar = {};
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
-								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
+								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
 							}else{
-								dataObj.$isSelected[i][this.id] = nullUpdate(0);
+								dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 							}
 						}
 					}else{
@@ -169,25 +171,27 @@ var Bar = {};
 									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
-								dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
+								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
 							}else{
-								dataObj.$isSelected[i][this.id] = nullUpdate(0);
+								dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 							}
 						}
 					}
 				}				
 	        	// event add
+				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
 				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
-	        	//this.firstUpdate = firstUpdate(scatterObj);
-	        	
+				this.firstUpdate = firstUpdate(dataObj);
+				
 	        	this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
 				}
-				axisObj.dataLayerArr.push(this.dataLayer);
-				axisObj.hoverArr.push(barHover());
+	        	axisObj.graphObjArr[this.graphId] = this;
+	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
+				axisObj.hoverArr[this.graphId] = barHover();
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
@@ -207,11 +211,13 @@ function barUpdate(node)
 				node.setSelectCnt(node.getSelectCnt() - 1);
 				if(node.getSelectCnt() == 0){
 					node.setOpacity(0.5);
+					node.setStroke(node.getFill());
 					node.setSelected(0);
 				}
 			}else if(selectOn == 1){		// select
-				node.setSelectCnt(node.getSelectCnt() + 1);						
+				node.setSelectCnt(node.getSelectCnt() + 1);
 				if(node.getSelected() == 0){
+					node.setStroke('black');
 					node.setOpacity(1);
 					node.setSelected(1);
 				}

@@ -9,7 +9,7 @@ function getNodeinfo(dataObj, id)
 	var cnt = 0;
 	for(var name in dataObj){
 		if(cnt == 0){
-			if(!(name == 'parent' || name == 'child' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			if(!(name == 'parent' || name == 'child' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 				if(dataObj[name].isDiscrete == true){
 					var info =  name + ': ' + dataObj[name].index[dataObj[name][id]];
 				}else{
@@ -19,7 +19,7 @@ function getNodeinfo(dataObj, id)
 				
 			cnt ++;
 		}else{
-			if(!(name == 'parent' || name == 'child' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			if(!(name == 'parent' || name == 'child' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 				if(dataObj[name].isDiscrete == true){
 					info = info + "\r\n" + name + ': ' + dataObj[name].index[dataObj[name][id]];
 				}else{
@@ -150,62 +150,79 @@ function setMapping(index)
 }
 
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate(Name, nodes, select) 
+function allGraphUpdate(graphObj, nodes, selectOn) 
 {	
-	Name.firstUpdate(nodes, select);
+	graphObj.firstUpdate(nodes, selectOn);
 }
 
 function firstUpdate(obj)
 {
-	return function(nodes, select)
+	return function(nodes, selectOn)
 		{
 			var object = obj;
 			var temp = nodes;
 			// find root
-			while(object.parent != null){				
+			while(object.parent != null){
 				temp = object.childTOparent(temp);
 				object = object.parent;
 			}
-			// selectTable update & call refreshTable.
 			var refineArr = new Array();
 			var cnt = 0;
+			// if just one node.
 			if(temp.length == undefined){
-				if(select != object.selectTable[temp]){ // prevent duplicate
-					object.selectTable[temp] = select;
+				if(object.$isSelected[temp][0] != selectOn){ // prevent duplicate 
+					object.$isSelected[temp][0] = selectOn;
+					for(var i = 1 ; i < object.$isSelected[temp].length ; i ++){
+						object.$isSelected[temp][i](selectOn);
+						object.refreshArr[i](); // refresh
+					}
 					refineArr[cnt++] = temp;
 				}
-				
-			}else{
-				for(var i = 0 ; i < temp.length ; i ++){
-					if(select != object.selectTable[temp[i]]){ // prevent duplicate
-						object.selectTable[temp[i]] = select;
-						refineArr[cnt++] = temp[i];
+			}else{ // more than one node.
+				for(var j = 0 ; j < temp.length ; j ++){
+					if(object.$isSelected[temp[j]][0] != selectOn){ // prevent duplicate 
+						object.$isSelected[temp[j]][0] = selectOn;
+						for(var i = 1 ; i < object.$isSelected[temp[j]].length ; i ++){
+							object.$isSelected[temp[j]][i](selectOn);
+							object.refreshArr[i](); // refresh
+						}
+						refineArr[cnt++] = temp[j];
 					}
 				}
 			}
-			object.refreshTable();
-			// children update
-			if(object.child != null){
+			// child update
+			if(object.child != null && cnt > 0){
 				for(var i = 0 ; i < object.child.length ; i ++){
 					var temp2 = object.parentTOchild[i](refineArr);
-					childUpdate(object.child[i], temp2, select);
+					childUpdate(object.child[i], temp2, selectOn);
 				}
 			}
 		};
 }
 
-function childUpdate(obj, nodes, select)
+function childUpdate(object, nodes, selectOn)
 {
 	// my update
-	for(var i = 0 ; i < obj.updateArr.length ; i ++){
-		obj.updateArr[i](nodes, select);
-		obj.refreshArr[i]();
+	if(nodes.length == undefined){
+		object.$isSelected[nodes][0] = selectOn;
+		for(var i = 1 ; i < object.$isSelected[nodes].length ; i ++){
+			object.$isSelected[nodes][i](selectOn);
+			object.refreshArr[i](); // refresh
+		}
+	}else{
+		for(var j = 0 ; j < nodes.length ; j ++){
+			object.$isSelected[nodes[j]][0] = selectOn;
+			for(var i = 1 ; i < object.$isSelected[nodes[j]].length ; i ++){
+				object.$isSelected[nodes[j]][i](selectOn);
+				object.refreshArr[i](); // refresh
+			}
+		}
 	}
 	//child update
-	if(obj.child != null){
-		for(var i = 0 ; i < obj.child.length ; i ++){
-			var temp = parent.parentTOchild[i](nodes);
-			childUpdate(obj.child[i], temp, select);
+	if(object.child != null){
+		for(var i = 0 ; i < object.child.length ; i ++){
+			var temp = object.parentTOchild[i](nodes);
+			childUpdate(object.child[i], temp, selectOn);
 		}
 	}
 }
@@ -216,23 +233,23 @@ function makeRefresh(stage){
 		}
 }
 
-function allSelect(Name)
+function allSelect(graphObj)
 {
 	var tmpNodeArr = new Array();
-	for(var i = 0 ; i < Name.node.length ; i ++)
+	for(var i = 0 ; i < graphObj.node.length ; i ++)
 	{
 		tmpNodeArr.push(i);
 	}
-	allGraphUpdate(Name, tmpNodeArr, 1);	
+	allGraphUpdate(graphObj, tmpNodeArr, 1);	
 }
-function allDeselect(Name)
+function allDeselect(graphObj)
 {
 	var tmpNodeArr = new Array();
-	for(var i = 0 ; i < Name.node.length ; i ++)
+	for(var i = 0 ; i < graphObj.node.length ; i ++)
 	{
 		tmpNodeArr.push(i);
 	}
-	allGraphUpdate(Name, tmpNodeArr, 0);
+	allGraphUpdate(graphObj, tmpNodeArr, 0);
 
 }
 function findMaxMinValue(Data)

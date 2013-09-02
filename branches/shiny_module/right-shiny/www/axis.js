@@ -3,8 +3,8 @@ var Axis = {};
 
 (function() {
 	
-	Axis = function(id, dataObj, xLabel, yLabel, optionObj) {
-		this._init(id, optionObj);
+	Axis = function(containerId, dataObj, xLabel, yLabel, optionObj) {
+		this._init(containerId, optionObj);
 		this._addLegend(dataObj, optionObj);
 		this._build(dataObj, xLabel, yLabel, optionObj);
 		this._draw();
@@ -12,8 +12,9 @@ var Axis = {};
 	
 	Axis.prototype = {
 			
-			_init: function(id, optionObj) {
-				this.id = id;
+			_init: function(containerId, optionObj) {
+				this.numberOfGraph = 0;
+				this.containerId = containerId;
 				this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
 				this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300
 				this.xTick = (optionObj.xTick == undefined) ? (5) : (optionObj.xTick); //default x tick is 5
@@ -22,13 +23,14 @@ var Axis = {};
 				this.plotYMargin = this.height*0.2; //canvas top, bottom margin
 				this.plotLength = this.width*0.02; //margin from plot box
 				
-				document.getElementById('container'+ id).onmousemove = getCoords;
-				document.getElementById('container'+ id).onclick = function() {
+				document.getElementById('container'+ containerId).onmousemove = getCoords;
+				document.getElementById('container'+ containerId).onclick = function() {
 			        document.getElementById('regcoords');
 			    };
-			    
+			    this.graphObjArr = new Array();
 			    this.dataLayerArr = new Array();
 			    this.hoverArr = new Array();
+			    
 			},
 			
 			_addLegend: function(dataObj, optionObj) {
@@ -133,6 +135,7 @@ var Axis = {};
 			_draw: function() {
 				// make stage.
 				makeStageLayer(this);
+				this.refresh = makeRefresh(this.stage);
 				// make plotRect.
 				makePlotRectLayer(this);
 				
@@ -309,7 +312,8 @@ function makeStageLayer(obj)
 	}
 	
 	obj.stage = new Kinetic.Stage({
-		container: 'container'+ obj.id,
+		name: 'stage',
+		container: 'container'+ obj.containerId,
 		width : obj.width + obj.plotXMargin*2 + addtionalMargin,
 		height: obj.height+obj.plotYMargin*2
 	});

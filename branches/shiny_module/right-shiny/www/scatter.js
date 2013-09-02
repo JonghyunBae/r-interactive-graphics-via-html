@@ -4,11 +4,13 @@ var Dot = {};
 	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this._init(axisObj, dataObj, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
+		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
 	Dot.prototype = {
 			_init: function(axisObj, dataObj, optionObj) {
-				this.id = dataObj.$id;
+				this.dataId = dataObj.$id;
+				this.graphId = axisObj.numberOfGraph;
 				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 				// check color
 				if(axisObj.legendLabel != undefined){
@@ -45,10 +47,10 @@ var Dot = {};
 								opacity: 0.5,
 								info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 							});							
-							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
+							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
 							cnt ++;
 						}else{
-							dataObj.$isSelected[i][this.id] = nullUpdate(0);
+							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 						}
 					}
 				}else{
@@ -65,24 +67,26 @@ var Dot = {};
 								opacity: 0.5,
 								info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 							});
-							dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
+							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
 							cnt ++;
 						}else{
-							dataObj.$isSelected[i][this.id] = nullUpdate(0);
+							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 						}
 					}
 				}
 	        	// event add
+				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
 				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
-	        	//this.firstUpdate = firstUpdate(scatterObj);
+	        	this.firstUpdate = firstUpdate(dataObj);
 	        	
 	        	this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
 				}
-				axisObj.dataLayerArr.push(this.dataLayer);
-				axisObj.hoverArr.push(dotHover());
+	        	axisObj.graphObjArr[this.graphId] = this;
+	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
+				axisObj.hoverArr[this.graphId] = dotHover();
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
@@ -102,11 +106,13 @@ function dotUpdate(node)
 				node.setStroke(node.getFill());
 				node.setScaleX(1);
 				node.setScaleY(1);
+				node.setOpacity(0.5);
 				node.setSelected(0);
 			}else if(node.getSelected() == 0 && selectOn == 1){	//select
 				node.setStroke('black');
 				node.setScaleX(2);
 				node.setScaleY(2);
+				node.setOpacity(1);
 				node.setSelected(1);
 				node.moveToTop();
 			}

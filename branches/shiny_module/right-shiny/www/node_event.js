@@ -86,6 +86,7 @@ function eventTrigger(NameArr)
 {
 	for(var i = 0 ; i < NameArr.length ; i ++){
 		hover(NameArr[i]);
+		select(NameArr[i]);
 	}	
 	//select(Name);
    // menu(Name);
@@ -355,26 +356,29 @@ function select(Name)
 		if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
 			var node = evt.targetNode;
 			if(isNaN(node.getName())){
-				allDeselect(Name);
+				allDeselect(Name.graphObjArr[0]);
 			}
 		}
 	});
 	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
 		(function (i) {
 			Name.dataLayerArr[i].on('click', function(evt){
+				var node = evt.targetNode;
 				if(dragOn == true){                       
 		            dragOn = false;
 		            return;
 		        }
+				if(!isNaN(node.getName())){
+					allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
+				}
 			});
 		})(i);
 	}
-	Name.stage.on('click', function(evt){
-		if(dragOn == true)
-        {                       
+	/*Name.stage.on('click', function(evt){
+		if(dragOn == true){                       
             dragOn = false;
             return;
-        }		
+        }
 		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
             var node = evt.targetNode;
             if(isNaN(node.getName() == false)){
@@ -427,5 +431,5 @@ function select(Name)
         		Name.preId = {x : -1 , y : -1};
         	}
         }
-	});
+	});*/
 }

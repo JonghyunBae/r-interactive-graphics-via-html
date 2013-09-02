@@ -59,6 +59,7 @@ This page can be modified while being designed.
  * TO DO
   * design event handler part.  
  * DONE
+  * kinetic new version update(4.6.0).(9/2)
   * information of nodes -> "getNodeinfo" function.(9/2)
   * basic pie & line.(9/1)
   * Bar stacking.(9/1)

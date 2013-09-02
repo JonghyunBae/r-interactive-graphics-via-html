@@ -59,6 +59,7 @@ This page can be modified while being designed.
 = Schedule =
  * TO DO
   * design event handler part.
+  * information of nodes.
  * DONE
   * basic pie & line.(9/1)
   * Bar stacking.(9/1)

@@ -23,7 +23,7 @@ shinyUI(bootstrapPage(
   includeCSS(), 
   includeJS("shiny-right.js"),
   includeJS("callback.js"),
-  includeJS("kinetic-v4.5.4.js"),
+  includeJS("kinetic-v4.6.0.js"),
   includeJS("structure.js"),
   includeJS("common.js"),
   includeJS("axis.js"),

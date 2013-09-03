@@ -95,101 +95,195 @@ function eventTrigger(NameArr)
 var dragOn = false;
 function drag(Name)
 {
-        var preDragMousePos;
-        var aftDragMousePos;
-               
-        var moving = false;
-        var divid;
-        Name.stage.on('mousedown touchstart', function(evt){
-            if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-                divid = mouseName;
-                preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
-                if(moving == true){
-                    moving = false;
-                    Name.rangeBoxLayer.draw();
-                }else{
-                    var mousePos = Name.stage.getMousePosition();           
-                    Name.rangeBox.setX(mousePos.x);
-                    Name.rangeBox.setY(mousePos.y);
-                    Name.rangeBox.setWidth(0);
-                    Name.rangeBox.setHeight(0);
-                    moving = true;
-                    Name.rangeBoxLayer.drawScene();
-                }
+    var preDragMousePos;
+    var aftDragMousePos;
+    
+    var moving = false;
+    var divid;
+    Name.stage.on('mousedown touchstart', function(evt){
+        if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+            divid = mouseName;
+            preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+            if(moving == true){
+                moving = false;
+                Name.rangeBoxLayer.draw();
+            }else{
+                var mousePos = Name.stage.getMousePosition();
+                Name.rangeBox.setX(mousePos.x);
+                Name.rangeBox.setY(mousePos.y);
+                Name.rangeBox.setWidth(0);
+                Name.rangeBox.setHeight(0);
+                moving = true;
+                Name.rangeBoxLayer.drawScene();
             }
-        }); 
-        
-         
-        var tmpx, tmpy, tmpName;
-        window.addEventListener ("mousemove", function (evt){
-                        if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-                                
-                                if(moving == true)
-                                {
-                                        dragOn = true;
-                                        if(divid == mouseName)
-                                        {
-                                                var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
-                                                tmpx = divOffsetX;
-                                                tmpy = divOffsetY;
-                                                tmpName = Name;
-                                        }else{
-                                                var mousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
-                                        }
-                                        var x, y;
-                                        x = mousePos.x;// + plotXmargin;
-                                        y = mousePos.y; //+ plotYmargin + plotHeight;
-                                        Name.rangeBox.setWidth(x- Name.rangeBox.getX());
-                                        Name.rangeBox.setHeight(y- Name.rangeBox.getY());
-                                        Name.rangeBoxLayer.moveToTop();
-                                        Name.rangeBoxLayer.drawScene();
-                                }
-                        }
-                
-        }, true);
-        
-        window.addEventListener ("mouseup", function (evt){
-                if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-                        if(moving == true)
-                        {
-                                aftDragMousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
-                                Name.rangeBox.setWidth(0);
-                                Name.rangeBox.setHeight(0);
-                                Name.rangeBoxLayer.drawScene();
-                               
-                                
-                                if(ctrlPressed == false){
-                                	allDeselect(Name.graphObjArr[0]);
-                                }
-                                // find small x,y and big x,y
-                                var smallX, bigX;
-                    			var smallY, bigY;
-                    			if(preDragMousePos.x >= aftDragMousePos.x){
-                    				smallX = aftDragMousePos.x;
-                    				bigX = preDragMousePos.x;
-                    			}else if(preDragMousePos.x < aftDragMousePos.x){
-                    		        smallX = preDragMousePos.x;
-                    		        bigX = aftDragMousePos.x;
-                    			}
-                    			if(preDragMousePos.y >= aftDragMousePos.y){
-                    		        smallY = aftDragMousePos.y;
-                    		        bigY = preDragMousePos.y;
-                    			}else if(preDragMousePos.y < aftDragMousePos.y){
-                    		        smallY = preDragMousePos.y;
-                    		        bigY = aftDragMousePos.y;
-                    			}
-                    			// box search
-                                for(var i = 0 ; i < Name.boxSearchArr.length ; i ++){
-                                	Name.boxSearchArr[i](smallX, smallY, bigX, bigY);
-                                }
-                             //   alert(preDragMousePos.x + ', ' + preDragMousePos.y + ', ' + aftDragMousePos.x + ', ' + aftDragMousePos.y);
-                             //   RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
-                                moving = false;
-                                
-                        }
+        }
+    }); 
+    var tmpx, tmpy, tmpName;
+    window.addEventListener("mousemove", function (evt){
+    	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click                            
+		    if(moving == true){
+	            dragOn = true;
+	            if(divid == mouseName){
+	                var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+	                tmpx = divOffsetX;
+	                tmpy = divOffsetY;
+	                tmpName = Name;
+	            }else{
+	                var mousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
+	            }
+	            var x, y;
+	            x = mousePos.x;// + plotXmargin;
+	            y = mousePos.y; //+ plotYmargin + plotHeight;
+	            Name.rangeBox.setWidth(x- Name.rangeBox.getX());
+	            Name.rangeBox.setHeight(y- Name.rangeBox.getY());
+	            Name.rangeBoxLayer.moveToTop();
+	            Name.rangeBoxLayer.drawScene();
+		    }
+    	}
+            
+    }, true);
+    
+    window.addEventListener ("mouseup", function (evt){
+    	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+            if(moving == true){
+                aftDragMousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
+                Name.rangeBox.setWidth(0);
+                Name.rangeBox.setHeight(0);
+                Name.rangeBoxLayer.drawScene();
+                if(ctrlPressed == false){
+                	allDeselect(Name.graphObjArr[0]);
                 }
-        }, true);
+                // find small x,y and big x,y
+                var smallX, bigX;
+    			var smallY, bigY;
+    			if(preDragMousePos.x >= aftDragMousePos.x){
+    				smallX = aftDragMousePos.x;
+    				bigX = preDragMousePos.x;
+    			}else if(preDragMousePos.x < aftDragMousePos.x){
+    		        smallX = preDragMousePos.x;
+    		        bigX = aftDragMousePos.x;
+    			}
+    			if(preDragMousePos.y >= aftDragMousePos.y){
+    		        smallY = aftDragMousePos.y;
+    		        bigY = preDragMousePos.y;
+    			}else if(preDragMousePos.y < aftDragMousePos.y){
+    		        smallY = preDragMousePos.y;
+    		        bigY = aftDragMousePos.y;
+    			}
+    			// box search
+    		//	alert('box');
+                for(var i = 0 ; i < Name.boxSearchArr.length ; i ++){
+                	Name.boxSearchArr[i](smallX, smallY, bigX, bigY);
+                }
+                moving = false;
+            }
+        }
+    }, true);
 }
+
+function select(Name)
+{
+	var tmpNodeArr = new Array();
+	// temporary method for unselecting nodes.
+	Name.stage.on('click', function(evt){
+		if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
+			var node = evt.targetNode;
+			if(isNaN(node.getName())){
+				if(dragOn == true){                       
+		            dragOn = false;
+		            return;
+		        }
+				allDeselect(Name.graphObjArr[0]);
+			}
+		}
+	});
+	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
+		(function (i) {
+			Name.dataLayerArr[i].on('click', function(evt){
+				var node = evt.targetNode;
+				if(dragOn == true){
+					//alert("ddd");
+		            dragOn = false;
+		            return;
+		        }
+				if(!isNaN(node.getName())){
+					if(aPressed){
+	            		allSelect(Name.graphObjArr[0]);
+	            	}else if(ctrlPressed){
+	            		if(node.getSelected() == 0){
+	            		//	alert('dddd');
+	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
+	                	}else if(node.getSelected() == 1){
+	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 0);
+	                	}
+	            	}else{
+	   //         		alert("in click");
+	            		allDeselect(Name.graphObjArr[0]);
+						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
+	            	}					
+				}
+			});
+		})(i);
+	}
+}
+
+
+function hover(Name)
+{
+	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
+		(function (i) { 
+		Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
+			if(dragOn == true){                       
+	            dragOn = false;
+	            return;
+	        }
+			var node = evt.targetNode;
+			document.body.style.cursor = "pointer";
+			var mousePos = node.getStage().getMousePosition();
+			var mousePos = node.getStage().getMousePosition();
+			// Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
+			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
+	            Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
+		    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
+		            Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
+		    }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
+		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
+		    }else{
+		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
+		    }
+			Name.tooltip.getText().setText(node.getInfo());
+			Name.tooltipLayer.moveToTop();
+			Name.tooltip.show();
+			Name.tooltipLayer.draw();
+			if(node.getSelected() == 0){
+				Name.hoverArr[i](node, 1);
+	        }
+		});
+		Name.dataLayerArr[i].on('mouseout', function(evt) {
+			if(dragOn == true){                       
+	            dragOn = false;
+	            return;
+	        }
+			var node = evt.targetNode;
+			document.body.style.cursor = "default";
+			Name.tooltip.hide();
+			Name.tooltipLayer.draw();
+			if(node.getSelected() == 0){
+				Name.hoverArr[i](node, 0);
+			}else{
+				if(node.getOpacity() == 0.5){
+					node.setOpacity(1);
+					node.draw();
+				}				
+			}
+		});
+		})(i);
+	}
+}
+
+
+
+
 function RectRangeSelect(Name, pre, aft)
 {
 	var tmpNodeArr = new Array();
@@ -217,50 +311,7 @@ function RectRangeSelect(Name, pre, aft)
 	}       
 	if(Name._type == undefined)
 		return;
-	if(Name._type == "scatter"  || Name._type == "pie" ){
-		if(ctrlPressed == true) {
-			for(var i = 0 ; i < Name.node.length ; i ++){
-				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY){
-					if(Name.node[i].getSelected()==1){
-						tmpNodeArr.push(i);
-					}else{
-						tmpNodeArr1.push(i);
-					}					                   
-                }
-			}
-			allGraphUpdate(Name, tmpNodeArr, 0);
-			allGraphUpdate(Name, tmpNodeArr1, 1);
-		}else{
-			for(var i = 0 ; i < Name.node.length ; i ++){
-				if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY){
-					tmpNodeArr.push(i);              
-                }                        
-			}
-			allGraphUpdate(Name, tmpNodeArr, 1);
-		}
-                
-	}else if(Name._type == "hist"){
-		if(ctrlPressed == true) {
-			for(var i = 0 ; i < Name.node.length ; i ++){
-				if((smallX <= Name.node[i].getX() + Name.node[i].getWidth() && Name.node[i].getX() <= bigX) && (smallY <= Name.node[i].getY() + Name.node[i].getHeight() && Name.node[i].getY() <= bigY)){
-					if(Name.node[i].getSelected()==1){
-						tmpNodeArr.push(i);
-					}else{
-						tmpNodeArr1.push(i);
-					}                      
-				}
-			}
-			allGraphUpdate(Name, tmpNodeArr, 0);
-			allGraphUpdate(Name, tmpNodeArr1, 1);
-		}else{
-			for(var i = 0 ; i < Name.node.length ; i ++){
-				if((smallX <= Name.node[i].getX() + Name.node[i].getWidth() && Name.node[i].getX() <= bigX) && (smallY <= Name.node[i].getY() + Name.node[i].getHeight() && Name.node[i].getY() <= bigY)){
-					tmpNodeArr.push(i);
-                }
-           	}
-			allGraphUpdate(Name, tmpNodeArr, 1);
-        }
-	}else if(Name._type == "box"){
+	if(Name._type == "box"){
 		if(ctrlPressed == true) {
 			for(var i = 0 ; i < Name.node.length ; i ++)
 			{
@@ -306,93 +357,3 @@ function RectRangeSelect(Name, pre, aft)
 	}
 }
 
-function hover(Name)
-{
-	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
-		(function (i) { 
-		Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
-			if(dragOn == true){                       
-	            dragOn = false;
-	            return;
-	        }
-			var node = evt.targetNode;
-			document.body.style.cursor = "pointer";
-			var mousePos = node.getStage().getMousePosition();
-			var mousePos = node.getStage().getMousePosition();
-			// Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
-			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
-	            Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
-		    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
-		            Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
-		    }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
-		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
-		    }else{
-		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
-		    }
-			Name.tooltip.getText().setText(node.getInfo());
-			Name.tooltipLayer.moveToTop();
-			Name.tooltip.show();
-			Name.tooltipLayer.draw();
-			if(node.getSelected() == 0){
-				Name.hoverArr[i](node, 1);
-	        }
-		});
-		Name.dataLayerArr[i].on('mouseout', function(evt) {
-			if(dragOn == true){                       
-	            dragOn = false;
-	            return;
-	        }
-			var node = evt.targetNode;
-			document.body.style.cursor = "default";
-			Name.tooltip.hide();
-			Name.tooltipLayer.draw();
-			if(node.getSelected() == 0){
-				Name.hoverArr[i](node, 0);
-			}
-		});
-		})(i);
-	}
-}
-
-function select(Name)
-{
-	var tmpNodeArr = new Array();
-	// temporary method for unselecting nodes.
-	Name.stage.on('click', function(evt){
-		if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
-			var node = evt.targetNode;
-			if(isNaN(node.getName())){
-				if(dragOn == true){                       
-		            dragOn = false;
-		            return;
-		        }
-				allDeselect(Name.graphObjArr[0]);
-			}
-		}
-	});
-	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
-		(function (i) {
-			Name.dataLayerArr[i].on('click', function(evt){
-				var node = evt.targetNode;
-				if(dragOn == true){                       
-		            dragOn = false;
-		            return;
-		        }
-				if(!isNaN(node.getName())){
-					if(aPressed){
-	            		allSelect(Name.graphObjArr[0]);
-	            	}else if(ctrlPressed){
-	            		if(node.getSelected() == 0){
-	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
-	                	}else if(node.getSelected() == 1){
-	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 0);
-	                	}
-	            	}else{
-	            		allDeselect(Name.graphObjArr[0]);
-						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
-	            	}					
-				}
-			});
-		})(i);
-	}
-}

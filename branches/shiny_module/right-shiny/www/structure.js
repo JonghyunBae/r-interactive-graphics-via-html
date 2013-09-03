@@ -92,6 +92,9 @@ function createMainStructure(id, fileName)
 		isSelected[i][0] = 0;
 	}
 	// event components
+	mainArr._type = 'main';
+	mainArr.refreshTable = refreshTable("table" + id, mainArr);
+	mainArr.labelArr = labelArr; // for table.
 	mainArr.parent = null;
 	mainArr.child = null;
 	mainArr.$isSelected = isSelected;
@@ -294,6 +297,7 @@ var ddply = {};
 			}
 		}
 		this.$id = 1;
+		this._type = 'ddply';
 		this.$isSelected = isSelected;
 		birthReport(dataObj, this, p2cArr, hasArr);
 		

@@ -9,7 +9,7 @@ function getNodeinfo(dataObj, id)
 	var cnt = 0;
 	for(var name in dataObj){
 		if(cnt == 0){
-			if(!(name == 'parent' || name == 'child' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 				if(dataObj[name].isDiscrete == true){
 					var info =  name + ': ' + dataObj[name].index[dataObj[name][id]];
 				}else{
@@ -19,7 +19,7 @@ function getNodeinfo(dataObj, id)
 				
 			cnt ++;
 		}else{
-			if(!(name == 'parent' || name == 'child' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 				if(dataObj[name].isDiscrete == true){
 					info = info + "\r\n" + name + ': ' + dataObj[name].index[dataObj[name][id]];
 				}else{
@@ -92,21 +92,20 @@ function refreshTable(tableID, mainArr){
 	    var row = table.insertRow(rowCount);
 	    var colCount = table.rows[0].cells.length;
 	    var colWidth=100;
-	    for(var i=0; i < mainArr.selectTable.length ; i++)
+	    for(var i=0; i < mainArr.$isSelected.length ; i ++)
 		{
-			if(mainArr.selectTable[i] == 1)
+			if(mainArr.$isSelected[i][0] == 1)
 			{
-				//alert('1');
 				rowCount = table.rows.length;
 				row = table.insertRow(rowCount);
 				var newcell = row.insertCell(0);
-				newcell.align = 'center';			
+				newcell.align = 'center';
 				newcell.style.backgroundColor = '#cfe444';
 				newcell.style.color = 'black';
 				newcell.innerHTML = i;
 				newcell.width = colWidth;
 				
-				for(var j=1; j<colCount; j++) {
+				for(var j = 1 ; j < colCount ; j ++) {
 					var newcell = row.insertCell(j);			
 					newcell.align = 'center';
 					newcell.style.color = 'black';
@@ -152,6 +151,7 @@ function setMapping(index)
 //allGraphUpdate is used for only select & unselect
 function allGraphUpdate(graphObj, nodes, selectOn) 
 {	
+//	alert('allupdate ' + nodes + ', ' + selectOn);
 	graphObj.firstUpdate(nodes, selectOn);
 }
 
@@ -159,6 +159,8 @@ function firstUpdate(obj)
 {
 	return function(nodes, selectOn)
 		{
+			//alert(obj._type);
+			//alert(nodes + ", " + selectOn);
 			var object = obj;
 			var temp = nodes;
 			// find root
@@ -188,6 +190,9 @@ function firstUpdate(obj)
 					}
 				}
 			}
+			object.refreshTable();
+			//alert(object._type);
+			//alert(refineArr);
 			// refresh
 			for(var i = 1 ; i < object.refreshArr.length ; i ++){
 				object.refreshArr[i]();
@@ -249,6 +254,7 @@ function allSelect(graphObj)
 function allDeselect(graphObj)
 {
 	var tmpNodeArr = new Array();
+//	alert("deselect");
 	for(var i = 0 ; i < graphObj.node.length ; i ++)
 	{
 		tmpNodeArr.push(i);

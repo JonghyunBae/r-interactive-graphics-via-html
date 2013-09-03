@@ -54,16 +54,19 @@ This page can be modified while being designed.
  # Event Part
   * $isSelected relationship.
    * update soon..
+  * box selection and click
+   * there are few bugs -> should be fixed later.
   * table part.
-   * under construction.
-  * change axis.
+   * "refreshTable" is added to mainArr.(labelArr is needed)
+  * right click menu(change axis)
    * under construction.
 
 
 = Schedule =
  * TO DO
-  * design event handler - table, change axis.
+  * design event handler - change axis + few bugs with box select.
  * DONE
+  * event Handle - table.(9/3)
   * event Handle - click, multiple click(ctrl, A), box Select.(9/3)
   * add basic line(no event).(9/2)
   * kinetic new version update(4.6.0).(9/2)

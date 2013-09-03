@@ -52,13 +52,20 @@ This page can be modified while being designed.
      * continuous: addColorField(mainArr1.carat);
      * result: mainArr1.carat.color = [RGB, RGB, ...];(length of mainArr.carat)
  # Event Part
-  * under construction..
+  * $isSelected relationship.
+   * update soon..
+  * table part.
+   * under construction.
+  * change axis.
+   * under construction.
 
 
 = Schedule =
  * TO DO
-  * design event handler part.  
+  * design event handler - table, change axis.
  * DONE
+  * event Handle - click, multiple click(ctrl, A), box Select.(9/3)
+  * add basic line(no event).(9/2)
   * kinetic new version update(4.6.0).(9/2)
   * information of nodes -> "getNodeinfo" function.(9/2)
   * basic pie & line.(9/1)

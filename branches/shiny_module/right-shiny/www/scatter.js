@@ -87,13 +87,41 @@ var Dot = {};
 	        	axisObj.graphObjArr[this.graphId] = this;
 	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 				axisObj.hoverArr[this.graphId] = dotHover();
+				axisObj.boxSearchArr[this.graphId] = dotBoxSearch(this);
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
 	}
 })();
 /**  Draw Dot graph(scatter) End  **/
-
+function dotBoxSearch(graphObj)
+{
+	return function(smallX, smallY, bigX, bigY)
+		{
+			var tmpNodeArr = new Array();
+			var tmpNodeArr1 = new Array();
+			if(ctrlPressed == true) {
+				for(var i = 0 ; i < graphObj.node.length ; i ++){
+					if(smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY){
+						if(graphObj.node[i].getSelected()==1){
+							tmpNodeArr.push(i);
+						}else{
+							tmpNodeArr1.push(i);
+						}					                   
+	                }
+				}
+				allGraphUpdate(graphObj, tmpNodeArr, 0);
+				allGraphUpdate(graphObj, tmpNodeArr1, 1);
+			}else{
+				for(var i = 0 ; i < graphObj.node.length ; i ++){
+					if(smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY){
+						tmpNodeArr.push(i);              
+	                }                        
+				}
+				allGraphUpdate(graphObj, tmpNodeArr, 1);
+			}
+		};
+}
 /**  update function  **/
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.

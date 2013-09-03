@@ -87,10 +87,8 @@ function eventTrigger(NameArr)
 	for(var i = 0 ; i < NameArr.length ; i ++){
 		hover(NameArr[i]);
 		select(NameArr[i]);
-	}	
-	//select(Name);
-   // menu(Name);
-   // drag(Name);        
+		drag(NameArr[i]);
+	}      
 }
 
 
@@ -99,57 +97,29 @@ function drag(Name)
 {
         var preDragMousePos;
         var aftDragMousePos;
-        
-        var rangeBox = new Kinetic.Rect({
-                x: 0,
-                y: 0, 
-                width : 0,
-                height : 0,
-                fill: "blue",
-                stroke: "blue",                                         
-                opacity : 0.3
-        });
-        var rangeBoxLayer = new Kinetic.Layer();
-        rangeBoxLayer.add(rangeBox); 
-        Name.stage.add(rangeBoxLayer);        
+               
         var moving = false;
         var divid;
         Name.stage.on('mousedown touchstart', function(evt){
-                if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-                        divid = mouseName;
-                        preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
-                        if(moving == true){
-                                moving = false;
-                                rangeBoxLayer.draw();
-                        }else{
-                                var mousePos = Name.stage.getMousePosition();           
-                                rangeBox.setX(mousePos.x);
-                                rangeBox.setY(mousePos.y);
-                                rangeBox.setWidth(0);
-                                rangeBox.setHeight(0);
-                                moving = true;
-                                rangeBoxLayer.drawScene();
-                        }
+            if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+                divid = mouseName;
+                preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
+                if(moving == true){
+                    moving = false;
+                    Name.rangeBoxLayer.draw();
+                }else{
+                    var mousePos = Name.stage.getMousePosition();           
+                    Name.rangeBox.setX(mousePos.x);
+                    Name.rangeBox.setY(mousePos.y);
+                    Name.rangeBox.setWidth(0);
+                    Name.rangeBox.setHeight(0);
+                    moving = true;
+                    Name.rangeBoxLayer.drawScene();
                 }
+            }
         }); 
-        Name.dataLayer.on('mousedown touchstart', function(evt){
-                if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-                        divid = mouseName;
-                        preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
-                        if(moving == true){
-                                moving = false;
-                                rangeBoxLayer.draw();
-                        }else{
-                                var mousePos = Name.stage.getMousePosition();           
-                                rangeBox.setX(mousePos.x);
-                                rangeBox.setY(mousePos.y);
-                                rangeBox.setWidth(0);
-                                rangeBox.setHeight(0);
-                                moving = true;
-                                rangeBoxLayer.drawScene();
-                        }
-                }
-        }); 
+        
+         
         var tmpx, tmpy, tmpName;
         window.addEventListener ("mousemove", function (evt){
                         if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
@@ -169,9 +139,10 @@ function drag(Name)
                                         var x, y;
                                         x = mousePos.x;// + plotXmargin;
                                         y = mousePos.y; //+ plotYmargin + plotHeight;
-                                        rangeBox.setWidth(x- rangeBox.getX());
-                                        rangeBox.setHeight(y- rangeBox.getY());
-                                        rangeBoxLayer.drawScene();
+                                        Name.rangeBox.setWidth(x- Name.rangeBox.getX());
+                                        Name.rangeBox.setHeight(y- Name.rangeBox.getY());
+                                        Name.rangeBoxLayer.moveToTop();
+                                        Name.rangeBoxLayer.drawScene();
                                 }
                         }
                 
@@ -182,11 +153,38 @@ function drag(Name)
                         if(moving == true)
                         {
                                 aftDragMousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
-                                rangeBox.setWidth(0);
-                                rangeBox.setHeight(0);
-                                rangeBoxLayer.drawScene();
+                                Name.rangeBox.setWidth(0);
+                                Name.rangeBox.setHeight(0);
+                                Name.rangeBoxLayer.drawScene();
+                               
+                                
+                                if(ctrlPressed == false){
+                                	allDeselect(Name.graphObjArr[0]);
+                                }
+                                // find small x,y and big x,y
+                                var smallX, bigX;
+                    			var smallY, bigY;
+                    			if(preDragMousePos.x >= aftDragMousePos.x){
+                    				smallX = aftDragMousePos.x;
+                    				bigX = preDragMousePos.x;
+                    			}else if(preDragMousePos.x < aftDragMousePos.x){
+                    		        smallX = preDragMousePos.x;
+                    		        bigX = aftDragMousePos.x;
+                    			}
+                    			if(preDragMousePos.y >= aftDragMousePos.y){
+                    		        smallY = aftDragMousePos.y;
+                    		        bigY = preDragMousePos.y;
+                    			}else if(preDragMousePos.y < aftDragMousePos.y){
+                    		        smallY = preDragMousePos.y;
+                    		        bigY = aftDragMousePos.y;
+                    			}
+                    			// box search
+                                for(var i = 0 ; i < Name.boxSearchArr.length ; i ++){
+                                	Name.boxSearchArr[i](smallX, smallY, bigX, bigY);
+                                }
+                             //   alert(preDragMousePos.x + ', ' + preDragMousePos.y + ', ' + aftDragMousePos.x + ', ' + aftDragMousePos.y);
+                             //   RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
                                 moving = false;
-                                RectRangeSelect(tmpName, preDragMousePos, aftDragMousePos);
                                 
                         }
                 }
@@ -313,6 +311,10 @@ function hover(Name)
 	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
 		(function (i) { 
 		Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
+			if(dragOn == true){                       
+	            dragOn = false;
+	            return;
+	        }
 			var node = evt.targetNode;
 			document.body.style.cursor = "pointer";
 			var mousePos = node.getStage().getMousePosition();
@@ -332,10 +334,14 @@ function hover(Name)
 			Name.tooltip.show();
 			Name.tooltipLayer.draw();
 			if(node.getSelected() == 0){
-				Name.hoverArr[i](node, 1)
+				Name.hoverArr[i](node, 1);
 	        }
 		});
 		Name.dataLayerArr[i].on('mouseout', function(evt) {
+			if(dragOn == true){                       
+	            dragOn = false;
+	            return;
+	        }
 			var node = evt.targetNode;
 			document.body.style.cursor = "default";
 			Name.tooltip.hide();
@@ -356,6 +362,10 @@ function select(Name)
 		if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
 			var node = evt.targetNode;
 			if(isNaN(node.getName())){
+				if(dragOn == true){                       
+		            dragOn = false;
+		            return;
+		        }
 				allDeselect(Name.graphObjArr[0]);
 			}
 		}
@@ -385,62 +395,4 @@ function select(Name)
 			});
 		})(i);
 	}
-	/*Name.stage.on('click', function(evt){
-		if(dragOn == true){                       
-            dragOn = false;
-            return;
-        }
-		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-            var node = evt.targetNode;
-            if(isNaN(node.getName() == false)){
-            	if(aPressed){
-            		allSelect(Name.dataLayerArr[0])
-            	}
-            }
-            var tmpX = Name.node[node.getName()].getX();
-            var tmpY = Name.height +Name.plotYMargin - Name.node[node.getName()].getY();
-            if(aPressed){   //select ALL
-            	Name.tmpShift = false;
-            	allSelect(Name);
-            }else if(gPressed){
-            	Name.tmpShift = false;
-            }else if(shiftPressed && Name.preId.x != -1){
-            	Name.tmpShift = true;
-            	allDeselect(Name);
-            	if(Name._type == "hist" || Name._type == "box" || Name._type == "pie"){
-            		if(Name.preId.x >= tmpX){
-            			for(var i = 0 ; i < Name.node.length ; i ++){
-            				if(tmpX <= Name.node[i].getX() && Name.node[i].getX() <= Name.preId.x){
-            					tmpNodeArr.push(i);
-            				}
-            			}
-            			allGraphUpdate(Name, tmpNodeArr, 1);
-            		}else if(Name.preId.x <= tmpX){
-            			for(var i = 0 ; i < Name.node.length ; i ++){
-            				if(tmpX >= Name.node[i].getX() && Name.node[i].getX() >= Name.preId.x){
-            					tmpNodeArr.push(i);
-            				}
-            			}
-            			allGraphUpdate(Name, tmpNodeArr, 1);
-            		}
-            	}
-            }else if(ctrlPressed){ //select mutiple node one by one.
-            	if(node.getSelected() == 0){
-            		allGraphUpdate(Name, node.getName(), 1);
-            	}else if(node.getSelected() == 1){
-            		allGraphUpdate(Name, node.getName(), 0);
-            	}
-            	Name.tmpShift = false;
-            }else{  // just one click
-            	Name.tmpShift = false;
-            	allDeselect(Name);
-            	allGraphUpdate(Name, node.getName(), 1);
-            }
-        }else{
-        	if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
-        		allDeselect(Name);
-        		Name.preId = {x : -1 , y : -1};
-        	}
-        }
-	});*/
 }

@@ -68,13 +68,13 @@ shinyUI(bootstrapPage(
       
         var axis2 = new Axis(2, mainArr1, 'price', 'table', {legend: 'cut', position: 'right'});
         var s2 = new Dot(axis2, mainArr1, 'price', 'table', {});
-         var hobj1 = new ddply(mainArr1, ['cut'], {});
+      var hobj1 = new ddply(mainArr1, ['cut'], {});
         var axis3 = new Axis(3, hobj1, 'cut', 'frequency', {legend:'cut', position: 'left'});
        var s3 = new Bar(axis3, hobj1, 'cut', 'frequency',{});
-    //  var hobj2 = new ddply(mainArr1, ['cut','carat'] , {});
-    //  var axis3 = new Axis(3, hobj2, 'carat', 'frequency', {legend:'cut', position: 'left'});
-    //  var s4 = new Bar(axis3, hobj2, 'carat', 'frequency',{});
-    //  var l2 = new Line(axis3, hobj2, 'carat', 'frequency',{});
+      var hobj2 = new ddply(mainArr1, ['cut','carat'] , {});
+      var axis4 = new Axis(4, hobj2, 'carat', 'frequency', {legend:'cut', position: 'left'});
+      var s4 = new Bar(axis4, hobj2, 'carat', 'frequency',{});
+     // var l2 = new Line(axis4, hobj2, 'carat', 'frequency',{});
 
       //var hobj3 = new ddply(mainArr1, ['color', 'cut'], {});
       //var axis4 = new Axis(4, hobj3, 'cut', 'frequency', {legend:'color', position: 'left'});
@@ -84,7 +84,7 @@ shinyUI(bootstrapPage(
    //   var axis5 = new Axis(5, hobj4, 'carat', 'frequency', {legend:'carat', position: 'left'});
     //  var p1 = new Pie(axis5, hobj4, 'carat', 'frequency', {});
           
-      eventTrigger([axis1, axis2, axis3]);
+      eventTrigger([axis1, axis2, axis3, axis4]);
        // hist releated.
        /*  var hObj1= new MakeHistObj(mainArr1, 'cut', {color:'color', legend: 'left'});
        var axis1 = new MakeAxis(1, hObj1.xArr[0], hObj1.yArr[0], hObj1.isXDiscrete, hObj1.isYDiscrete, {mainLabel: hObj1.mainLabel, xLabel: hObj1.xLabel , yLabel: hObj1.yLabel, xbin: hObj1.bin, legend: hObj1.legend});
@@ -104,7 +104,7 @@ shinyUI(bootstrapPage(
        // var line2 = new Line(axis1, sobj1, sobj1.xArr[1], sobj1.yArr[1], sobj1.colorArr,{double: sobj1.double});
        var scatter3 = new Scatter(axis1, sobj1, sobj1.xArr[1], sobj1.yArr[1], sobj1.colorArr, {double: sobj1.double});
        
-       eventTrigger([axis1,axis2, axis3]);
+       eventTrigger([axis1,axis2, axis3, axis4]);
        */
        
        // var line1 = new Line(axis1, histArr1, histArr1.xArr[1], histArr1.yArr[1], histArr1.colorArr, {double: histArr1.double});

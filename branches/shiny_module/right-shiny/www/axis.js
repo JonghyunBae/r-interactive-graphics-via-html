@@ -30,7 +30,7 @@ var Axis = {};
 			    this.graphObjArr = new Array();
 			    this.dataLayerArr = new Array();
 			    this.hoverArr = new Array();
-			    
+			    this.boxSearchArr = new Array();
 			},
 			
 			_addLegend: function(dataObj, optionObj) {
@@ -112,6 +112,8 @@ var Axis = {};
 				}
 				makeXLabelLayer(this, xLabel);
 				makeYLabelLayer(this, yLabel);
+				// make rangeBoxLayer.
+				makeRangeBoxLayer(this);
 			},
 			
 			_setYContinuous: function(max, min) {
@@ -164,6 +166,9 @@ var Axis = {};
 				if(this.legendLayer != undefined){
 					this.stage.add(this.legendLayer);
 				}
+				// add rangeBox layer.
+				this.stage.add(this.rangeBoxLayer);
+				// add tooltip layer.
 				this.stage.add(this.tooltipLayer);
 			},
 			
@@ -302,7 +307,22 @@ function setAxis_discrete(index, plotLength)
 	};
 }
 /**  set axis end  **/
-
+/**  make rangeBox(drag box)  **/
+function makeRangeBoxLayer(obj)
+{
+	obj.rangeBox = new Kinetic.Rect({
+        x: 0,
+        y: 0, 
+        width : 0,
+        height : 0,
+        fill: "blue",
+        stroke: "blue",                                         
+        opacity : 0.3
+	});
+	obj.rangeBoxLayer = new Kinetic.Layer();
+	obj.rangeBoxLayer.add(obj.rangeBox);
+}
+/**  make rangeBox(drag box) end  **/
 /**  make stage  **/
 function makeStageLayer(obj)
 {

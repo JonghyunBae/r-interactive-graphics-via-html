@@ -80,6 +80,9 @@ var Bar = {};
 									y = yArr[i] - tempHeight[xArr[i]];
 									tempHeight[xArr[i]] = axisObj.height + axisObj.plotYMargin - y;
 								}
+								if(axisObj.isXDiscrete){
+									xArr[i] = xArr[i] - this.barWidth/2;
+								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
 									freq: yArr[i],
@@ -92,7 +95,7 @@ var Bar = {};
 									selected: 0,
 									selectCnt : 0,
 									opacity: 0.5,
-									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+								//	offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
@@ -104,6 +107,9 @@ var Bar = {};
 					}else{
 						for(var i = 0 ; i < xArr.length ; i ++){
 							if(!(xArr[i] == -1 || yArr[i] == -1)){
+								if(axisObj.isXDiscrete){
+									xArr[i] = xArr[i] - this.barWidth/2;
+								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
 									freq: yArr[i],
@@ -116,7 +122,7 @@ var Bar = {};
 									selected: 0,
 									selectCnt : 0,
 									opacity: 0.5,
-									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+								//	offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
@@ -132,6 +138,9 @@ var Bar = {};
 					if(this.colorOn == true){
 						for(var i = 0 ; i < xArr.length ; i ++){
 							if(!(xArr[i] == -1 || yArr[i] == -1)){
+								if(axisObj.isXDiscrete){
+									xArr[i] = xArr[i] - this.barWidth/2;
+								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
 									freq: yArr[i],
@@ -144,7 +153,7 @@ var Bar = {};
 									selected: 0,
 									selectCnt : 0,
 									opacity: 0.5,
-									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+									//offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
@@ -156,6 +165,9 @@ var Bar = {};
 					}else{
 						for(var i = 0 ; i < xArr.length ; i ++){
 							if(!(xArr[i] == -1 || yArr[i] == -1)){
+								if(axisObj.isXDiscrete){
+									xArr[i] = xArr[i] - this.barWidth/2;
+								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
 									freq: yArr[i],
@@ -168,7 +180,7 @@ var Bar = {};
 									selected: 0,
 									selectCnt : 0,
 									opacity: 0.5,
-									offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
+								//	offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
 									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
@@ -192,12 +204,43 @@ var Bar = {};
 	        	axisObj.graphObjArr[this.graphId] = this;
 	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 				axisObj.hoverArr[this.graphId] = barHover();
+				axisObj.boxSearchArr[this.graphId] = barBoxSearch(this);
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
 	};
 })();
 /**  Draw Bar graph(histogram) End  **/
+
+function barBoxSearch(graphObj)
+{
+	return function(smallX, smallY, bigX, bigY)
+		{	
+			var tmpNodeArr = new Array();
+			var tmpNodeArr1 = new Array();
+			if(ctrlPressed == true) {
+				for(var i = 0 ; i < graphObj.node.length ; i ++){
+					if((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)){
+						if(graphObj.node[i].getSelected() == 1){
+							tmpNodeArr.push(i);
+						}else{
+							tmpNodeArr1.push(i);
+						}                      
+					}
+				}
+				allGraphUpdate(graphObj, tmpNodeArr, 0);
+				allGraphUpdate(graphObj, tmpNodeArr1, 1);
+			}else{
+				for(var i = 0 ; i < graphObj.node.length ; i ++){
+					if((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)){
+						tmpNodeArr.push(i);
+	                }
+	           	}
+				allGraphUpdate(graphObj, tmpNodeArr, 1);
+	        }
+			
+		};
+}
 
 /**  update function  **/
 //Kinetic version update

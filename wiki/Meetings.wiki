@@ -18,6 +18,15 @@
 
 == 01SEP2013 ==
 
+  # Update from CH:
+   # histogram stacking.
+   # basic line graph.
+  # Update from JH:
+   # Simple package can be done in various environment.
+  # To-Do list
+   # Basic event handler and right click(e.g. change axis) should be done as soon as possible for making a simple package.
+   # Regression line with server offload part, or without it.
+   # R API for code generation.
 
 == 25AUG2013 ==
 

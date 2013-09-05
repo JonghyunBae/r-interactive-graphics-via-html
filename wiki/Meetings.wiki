@@ -18,17 +18,21 @@
 
 == 01SEP2013 ==
 
+Participants : Jae W.Lee, Jung Hoon Lee, Chung Ha Sung.
+
   # Update from CH:
    # histogram stacking.
    # basic line graph.
   # Update from JH:
-   # Simple package can be done in various environment.
-  # To-Do list
+   # Simple package is being developed.
+  # To-do list
    # Basic event handler and right click(e.g. change axis) should be done as soon as possible for making a simple package.
    # Regression line with server offload part, or without it.
    # R API for code generation.
 
 == 25AUG2013 ==
+
+Participants : Jae W.Lee, Jung Hoon Lee, Chung Ha Sung.
 
   # Update from CH:
    # Scatter and histogram works.

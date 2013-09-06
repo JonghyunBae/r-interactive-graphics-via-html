@@ -18,8 +18,7 @@ function makeTable(tableID, mainArr, height){
 			document.write("<thead>");
 				document.write("<tr>");
 				document.write("<th class=\"node\"><div>node<br>(number)</div></th>");
-				for(var i=0; i<mainArr.labelArr.length ; i++)
-				{
+				for(var i = 0 ; i < mainArr.labelArr.length ; i ++){
 					document.write("<th class=\"column\"><div>"+mainArr.labelArr[i]+"</div></th>");
 				}	  			
 				document.write("</tr>");
@@ -31,17 +30,16 @@ function makeTable(tableID, mainArr, height){
 				//	{
 						document.write("<tr style=\"display:none; \"> ");			//style=\"display:none\">
 							document.write("<td><div>-</div></td>");
-							for(var i=0; i<mainArr.labelArr.length ; i++)
-							{
+							for(var i = 0 ; i < mainArr.labelArr.length ; i ++){
 								document.write("<td ><div>-</div></td>");
-							}	  	
-						document.write("</tr>");		
+							}
+						document.write("</tr>");
 				//	}					
 			//	}
-				document.write("</tbody>");			
-			document.write("</table>");	
+				document.write("</tbody>");
+			document.write("</table>");
 		document.write(" </div>");
-	document.write(" </div>");		
+	document.write(" </div>");
 }
 
 

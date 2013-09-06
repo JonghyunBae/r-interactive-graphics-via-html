@@ -4,7 +4,7 @@ var Axis = {};
 (function() {
 	
 	Axis = function(containerId, dataObj, xLabel, yLabel, optionObj) {
-		this._init(containerId, optionObj);
+		this._init(containerId, dataObj, optionObj);
 		this._addLegend(dataObj, optionObj);
 		this._build(dataObj, xLabel, yLabel, optionObj);
 		this._draw();
@@ -12,17 +12,17 @@ var Axis = {};
 	
 	Axis.prototype = {
 			
-			_init: function(containerId, optionObj) {
+			_init: function(containerId, dataObj, optionObj) {
 				this.numberOfGraph = 0;
 				this.containerId = containerId;
 				this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
 				this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300
 				this.xTick = (optionObj.xTick == undefined) ? (5) : (optionObj.xTick); //default x tick is 5
 		        this.yTick = (optionObj.yTick == undefined) ? (5) : (optionObj.yTick); //default y tick is 5
-				this.plotXMargin = this.width*0.2; //canvas left, right margin
-				this.plotYMargin = this.height*0.2; //canvas top, bottom margin
-				this.plotLength = this.width*0.02; //margin from plot box
-				
+				this.plotXMargin = this.width*0.2; // canvas left, right margin
+				this.plotYMargin = this.height*0.2; // canvas top, bottom margin
+				this.plotLength = this.width*0.02; // margin from plot box
+				this.labelArr = getAxisLabels(dataObj); // for right click menu
 				document.getElementById('container'+ containerId).onmousemove = getCoords;
 				document.getElementById('container'+ containerId).onclick = function() {
 			        document.getElementById('regcoords');
@@ -225,6 +225,19 @@ var Axis = {};
 			}
 	}
 })();
+
+/**  getAxisLabels  **/
+function getAxisLabels(dataObj)
+{
+	var tmpNameArr = new Array();
+	for(var name in dataObj){
+		if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			tmpNameArr.push(name);
+		}
+	}
+	return tmpNameArr;
+}
+/**  getAxisLabels end  **/
 
 /**  set tooltip  **/
 //new kenetic version -> tooltip setting change using tag

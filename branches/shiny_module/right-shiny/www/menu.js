@@ -8,13 +8,9 @@ function menu(Name)
             visible: false
     });
     Name.menuText = new Array();
-    Name.menuRect = new Array();    
-   
-    var menuName = ["Hide", "Reset", "User", "Regression", "Options"]; //add topmenu element you want.
-    //var menuNameRev = new Array("Hide", "Reset", "Table", "X Axis", "Y Axis", "Color",  "Legend", "Width", "Height", "Bin"); 
-    //var menuFunction = [hideSelected, resetSelected, showTable];
-    
-    for(var i=0; i < menuName.length; i++){
+    Name.menuRect = new Array();
+    var menuName = ["Hide", "Reset", "User", "Regression", "Options"]; //add topmenu element you want.    
+    for(var i = 0 ; i < menuName.length ; i ++){
         Name.menuText[i] = new Kinetic.Text({
                 y: 25 * i,
                 text: '',
@@ -30,46 +26,46 @@ function menu(Name)
                 fill: '#93b21a'
         });
         Name.menu.add(Name.menuRect[i]).add(Name.menuText[i]);
-        Name.menuText[i].setText(' '+menuName[i]);                              
+        Name.menuText[i].setText(' ' + menuName[i]);                              
         (function (i) { 
             Name.menuText[i].on('mouseover', function(evt){
-            	for(var k=0; k<menuName.length; k++){
+            	for(var k = 0 ; k < menuName.length ; k ++){
             		Name.menuRect[k].setFill('#93b21a');
                     Name.menuText[k].setFill('white');
             	}
                 Name.menuRect[i].setFill('#cfe444');
                 Name.menuText[i].setFill('black');
                 Name.menuLayer.draw();
-                if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Table" no sub menu       
-                    for(var j=0; j<optionMenuName.length; j++){
+                if(i == 0 || i == 1 || i == 2){ //if "Hide", "Reset", "Table" no sub menu       
+                    for(var j = 0; j < optionMenuName.length ; j ++){
                         Name.optionMenu[j].hide();
-                        Name.optionMenuLayer.draw();                                            
+                        Name.optionMenuLayer.draw();                               
                         Name.subMenu[j].hide();
-                        Name.subMenuLayer[j].draw();    
+                        Name.subMenuLayer[j].draw();
                     }
-                    for(var j=0; j<regressionMenuName.length; j++){
+                    for(var j = 0; j < regressionMenuName.length ; j ++){
                         Name.regressionMenu[j].hide();
                         Name.regressionMenuLayer.draw();
                     }
-                }else if(i == 3){		// on Regression 
-                	for(var j=0; j<optionMenuName.length; j++){
+                }else if(i == 3){		// on Regression
+                	for(var j = 0; j < optionMenuName.length ; j ++){
                         Name.optionMenu[j].hide();
-                        Name.optionMenuLayer.draw();  
+                        Name.optionMenuLayer.draw();
                         Name.subMenu[j].hide();
-                        Name.subMenuLayer[j].draw();    
+                        Name.subMenuLayer[j].draw();
                 	}
-                	for(var j=0; j<regressionMenuName.length; j++){
+                	for(var j = 0; j < regressionMenuName.length ; j ++){
                         Name.regressionMenu[j].show();
                         Name.regressionMenuLayer.moveToTop();
                         Name.regressionMenuLayer.draw();
                 	}
                 	Name.regressionMenuLayer.draw();
                 }else{		// on option
-                	for(var j=0; j<regressionMenuName.length; j++){
+                	for(var j = 0; j < regressionMenuName.length ; j ++){
                         Name.regressionMenu[j].hide();
                         Name.regressionMenuLayer.draw();
                 	}
-                    for(var j=0; j<optionMenuName.length; j++){
+                    for(var j = 0; j < optionMenuName.length ; j ++){
                             Name.optionMenu[j].show();
                             Name.optionMenuLayer.moveToTop();
                             Name.optionMenuLayer.draw();
@@ -81,40 +77,40 @@ function menu(Name)
             	for(var k=0; k<menuName.length; k++){
             		Name.menuRect[k].setFill('#93b21a');
                     Name.menuText[k].setFill('white');
-            	}                     
+            	}
             	Name.menuRect[i].setFill('#cfe444');
                 Name.menuText[i].setFill('black');
                 Name.menuLayer.draw();
-            	if(i==0 || i==1 || i==2){ //if "Hide", "Reset", "Table", "Regression" no sub menu       
-                    for(var j=0; j<optionMenuName.length; j++){
+            	if(i == 0 || i == 1 || i == 2){ //if "Hide", "Reset", "Table", "Regression" no sub menu       
+                    for(var j = 0 ; j < optionMenuName.length ; j ++){
                             Name.optionMenu[j].hide();
-                            Name.optionMenuLayer.draw();  
+                            Name.optionMenuLayer.draw();
                             Name.subMenu[j].hide();
-                            Name.subMenuLayer[j].draw();    
+                            Name.subMenuLayer[j].draw();
                     }
-                    for(var j=0; j<regressionMenuName.length; j++){
+                    for(var j = 0; j < regressionMenuName.length ; j ++){
                         Name.regressionMenu[j].hide();
                         Name.regressionMenuLayer.draw();
                     }
                 }else if(i == 3){	// on Regression 
-                	for(var j=0; j<optionMenuName.length; j++){
+                	for(var j = 0; j < optionMenuName.length ; j ++){
                         Name.optionMenu[j].hide();
-                        Name.optionMenuLayer.draw();  
+                        Name.optionMenuLayer.draw();
                         Name.subMenu[j].hide();
-                        Name.subMenuLayer[j].draw();    
+                        Name.subMenuLayer[j].draw();
                 	}
-                	for(var j=0; j<regressionMenuName.length; j++){
+                	for(var j = 0; j < regressionMenuName.length ; j ++){
                         Name.regressionMenu[j].show();
                         Name.regressionMenuLayer.moveToTop();
                         Name.regressionMenuLayer.draw();
                 	}
                 	Name.regressionMenuLayer.draw();
                 }else{	// on option
-                	for(var j=0; j<regressionMenuName.length; j++){
+                	for(var j = 0 ; j < regressionMenuName.length ; j ++){
                         Name.regressionMenu[j].hide();
                         Name.regressionMenuLayer.draw();
                 	}
-                    for(var j=0; j<optionMenuName.length; j++){
+                    for(var j = 0 ; j < optionMenuName.length ; j ++){
                         Name.optionMenu[j].show();
                         Name.optionMenuLayer.moveToTop();
                         Name.optionMenuLayer.draw();
@@ -131,7 +127,7 @@ function menu(Name)
 		            Name.menuRect[i].setFill('#93b21a');
 		            Name.menuText[i].setFill('white');
 		            Name.menuLayer.draw();
-		    });     
+		    });
 	    })(i);
     }
     Name.menuLayer.add(Name.menu);
@@ -181,7 +177,7 @@ function menu(Name)
     var regressionMenuName = ['linear', 'loess']; //add option element you want.
     Name.regressionMenuLayer = new Kinetic.Layer();
     Name.regressionMenu = new Array(regressionMenuName.length);
-    for(var i=0; i< regressionMenuName.length ; i++){
+    for(var i = 0 ; i < regressionMenuName.length ; i++){
         Name.regressionMenu[i] = new Kinetic.Group({
                 opacity: 0.95,
                 visible: false
@@ -190,7 +186,7 @@ function menu(Name)
     Name.regressionMenuText = new Array();
     Name.regressionMenuRect = new Array();    
     
-    for(var i=0; i < regressionMenuName.length; i++){
+    for(var i = 0 ; i < regressionMenuName.length ; i ++){
         Name.regressionMenuText[i] = new Kinetic.Text({
     	    x: 88,
             y: 25* i,
@@ -214,7 +210,7 @@ function menu(Name)
         		Name.menuRect[3].setFill('#cfe444');
                 Name.menuText[3].setFill('black');  
                 Name.menuLayer.draw();//menu higlighed		
-            	for(var k=0; k<regressionMenuName.length; k++){
+            	for(var k = 0 ; k < regressionMenuName.length ; k ++){
             		Name.regressionMenuRect[k].setFill('#EEAD0E');
                     Name.regressionMenuText[k].setFill('white');
             	}
@@ -226,7 +222,7 @@ function menu(Name)
             	Name.menuRect[3].setFill('#cfe444');
                 Name.menuText[3].setFill('black');  
                 Name.menuLayer.draw();//menu higlighed	
-            	for(var k=0; k<regressionMenuName.length; k++){
+            	for(var k = 0; k < regressionMenuName.length ; k ++){
             		Name.regressionMenuRect[k].setFill('#EEAD0E');
                     Name.regressionMenuText[k].setFill('white');
             	}
@@ -246,7 +242,7 @@ function menu(Name)
             });    
         })(i);
     }
-    for(var i=0; i<regressionMenuName.length; i++){
+    for(var i = 0; i < regressionMenuName.length ; i ++){
         Name.regressionMenuLayer.add(Name.regressionMenu[i]);
     }
     Name.stage.add(Name.regressionMenuLayer);
@@ -277,7 +273,7 @@ function menu(Name)
     var optionMenuName = ['xAxis', 'yAxis', 'color', 'width', 'height', 'bin']; //add option element you want.
     Name.optionMenuLayer = new Kinetic.Layer();
     Name.optionMenu = new Array(optionMenuName.length);
-    for(var i=0; i< optionMenuName.length ; i++){
+    for(var i = 0 ; i < optionMenuName.length ; i ++){
         Name.optionMenu[i] = new Kinetic.Group({
             opacity: 0.95,
             visible: false
@@ -286,7 +282,7 @@ function menu(Name)
     Name.optionMenuText = new Array();
     Name.optionMenuRect = new Array();    
     
-    for(var i=0; i < optionMenuName.length; i++){
+    for(var i = 0 ; i < optionMenuName.length ; i ++){
         Name.optionMenuText[i] = new Kinetic.Text({
     	    x: 88,
             y: 25 * i,
@@ -310,7 +306,7 @@ function menu(Name)
         		Name.menuRect[4].setFill('#cfe444');
                 Name.menuText[4].setFill('black');  
                 Name.menuLayer.draw();//menu higlighed	
-            	for(var k=0; k<optionMenuName.length; k++){
+            	for(var k = 0 ; k < optionMenuName.length ; k ++){
             		Name.optionMenuRect[k].setFill('#EEAD0E');
                     Name.optionMenuText[k].setFill('white');
             	}
@@ -356,7 +352,7 @@ function menu(Name)
             });    
         })(i);
     }
-    for(var i=0; i<optionMenuName.length; i++){
+    for(var i = 0; i < optionMenuName.length ; i ++){
         Name.optionMenuLayer.add(Name.optionMenu[i]);
     }
     Name.stage.add(Name.optionMenuLayer);
@@ -365,7 +361,7 @@ function menu(Name)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Name.subMenuLayer = new Array(optionMenuName.length);
     Name.subMenu = new Array(optionMenuName.length);
-    for(var i=0; i< optionMenuName.length ; i++){
+    for(var i = 0; i < optionMenuName.length ; i ++){
         Name.subMenuLayer[i] = new Kinetic.Layer();
         Name.subMenu[i] = new Kinetic.Group({
             opacity: 0.95,
@@ -375,26 +371,25 @@ function menu(Name)
     Name.subMenuText = make2DArr(optionMenuName.length);
     Name.subMenuRect = make2DArr(optionMenuName.length);
     var subMenuName =  make2DArr(optionMenuName.length);
-    for(j=0; j< optionMenuName.length; j++){
+    for(j = 0 ; j < optionMenuName.length ; j ++){
 		switch(j){
     		case 0 : 
     		case 1 :
     		case 2 :
-                subMenuName[j]=['1','2'];
+                subMenuName[j] = Name.labelArr;
                 break;
     		case 3 :
     		case 4 :
-    			subMenuName[j]=['-100px', '-10px', '-1px', '+1px', '+10px', '+100px'];
+    			subMenuName[j] = ['-100px', '-10px', '-1px', '+1px', '+10px', '+100px'];
                 break;
     		case 5 :
-    			subMenuName[j]=['-1', '+1'];
+    			subMenuName[j] = ['-1', '+1'];
                 break;
             default :
             	break;
 		}
-        (function (j) { 
-        	//alert(subMenuName[j]);
-            for(var i=0; i < subMenuName[j].length; i++){
+        (function (j) {
+            for(var i = 0; i < subMenuName[j].length ; i ++){
                 Name.subMenuText[j][i] = new Kinetic.Text({
                     x: 180,
                     y: 25 * i + 25 * j,
@@ -413,13 +408,13 @@ function menu(Name)
                     fill: '#7a8eb9'
                 });     
                 Name.subMenu[j].add(Name.subMenuRect[j][i]).add(Name.subMenuText[j][i]);
-                Name.subMenuText[j][i].setText(' '+subMenuName[j][i]);  
+                Name.subMenuText[j][i].setText(' ' + subMenuName[j][i]);  
                 (function (i) { 
                     Name.subMenuText[j][i].on('click', function(evt){
-                    	array_of_functions[j](Name, i);
+                    	array_of_functions[j](Name, Name.labelArr[i]);
                     });
                     Name.subMenuRect[j][i].on('click', function(evt){
-                    	array_of_functions[j](Name, i);
+                    	array_of_functions[j](Name, Name.labelArr[i]);
                     });
                     Name.subMenuText[j][i].on('mouseover', function(evt){
                     	Name.optionMenuRect[j].setFill('#FFD700');
@@ -453,7 +448,7 @@ function menu(Name)
             }
         })(j); 
     }
-    for(var j=0; j<optionMenuName.length; j++){
+    for(var j = 0; j < optionMenuName.length ; j ++){
         Name.subMenuLayer[j].add(Name.subMenu[j]);
         Name.stage.add(Name.subMenuLayer[j]);
     }
@@ -461,8 +456,7 @@ function menu(Name)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Name.stage.on('click', function(evt){
-        for(var i = 0 ; i < objArr.length ; i ++)
-        {
+     /*   for(var i = 0 ; i < objArr.length ; i ++){
             objArr[i].menu.hide();
             objArr[i].menuLayer.draw();
             for(var j=0; j<optionMenuName.length; j++){
@@ -475,15 +469,23 @@ function menu(Name)
             }
             objArr[i].regressionMenuLayer.draw();
             objArr[i].optionMenuLayer.draw();  
-        }
-        if((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click         
-    		for(var j=0; j<optionMenuName.length; j++){
-            		Name.optionMenu[j].hide();
-                    Name.subMenu[j].hide();
-                    Name.subMenuLayer[j].draw();    
-            }
-    		Name.optionMenuLayer.draw();  
-            menuOn=true;
+        }*/
+        if((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click
+        	if(menuOn == true){
+        		// hide all menu.
+        		for(var j = 0; j < optionMenuName.length ; j ++){
+                		Name.optionMenu[j].hide();
+                        Name.subMenu[j].hide();
+                        Name.subMenuLayer[j].draw();
+                }
+        		for(var j = 0 ; j < regressionMenuName.length ; j ++){
+        			Name.regressionMenu[j].hide();
+        		}
+        		Name.regressionMenuLayer.draw();
+        		Name.optionMenuLayer.draw();
+        	}else{
+        		menuOn = true;
+        	}       	
             var node = evt.targetNode;
             //update menu
             var menuHeight = 25*menuName.length;
@@ -498,44 +500,51 @@ function menu(Name)
                 Name.menu.setPosition(mousePos.x, mousePos.y);
                 Name.optionMenuLayer.setPosition(mousePos.x , mousePos.y);
                 Name.regressionMenuLayer.setPosition(mousePos.x , mousePos.y + 75);
-                for(var j=0; j<subMenuName.length; j++){
-                        Name.subMenuLayer[j].setPosition(mousePos.x , mousePos.y);
+                for(var j = 0 ; j < subMenuName.length ; j ++){
+                	Name.subMenuLayer[j].setPosition(mousePos.x , mousePos.y);
                 }                                
             }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){//3rd quadrant
                 Name.menu.setPosition(mousePos.x, mousePos.y - menuHeight);
                 Name.optionMenuLayer.setPosition(mousePos.x, mousePos.y - menuHeight);
                 Name.regressionMenuLayer.setPosition(mousePos.x, mousePos.y - menuHeight + 75);
-                for(var j=0; j<subMenuName.length; j++){
-                        Name.subMenuLayer[j].setPosition(mousePos.x , mousePos.y - 25*optionMenuName[0].length - 25*(subMenuName[j].length-1)/2);
+                for(var j = 0 ; j < subMenuName.length ; j ++){
+                	Name.subMenuLayer[j].setPosition(mousePos.x , mousePos.y - 25*optionMenuName[0].length - 25*(subMenuName[j].length-1)/2);
                 }                    
             }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//1st quadrant
                 Name.menu.setPosition(mousePos.x - menuWidth, mousePos.y );
                 Name.optionMenuLayer.setPosition(mousePos.x  - menuWidth, mousePos.y );
                 Name.regressionMenuLayer.setPosition(mousePos.x  - menuWidth, mousePos.y + 75);
-                for(var j=0; j<subMenuName.length; j++){
-                        Name.subMenuLayer[j].setPosition(mousePos.x - 5 - 3*menuWidth, mousePos.y );
+                for(var j = 0 ; j < subMenuName.length ; j ++){
+                	Name.subMenuLayer[j].setPosition(mousePos.x - 5 - 3*menuWidth, mousePos.y );
                 }
             }else{//4th quadrant
                 Name.menu.setPosition(mousePos.x  - menuWidth , mousePos.y - menuHeight);
                 Name.optionMenuLayer.setPosition(mousePos.x  - menuWidth , mousePos.y  - menuHeight);
                 Name.regressionMenuLayer.setPosition(mousePos.x  - menuWidth , mousePos.y  - menuHeight + 75);
-                for(var j=0; j<subMenuName.length; j++){
-                        Name.subMenuLayer[j].setPosition(mousePos.x - 5 - 3*menuWidth, mousePos.y - 25*optionMenuName[0].length  - 25*(subMenuName[j].length-1)/2);
+                for(var j = 0 ; j < subMenuName.length ; j ++){
+                	Name.subMenuLayer[j].setPosition(mousePos.x - 5 - 3*menuWidth, mousePos.y - 25*optionMenuName[0].length  - 25*(subMenuName[j].length-1)/2);
                 }
-            }                               
+            }
             Name.menuLayer.moveToTop();
             Name.menu.show();
             Name.menuLayer.draw();
         }else if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-            if(menuOn==true){
+            if(menuOn == true){
+            	// hide all menu.
                 Name.menu.hide();
                 Name.menuLayer.draw();
-                for(var j=0; j<optionMenuName.length; j++){
-                    Name.subMenu[j].hide();
-                    Name.subMenuLayer[j].draw();    
+        		for(var j = 0; j < optionMenuName.length ; j ++){
+                		Name.optionMenu[j].hide();
+                        Name.subMenu[j].hide();
+                        Name.subMenuLayer[j].draw();
                 }
-            }                
-        }     
+        		for(var j = 0 ; j < regressionMenuName.length ; j ++){
+        			Name.regressionMenu[j].hide();
+        		}
+        		Name.regressionMenuLayer.draw();
+        		Name.optionMenuLayer.draw();
+            }
+        }
 	});        
 //////////////////////////////////////Menu End//////////////////////////////////////
 }

@@ -88,6 +88,7 @@ function eventTrigger(NameArr)
 		hover(NameArr[i]);
 		select(NameArr[i]);
 		drag(NameArr[i]);
+		menu(NameArr[i]);
 	}      
 }
 
@@ -186,16 +187,18 @@ function select(Name)
 	var tmpNodeArr = new Array();
 	// temporary method for unselecting nodes.
 	Name.stage.on('click', function(evt){
-		if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
-			var node = evt.targetNode;
-			if(isNaN(node.getName())){
-				if(dragOn == true){                       
-		            dragOn = false;
-		            return;
-		        }
-				allDeselect(Name.graphObjArr[0]);
+		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+			if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
+				var node = evt.targetNode;
+				if(isNaN(node.getName())){
+					if(dragOn == true){                       
+			            dragOn = false;
+			            return;
+			        }
+					allDeselect(Name.graphObjArr[0]);
+				}
 			}
-		}
+		}		
 	});
 	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
 		(function (i) {

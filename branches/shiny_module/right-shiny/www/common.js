@@ -92,7 +92,7 @@ function refreshTable(tableID, mainArr){
 	    var row = table.insertRow(rowCount);
 	    var colCount = table.rows[0].cells.length;
 	    var colWidth=100;
-	    for(var i=0; i < mainArr.$isSelected.length ; i ++)
+	    for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
 		{
 			if(mainArr.$isSelected[i][0] == 1)
 			{
@@ -110,7 +110,11 @@ function refreshTable(tableID, mainArr){
 					newcell.align = 'center';
 					newcell.style.color = 'black';
 					newcell.width = colWidth;
-					newcell.innerHTML = mainArr[mainArr.labelArr[j-1]][i];
+					if(mainArr[mainArr.labelArr[j-1]].isDiscrete == true){
+						newcell.innerHTML = mainArr[mainArr.labelArr[j-1]].index[mainArr[mainArr.labelArr[j-1]][i]];
+					}else{
+						newcell.innerHTML = mainArr[mainArr.labelArr[j-1]][i];
+					}					
 				}
 			}
 		}	

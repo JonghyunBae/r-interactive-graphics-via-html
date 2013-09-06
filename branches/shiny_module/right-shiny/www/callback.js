@@ -3,42 +3,31 @@ var widthArr = [-100, -10, -1, 1, 10, 100];
 var heightArr = [-100, -10, -1, 1, 10, 100];
 var binArr = [-1, 1];
 var array_of_functions = [
-                          function(Name, i) { changeXAxis(Name, i) },
-                          function(Name, i) { changeYAxis(Name, i) },
-                          function(Name, i) { changeColor(Name, i) },
-                          function(Name, i) { changeWidth(Name, i) },
-                          function(Name, i) { changeHeight(Name, i) },
-                          function(Name, i) { changeBin(Name, i) }
-                      ]
-var changeXAxis = function (Name, i){
-	Name.changeX(Name._id, tempData, {x: Name._labelArr[i]});
-	Name.draw(Name._id);
-	eventTrigger(Name);		
+                          function(Name, label) { changeXAxis(Name, label) },
+                          function(Name, label) { changeYAxis(Name, label) },
+                          function(Name, label) { changeColor(Name, label) },
+                          function(Name, label) { changeWidth(Name, label) },
+                          function(Name, label) { changeHeight(Name, label) },
+                          function(Name, label) { changeBin(Name, label) }
+                      ];
+// Name -> axisobj
+var changeXAxis = function (Name, label){
+	alert(label);
 }
-var changeYAxis = function (Name, i){
-	Name.changeY(Name._id, tempData, {y: Name._labelArr[i]});
-	Name.draw(Name._id);
-	eventTrigger(Name);			
+var changeYAxis = function (Name, label){
+	alert(label);
 }
-var changeColor = function (Name, i){
-	Name.changeColor(Name._id, tempData, {color: Name._labelArr[i]});
-	Name.draw(Name._id);
-	eventTrigger(Name);
+var changeColor = function (Name, label){
+	alert(label);
 }
-var changeWidth = function (Name, i){
-	Name._init(Name._id, tempData, {width: Name.width + widthArr[i]});
-	Name.draw(Name._id);
-	eventTrigger(Name);
+var changeWidth = function (Name, label){
+	alert(label);
 }
-var changeHeight = function (Name, i){
-	Name._init(Name._id, tempData, {height: Name.height + heightArr[i]});
-	Name.draw(Name._id);
-	eventTrigger(Name);
+var changeHeight = function (Name, label){
+	alert(label);
 }
-var changeBin = function (Name, i){
-	Name._init(Name._id, tempData, {bin: Name.bin + binArr[i]});
-	Name.draw(Name._id);
-	eventTrigger(Name);
+var changeBin = function (Name, label){
+	alert(label);
 }
 
 //these variables are used for only hideSelected and resetSelected.
@@ -46,6 +35,8 @@ var hideCnt = 0;
 var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected()
 {
+	alert('hide selected!');
+	/*
 	var hiddenArr = new Array();
 	// collect nodes' numbers which will be hidden.
 	for(var i = 0 ; i < isSelected.length ; i ++)
@@ -82,24 +73,26 @@ function hideSelected()
 	for(var i = 0 ; i < mainArr[0].length ; i ++){
 		if(isHidden[i]){
 			continue;
-		}							
+		}
 		for(var j = 0 ; j < mainArr.length ; j ++){
 			tempData[j][h] = mainArr[j][i];
-		}				
+		}
 		h++;
 	}
 	
 	// redraw graphs.
-	for(var i = 0 ; i < objArr.length ; i ++)
-	{
+	for(var i = 0 ; i < objArr.length ; i ++){
 		objArr[i]._init(objArr[i]._id, tempData, {});
 		objArr[i].draw(objArr[i]._id);
 		eventTrigger(objArr[i]);
 	}
+	*/
 }
 
 function resetSelected()
 {
+	alert('reset selected!');
+	/*
 	if(hideCnt > 0)
 		isSelected[isSelected.length - hideCnt][0] = 0; // delete last end check.
 	hideCnt = 0; // reset the hideCnt.
@@ -116,7 +109,7 @@ function resetSelected()
 		objArr[i].draw(objArr[i]._id);
 		eventTrigger(objArr[i]);
 	}
-
+	*/
 }
 
 

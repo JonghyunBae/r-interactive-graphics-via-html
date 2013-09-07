@@ -35,7 +35,7 @@ shinyUI(bootstrapPage(
   includeJS("line.js"),
   includeJS("node_event.js"),
   includeJS("menu.js"),
-  HTML("<script> var mainArr1 = createMainStructure(1, '_sub.diamonds.csv');</script>"), 
+  HTML("<script> var mainArr1 = createMainStructure(-1, '_sub.diamonds.csv');</script>"), 
   HTML("<script>//var mainArr2 = createMainStructure(2, 'Theoph-from-R.csv');</script>"), 
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
@@ -66,14 +66,14 @@ shinyUI(bootstrapPage(
       //  var l1 = new Line(axis1, mainArr1, 'carat', 'price', {});
      //   var s2 = new Dot(axis1, mainArr1, 'cut', 'table',{});
 
-        var axis2 = new Axis(2, mainArr1, 'price', 'table', {legend: 'cut', position: 'right'});
-        var s2 = new Dot(axis2, mainArr1, 'price', 'table', {});
+     //   var axis2 = new Axis(2, mainArr1, 'price', 'table', {legend: 'cut', position: 'right'});
+      //  var s2 = new Dot(axis2, mainArr1, 'price', 'table', {});
       var hobj1 = new ddply(mainArr1, ['cut'], {});
         var axis3 = new Axis(3, hobj1, 'cut', 'frequency', {legend:'cut', position: 'left'});
        var s3 = new Bar(axis3, hobj1, 'cut', 'frequency',{});
-      var hobj2 = new ddply(mainArr1, ['cut','carat'] , {});
-      var axis4 = new Axis(4, hobj2, 'carat', 'frequency', {legend:'cut', position: 'left'});
-      var s4 = new Bar(axis4, hobj2, 'carat', 'frequency',{});
+     // var hobj2 = new ddply(mainArr1, ['cut','carat'] , {});
+    //  var axis4 = new Axis(4, hobj2, 'carat', 'frequency', {legend:'cut', position: 'left'});
+    //  var s4 = new Bar(axis4, hobj2, 'carat', 'frequency',{});
      // var l2 = new Line(axis4, hobj2, 'carat', 'frequency',{});
 
       //var hobj3 = new ddply(mainArr1, ['color', 'cut'], {});
@@ -84,13 +84,13 @@ shinyUI(bootstrapPage(
    //   var axis5 = new Axis(5, hobj4, 'carat', 'frequency', {legend:'carat', position: 'left'});
     //  var p1 = new Pie(axis5, hobj4, 'carat', 'frequency', {});
           
-      eventTrigger([axis1, axis2, axis3, axis4]);
+      eventTrigger([axis1,axis3]);
        </script>
 
        <script src=\"button_event.js\"></script>
       <script src=\"table.js\"></script>
 
-       <script>makeTable('table1', mainArr1, 200)</script>
+       <script>//makeTable('table1', mainArr1, 200)</script>
        <script>//makeTable('table2', mainArr2, 300)</script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>

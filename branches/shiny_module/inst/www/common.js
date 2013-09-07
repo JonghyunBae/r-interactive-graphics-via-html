@@ -86,38 +86,39 @@ function getXYpos(elm) {
 //////////////////////////////////////////////////////////////////////////////////////////////
 function refreshTable(tableID, mainArr){
 	return function() {
-		deleteRow(tableID); //delete all Row first.
-	    var table = document.getElementById(tableID);
-	    var rowCount = table.rows.length;
-	    var row = table.insertRow(rowCount);
-	    var colCount = table.rows[0].cells.length;
-	    var colWidth=100;
-	    for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
-		{
-			if(mainArr.$isSelected[i][0] == 1)
-			{
-				rowCount = table.rows.length;
-				row = table.insertRow(rowCount);
-				var newcell = row.insertCell(0);
-				newcell.align = 'center';
-				newcell.style.backgroundColor = '#cfe444';
-				newcell.style.color = 'black';
-				newcell.innerHTML = i;
-				newcell.width = colWidth;
-				
-				for(var j = 1 ; j < colCount ; j ++) {
-					var newcell = row.insertCell(j);			
+		if(tableID != 'table-1'){ //for temporary method.
+			deleteRow(tableID); //delete all Row first.
+		    var table = document.getElementById(tableID);
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    var colCount = table.rows[0].cells.length;
+		    var colWidth=100;
+		    for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
+				if(mainArr.$isSelected[i][0] == 1)
+				{
+					rowCount = table.rows.length;
+					row = table.insertRow(rowCount);
+					var newcell = row.insertCell(0);
 					newcell.align = 'center';
+					newcell.style.backgroundColor = '#cfe444';
 					newcell.style.color = 'black';
+					newcell.innerHTML = i;
 					newcell.width = colWidth;
-					if(mainArr[mainArr.labelArr[j-1]].isDiscrete == true){
-						newcell.innerHTML = mainArr[mainArr.labelArr[j-1]].index[mainArr[mainArr.labelArr[j-1]][i]];
-					}else{
-						newcell.innerHTML = mainArr[mainArr.labelArr[j-1]][i];
-					}					
+					
+					for(var j = 1 ; j < colCount ; j ++) {
+						var newcell = row.insertCell(j);			
+						newcell.align = 'center';
+						newcell.style.color = 'black';
+						newcell.width = colWidth;
+						if(mainArr[mainArr.labelArr[j-1]].isDiscrete == true){
+							newcell.innerHTML = mainArr[mainArr.labelArr[j-1]].index[mainArr[mainArr.labelArr[j-1]][i]];
+						}else{
+							newcell.innerHTML = mainArr[mainArr.labelArr[j-1]][i];
+						}					
+					}
 				}
 			}
-		}	
+		}		
 	};
 }
 

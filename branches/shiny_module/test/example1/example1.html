@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ 
+ <link rel="stylesheet" href="../../inst/www/right.css"/>
+ <title>RIGHT: R Interactive Graphics via HTml</title>
+
+ <script src="../../inst/www/callback.js"></script>
+ <script src="../../inst/www/kinetic-v4.6.0.js"></script>
+ <script src="../../inst/www/structure.js"></script>
+ <script src="../../inst/www/common.js"></script>
+ <script src="../../inst/www/axis.js"></script>
+ <script src="../../inst/www/color.js"></script>
+ <script src="../../inst/www/scatter.js"></script>
+ <script src="../../inst/www/bar.js"></script>
+ <script src="../../inst/www/node_event.js"></script>
+ <script src="../../inst/www/menu.js"></script>
+</head>
+<body>
+<script> var mainArr1 = createMainStructure(-1, '../../inst/www/_sub.diamonds.csv');</script>
+ 		<div id="content1" class = "right-output1" >
+ 		<div id="content" class = "right-output" >
+		<div id="container1" oncontextmenu="return false;"></div>
+		<div id="container2" oncontextmenu="return false;"></div>
+       </div>
+       </div>
+       
+       <script>      
+       var axis1 = new Axis(1, mainArr1, 'carat', 'price', {legend: 'carat', position: 'topleft'});
+       var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
+       var hobj1 = new ddply(mainArr1, ['cut'], {});
+       var axis2 = new Axis(2, hobj1, 'cut', 'frequency', {legend:'cut', position: 'left'});
+       var s2 = new Bar(axis2, hobj1, 'cut', 'frequency',{});
+       eventTrigger([axis1,axis2]);
+       </script>
+       <div id="footer">
+       <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>
+       <p id="dont-delete-this">E-mail : <a href="mailto:teamrightjs@gmail.com">team.right.js@gmail.com</a></p>
+       </div>
+       
+</body>
+</html>

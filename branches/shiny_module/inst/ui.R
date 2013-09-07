@@ -35,8 +35,8 @@ shinyUI(bootstrapPage(
   includeJS("line.js"),
   includeJS("node_event.js"),
   includeJS("menu.js"),
-  HTML("<script> var mainArr1 = createMainStructure(-1, '_sub.diamonds.csv');</script>"), 
-  HTML("<script>//var mainArr2 = createMainStructure(2, 'Theoph-from-R.csv');</script>"), 
+  HTML("<script> var mainArr1 = createMainStructure('_sub.diamonds.csv');</script>"),
+  HTML("<script>//var mainArr2 = createMainStructure('Theoph-from-R.csv');</script>"),
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
        <form id=\"searchForm1\">
@@ -90,8 +90,8 @@ shinyUI(bootstrapPage(
        <script src=\"button_event.js\"></script>
       <script src=\"table.js\"></script>
 
-       <script>//makeTable('table1', mainArr1, 200)</script>
-       <script>//makeTable('table2', mainArr2, 300)</script>
+       <script>makeTable('1', mainArr1, 200)</script>
+       <script>//makeTable('2', mainArr2, 300)</script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>
        <p id=\"dont-delete-this\">E-mail : <a href=\"mailto:teamrightjs@gmail.com\">team.right.js@gmail.com</a></p>

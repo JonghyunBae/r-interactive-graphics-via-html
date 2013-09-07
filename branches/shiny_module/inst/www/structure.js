@@ -50,7 +50,7 @@ function make2DArr(rows) {
 /**  create main structure of data  **/
 // TODO: should add event handle part(e.g. isSelected, isHidden..).
 // TODO: table relative part should be needed.
-function createMainStructure(id, fileName)
+function createMainStructure(fileName)
 {	
 	var tmpArr = getData(fileName);	
 	var dataArr = tmpArr.dataArr;	
@@ -93,7 +93,6 @@ function createMainStructure(id, fileName)
 	}
 	// event components
 	mainArr._type = 'main';
-	mainArr.refreshTable = refreshTable("table" + id, mainArr);
 	mainArr.labelArr = labelArr; // for table.
 	mainArr.parent = null;
 	mainArr.child = null;

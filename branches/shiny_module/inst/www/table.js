@@ -1,6 +1,63 @@
+function deleteRow(tableID) {
+	try {
+		var table = document.getElementById(tableID);
+		var rowCount = table.rows.length;
+ 
+		for(var i = 2 ; i < rowCount ; i ++) {
+			var row = table.rows[i];
+               //var chkbox = row.cells[0].childNodes[0];
+	        if(1){
+	            table.deleteRow(i);
+	            rowCount--;
+	            i--;
+	        }
+    }
+    }catch(e){
+        alert(e);
+    }
+}
+
+function refreshTable(tableID, mainArr){
+	return function() {
+			deleteRow(tableID); //delete all Row first.
+		    var table = document.getElementById(tableID);
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    var colCount = table.rows[0].cells.length;
+		    var colWidth=100;
+		    for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
+				if(mainArr.$isSelected[i][0] == 1)
+				{
+					rowCount = table.rows.length;
+					row = table.insertRow(rowCount);
+					var newcell = row.insertCell(0);
+					newcell.align = 'center';
+					newcell.style.backgroundColor = '#cfe444';
+					newcell.style.color = 'black';
+					newcell.innerHTML = i;
+					newcell.width = colWidth;
+					
+					for(var j = 1 ; j < colCount ; j ++) {
+						var newcell = row.insertCell(j);			
+						newcell.align = 'center';
+						newcell.style.color = 'black';
+						newcell.width = colWidth;
+						if(mainArr[mainArr.labelArr[j-1]].isDiscrete == true){
+							newcell.innerHTML = mainArr[mainArr.labelArr[j-1]].index[mainArr[mainArr.labelArr[j-1]][i]];
+						}else{
+							newcell.innerHTML = mainArr[mainArr.labelArr[j-1]][i];
+						}					
+					}
+				}
+			}		
+	};
+}
+
 //create dynamic css style for dynamic table
 function makeTable(tableID, mainArr, height){
+	tableID = 'table' + tableID;
 	var colWidth=100;
+	mainArr.refreshTable = refreshTable(tableID, mainArr);
 	document.write("<style>");
 	document.write("table.selectedInfo { width: "+((colWidth)*(mainArr.labelArr.length+1)-1)+"px; }");			
 	document.write("#"+"css"+tableID+" { width: "+ ((colWidth+1)*(mainArr.labelArr.length+1)+16) +"px;}");
@@ -41,28 +98,6 @@ function makeTable(tableID, mainArr, height){
 		document.write(" </div>");
 	document.write(" </div>");
 }
-
-
-
-function deleteRow(tableID) {
-	try {
-		var table = document.getElementById(tableID);
-		var rowCount = table.rows.length;
- 
-		for(var i=2; i<rowCount; i++) {
-			var row = table.rows[i];
-               //var chkbox = row.cells[0].childNodes[0];
-	        if(1){
-	            table.deleteRow(i);
-	            rowCount--;
-	            i--;
-	        }
-    }
-    }catch(e){
-        alert(e);
-    }
-}
-
 
 /*
 <div class="scrollableContainer" style="left:100px; top:100px">

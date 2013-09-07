@@ -3,7 +3,7 @@
 	var ansShow='';
 	// variable buttons update
 
-	for(var i=0; i<labelArr.length; i++)
+	for(var i = 0; i < labelArr.length ; i ++)
 	{
 		document.write("<a id=\"labelArr[");
 		document.write(i);

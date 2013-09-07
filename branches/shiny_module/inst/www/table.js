@@ -26,8 +26,7 @@ function refreshTable(tableID, mainArr){
 		    var colCount = table.rows[0].cells.length;
 		    var colWidth=100;
 		    for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
-				if(mainArr.$isSelected[i][0] == 1)
-				{
+				if(mainArr.$isSelected[i][0] == 1){
 					rowCount = table.rows.length;
 					row = table.insertRow(rowCount);
 					var newcell = row.insertCell(0);

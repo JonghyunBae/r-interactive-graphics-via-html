@@ -2,8 +2,7 @@
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- 
- <link rel="stylesheet" href="../../inst/www/right.css"/>
+  <link rel="stylesheet" href="../../inst/www/right.css"/>
  <title>RIGHT: R Interactive Graphics via HTml</title>
 
  <script src="../../inst/www/callback.js"></script>
@@ -35,7 +34,8 @@ var mainArr2 = createMainStructure('../../inst/www/diamonds-from-R_100.csv');
        <a id="saveImg" href="#" class="myButton" onClick="return false;">Save Image</a>
        </form>
        </div>
-       </div> 		
+       </div>
+       	<script>addButtonEvent();</script> 
  		<div id="content" class = "right-output" >
 		<div id="container1" oncontextmenu="return false;"></div>
        </div>
@@ -51,6 +51,7 @@ var mainArr2 = createMainStructure('../../inst/www/diamonds-from-R_100.csv');
        
       
       <script> makeTable(1, mainArr1, 200);</script>
+      
        <div id="footer">
        <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>
        <p id="dont-delete-this">E-mail : <a href="mailto:teamrightjs@gmail.com">team.right.js@gmail.com</a></p>

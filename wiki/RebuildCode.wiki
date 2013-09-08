@@ -64,8 +64,13 @@ This page can be modified while being designed.
 
 = Schedule =
  * TO DO
-  * design event handler - change axis + few bugs with box select.
+  * How do I set the priority of these tasks?
+   * Make box&whisker graph(the statistical calculation is needed, such as "ddply")
+   * Modify search box functions.
+   * Change the sequence of color and legend.(e.g. colors() in R)
+   * fix event handle bugs.
  * DONE
+  * fix bar selection bugs.(9/8)
   * event Handle - table.(9/3)
   * event Handle - click, multiple click(ctrl, A), box Select.(9/3)
   * add basic line(no event).(9/2)

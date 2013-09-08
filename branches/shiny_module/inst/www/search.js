@@ -1,24 +1,24 @@
-
+function makeSearchButton(mainArr)
+{
 	var ans='';
 	var ansShow='';
 	// variable buttons update
-
-	for(var i = 0; i < labelArr.length ; i ++)
-	{
+	for(var i = 0; i < mainArr.labelArr.length ; i ++){
 		document.write("<a id=\"labelArr[");
 		document.write(i);
 		document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox(");
-		document.write(i);
+		document.write(mainArr.labelArr[i]);
 		document.write("); return false;\">");
-		document.write(labelArr[i]);
+		document.write(mainArr.labelArr[i]);
 		document.write("</a>");	  
-	}			
-	
+	}
 	document.write("<br>");
 	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
 	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a>");
 	document.write("<label> [ans] : </label>");
 	document.write("<label id=\"label1\">undefined</label>");
+}
+	
 	
 	function printAns(){
 		var tmpStr = '';	
@@ -39,15 +39,13 @@
 		//histAllDeselect();
 		var textBox = document.getElementById("searchBox");
 		textBox.value = '';
-		//writeMsg(msgLayer);
-		addRow('dataTable');     	
+		//writeMsg(msgLayer);  	
 	}
 
-	function addValueToSearchBox(i)
+	function addValueToSearchBox(label)
 	{
-		
 	    var textBox = document.getElementById("searchBox");
-	    textBox.value = textBox.value + labelArr[i];
+	    textBox.value = textBox.value + label;
 	}
 
 	function addAnsToSearchBox()
@@ -59,7 +57,6 @@
 
 	function booleanSearch(string)
 	{
-		
 //		scatterAllDeselect();
 //		histAllDeselect();
 	    var inputStr = string.searchId.value;

@@ -17,6 +17,7 @@
  <script src="../../inst/www/menu.js"></script>
  <script src="../../inst/www/button_event.js"></script>
  <script src="../../inst/www/table.js"></script>
+  <script src="../../inst/www/search.js"></script>
 </head>
 <body>
 <script>
@@ -27,6 +28,7 @@ var mainArr2 = createMainStructure('../../inst/www/diamonds-from-R_100.csv');
 <div id="head"> 
        <div class="wrap">
        <form id="searchForm1">
+       <script>makeSearchButton(mainArr1);</script>
        <input type="text" id="searchBox" name="searchId" placeholder="Please input boolean statement..." onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"/>
        <a id="searchBtn" href="#" class="myButton" onClick="booleanSearch(searchForm1); printAns(); return false;">Search</a>
        <a id="clearBtn" href="#" class="myButton" onClick="clearSearchBox(); return false;">Clear</a>
@@ -35,7 +37,10 @@ var mainArr2 = createMainStructure('../../inst/www/diamonds-from-R_100.csv');
        </form>
        </div>
        </div>
-       	<script>addButtonEvent();</script> 
+       	<script>
+       		addButtonEvent();      	
+       	</script> 
+       	
  		<div id="content" class = "right-output" >
 		<div id="container1" oncontextmenu="return false;"></div>
        </div>

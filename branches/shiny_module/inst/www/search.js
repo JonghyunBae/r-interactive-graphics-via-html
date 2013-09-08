@@ -20,7 +20,8 @@ function makeSearchButton(mainArr)
 }
 	
 	
-	function printAns(){
+	function printAns()
+	{
 		var tmpStr = '';	
 		tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.
 		document.getElementById('label1').innerHTML = tmpStr;
@@ -29,7 +30,8 @@ function makeSearchButton(mainArr)
 		}
 	}
 
-	function printClearAns(){
+	function printClearAns()
+	{
 		document.getElementById('label1').innerHTML = "undefined";
 	}
 

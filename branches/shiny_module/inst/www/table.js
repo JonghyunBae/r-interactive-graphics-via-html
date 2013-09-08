@@ -25,6 +25,7 @@ function refreshTable(tableID, mainArr){
 		    var row = table.insertRow(rowCount);
 		    var colCount = table.rows[0].cells.length;
 		    var colWidth=100;
+		    var cnt = 0;
 		    for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
 				if(mainArr.$isSelected[i][0] == 1){
 					rowCount = table.rows.length;
@@ -33,7 +34,7 @@ function refreshTable(tableID, mainArr){
 					newcell.align = 'center';
 					newcell.style.backgroundColor = '#cfe444';
 					newcell.style.color = 'black';
-					newcell.innerHTML = i;
+					newcell.innerHTML = cnt++; // i
 					newcell.width = colWidth;
 					
 					for(var j = 1 ; j < colCount ; j ++) {

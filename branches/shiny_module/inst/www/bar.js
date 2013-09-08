@@ -85,7 +85,6 @@ var Bar = {};
 								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
-									freq: yArr[i],
 									x: xArr[i],
 									y: y,
 									width: this.barWidth,
@@ -112,7 +111,6 @@ var Bar = {};
 								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
-									freq: yArr[i],
 									x: xArr[i],
 									y: yArr[i],
 									width: this.barWidth,
@@ -143,7 +141,6 @@ var Bar = {};
 								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
-									freq: yArr[i],
 									x: xArr[i],
 									y: yArr[i],
 									width: this.barWidth,
@@ -170,7 +167,6 @@ var Bar = {};
 								}
 								this.node[cnt] = new Kinetic.Rect({
 									name: cnt,
-									freq: yArr[i],
 									x: xArr[i],
 									y: yArr[i],
 									width: this.barWidth,
@@ -251,19 +247,14 @@ function barUpdate(node)
 	return	function(selectOn)
 		{
 			if(node.getSelected() == 1 && selectOn == 0){		//unselect
-				if(node.getSelectCnt() > 0){
-					node.setSelectCnt(node.getSelectCnt() - 1);
-				}				
+				node.setSelectCnt(node.getSelectCnt() - 1);	
 				if(node.getSelectCnt() == 0){
 					node.setOpacity(0.5);
 					node.setStroke(node.getFill());
 					node.setSelected(0);
 				}
 			}else if(selectOn == 1){		// select
-				
-				if(node.getSelectCnt() < node.getFreq()){
-					node.setSelectCnt(node.getSelectCnt() + 1);
-				}
+				node.setSelectCnt(node.getSelectCnt() + 1);
 				if(node.getSelected() == 0){
 					node.setStroke('black');
 					node.setOpacity(1);

@@ -35,11 +35,15 @@ shinyUI(bootstrapPage(
   includeJS("line.js"),
   includeJS("node_event.js"),
   includeJS("menu.js"),
+  includeJS("button_event.js"),
+  includeJS("table.js"),
+  includeJS("search.js"),
   HTML("<script> var mainArr1 = createMainStructure('_sub.diamonds.csv');</script>"),
   HTML("<script>//var mainArr2 = createMainStructure('Theoph-from-R.csv');</script>"),
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
        <form id=\"searchForm1\">
+      <script>makeSearchButton(mainArr1);</script>
        <input type=\"text\" id=\"searchBox\" name=\"searchId\" placeholder=\"Please input boolean statement...\" onkeydown=\"if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};\"/>
        <a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(searchForm1); printAns(); return false;\">Search</a>
        <a id=\"clearBtn\" href=\"#\" class=\"myButton\" onClick=\"clearSearchBox(); return false;\">Clear</a>
@@ -48,6 +52,9 @@ shinyUI(bootstrapPage(
        </form>
        </div>
        </div>
+        <script>
+         	addButtonEvent();      	
+       	</script>
        <div id=\"content1\" class = \"right-output1\" >
        <div id=\"content\" class = \"right-output\" >"),
   createDiv("container1"),
@@ -63,35 +70,20 @@ shinyUI(bootstrapPage(
        <script>
        var axis1 = new Axis(1, mainArr1, 'carat', 'price', {legend: 'carat', position: 'topleft'});
        var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
-      //  var l1 = new Line(axis1, mainArr1, 'carat', 'price', {});
-     //   var s2 = new Dot(axis1, mainArr1, 'cut', 'table',{});
+        
+      var hobj1 = new ddply(mainArr1, ['color'], {});
+        var axis3 = new Axis(3, hobj1, 'color', 'frequency', {legend:'cut', position: 'left'});
+       var s3 = new Bar(axis3, hobj1, 'color', 'frequency',{});
+      
 
-     //   var axis2 = new Axis(2, mainArr1, 'price', 'table', {legend: 'cut', position: 'right'});
-      //  var s2 = new Dot(axis2, mainArr1, 'price', 'table', {});
-      var hobj1 = new ddply(mainArr1, ['cut'], {});
-        var axis3 = new Axis(3, hobj1, 'cut', 'frequency', {legend:'cut', position: 'left'});
-       var s3 = new Bar(axis3, hobj1, 'cut', 'frequency',{});
-     // var hobj2 = new ddply(mainArr1, ['cut','carat'] , {});
-    //  var axis4 = new Axis(4, hobj2, 'carat', 'frequency', {legend:'cut', position: 'left'});
-    //  var s4 = new Bar(axis4, hobj2, 'carat', 'frequency',{});
-     // var l2 = new Line(axis4, hobj2, 'carat', 'frequency',{});
+      var hobj3 = new ddply(mainArr1, ['color', 'cut'], {});
+      var axis4 = new Axis(4, hobj3, 'cut', 'frequency', {legend:'color', position: 'left'});
+      var s5 = new Bar(axis4, hobj3, 'cut', 'frequency', {});
 
-      //var hobj3 = new ddply(mainArr1, ['color', 'cut'], {});
-      //var axis4 = new Axis(4, hobj3, 'cut', 'frequency', {legend:'color', position: 'left'});
-      //var s5 = new Bar(axis4, hobj3, 'cut', 'frequency', {});
-
-    //   var hobj4 = new ddply(mainArr1, ['carat'], {});
-   //   var axis5 = new Axis(5, hobj4, 'carat', 'frequency', {legend:'carat', position: 'left'});
-    //  var p1 = new Pie(axis5, hobj4, 'carat', 'frequency', {});
-          
-      eventTrigger([axis1,axis3]);
+      eventTrigger([axis1, axis3, axis4]);
        </script>
-
-       <script src=\"button_event.js\"></script>
-      <script src=\"table.js\"></script>
-
        <script>makeTable('1', mainArr1, 200)</script>
-       <script>//makeTable('2', mainArr2, 300)</script>
+
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>
        <p id=\"dont-delete-this\">E-mail : <a href=\"mailto:teamrightjs@gmail.com\">team.right.js@gmail.com</a></p>

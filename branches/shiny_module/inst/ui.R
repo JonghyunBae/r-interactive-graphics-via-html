@@ -38,6 +38,7 @@ shinyUI(bootstrapPage(
   includeJS("button_event.js"),
   includeJS("table.js"),
   includeJS("search.js"),
+  includeJS("legend.js"),
   HTML("<script> var mainArr1 = createMainStructure('_sub.diamonds.csv');</script>"),
   HTML("<script>//var mainArr2 = createMainStructure('Theoph-from-R.csv');</script>"),
   HTML("<div id=\"head\"> 
@@ -68,7 +69,8 @@ shinyUI(bootstrapPage(
        </div>
        
        <script>
-       var axis1 = new Axis(1, mainArr1, 'carat', 'price', {legend: 'carat', position: 'topleft'});
+       var axis1 = new Axis(1, mainArr1, 'carat', 'price', {});
+      legend(axis1, 'left', ['A', 'B', 'C'], ['green', 'red', 'yellow']);
        var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
         
       var hobj1 = new ddply(mainArr1, ['color'], {});

@@ -102,7 +102,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	var legendX = 0;
 	var legendY = 0;
 	// set legend position.
-	if (position == 'topright' || position == 'right' || position == 'bottomright')  {
+	if(position == 'topright' || position == 'right' || position == 'bottomright'){
         legendX = axisObj.plotXMargin + axisObj.width + axisObj.plotLength*5;
         if(position == 'topright'){
         	legendY = axisObj.plotYMargin - axisObj.plotLength;

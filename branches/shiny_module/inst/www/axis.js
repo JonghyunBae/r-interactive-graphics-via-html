@@ -23,6 +23,9 @@ var Axis = {};
 				this.plotYMargin = this.height*0.2; // canvas top, bottom margin
 				this.plotLength = this.width*0.02; // margin from plot box
 				this.labelArr = getAxisLabels(dataObj); // for right click menu
+				//for providing drag
+				this.moving = false;
+				this.touch = false;
 				document.getElementById('container'+ containerId).onmousemove = getCoords;
 				document.getElementById('container'+ containerId).onclick = function() {
 			        document.getElementById('regcoords');

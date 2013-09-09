@@ -100,29 +100,33 @@ function drag(Name)
     var aftDragMousePos;
     
     var moving = false;
+    var touch = false;
     var divid;
     Name.stage.on('mousedown touchstart', function(evt){
         if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
             divid = mouseName;
             preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
-            if(moving == true){
-                moving = false;
-                Name.rangeBoxLayer.draw();
-            }else{
+         //   if(touch == true){
+          //  	touch = false;
+           //     Name.rangeBoxLayer.draw();
+           // }else{
                 var mousePos = Name.stage.getMousePosition();
                 Name.rangeBox.setX(mousePos.x);
                 Name.rangeBox.setY(mousePos.y);
                 Name.rangeBox.setWidth(0);
                 Name.rangeBox.setHeight(0);
-                moving = true;
+                Name.touch = true;
+             //   moving = true;
                 Name.rangeBoxLayer.drawScene();
-            }
+           // }
         }
     }); 
     var tmpx, tmpy, tmpName;
-    window.addEventListener("mousemove", function (evt){
+    Name.stage.on("mousemove", function (evt){
     	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click                            
-		    if(moving == true){
+		    if(Name.touch == true){
+		    	//alert(Name.containerId);
+		    	Name.moving = true;
 	            dragOn = true;
 	            if(divid == mouseName){
 	                var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
@@ -144,9 +148,9 @@ function drag(Name)
             
     }, true);
     
-    window.addEventListener ("mouseup", function (evt){
+    Name.stage.on("mouseup", function (evt){
     	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-            if(moving == true){
+            if(Name.moving == true){
                 aftDragMousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
                 Name.rangeBox.setWidth(0);
                 Name.rangeBox.setHeight(0);
@@ -172,11 +176,12 @@ function drag(Name)
     		        bigY = aftDragMousePos.y;
     			}
     			// box search
-    		//	alert('box');
                 for(var i = 0 ; i < Name.boxSearchArr.length ; i ++){
                 	Name.boxSearchArr[i](smallX, smallY, bigX, bigY);
                 }
-                moving = false;
+                Name.moving = false;
+                Name.touch = false;
+            //    dragOn = false;
             }
         }
     }, true);
@@ -191,10 +196,11 @@ function select(Name)
 			if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
 				var node = evt.targetNode;
 				if(isNaN(node.getName())){
-					if(dragOn == true){                       
+					if(dragOn == true){                    
 			            dragOn = false;
 			            return;
 			        }
+					Name.touch = false;
 					allDeselect(Name.graphObjArr[0]);
 				}
 			}
@@ -205,22 +211,20 @@ function select(Name)
 			Name.dataLayerArr[i].on('click', function(evt){
 				var node = evt.targetNode;
 				if(dragOn == true){
-					//alert("ddd");
-		            dragOn = false;
+					dragOn = false;
 		            return;
 		        }
+				Name.touch = false;
 				if(!isNaN(node.getName())){
 					if(aPressed){
 	            		allSelect(Name.graphObjArr[0]);
 	            	}else if(ctrlPressed){
 	            		if(node.getSelected() == 0){
-	            		//	alert('dddd');
 	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
 	                	}else if(node.getSelected() == 1){
 	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 0);
 	                	}
 	            	}else{
-	   //         		alert("in click");
 	            		allDeselect(Name.graphObjArr[0]);
 						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
 	            	}					
@@ -244,7 +248,6 @@ function hover(Name)
 			document.body.style.cursor = "pointer";
 			var mousePos = node.getStage().getMousePosition();
 			var mousePos = node.getStage().getMousePosition();
-			// Name.tooltip.setPosition(mousePos.x+5, mousePos.y - 5);
 			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
 	            Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
 		    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
@@ -284,7 +287,7 @@ function hover(Name)
 	}
 }
 
-
+//////////////////////// unused /////////////////////////////
 
 
 function RectRangeSelect(Name, pre, aft)

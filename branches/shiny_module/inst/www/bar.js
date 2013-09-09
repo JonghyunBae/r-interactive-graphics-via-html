@@ -221,11 +221,16 @@ function barBoxSearch(graphObj)
 							tmpNodeArr.push(i);
 						}else{
 							tmpNodeArr1.push(i);
-						}                      
+						}        
 					}
 				}
-				allGraphUpdate(graphObj, tmpNodeArr, 0);
-				allGraphUpdate(graphObj, tmpNodeArr1, 1);
+			//	alert("ddd");
+				if(tmpNodeArr.length != undefined){
+					allGraphUpdate(graphObj, tmpNodeArr, 0);
+				}
+				if(tmpNodeArr1.length != undefined){
+					allGraphUpdate(graphObj, tmpNodeArr1, 1);
+				}				
 			}else{
 				for(var i = 0 ; i < graphObj.node.length ; i ++){
 					if((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)){

@@ -70,8 +70,10 @@ shinyUI(bootstrapPage(
        
        <script>
        var axis1 = new Axis(1, mainArr1, 'carat', 'price', {});
-      legend(axis1, 'left', ['A', 'B', 'C'], ['green', 'red', 'yellow']);
-       var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
+        var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
+      legend('color', axis1, 'left', ['A', 'B', 'C'], ['green', 'red', 'yellow']);
+    //  var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
+       
         
       var hobj1 = new ddply(mainArr1, ['color'], {});
         var axis3 = new Axis(3, hobj1, 'color', 'frequency', {legend:'cut', position: 'left'});

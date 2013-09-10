@@ -104,6 +104,10 @@ function drag(Name)
     var divid;
     Name.stage.on('mousedown touchstart', function(evt){
         if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+        	var node = evt.targetNode;
+        	if(node.getName() == 'legend'){
+        		return;
+        	}
             divid = mouseName;
             preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
          //   if(touch == true){

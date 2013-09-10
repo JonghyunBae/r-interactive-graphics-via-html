@@ -138,6 +138,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 		for(var i = 0 ; i < legendObj.index.length ; i ++)
 		{						
 			legendNode[i] = new Kinetic.Circle({
+				name: 'legend',
 				x: legendX + 15,
 				y: legendY + 15*i + 11 + 20,
 				radius: 5,
@@ -145,6 +146,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 				fill: legendObj.colorIndex[i]
 			});			
 			legendText[i] = new Kinetic.Text({
+				name: 'legend',
 				x: legendX + 20,
 		        y: legendY + 15*i + 20,
 				text: legendObj.index[i],
@@ -181,6 +183,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
     	for(var i = 0; i < plotArr.length ; i++)
 		{
 			legendText[i] = new Kinetic.Text({
+				name: 'legend',
 				x: legendX + 30,
 		        y: legendY + 20*i + 15,
 				text: '-  ' + plotArr[(plotArr.length-1)-i],
@@ -192,6 +195,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 			});
 		}    	
     	legendNode[0] = new Kinetic.Rect({
+    		name: 'legend',
 			x: legendX+15,
 			y: legendY + 47 + 20*((newMax-newMin)/tickRange-1) - 20*(max - min )/tickRange - 20*(min -newMin)/tickRange,
 			width :20,
@@ -215,6 +219,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	
 	// legend Main Label.
 	var legendMain= new Kinetic.Text({
+		name: 'legend',
 		x: legendX,
         y: legendY + 5,
 		text: legendName,
@@ -229,6 +234,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	}
 	
 	var legendRect= new Kinetic.Rect({
+		name: 'legend',
 		x: legendX,
 		y: legendY,
 		width: maxLengthLegendText + 30,
@@ -258,11 +264,11 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	}
 	// make legendLayer.
 	axisObj.legendLayer = new Kinetic.Layer({
-			name:'legendLayer', 
-			width: layerWidth,
-			height: legendRect.getHeight(),
-			draggable:true
-		});
+		name: 'legend',
+		width: layerWidth,
+		height: legendRect.getHeight(),
+		draggable:true
+	});
 	axisObj.legendLayer.on('mouseover', function(evt){  
 		document.body.style.cursor = "pointer";
 	}); 

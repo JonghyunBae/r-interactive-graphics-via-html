@@ -3,9 +3,18 @@
 var Line = {};
 (function() {	
 	Line = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+		this._init(optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
 	};
 	Line.prototype = {
+			_init: function(optionObj) {
+				// set the base color.
+				if(optionObj.baseColor != undefined){
+					this.baseColor = optionObj.baseColor;
+				}else{
+					this.baseColor = 'black';
+				}
+			},
 			_draw: function(axisObj, dataObj, xLabel, yLabel) {
 				// get pixel values from axis
 				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
@@ -23,7 +32,7 @@ var Line = {};
 							         xArr[i+1],
 							         yArr[i+1]							        
 							        ],
-							stroke: 'black',
+							stroke: this.baseColor,
 							strokeWdith: 1,
 							opacity: 0.5,
 							info: "Node: " + cnt 

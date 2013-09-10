@@ -28,7 +28,7 @@ shinyUI(bootstrapPage(
   includeJS("common.js"),
   includeJS("axis.js"),
   includeJS("color.js"),
-  includeJS("scatter.js"),
+  includeJS("dot.js"),
   includeJS("bar.js"),
   includeJS("box.js"),
   includeJS("pie.js"),
@@ -70,7 +70,7 @@ shinyUI(bootstrapPage(
        
        <script>
        var axis1 = new Axis(1, mainArr1, 'carat', 'price', {});
-        var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
+        var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{baseColor: 'blue'});
       legend('color', axis1, 'left', ['A', 'B', 'C'], ['green', 'red', 'yellow']);
     //  var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
        

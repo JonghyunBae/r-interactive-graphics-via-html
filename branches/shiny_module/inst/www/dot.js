@@ -25,6 +25,12 @@ var Dot = {};
 					this.colorOn = false;
 				}
 				this.colorLabel = legendLabel;
+				// set the base color.
+				if(optionObj.baseColor != undefined){
+					this.baseColor = optionObj.baseColor;
+				}else{
+					this.baseColor = 'green';
+				}
 			},
 			_draw: function(axisObj, dataObj, xLabel, yLabel) {
 				// get pixel values from axis
@@ -61,8 +67,8 @@ var Dot = {};
 								x: xArr[i],
 								y: yArr[i],
 								radius: this.radius,
-								stroke: 'green',
-								fill: 'green',
+								stroke: this.baseColor,
+								fill: this.baseColor,
 								selected: 0,
 								opacity: 0.5,
 								info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)

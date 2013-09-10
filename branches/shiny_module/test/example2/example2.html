@@ -11,7 +11,7 @@
  <script src="../../inst/www/common.js"></script>
  <script src="../../inst/www/axis.js"></script>
  <script src="../../inst/www/color.js"></script>
- <script src="../../inst/www/scatter.js"></script>
+ <script src="../../inst/www/dot.js"></script>
   <script src="../../inst/www/line.js"></script>
  <script src="../../inst/www/node_event.js"></script>
  <script src="../../inst/www/menu.js"></script>
@@ -49,7 +49,7 @@ var mainArr2 = createMainStructure('../../inst/www/diamonds-from-R_100.csv');
        
        var axis1 = new Axis(1, mainArr1, 'carat', 'table', {legend: 'color', position: 'right'});
        var s1 = new Dot(axis1, mainArr1, 'carat', 'table',{});
-       var l1 = new Line(axis1, mainArr2, 'carat', 'depth',{});
+       var l1 = new Line(axis1, mainArr2, 'carat', 'depth',{baseColor: 'green'});
        eventTrigger([axis1]);
       
        </script>

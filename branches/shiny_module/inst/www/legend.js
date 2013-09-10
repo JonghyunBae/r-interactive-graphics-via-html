@@ -38,10 +38,10 @@ function legend(legendName, axisObj, position, nameArr, colorArr)
 	var legendNode = new Array(nameArr.length);
 	var legendText = new Array(nameArr.length);
 	
-	if(nameArr.length > 24){ // continuous
-		alert('continuous is yet builded.');
-		return 0;
-	}else{ // discrete
+//	if(nameArr.length > 24){ // continuous
+//		alert('continuous is yet builded.');
+//		return 0;
+//	}else{ // discrete
 		for(var i = 0 ; i < nameArr.length ; i ++){
 			legendNode[i] = new Kinetic.Circle({
 				name: 'legend',
@@ -63,7 +63,7 @@ function legend(legendName, axisObj, position, nameArr, colorArr)
 				align:'center'
 			});
 		}
-	}
+//	}
 	
 	// find maximum length of legendText. -> it will set legend width.
 	var maxLengthLegendText = legendText[0].getWidth();

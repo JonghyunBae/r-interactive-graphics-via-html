@@ -3,13 +3,14 @@
 ## Test addBlankLine():
 ## ---
 
-.RIGHT <- list2env(list(scriptArray = c()))
+# CHECK (junghoon): is there a better way to do this?
+assign(".RIGHT", list2env(list(scriptArray = c())), envir = asNamespace("RIGHT"))
 
 addBlankLine()
-expect_identical(.RIGHT$scriptArray, "")
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, "")
 
 addBlankLine(2)
-expect_identical(.RIGHT$scriptArray, rep("", 3))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, rep("", 3))
 
 ## ---
 ## Test prepareData():
@@ -41,17 +42,20 @@ unlink("TEMP", recursive = TRUE)
 ## Test loadData():
 ## ---
 
-.RIGHT <- list2env(list(scriptArray = c()))
+assign(".RIGHT", list2env(list(scriptArray = c())), envir = asNamespace("RIGHT"))
 
 loadData("A")
-expect_identical(.RIGHT$scriptArray, paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+                 paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'))
 
 loadData()
-expect_identical(.RIGHT$scriptArray, paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+                 paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'))
 
 expect_error(loadData(c("B", "C"), "BB.csv"))
 
 loadData(c("B", "C"), c("BB.csv", "CC.csv"))
-expect_identical(.RIGHT$scriptArray, c(paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'),
-                                       paste0('B = createMainStructure("', file.path("..", "BB.csv"), '");'),
-                                       paste0('C = createMainStructure("', file.path("..", "CC.csv"), '");')))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+                 c(paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'),
+                   paste0('B = createMainStructure("', file.path("..", "BB.csv"), '");'),
+                   paste0('C = createMainStructure("', file.path("..", "CC.csv"), '");')))

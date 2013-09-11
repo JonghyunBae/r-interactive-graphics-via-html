@@ -1,26 +1,27 @@
 ## Script to test head.R
 
-source("R/head.R")
-
 ## ---
 ## Test sourcing related functions:
 ## ---
 
-.RIGHT <- list2env(list(sourceArray = c()))
-expect_identical(.RIGHT$sourceArray , c())
+assign(".RIGHT", list2env(list(sourceArray = c())), envir = asNamespace("RIGHT"))
 
 addSource("common.js")
-expect_identical(.RIGHT$sourceArray, "common.js")
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$sourceArray, 
+                 "common.js")
 
 addSource()
-expect_identical(.RIGHT$sourceArray, "common.js")
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$sourceArray, 
+                 "common.js")
 
 addSource(c("structure.js", "event.js"))
-expect_identical(.RIGHT$sourceArray, c("common.js", "structure.js", "event.js"))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$sourceArray, 
+                 c("common.js", "structure.js", "event.js"))
 
 # Repeated values are allowed:
 addSource("common.js")
-expect_identical(.RIGHT$sourceArray, c("common.js", "structure.js", "event.js", "common.js"))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$sourceArray, 
+                 c("common.js", "structure.js", "event.js", "common.js"))
 
 expect_error(addSource(1))
 
@@ -34,21 +35,26 @@ expect_identical(createSource(c("A", "B", "", "A")),
 ## Test linking related functions:
 ## ---
 
-.RIGHT <- list2env(list(linkArray = c()))
-expect_identical(.RIGHT$linkArray , c())
+assign(".RIGHT", list2env(list(linkArray = c())), envir = asNamespace("RIGHT"))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$linkArray , 
+                 c())
 
 addLink("shared/shiny.css")
-expect_identical(.RIGHT$linkArray, "shared/shiny.css")
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$linkArray, 
+                 "shared/shiny.css")
 
 addLink()
-expect_identical(.RIGHT$linkArray, "shared/shiny.css")
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$linkArray, 
+                 "shared/shiny.css")
 
 addLink(c("right.css", "shared/slider/css/jquery.slider.min.css"))
-expect_identical(.RIGHT$linkArray, c("shared/shiny.css", "right.css", "shared/slider/css/jquery.slider.min.css"))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$linkArray, 
+                 c("shared/shiny.css", "right.css", "shared/slider/css/jquery.slider.min.css"))
 
 # Repeated values are allowed:
 addLink("right.css")
-expect_identical(.RIGHT$linkArray, c("shared/shiny.css", "right.css", "shared/slider/css/jquery.slider.min.css", "right.css"))
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$linkArray, 
+                 c("shared/shiny.css", "right.css", "shared/slider/css/jquery.slider.min.css", "right.css"))
 
 expect_error(addLink(1))
 
@@ -62,8 +68,8 @@ expect_identical(createLink(c("A", "B", "", "A")),
 ## Test createHead():
 ## ---
 
-.RIGHT <- list2env(list(linkArray = c(),
-                     sourceArray = c()))
+assign(".RIGHT", list2env(list(linkArray = c(),
+                               sourceArray = c())), envir = asNamespace("RIGHT"))
 
 expect_identical(createHead("NOTHING & EMPTY"),
                  c("<head>",
@@ -74,7 +80,9 @@ expect_identical(createHead("NOTHING & EMPTY"),
                    "",
                    "</head>"))
 
-.RIGHT$linkArray <- "right.css"
+assign(".RIGHT", list2env(list(linkArray = "right.css",
+                               sourceArray = c())), envir = asNamespace("RIGHT"))
+
 expect_identical(createHead("LINK' GIVEN"),
                  c("<head>",
                    "",
@@ -86,7 +94,9 @@ expect_identical(createHead("LINK' GIVEN"),
                    "",
                    "</head>"))
 
-.RIGHT$sourceArray <- "common.js"
+assign(".RIGHT", list2env(list(linkArray = "right.css",
+                               sourceArray = "common.js")), envir = asNamespace("RIGHT"))
+
 expect_identical(createHead("BOTH GIVEN"),
                  c("<head>",
                    "",

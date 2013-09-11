@@ -3,7 +3,7 @@
 ## Check checkDataName():
 ## ---
 
-.RIGHT <- list2env(list(nameArray = "Theoph"))
+assign(".RIGHT", list2env(list(nameArray = "Theoph")), envir = asNamespace("RIGHT"))
 
 expect_error(checkDataName("dummy"))
 checkDataName("Theoph")

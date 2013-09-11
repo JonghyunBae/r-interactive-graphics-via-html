@@ -2,7 +2,13 @@
 
 # Environment used to collect all the necessary information to assemble the HTML file
 # that derives the RIGHT JavaScript API:
-.RIGHT <- NA
+#
+# This creates a local environment to the package before it gets sealed. See 
+#    http://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r
+# for more explanation.
+.onLoad <- function(libname, pkgname) {
+  assign(".RIGHT", new.env(), envir = parent.frame()) 
+}
 
 # Special environment used to keep aliases of functions. This is used by RIGHT() to evaluate
 # the given expression:

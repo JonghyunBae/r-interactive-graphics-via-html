@@ -6,9 +6,8 @@
 
 # Special environment used to keep aliases of functions. This is used by RIGHT() to evaluate
 # the given expression:
-.RIGHT_FUN <- list2env(list(plot = plot_RIGHT,
-                            points = points_RIGHT,
-                            lines = lines_RIGHT))
+# .RIGHT_FUN <- list2env(list(plot = plot_RIGHT,
+#                             points = points_RIGHT))
 
 # This function has side effect.
 initRIGHT <- function() {
@@ -32,14 +31,16 @@ initRIGHT <- function() {
   linkArray <- c("right.css")
   linkArray <- file.path(libDir, linkArray)
   
+  # CHECK (junghoon): should I use a reference class instead?
   .RIGHT <<- list2env(list(libDir = libDir,
                            nameArray = c(), # keep variable names for checking
                            sourceArray = sourceArray, # scripts to source
                            linkArray = linkArray, # links for CSS
                            divArray = c(), # div for plot layout
                            scriptArray = c(), # JavaScript code
-                           numBox = 0, # number of containers
-                           numAxis = 0) # number of axis used
+                           numAxis = 0, # number of axis used
+                           numPoints = 0, # number of points objects
+                           numLines = 0)) # number of lines objects
                       
 } # function initRIGHT
 
@@ -65,9 +66,12 @@ RIGHT <- function(expr = {}, ...,
   # CHECK (junghoon): what happens if no objects are given?
   dataArray <- as.character(as.list(match.call(expand.dots = F))$...)
   prepareData(mget(dataArray, envir = parent.frame()), dir) # mget returns a list that perserves the names
-  
+
   loadData(dataArray)
   addBlankLine()
+
+  # Keep the name of the data.frame objects for checking:
+  .RIGHT$nameArray <<- dataArray 
   
 } # function RIGHT
 

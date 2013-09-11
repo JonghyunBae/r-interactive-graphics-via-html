@@ -15,6 +15,20 @@
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
    * Discuss about Hardly Wickham's comments.
   # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+== 11SEP2013 ==
+
+Participants : Jae W.Lee, Jung Hoon Lee, Chung Ha Sung.
+
+  # Update from CH:
+   # basic legend.
+   # basic color as an option.
+  # Update from JH:
+   # Simple package is being developed.
+  # To-do list
+   # subsetting with simple boolean equation.
+   # get used to R-base-graphics API.
+   # get used to JH's R package code.
+  # TJ can participate in our team again from this Friday.
 
 == 01SEP2013 ==
 

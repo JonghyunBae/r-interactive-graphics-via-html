@@ -120,7 +120,6 @@ RIGHT <- function(expr = {}, ...,
 
   # Add event handler:
   addBlankLine()
-  cat(.RIGHT$numAxis, "\n")
   addEventTrigger(.RIGHT$numAxis)
   
   ## ---

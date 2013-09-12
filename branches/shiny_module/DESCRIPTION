@@ -5,10 +5,27 @@ Version: 0.1
 Date: 2013-09-04
 Author: ChungHa Sung, TaeJoon Song, Jae W. Lee, and Junghoon Lee
 Maintainer: Junghoon Lee <flammy@gmail.com>
-Description: RIGHT enables interactive data visualization and analysis using HTML5 canvas and JavaScript technology to help users easily explore data and gain valuable insight. Its R API is designed to create a seamless analysis-visualization workflow for interactive graphics. Since HTML5 canvas and JavaScript is supported in virtually all modern web browsers, the visualizations can be delivered to almost any device/platform for presentation purposes.
+Description: RIGHT enables interactive data visualization and analysis using
+    HTML5 canvas and JavaScript technology to help users easily explore data
+    and gain valuable insight. Its R API is designed to create a seamless
+    analysis-visualization workflow for interactive graphics. Since HTML5
+    canvas and JavaScript is supported in virtually all modern web browsers,
+    the visualizations can be delivered to almost any device/platform for
+    presentation purposes.
 License: GPL-3
-Depends: R (>= 3.0.1), shiny
-Imports: 
-Suggests: testthat
+Depends:
+    R (>= 3.0.1),
+    shiny
+Imports:
+Suggests:
+    testthat
 URL: https://code.google.com/p/r-interactive-graphics-via-html/
-BugReports: https://code.google.com/p/r-interactive-graphics-via-html/issues/list
+BugReports:
+    https://code.google.com/p/r-interactive-graphics-via-html/issues/list
+Collate:
+    'RIGHT.R'
+    'body.R'
+    'common.R'
+    'head.R'
+    'plot_RIGHT.R'
+    'points_RIGHT.R'

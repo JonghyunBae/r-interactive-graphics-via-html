@@ -1,5 +1,10 @@
 ## plot_RIGHT.R
 
+#' X-Y Plotting
+#' 
+#' Function to create x-y scatter and line plots, including the axis.
+#' @export
+
 plot_RIGHT <- function(form, data, type = "n",
                        isString = FALSE) {
   

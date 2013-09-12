@@ -5,7 +5,7 @@
 #' @param form y ~ x formula
 #' @param data data.frame object containing data
 #' @param col color of the points
-#' @subset condition to subset data
+#' @param subset condition to subset data
 #' 
 #' @aliases points
 #' 

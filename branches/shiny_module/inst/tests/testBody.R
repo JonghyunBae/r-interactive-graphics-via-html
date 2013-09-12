@@ -59,3 +59,106 @@ expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray,
                  c(paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'),
                    paste0('B = createMainStructure("', file.path("..", "BB.csv"), '");'),
                    paste0('C = createMainStructure("', file.path("..", "CC.csv"), '");')))
+
+## ---
+## Test addEventTrigger():
+## ---
+
+assign(".RIGHT", list2env(list(scriptArray = c())), envir = asNamespace("RIGHT"))
+
+addEventTrigger()
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, c())
+
+addEventTrigger(0)
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, c())
+
+addEventTrigger(1)
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+                 "eventTrigger([axis1]);")
+
+addEventTrigger(3)
+expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+                 c("eventTrigger([axis1]);", 
+                   "eventTrigger([axis1, axis2, axis3]);"))
+
+## ---
+## Test createDiv():
+## ---
+
+expect_identical(createDiv(), NULL)
+expect_identical(createDiv(c()), NULL)
+expect_identical(createDiv(c("A", "B")),
+                 c('<div id="content" class="right-output">',
+                   "  A",
+                   "  B",
+                   "</div>"))
+
+## ---
+## Test createScript():
+## ---
+
+expect_identical(createScript(), NULL)
+expect_identical(createScript(c()), NULL)
+expect_identical(createScript(c("A", "B")),
+                 c("<script>",
+                   "  A",
+                   "  B",
+                   "</script>"))
+
+## ---
+## Test createBody():
+## ---
+
+assign(".RIGHT", list2env(list(divArray = c(),
+                               scriptArray = c())), envir = asNamespace("RIGHT"))
+
+expect_identical(createBody(),
+                 c("<body>",
+                   "",
+                   '  <div id="footer">',
+                   '  <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>',
+                   '  <p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>',
+                   "  </div>",
+                   "",
+                   "</body>"))
+
+assign(".RIGHT", list2env(list(divArray = c("A", "B"),
+                               scriptArray = c())), envir = asNamespace("RIGHT"))
+
+expect_identical(createBody(),
+                 c("<body>",
+                   "",
+                   '  <div id="content" class="right-output">',
+                   "    A",
+                   "    B",
+                   "  </div>",
+                   "",
+                   '  <div id="footer">',
+                   '  <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>',
+                   '  <p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>',
+                   "  </div>",
+                   "",
+                   "</body>"))
+
+assign(".RIGHT", list2env(list(divArray = c("A", "B"),
+                               scriptArray = c("C", "D"))), envir = asNamespace("RIGHT"))
+
+expect_identical(createBody(),
+                 c("<body>",
+                   "",
+                   '  <div id="content" class="right-output">',
+                   "    A",
+                   "    B",
+                   "  </div>",
+                   "",
+                   "  <script>",
+                   "    C",
+                   "    D",
+                   "  </script>",
+                   "",
+                   '  <div id="footer">',
+                   '  <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>',
+                   '  <p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>',
+                   "  </div>",
+                   "",
+                   "</body>"))

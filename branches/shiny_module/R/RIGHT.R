@@ -50,14 +50,29 @@ initRIGHT <- function() {
                       
 } # function initRIGHT
 
+#' Entry Function for RIGHT
+#' 
+#' @export
+
 RIGHT <- function(expr = {}, ..., 
-                  header = "RIGHT: R Interactive Graphics via HTml",
+                  title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(tmpdir = getwd()), # CHECK (junghoon): not used for now
-                  isOverwrite = T) {
+                  isOverwrite = TRUE) {
+  
+  if (isOverwrite == FALSE && file.exists(dir)) {
+    stop(dir, " already exists.")
+  } # if
   
   # Initialize the environment that keeps track of the information:
   initRIGHT()
 
+  # Convert to absolute path:
+  # CHECK (junghoon): is this the best way?
+  dir <- stringr::str_trim(dir)
+  if (!stringr::str_detect(dir, "^[/\\\\]")) {
+    dir <- file.path(getwd(), dir)
+  } # if
+  
   # Create a directory structure for all the necessary files for RIGHT:
   if (!file.exists(dir)) {
     dir.create(dir)
@@ -67,17 +82,107 @@ RIGHT <- function(expr = {}, ...,
     dir.create(tempDir)
   } # if
   
+  ## ---
+  ## Process data.frame objects:
+  ## ---
+  
   # Get the data objects and their names:
   # CHECK (junghoon): there may be a better way than this
-  # CHECK (junghoon): what happens if no objects are given?
   dataArray <- as.character(as.list(match.call(expand.dots = F))$...)
-  prepareData(mget(dataArray, envir = parent.frame()), dir) # mget returns a list that perserves the names
+  if (length(dataArray) == 0) {
+    stop("No data is given.")
+  } # if
+  
+  dataList <- mget(dataArray, envir = parent.frame()) # mget returns a list that perserves the names
+  if (any(!sapply(dataList, is.data.frame))) {
+    stop("All data should be given as data.frame objects.")
+  } # if
+  
+  fileNameArray <- prepareData(dataList, dir) 
 
   loadData(dataArray)
   addBlankLine()
 
   # Keep the name of the data.frame objects for checking:
   .RIGHT$nameArray <<- dataArray 
+
+  ## ---
+  ## Evaluate the given expression:
+  ## ---
+  
+  # CHECK (junghoon): substitute does not work yet
+  force(expr)
+  
+  # Special environment is created to overload base graphics plotting function when evaluating
+  # the given expression:
+#   eval(substitute(expr, env = list(plot = plot_RIGHT,
+#                                    points = points_RIGHT)))
+
+  # Add event handler:
+  addBlankLine()
+  cat(.RIGHT$numAxis, "\n")
+  addEventTrigger(.RIGHT$numAxis)
+  
+  ## ---
+  ## Assemble client-side code:
+  ## ---
+  
+  writeLines(c("<!DOCTYPE html>",
+               "<html>",
+               createHead(title),
+               createBody(),
+               "</html>"),
+             con = file.path(dir, "www", "index.html"))
+             
+  ## ---
+  ## Assemble the RIGHT object:
+  ## ---
+  
+  return(structure(list(dir = dir,
+                        fileNameArray = fileNameArray),
+                   class = "RIGHT"))
   
 } # function RIGHT
 
+#' Print RIGHT Object
+#' 
+#' @export
+
+print.RIGHT <- function(obj) {
+  
+  fileName_index <- file.path(obj$dir, "www", "index.html")
+  if (!file.exists(fileName_index)) {
+    stop("cleanup was called on the object.")
+  } # if
+  
+  # CHECK (junghoon): is there a better way?
+  if (Sys.info()["sysname"] == "Windows") {
+    shell.exec(fileName_index)
+  } else {
+    system(paste0("firefox -new-tab ", fileName_index, " &"))
+  } # if
+  
+} # function print.RIGHT
+
+#' Summarize RIGHT Object
+#' 
+#' @export
+
+summary.RIGHT <- function(obj) {
+  
+  # CHECK: improve this?
+  print.default(obj)
+  
+} # function summary.RIGHT
+
+#' Cleanup RIGHT Object
+#' 
+#' @export
+
+cleanup <- function(obj) {
+  
+  # CHECK (junghoon): is there a way to tightly integrate this with rm()?  
+  # CHECK (junghoon): more sophisticated cleanup is necessary.
+  unlink(obj$dir, recursive = TRUE)
+  
+} # function cleanup.RIGHT

@@ -169,7 +169,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 		var tick = 5; //default legend ticks is 5  
 		var tickRange = (max - min) / tick;
 		tickRange = setTickRange( Math.ceil( Math.log(tickRange) / Math.log(10)) , tickRange);
-		var newMax = tickRange * Math.ceil(max/tickRange);     		
+		var newMax = tickRange * Math.ceil(max/tickRange);
 		var newMin= tickRange * Math.floor(min/tickRange);
 		var plotArr = new Array(parseInt((newMax-newMin)/tickRange+1));
 		for(var i = 0 ; i < plotArr.length ; i ++)

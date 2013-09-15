@@ -20,7 +20,7 @@ initRIGHT <- function() {
   
   # CHECK (junghoon): this has to change
   # Keep the location of the library:
-  libDir <- "d:/Shared/RIGHT/branches/shiny_module/inst/www"  
+  libDir <- "../../inst/www"  
     
   # Script files always necessary:
   sourceArray <- c("kinetic-v4.6.0.js",

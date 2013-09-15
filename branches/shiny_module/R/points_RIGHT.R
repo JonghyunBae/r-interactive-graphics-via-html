@@ -52,7 +52,7 @@ points_RIGHT <- function(form, data, col = NULL, subset = NULL,
   # Add script in body:
   .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
                                 paste0("var points", .RIGHT$numPoints,
-                                       " = new Dots(axis", .RIGHT$numAxis,
+                                       " = new Dot(axis", .RIGHT$numAxis,
                                        ", ", dataName,
                                        ", '", form[[3]], "', '", form[[2]], "', {});"))
   

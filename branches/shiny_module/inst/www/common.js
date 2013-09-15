@@ -31,6 +31,16 @@ function getNodeinfo(dataObj, id)
 	return info;
 }
 
+function getFields(dataObj)
+{
+	var temp = new Array();
+	for(var name in dataObj){
+		if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			temp.push(name);
+		}
+	}
+	return temp;
+}
 
 ////////////////////////////////////mouse position of each graph////////////////////////////////////
 var mouseName;
@@ -216,9 +226,8 @@ function makeRefresh(stage){
 function allSelect(graphObj)
 {
 	var tmpNodeArr = new Array();
-	for(var i = 0 ; i < graphObj.node.length ; i ++)
-	{
-		tmpNodeArr.push(i);
+	for(var i = 0 ; i < graphObj.node.length ; i ++){
+		tmpNodeArr.push(graphObj.node[i].getName());
 	}
 	allGraphUpdate(graphObj, tmpNodeArr, 1);	
 }
@@ -226,9 +235,8 @@ function allDeselect(graphObj)
 {
 	var tmpNodeArr = new Array();
 //	alert("deselect");
-	for(var i = 0 ; i < graphObj.node.length ; i ++)
-	{
-		tmpNodeArr.push(i);
+	for(var i = 0 ; i < graphObj.node.length ; i ++){
+		tmpNodeArr.push(graphObj.node[i].getName());
 	}
 	allGraphUpdate(graphObj, tmpNodeArr, 0);
 

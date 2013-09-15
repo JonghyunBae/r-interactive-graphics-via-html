@@ -84,7 +84,7 @@ var Bar = {};
 									xArr[i] = xArr[i] - this.barWidth/2;
 								}
 								this.node[cnt] = new Kinetic.Rect({
-									name: cnt,
+									name: i,
 									x: xArr[i],
 									y: y,
 									width: this.barWidth,
@@ -95,7 +95,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 								//	offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
+									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
@@ -110,7 +110,7 @@ var Bar = {};
 									xArr[i] = xArr[i] - this.barWidth/2;
 								}
 								this.node[cnt] = new Kinetic.Rect({
-									name: cnt,
+									name: i,
 									x: xArr[i],
 									y: yArr[i],
 									width: this.barWidth,
@@ -121,7 +121,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 								//	offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
+									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
@@ -140,7 +140,7 @@ var Bar = {};
 									xArr[i] = xArr[i] - this.barWidth/2;
 								}
 								this.node[cnt] = new Kinetic.Rect({
-									name: cnt,
+									name: i,
 									x: xArr[i],
 									y: yArr[i],
 									width: this.barWidth,
@@ -151,7 +151,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 									//offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
+									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
@@ -166,7 +166,7 @@ var Bar = {};
 									xArr[i] = xArr[i] - this.barWidth/2;
 								}
 								this.node[cnt] = new Kinetic.Rect({
-									name: cnt,
+									name: i,
 									x: xArr[i],
 									y: yArr[i],
 									width: this.barWidth,
@@ -177,7 +177,7 @@ var Bar = {};
 									selectCnt : 0,
 									opacity: 0.5,
 								//	offset: {x:(axisObj.isXDiscrete == true)? this.barWidth/2 : 0},
-									info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
+									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 								});
 								dataObj.$isSelected[i][this.dataId] = barUpdate(this.node[cnt]);
 								cnt ++;
@@ -218,9 +218,9 @@ function barBoxSearch(graphObj)
 				for(var i = 0 ; i < graphObj.node.length ; i ++){
 					if((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)){
 						if(graphObj.node[i].getSelected() == 1){
-							tmpNodeArr.push(i);
+							tmpNodeArr.push(graphObj.node[i].getName());
 						}else{
-							tmpNodeArr1.push(i);
+							tmpNodeArr1.push(graphObj.node[i].getName());
 						}        
 					}
 				}
@@ -234,7 +234,7 @@ function barBoxSearch(graphObj)
 			}else{
 				for(var i = 0 ; i < graphObj.node.length ; i ++){
 					if((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)){
-						tmpNodeArr.push(i);
+						tmpNodeArr.push(graphObj.node[i].getName());
 	                }
 	           	}
 				allGraphUpdate(graphObj, tmpNodeArr, 1);

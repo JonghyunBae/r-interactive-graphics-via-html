@@ -34,7 +34,7 @@ function refreshTable(tableID, mainArr){
 					newcell.align = 'center';
 					newcell.style.backgroundColor = '#cfe444';
 					newcell.style.color = 'black';
-					newcell.innerHTML = cnt++; // i
+					newcell.innerHTML = i;
 					newcell.width = colWidth;
 					
 					for(var j = 1 ; j < colCount ; j ++) {
@@ -76,7 +76,7 @@ function makeTable(tableID, mainArr, height){
 				document.write("<tr>");
 				document.write("<th class=\"node\"><div>node<br>(number)</div></th>");
 				for(var i = 0 ; i < mainArr.labelArr.length ; i ++){
-					document.write("<th class=\"column\"><div>"+mainArr.labelArr[i]+"</div></th>");
+					document.write("<th class=\"column\"><div>" + mainArr.labelArr[i] + "</div></th>");
 				}	  			
 				document.write("</tr>");
 			document.write("</thead>");

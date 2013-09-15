@@ -113,7 +113,7 @@ function legend(legendName, axisObj, position, nameArr, colorArr)
 	
 	var layerWidth = legendRect.getWidth() + 20;
 	// set axis plotMargin.
-/*	if(position == 'left' || position == 'topleft'){
+	if(position == 'left' || position == 'topleft'){
 		
 		axisObj.plotXMargin = axisObj.plotXMargin + layerWidth;
 		layerWidth = layerWidth - axisObj.plotXMargin;
@@ -125,7 +125,7 @@ function legend(legendName, axisObj, position, nameArr, colorArr)
 	makeYAxisLayer(axisObj);
 	axisObj._draw();
 	
-*/	
+
 	// make legendLayer.
 	axisObj.legendLayer = new Kinetic.Layer({
 			name: 'legend',

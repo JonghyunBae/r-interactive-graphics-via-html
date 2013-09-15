@@ -3,7 +3,7 @@ var Dot = {};
 (function() {
 	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this._init(axisObj, dataObj, optionObj);
-		this._draw(axisObj, dataObj, xLabel, yLabel);
+		this._draw(axisObj, dataObj, xLabel, yLabel, optionObj);
 		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
@@ -32,18 +32,29 @@ var Dot = {};
 					this.baseColor = 'green';
 				}
 			},
-			_draw: function(axisObj, dataObj, xLabel, yLabel) {
+			_draw: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				// get pixel values from axis
 				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
+				var labelArr = getFields(dataObj);
+				// find subSetting.
+				if(optionObj.subSet != undefined){
+					var subSet = optionObj.subSet;
+					for(var i = 0 ; i < labelArr.length ; i ++){
+			    		var searchStr = new RegExp(labelArr[i], 'g'); // "g" means all search
+			    		subSet = subSet.replace(searchStr, "dataObj." + labelArr[i] + "[i]");
+			    	}
+				}else{
+					var subSet = -1;
+				}
 				var cnt = 0;
 				this.node = new Array();
 				if(this.colorOn == true){
-					for(var i = 0 ; i < xArr.length ; i ++){
-						if(!(xArr[i] == -1 || yArr[i] == -1)){
+					for(var i = 0 ; i < xArr.length ; i ++){						
+						if(!(xArr[i] == -1 || yArr[i] == -1) && (subSet == -1 || eval(subSet))){
 							this.node[cnt] = new Kinetic.Circle({
-								name: cnt,
+								name: i,
 								x: xArr[i],
 								y: yArr[i],
 								radius: this.radius,
@@ -51,7 +62,7 @@ var Dot = {};
 								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
 								selected: 0,
 								opacity: 0.5,
-								info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 							});							
 							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
 							cnt ++;
@@ -61,9 +72,9 @@ var Dot = {};
 					}
 				}else{
 					for(var i = 0 ; i < xArr.length ; i ++){
-						if(!(xArr[i] == -1 || yArr[i] == -1)){
+						if(!(xArr[i] == -1 || yArr[i] == -1) && (subSet == -1 || eval(subSet))){
 							this.node[cnt] = new Kinetic.Circle({
-								name: cnt,
+								name: i,
 								x: xArr[i],
 								y: yArr[i],
 								radius: this.radius,
@@ -71,7 +82,7 @@ var Dot = {};
 								fill: this.baseColor,
 								selected: 0,
 								opacity: 0.5,
-								info: "Node: " + cnt + "\r\n" + getNodeinfo(dataObj, i)
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 							});
 							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
 							cnt ++;
@@ -110,9 +121,9 @@ function dotBoxSearch(graphObj)
 				for(var i = 0 ; i < graphObj.node.length ; i ++){
 					if(smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY){
 						if(graphObj.node[i].getSelected()==1){
-							tmpNodeArr.push(i);
+							tmpNodeArr.push(graphObj.node[i].getName());
 						}else{
-							tmpNodeArr1.push(i);
+							tmpNodeArr1.push(graphObj.node[i].getName());
 						}					                   
 	                }
 				}
@@ -121,7 +132,7 @@ function dotBoxSearch(graphObj)
 			}else{
 				for(var i = 0 ; i < graphObj.node.length ; i ++){
 					if(smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY){
-						tmpNodeArr.push(i);              
+						tmpNodeArr.push(graphObj.node[i].getName());              
 	                }                        
 				}
 				allGraphUpdate(graphObj, tmpNodeArr, 1);
@@ -154,7 +165,10 @@ function dotUpdate(node)
 }
 function nullUpdate(node)
 {
-	return;
+	return function(temp)
+		{
+			return;
+		};
 }
 /**  update function end  **/
 function dotHover()

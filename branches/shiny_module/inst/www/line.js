@@ -25,7 +25,7 @@ var Line = {};
 				for(var i = 0 ; i < xArr.length ; i ++){
 					if(!(xArr[i] == -1 || yArr[i] == -1)){
 						this.node[cnt] = new Kinetic.Line({
-							name: cnt,
+							name: i,
 							points: [ 
 							         xArr[i],
 							         yArr[i],
@@ -35,7 +35,7 @@ var Line = {};
 							stroke: this.baseColor,
 							strokeWdith: 1,
 							opacity: 0.5,
-							info: "Node: " + cnt 
+							info: "Node: " + i 
 						});
 						//dataObj.$isSelected[i][this.id] = dotUpdate(this.node[cnt]);
 						cnt ++;

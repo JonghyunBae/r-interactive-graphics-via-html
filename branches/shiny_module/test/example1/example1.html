@@ -16,6 +16,8 @@
  <script src="../../inst/www/bar.js"></script>
  <script src="../../inst/www/node_event.js"></script>
  <script src="../../inst/www/menu.js"></script>
+ <script src="../../inst/www/table.js"></script>
+ <script src="../../inst/www/legend.js"></script>
 </head>
 <body>
 <script> var mainArr1 = createMainStructure('../../inst/www/_sub.diamonds.csv');</script>
@@ -27,13 +29,16 @@
 
        
        <script>      
-       var axis1 = new Axis(1, mainArr1, 'carat', 'price', {legend: 'carat', position: 'topleft'});
-       var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
-       var hobj1 = new ddply(mainArr1, ['cut'], {});
-       var axis2 = new Axis(2, hobj1, 'cut', 'frequency', {legend:'cut', position: 'left'});
+       var axis1 = new Axis(1, mainArr1, 'carat', 'table', {});
+       var s1 = new Dot(axis1, mainArr1, 'carat', 'depth',{subSet: 'price < 5000 && carat >1'});
+     
+       
+       var hobj1 = new ddply(mainArr1, ['cut', 'color'], {});
+       var axis2 = new Axis(2, hobj1, 'cut', 'frequency', {legend:'color', position: 'left'});
        var s2 = new Bar(axis2, hobj1, 'cut', 'frequency',{});
        eventTrigger([axis1,axis2]);
        </script>
+       <script> makeTable(1, mainArr1, 200);</script>
        <div id="footer">
        <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>
        <p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>

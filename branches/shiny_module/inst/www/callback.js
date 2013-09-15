@@ -33,8 +33,23 @@ var changeBin = function (Name, label){
 //these variables are used for only hideSelected and resetSelected.
 var hideCnt = 0; 
 var tempHidden = new Array();	// collect total hidden nodes.
-function hideSelected()
+function hideSelected(Name)
 {
+	var dataObj = Name.graphObjArr[0].dataObj;
+	// find root dataObj.
+	while(dataObj.parent != null){
+		dataObj = dataObj.parent;
+	}
+	
+	// set the $isSelected -> 3
+	for(var i = 0 ; i < dataObj.$isSelected.length ; i ++){
+		if(dataObj.$isSelected[i][0] == 1){
+			dataObj.$isSelected[i][0] = 3; 
+		}
+	}
+	
+	// $isSelecteds of children are updated.
+	
 	alert('hide selected!');
 	/*
 	var hiddenArr = new Array();

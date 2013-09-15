@@ -160,7 +160,9 @@ function drag(Name)
                 Name.rangeBox.setHeight(0);
                 Name.rangeBoxLayer.drawScene();
                 if(ctrlPressed == false){
-                	allDeselect(Name.graphObjArr[0]);
+                	for(var j = 0 ; j < Name.graphObjArr.length ; j ++){
+						allDeselect(Name.graphObjArr[j]);
+					}
                 }
                 // find small x,y and big x,y
                 var smallX, bigX;
@@ -200,12 +202,14 @@ function select(Name)
 			if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
 				var node = evt.targetNode;
 				if(isNaN(node.getName())){
-					if(dragOn == true){                    
+					if(dragOn == true){
 			            dragOn = false;
 			            return;
 			        }
 					Name.touch = false;
-					allDeselect(Name.graphObjArr[0]);
+					for(var i = 0 ; i < Name.graphObjArr.length ; i ++){
+						allDeselect(Name.graphObjArr[i]);
+					}					
 				}
 			}
 		}		
@@ -221,7 +225,9 @@ function select(Name)
 				Name.touch = false;
 				if(!isNaN(node.getName())){
 					if(aPressed){
-	            		allSelect(Name.graphObjArr[0]);
+						for(var j = 0 ; j < Name.graphObjArr.length ; j ++){
+							allSelect(Name.graphObjArr[j]);
+						}	            		
 	            	}else if(ctrlPressed){
 	            		if(node.getSelected() == 0){
 	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
@@ -229,7 +235,9 @@ function select(Name)
 	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 0);
 	                	}
 	            	}else{
-	            		allDeselect(Name.graphObjArr[0]);
+	            		for(var j = 0 ; j < Name.graphObjArr.length ; j ++){
+							allDeselect(Name.graphObjArr[j]);
+						}
 						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
 	            	}					
 				}

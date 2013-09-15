@@ -134,12 +134,12 @@ function menu(Name)
     Name.stage.add(Name.menuLayer);
     
     Name.menuText[0].on('click', function(evt){
-    	hideSelected();
+    	hideSelected(Name);
         Name.menu.hide();
         Name.menuLayer.draw();  
     });
     Name.menuRect[0].on('click', function(evt){
-        hideSelected();
+        hideSelected(Name);
         Name.menu.hide();
         Name.menuLayer.draw();  
     });

@@ -192,7 +192,7 @@ var Bar = {};
 				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
 				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
 				this.firstUpdate = firstUpdate(dataObj);
-				
+				this.dataObj = dataObj;
 	        	this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);

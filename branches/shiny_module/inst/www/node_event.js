@@ -252,8 +252,8 @@ function hover(Name)
 	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
 		(function (i) { 
 		Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
-			if(dragOn == true){                       
-	            dragOn = false;
+			if(Name.moving == true){                       
+	       //     dragOn = false;
 	            return;
 	        }
 			var node = evt.targetNode;

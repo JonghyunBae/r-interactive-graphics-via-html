@@ -36,19 +36,34 @@ var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected(Name)
 {
 	var dataObj = Name.graphObjArr[0].dataObj;
+	
 	// find root dataObj.
 	while(dataObj.parent != null){
 		dataObj = dataObj.parent;
 	}
 	
 	// set the $isSelected -> 3
+	var temp = new Array();
 	for(var i = 0 ; i < dataObj.$isSelected.length ; i ++){
 		if(dataObj.$isSelected[i][0] == 1){
+			temp.push(i);
 			dataObj.$isSelected[i][0] = 3; 
 		}
 	}
 	
+	if(dataObj.refreshTable != undefined){
+		dataObj.refreshTable();
+	}
+	
 	// $isSelecteds of children are updated.
+	if(temp.length > 0 && dataObj.child != null){
+		for(var i = 0 ; i < dataObj.child.length ; i ++){
+			var temp2 = dataObj.parentTOchild[i](temp);
+			childUpdate(dataObj.child[i], temp2, 3);
+		}
+	}
+	
+	// redraw
 	
 	alert('hide selected!');
 	/*

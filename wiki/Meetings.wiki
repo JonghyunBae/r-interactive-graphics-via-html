@@ -15,6 +15,31 @@
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
    * Discuss about Hardly Wickham's comments.
   # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+
+== 15SEP2013 ==
+
+Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
+
+  # Update from CH:
+   # fixed some bugs.
+   # subset in dot.
+  # Update from JH:
+   # add testing.
+   # modify path.
+  # To-do list
+   # Graph type(CH)
+    # line with event handle by making a dataObj.
+    # box-whisker.
+    # add example with pie.
+   # Hide(CH)
+   # Identifying server.R code to implement regression.(TJ)
+    # example3/www/index.html and example3/server.R
+   # Search box(for each dataObj) with simple function.(TJ)
+  # Share documentation.(JH)
+  # Make a histogram API on R side.(JH & CH)
+  # Make a list for big problems.(TJ & CH)
+  Next meeting : 20:30 (Korea time) on Tue, 9/17
+
 == 11SEP2013 ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Chung Ha Sung.

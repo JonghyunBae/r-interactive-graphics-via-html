@@ -80,7 +80,6 @@ function createMainStructure(fileName)
 					mainArr[labelArr[j]].isDiscrete = false;
 					delete mainArr[labelArr[j]].index;
 				}
-				
 			}
 			if(isNaN((tmpArr[j]))){
 				isNumArr[j] = false;
@@ -104,7 +103,12 @@ function createMainStructure(fileName)
 	for(var i = 0 ; i < labelArr.length ; i ++){
 		delete mainArr[labelArr[i]]["tempField"];
 		if(mainArr[labelArr[i]].isDiscrete == true){
-			mainArr[labelArr[i]].index.sort();
+			for(var j = 0 ; j < mainArr[labelArr[i]].index.length ; j ++){
+				if(!isNaN(mainArr[labelArr[i]].index[j])){
+					mainArr[labelArr[i]].index[j] = parseFloat(mainArr[labelArr[i]].index[j]);
+				}
+			}
+			mainArr[labelArr[i]].index.sort(function(a,b){return a-b}); // 1, 10, 11, 12, 2, 3, 4 check.
 			for(var j = 0 ; j < mainArr[labelArr[i]].length ; j ++){
 				mainArr[labelArr[i]][j] = mainArr[labelArr[i]].index.indexOf(mainArr[labelArr[i]][j]);
 			}

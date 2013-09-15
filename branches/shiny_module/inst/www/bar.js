@@ -189,8 +189,6 @@ var Bar = {};
 				}				
 	        	// event add
 				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
-				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
 				this.firstUpdate = firstUpdate(dataObj);
 				this.dataObj = dataObj;
 	        	this.dataLayer = new Kinetic.Layer();	

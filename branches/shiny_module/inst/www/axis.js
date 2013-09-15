@@ -248,11 +248,13 @@ function setTooltip(obj)
 {
 	obj.tooltipLayer = new Kinetic.Layer();			 
 	obj.tooltip = new Kinetic.Label({
+		name: 'tooltip',
 	    opacity: 0.75,
 	    visible: false,
 	    listening: false
 	  });
 	obj.tooltip.add(new Kinetic.Tag({
+		name: 'tooltip',
 	    fill: 'black',
 	    //pointerDirection: 'down',
 	    pointerWidth: 10,  
@@ -264,6 +266,7 @@ function setTooltip(obj)
 	    shadowOpacity: 0.2
 	  }));
 	obj.tooltip.add(new Kinetic.Text({
+		name: 'tooltip',
 	    text: '',
 	    fontFamily: 'Calibri',
 	    fontSize: 15,
@@ -327,6 +330,7 @@ function setAxis_discrete(index, plotLength)
 function makeRangeBoxLayer(obj)
 {
 	obj.rangeBox = new Kinetic.Rect({
+		name: 'rangeBox',
         x: 0,
         y: 0, 
         width : 0,
@@ -472,16 +476,18 @@ function makeYAxisLayer(obj)
 
 	for(var i = 0; i < obj.yPlotArr.length ; i ++){
 		obj.yLine[i] = new Kinetic.Line({
-	       points: [
-	                	obj.plotXMargin - obj.plotLength, 
-	                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0], 
-	                	obj.plotXMargin - 2*obj.plotLength,
-	                	obj.plotYMargin + obj.height - obj.yPlotArr[i][0]
-	       			],
-	       stroke: 'black',
-	       strokeWidth: 2,             
+			name : "yLine"+i,
+			points: [
+			         obj.plotXMargin - obj.plotLength, 
+			         obj.plotYMargin + obj.height - obj.yPlotArr[i][0], 
+			         obj.plotXMargin - 2*obj.plotLength,
+			         obj.plotYMargin + obj.height - obj.yPlotArr[i][0]
+			         ],
+			         stroke: 'black',
+			         strokeWidth: 2,
 	   });              
 	   obj.yText[i] = new Kinetic.Text({
+		   name : "yText"+i,
 	       x: obj.plotXMargin - obj.plotLength*2-15,
 	       y: obj.plotYMargin + obj.height- obj.yPlotArr[i][0] + 30,
 	       text: obj.yPlotArr[i][1],

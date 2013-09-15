@@ -223,6 +223,14 @@ function makeRefresh(stage){
 		}
 }
 
+function nullUpdate(node)
+{
+	return function(temp)
+		{
+			return;
+		};
+}
+
 function allSelect(graphObj)
 {
 	var tmpNodeArr = new Array();

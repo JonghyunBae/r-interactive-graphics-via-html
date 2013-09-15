@@ -163,13 +163,7 @@ function dotUpdate(node)
 			}
 		};
 }
-function nullUpdate(node)
-{
-	return function(temp)
-		{
-			return;
-		};
-}
+
 /**  update function end  **/
 function dotHover()
 {

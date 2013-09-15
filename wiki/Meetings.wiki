@@ -24,13 +24,13 @@ Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
    # fixed some bugs.
    # subset in dot.
   # Update from JH:
-   # add testing.
+   # add tests on R.
    # modify path.
   # To-do list
    # Graph type(CH)
     # line with event handle by making a dataObj.
     # box-whisker.
-    # add example with pie.
+    # add an example with pie.
    # Hide(CH)
    # Identifying server.R code to implement regression.(TJ)
     # example3/www/index.html and example3/server.R

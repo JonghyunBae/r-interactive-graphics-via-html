@@ -9,10 +9,6 @@
 #' 
 #' @aliases points
 #' 
-#' @examples
-#' plot_RIGHT(conc ~ Time, Thoeph, type = "n") # initialize axis
-#' points_RIGHT(conc ~ Time, Theoph)
-#' 
 #' @export
 
 points_RIGHT <- function(form, data, col = NULL, subset = NULL,

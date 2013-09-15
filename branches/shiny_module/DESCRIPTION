@@ -16,7 +16,6 @@ License: GPL-3
 Depends:
     R (>= 3.0.1),
     shiny
-Imports:
 Suggests:
     testthat
 URL: https://code.google.com/p/r-interactive-graphics-via-html/

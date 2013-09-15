@@ -18,9 +18,8 @@
 # This function has side effect.
 initRIGHT <- function() {
   
-  # CHECK (junghoon): this has to change
   # Keep the location of the library:
-  libDir <- "../../inst/www"  
+  libDir <- file.path(path.package("RIGHT"), "inst", "www")  
     
   # Script files always necessary:
   sourceArray <- c("kinetic-v4.6.0.js",
@@ -87,13 +86,12 @@ RIGHT <- function(expr = {}, ...,
   ## ---
   
   # Get the data objects and their names:
-  # CHECK (junghoon): there may be a better way than this
   dataArray <- as.character(as.list(match.call(expand.dots = F))$...)
   if (length(dataArray) == 0) {
     stop("No data is given.")
   } # if
-  
-  dataList <- mget(dataArray, envir = parent.frame()) # mget returns a list that perserves the names
+
+  dataList <- mget(dataArray, envir = parent.frame(), inherits = TRUE)
   if (any(!sapply(dataList, is.data.frame))) {
     stop("All data should be given as data.frame objects.")
   } # if
@@ -109,14 +107,11 @@ RIGHT <- function(expr = {}, ...,
   ## ---
   ## Evaluate the given expression:
   ## ---
-  
-  # CHECK (junghoon): substitute does not work yet
-  force(expr)
-  
+
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
-#   eval(substitute(expr, env = list(plot = plot_RIGHT,
-#                                    points = points_RIGHT)))
+  eval(substitute(expr), env = list(plot = plot_RIGHT,
+                                    points = points_RIGHT))
 
   # Add event handler:
   addBlankLine()

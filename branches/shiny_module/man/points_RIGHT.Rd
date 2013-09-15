@@ -19,8 +19,4 @@
   points_RIGHT draws a sequence of points in the current
   axis.
 }
-\examples{
-plot_RIGHT(conc ~ Time, Thoeph, type = "n") # initialize axis
-points_RIGHT(conc ~ Time, Theoph)
-}
 

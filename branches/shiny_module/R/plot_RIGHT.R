@@ -5,7 +5,7 @@
 #' Function to create x-y scatter and line plots, including the axis.
 #' @export
 
-plot_RIGHT <- function(form, data, type = "n",
+plot_RIGHT <- function(form, data, type = "b",
                        isString = FALSE) {
   
   ## ---

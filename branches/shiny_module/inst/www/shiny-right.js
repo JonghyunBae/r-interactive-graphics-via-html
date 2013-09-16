@@ -7,8 +7,11 @@ rightOutputBinding.renderValue = function(el, data) {
 	if(cnt > 0){//if(data change)
 		cnt = 0;
 		if(data[0] != -1){
-			objArr[data[0]-1].draw_regression(data[1], data[2].xx, data[2].yy);	
-			window.Shiny.onInputChange("id",-1);
+			axisSaving1.getAxisObj(data[0])._drawRegression(data[1].xx, data[1].yy);
+				
+			//axis2._drawRegression(data[1].xx, data[1].yy);
+		//	objArr[data[0]-1].draw_regression(data[1], data[2].xx, data[2].yy);	
+			window.Shiny.onInputChange("start",-1);
 		}
 	}
 	cnt ++;

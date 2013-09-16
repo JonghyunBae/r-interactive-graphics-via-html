@@ -2,13 +2,15 @@
 var Dot = {};
 (function() {
 	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-		this._init(axisObj, dataObj, optionObj);
+		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel, optionObj);
 		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
 	Dot.prototype = {
-			_init: function(axisObj, dataObj, optionObj) {
+			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+				this.xLabel = xLabel;
+				this.yLabel = yLabel;
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
@@ -189,43 +191,48 @@ function dotHover()
 //linear regression.
 function linearSendArr(Name)
 {
-	if(Name._type == "scatter"){	// only for scatter.
-		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
-			if(Name.linear == true){
-				Name.linear = false;
-				Name.draw(Name._id);
-				eventTrigger(Name);
-			}else{		
-				Name.linear = true;		
-				window.Shiny.onInputChange("id", Name._id);
-				window.Shiny.onInputChange("type", Name._type);
-				window.Shiny.onInputChange("graph", "linear");
-				window.Shiny.onInputChange("xx", tempData[Name.x]);
-				window.Shiny.onInputChange("yy", tempData[Name.y]);
-			}
+	var dataObj = Name.graphObjArr[0].dataObj;
+	var xLabel = Name.graphObjArr[0].xLabel;
+	var yLabel = Name.graphObjArr[0].yLabel;
+	var xArr = new Array();
+	var yArr = new Array();
+	
+	// refine array by searching hidden nodes.
+	for(var i = 0 ; i < dataObj.$isSelected.length ; i ++){
+		if(dataObj.$isSelected[i][0] < 2){
+			xArr.push(dataObj[xLabel][i]);
+			yArr.push(dataObj[yLabel][i]);
 		}
 	}
-
+	
+	window.Shiny.onInputChange("containerId", Name.containerId);
+	window.Shiny.onInputChange("xx", xArr);
+	window.Shiny.onInputChange("yy", yArr);
+	window.Shiny.onInputChange("graph", "linear");
+	window.Shiny.onInputChange("start", 1);
 }
 //loess regression.
 function loessSendArr(Name)
 {
-	if(Name._type == "scatter"){	// only for scatter.
-		if(isDiscrete[Name.x] == false && isDiscrete[Name.y] == false){		// only for continuous data.
-			if(Name.loess == true){
-				Name.loess = false;
-				Name.draw(Name._id);
-				eventTrigger(Name);
-			}else{		
-				Name.loess = true;		
-				window.Shiny.onInputChange("id1", Name._id);
-				window.Shiny.onInputChange("type1", Name._type);
-				window.Shiny.onInputChange("graph1", "loess");
-				window.Shiny.onInputChange("xx1", tempData[Name.x]);
-				window.Shiny.onInputChange("yy1", tempData[Name.y]);
-			}
+	var dataObj = Name.graphObjArr[0].dataObj;
+	var xLabel = Name.graphObjArr[0].xLabel;
+	var yLabel = Name.graphObjArr[0].yLabel;
+	var xArr = new Array();
+	var yArr = new Array();
+	
+	// refine array by searching hidden nodes.
+	for(var i = 0 ; i < dataObj.$isSelected.length ; i ++){
+		if(dataObj.$isSelected[i][0] < 2){
+			xArr.push(dataObj[xLabel][i]);
+			yArr.push(dataObj[yLabel][i]);
 		}
 	}
+	
+	window.Shiny.onInputChange("containerId", Name.containerId);
+	window.Shiny.onInputChange("xx", xArr);
+	window.Shiny.onInputChange("yy", yArr);
+	window.Shiny.onInputChange("graph", "loess");
+	window.Shiny.onInputChange("start", 1);
 }
 /**  Regression functions for scatter end  **/
 

@@ -225,6 +225,39 @@ var Axis = {};
 					'xArr': xPixelArr,
 					'yArr': yPixelArr
 				};
+			},
+			
+			_drawRegression: function(xx, yy) {
+				var temp = this._getPixel(xx, yy);
+				var cnt = 0;
+				var xArr = temp.xArr;
+				var yArr = temp.yArr;
+				var node = new Array();
+				for(var i = 0 ; i < xArr.length - 1 ; i ++){
+					if(!(xArr[i] == -1 || yArr[i] == -1 || xArr[i+1] == -1 || yArr[i+1] == -1)){
+						node[cnt] = new Kinetic.Line({
+							name: i,
+							x: [xArr[i], xArr[i+1]],
+							y: [yArr[i], yArr[i+1]],
+							points: [ 
+							         xArr[i],
+							         yArr[i],
+							         xArr[i+1],
+							         yArr[i+1]
+							        ],
+							stroke: 'blue',
+							fill: 'blue',
+							strokeWdith: 1,
+							opacity: 1
+						});
+						cnt ++;
+					}
+				}
+				var dataLayer = new Kinetic.Layer();	
+	        	for(var i = 0 ; i < node.length ; i ++){
+					dataLayer.add(node[i]);
+				}
+	        	this.stage.add(dataLayer);
 			}
 	}
 })();

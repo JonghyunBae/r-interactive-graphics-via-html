@@ -30,13 +30,15 @@ var MakeLineObj = {};
 var Line = {};
 (function() {	
 	Line = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-		this._init(axisObj, dataObj, optionObj);
+		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
 		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
 	Line.prototype = {
-			_init: function(axisObj, dataObj, optionObj) {
+			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+				this.xLabel = xLabel;
+				this.yLabel = yLabel;
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				// set the base color.

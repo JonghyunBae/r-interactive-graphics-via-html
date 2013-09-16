@@ -69,24 +69,16 @@ shinyUI(bootstrapPage(
        </div>
        
        <script>
-       var axis1 = new Axis(1, mainArr1, 'carat', 'price', {});
-        var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{baseColor: 'blue'});
-      legend('color', axis1, 'left', ['A', 'B', 'C'], ['green', 'red', 'yellow']);
-    //  var s1 = new Dot(axis1, mainArr1, 'carat', 'price',{});
+       var lobj1 = new MakeLineObj(mainArr1);
+       var axis1 = new Axis(1, lobj1, 'depth', 'price', {});
+       var l1 = new Line(axis1, lobj1, 'depth', 'price',{});
        
-        
-      var hobj1 = new ddply(mainArr1, ['color'], {});
-        var axis3 = new Axis(3, hobj1, 'color', 'frequency', {legend:'cut', position: 'left'});
-       var s3 = new Bar(axis3, hobj1, 'color', 'frequency',{});
-      
+       var axis2 = new Axis(2, mainArr1, 'carat', 'price', {});
+       var d1 = new Dot(axis2, mainArr1, 'carat', 'price', {});
 
-      var hobj3 = new ddply(mainArr1, ['color', 'cut'], {});
-      var axis4 = new Axis(4, hobj3, 'cut', 'frequency', {legend:'color', position: 'left'});
-      var s5 = new Bar(axis4, hobj3, 'cut', 'frequency', {});
-
-      eventTrigger([axis1, axis3, axis4]);
+       eventTrigger([axis1, axis2]);
+       var axisSaving1 = new axisSaving([axis1, axis2]);
        </script>
-       <script>makeTable('1', mainArr1, 200)</script>
 
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>

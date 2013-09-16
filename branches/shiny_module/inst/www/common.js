@@ -2,7 +2,20 @@ var plotWidth = 300;  //default value for plot width
 var plotHeight = 300; //default value for plot height  
 var plotRadius = 2;
 
-
+var axisSaving = {};
+(function() {
+	axisSaving = function(axisArr) {
+		this.axisObjArr = new Array();
+		for(var i = 0 ; i < axisArr.length ; i ++){
+			this.axisObjArr[i] = axisArr[i];
+		}
+	};
+	axisSaving.prototype = {
+			getAxisObj: function(id) {
+				return this.axisObjArr[id-1];
+			}
+	};
+})();
 
 function getNodeinfo(dataObj, id)
 {

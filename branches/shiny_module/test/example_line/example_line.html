@@ -11,6 +11,7 @@
  <script src="../../inst/www/common.js"></script>
  <script src="../../inst/www/axis.js"></script>
  <script src="../../inst/www/line.js"></script>
+ <script src="../../inst/www/dot.js"></script>
  <script src="../../inst/www/node_event.js"></script>
  <script src="../../inst/www/menu.js"></script>
 </head>
@@ -21,14 +22,18 @@ var mainArr1 = createMainStructure('../../inst/www/_sub.diamonds.csv');
 
  		<div id="content" class = "right-output" >
 		<div id="container1" oncontextmenu="return false;"></div>
+		<div id="container2" oncontextmenu="return false;"></div>
        </div>
        
        <script>
        var lobj1 = new MakeLineObj(mainArr1);
        var axis1 = new Axis(1, lobj1, 'depth', 'price', {});
-       var l1 = new Line(axis1, lobj1, 'table', 'price',{});
+       var l1 = new Line(axis1, lobj1, 'depth', 'price',{});
+       
+       var axis2 = new Axis(2, mainArr1, 'carat', 'price', {});
+       var d1 = new Dot(axis2, mainArr1, 'carat', 'price', {});
 
-       eventTrigger([axis1]);
+       eventTrigger([axis1, axis2]);
       
        </script>
 

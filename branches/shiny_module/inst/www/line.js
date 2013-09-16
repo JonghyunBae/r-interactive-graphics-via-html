@@ -57,14 +57,18 @@ var Line = {};
 					if(!(xArr[i] == -1 || yArr[i] == -1 || xArr[i+1] == -1 || yArr[i+1] == -1)){
 						this.node[cnt] = new Kinetic.Line({
 							name: i,
+							x: [xArr[i], xArr[i+1]],
+							y: [yArr[i], yArr[i+1]],
 							points: [ 
 							         xArr[i],
 							         yArr[i],
 							         xArr[i+1],
-							         yArr[i+1]							        
+							         yArr[i+1]
 							        ],
 							stroke: this.baseColor,
 							fill: this.baseColor,
+							selected: 0,
+							selectCnt: 0,
 							strokeWdith: 1,
 							opacity: 0.5,
 							info: "Node: " + i
@@ -86,25 +90,64 @@ var Line = {};
 	        	axisObj.graphObjArr[this.graphId] = this;
 	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 				axisObj.hoverArr[this.graphId] = lineHover();
-				//axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
+				axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 			}
 	};
 })();
+function lineBoxSearch(graphObj)
+{
+	return function(smallX, smallY, bigX, bigY)
+		{	
+			var tmpNodeArr = new Array();
+			var tmpNodeArr1 = new Array();
+			if(ctrlPressed == true) {
+				for(var i = 0 ; i < graphObj.node.length ; i ++){
+					if(((smallX <= graphObj.node[i].getX()[0] && graphObj.node[i].getX()[0] <= bigX) && (smallY <= graphObj.node[i].getY()[0] && graphObj.node[i].getY()[0] <= bigY)) || ((smallX <= graphObj.node[i].getX()[1] && graphObj.node[i].getX()[1] <= bigX) && (smallY <= graphObj.node[i].getY()[1] && graphObj.node[i].getY()[1] <= bigY))){
+						if(graphObj.node[i].getSelected() == 1){
+							tmpNodeArr.push(graphObj.node[i].getName());
+						}else{
+							tmpNodeArr1.push(graphObj.node[i].getName());
+						}        
+					}
+				}
+				if(tmpNodeArr.length != undefined){
+					allGraphUpdate(graphObj, tmpNodeArr, 0);
+				}
+				if(tmpNodeArr1.length != undefined){
+					allGraphUpdate(graphObj, tmpNodeArr1, 1);
+				}				
+			}else{
+				for(var i = 0 ; i < graphObj.node.length ; i ++){
+					if(((smallX <= graphObj.node[i].getX()[0] && graphObj.node[i].getX()[0] <= bigX) && (smallY <= graphObj.node[i].getY()[0] && graphObj.node[i].getY()[0] <= bigY)) || ((smallX <= graphObj.node[i].getX()[1] && graphObj.node[i].getX()[1] <= bigX) && (smallY <= graphObj.node[i].getY()[1] && graphObj.node[i].getY()[1] <= bigY))){
+						tmpNodeArr.push(graphObj.node[i].getName());
+	                }
+	           	}
+				allGraphUpdate(graphObj, tmpNodeArr, 1);
+	        }
+			
+		};
+}
 function lineUpdate(node)
 {
 	return	function(selectOn)
 		{
 			if(node.getSelected() == 1 && selectOn == 0){		//unselect
-				node.setStroke(node.getFill());
-				node.setOpacity(0.5);
-				node.setSelected(0);
-			}else if(node.getSelected() == 0 && selectOn == 1){	//select
-				node.setStroke('red');
-				node.setOpacity(1);
-				node.setSelected(1);
-				node.moveToTop();
+				node.setSelectCnt(node.getSelectCnt() - 1);
+				if(node.getSelectCnt() == 0){
+					node.setStroke(node.getFill());
+					node.setOpacity(0.5);
+					node.setSelected(0);
+				}
+			}else if(selectOn == 1){	//select
+				node.setSelectCnt(node.getSelectCnt() + 1);
+				if(node.getSelected() == 0){
+					node.setStroke('red');
+					node.setOpacity(1);
+					node.setSelected(1);
+					node.moveToTop();
+				}
 			}
 		};
 }

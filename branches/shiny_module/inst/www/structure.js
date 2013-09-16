@@ -91,7 +91,7 @@ function createMainStructure(fileName)
 		isSelected[i][0] = 0;
 	}
 	// event components
-	mainArr._type = 'main';
+	mainArr._type = 'rootObj';
 	mainArr.labelArr = labelArr; // for table.
 	mainArr.parent = null;
 	mainArr.child = null;
@@ -300,7 +300,7 @@ var ddply = {};
 			}
 		}
 		this.$id = 1;
-		this._type = 'ddply';
+		this._type = 'histObj';
 		this.$isSelected = isSelected;
 		birthReport(dataObj, this, p2cArr, hasArr);
 		

@@ -134,14 +134,37 @@ function allGraphUpdate(graphObj, nodes, selectOn)
 	graphObj.firstUpdate(nodes, selectOn);
 }
 
-function firstUpdate(obj)
+function firstUpdate(firstObj)
 {
 	return function(nodes, selectOn)
 		{
-			//alert(obj._type);
-			//alert(nodes + ", " + selectOn);
-			var object = obj;
+			var object = firstObj;
 			var temp = nodes;
+			
+			// when lineObj.
+			if(firstObj._type == 'lineObj'){
+				// my update
+				if(nodes.length == undefined){
+					object.$isSelected[nodes][0] = selectOn;
+					for(var i = 1 ; i < object.$isSelected[nodes].length ; i ++){
+						object.$isSelected[nodes][i](selectOn);
+						object.$isSelected[nodes][i](selectOn);
+					}
+				}else{
+					for(var j = 0 ; j < nodes.length ; j ++){
+						object.$isSelected[nodes[j]][0] = selectOn;
+						for(var i = 1 ; i < object.$isSelected[nodes[j]].length ; i ++){
+							object.$isSelected[nodes[j]][i](selectOn);
+							object.$isSelected[nodes[j]][i](selectOn);
+						}
+					}
+				}
+				// refresh
+				for(var i = 1 ; i < object.refreshArr.length ; i ++){
+					object.refreshArr[i]();
+				}
+			}
+			
 			// find root
 			while(object.parent != null){
 				temp = object.childTOparent(temp);
@@ -171,48 +194,51 @@ function firstUpdate(obj)
 			}
 			if(object.refreshTable != undefined){
 				object.refreshTable();
-			}			
-			//alert(object._type);
-			//alert(refineArr);
+			}
+			
 			// refresh
 			for(var i = 1 ; i < object.refreshArr.length ; i ++){
 				object.refreshArr[i]();
 			}
+			
 			// child update
 			if(object.child != null && cnt > 0){
 				for(var i = 0 ; i < object.child.length ; i ++){
 					var temp2 = object.parentTOchild[i](refineArr);
-					childUpdate(object.child[i], temp2, selectOn);
+					childUpdate(object.child[i], temp2, selectOn, firstObj);
 				}
 			}
 		};
 }
 
-function childUpdate(object, nodes, selectOn)
+function childUpdate(object, nodes, selectOn, firstObj)
 {
 	// my update
-	if(nodes.length == undefined){
-		object.$isSelected[nodes][0] = selectOn;
-		for(var i = 1 ; i < object.$isSelected[nodes].length ; i ++){
-			object.$isSelected[nodes][i](selectOn);
-		}
-	}else{
-		for(var j = 0 ; j < nodes.length ; j ++){
-			object.$isSelected[nodes[j]][0] = selectOn;
-			for(var i = 1 ; i < object.$isSelected[nodes[j]].length ; i ++){
-				object.$isSelected[nodes[j]][i](selectOn);
+	if(!(object == firstObj && object._type == 'lineObj')){
+		if(nodes.length == undefined){
+			object.$isSelected[nodes][0] = selectOn;
+			for(var i = 1 ; i < object.$isSelected[nodes].length ; i ++){
+				object.$isSelected[nodes][i](selectOn);
+			}
+		}else{
+			for(var j = 0 ; j < nodes.length ; j ++){
+				object.$isSelected[nodes[j]][0] = selectOn;
+				for(var i = 1 ; i < object.$isSelected[nodes[j]].length ; i ++){
+					object.$isSelected[nodes[j]][i](selectOn);
+				}
 			}
 		}
+		// refresh
+		for(var i = 1 ; i < object.refreshArr.length ; i ++){
+			object.refreshArr[i]();
+		}
 	}
-	// refresh
-	for(var i = 1 ; i < object.refreshArr.length ; i ++){
-		object.refreshArr[i]();
-	}
+	
 	//child update
 	if(object.child != null){
 		for(var i = 0 ; i < object.child.length ; i ++){
 			var temp = object.parentTOchild[i](nodes);
-			childUpdate(object.child[i], temp, selectOn);
+			childUpdate(object.child[i], temp, selectOn, firstObj);
 		}
 	}
 }

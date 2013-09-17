@@ -1,4 +1,5 @@
-var cnt=0;
+var cnt = 0;
+var offload;
 var rightOutputBinding = new Shiny.OutputBinding();
 rightOutputBinding.find = function(scope){
 	return $(scope).find(".right-output");
@@ -8,7 +9,8 @@ rightOutputBinding.renderValue = function(el, data) {
 		cnt = 0;
 		if(data[0] != -1){
 			if(data[0] == 'first'){
-				axisSaving1.getAxisObj(data[1])._drawRegression(data[2].x, data[2].y);
+				offload._run(data[2].x, data[2].y);
+				//axisSaving1.getAxisObj(data[1])._drawRegression(data[2].x, data[2].y);
 			}
 		//	axisSaving1.getAxisObj(data[0])._drawRegression(data[1].xx, data[1].yy);
 				

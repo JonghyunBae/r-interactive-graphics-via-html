@@ -226,7 +226,42 @@ var Axis = {};
 					'yArr': yPixelArr
 				};
 			},
-			
+			_reDraw: function() {
+				makeStageLayer(this);
+				this.refresh = makeRefresh(this.stage);
+				// make plotRect.
+				makePlotRectLayer(this);
+				
+				this.plotLayer = new Kinetic.Layer();
+				// add base rectangular.
+				this.plotLayer.add(this.plotRect);				
+				// add x axis layer.
+				for(var i = 0 ; i < this.xLine.length ; i ++){
+					this.plotLayer.add(this.xLine[i]); 
+				    this.plotLayer.add(this.xText[i]);
+				}
+				// add y axis layer.				
+				for(var i = 0 ; i < this.yLine.length ; i ++){
+					this.plotLayer.add(this.yLine[i]);
+			        this.plotLayer.add(this.yText[i]);
+				}
+				// add main, x, y label.
+				if(this.mainLabel != undefined){
+					this.plotLayer.add(this.mainLabel);
+				}
+				this.plotLayer.add(this.xLabel);
+				this.plotLayer.add(this.yLabel);
+				
+				this.stage.add(this.plotLayer);
+				// add legend layer.
+				if(this.legendLayer != undefined){
+					this.stage.add(this.legendLayer);
+				}
+				// add rangeBox layer.
+				this.stage.add(this.rangeBoxLayer);
+				// add tooltip layer.
+				this.stage.add(this.tooltipLayer);
+			},
 			_drawRegression: function(xx, yy) {
 				var temp = this._getPixel(xx, yy);
 				var cnt = 0;

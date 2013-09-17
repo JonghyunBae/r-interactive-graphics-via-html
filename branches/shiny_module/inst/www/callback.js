@@ -35,6 +35,8 @@ var hideCnt = 0;
 var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected(Name)
 {
+	Name._reDraw();
+	/*
 	var dataObj = Name.graphObjArr[0].dataObj;
 	
 	// find root dataObj.

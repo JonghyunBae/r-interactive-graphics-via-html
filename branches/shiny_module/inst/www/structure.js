@@ -96,6 +96,10 @@ function createMainStructure(fileName)
 	mainArr.parent = null;
 	mainArr.child = null;
 	mainArr.$isSelected = isSelected;
+	mainArr.$isHidden = new Array(isSelected.length);
+	for(var i = 0 ; i < mainArr.$isHidden ; i ++){
+		mainArr.$isHidden[i] = false;
+	}
 	mainArr.$id = 1;
 	mainArr.refreshArr = new Array();
 	mainArr.refreshArr[0] = null;

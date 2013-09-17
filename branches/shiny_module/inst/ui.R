@@ -39,7 +39,7 @@ shinyUI(bootstrapPage(
   includeJS("table.js"),
   includeJS("search.js"),
   includeJS("legend.js"),
-  HTML("<script> var mainArr1 = createMainStructure('_sub.diamonds.csv');</script>"),
+  HTML("<script> var mainArr1 = createMainStructure('Theoph-from-R.csv');</script>"),
   HTML("<script>//var mainArr2 = createMainStructure('Theoph-from-R.csv');</script>"),
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
@@ -70,16 +70,22 @@ shinyUI(bootstrapPage(
        
        <script>
        var lobj1 = new MakeLineObj(mainArr1);
-       var axis1 = new Axis(1, lobj1, 'depth', 'price', {});
-       var l1 = new Line(axis1, lobj1, 'depth', 'price',{});
+       var axis1 = new Axis(1, lobj1, 'Time', 'conc', {});
+       var l1 = new Line(axis1, lobj1, 'Time', 'conc',{});
        
-       var axis2 = new Axis(2, mainArr1, 'carat', 'price', {});
-       var d1 = new Dot(axis2, mainArr1, 'carat', 'price', {});
+       var axis2 = new Axis(2, mainArr1, 'Time', 'conc', {});
+       var d1 = new Dot(axis2, mainArr1, 'Time', 'conc', {});
 
        eventTrigger([axis1, axis2]);
        var axisSaving1 = new axisSaving([axis1, axis2]);
        </script>
-
+        <script>
+        $(function() {
+          setTimeout(function() {
+          window.Shiny.onInputChange(\"first\", 1);
+          }, 1)
+        });
+        </script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>
        <p id=\"dont-delete-this\">E-mail : <a href=\"mailto:teamrightjs@gmail.com\">team.right.js@gmail.com</a></p>

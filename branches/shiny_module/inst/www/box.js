@@ -1,3 +1,159 @@
+var MakeBoxObj = {};
+(function() {
+	
+	MakeBoxObj = function(dataObj, xLabel, yLabel, optionObj) {
+		
+		// check y is continuous.
+		if(dataObj[yLabel].isDiscrete == true){
+			alert("y should be continuous. cannot be drawn box graph!");
+			return;
+		}
+		
+		// check whether x is continuous or not, and collect elements. 
+		
+		if(dataObj[xLabel].isDiscrete == true){
+			// discrete.
+			var isDiscrete = true;
+			var boxNum = dataObj[xLabel].index.length;
+			var boxNumDataArr = make2DArr(boxNum);
+			// push elements into each box.
+			for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+				boxNumDataArr[dataObj[xLabel][i]].push(dataObj[yLabel][i]);
+			}			
+		}else{
+			var isDiscrete = false;
+			var boxNum = 1;
+			var boxNumDataArr = new Array()
+			boxNumDataArr[0] = dataObj[yLabel];
+		}
+		
+		// make tags.
+		this.$tag = new Array();
+		var hasArr = new Array();
+		var outliers = new Array();
+		var outlierCnt = 0;
+		// calculate tags.
+		for(var i = 0 ; i < boxNum ; i ++){
+			// copy value of array.
+			var tempArr = boxNumDataArr[i].slice(0);
+			
+			var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
+			    if (a.data == b.data) return a.dataNumber > b.dataNumber ? 1 : -1;
+			    if (a.data > b.data) return 1;
+			    return -1;
+			};
+			var testArr = new Array();
+			for (j = 0 ; j < tempArr.length; j ++) {
+				testArr[j] = tempArr[j];
+				testArr[j].dataNumber = j;
+				tempArr[j] = new Object;
+				tempArr[j].dataNumber = j;
+				tempArr[j] = 2;
+			}
+			alert(testArr[0].dataNumber);
+			// sort data
+			tempArr.sort(stableSort);
+			// get values which are needed to draw box.
+			var max = tempArr[tempArr.length-1];
+			var min = tempArr[0];
+			var q3 = findQuartile(tempArr, 3);
+			var median = findQuartile(tempArr, 2);
+			var q1 = findQuartile(tempArr, 1);
+			// calculate upper fence.
+			var tmpUpFence = findMaxBelowFence(tempArr, q1, q3);			
+			var upperFence = tmpUpFence.fence;
+			var upperFenceNumber = tmpUpFence.fenceNumber;
+			var tmpOutlier = tmpUpFence.outliers;
+			for(var j = 0 ; j < tmpOutlier.length ; j ++){
+				outliers[outlierCnt] = tmpOutlier[j];
+				outliers[outlierCnt].dataNumber = tmpOutlier[j].dataNumber;
+				outlierCnt ++;
+			}
+			// calculate below fence.
+			var tmpDownFence = findMinAboveFence(tempArr, q1, q3);
+			var belowFence = tmpDownFence.fence;
+			var belowFenceNumber = tmpDownFence.fenceNumber;
+			var tmpOutlier = tmpDownFence.outliers;
+			for(var j = 0 ; j < tmpOutlier.length ; j ++){
+				outliers[outlierCnt] = tmpOutlier[j];
+				outliers[outlierCnt].dataNumber = tmpOutlier[j].dataNumber;
+				outlierCnt ++;
+			}
+			//set tag and hasArr.
+			this.$tag[i] = new Object();
+			this.$tag[i].median = median;
+			this.$tag[i].q1 = q1;
+			this.$tag[i].q3 = q3;
+			this.$tag[i].upperFence = upperFence;
+			this.$tag[i].belowFence = belowFence;
+			hasArr[i] = new Array();
+			alert(belowFenceNumber + ", " + upperFenceNumber);
+			for(var j = belowFenceNumber ; j < upperFenceNumber + 1 ; j ++){
+				hasArr[i].push(tempArr[j].dataNumber);
+			}
+			alert(hasArr[i]);
+		}
+	}
+})();
+// find fence.
+function findMaxBelowFence(Data, q1, q3)
+{
+    var iqr = q3 - q1;    
+    var fence = q3 + 1.5*iqr;
+    var fenceNumber;
+    var outliers = new Array();
+    var cnt = 0;
+    var maxValue = q3;
+    for(var i = 0 ; i < Data.length ; i ++){
+    	if(Data[i] > maxValue && Data[i] <= fence){
+    		maxValue = Data[i];
+    		fenceNumber = i;
+    	}else if(Data[i] > fence){
+    		outliers[cnt] = Data[i];
+    		outliers[cnt].dataNumber = Data[i].dataNumber;
+    		cnt ++;               
+    	}
+	}
+	return {fence : maxValue, fenceNumber: fenceNumber, outliers : outliers};
+}
+function findMinAboveFence(Data, q1, q3)
+{
+    var iqr = q3 - q1;    
+    var fence = q1 - 1.5*iqr;
+    var fenceNumber;
+    var outliers = new Array();
+    var cnt = 0;
+    var minValue = q1;
+    for(var i = 0 ; i < Data.length ; i ++){
+    	if(Data[i] < minValue && Data[i] >= fence){
+    		minValue = Data[i];
+    		fenceNumber = i;
+    	}else if(Data[i] < fence){
+    		outliers[cnt] = Data[i];
+    		outliers[cnt].dataNumber = Data[i].dataNumber;
+    		cnt ++;
+    	}
+	}
+    return {fence : minValue, fenceNumber: fenceNumber, outliers : outliers};
+}
+/**  find q1, q2, median  **/
+// _th = 1 -> q1.
+// _th = 2 -> median.
+// _th = 3 -> q3.
+function findQuartile(Data, _th)
+{     
+    var p = _th/4;
+    var n = Data.length;
+    var j = parseInt(n*p);
+    var g = n*p - j;
+    if(g == 0){
+        return (Data[j-1] + Data[j]) / 2;
+    }else{ //g > 0
+        return Data[j];
+    }
+    
+}
+/**  find q1, q2, median end  **/
 var Box = {};    
 
 (function() {    
@@ -629,65 +785,9 @@ function boxFindMinValue(Data , index)
     }
     return minValue;
 }*/
-function findQuartile(Data, _th)//_th =1, return Q1
-{     
-    var p=_th/4;
-    var n=Data.length;
-    var j=parseInt(n*p);
-    var g=n*p-j;
-   
-    if(g==0){
-        return (Data[j-1]+Data[j])/2;
-    }else{ //g>0
-        return Data[j];
-    }
-    
-}
 
-function findMaxBelowFence(Data, index, q1, q3)
-{
-    var iqr = q3-q1;    
-    var fence = q3 + 1.5*iqr;
-    var outliers = new Array();
-    var j=0;
-    var maxValue=q3;
-    for(var i=0; i<Data.length; i++)
-    {    
-        if(i==index[j])
-        {  
-            if(Data[i] > maxValue && Data[i] <= fence){
-                maxValue=Data[i];            
-            }else if(Data[i] > fence){
-                outliers.push(i);               
-            }            
-            j++;
-        }
-    }    
-    return {max : maxValue, outliers : outliers};    
-}
-function findMinAboveFence(Data, index, q1, q3)
-{
-    var iqr = q3-q1;    
-    var fence = q1 - 1.5*iqr;
-    var outliers = new Array();
-    var j=0;    
-    var minValue=q1;
-    
-    for(var i=0; i<Data.length; i++)
-    {    
-        if(i==index[j])
-        {   
-            if(Data[i] < minValue && Data[i] >= fence){
-                minValue=Data[i];    
-            }else if(Data[i] < fence){
-                outliers.push(i);                
-            }            
-            j++;
-        }    
-    }
-    //outliers.push('NaN');
-    return {min : minValue, outliers : outliers};    
-}
+
+
 /*
 function findOutliers(Data, maxBelowFence, minAboveFence)
 {

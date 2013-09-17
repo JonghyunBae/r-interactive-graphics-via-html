@@ -2,40 +2,18 @@ library(shiny)
 
 shinyServer(function(input, output) {
   output$content <- reactive({
-    if(length(input$start != 0)){
-      if(input$start != -1){
-        if(input$graph == "linear"){
-          containerId <- input$containerId
-          xx <- input$xx
-          yy <- input$yy
-          pp <- cbind(xx,yy)
-          pp <- data.frame(pp)
-          obj.lm <- lm(yy ~ xx, pp)
-          xRange <- range(xx)
-          xArray <- seq(xRange[1], xRange[2], length.out = length(xx))
-          yArray <- predict(obj.lm, data.frame(xx = xArray))
-          fitArray <- data.frame(xx = xArray, yy = yArray)
-          output <- list(containerId, fitArray)
-          return(output)
-        }else if(input$graph == "loess"){
-          containerId <- input$containerId
-          xx <- input$xx
-          yy <- input$yy
-          pp <- cbind(xx,yy)
-          pp <- data.frame(pp)
-          obj <- loess(yy ~ xx, pp)
-          xRange <- range(xx)
-          xArray <- seq(xRange[1], xRange[2], length.out = length(xx))
-          yArray <- predict(obj, data.frame(xx = xArray))
-          fitArray <- data.frame(xx = xArray, yy = yArray)
-          output <- list(containerId, fitArray) 
-          return(output)
-        }
-      }else{
-        output<-list(-1,-1)
+    if(length(input$first) != 0){
+      if(input$first == 1){
+        obj <- lm(conc ~ Time, Theoph)
+        xRange <- range(Theoph$Time)
+        xArray <- seq(xRange[1], xRange[2], length.out = length(Theoph$Time))
+        yArray <- predict(obj, data.frame(Time = xArray))
+        fitArray <- data.frame(x = xArray, y = yArray)
+        containerId <- 2
+        output <- list("first", containerId, fitArray)
         return(output)
-      }      
-    }
+      }
+    }      
   })
   output$content1 <- reactive({
     if(length(input$yy1) != 0){

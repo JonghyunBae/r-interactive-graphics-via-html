@@ -28,3 +28,4 @@ Collate:
     'head.R'
     'plot_RIGHT.R'
     'points_RIGHT.R'
+    'lines_RIGHT.R'

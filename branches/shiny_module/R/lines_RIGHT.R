@@ -1,21 +1,23 @@
-#' Add Points to a Plot
+#' Add Lines to a Plot
 #'
-#' points_RIGHT draws a sequence of points in the current axis.
+#' lines_RIGHT draws a sequence of points in the current axis.
 #' 
 #' @param form y ~ x formula
 #' @param data data.frame object containing data
 #' @param col color of the points
 #' @param subset condition to subset data
 #' 
-#' @aliases points
+#' @aliases lines
 #' 
 #' @export
 
-points_RIGHT <- function(form, data, col = NULL, subset = NULL,
-                         isString = FALSE) {
+lines_RIGHT <- function(form, data, col = NULL, subset = NULL,
+                        isString = FALSE) {
 
   ## ---
   ## Check input arguments:
+  ##
+  ## CHECK (junghoon): this part is common to both points_RIGHT and lines_RIGHT.
   ## ---
   
   # Make sure that there is at least one axis to draw on:
@@ -45,18 +47,18 @@ points_RIGHT <- function(form, data, col = NULL, subset = NULL,
   ## ---
   
   # Increment the number of points:
-  .RIGHT$numPoints <<- .RIGHT$numPoints + 1
+  .RIGHT$numLines <<- .RIGHT$numLines + 1
   
   # Add script in body:
   .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
-                                paste0("var points", .RIGHT$numPoints,
-                                       " = new Dot(axis", .RIGHT$numAxis,
+                                paste0("var lines", .RIGHT$numLines,
+                                       " = new Line(axis", .RIGHT$numAxis,
                                        ", ", dataName,
                                        ", '", axisName$x, "', '", axisName$y, "', {});"))
   
   # Source dot.js in head:
-  addSource(file.path(.RIGHT$libDir, "dot.js"))
+  addSource(file.path(.RIGHT$libDir, "line.js"))
   
   invisible()
   
-} # function point_RIGHT
+} # function lines_RIGHT

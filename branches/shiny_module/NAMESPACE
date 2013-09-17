@@ -1,5 +1,6 @@
 export(RIGHT)
 export(cleanup)
+export(lines_RIGHT)
 export(plot_RIGHT)
 export(points_RIGHT)
 export(print.RIGHT)

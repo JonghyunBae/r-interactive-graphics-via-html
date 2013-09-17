@@ -86,12 +86,13 @@ RIGHT <- function(expr = {}, ...,
   ## ---
   
   # Get the data objects and their names:
-  dataArray <- as.character(as.list(match.call(expand.dots = F))$...)
+  dataArray <- as.character(as.list(match.call(expand.dots = FALSE))$...)
   if (length(dataArray) == 0) {
     stop("No data is given.")
   } # if
 
-  dataList <- mget(dataArray, envir = parent.frame(), inherits = TRUE)
+#   dataList <- mget(dataArray, envir = parent.frame(), inherits = TRUE)
+  dataList <- setNames(list(...), dataArray)
   if (any(!sapply(dataList, is.data.frame))) {
     stop("All data should be given as data.frame objects.")
   } # if

@@ -21,11 +21,13 @@ plot_RIGHT <- function(form, data, type = "b",
     dataName <- as.character(argArray$data)
   } # if
   checkDataName(dataName)
+
+  dataArray <- get(dataName, envir = parent.frame())
   
   # Check whether the columns exist:
-  dataArray <- get(dataName, envir = parent.frame())
-  checkAxisName(as.character(form[[2]]), dataArray)
-  checkAxisName(as.character(form[[3]]), dataArray)
+  axisName <- checkFormula_xy(form) 
+  checkAxisName(axisName$x, dataArray)
+  checkAxisName(axisName$y, dataArray)
   
   ## ---
   ## Create an axis:
@@ -44,13 +46,14 @@ plot_RIGHT <- function(form, data, type = "b",
                                 paste0("var axis", .RIGHT$numAxis,
                                        " = new Axis(", .RIGHT$numAxis, 
                                        ", ", dataName,
-                                       ", '", form[[3]], "', '", form[[2]], "', {});"))
+                                       ", '", axisName$x, "', '", axisName$y, "', {});"))
   
   ## ---
   ## Plot points if necessary:
   ## ---
   
   if (type == "p" || type == "b") {
+    # CHECK (junghoon): should axis name be passed?
     points_RIGHT(form, dataName, isString = TRUE)
   } # if
   

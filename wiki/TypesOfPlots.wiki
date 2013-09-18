@@ -75,7 +75,7 @@ To run the example type:
 To run the example type:
 
 {{{
-> RIGHT(line(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
+> RIGHT(plot(price~carat, diamonds, type="l"), diamonds, dir = "TEST")
 }}}
 
 == Pie chart == 

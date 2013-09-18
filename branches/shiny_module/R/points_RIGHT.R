@@ -11,8 +11,7 @@
 #' 
 #' @export
 
-points_RIGHT <- function(form, data, col = NULL, subset = NULL,
-                         isString = FALSE) {
+points_RIGHT <- function(form, data, col = NULL, subset = NULL) {
 
   ## ---
   ## Check input arguments:
@@ -26,16 +25,19 @@ points_RIGHT <- function(form, data, col = NULL, subset = NULL,
   # Make sure that data exists:
   argArray <- as.list(match.call())
   
-  if (isString == TRUE) {
+  dataAttr <- attr(data, "char")
+  if (!is.null(dataAttr) && dataAttr == TRUE) {
     dataName <- data
   } else {
     dataName <- as.character(argArray$data) 
   } # if
   checkDataName(dataName)
 
+  # get is necessary in case a character string is given for data:
   dataArray <- get(dataName, envir = parent.frame())
   
   # Check whether the columns exist:
+  # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form)
   checkAxisName(axisName$x, dataArray)
   checkAxisName(axisName$y, dataArray)
@@ -49,7 +51,7 @@ points_RIGHT <- function(form, data, col = NULL, subset = NULL,
   
   # Add script in body:
   .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
-                                paste0("var points", .RIGHT$numPoints,
+                                paste0("var point", .RIGHT$numPoints,
                                        " = new Dot(axis", .RIGHT$numAxis,
                                        ", ", dataName,
                                        ", '", axisName$x, "', '", axisName$y, "', {});"))

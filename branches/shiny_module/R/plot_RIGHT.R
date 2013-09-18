@@ -3,10 +3,10 @@
 #' X-Y Plotting
 #' 
 #' Function to create x-y scatter and line plots, including the axis.
+#' @aliases plot
 #' @export
 
-plot_RIGHT <- function(form, data, type = "b",
-                       isString = FALSE) {
+plot_RIGHT <- function(form, data, type = "b") {
   
   ## ---
   ## Check input arguments:
@@ -15,16 +15,19 @@ plot_RIGHT <- function(form, data, type = "b",
   # Make sure that data exists:
   argArray <- as.list(match.call())
   
-  if (isString == TRUE) {
+  dataAttr <- attr(data, "char")
+  if (!is.null(dataAttr) && dataAttr == TRUE) {
     dataName <- data
   } else {
     dataName <- as.character(argArray$data)
   } # if
   checkDataName(dataName)
 
+  # get is necessary in case a character string is given for data:
   dataArray <- get(dataName, envir = parent.frame())
   
   # Check whether the columns exist:
+  # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form) 
   checkAxisName(axisName$x, dataArray)
   checkAxisName(axisName$y, dataArray)
@@ -33,7 +36,7 @@ plot_RIGHT <- function(form, data, type = "b",
   ## Create an axis:
   ## ---
   
-  # Increment the number of points:
+  # Increment the number of axes:
   .RIGHT$numAxis <<- .RIGHT$numAxis + 1
   
   # Add div in body:
@@ -49,12 +52,22 @@ plot_RIGHT <- function(form, data, type = "b",
                                        ", '", axisName$x, "', '", axisName$y, "', {});"))
   
   ## ---
+  ## Plot lines if necessary:
+  ## ---
+
+  # CHECK (junghoon): refine this to support type == "c" as well.
+  if (type == "l" || type == "b") {
+    lines_RIGHT(form, char(dataName))
+  } # if
+  
+  ## ---
   ## Plot points if necessary:
   ## ---
   
   if (type == "p" || type == "b") {
-    # CHECK (junghoon): should axis name be passed?
-    points_RIGHT(form, dataName, isString = TRUE)
+    points_RIGHT(form, char(dataName))
   } # if
+  
+  invisible()
   
 } # function plot_RIGHT

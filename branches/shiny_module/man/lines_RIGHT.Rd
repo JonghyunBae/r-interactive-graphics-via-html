@@ -1,9 +1,9 @@
-\name{points_RIGHT}
-\alias{points}
-\alias{points_RIGHT}
-\title{Add Points to a Plot}
+\name{lines_RIGHT}
+\alias{lines}
+\alias{lines_RIGHT}
+\title{Add Lines to a Plot}
 \usage{
-  points_RIGHT(form, data, col = NULL, subset = NULL)
+  lines_RIGHT(form, data, col = NULL, subset = NULL)
 }
 \arguments{
   \item{form}{y ~ x formula}
@@ -15,7 +15,7 @@
   \item{subset}{condition to subset data}
 }
 \description{
-  points_RIGHT draws a sequence of points in the current
+  lines_RIGHT draws a sequence of points in the current
   axis.
 }
 

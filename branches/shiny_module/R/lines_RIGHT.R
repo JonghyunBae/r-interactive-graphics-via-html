@@ -11,8 +11,7 @@
 #' 
 #' @export
 
-lines_RIGHT <- function(form, data, col = NULL, subset = NULL,
-                        isString = FALSE) {
+lines_RIGHT <- function(form, data, col = NULL, subset = NULL) {
 
   ## ---
   ## Check input arguments:
@@ -28,16 +27,19 @@ lines_RIGHT <- function(form, data, col = NULL, subset = NULL,
   # Make sure that data exists:
   argArray <- as.list(match.call())
   
-  if (isString == TRUE) {
+  dataAttr <- attr(data, "char")
+  if (!is.null(dataAttr) && dataAttr == TRUE) {
     dataName <- data
   } else {
     dataName <- as.character(argArray$data) 
   } # if
   checkDataName(dataName)
 
+  # get is necessary in case a character string is given for data:
   dataArray <- get(dataName, envir = parent.frame())
   
   # Check whether the columns exist:
+  # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form)
   checkAxisName(axisName$x, dataArray)
   checkAxisName(axisName$y, dataArray)
@@ -51,10 +53,12 @@ lines_RIGHT <- function(form, data, col = NULL, subset = NULL,
   
   # Add script in body:
   .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
-                                paste0("var lines", .RIGHT$numLines,
-                                       " = new Line(axis", .RIGHT$numAxis,
-                                       ", ", dataName,
-                                       ", '", axisName$x, "', '", axisName$y, "', {});"))
+                                c(paste0("var lineObj", .RIGHT$numLines,
+                                         " = new MakeLineObj(", dataName, ");"),
+                                  paste0("var line", .RIGHT$numLines,
+                                         " = new Line(axis", .RIGHT$numAxis,
+                                         ", lineObj", .RIGHT$numLines,
+                                         ", '", axisName$x, "', '", axisName$y, "', {});")))
   
   # Source dot.js in head:
   addSource(file.path(.RIGHT$libDir, "line.js"))

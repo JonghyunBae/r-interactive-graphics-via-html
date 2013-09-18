@@ -1,13 +1,25 @@
-## Script to test funRight.R:
+## Script for simple functionality test:
 
-source("testR.R")
+library(devtools)
+library(ggplot2)
+load_all() # load the code under development as library:
 
-sub.diamonds <- Theoph
+rm(list = ls())
 
-obj <- RIGHT(sub.diamonds, fun = {
-  plot.RIGHT(sub.diamonds, carat, price, color, "right", 300, 300)
-  hist.RIGHT(sub.diamonds, cut, 2, 300, 300)
-  box.RIGHT(sub.diamonds, carat, price, 300, 300)
-})
+subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
 
-print(obj)
+fitObj <- loess(price ~ carat, subArray)
+xRange <- range(subArray$carat)
+fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
+fitArray$price <- predict(fitObj, newdata = fitArray)
+
+# Sanity check:
+print(ggplot(NULL, aes(x = carat, y = price)) + 
+        geom_point(data = subArray, color = "green", size = 2) +
+        geom_line(data = fitArray, color = "black", size = 1.2))
+
+# dir = "TEMP" is just for ease of debugging
+print(RIGHT({plot(price ~ carat, subArray, type = "p")
+             lines(price ~ carat, fitArray)
+             hist(color, subArray)
+             pie(cut, subARray)}, subArray, fitArray, dir = "TEMP"))

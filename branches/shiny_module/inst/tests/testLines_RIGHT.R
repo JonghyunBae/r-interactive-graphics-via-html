@@ -1,3 +1,5 @@
+# CHECK (junghoon): check use of char().
+
 ## ---
 ## Test lines_RIGHT():
 ## ---
@@ -32,12 +34,16 @@ expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$numLines, 0)
 lines_RIGHT(conc ~ Time, Theoph)
 temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
 expect_identical(temp$numLines, 1)
-expect_identical(temp$scriptArray, "var lines1 = new Line(axis1, Theoph, 'Time', 'conc', {});")
+expect_identical(temp$scriptArray, 
+                 c("var lineObj1 = new MakeLineObj(Theoph);",
+                   "var line1 = new Line(axis1, lineObj1, 'Time', 'conc', {});"))
 expect_true(any(file.path(temp$libDir, "line.js") %in% temp$sourceArray))
 
 lines_RIGHT(conc ~ Time, "Theoph")
 temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
 expect_identical(temp$numLines, 2)
-expect_identical(temp$scriptArray, c("var lines1 = new Line(axis1, Theoph, 'Time', 'conc', {});",
-                                     "var lines2 = new Line(axis1, Theoph, 'Time', 'conc', {});"))
+expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph);",
+                                     "var line1 = new Line(axis1, lineObj1, 'Time', 'conc', {});",
+                                     "var lineObj2 = new MakeLineObj(Theoph);",
+                                     "var line2 = new Line(axis1, lineObj2, 'Time', 'conc', {});"))
 expect_true(any(file.path(temp$libDir, "line.js") %in% temp$sourceArray))

@@ -1,3 +1,8 @@
+## ---
+## Check char():
+## ---
+
+expect_identical(attr(char("AA"), "char"), TRUE)
 
 ## ---
 ## Check checkDataName():

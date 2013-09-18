@@ -45,7 +45,9 @@ initRIGHT <- function() {
                            scriptArray = c(), # JavaScript code
                            numAxis = 0, # number of axis used
                            numPoints = 0, # number of points objects
-                           numLines = 0)) # number of lines objects
+                           numLines = 0, # number of lines objects
+                           numHist = 0,
+                           numPie = 0)) 
                       
 } # function initRIGHT
 
@@ -58,9 +60,32 @@ RIGHT <- function(expr = {}, ...,
                   dir = tempfile(tmpdir = getwd()), # CHECK (junghoon): not used for now
                   isOverwrite = TRUE) {
   
+  ## ---
+  ## Check input arguments:
+  ## ---
+  
   if (isOverwrite == FALSE && file.exists(dir)) {
     stop(dir, " already exists.")
   } # if
+
+  # Get the data objects and their names:
+  dataArray <- as.character(as.list(match.call(expand.dots = FALSE))$...)
+  if (length(dataArray) == 0) {
+    stop("No data object is given.")
+  } # if
+  if (any(grepl(".", dataArray, fixed = TRUE))) {
+    stop("The names of the data objects cannot contain any periods.")
+  } # if
+  
+  #   dataList <- mget(dataArray, envir = parent.frame(), inherits = TRUE)
+  dataList <- setNames(list(...), dataArray)
+  if (any(!sapply(dataList, is.data.frame))) {
+    stop("All data objects should be given as data.frame objects.")
+  } # if
+  
+  ## ---
+  ## Setup directory:
+  ## ---
   
   # Initialize the environment that keeps track of the information:
   initRIGHT()
@@ -85,18 +110,6 @@ RIGHT <- function(expr = {}, ...,
   ## Process data.frame objects:
   ## ---
   
-  # Get the data objects and their names:
-  dataArray <- as.character(as.list(match.call(expand.dots = FALSE))$...)
-  if (length(dataArray) == 0) {
-    stop("No data is given.")
-  } # if
-
-#   dataList <- mget(dataArray, envir = parent.frame(), inherits = TRUE)
-  dataList <- setNames(list(...), dataArray)
-  if (any(!sapply(dataList, is.data.frame))) {
-    stop("All data should be given as data.frame objects.")
-  } # if
-  
   fileNameArray <- prepareData(dataList, dir) 
 
   loadData(dataArray)
@@ -112,7 +125,10 @@ RIGHT <- function(expr = {}, ...,
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
   eval(substitute(expr), env = list(plot = plot_RIGHT,
-                                    points = points_RIGHT))
+                                    points = points_RIGHT,
+                                    lines = lines_RIGHT,
+                                    hist = hist_RIGHT,
+                                    pie = pie_RIGHT))
 
   # Add event handler:
   addBlankLine()

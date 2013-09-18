@@ -1,6 +1,18 @@
 ## Functions used by many other functions:
 
 ## ---
+## Mark an object as character:
+## ---
+
+char <- function(obj) {
+  
+  # CHECK (junghoon): class does not work!
+  attr(obj, "char") <- TRUE
+  return(obj)
+  
+} # function char
+
+## ---
 ## Functions to check input arguments:
 ## ---
 

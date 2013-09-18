@@ -6,6 +6,8 @@ load_all() # load the code under development as library:
 
 rm(list = ls())
 
+set.seed(123456)
+
 subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
 
 fitObj <- loess(price ~ carat, subArray)
@@ -22,4 +24,7 @@ print(ggplot(NULL, aes(x = carat, y = price)) +
 print(RIGHT({plot(price ~ carat, subArray, type = "p")
              lines(price ~ carat, fitArray)
              hist(color, subArray)
-             pie(cut, subARray)}, subArray, fitArray, dir = "TEMP"))
+             pie(cut, subArray)}, 
+            subArray, fitArray, 
+            dir = "TEMP"))
+

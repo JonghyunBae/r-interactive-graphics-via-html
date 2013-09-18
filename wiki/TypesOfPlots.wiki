@@ -42,19 +42,48 @@ LET'S SUMMARIZE WHAT TYPES OF INTERACTIVITY EACH PLOT TYPE SUPPORTS IN A TABLE.
 
 Read more about [TypesOfInteractivity types of supported interactivity] and [PlotOptions supported plotting options].
 
+RIGHT는 R에서 지원하는 base그래픽의 문법에 기초하여 만들어졌습니다.
+따라서 RIGHT를 처음 접해보는 유저들도 아주 간편하게 사용할 수 있습니다.
+R에서 지원하는 그래프 문법에 RIGHT() 감싸주기만 하면 됩니다.
+
 == Scatter plot == 
  * [http://en.wikipedia.org/wiki/Scatter_plot Scatter plot], display values for two variables for a set of data.
  * Regression (linear, loess) is enabled. The calculation for a regression line is done by the server side with R. (Shiny library is used here)
-<img src="http://thepotter.woobi.co.kr/img/scatter.png">
+<img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.png">
+
+To run the example type:
+
+{{{
+> RIGHT(plot(conc~Time, Theoph, type="p"), Theoph, dir = "TEST")
+}}}
+
 
 == Bar plot == 
  * [http://en.wikipedia.org/wiki/Bar_chart Bar plot], rectangular bars with lengths proportional to the values.
-<img src="http://thepotter.woobi.co.kr/img/bar.png">
+<img src="http://thepotter.woobi.co.kr/img/bar_diamonds.png">
+
+To run the example type:
+
+{{{
+> RIGHT(hist(price, diamonds), diamonds, dir = "TEST")
+}}}
 
 == Line plot == 
  * [http://en.wikipedia.org/wiki/Line_chart Line plot], displays information as a series of data points connected by straight line segments.
 <img src="http://thepotter.woobi.co.kr/img/box.png">
 
+To run the example type:
+
+{{{
+> RIGHT(line(conc~Time, Theoph, type="p"), Theoph, dir = "TEST")
+}}}
+
 == Pie chart == 
  * [http://en.wikipedia.org/wiki/Pie_chart Pie chart], circular chart divided into sectors, illustrating numerical proportion.
 <img src="http://thepotter.woobi.co.kr/img/pie.png">
+
+To run the example type:
+
+{{{
+> RIGHT(pie(conc~Time, Theoph, type="p"), Theoph, dir = "TEST")
+}}}

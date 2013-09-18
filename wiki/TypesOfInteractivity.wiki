@@ -5,12 +5,26 @@
 
 = Introduction =
 
-Add your content here.
+ * RIGHT는 여러가지 interactivity를 지원합니다.
+ * 그래프내에서의 툴팁박스
+ * 여러 그래프간의 하이라이트
+ * 선택 후 숨기기
+ * 리그레션 (서버오프로딩)
 
+= Interactivity Features =
 
-= Details =
+== Tooltip Box ==
+: 툴팁박스에 정보가 표시됩니다.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Simultaneous selection == 
+: Each data point on different charts is connected so that they will be selected at the same time. Multiple selection with ctrl/shift key and box selection is also possible.
+== Hiding == 
+ : Selected data points can be hidden.
+== Searching == 
+: Data points can be searched with boolean statements.
+== Table == 
+: Table shows information about selected data points.
+== Right-click Mene ==
+: When right click occurs, it will show context menu.
+==Regression == 
+: draw a regression line(linear or loess) using server offloading in Shiny package

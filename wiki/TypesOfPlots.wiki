@@ -85,5 +85,5 @@ To run the example type:
 To run the example type:
 
 {{{
-> RIGHT(pie(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
+> RIGHT(pie(color, diamonds), diamonds, dir = "TEST")
 }}}

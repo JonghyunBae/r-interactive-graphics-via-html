@@ -18,3 +18,8 @@ To run shiny type :
 > setwd("YOUR PATH")
 > runApp("YOUR FOLDER NAME")
 }}}
+
+이제, 서버 오프로딩을 통해서 계산하고자 하는 원하는 코드를 넣고 실행하는 방법은 다음과 같습니다.
+{{{
+> RIGHT.....
+}}}

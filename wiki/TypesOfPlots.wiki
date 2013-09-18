@@ -49,18 +49,18 @@ R에서 지원하는 그래프 문법에 RIGHT() 감싸주기만 하면 됩니�
 == Scatter plot == 
  * [http://en.wikipedia.org/wiki/Scatter_plot Scatter plot], display values for two variables for a set of data.
  * Regression (linear, loess) is enabled. The calculation for a regression line is done by the server side with R. (Shiny library is used here)
-<img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.png">
+<img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
 
 To run the example type:
 
 {{{
-> RIGHT(plot(conc~Time, Theoph, type="p"), Theoph, dir = "TEST")
+> RIGHT(plot(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
 }}}
 
 
 == Bar plot == 
  * [http://en.wikipedia.org/wiki/Bar_chart Bar plot], rectangular bars with lengths proportional to the values.
-<img src="http://thepotter.woobi.co.kr/img/bar_diamonds.png">
+<img src="http://thepotter.woobi.co.kr/img/bar_diamonds.PNG">
 
 To run the example type:
 
@@ -75,7 +75,7 @@ To run the example type:
 To run the example type:
 
 {{{
-> RIGHT(line(conc~Time, Theoph, type="p"), Theoph, dir = "TEST")
+> RIGHT(line(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
 }}}
 
 == Pie chart == 
@@ -85,5 +85,5 @@ To run the example type:
 To run the example type:
 
 {{{
-> RIGHT(pie(conc~Time, Theoph, type="p"), Theoph, dir = "TEST")
+> RIGHT(pie(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
 }}}

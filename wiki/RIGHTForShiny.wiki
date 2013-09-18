@@ -9,5 +9,12 @@ RIGHT는 샤이니를 이용한 서버오프로딩 기능을 제공합니다. �
 
 The RIGHT package depends on the Shiny packages, so we have to install this first, e.g. in R via:
 {{{
-install.packages('Shiny')
+> install.packages('Shiny')
+}}}
+
+To run shiny type :
+{{{
+> library(shiny)
+> setwd("YOUR PATH")
+> runApp("YOUR FOLDER NAME")
 }}}

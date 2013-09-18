@@ -63,15 +63,23 @@
        </div>
        
        <script>
+
        var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc');
        var axis1 = new Axis(1, lobj1, 'Time', 'conc', {});
        var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
        
+       
+
        var axis2 = new Axis(2, mainArr1, 'Time', 'conc', {});
        var d1 = new Dot(axis2, mainArr1, 'Time', 'conc', {});
+       
+       var histObj1 = new ddply(mainArr1, ['conc'], {});
+       var axis3 = new Axis(3, histObj1, 'conc', 'frequency', {legend: 'conc'});
+       var hist1 = new Bar(axis3, histObj1, 'conc', 'frequency', {});
+     
 
-       eventTrigger([axis1, axis2]);
-       var axisSaving1 = new axisSaving([axis1, axis2]);
+       eventTrigger([axis1, axis2, axis3]);
+       var axisSaving1 = new axisSaving([axis1, axis2, axis3]);
        </script>
         <script>
         

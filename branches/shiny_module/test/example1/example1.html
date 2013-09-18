@@ -35,9 +35,9 @@
        var s3 = new Dot(axis1, mainArr1, 'carat', 'table', {baseColor: 'blue'});
      
        
-       var hobj1 = new ddply(mainArr1, ['cut', 'color'], {});
-       var axis2 = new Axis(2, hobj1, 'cut', 'frequency', {legend:'color', position: 'left'});
-       var s2 = new Bar(axis2, hobj1, 'cut', 'frequency',{});
+       var hobj1 = new ddply(mainArr1, ['carat', 'color'], {});
+       var axis2 = new Axis(2, hobj1, 'carat', 'frequency', {legend:'color', position: 'left'});
+       var s2 = new Bar(axis2, hobj1, 'carat', 'frequency',{});
        eventTrigger([axis1,axis2]);
        </script>
        <script> makeTable(1, mainArr1, 200);</script>

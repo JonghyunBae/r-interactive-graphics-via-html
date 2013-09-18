@@ -133,6 +133,7 @@ function binning(labelObj, bin)
 		var temp = findMaxMinValue(labelObj);
 		var tempMax = temp.max;
 		var tempMin = temp.min;
+		
 		if(bin == undefined){
 			var tickRange = (tempMax - tempMin) / 5;
 			var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
@@ -254,6 +255,8 @@ var ddply = {};
 				var temp = binning(dataObj[labels[i]], optionObj.bin);
 				indexArr[i] = temp.indexArr;
 				factoredArr[i] = temp.factoredArr;
+				dataObj[labels[i]].max = temp.max;
+				dataObj[labels[i]].min = temp.min;
 			}else{
 				// make indexArr of discrete label.
 				for(var j = 0 ; j < dataObj[labels[i]].index.length ; j ++){
@@ -292,6 +295,14 @@ var ddply = {};
 		// set the array of fields by using recursive function.
 		setNode(0, labels.length, labels, indexArr, tmpObj, this);
 		
+		// copy max and min value for matching with axis binnig.
+		for(var i = 0 ; i < labels.length ; i ++){
+			if(dataObj[labels[i]].max != undefined){
+				this[labels[i]].max = dataObj[labels[i]].max;
+				this[labels[i]].min = dataObj[labels[i]].min;
+			}
+		}
+		
 		var hasArr = this['hasArr'];
 		delete this['hasArr'];
 		// make event handle part
@@ -307,7 +318,7 @@ var ddply = {};
 		this._type = 'histObj';
 		this.$isSelected = isSelected;
 		birthReport(dataObj, this, p2cArr, hasArr);
-		
+
 		// for debugging
 		/*
 		document.write("<br>");

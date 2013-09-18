@@ -8,7 +8,6 @@ var MakeLineObj = {};
                 this[temp[i]] = dataObj[temp[i]];
         }
         this.labelArr = dataObj.labelArr;
-        
 		this.x1 = new Array(dataObj[xLabel].length - 1);
 		this.x2 = new Array(dataObj[xLabel].length - 1);
 		this.y1 = new Array(dataObj[yLabel].length - 1);

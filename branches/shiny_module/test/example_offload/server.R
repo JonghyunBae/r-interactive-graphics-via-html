@@ -10,6 +10,7 @@ shinyServer(function(input, output) {
         yArray <- predict(obj, data.frame(Time = xArray))
         fitArray <- data.frame(x = xArray, y = yArray)
         containerId <- 2
+        regArr$conc <- Theop
         output <- list("first", containerId, fitArray)
         return(output)
       }

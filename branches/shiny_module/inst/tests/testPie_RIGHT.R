@@ -28,5 +28,5 @@ expect_identical(temp$numPie, 1)
 expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
 expect_identical(temp$scriptArray, 
                  c("var pieObj1 = new ddply(Theoph, ['Subject'], {});",
-                   "var axis1 = new Axis(1, pieObj1, 'Subject', 'Subject', {legend: 'Subject'});",
+                   "var axis1 = new Axis(1, pieObj1, 'Subject', 'frequency', {legend: 'Subject'});",
                    "var pie1 = new Pie(axis1, pieObj1, 'Subject', 'frequency', {});"))

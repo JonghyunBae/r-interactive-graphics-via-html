@@ -54,9 +54,14 @@ var Axis = {};
 				// xAxis
 				if(dataObj[xLabel].isDiscrete == undefined){ // continuous
 					this.isXDiscrete = false;
-					var temp = findMaxMinValue(dataObj[xLabel]);
-					this.xMax = temp.max;
-		            this.xMin = temp.min;
+					if(dataObj[xLabel].max == undefined){
+						var temp = findMaxMinValue(dataObj[xLabel]);
+						this.xMax = temp.max;
+			            this.xMin = temp.min;
+					}else{
+						this.xMax = dataObj[xLabel].max;
+			            this.xMin = dataObj[xLabel].min;
+					}					
 		            // frequency's min value should be 0
 		            if(xLabel == 'frequency'){
 		            	this.yMin = 0;
@@ -81,9 +86,14 @@ var Axis = {};
 				// yAxis
 				if(dataObj[yLabel].isDiscrete == undefined){ // continuous
 					this.isYDiscrete = false;
-					var temp = findMaxMinValue(dataObj[yLabel]);
-					this.yMax = temp.max;
-		            this.yMin = temp.min;
+					if(dataObj[yLabel].max == undefined){
+						var temp = findMaxMinValue(dataObj[yLabel]);
+						this.yMax = temp.max;
+			            this.yMin = temp.min;
+					}else{
+						this.yMax = dataObj[yLabel].max;
+			            this.yMin = dataObj[yLabel].min;
+					}					
 		            // frequency's min value should be 0
 		            if(yLabel == 'frequency'){
 		            	this.yMin = 0;

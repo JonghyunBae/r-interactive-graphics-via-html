@@ -52,7 +52,7 @@ pie_RIGHT <- function(x, data) {
                                   paste0("var axis", .RIGHT$numAxis,
                                          " = new Axis(", .RIGHT$numAxis, 
                                          ", pieObj", .RIGHT$numPie, # pie object is used to set axis
-                                         ", '", xName, "', '", xName, 
+                                         ", '", xName, "', '", 'frequency', 
                                          "', {legend: '", xName, "'});"),
                                   paste0("var pie", .RIGHT$numPie,
                                          " = new Pie(axis", .RIGHT$numAxis,

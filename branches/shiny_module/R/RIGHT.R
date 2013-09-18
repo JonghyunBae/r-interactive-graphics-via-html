@@ -1,5 +1,9 @@
 ## RIGHT() that uses a special environment to evaluate the expressions:
 
+# CHECK (junghoon): is there a better way?
+# To avoid "no visible binding for '<<-' assignment to '.RIGHT'":
+.RIGHT <- NULL
+
 # Environment used to collect all the necessary information to assemble the HTML file
 # that derives the RIGHT JavaScript API:
 #
@@ -7,13 +11,12 @@
 #    http://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r
 # for more explanation.
 .onLoad <- function(libname, pkgname) {
+  
+  # CHECK (junghoon): should I use a reference class instead of .RIGHT?
   assign(".RIGHT", new.env(), envir = parent.frame()) 
-}
-
-# Special environment used to keep aliases of functions. This is used by RIGHT() to evaluate
-# the given expression:
-# .RIGHT_FUN <- list2env(list(plot = plot_RIGHT,
-#                             points = points_RIGHT))
+  options(supportRIGHT = TRUE)
+  
+} # function .onLoad
 
 # This function has side effect.
 initRIGHT <- function() {
@@ -36,7 +39,6 @@ initRIGHT <- function() {
   linkArray <- c("right.css")
   linkArray <- file.path(libDir, linkArray)
   
-  # CHECK (junghoon): should I use a reference class instead?
   .RIGHT <<- list2env(list(libDir = libDir,
                            nameArray = c(), # keep variable names for checking
                            sourceArray = sourceArray, # scripts to source
@@ -47,8 +49,10 @@ initRIGHT <- function() {
                            numPoints = 0, # number of points objects
                            numLines = 0, # number of lines objects
                            numHist = 0,
-                           numPie = 0)) 
-                      
+                           numPie = 0))
+                 
+  invisible()
+  
 } # function initRIGHT
 
 #' Entry Function for RIGHT
@@ -58,7 +62,8 @@ initRIGHT <- function() {
 RIGHT <- function(expr = {}, ..., 
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(tmpdir = getwd()), # CHECK (junghoon): not used for now
-                  isOverwrite = TRUE) {
+                  isOverwrite = TRUE,
+                  supportRIGHT = getOption("supportRIGHT")) {
   
   ## ---
   ## Check input arguments:
@@ -124,7 +129,7 @@ RIGHT <- function(expr = {}, ...,
 
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
-  eval(substitute(expr), env = list(plot = plot_RIGHT,
+  eval(substitute(expr), envir = list(plot = plot_RIGHT,
                                     points = points_RIGHT,
                                     lines = lines_RIGHT,
                                     hist = hist_RIGHT,
@@ -159,9 +164,9 @@ RIGHT <- function(expr = {}, ...,
 #' 
 #' @export
 
-print.RIGHT <- function(obj) {
+print.RIGHT <- function(x, ...) {
   
-  fileName_index <- file.path(obj$dir, "www", "index.html")
+  fileName_index <- file.path(x$dir, "www", "index.html")
   if (!file.exists(fileName_index)) {
     stop("cleanup was called on the object.")
   } # if
@@ -179,10 +184,10 @@ print.RIGHT <- function(obj) {
 #' 
 #' @export
 
-summary.RIGHT <- function(obj) {
+summary.RIGHT <- function(object, ...) {
   
   # CHECK: improve this?
-  print.default(obj)
+  print.default(object)
   
 } # function summary.RIGHT
 

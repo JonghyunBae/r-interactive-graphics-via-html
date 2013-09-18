@@ -15,7 +15,8 @@ Description: RIGHT enables interactive data visualization and analysis using
 License: GPL-3
 Depends:
     R (>= 3.0.1),
-    shiny
+    shiny,
+    stringr
 Suggests:
     testthat
 URL: https://code.google.com/p/r-interactive-graphics-via-html/

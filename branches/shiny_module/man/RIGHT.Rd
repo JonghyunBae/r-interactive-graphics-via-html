@@ -4,7 +4,8 @@
 \usage{
   RIGHT(expr = { }, ...,
     title = "RIGHT: R Interactive Graphics via HTml",
-    dir = tempfile(tmpdir = getwd()), isOverwrite = TRUE)
+    dir = tempfile(tmpdir = getwd()), isOverwrite = TRUE,
+    supportRIGHT = getOption("supportRIGHT"))
 }
 \description{
   Entry Function for RIGHT

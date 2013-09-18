@@ -2,7 +2,7 @@
 \alias{print.RIGHT}
 \title{Print RIGHT Object}
 \usage{
-  print.RIGHT(obj)
+  print.RIGHT(x, ...)
 }
 \description{
   Print RIGHT Object

@@ -2,7 +2,7 @@
 \alias{summary.RIGHT}
 \title{Summarize RIGHT Object}
 \usage{
-  summary.RIGHT(obj)
+  summary.RIGHT(object, ...)
 }
 \description{
   Summarize RIGHT Object

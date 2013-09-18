@@ -37,7 +37,7 @@ Table shows information about selected data points.
 
 <img src="http://thepotter.woobi.co.kr/img/table.PNG">
 
-== Right-click Mene ==
+== Right-click Menu ==
 When right click occurs, it will show context menu.
 
 <img src="http://thepotter.woobi.co.kr/img/rightmenu.PNG">

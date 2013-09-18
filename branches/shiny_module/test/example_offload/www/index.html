@@ -77,25 +77,28 @@
        var axis3 = new Axis(3, histObj1, 'conc', 'frequency', {legend: 'conc'});
        var hist1 = new Bar(axis3, histObj1, 'conc', 'frequency', {});
      
-
-       eventTrigger([axis1, axis2, axis3]);
-     //  var axisSaving1 = new axisSaving([axis1, axis2, axis3]);
+       var AllAxisObjArr = [axis1, axis2, axis3]; // this is global for redrawing.
+       eventTrigger(AllAxisObjArr);
        </script>
         <script>
         
         var runOffload = {};
         (function() {
-        	runOffload = function () {
+        	runOffload = function (dataObj) {
+        		this.dataObj = dataObj;
         	};
         	runOffload.prototype = {
+        		_send: function(){
+        			window.Shiny.onInputChange("hidden", this.dataObj.$isHidden);
+        		},
         		_run: function(dataObj){
         			// customized code in here.
         			var tt = new MakeLineObj(dataObj, 'x', 'y');
         			var tt2 = new Line(axis2, tt, 'x1', 'x2', 'y1', 'y2', {baseColor:'blue' , event:'false'});
-        		}        		
+        		}
         	};
         })();
-        offload = new runOffload();
+        offload = new runOffload(mainArr1);
         $(function() {
             setTimeout(function() {
             window.Shiny.onInputChange('first', 1);

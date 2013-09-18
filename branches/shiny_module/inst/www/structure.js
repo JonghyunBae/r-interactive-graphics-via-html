@@ -337,5 +337,10 @@ var ddply = {};
 		document.write("Total frequency: " + cnt);
 		*/
 	};
+	ddply.prototype = {
+		_reCalculate: function() {
+			
+		};
+	};
 })();
 /**  ddply End  **/

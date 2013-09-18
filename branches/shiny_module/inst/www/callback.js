@@ -35,8 +35,46 @@ var hideCnt = 0;
 var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected(Name)
 {
-	Name._reDraw();
-	eventTrigger([Name]);
+	var rootObjArr = new Array();
+	var axisArr = new Array();
+	// find all rootObj related with this Axis.
+	for(var i = 0 ; i < Name.graphObjArr.length ; i ++){
+		// get dataObj of each graph on the axis.
+		var temp = Name.graphObjArr[i].dataObj;
+		// find root.
+		while(temp.parent != null){
+			temp = temp.parent;
+		}
+		// save all rootObj in the rootObjArr.
+		for(var j = 0 ; j < rootObjArr.length ; j ++){
+			if(temp == rootObjArr[j]) // prevent duplicate.
+				break;
+		}
+		if(j == rootObjArr.length){
+			rootObjArr.push(temp);
+		}
+	}
+	// update $isSelected and $isHidden
+	for(var i = 0 ; i < rootObjArr.length ; i ++){
+		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++){
+			if(rootObjArr[i].$isSelected[j][0] == 1){
+				rootObjArr[i].$isSelected[j][0] = 2;
+				rootObjArr[i].$isHidden[j] = true;
+			}
+		}
+		// recalculate all children dataObj.
+		// TODO: should add "recalculate" prototype in all dataObj!!!!
+	}
+	// redraw all axis.
+	for(var i = 0 ; i < AllAxisObjArr.length ; i ++){
+		// TODO: should make "_reDraw()" in all graph type!!!!!
+		AllAxisObjArr[i]._reDraw();
+	}
+	eventTrigger(AllAxisObjArr);
+	
+	
+	// TODO: should call server offload!!
+	
 	/*
 	var dataObj = Name.graphObjArr[0].dataObj;
 	

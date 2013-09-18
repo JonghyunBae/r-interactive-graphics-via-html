@@ -43,18 +43,18 @@ LET'S SUMMARIZE WHAT TYPES OF INTERACTIVITY EACH PLOT TYPE SUPPORTS IN A TABLE.
 Read more about [TypesOfInteractivity types of supported interactivity] and [PlotOptions supported plotting options].
 
 == Scatter plot == 
- * [http://en.wikipedia.org/wiki/Scatter_plot scatter plot], display values for two variables for a set of data.
+ * [http://en.wikipedia.org/wiki/Scatter_plot Scatter plot], display values for two variables for a set of data.
  * Regression (linear, loess) is enabled. The calculation for a regression line is done by the server side with R. (Shiny library is used here)
 <img src="http://thepotter.woobi.co.kr/img/scatter.png">
 
 == Bar plot == 
- * [http://en.wikipedia.org/wiki/Bar_chart bar plot], rectangular bars with lengths proportional to the values.
+ * [http://en.wikipedia.org/wiki/Bar_chart Bar plot], rectangular bars with lengths proportional to the values.
 <img src="http://thepotter.woobi.co.kr/img/bar.png">
 
-== Box-and-Whisker plot == 
- * [http://en.wikipedia.org/wiki/Box_and_whisker box-and-whisker plot], boxes (whiskers) indicating variability outside the upper and lower quartiles, and outliers.
+== Line plot == 
+ * [http://en.wikipedia.org/wiki/Line_chart Line plot], displays information as a series of data points connected by straight line segments.
 <img src="http://thepotter.woobi.co.kr/img/box.png">
 
 == Pie chart == 
- * [http://en.wikipedia.org/wiki/Pie_chart pie chart], circular chart divided into sectors, illustrating numerical proportion.
+ * [http://en.wikipedia.org/wiki/Pie_chart Pie chart], circular chart divided into sectors, illustrating numerical proportion.
 <img src="http://thepotter.woobi.co.kr/img/pie.png">

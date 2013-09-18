@@ -63,9 +63,9 @@
        </div>
        
        <script>
-       var lobj1 = new MakeLineObj(mainArr1);
+       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc');
        var axis1 = new Axis(1, lobj1, 'Time', 'conc', {});
-       var l1 = new Line(axis1, lobj1, 'Time', 'conc',{});
+       var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
        
        var axis2 = new Axis(2, mainArr1, 'Time', 'conc', {});
        var d1 = new Dot(axis2, mainArr1, 'Time', 'conc', {});

@@ -1,13 +1,25 @@
 var MakeLineObj = {};
 (function() {
-	MakeLineObj = function(dataObj) {
+	MakeLineObj = function(dataObj, xLabel, yLabel) {
 		var temp = getFields(dataObj);
 		
 		// copy data field.
-		for(var i = 0 ; i < temp.length ; i ++){
-			this[temp[i]] = dataObj[temp[i]];
+        for(var i = 0 ; i < temp.length ; i ++){
+                this[temp[i]] = dataObj[temp[i]];
+        }
+        this.labelArr = dataObj.labelArr;
+        
+		this.x1 = new Array(dataObj[xLabel].length - 1);
+		this.x2 = new Array(dataObj[xLabel].length - 1);
+		this.y1 = new Array(dataObj[yLabel].length - 1);
+		this.y2 = new Array(dataObj[yLabel].length - 1);
+		
+		for(var i = 0 ; i < this.x1.length ; i ++){
+			this.x1[i] = dataObj[xLabel][i];
+			this.x2[i] = dataObj[xLabel][i+1];
+			this.y1[i] = dataObj[yLabel][i];
+			this.y2[i] = dataObj[yLabel][i+1];
 		}
-		this.labelArr = dataObj.labelArr;
 		
 		// make event handle part.
 		this.$isSelected = make2DArr(dataObj.$isSelected.length - 1);
@@ -29,16 +41,18 @@ var MakeLineObj = {};
 // not event handle yet.
 var Line = {};
 (function() {	
-	Line = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
-		this._draw(axisObj, dataObj, xLabel, yLabel);
+	Line = function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
+		this._init(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
+		this._draw(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2);
 		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
 	Line.prototype = {
-			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-				this.xLabel = xLabel;
-				this.yLabel = yLabel;
+			_init: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
+				this.xLabel1 = xLabel1;
+				this.xLabel2 = xLabel2;
+				this.yLabel1 = yLabel1;
+				this.yLabel2 = yLabel2;
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				// set the base color.
@@ -48,24 +62,27 @@ var Line = {};
 					this.baseColor = 'black';
 				}
 			},
-			_draw: function(axisObj, dataObj, xLabel, yLabel) {
+			_draw: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2) {
 				// get pixel values from axis
-				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
-				var xArr = temp.xArr;
-				var yArr = temp.yArr;
+				var temp = axisObj._getPixel(dataObj[xLabel1], dataObj[yLabel1]);
+				var xArr1 = temp.xArr;
+				var yArr1 = temp.yArr;
+				var temp = axisObj._getPixel(dataObj[xLabel2], dataObj[yLabel2]);
+				var xArr2 = temp.xArr;
+				var yArr2 = temp.yArr;
 				var cnt = 0;
 				this.node = new Array();
-				for(var i = 0 ; i < xArr.length - 1 ; i ++){
-					if(!(xArr[i] == -1 || yArr[i] == -1 || xArr[i+1] == -1 || yArr[i+1] == -1)){
+				for(var i = 0 ; i < xArr1.length - 1 ; i ++){
+					if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
 						this.node[cnt] = new Kinetic.Line({
 							name: i,
-							x: [xArr[i], xArr[i+1]],
-							y: [yArr[i], yArr[i+1]],
+							x: [xArr1[i], xArr2[i]],
+							y: [yArr1[i], yArr2[i]],
 							points: [ 
-							         xArr[i],
-							         yArr[i],
-							         xArr[i+1],
-							         yArr[i+1]
+							         xArr1[i],
+							         yArr1[i],
+							         xArr2[i],
+							         yArr2[i]
 							        ],
 							stroke: this.baseColor,
 							fill: this.baseColor,

@@ -182,7 +182,7 @@ var Axis = {};
 				if(this.isXDiscrete == true){
 					var temp;
 					for(var i = 0 ; i < xArr.length ; i ++){
-						if(xArr[i] < 0 || xArr[i] > xArr.index.length){
+						if(xArr[i] < 0 || xArr[i] > this.xPlotArr.length - 1){
 							temp = -1;
 						}else{
 							temp = (xArr[i]+1)*this.xDiff + this.plotXMargin;
@@ -203,10 +203,10 @@ var Axis = {};
 				if(this.isYDiscrete == true){
 					var temp;
 					for(var i = 0 ; i < yArr.length ; i ++){
-						if(yArr[i] < 0 || yArr[i] > yArr.index.length || xPixelArr[i] == -1){
+						if(yArr[i] < 0 || yArr[i] > this.yPlotArr.length - 1 || xPixelArr[i] == -1){
 							temp = -1;
 						}else{
-							temp = this.plotYMargin + this.height - yArr[i]*this.yDiff;
+							temp = this.plotYMargin + this.height - (yArr[i] + 1)*this.yDiff;
 						}
 						yPixelArr[i] = temp;
 					}

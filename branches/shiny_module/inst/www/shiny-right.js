@@ -9,7 +9,8 @@ rightOutputBinding.renderValue = function(el, data) {
 		cnt = 0;
 		if(data[0] != -1){
 			if(data[0] == 'first'){
-				offload._run(data[2].x, data[2].y);
+				//offload._run(data[2].x, data[2].y);
+				offload._run(data[1]);
 				//axisSaving1.getAxisObj(data[1])._drawRegression(data[2].x, data[2].y);
 			}
 		//	axisSaving1.getAxisObj(data[0])._drawRegression(data[1].xx, data[1].yy);

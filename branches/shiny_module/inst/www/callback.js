@@ -36,6 +36,7 @@ var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected(Name)
 {
 	Name._reDraw();
+	eventTrigger([Name]);
 	/*
 	var dataObj = Name.graphObjArr[0].dataObj;
 	

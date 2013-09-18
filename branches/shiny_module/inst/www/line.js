@@ -21,7 +21,7 @@ var MakeLineObj = {};
 		}
 		
 		// make event handle part.
-		this.$isSelected = make2DArr(dataObj.$isSelected.length - 1);
+		this.$isSelected = make2DArr(this.x1.length);
 		var p2cArr = new Array(this.$isSelected.length + 1);
 		var c2pArr = new Array(this.$isSelected.length);
 		for(var i = 0 ; i < this.$isSelected.length ; i ++){
@@ -30,10 +30,10 @@ var MakeLineObj = {};
 			c2pArr[i] = [i, i+1];
 		}
 		p2cArr[0] = 0;
-		p2cArr[i] = i-1;		
+		p2cArr[i] = i-1;
 		this.$id = 1;
 		this._type = 'lineObj';
-		birthReport(dataObj, this, p2cArr, c2pArr);		
+		birthReport(dataObj, this, p2cArr, c2pArr);
 	}
 })();
 /**  draw line graph  **/
@@ -42,7 +42,7 @@ var Line = {};
 (function() {	
 	Line = function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 		this._init(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
-		this._draw(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2);
+		this._draw(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
 		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
@@ -61,7 +61,7 @@ var Line = {};
 					this.baseColor = 'black';
 				}
 			},
-			_draw: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2) {
+			_draw: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 				// get pixel values from axis
 				var temp = axisObj._getPixel(dataObj[xLabel1], dataObj[yLabel1]);
 				var xArr1 = temp.xArr;
@@ -97,14 +97,65 @@ var Line = {};
 						dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 					}
 				}
-				// event add
-				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-				this.firstUpdate = firstUpdate(dataObj);
-				this.dataObj = dataObj;
-	        	this.dataLayer = new Kinetic.Layer();	
+				this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
 				}
+				// event add
+				if(optionObj.event == undefined || optionObj.event != 'false'){
+					dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+					this.firstUpdate = firstUpdate(dataObj);
+					this.dataObj = dataObj;		        	
+		        	axisObj.graphObjArr[this.graphId] = this;
+		        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
+					axisObj.hoverArr[this.graphId] = lineHover();
+					axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
+				}
+				//add layer
+				axisObj.stage.add(this.dataLayer);
+			},
+			_reDraw: function(axisObj){
+				var temp = axisObj._getPixel(this.dataObj[this.xLabel1], this.dataObj[this.yLabel1]);
+				var xArr1 = temp.xArr;
+				var yArr1 = temp.yArr;
+				var temp = axisObj._getPixel(this.dataObj[this.xLabel2], this.dataObj[this.yLabel2]);
+				var xArr2 = temp.xArr;
+				var yArr2 = temp.yArr;
+				var cnt = 0;
+				this.node = new Array();
+				for(var i = 0 ; i < xArr1.length - 1 ; i ++){
+					if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
+						this.node[cnt] = new Kinetic.Line({
+							name: i,
+							x: [xArr1[i], xArr2[i]],
+							y: [yArr1[i], yArr2[i]],
+							points: [ 
+							         xArr1[i],
+							         yArr1[i],
+							         xArr2[i],
+							         yArr2[i]
+							        ],
+							stroke: this.baseColor,
+							fill: this.baseColor,
+							selected: 0,
+							selectCnt: 0,
+							strokeWdith: 1,
+							opacity: 0.5,
+							info: "Node: " + i
+						});
+						this.dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
+						cnt ++;
+					}else{
+						this.dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+					}
+				}
+				this.dataLayer = new Kinetic.Layer();	
+	        	for(var i = 0 ; i < this.node.length ; i ++){
+					this.dataLayer.add(this.node[i]);
+				}
+				// event add
+				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+				this.firstUpdate = firstUpdate(this.dataObj);		        	
 	        	axisObj.graphObjArr[this.graphId] = this;
 	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 				axisObj.hoverArr[this.graphId] = lineHover();

@@ -271,6 +271,10 @@ var Axis = {};
 				this.stage.add(this.rangeBoxLayer);
 				// add tooltip layer.
 				this.stage.add(this.tooltipLayer);
+				for(var i = 0 ; i < this.graphObjArr.length ; i ++){
+					this.graphObjArr[i]._reDraw(this);
+				}
+				
 			},
 			_drawRegression: function(xx, yy) {
 				var temp = this._getPixel(xx, yy);

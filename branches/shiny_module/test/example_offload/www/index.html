@@ -79,7 +79,7 @@
      
 
        eventTrigger([axis1, axis2, axis3]);
-       var axisSaving1 = new axisSaving([axis1, axis2, axis3]);
+     //  var axisSaving1 = new axisSaving([axis1, axis2, axis3]);
        </script>
         <script>
         
@@ -88,18 +88,17 @@
         	runOffload = function () {
         	};
         	runOffload.prototype = {
-        		_run: function(xArr, yArr) {
-        			axis2._drawRegression(xArr, yArr);	
-        		},
-        		_run2: function(dataObj){
-        				
+        		_run: function(dataObj){
+        			// customized code in here.
+        			var tt = new MakeLineObj(dataObj, 'x', 'y');
+        			var tt2 = new Line(axis2, tt, 'x1', 'x2', 'y1', 'y2', {baseColor:'blue' , event:'false'});
         		}        		
         	};
         })();
         offload = new runOffload();
         $(function() {
             setTimeout(function() {
-            window.Shiny.onInputChange("first", 1);
+            window.Shiny.onInputChange('first', 1);
             }, 1)
           });
         </script>

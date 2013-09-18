@@ -112,7 +112,7 @@ function createMainStructure(fileName)
 					mainArr[labelArr[i]].index[j] = parseFloat(mainArr[labelArr[i]].index[j]);
 				}
 			}
-			mainArr[labelArr[i]].index.sort(function(a,b){return a-b}); // 1, 10, 11, 12, 2, 3, 4 check.
+			mainArr[labelArr[i]].index.sort(function(a,b){return a-b});
 			for(var j = 0 ; j < mainArr[labelArr[i]].length ; j ++){
 				mainArr[labelArr[i]][j] = mainArr[labelArr[i]].index.indexOf(mainArr[labelArr[i]][j]);
 			}

@@ -26,7 +26,7 @@ var mainArr1 = createMainStructure('../../inst/www/_sub.diamonds.csv');
        
        <script>
        var hobj1 = new ddply(mainArr1, ['color'], {});
-       var axis1 = new Axis(1, hobj1, 'color', 'color', {legend:'color'});
+       var axis1 = new Axis(1, hobj1, 'color', 'frequency', {legend:'color'});
        var s1 = new Pie(axis1, hobj1, 'color', 'frequency',{});
        eventTrigger([axis1]);
       

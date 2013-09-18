@@ -15,16 +15,27 @@
 
 == Tooltip Box ==
 : 툴팁박스에 정보가 표시됩니다.
+<img src="http://thepotter.woobi.co.kr/img/tooltip.PNG">
 
 == Simultaneous selection == 
 : Each data point on different charts is connected so that they will be selected at the same time. Multiple selection with ctrl/shift key and box selection is also possible.
+<img src="http://thepotter.woobi.co.kr/img/simul_selectino.PNG">
+
 == Hiding == 
  : Selected data points can be hidden.
+
+
 == Searching == 
 : Data points can be searched with boolean statements.
+<img src="http://thepotter.woobi.co.kr/img/search.PNG">
+
 == Table == 
 : Table shows information about selected data points.
+<img src="http://thepotter.woobi.co.kr/img/table.PNG">
+
 == Right-click Mene ==
 : When right click occurs, it will show context menu.
+<img src="http://thepotter.woobi.co.kr/img/rightmenu.PNG">
+
 ==Regression == 
 : draw a regression line(linear or loess) using server offloading in Shiny package

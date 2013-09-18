@@ -1,0 +1,22 @@
+#summary Introducing RIGHT
+
+= Introduction =
+
+R Interactive Graphics via HTml (RIGHT) package enables interactive data visualization and analysis on a variety of platforms.
+
+
+= Features =
+
+  * Interactivity features
+    * Tooltip Box : Hovering cursor display information about data point.
+    * Simultaneous selection : Each data point on different charts is connected so that they will be selected at the same time. Multilpe selection with ctrl/shift key and box selection is also possible.
+    * Hiding : Selected data points can be hidden.
+    * Searching : Data points can be searched with boolean statements.
+    * Table : Table shows information about selected data points.
+    * Right-click Menu : When right click occurs, it will show context menu.
+    * Regression : draw a regression line(linear or loess) using server offloading.
+  * Graphs
+    * Scatter graph
+    * Bar graph
+    * Line graph
+    * Pie graph

@@ -2,27 +2,27 @@
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link rel="stylesheet" href="../../inst/www/right.css"/>
+  <link rel="stylesheet" href="../../JavaScript/right.css"/>
  <title>RIGHT: R Interactive Graphics via HTml</title>
 
- <script src="../../inst/www/callback.js"></script>
- <script src="../../inst/www/kinetic-v4.6.0.js"></script>
- <script src="../../inst/www/structure.js"></script>
- <script src="../../inst/www/common.js"></script>
- <script src="../../inst/www/axis.js"></script>
- <script src="../../inst/www/color.js"></script>
- <script src="../../inst/www/dot.js"></script>
-  <script src="../../inst/www/line.js"></script>
- <script src="../../inst/www/node_event.js"></script>
- <script src="../../inst/www/menu.js"></script>
- <script src="../../inst/www/button_event.js"></script>
- <script src="../../inst/www/table.js"></script>
-  <script src="../../inst/www/search.js"></script>
+ <script src="../../JavaScript/callback.js"></script>
+ <script src="../../JavaScript/kinetic-v4.6.0.js"></script>
+ <script src="../../JavaScript/structure.js"></script>
+ <script src="../../JavaScript/common.js"></script>
+ <script src="../../JavaScript/axis.js"></script>
+ <script src="../../JavaScript/color.js"></script>
+ <script src="../../JavaScript/dot.js"></script>
+  <script src="../../JavaScript/line.js"></script>
+ <script src="../../JavaScript/node_event.js"></script>
+ <script src="../../JavaScript/menu.js"></script>
+ <script src="../../JavaScript/button_event.js"></script>
+ <script src="../../JavaScript/table.js"></script>
+  <script src="../../JavaScript/search.js"></script>
 </head>
 <body>
 <script>
-var mainArr1 = createMainStructure('../../inst/www/_sub.diamonds.csv');
-var mainArr2 = createMainStructure('../../inst/www/diamonds-from-R_100.csv');
+var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
+var mainArr2 = createMainStructure('../../JavaScript/diamonds-from-R_100.csv');
 </script>
 
 <div id="head"> 
@@ -49,7 +49,8 @@ var mainArr2 = createMainStructure('../../inst/www/diamonds-from-R_100.csv');
        
        var axis1 = new Axis(1, mainArr1, 'carat', 'table', {legend: 'color', position: 'right'});
        var s1 = new Dot(axis1, mainArr1, 'carat', 'table',{});
-       var l1 = new Line(axis1, mainArr2, 'carat', 'depth',{baseColor: 'green'});
+       var lObj1 = new MakeLineObj(mainArr2, 'carat', 'depth');
+       var l1 = new Line(axis1, lObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: 'green'});
        eventTrigger([axis1]);
       
        </script>

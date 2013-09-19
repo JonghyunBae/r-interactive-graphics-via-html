@@ -10,7 +10,7 @@ shinyServer(function(input, output) {
         yArray <- predict(obj, data.frame(Time = xArray))
         fitArray <- data.frame(x = xArray, y = yArray)
         containerId <- 2
-        output <- list("first", containerId, fitArray)
+        output <- list("first", fitArray)
         return(output)
       }
     }      

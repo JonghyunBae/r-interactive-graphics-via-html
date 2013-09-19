@@ -133,7 +133,7 @@ function binning(labelObj, bin)
 		var temp = findMaxMinValue(labelObj);
 		var tempMax = temp.max;
 		var tempMin = temp.min;
-		
+		//alert(tempMax + ", " + tempMin);
 		if(bin == undefined){
 			var tickRange = (tempMax - tempMin) / 5;
 			var tmp = Math.ceil(Math.log(tickRange) / Math.log(10));
@@ -172,6 +172,8 @@ function binning(labelObj, bin)
 		return {
 			'max': max,
 			'min': min,
+			'tempMax': tempMax,
+			'tempMin': tempMin,
 			'indexArr': indexArr,
 			'factoredArr': factoredArr
 		};
@@ -255,8 +257,8 @@ var ddply = {};
 				var temp = binning(dataObj[labels[i]], optionObj.bin);
 				indexArr[i] = temp.indexArr;
 				factoredArr[i] = temp.factoredArr;
-				dataObj[labels[i]].max = temp.max;
-				dataObj[labels[i]].min = temp.min;
+				dataObj[labels[i]].max = temp.tempMax;
+				dataObj[labels[i]].min = temp.tempMin;
 			}else{
 				// make indexArr of discrete label.
 				for(var j = 0 ; j < dataObj[labels[i]].index.length ; j ++){
@@ -340,7 +342,7 @@ var ddply = {};
 	ddply.prototype = {
 		_reCalculate: function() {
 			
-		};
+		}
 	};
 })();
 /**  ddply End  **/

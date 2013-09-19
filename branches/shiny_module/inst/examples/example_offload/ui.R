@@ -21,26 +21,25 @@ createDiv <- function(inputId) {
 
 shinyUI(bootstrapPage(
   includeCSS(), 
-  includeJS("shiny-right.js"),
-  includeJS("callback.js"),
-  includeJS("kinetic-v4.6.0.js"),
-  includeJS("structure.js"),
-  includeJS("common.js"),
-  includeJS("axis.js"),
-  includeJS("color.js"),
-  includeJS("dot.js"),
-  includeJS("bar.js"),
-  includeJS("box.js"),
-  includeJS("pie.js"),
-  includeJS("line.js"),
-  includeJS("node_event.js"),
-  includeJS("menu.js"),
-  includeJS("button_event.js"),
-  includeJS("table.js"),
-  includeJS("search.js"),
-  includeJS("legend.js"),
-  HTML("<script> var mainArr1 = createMainStructure('Theoph-from-R.csv');</script>"),
-  HTML("<script>//var mainArr2 = createMainStructure('Theoph-from-R.csv');</script>"),
+  includeJS("../../inst/www/shiny-right.js"),
+  includeJS("../../inst/www/callback.js"),
+  includeJS("../../inst/www/kinetic-v4.6.0.js"),
+  includeJS("../../inst/www/structure.js"),
+  includeJS("../../inst/www/common.js"),
+  includeJS("../../inst/www/axis.js"),
+  includeJS("../../inst/www/color.js"),
+  includeJS("../../../inst/www/dot.js"),
+  includeJS("../../../inst/www/bar.js"),
+  includeJS("../../../inst/www/box.js"),
+  includeJS("../../../inst/www/pie.js"),
+  includeJS("../../../inst/www/line.js"),
+  includeJS("../../../inst/www/node_event.js"),
+  includeJS("../../../inst/www/menu.js"),
+  includeJS("../../../inst/www/button_event.js"),
+  includeJS("../../../inst/www/table.js"),
+  includeJS("../../../inst/www/search.js"),
+  includeJS("../../../inst/www/legend.js"),
+  HTML("<script> var mainArr1 = createMainStructure('../../../inst/www/Theoph-from-R.csv');</script>"),
   HTML("<div id=\"head\"> 
        <div class=\"wrap\">
        <form id=\"searchForm1\">
@@ -68,23 +67,47 @@ shinyUI(bootstrapPage(
        </div>
        </div>
        
-       <script>
-       var lobj1 = new MakeLineObj(mainArr1);
+        <script>
+
+       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc');
        var axis1 = new Axis(1, lobj1, 'Time', 'conc', {});
-       var l1 = new Line(axis1, lobj1, 'Time', 'conc',{});
+       var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
        
+       
+
        var axis2 = new Axis(2, mainArr1, 'Time', 'conc', {});
        var d1 = new Dot(axis2, mainArr1, 'Time', 'conc', {});
+       
+       var histObj1 = new ddply(mainArr1, ['conc'], {});
+       var axis3 = new Axis(3, histObj1, 'conc', 'frequency', {legend: 'conc'});
+       var hist1 = new Bar(axis3, histObj1, 'conc', 'frequency', {});
+     
 
-       eventTrigger([axis1, axis2]);
-       var axisSaving1 = new axisSaving([axis1, axis2]);
+       eventTrigger([axis1, axis2, axis3]);
+       var axisSaving1 = new axisSaving([axis1, axis2, axis3]);
        </script>
         <script>
+        
+        var runOffload = {};
+        (function() {
+          runOffload = function () {
+        	};
+        	runOffload.prototype = {
+        		_run: function(xArr, yArr) {
+        			axis2._drawRegression(xArr, yArr);	
+        		},
+        		_run2: function(dataObj){
+        			var tt = new MakeLineObj(dataObj, 'x', 'y');
+        			var tt2 = new Line(axis1, tt, 'x1', 'x2', 'y1', 'y2', {});
+        		}        		
+        	};
+        })();
+        offload = new runOffload();
         $(function() {
-          setTimeout(function() {
-          window.Shiny.onInputChange(\"first\", 1);
-          }, 1)
-        });
+            setTimeout(function() {
+            window.Shiny.onInputChange('first', 1);
+            }, 1)
+          });
         </script>
        <div id=\"footer\">
        <p id=\"copyright\">&copy; 2013 - <a href=\"#\">The RIGHT team</a></p>

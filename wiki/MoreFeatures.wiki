@@ -1,4 +1,7 @@
 #summary Description of more features
+#sidebar TableOfContents
+
+<wiki:toc max_depth="2"/>
 
 = More features =
 

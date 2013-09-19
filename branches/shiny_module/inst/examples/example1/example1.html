@@ -46,7 +46,8 @@ var mainArr2 = createMainStructure('../../JavaScript/Theoph-from-R.csv');
        var hobj2 = new ddply(mainArr2, ['conc'], {});
        var axis3 = new Axis(3, hobj2, 'conc', 'frequency', {legend:'conc', position: 'left'});
        var s3 = new Bar(axis3, hobj2, 'conc', 'frequency',{});
-       eventTrigger([axis1,axis2, axis3]);
+       var AllAxisObjArr = [axis1,axis2, axis3];
+       eventTrigger(AllAxisObjArr);
        </script>
        <script> makeTable(1, mainArr1, 200);</script>
        <div id="footer">

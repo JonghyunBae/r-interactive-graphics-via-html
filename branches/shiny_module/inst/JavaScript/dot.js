@@ -113,10 +113,13 @@ var Dot = {};
 			},
 			_reDraw: function(axisObj) {
 				// get pixel values from axis
-				var temp = axisObj._getPixel(this.dataObj[this.xLabel], this.dataObj[this.yLabel]);
+				var dataObj = this.dataObj;
+				var xLabel = this.xLabel;
+				var yLabel = this.yLabel;
+				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
-				var labelArr = getFields(this.dataObj);
+				var labelArr = getFields(dataObj);
 				var cnt = 0;
 				this.node = new Array();
 				if(this.colorOn == true){
@@ -127,16 +130,16 @@ var Dot = {};
 								x: xArr[i],
 								y: yArr[i],
 								radius: this.radius,
-								stroke: (this.dataObj[this.colorLabel].isDiscrete == undefined) ? this.dataObj[this.colorLabel].color[i] : this.dataObj[this.colorLabel].colorIndex[this.dataObj[this.colorLabel][i]],
-								fill: (this.dataObj[this.colorLabel].isDiscrete == undefined) ? this.dataObj[this.colorLabel].color[i] : this.dataObj[this.colorLabel].colorIndex[this.dataObj[this.colorLabel][i]],
+								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
 								selected: 0,
 								opacity: 0.5,
-								info: "Node: " + i + "\r\n" + getNodeinfo(this.dataObj, i)
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 							});							
-							this.dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
+							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
 							cnt ++;
 						}else{
-							this.dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 						}
 					}
 				}else{
@@ -151,17 +154,17 @@ var Dot = {};
 								fill: this.baseColor,
 								selected: 0,
 								opacity: 0.5,
-								info: "Node: " + i + "\r\n" + getNodeinfo(this.dataObj, i)
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 							});
-							this.dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
+							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
 							cnt ++;
 						}else{
-							this.dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
 						}
 					}
 				}
 	        	// event add
-				this.dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
 				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
 	        	this.firstUpdate = firstUpdate(this.dataObj);

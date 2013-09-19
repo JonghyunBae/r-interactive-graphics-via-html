@@ -212,7 +212,7 @@ var Bar = {};
 					addColorField(dataObj[this.colorLabel]);
 				}
 				this.barWidth = axisObj.xbarWidth;
-				//this._checkStacking(axisObj, dataObj, xLabel, yLabel);
+				this._checkStacking(axisObj, dataObj, xLabel, yLabel);
 				// get pixel values from axis
 				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;

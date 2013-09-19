@@ -33,7 +33,8 @@ var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
        var axis2 = new Axis(2, mainArr1, 'carat', 'price', {});
        var d1 = new Dot(axis2, mainArr1, 'carat', 'price', {});
 
-       eventTrigger([axis1, axis2]);
+       var AllAxisObjArr = [axis1, axis2];
+       eventTrigger(AllAxisObjArr);
       
        </script>
 

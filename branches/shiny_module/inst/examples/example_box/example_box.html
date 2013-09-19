@@ -17,7 +17,7 @@
 </head>
 <body>
 <script>
-var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
+var mainArr1 = createMainStructure('../../JavaScript/Theoph-from-R.csv');
 </script>
 
  		<div id="content" class = "right-output" >
@@ -26,7 +26,9 @@ var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
        </div>
        
        <script>
-      	var bObj = new MakeBoxObj(mainArr1, 'color', 'carat', {});
+      	var bObj1 = new MakeBoxObj(mainArr1, 'Subject', 'conc', {});
+      	var axis1 = new Axis(1, bObj1, 'Subject', 'conc', {});
+      	var b = new Box(axis1, bObj1, {});
       
        </script>
 

@@ -26,73 +26,113 @@ var MakeBoxObj = {};
 			var boxNumDataArr = new Array()
 			boxNumDataArr[0] = dataObj[yLabel];
 		}
-		
+		this.xLabel = xLabel;
+		this.yLabel = yLabel;
+		this[xLabel] = dataObj[xLabel];
+		this[yLabel] = dataObj[yLabel];
 		// make tags.
-		this.$tag = new Array();
+		this.x = new Array();
+		this.y = new Array();
+
+		this.median = new Array();
+		this.q1 = new Array();
+		this.q3 = new Array();
+		this.upperFence = new Array();
+		this.lowerFence = new Array();
+		this.isOutlier = new Array();
 		var hasArr = new Array();
-		var outliers = new Array();
-		var outlierCnt = 0;
+		var stableSort = function(dataA, dataB){
+		    if (dataA.a == dataB.a) return dataA.b > dataB.b ? 1 : -1;
+		    if (dataA.a > dataB.a) return 1;
+		    return -1;
+		};		
 		// calculate tags.
+		var nodeCnt = 0;
 		for(var i = 0 ; i < boxNum ; i ++){
 			// copy value of array.
 			var tempArr = boxNumDataArr[i].slice(0);
+			var tempDataNumberArr = new Array();
+			var outliers = new Array();
+			var outliersDataNumber = new Array();			
 			
-			var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
-			    if (a.data == b.data) return a.dataNumber > b.dataNumber ? 1 : -1;
-			    if (a.data > b.data) return 1;
-			    return -1;
-			};
-			var testArr = new Array();
-			for (j = 0 ; j < tempArr.length; j ++) {
-				testArr[j] = tempArr[j];
-				testArr[j].dataNumber = j;
-				tempArr[j] = new Object;
-				tempArr[j].dataNumber = j;
-				tempArr[j] = 2;
+			for(j = 0 ; j < tempArr.length; j ++){
+				tempArr[j] = {a: tempArr[j], b: j};
 			}
-			alert(testArr[0].dataNumber);
 			// sort data
-			tempArr.sort(stableSort);
+			tempArr.sort(stableSort);		
+			
+			for(var j = 0 ; j < tempArr.length ; j ++){
+				tempDataNumberArr[j] = tempArr[j].b;
+				tempArr[j] = tempArr[j].a;
+			}
+			
 			// get values which are needed to draw box.
-			var max = tempArr[tempArr.length-1];
-			var min = tempArr[0];
 			var q3 = findQuartile(tempArr, 3);
 			var median = findQuartile(tempArr, 2);
 			var q1 = findQuartile(tempArr, 1);
 			// calculate upper fence.
-			var tmpUpFence = findMaxBelowFence(tempArr, q1, q3);			
+			var tmpUpFence = findMaxBelowFence(tempArr, q1, q3);
 			var upperFence = tmpUpFence.fence;
 			var upperFenceNumber = tmpUpFence.fenceNumber;
-			var tmpOutlier = tmpUpFence.outliers;
-			for(var j = 0 ; j < tmpOutlier.length ; j ++){
-				outliers[outlierCnt] = tmpOutlier[j];
-				outliers[outlierCnt].dataNumber = tmpOutlier[j].dataNumber;
-				outlierCnt ++;
+			// extract upper outliers.
+			for(var j = upperFenceNumber + 1 ; j < tempArr.length ; j ++){
+				outliers.push(tempArr[j]);
+				outliersDataNumber.push(tempDataNumberArr[j]);
 			}
 			// calculate below fence.
 			var tmpDownFence = findMinAboveFence(tempArr, q1, q3);
-			var belowFence = tmpDownFence.fence;
-			var belowFenceNumber = tmpDownFence.fenceNumber;
-			var tmpOutlier = tmpDownFence.outliers;
-			for(var j = 0 ; j < tmpOutlier.length ; j ++){
-				outliers[outlierCnt] = tmpOutlier[j];
-				outliers[outlierCnt].dataNumber = tmpOutlier[j].dataNumber;
-				outlierCnt ++;
+			var lowerFence = tmpDownFence.fence;
+			var lowerFenceNumber = tmpDownFence.fenceNumber;
+			// extract upper outliers.
+			for(var j = 0 ; j < lowerFenceNumber ; j ++){
+				outliers.push(tempArr[j]);
+				outliersDataNumber.push(tempDataNumberArr[j]);
 			}
-			//set tag and hasArr.
-			this.$tag[i] = new Object();
-			this.$tag[i].median = median;
-			this.$tag[i].q1 = q1;
-			this.$tag[i].q3 = q3;
-			this.$tag[i].upperFence = upperFence;
-			this.$tag[i].belowFence = belowFence;
-			hasArr[i] = new Array();
-			alert(belowFenceNumber + ", " + upperFenceNumber);
-			for(var j = belowFenceNumber ; j < upperFenceNumber + 1 ; j ++){
-				hasArr[i].push(tempArr[j].dataNumber);
+			
+			//set tag and hasArr with box data.
+			this.median[nodeCnt] = median;
+			this.isOutlier[nodeCnt] = false;
+			this.q1[nodeCnt] = q1;
+			this.q3[nodeCnt] = q3;
+			this.upperFence[nodeCnt] = upperFence;
+			this.lowerFence[nodeCnt] = lowerFence;
+			this.x[nodeCnt] = i;
+			this.y[nodeCnt] = q3;
+			// save hasArr.
+			hasArr[nodeCnt] = new Array();
+			for(var j = lowerFenceNumber ; j < upperFenceNumber + 1 ; j ++){
+				hasArr[nodeCnt].push(tempDataNumberArr[j]);
 			}
-			alert(hasArr[i]);
+			nodeCnt ++;
+			//set tag and hasArr with outlier data.
+			for(var j = 0 ; j < outliers.length ; j ++){
+				this.median[nodeCnt] = 0;
+				this.isOutlier[nodeCnt] = true;
+				this.q1[nodeCnt] = 0;
+				this.q3[nodeCnt] = 0;
+				this.upperFence[nodeCnt] = 0;
+				this.lowerFence[nodeCnt] = 0;
+				this.x[nodeCnt] = i;
+				this.y[nodeCnt] = outliers[j];
+				hasArr[nodeCnt] = new Array();
+				hasArr[nodeCnt] = outliersDataNumber[j];
+				nodeCnt ++;
+			}
 		}
+		
+		// event set
+		var p2cArr = new Array(dataObj[xLabel].length);
+		var isSelected = make2DArr(nodeCnt.length);
+		for(var i = 0 ; i < nodeCnt.length ; i ++){
+			isSelected[i][0] = 0;
+			for(var j = 0 ; j < hasArr[i].length ; j ++){
+				p2cArr[hasArr[i][j]] = i;
+			}
+		}
+		this.$id = 1;
+		this._type = 'boxObj';
+		this.$isSelected = isSelected;
+		birthReport(dataObj, this, p2cArr, hasArr);
 	}
 })();
 // find fence.
@@ -108,13 +148,9 @@ function findMaxBelowFence(Data, q1, q3)
     	if(Data[i] > maxValue && Data[i] <= fence){
     		maxValue = Data[i];
     		fenceNumber = i;
-    	}else if(Data[i] > fence){
-    		outliers[cnt] = Data[i];
-    		outliers[cnt].dataNumber = Data[i].dataNumber;
-    		cnt ++;               
     	}
 	}
-	return {fence : maxValue, fenceNumber: fenceNumber, outliers : outliers};
+	return {fence : maxValue, fenceNumber: fenceNumber};
 }
 function findMinAboveFence(Data, q1, q3)
 {
@@ -128,13 +164,9 @@ function findMinAboveFence(Data, q1, q3)
     	if(Data[i] < minValue && Data[i] >= fence){
     		minValue = Data[i];
     		fenceNumber = i;
-    	}else if(Data[i] < fence){
-    		outliers[cnt] = Data[i];
-    		outliers[cnt].dataNumber = Data[i].dataNumber;
-    		cnt ++;
     	}
 	}
-    return {fence : minValue, fenceNumber: fenceNumber, outliers : outliers};
+    return {fence : minValue, fenceNumber: fenceNumber};
 }
 /**  find q1, q2, median  **/
 // _th = 1 -> q1.
@@ -154,11 +186,96 @@ function findQuartile(Data, _th)
     
 }
 /**  find q1, q2, median end  **/
-var Box = {};    
+var Box = {};
+(function() {
+	
+	Box = function(axisObj, dataObj, optionObj) {
+		this._init(axisObj, dataObj, optionObj);
+		this._draw(axisObj, dataObj, optionObj);
+	};
+	Box.prototype = {
+		_init: function(axisObj, dataObj, optionObj) {
+			this.dataObj = dataObj;
+			this.dataId = dataObj.$id;
+			this.graphId = axisObj.numberOfGraph;
+			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
+			// set the base color.
+			if(optionObj.baseColor != undefined){
+				this.baseColor = optionObj.baseColor;
+			}else{
+				this.baseColor = 'green';
+			}
+		},
+		_draw: function(axisObj, dataObj, optionObj) {
+			var median = axisObj._getPixelY(dataObj.median);
+			var isOutlier = dataObj.isOutlier;
+			var q1 = axisObj._getPixelY(dataObj.q1);
+			alert(q1);
+			var q3 = axisObj._getPixelY(dataObj.q3);
+			var upperFence = axisObj._getPixelY(dataObj.upperFence);
+			var lowerFence = axisObj._getPixelY(dataObj.lowerFence);
+			var x = axisObj._getPixelX(dataObj.x);
+			var y = axisObj._getPixelY(dataObj.y);
+			var width = (axisObj.isXDiscrete == true) ? axisObj.xbarWidth : axisObj.width - 20;
+			this.node = new Array();
+			for(var i = 0 ; i < median.length ; i ++){
+				if(isOutlier[i] == false){
+					var IQR = q1[i] - q3[i];
+					var upFence = IQR + upperFence[i] - q3[i];
+					var loFence = IQR + lowerFence[i] - q1[i];
+					var med = median[i] - q3[i];
+					this.node[i] =  new Kinetic.Shape({
+				        x: (axisObj.isXDiscrete == true) ?  x[i] : axisObj._getPixelX((axisObj.xMax - axisObj.xMin)/2),
+				        y: axisObj.height + axisObj.plotYMargin - IQR,
+				        fill: this.baseColor,
+				        strokeWidth: 2,
+				        // a Kinetic.Canvas renderer is passed into the drawFunc function
+				        drawFunc: function(canvas) {
+				          var context = canvas.getContext();
+				          context.beginPath();
+				          context.rect(0, 0, width, IQR); // (0, 0, width, q3 - q1)
+				          context.moveTo(width/2, 0); // (width/2, 0)
+				          context.lineTo(width/2, upFence);  // (width/2, upperFence)
+				          context.moveTo(width/2, IQR); // (width/2, q3 - q1)
+				          context.lineTo(width/2, loFence);  // (width/2, lowerFence)
+				          context.moveTo(0, med);	// (0, median)
+				          context.lineTo(width, med); // (width, median)
+				          context.closePath();
+				          canvas.fillStroke(this);
+				        },
+				        offset:{x: width/2, y:0}
+				     });
+				}else{
+					this.node[i] = new Kinetic.Circle({
+						name: i,
+						x: (axisObj.isXDiscrete == true) ?  x[i] : axisObj._getPixelX((axisObj.xMax - axisObj.xMin)/2),
+						y: y[i],
+						radius: this.radius,
+						stroke: this.baseColor,
+						fill: this.baseColor,
+						selected: 0,
+						opacity: 0.5,
+						info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
+					});
+				}
+				
+			}
+			this.dataLayer = new Kinetic.Layer();	
+        	for(var i = 0 ; i < this.node.length ; i ++){
+				this.dataLayer.add(this.node[i]);
+			}
+        	//add layer
+			axisObj.stage.add(this.dataLayer);
+		}
+	};
+})();
+
+
+var Box2 = {};    
 
 (function() {    
     
-    Box = function(id, dataArr, optionObj) {
+    Box2 = function(id, dataArr, optionObj) {
         this._type = 'box';
         this._id = id;
         this._labelArr = labelArr; //localize later
@@ -167,7 +284,7 @@ var Box = {};
 		this.preId = {x : -1, y : -1};        
 		this._init(id, dataArr, optionObj); 
     };
-    Box.prototype = {
+    Box2.prototype = {
             
             _init: function(id, dataArr, optionObj){
             	//set plot variables.

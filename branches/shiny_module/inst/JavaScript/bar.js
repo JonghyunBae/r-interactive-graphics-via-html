@@ -63,7 +63,7 @@ var Bar = {};
 			
 			_draw: function(axisObj, dataObj, xLabel, yLabel) {
 				// get pixel values from axis
-				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
+				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
 				if(this.stacking == true){
@@ -214,7 +214,7 @@ var Bar = {};
 				this.barWidth = axisObj.xbarWidth;
 				this._checkStacking(axisObj, dataObj, xLabel, yLabel);
 				// get pixel values from axis
-				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
+				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
 				if(this.stacking == true){

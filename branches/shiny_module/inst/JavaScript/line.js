@@ -102,10 +102,10 @@ var Line = {};
 			},
 			_draw: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 				// get pixel values from axis
-				var temp = axisObj._getPixel(dataObj[xLabel1], dataObj[yLabel1]);
+				var temp = axisObj._getPixelXY(dataObj[xLabel1], dataObj[yLabel1]);
 				var xArr1 = temp.xArr;
 				var yArr1 = temp.yArr;
-				var temp = axisObj._getPixel(dataObj[xLabel2], dataObj[yLabel2]);
+				var temp = axisObj._getPixelXY(dataObj[xLabel2], dataObj[yLabel2]);
 				var xArr2 = temp.xArr;
 				var yArr2 = temp.yArr;
 				var cnt = 0;
@@ -155,10 +155,10 @@ var Line = {};
 			},
 			_reDraw: function(axisObj){
 				var dataObj = this.dataObj;
-				var temp = axisObj._getPixel(dataObj[this.xLabel1], dataObj[this.yLabel1]);
+				var temp = axisObj._getPixelXY(dataObj[this.xLabel1], dataObj[this.yLabel1]);
 				var xArr1 = temp.xArr;
 				var yArr1 = temp.yArr;
-				var temp = axisObj._getPixel(dataObj[this.xLabel2], dataObj[this.yLabel2]);
+				var temp = axisObj._getPixelXY(dataObj[this.xLabel2], dataObj[this.yLabel2]);
 				var xArr2 = temp.xArr;
 				var yArr2 = temp.yArr;
 				var cnt = 0;

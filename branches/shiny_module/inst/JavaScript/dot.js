@@ -14,7 +14,7 @@ var Dot = {};
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
-				// check color
+				// check color 
 				if(axisObj.legendLabel != undefined){
 					var legendLabel = axisObj.legendLabel;
 					if(dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined){
@@ -36,7 +36,7 @@ var Dot = {};
 			},
 			_draw: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				// get pixel values from axis
-				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
+				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
 				var labelArr = getFields(dataObj);
@@ -66,7 +66,7 @@ var Dot = {};
 								selected: 0,
 								opacity: 0.5,
 								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
-							});							
+							});
 							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
 							cnt ++;
 						}else{
@@ -116,7 +116,7 @@ var Dot = {};
 				var dataObj = this.dataObj;
 				var xLabel = this.xLabel;
 				var yLabel = this.yLabel;
-				var temp = axisObj._getPixel(dataObj[xLabel], dataObj[yLabel]);
+				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
 				var labelArr = getFields(dataObj);

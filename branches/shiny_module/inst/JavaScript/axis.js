@@ -191,12 +191,67 @@ var Axis = {};
 				this.stage.add(this.tooltipLayer);
 			},
 			
-			_getPixel: function(xArr, yArr) {
+			_reDraw: function() {
+				var dataObj = this.dataObj;
+				var xLabelAxis = this.xLabelAxis;
+				var yLabelAxis = this.yLabelAxis;
+				var optionObj = this.optionObj;
+				this._build(dataObj, xLabelAxis, yLabelAxis, optionObj);
+				makeStageLayer(this);
+				this.refresh = makeRefresh(this.stage);
+				// make plotRect.
+				makePlotRectLayer(this);
+				
+				this.plotLayer = new Kinetic.Layer();
+				// add base rectangular.
+				this.plotLayer.add(this.plotRect);				
+				// add x axis layer.
+				for(var i = 0 ; i < this.xLine.length ; i ++){
+					this.plotLayer.add(this.xLine[i]); 
+				    this.plotLayer.add(this.xText[i]);
+				}
+				// add y axis layer.				
+				for(var i = 0 ; i < this.yLine.length ; i ++){
+					this.plotLayer.add(this.yLine[i]);
+			        this.plotLayer.add(this.yText[i]);
+				}
+				// add main, x, y label.
+				if(this.mainLabel != undefined){
+					this.plotLayer.add(this.mainLabel);
+				}
+				this.plotLayer.add(this.xLabel);
+				this.plotLayer.add(this.yLabel);
+				
+				this.stage.add(this.plotLayer);
+				// add legend layer.
+				if(this.legendLayer != undefined){
+					this.stage.add(this.legendLayer);
+				}
+				// add rangeBox layer.
+				this.stage.add(this.rangeBoxLayer);
+				// add tooltip layer.
+				this.stage.add(this.tooltipLayer);
+				for(var i = 0 ; i < this.graphObjArr.length ; i ++){
+					this.graphObjArr[i]._reDraw(this);
+				}
+				
+			},
+			_getPixelXY: function(xArr, yArr) {
 				var xPixelArr = new Array();
 				var yPixelArr = new Array();
 				var outNumber = new Array();
+				if(xArr.length == undefined){
+					var temp = new Array();
+					temp[0] = xArr;
+					xArr = temp;
+				}
+				if(yArr.length == undefined){
+					var temp = new Array();
+					temp[0] = yArr;
+					yArr = temp;
+				}
 				if(this.isXDiscrete == true){
-					var temp;
+					var temp;					
 					for(var i = 0 ; i < xArr.length ; i ++){
 						if(xArr[i] < 0 || xArr[i] > this.xPlotArr.length - 1){
 							temp = -1;
@@ -242,50 +297,67 @@ var Axis = {};
 					'yArr': yPixelArr
 				};
 			},
-			_reDraw: function() {
-				var dataObj = this.dataObj;
-				var xLabelAxis = this.xLabelAxis;
-				var yLabelAxis = this.yLabelAxis;
-				var optionObj = this.optionObj;
-				this._build(dataObj, xLabelAxis, yLabelAxis, optionObj);
-				makeStageLayer(this);
-				this.refresh = makeRefresh(this.stage);
-				// make plotRect.
-				makePlotRectLayer(this);
-				
-				this.plotLayer = new Kinetic.Layer();
-				// add base rectangular.
-				this.plotLayer.add(this.plotRect);				
-				// add x axis layer.
-				for(var i = 0 ; i < this.xLine.length ; i ++){
-					this.plotLayer.add(this.xLine[i]); 
-				    this.plotLayer.add(this.xText[i]);
+			_getPixelX: function(xArr) {
+				var xPixelArr = new Array();
+				var outNumber = new Array();
+				if(xArr.length == undefined){
+					var temp = new Array();
+					temp[0] = xArr;
+					xArr = temp;
 				}
-				// add y axis layer.				
-				for(var i = 0 ; i < this.yLine.length ; i ++){
-					this.plotLayer.add(this.yLine[i]);
-			        this.plotLayer.add(this.yText[i]);
+				if(this.isXDiscrete == true){
+					var temp;
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(xArr[i] < 0 || xArr[i] > this.xPlotArr.length - 1){
+							temp = -1;
+						}else{
+							temp = (xArr[i]+1)*this.xDiff + this.plotXMargin;
+						}
+						xPixelArr[i] = temp;
+					}
+				}else{
+					var temp;
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(xArr[i] < this.xMin || xArr[i] > this.xMax){
+							temp = -1;
+						}else{
+							temp = (xArr[i]-this.xMin)*this.width/(this.xMax - this.xMin) + this.plotXMargin;
+						}
+						xPixelArr[i] = temp;
+					}
 				}
-				// add main, x, y label.
-				if(this.mainLabel != undefined){
-					this.plotLayer.add(this.mainLabel);
+				return xPixelArr;
+			},			
+			_getPixelY: function(yArr) {
+				var yPixelArr = new Array();
+				var outNumber = new Array();
+				if(yArr.length == undefined){
+					var temp = new Array();
+					temp[0] = yArr;
+					yArr = temp;
 				}
-				this.plotLayer.add(this.xLabel);
-				this.plotLayer.add(this.yLabel);
-				
-				this.stage.add(this.plotLayer);
-				// add legend layer.
-				if(this.legendLayer != undefined){
-					this.stage.add(this.legendLayer);
+				if(this.isYDiscrete == true){
+					var temp;
+					for(var i = 0 ; i < yArr.length ; i ++){
+						if(yArr[i] < 0 || yArr[i] > this.yPlotArr.length - 1){
+							temp = -1;
+						}else{
+							temp = this.plotYMargin + this.height - (yArr[i] + 1)*this.yDiff;
+						}
+						yPixelArr[i] = temp;
+					}
+				}else{
+					var temp;
+					for(var i = 0 ; i < yArr.length ; i ++){
+						if(yArr[i] < this.yMin || yArr[i] > this.yMax){
+							temp = -1;
+						}else{
+							temp = this.plotYMargin + this.height - (yArr[i] - this.yMin)*this.height/(this.yMax - this.yMin);
+						}
+						yPixelArr[i] = temp;
+					}
 				}
-				// add rangeBox layer.
-				this.stage.add(this.rangeBoxLayer);
-				// add tooltip layer.
-				this.stage.add(this.tooltipLayer);
-				for(var i = 0 ; i < this.graphObjArr.length ; i ++){
-					this.graphObjArr[i]._reDraw(this);
-				}
-				
+				return yPixelArr;
 			},
 			_drawRegression: function(xx, yy) {
 				var temp = this._getPixel(xx, yy);

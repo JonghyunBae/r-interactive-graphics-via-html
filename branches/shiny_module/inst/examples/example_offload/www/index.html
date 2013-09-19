@@ -73,9 +73,9 @@
        var axis2 = new Axis(2, mainArr1, 'Time', 'conc', {});
        var d1 = new Dot(axis2, mainArr1, 'Time', 'conc', {});
        
-       var histObj1 = new ddply(mainArr1, ['conc'], {});
-       var axis3 = new Axis(3, histObj1, 'conc', 'frequency', {legend: 'conc'});
-       var hist1 = new Bar(axis3, histObj1, 'conc', 'frequency', {});
+       var histObj1 = new ddply(mainArr1, ['Time'], {});
+		var axis3 = new Axis(3, histObj1, 'Time', 'frequency', {legend: 'Time'});
+       var hist1 = new Bar(axis3, histObj1, 'Time', 'frequency', {});
      
        var AllAxisObjArr = [axis1, axis2, axis3]; // this is global for redrawing.
        eventTrigger(AllAxisObjArr);

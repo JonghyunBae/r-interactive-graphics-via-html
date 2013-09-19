@@ -2,7 +2,8 @@ var MakeLineObj = {};
 (function() {
 	MakeLineObj = function(dataObj, xLabel, yLabel) {
 		var temp = getFields(dataObj);
-		
+		this.xLabel = xLabel;
+		this.yLabel = yLabel;
 		// copy data field.
         for(var i = 0 ; i < temp.length ; i ++){
                 this[temp[i]] = dataObj[temp[i]];
@@ -34,7 +35,45 @@ var MakeLineObj = {};
 		this.$id = 1;
 		this._type = 'lineObj';
 		birthReport(dataObj, this, p2cArr, c2pArr);
-	}
+	};
+	MakeLineObj.prototype = {
+		_reCalculate: function() {
+			// reload data.
+			var dataObj = this.parent;
+			xLabel = this.xLabel;
+			yLabel = this.yLabel;
+			var temp = getFields(dataObj);
+			// copy data field.
+	        for(var i = 0 ; i < temp.length ; i ++){
+	                this[temp[i]] = dataObj[temp[i]];
+	        }
+	        this.labelArr = dataObj.labelArr;
+			this.x1 = new Array(dataObj[xLabel].length - 1);
+			this.x2 = new Array(dataObj[xLabel].length - 1);
+			this.y1 = new Array(dataObj[yLabel].length - 1);
+			this.y2 = new Array(dataObj[yLabel].length - 1);
+			
+			for(var i = 0 ; i < this.x1.length ; i ++){
+				this.x1[i] = dataObj[xLabel][i];
+				this.x2[i] = dataObj[xLabel][i+1];
+				this.y1[i] = dataObj[yLabel][i];
+				this.y2[i] = dataObj[yLabel][i+1];
+			}
+			
+			// make event handle part.
+			this.$isSelected = make2DArr(this.x1.length);
+			var p2cArr = new Array(this.$isSelected.length + 1);
+			var c2pArr = new Array(this.$isSelected.length);
+			for(var i = 0 ; i < this.$isSelected.length ; i ++){
+				this.$isSelected[i][0] = 0;
+				p2cArr[i] = [i-1, i];
+				c2pArr[i] = [i, i+1];
+			}
+			p2cArr[0] = 0;
+			p2cArr[i] = i-1;
+			ModifyBirth(dataObj, this, p2cArr, c2pArr);
+		}
+	};
 })();
 /**  draw line graph  **/
 // not event handle yet.
@@ -115,10 +154,11 @@ var Line = {};
 				axisObj.stage.add(this.dataLayer);
 			},
 			_reDraw: function(axisObj){
-				var temp = axisObj._getPixel(this.dataObj[this.xLabel1], this.dataObj[this.yLabel1]);
+				var dataObj = this.dataObj;
+				var temp = axisObj._getPixel(dataObj[this.xLabel1], dataObj[this.yLabel1]);
 				var xArr1 = temp.xArr;
 				var yArr1 = temp.yArr;
-				var temp = axisObj._getPixel(this.dataObj[this.xLabel2], this.dataObj[this.yLabel2]);
+				var temp = axisObj._getPixel(dataObj[this.xLabel2], dataObj[this.yLabel2]);
 				var xArr2 = temp.xArr;
 				var yArr2 = temp.yArr;
 				var cnt = 0;
@@ -155,7 +195,7 @@ var Line = {};
 				}
 				// event add
 				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-				this.firstUpdate = firstUpdate(this.dataObj);		        	
+				this.firstUpdate = firstUpdate(dataObj);		        	
 	        	axisObj.graphObjArr[this.graphId] = this;
 	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 				axisObj.hoverArr[this.graphId] = lineHover();

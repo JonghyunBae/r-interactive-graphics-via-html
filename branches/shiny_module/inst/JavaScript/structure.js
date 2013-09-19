@@ -48,8 +48,6 @@ function make2DArr(rows) {
 }
 
 /**  create main structure of data  **/
-// TODO: should add event handle part(e.g. isSelected, isHidden..).
-// TODO: table relative part should be needed.
 function createMainStructure(fileName)
 {	
 	var tmpArr = getData(fileName);	
@@ -66,6 +64,7 @@ function createMainStructure(fileName)
 		mainArr[labelArr[i]] = new Array();
 		mainArr[labelArr[i]].isDiscrete = true;
 		mainArr[labelArr[i]].index = new Array();
+		mainArr[labelArr[i]].$Original = new Array();
 		mainArr[labelArr[i]]["tempField"] = new Object();
 	}
 	// extract data from dataArr into mainArr.
@@ -84,8 +83,10 @@ function createMainStructure(fileName)
 			if(isNaN((tmpArr[j]))){
 				isNumArr[j] = false;
 				mainArr[labelArr[j]][i] = tmpArr[j];
+				mainArr[labelArr[j]].$Original[i] = tempArr[j];
 			}else{
 				mainArr[labelArr[j]][i] = parseFloat(tmpArr[j]);
+				mainArr[labelArr[j]].$Original[i] = parseFloat(tmpArr[j]);
 			}
 		}
 		isSelected[i][0] = 0;
@@ -237,6 +238,8 @@ function addField(obj, fieldName){
 var ddply = {};
 (function() {
 	ddply = function(dataObj, labels, optionObj) {
+		this.labels = labels;
+		this.optionObj = optionObj;
 		// make new fields of ddply object
 		for(var i = 0 ; i < labels.length ; i ++){
 			this[labels[i]] = new Array();
@@ -322,26 +325,112 @@ var ddply = {};
 		birthReport(dataObj, this, p2cArr, hasArr);
 
 		// for debugging
-		/*
-		document.write("<br>");
+		
+	//	document.write("<br>");
+		
 		for(var j = 0 ; j < labels.length ; j ++){
-			document.write(labels[j] + " ");
+	//		document.write(labels[j] + " ");
 		}
-		document.write("frequency <br>");
+	//	document.write("frequency <br>");
 		var cnt = 0;
 		for(var i = 0 ; i < this[labels[0]].length ; i ++){
 			for(var j = 0 ; j < labels.length ; j ++){
-				document.write(this[labels[j]][i] + " ,  ");
+	//			document.write(this[labels[j]][i] + " ,  ");
 			}
-			document.write(this.frequency[i] + "<br>");
+	//		document.write(this.frequency[i] + "<br>");
 			cnt = cnt + this.frequency[i];
 		}
-		document.write("Total frequency: " + cnt);
-		*/
+	//	document.write("Total frequency: " + cnt);
+		
+	
 	};
 	ddply.prototype = {
-		_reCalculate: function() {
+		_reCalculate: function() {			
+			// reload data.
+			var dataObj = this.parent;
+			var labels = this.labels;
+			var optionObj = this.optionObj;
+			// make new fields of ddply object
+			for(var i = 0 ; i < labels.length ; i ++){
+				this[labels[i]] = new Array();
+				if(dataObj[labels[i]].isDiscrete != undefined){
+					this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
+					this[labels[i]].index = dataObj[labels[i]].index;
+				}
+			}
+			this['frequency'] = new Array();
+			this['hasArr'] = new Array();
+			// binning continuous data.
+			var binArr = new Array(labels.length);
+			var indexArr = make2DArr(labels.length);
+			var factoredArr = make2DArr(labels.length);
+			for(var i = 0 ; i < labels.length ; i ++){
+				if(dataObj[labels[i]].isDiscrete == undefined){
+					// find indexArr, factoredArr of continuous labels.
+					var temp = binning(dataObj[labels[i]], optionObj.bin);
+					indexArr[i] = temp.indexArr;
+					factoredArr[i] = temp.factoredArr;
+					dataObj[labels[i]].max = temp.tempMax;
+					dataObj[labels[i]].min = temp.tempMin;
+				}else{
+					// make indexArr of discrete label.
+					for(var j = 0 ; j < dataObj[labels[i]].index.length ; j ++){
+						indexArr[i][j] = j;
+					}
+				}
+			}
 			
+			// calculate frequency
+			var tmpObj = new Object();
+			for(var i = 0 ; i < dataObj[labels[0]].length ; i ++){
+				var temp = tmpObj;
+				for(var j = 0 ; j < labels.length ; j ++){
+					
+					if(dataObj[labels[j]].isDiscrete == undefined){
+						cnt = indexArr[j][factoredArr[j][i]];
+					}else{
+						cnt = dataObj[labels[j]][i];
+					}
+					temp = addField(temp, cnt);
+				}
+				// for debugging
+				// document.write("<br>");
+				if(temp['frequency']== undefined){
+					temp['frequency'] = 1;
+					temp['dataNumber'] = 
+					temp['hasArr'] = new Array();
+					temp['hasArr'].push(i);
+				}else{
+					temp['frequency'] ++;
+					temp['hasArr'].push(i);
+				}
+			}
+			
+			
+			// set the array of fields by using recursive function.
+			setNode(0, labels.length, labels, indexArr, tmpObj, this);
+			
+			// copy max and min value for matching with axis binnig.
+			for(var i = 0 ; i < labels.length ; i ++){
+				if(dataObj[labels[i]].max != undefined){
+					this[labels[i]].max = dataObj[labels[i]].max;
+					this[labels[i]].min = dataObj[labels[i]].min;
+				}
+			}
+			
+			var hasArr = this['hasArr'];
+			delete this['hasArr'];
+			// make event handle part
+			var p2cArr = new Array(dataObj[labels[0]].length);
+			var isSelected = make2DArr(hasArr.length);
+			for(var i = 0 ; i < hasArr.length ; i ++){
+				isSelected[i][0] = 0;
+				for(var j = 0 ; j < hasArr[i].length ; j ++){
+					p2cArr[hasArr[i][j]] = i;
+				}
+			}
+			this.$isSelected = isSelected;
+			ModifyBirth(dataObj, this, p2cArr, hasArr);
 		}
 	};
 })();

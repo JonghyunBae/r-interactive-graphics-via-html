@@ -4,7 +4,7 @@ var Axis = {};
 (function() {
 	
 	Axis = function(containerId, dataObj, xLabel, yLabel, optionObj) {
-		this._init(containerId, dataObj, optionObj);
+		this._init(containerId, dataObj, xLabel, yLabel, optionObj);
 		this._addLegend(dataObj, optionObj);
 		this._build(dataObj, xLabel, yLabel, optionObj);
 		this._draw();
@@ -12,9 +12,13 @@ var Axis = {};
 	
 	Axis.prototype = {
 			
-			_init: function(containerId, dataObj, optionObj) {
+			_init: function(containerId, dataObj, xLabel, yLabel, optionObj) {
 				this.numberOfGraph = 0;
 				this.containerId = containerId;
+				this.dataObj = dataObj;
+				this.xLabelAxis = xLabel;
+				this.yLabelAxis = yLabel;
+				this.optionObj = optionObj;
 				this.width = (optionObj.width == undefined) ? (300) : (optionObj.width); // default width is 300
 				this.height = (optionObj.height == undefined) ? (300) : (optionObj.height); // default height is 300
 				this.xTick = (optionObj.xTick == undefined) ? (5) : (optionObj.xTick); //default x tick is 5
@@ -149,6 +153,7 @@ var Axis = {};
 			},
 			
 			_draw: function() {
+				
 				// make stage.
 				makeStageLayer(this);
 				this.refresh = makeRefresh(this.stage);
@@ -238,6 +243,11 @@ var Axis = {};
 				};
 			},
 			_reDraw: function() {
+				var dataObj = this.dataObj;
+				var xLabelAxis = this.xLabelAxis;
+				var yLabelAxis = this.yLabelAxis;
+				var optionObj = this.optionObj;
+				this._build(dataObj, xLabelAxis, yLabelAxis, optionObj);
 				makeStageLayer(this);
 				this.refresh = makeRefresh(this.stage);
 				// make plotRect.

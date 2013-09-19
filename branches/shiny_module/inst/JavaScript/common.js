@@ -7,7 +7,7 @@ function getNodeinfo(dataObj, id)
 	var cnt = 0;
 	for(var name in dataObj){
 		if(cnt == 0){
-			if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			if(!(name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 				if(dataObj[name].isDiscrete == true){
 					var info =  name + ': ' + dataObj[name].index[dataObj[name][id]];
 				}else{
@@ -17,7 +17,7 @@ function getNodeinfo(dataObj, id)
 				
 			cnt ++;
 		}else{
-			if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			if(!(name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 				if(dataObj[name].isDiscrete == true){
 					info = info + "\r\n" + name + ': ' + dataObj[name].index[dataObj[name][id]];
 				}else{
@@ -33,7 +33,7 @@ function getFields(dataObj)
 {
 	var temp = new Array();
 	for(var name in dataObj){
-		if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+		if(!(name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 			temp.push(name);
 		}
 	}
@@ -108,6 +108,22 @@ function birthReport(parent, child, p2cArr, c2pArr){
 	child.updateArr = new Array();
 	child.refreshArr = new Array();
 }
+
+function ModifyBirth(parent, child, p2cArr, c2pArr){
+	for(var i = 0 ; i < parent.child.length ; i ++){
+		if(parent.child[i] == child)
+			break;
+	}
+	
+	if(i == parent.child.length){
+		// error check.
+		alert('There is no child which matches it.');
+	}
+	
+	parent.parentTOchild[i] = setMapping(p2cArr);
+	child.childTOparent = setMapping(c2pArr);
+}
+
 
 function setMapping(index)
 {

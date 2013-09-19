@@ -54,16 +54,42 @@ function hideSelected(Name)
 			rootObjArr.push(temp);
 		}
 	}
-	// update $isSelected and $isHidden
+	// update $isSelected and update dataField.
 	for(var i = 0 ; i < rootObjArr.length ; i ++){
-		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++){
-			if(rootObjArr[i].$isSelected[j][0] == 1){
-				rootObjArr[i].$isSelected[j][0] = 2;
-				rootObjArr[i].$isHidden[j] = true;
+		var tempData = make2DArr(rootObjArr[i].labelArr.length);
+		var labelArr = rootObjArr[i].labelArr;
+		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++){			
+			if(rootObjArr[i].$isSelected[j][0] == 0){
+				for(var t = 0 ; t < tempData.length ; t ++){
+					tempData[t].push(rootObjArr[i][labelArr[t]][j]);
+				}
 			}
 		}
+		// update dataField.
+		for(var j = 0 ; j < labelArr.length ; j ++){
+			for(var t = 0 ; t < tempData[j].length ; t ++){
+				rootObjArr[i][labelArr[j]][t] = tempData[j][t];
+			}
+			for(var k = t ; k < t + (rootObjArr[i][labelArr[j]].length - t) ; k ++){
+				delete rootObjArr[i][labelArr[j]][k];
+			}
+			rootObjArr[i][labelArr[j]].splice(t, (rootObjArr[i][labelArr[j]].length - t));
+		}
+		//alert(rootObjArr[i].conc);
+
+		// update $isSelected.
+		rootObjArr[i].$isSelected = make2DArr(rootObjArr[i][labelArr[0]].length);
+		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++ ){
+			rootObjArr[i].$isSelected[j][0] = 0;
+		}
+		
 		// recalculate all children dataObj.
 		// TODO: should add "recalculate" prototype in all dataObj!!!!
+		if(rootObjArr[i].child != null){
+			for(var j = 0 ; j < rootObjArr[i].child.length ; j ++){
+				childReCalculate(rootObjArr[i].child[j]);
+			}
+		}
 	}
 	// redraw all axis.
 	for(var i = 0 ; i < AllAxisObjArr.length ; i ++){
@@ -74,90 +100,18 @@ function hideSelected(Name)
 	
 	
 	// TODO: should call server offload!!
+}
+function childReCalculate(object)
+{
+	// my recalculate.
+	object._reCalculate();
 	
-	/*
-	var dataObj = Name.graphObjArr[0].dataObj;
-	
-	// find root dataObj.
-	while(dataObj.parent != null){
-		dataObj = dataObj.parent;
-	}
-	
-	// set the $isSelected -> 3
-	var temp = new Array();
-	for(var i = 0 ; i < dataObj.$isSelected.length ; i ++){
-		if(dataObj.$isSelected[i][0] == 1){
-			temp.push(i);
-			dataObj.$isSelected[i][0] = 3; 
+	// child recalculate.
+	if(object.child != null){
+		for(var i = 0 ; i < object.child.length ; i ++){
+			childReCalculate(object.child[i]);
 		}
 	}
-	
-	if(dataObj.refreshTable != undefined){
-		dataObj.refreshTable();
-	}
-	
-	// $isSelecteds of children are updated.
-	if(temp.length > 0 && dataObj.child != null){
-		for(var i = 0 ; i < dataObj.child.length ; i ++){
-			var temp2 = dataObj.parentTOchild[i](temp);
-			childUpdate(dataObj.child[i], temp2, 3);
-		}
-	}
-	
-	// redraw
-	
-	alert('hide selected!');
-	/*
-	var hiddenArr = new Array();
-	// collect nodes' numbers which will be hidden.
-	for(var i = 0 ; i < isSelected.length ; i ++)
-	{
-		//find selected nodes.
-		if(isSelected[i][0] == 1)
-		{
-			hiddenArr.push(i);
-			hideCnt ++;
-		}
-		//check the end of the isSelected.
-		if(isSelected[i][0] == 2){
-			isSelected[i][0] = 0;	// delete last end check.
-			break;
-		}	
-			
-		isSelected[i][0] = 0;
-	}
-	if(hideCnt > 0)
-		isSelected[isSelected.length - hideCnt][0] = 2; // check it as the end of the isSelected.
-	
-	//	set the tempData with non hidden nodes of mainArr.
-	if(hiddenArr.length == undefined){
-		isHidden[tempData[tempData.length-1][hiddenArr]] = true;
-		tempHidden.push(tempData[tempData.length-1][hiddenArr]);
-	}else{
-		for(var i = 0 ; i < hiddenArr.length ; i ++){
-			isHidden[tempData[tempData.length-1][hiddenArr[i]]] = true;
-			tempHidden.push(tempData[tempData.length-1][hiddenArr[i]]);
-		}
-	}				
-	tempData = make2DArr(mainArr.length);
-	var h = 0;
-	for(var i = 0 ; i < mainArr[0].length ; i ++){
-		if(isHidden[i]){
-			continue;
-		}
-		for(var j = 0 ; j < mainArr.length ; j ++){
-			tempData[j][h] = mainArr[j][i];
-		}
-		h++;
-	}
-	
-	// redraw graphs.
-	for(var i = 0 ; i < objArr.length ; i ++){
-		objArr[i]._init(objArr[i]._id, tempData, {});
-		objArr[i].draw(objArr[i]._id);
-		eventTrigger(objArr[i]);
-	}
-	*/
 }
 
 function resetSelected()

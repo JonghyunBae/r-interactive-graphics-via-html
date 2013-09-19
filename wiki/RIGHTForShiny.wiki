@@ -1,4 +1,7 @@
 #summary RIGHT using Shiny
+#sidebar TableOfContents
+
+<wiki:toc max_depth="2"/>
 
 = Introduction =
 

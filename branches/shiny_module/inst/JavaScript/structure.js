@@ -83,7 +83,7 @@ function createMainStructure(fileName)
 			if(isNaN((tmpArr[j]))){
 				isNumArr[j] = false;
 				mainArr[labelArr[j]][i] = tmpArr[j];
-				mainArr[labelArr[j]].$Original[i] = tempArr[j];
+				mainArr[labelArr[j]].$Original[i] = tmpArr[j];
 			}else{
 				mainArr[labelArr[j]][i] = parseFloat(tmpArr[j]);
 				mainArr[labelArr[j]].$Original[i] = parseFloat(tmpArr[j]);

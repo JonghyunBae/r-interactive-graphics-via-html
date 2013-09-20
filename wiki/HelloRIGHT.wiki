@@ -3,15 +3,16 @@
 
 = Getting Started =
 
-RIGHT syntax is based on R-basic graphic, so even RIGHT beginners can use RIGHT package with ease.
-You just need to wrap R-basic syntax with RIGHT bracket.
+After installing RIGHT package successfully, you can draw your own interactive graphs very easily.
+
+Since RIGHT syntax is based on R-basic graphic, even beginners can use RIGHT package with ease. You just need to wrap R-basic syntax with RIGHT bracket.
 
 For example, in original R, you can draw basic scatter grpahs like below.
 
 {{{
 > plot(price~carat, diamonds, type="p")
 }}}
-
+ 
 And it will show like below graph. 
 
 <img src="http://thepotter.woobi.co.kr/img/scatter_R.PNG">

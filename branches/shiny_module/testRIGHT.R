@@ -26,5 +26,6 @@ print(RIGHT({plot(price ~ carat, subArray, type = "p")
              hist(color, subArray)
              pie(cut, subArray)}, 
             subArray, fitArray, 
-            dir = "TEMP"))
+            dir = "TEMP",
+            isOverwrite = TRUE))
 

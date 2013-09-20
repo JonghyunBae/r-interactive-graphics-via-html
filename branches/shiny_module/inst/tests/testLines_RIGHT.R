@@ -4,7 +4,7 @@
 ## Test lines_RIGHT():
 ## ---
 
-assign(".RIGHT", list2env(list(libDir = ".",
+assign(".RIGHT", list2env(list(libDir_RIGHT = ".",
                                nameArray = "Theoph",
                                numAxis = 0,
                                numLines = 0,
@@ -16,7 +16,7 @@ expect_error(lines_RIGHT(conc ~ Time, Theoph))
 expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$numLines, 0)
 
 # dummy does not exists:
-assign(".RIGHT", list2env(list(libDir = ".",
+assign(".RIGHT", list2env(list(libDir_RIGHT = ".",
                                nameArray = "Theoph",
                                numAxis = 1,
                                numLines = 0,
@@ -35,15 +35,15 @@ lines_RIGHT(conc ~ Time, Theoph)
 temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
 expect_identical(temp$numLines, 1)
 expect_identical(temp$scriptArray, 
-                 c("var lineObj1 = new MakeLineObj(Theoph);",
-                   "var line1 = new Line(axis1, lineObj1, 'Time', 'conc', {});"))
-expect_true(any(file.path(temp$libDir, "line.js") %in% temp$sourceArray))
+                 c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
+                   "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
+expect_true(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
 
 lines_RIGHT(conc ~ Time, "Theoph")
 temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
 expect_identical(temp$numLines, 2)
-expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph);",
-                                     "var line1 = new Line(axis1, lineObj1, 'Time', 'conc', {});",
-                                     "var lineObj2 = new MakeLineObj(Theoph);",
-                                     "var line2 = new Line(axis1, lineObj2, 'Time', 'conc', {});"))
-expect_true(any(file.path(temp$libDir, "line.js") %in% temp$sourceArray))
+expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
+                                     "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
+                                     "var lineObj2 = new MakeLineObj(Theoph, 'Time', 'conc');",
+                                     "var line2 = new Line(axis1, lineObj2, 'x1', 'x2', 'y1', 'y2', {});"))
+expect_true(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))

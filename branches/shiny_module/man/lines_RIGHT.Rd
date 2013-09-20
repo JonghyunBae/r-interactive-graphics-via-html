@@ -1,18 +1,14 @@
 \name{lines_RIGHT}
-\alias{lines}
 \alias{lines_RIGHT}
 \title{Add Lines to a Plot}
 \usage{
-  lines_RIGHT(form, data, col = NULL, subset = NULL)
+  lines_RIGHT(form, data)
 }
 \arguments{
-  \item{form}{y ~ x formula}
+  \item{form}{a formula describing the x and y variables as
+  y ~ x.}
 
-  \item{data}{data.frame object containing data}
-
-  \item{col}{color of the points}
-
-  \item{subset}{condition to subset data}
+  \item{data}{a data.frame object.}
 }
 \description{
   lines_RIGHT draws a sequence of points in the current

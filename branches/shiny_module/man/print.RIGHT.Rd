@@ -2,7 +2,13 @@
 \alias{print.RIGHT}
 \title{Print RIGHT Object}
 \usage{
-  print.RIGHT(x, ...)
+  \method{print}{RIGHT} (x, ...)
+}
+\arguments{
+  \item{x}{RIGHT object.}
+
+  \item{...}{additional arguments affecting the summary
+  produced.}
 }
 \description{
   Print RIGHT Object

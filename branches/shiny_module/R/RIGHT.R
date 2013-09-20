@@ -22,7 +22,7 @@
 initRIGHT <- function() {
   
   # Keep the location of the library:
-  libDir <- file.path(path.package("RIGHT"), "inst", "www")  
+  libDir_RIGHT <- file.path(path.package("RIGHT"), "inst", "JavaScript")  
     
   # Script files always necessary:
   sourceArray <- c("kinetic-v4.6.0.js",
@@ -33,13 +33,13 @@ initRIGHT <- function() {
                    "callback.js",
                    "node_event.js",
                    "menu.js")
-  sourceArray <- file.path(libDir, sourceArray)
+  sourceArray <- file.path(libDir_RIGHT, sourceArray)
   
   # Css files always necessary:
   linkArray <- c("right.css")
-  linkArray <- file.path(libDir, linkArray)
+  linkArray <- file.path(libDir_RIGHT, linkArray)
   
-  .RIGHT <<- list2env(list(libDir = libDir,
+  .RIGHT <<- list2env(list(libDir_RIGHT = libDir_RIGHT,
                            nameArray = c(), # keep variable names for checking
                            sourceArray = sourceArray, # scripts to source
                            linkArray = linkArray, # links for CSS
@@ -55,14 +55,21 @@ initRIGHT <- function() {
   
 } # function initRIGHT
 
-#' Entry Function for RIGHT
+#' @title Entry Function for RIGHT
+#' 
+#' @param expr plotting expression to evaluate
+#' @param ... data.frame objects used in \code{expr}.
+#' @param title title of the visualization. The default value is "RIGHT: R Interactive Graphics via HTml."
+#' @param dir directory name to store files used for the visualization. Temporary directory is created under the current working directory by default.
+#' @param isOverwrite rewrite exiting files if the directory name matches. FALSE by default.
+#' @param supportRIGHT allow inserting Google AdSense to support further development of RIGHT. Use \code{\link{options}} and \code{\link{getOption}} to set and retrieve global option supportRIGHT.
 #' 
 #' @export
-
+#' @importFrom stringr str_trim
 RIGHT <- function(expr = {}, ..., 
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(tmpdir = getwd()), # CHECK (junghoon): not used for now
-                  isOverwrite = TRUE,
+                  isOverwrite = FALSE,
                   supportRIGHT = getOption("supportRIGHT")) {
   
   ## ---
@@ -160,10 +167,13 @@ RIGHT <- function(expr = {}, ...,
   
 } # function RIGHT
 
-#' Print RIGHT Object
+#' @title Print RIGHT Object
 #' 
+#' @param x RIGHT object.
+#' @param ... additional arguments affecting the summary produced.
+#' 
+#' @method print RIGHT
 #' @export
-
 print.RIGHT <- function(x, ...) {
   
   fileName_index <- file.path(x$dir, "www", "index.html")
@@ -180,10 +190,13 @@ print.RIGHT <- function(x, ...) {
   
 } # function print.RIGHT
 
-#' Summarize RIGHT Object
+#' @title Summarize RIGHT Object
 #' 
+#' @param object RIGHT object.
+#' @param ... additional arguments affecting the summary produced.
+#' 
+#' @method summary RIGHT
 #' @export
-
 summary.RIGHT <- function(object, ...) {
   
   # CHECK: improve this?
@@ -193,8 +206,9 @@ summary.RIGHT <- function(object, ...) {
 
 #' Cleanup RIGHT Object
 #' 
+#' @param obj RIGHT object.
+#' 
 #' @export
-
 cleanup <- function(obj) {
   
   # CHECK (junghoon): is there a way to tightly integrate this with rm()?  

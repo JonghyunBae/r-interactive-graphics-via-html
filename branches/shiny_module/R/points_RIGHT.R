@@ -1,17 +1,12 @@
-#' Add Points to a Plot
+#' @title Add Points to a Plot
 #'
-#' points_RIGHT draws a sequence of points in the current axis.
+#' @description points_RIGHT draws a sequence of points in the current axis.
 #' 
-#' @param form y ~ x formula
-#' @param data data.frame object containing data
-#' @param col color of the points
-#' @param subset condition to subset data
-#' 
-#' @aliases points
+#' @param form a formula describing the x and y variables as y ~ x.
+#' @param data a data.frame object.
 #' 
 #' @export
-
-points_RIGHT <- function(form, data, col = NULL, subset = NULL) {
+points_RIGHT <- function(form, data) {
 
   ## ---
   ## Check input arguments:
@@ -57,7 +52,7 @@ points_RIGHT <- function(form, data, col = NULL, subset = NULL) {
                                        ", '", axisName$x, "', '", axisName$y, "', {});"))
   
   # Source dot.js in head:
-  addSource(file.path(.RIGHT$libDir, "dot.js"))
+  addSource(file.path(.RIGHT$libDir_RIGHT, "dot.js"))
   
   invisible()
   

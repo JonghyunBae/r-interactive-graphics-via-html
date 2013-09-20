@@ -2,7 +2,13 @@
 \alias{summary.RIGHT}
 \title{Summarize RIGHT Object}
 \usage{
-  summary.RIGHT(object, ...)
+  \method{summary}{RIGHT} (object, ...)
+}
+\arguments{
+  \item{object}{RIGHT object.}
+
+  \item{...}{additional arguments affecting the summary
+  produced.}
 }
 \description{
   Summarize RIGHT Object

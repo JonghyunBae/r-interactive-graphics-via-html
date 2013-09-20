@@ -4,6 +4,9 @@
 \usage{
   cleanup(obj)
 }
+\arguments{
+  \item{obj}{RIGHT object.}
+}
 \description{
   Cleanup RIGHT Object
 }

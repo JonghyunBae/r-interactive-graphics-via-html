@@ -1,9 +1,13 @@
 ## plot_RIGHT.R
 
-#' X-Y Plotting
+#' @title X-Y Plotting
 #' 
-#' Function to create x-y scatter and line plots, including the axis.
-#' @aliases plot
+#' @description Function to create x-y scatter and line plots, including the axis.
+#' 
+#' @param form a formula describing the x and y variables as y ~ x.
+#' @param data a data.frame object.
+#' @param type the type of plot. Currently, only "n", "b", "p", "l" are supported. See \code{\link{plot}} for more details.
+#'
 #' @export
 
 plot_RIGHT <- function(form, data, type = "b") {

@@ -1,11 +1,11 @@
-## pie_RIGHT.R
-
-#' Pie Charts
+#' @title Pie Charts
 #' 
-#' Draw a pie chart.
-#' @aliases pie
+#' @description Draw a pie chart.
+#'
+#' @param x variable name for which the histogram is desired.
+#' @param data a data.frame object.
+#'
 #' @export
-
 pie_RIGHT <- function(x, data) {
 
   ## ---
@@ -60,6 +60,6 @@ pie_RIGHT <- function(x, data) {
                                          ", '", xName, "', 'frequency', {});")))
   
   # Source pie.js in head:
-  addSource(file.path(.RIGHT$libDir, "pie.js"))
+  addSource(file.path(.RIGHT$libDir_RIGHT, "pie.js"))
   
 } # function pie_RIGHT

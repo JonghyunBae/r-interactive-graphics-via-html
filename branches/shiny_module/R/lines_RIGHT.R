@@ -1,17 +1,12 @@
-#' Add Lines to a Plot
+#' @title Add Lines to a Plot
 #'
-#' lines_RIGHT draws a sequence of points in the current axis.
+#' @description lines_RIGHT draws a sequence of points in the current axis.
 #' 
-#' @param form y ~ x formula
-#' @param data data.frame object containing data
-#' @param col color of the points
-#' @param subset condition to subset data
-#' 
-#' @aliases lines
+#' @param form a formula describing the x and y variables as y ~ x.
+#' @param data a data.frame object.
 #' 
 #' @export
-
-lines_RIGHT <- function(form, data, col = NULL, subset = NULL) {
+lines_RIGHT <- function(form, data) {
 
   ## ---
   ## Check input arguments:
@@ -54,14 +49,15 @@ lines_RIGHT <- function(form, data, col = NULL, subset = NULL) {
   # Add script in body:
   .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
                                 c(paste0("var lineObj", .RIGHT$numLines,
-                                         " = new MakeLineObj(", dataName, ");"),
+                                         " = new MakeLineObj(", dataName, 
+                                         ", '", axisName$x, "', '", axisName$y, "');"),
                                   paste0("var line", .RIGHT$numLines,
                                          " = new Line(axis", .RIGHT$numAxis,
                                          ", lineObj", .RIGHT$numLines,
-                                         ", '", axisName$x, "', '", axisName$y, "', {});")))
+                                         ", 'x1', 'x2', 'y1', 'y2', {});")))
   
   # Source dot.js in head:
-  addSource(file.path(.RIGHT$libDir, "line.js"))
+  addSource(file.path(.RIGHT$libDir_RIGHT, "line.js"))
   
   invisible()
   

@@ -1,11 +1,11 @@
-## hist_RIGHT.R
-
-#' Histograms
+#' @title Histograms
 #' 
-#' Draw a histogram of the given data values.
-#' @aliases hist
+#' @description Draw a histogram of the given data values.
+#' 
+#' @param x variable name for which the histogram is desired.
+#' @param data a data.frame object.
+#' 
 #' @export
-
 hist_RIGHT <- function(x, data) {
 
   ## ---
@@ -60,6 +60,6 @@ hist_RIGHT <- function(x, data) {
                                          ", '", xName, "', 'frequency', {});")))
   
   # Source bar.js in head:
-  addSource(file.path(.RIGHT$libDir, "bar.js"))
+  addSource(file.path(.RIGHT$libDir_RIGHT, "bar.js"))
   
 } # function hist_RIGHT

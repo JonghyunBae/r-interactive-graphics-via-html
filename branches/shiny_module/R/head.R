@@ -80,6 +80,7 @@ createLink <- function(linkArray = NULL) {
 
 createHead <- function(title) {
 
+  # CHECK (junghoon): do not use htmlEscape in the next version
   # Escape the title using Shiny tags function:
   title <- paste0("  <title>", shiny:::htmlEscape(title), "</title>")
   

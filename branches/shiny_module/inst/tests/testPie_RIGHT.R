@@ -2,7 +2,8 @@
 ## Test pie_RIGHT():
 ## ---
 
-assign(".RIGHT", list2env(list(nameArray = "Theoph",
+assign(".RIGHT", list2env(list(libDir_RIGHT = ".",
+                               nameArray = "Theoph",
                                divArray = c(),
                                scriptArray = c(),
                                numAxis = 0,
@@ -30,3 +31,4 @@ expect_identical(temp$scriptArray,
                  c("var pieObj1 = new ddply(Theoph, ['Subject'], {});",
                    "var axis1 = new Axis(1, pieObj1, 'Subject', 'frequency', {legend: 'Subject'});",
                    "var pie1 = new Pie(axis1, pieObj1, 'Subject', 'frequency', {});"))
+expect_true(any(file.path(temp$libDir_RIGHT, "pie.js") %in% temp$sourceArray))

@@ -2,6 +2,7 @@
    * [WelcomeRIGHT Welcome]
    * [HelloRIGHT Hello RIGHT]
    * [TypesOfPlots Supported Plot Types]
+   * [AdvancedRIGHT Advanced RIGHT]
    * [TypesOfInteractivity Supported Interactivity]
    * [PlotOptions Supported Plotting Options]
    * [RIGHTForShiny Server Offloading in Shiny]

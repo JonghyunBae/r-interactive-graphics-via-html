@@ -69,6 +69,14 @@ function makeSearchButton(searchBoxIdString, mainArr)
 	
 	// close form 
 	document.write("<br><br></form></div>");
+	
+	// call auto complete function
+	document.write("<script>");
+	document.write("autoComplete(");
+	document.write(searchBoxId);
+	document.write(", mainArrOfSearch");
+	document.write(searchBoxId);
+	document.write(");</script>");
 }
 	
 	
@@ -182,4 +190,46 @@ function booleanSearch(searchBoxId, mainArr)
 ///////////////////5<TIME ,,,,,,,bug found
 
 
+//auto complete (Reference, http://stackoverflow.com/questions/10101490/autocomplete-with-multiple-values)
+function autoComplete(searchBoxId, mainArr){
+	$(function(){
+	    var availableTags = mainArr.labelArr;
+	    function split(val) {
+	        return val.split(/ \s*/);
+	    }
+	    function extractLast(term){
+	        return split(term).pop();
+	    }
+	    $( "#searchBox"+searchBoxId )
+	        // don't navigate away from the field on tab when selecting an item
+	        .bind( "keydown", function( event ) {
+	            if(event.keyCode === $.ui.keyCode.TAB&&
+	            		$(this).data("autocomplete").menu.active){
+	            	event.preventDefault();
+	            	}
+	        })
+	        .autocomplete({
+	            minLength: 0,
+	            source: function(request, response) {
+	                response($.ui.autocomplete.filter(
+	                    availableTags, extractLast(request.term)
+	                    ));
+	            },
+	            focus: function() {
+	                // prevent value inserted on focus
+	                return false;
+	            },
+	            select: function(event, ui) {
+	                var terms = split(this.value);
+	                // remove the current input
+	                terms.pop();
+	                // add the selected item
+	                terms.push(ui.item.value);
+	                terms.push("");
+	                this.value = terms.join(" ");
+	                return false;
+	            }
+	        });
+	});	
+}
 

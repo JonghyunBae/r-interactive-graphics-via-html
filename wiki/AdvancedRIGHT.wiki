@@ -1,24 +1,35 @@
 #summary Description about advanced features
 
-= Drawing multiple graphs =
+= Advanced RIGHT =
+In this page, you can learn advanced RIGHT features with few example codes.
+ * Multiple graphs 
+ * Fitting lines
+
+== 1. Drawing multiple graphs ==
+
+You can draw multiple graphs in one page very easily. If you want to draw three grahps, just type like below : 
 
 {{{
-RIGHT({plot(price ~ color, subArray, type = "p")
-+        hist(color, subArray)
-+        pie(color, subArray)}, subArray, dir="TEMP", isOverwrite = TRUE)
+> RIGHT({plot(price ~ color, subArray, type = "p")
+        hist(color, subArray)
+        pie(color, subArray)}, subArray, dir="TEMP", isOverwrite = TRUE)
 }}}
 
-advanced01
-advanced02
+It will show three interactive graphs like below. From left, _plot_ draw a scatter graph, _hist_ draws a bar graph, and finally _pie_ draws a pie graph.
 
+<img src="http://thepotter.woobi.co.kr/img/advanced01.PNG">
+
+All graphs, of course, are interactively connected.
+
+<img src="http://thepotter.woobi.co.kr/img/advanced02.PNG">
+
+
+== 2. Fitting Lines == 
+
+You can build a fitting line to nodes. To get the fitting line, follow this example code : 
 
 {{{
-## Script for simple functionality test:
-
-library(devtools)
 library(ggplot2)
-load_all() # load the code under development as library:
-
 rm(list = ls())
 
 set.seed(123456)
@@ -30,12 +41,12 @@ xRange <- range(subArray$carat)
 fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
 fitArray$price <- predict(fitObj, newdata = fitArray)
 
-# Sanity check:
+# ggplot:
 print(ggplot(NULL, aes(x = carat, y = price)) + 
         geom_point(data = subArray, color = "green", size = 2) +
         geom_line(data = fitArray, color = "black", size = 1.2))
 
-# dir = "TEMP" is just for ease of debugging
+# RIGHT:
 print(RIGHT({plot(price ~ carat, subArray, type = "p")
              lines(price ~ carat, fitArray)}, 
             subArray, fitArray, 
@@ -43,5 +54,11 @@ print(RIGHT({plot(price ~ carat, subArray, type = "p")
             isOverwrite = TRUE))
 }}}
 
-advanced03
-advanced04
+You can check the result from ggplot. But, this is not interactive at all.
+
+<img src="http://thepotter.woobi.co.kr/img/advanced05.PNG">
+
+
+RIGHT will show the same, but interactive one on your browser.
+
+<img src="http://thepotter.woobi.co.kr/img/advanced04.PNG">

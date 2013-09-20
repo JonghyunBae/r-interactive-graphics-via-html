@@ -32,6 +32,7 @@ R Interactive Graphics via HTml (RIGHT) package enables interactive data visuali
  # Graphs
    * Scatter graph
    * Bar graph
+   * Box and Whisker graph
    * Line graph
    * Pie graph
 

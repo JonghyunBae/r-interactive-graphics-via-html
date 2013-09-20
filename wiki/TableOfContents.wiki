@@ -1,6 +1,5 @@
   * [TutorialIntro Tutorial]
    * [HelloRIGHT Hello RIGHT]
-   * [AddPlot Adding More Plots]
    * [TypesOfPlots Supported Plot Types]
    * [TypesOfInteractivity Supported Interactivity]
    * [PlotOptions Supported Plotting Options]

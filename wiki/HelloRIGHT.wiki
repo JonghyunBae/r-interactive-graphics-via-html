@@ -1,43 +1,27 @@
 #summary Introducing RIGHT
 #sidebar TableOfContents
 
-<wiki:toc max_depth="2"/>
+= Getting Started =
 
-= Introduction =
+RIGHT syntax is based on R-basic graphic, so even RIGHT beginners can use RIGHT package with ease.
+You just need to wrap R-basic syntax with RIGHT bracket.
 
-R Interactive Graphics via HTml (RIGHT) package enables interactive data visualization and analysis on a variety of platforms.
+For example, in original R, you can draw basic scatter grpahs like below.
 
-
-= Features =
-
- # Interactivity features
-  * Tooltip Box 
-   * A mouse hover on a node triggers tooltip box which includes all information about the node.
-   * Tooltip box is different 
-  * Simultaneous selection
-   * Each data point on different graphs is connected so that they will be selected at the same time.
-   * Multiple selection with ctrl/shift key and box selection is also possible.
-  * Hiding/Reset
-   * Selected nodes can be hidden.
-   * Hidden nodes can be reset
-  * Searching
-   * Nodes can be searched and selected with boolean statements using search box.
-  * Table
-   * Table shows all information about selected nodes.
-  * Right-click Menu
-   * When right click occurs, it will show context menu.
-   * Context menu can be modified.
-  * Regression
-   * Draw a regression line(linear or loess) using server offloading in Shiny package.
- # Graphs
-   * Scatter graph
-   * Bar graph
-   * Box and Whisker graph
-   * Line graph
-   * Pie graph
-
-= Installation =
-Start R on your computer and type:
 {{{
-install.packages("RIGHT")
+> plot(price~carat, diamonds, type="p")
 }}}
+
+And it will show like below graph. 
+
+<img src="http://thepotter.woobi.co.kr/img/scatter_R.PNG">
+
+
+Now, what you need to get our RIGHT graph is just wrapping with RIGHT bracket.
+{{{
+> RIGHT(plot(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
+}}}
+
+Finally you can get the exactly same graph, but beautiful and interactive one, on your default browser!
+
+<img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">

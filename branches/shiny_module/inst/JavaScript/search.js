@@ -1,7 +1,13 @@
-function makeSearchButton(mainArr)
+function makeSearchButton(searchBoxId, mainArr)
 {
 	var ans='';
 	var ansShow='';
+	
+	// make form 
+	document.write("<div class=\"wrap\"><form id=\"searchForm");
+	document.write(searchBoxId);
+	document.write("\">");
+	
 	// variable buttons update
 	for(var i = 0; i < mainArr.labelArr.length ; i ++){
 		document.write("<a id=\"labelArr[");
@@ -13,48 +19,76 @@ function makeSearchButton(mainArr)
 		document.write("</a>");	  
 	}
 	document.write("<br>");
+	
+	// make answer button
 	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
-	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(); return false;\">Clr Ans</a>");
+	
+	// make answer clear button
+	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(");
+	document.write(searchBoxId);
+	document.write("); return false;\">Clr Ans</a>");
+	
+	// make answer label
 	document.write("<label> [ans] : </label>");
-	document.write("<label id=\"label1\">undefined</label>");
+	document.write("<label id=\"label");
+	document.write(searchBoxId);
+	document.write("\">undefined</label>");
+	
+	// make text input box
+	document.write("<input type=\"text\" id=\"searchBox");
+	document.write(searchBoxId);
+	document.write("\" name=\"searchId\" placeholder=\"Please input boolean statement...\" " +
+			"onkeydown=\"if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13))" +
+			" {booleanSearch(searchForm1);  printAns(); return false;}};\"/>");
+	
+	// make search button
+	document.write("<a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(searchForm1);" +
+			" printAns(); return false;\">Search</a>");
+	
+	// make clear button
+	document.write("<a id=\"clearBtn\" href=\"#\" class=\"myButton\" onClick=\"clearSearchBox(");
+	document.write(searchBoxId);
+	document.write("); return false;\">Clear</a>");
+	
+	// close form 
+	document.write("<br><br></form></div>");
 }
 	
 	
-	function printAns()
-	{
-		var tmpStr = '';	
-		tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.
-		document.getElementById('label1').innerHTML = tmpStr;
-		if(ansShow==''){		
-			printClearAns();
-		}
+function printAns()
+{
+	var tmpStr = '';	
+	tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.
+	document.getElementById('label1').innerHTML = tmpStr;
+	if(ansShow==''){		
+		printClearAns();
 	}
+}
 
-	function printClearAns()
-	{
-		document.getElementById('label1').innerHTML = "undefined";
-	}
+function printClearAns(searchBoxId)
+{
+	document.getElementById('label'+searchBoxId).innerHTML = "undefined";
+}
 
-	function clearSearchBox()
-	{
-		//scatterAllDeselect();
-		//histAllDeselect();
-		var textBox = document.getElementById("searchBox");
-		textBox.value = '';
-		//writeMsg(msgLayer);  	
-	}
+function clearSearchBox(searchBoxId)
+{
+	//AllDeselect();
+	var textBox = document.getElementById("searchBox"+searchBoxId);
+	textBox.value = '';
+	//Table Update needed;  	
+}
 
-	function addValueToSearchBox(label)
-	{
-	    var textBox = document.getElementById("searchBox");
-	    textBox.value = textBox.value + label;
-	}
+function addValueToSearchBox(label)
+{
+    var textBox = document.getElementById("searchBox");
+    textBox.value = textBox.value + label;
+}
 
-	function addAnsToSearchBox()
-	{
-	    var textBox = document.getElementById("searchBox");
-	    textBox.value = textBox.value + "[ans]";
-	}
+function addAnsToSearchBox()
+{
+    var textBox = document.getElementById("searchBox");
+    textBox.value = textBox.value + "[ans]";
+}
 
 
 	function booleanSearch(string)

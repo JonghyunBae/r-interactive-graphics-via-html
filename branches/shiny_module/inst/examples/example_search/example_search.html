@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" href="../../JavaScript/right.css"/>
+ <title>RIGHT: R Interactive Graphics via HTml</title>
+
+ <script src="../../JavaScript/callback.js"></script>
+ <script src="../../JavaScript/kinetic-v4.6.0.js"></script>
+ <script src="../../JavaScript/structure.js"></script>
+ <script src="../../JavaScript/common.js"></script>
+ <script src="../../JavaScript/axis.js"></script>
+ <script src="../../JavaScript/color.js"></script>
+ <script src="../../JavaScript/dot.js"></script>
+  <script src="../../JavaScript/line.js"></script>
+ <script src="../../JavaScript/node_event.js"></script>
+ <script src="../../JavaScript/menu.js"></script>
+ <script src="../../JavaScript/button_event.js"></script>
+ <script src="../../JavaScript/table.js"></script>
+  <script src="../../JavaScript/search.js"></script>
+</head>
+<body>
+<script>
+var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
+var mainArr2 = createMainStructure('../../JavaScript/Theoph-from-R.csv');
+</script>
+
+<div id="head"> 
+       
+       <script>makeSearchButton(1, mainArr1);</script>
+       <script>makeSearchButton(2, mainArr2);</script>
+     <!-- <input type="text" id="searchBox1" name="searchId" placeholder="Please input boolean statement..." onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"/>
+       <a id="searchBtn" href="#" class="myButton" onClick="booleanSearch(searchForm1); printAns(); return false;">Search</a>
+       <a id="clearBtn" href="#" class="myButton" onClick="clearSearchBox(1); return false;">Clear</a>
+       <a id="showTable" href="#" class="myButton" onClick="return false;">Hide Table</a>
+       <a id="saveImg" href="#" class="myButton" onClick="return false;">Save Image</a>
+      -->    
+       </div>
+       	<script>
+       		addButtonEvent();      	
+       	</script> 
+       	
+ 		<div id="content" class = "right-output" >
+		<div id="container1" oncontextmenu="return false;"></div>
+		<div id="container2" oncontextmenu="return false;"></div>
+       </div>
+       
+       <script>
+       
+       var axis1 = new Axis(1, mainArr1, 'carat', 'table', {legend: 'color', position: 'right'});
+       var s1 = new Dot(axis1, mainArr1, 'carat', 'table',{});
+       var axis2 = new Axis(2, mainArr2, 'Time', 'conc', {legend: 'Subject', position: 'right'});
+       var s2 = new Dot(axis2, mainArr2, 'Time', 'conc',{});
+       var AllAxisObjArr = [axis1, axis2];
+       eventTrigger(AllAxisObjArr);
+      
+       </script>
+       
+     
+      
+       <div id="footer">
+       <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>
+       <p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>
+       </div>
+       
+</body>
+</html>

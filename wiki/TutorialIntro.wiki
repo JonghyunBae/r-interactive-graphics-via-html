@@ -11,7 +11,7 @@ With RIGHT, you can experience following amazing features.
  * All graphs are "interactive", so RIGHT users can easily know which node is connected to which node in other graphs.
  * Provide handy information using various ways, such as tooltip box, search box, or table.
  * Any nodes can be hidden or reset.
- * Works in any R environment (Console R, Rgui for Windows or Mac, ESS, StatET, RStudio, etc.)
+ * Works in any R environment (Console R, Rgui for Windows, RStudio, etc.)
  * Intuitive and colorful UI on graphs.
  * Do complicated calculation with server offloading. (Using [http://www.rstudio.com/shiny/, Shiny])
  

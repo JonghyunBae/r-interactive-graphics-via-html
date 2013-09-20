@@ -1,9 +1,10 @@
 #summary Description about advanced features
+#sidebar TableOfContents
+<wiki:toc max_depth="2"/>
 
 = Advanced RIGHT =
 In this page, you can learn advanced RIGHT features with few example codes.
- * Multiple graphs 
- * Fitting lines
+
 
 == 1. Drawing multiple graphs ==
 

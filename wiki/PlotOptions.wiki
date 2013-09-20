@@ -7,7 +7,7 @@
  * For all types of graphs, some options are required, and some are optional.
  * Options will be added soon.
 
-=<font color = 'green'>Options</font>=
+=<font color = 'green'>Details</font>=
 == Scatter chart ==
 <table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
 <tr>

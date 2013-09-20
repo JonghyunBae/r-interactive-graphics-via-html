@@ -40,3 +40,4 @@ When right click occurs, it will show context menu.
 
 ==Regression == 
 Draw a regression line(linear or loess) using server offloading in Shiny package.
+Check more detail in [RIGHTForShiny this page]

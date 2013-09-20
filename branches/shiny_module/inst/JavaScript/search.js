@@ -1,7 +1,9 @@
-function makeSearchButton(searchBoxId, mainArr)
+function makeSearchButton(searchBoxIdString, mainArr)
 {
 	var ans='';
 	var ansShow='';
+	//get searchBoxId from string
+	var searchBoxId=searchBoxIdString.slice(9);
 	
 	// make form 
 	document.write("<div class=\"wrap\"><form id=\"searchForm");
@@ -49,7 +51,7 @@ function makeSearchButton(searchBoxId, mainArr)
 	
 	// make search button
 	document.write("<a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(");
-	document.write(searchBoxId);	
+	document.write(""+searchBoxId);	
 	document.write("); printAns(); return false;\">Search</a>");
 	
 	// make clear button

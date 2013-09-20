@@ -5,6 +5,10 @@
 
 = More features =
 
+UNDER CONSTRUCTION
+
+THIS FEATURES ARE AVAILABLE ONLY IN THE JAVASCRIPT. NOT SUPPORTED IN R YET
+
 == 1. Sub Setting ==
 Using sub setting, RIGHT users can draw the specific part which satisfies the boolean condition. To use this feature type : 
 
@@ -29,3 +33,17 @@ UNDER CONSTRUCTION UNDER CONSTRUCTION UNDER CONSTRUCTION
 You can see the graph with different color. The right graph is using "red" color. 
 
 <img src="http://thepotter.woobi.co.kr/img/base_color.PNG">
+
+== 3. Legend ==
+A legend contains a list of the variables appearing in the chart and an example of their appearance. This information allows the data from each variable to be identified in the chart. ([http://en.wikipedia.org/wiki/Chart reference])
+
+{{{
+> RIGHT(plot(price~carat, diamonds, type="p", legend: 'color', position: 'right')
+        plot(price~carat, diamonds, type="p", legend: 'carat', position: 'left'),
+        diamonds, dir = "TEST")
+UNDER CONSTRUCTION UNDER CONSTRUCTION UNDER CONSTRUCTION
+}}}
+
+You can see the graph with colorful legend. Legend can be positioned on left or right side.
+
+<img src="http://thepotter.woobi.co.kr/img/legend.PNG">

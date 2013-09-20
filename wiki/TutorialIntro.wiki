@@ -1,8 +1,6 @@
 #summary Tutorial Overview
 #sidebar TableOfContents
 
-<wiki:toc max_depth="2"/>
-
 = Overview =
 
 In this tutorial, we will introduce the following features.

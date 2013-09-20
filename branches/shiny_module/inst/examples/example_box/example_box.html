@@ -29,8 +29,8 @@ var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
        </div>
        
        <script>
-      	var bObj1 = new MakeBoxObj(mainArr1, 'color', 'price', {});
-      	var axis1 = new Axis(1, bObj1, 'color', 'price', {});
+      	var bObj1 = new MakeBoxObj(mainArr1, 'price', 'price', {});
+      	var axis1 = new Axis(1, bObj1, 'price', 'price', {});
       	var b = new Box(axis1, bObj1, {});
       	var axis2 = new Axis(2, mainArr1, 'color', 'price', {});
         var d1 = new Dot(axis2, mainArr1, 'color', 'price', {});
@@ -39,7 +39,7 @@ var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
         var axis3 = new Axis(3, hobj1, 'color', 'frequency', {legend:'color'});
         var s1 = new Pie(axis3, hobj1, 'color', 'frequency',{});
         
-      	 var AllAxisObjArr = [axis1, axis2, axis3];
+      	 var AllAxisObjArr = [axis1, axis2, axis3]; // this is global for redrawing in hideselected.
          eventTrigger(AllAxisObjArr);
        </script>
 

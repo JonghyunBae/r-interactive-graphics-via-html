@@ -124,6 +124,18 @@ function createMainStructure(fileName)
 	}
 	return mainArr;
 }
+function createOffloadStructure()
+{
+	var mainArr = new Object();
+	mainArr._type = 'offloadObj';
+	mainArr.parent = null;
+	mainArr.child = null;
+	mainArr.$id = 1;
+	mainArr.$readyState = false;
+	mainArr.$isSelected = new Array();
+	return mainArr;
+	
+}
 /**  create main structure of data End  **/
 
 /**  binning  **/
@@ -434,5 +446,6 @@ var ddply = {};
 	};
 })();
 /**  ddply End  **/
+
 
 

@@ -29,7 +29,7 @@ var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
        var axis1 = new Axis(1, hobj1, 'color', 'frequency', {legend:'color'});
        var s1 = new Pie(axis1, hobj1, 'color', 'frequency',{});
        
-       var AllAxisObjArr = [axis1];
+       var AllAxisObjArr = [axis1]; // this is global for redrawing in hideselected.
        eventTrigger(AllAxisObjArr);
       
        </script>

@@ -30,26 +30,16 @@
   <script src="../../../JavaScript/menu.js"></script>
   <script src="../../../JavaScript/button_event.js"></script>
   <script src="../../../JavaScript/table.js"></script>
-  <script src="../../../JavaScript/search.js"></script>
   <script src="../../../JavaScript/legend.js"></script>
+  <script src="../../../JavaScript/offloadGraph.js"></script>
 </head>
 <body>
 <script> var mainArr1 = createMainStructure('../../../JavaScript/Theoph-from-R.csv');</script>
 <div id="head"> 
        <div class="wrap">
-       <form id="searchForm1">
-      <script>makeSearchButton(mainArr1);</script>
-       <input type="text" id="searchBox" name="searchId" placeholder="Please input boolean statement..." onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"/>
-       <a id="searchBtn" href="#" class="myButton" onClick="booleanSearch(searchForm1); printAns(); return false;">Search</a>
-       <a id="clearBtn" href="#" class="myButton" onClick="clearSearchBox(); return false;">Clear</a>
-       <a id="showTable" href="#" class="myButton" onClick="return false;">Hide Table</a>
-       <a id="saveImg" href="#" class="myButton" onClick="return false;">Save Image</a>
-       </form>
+
        </div>
        </div>
-        <script>
-         	addButtonEvent();
-       	</script>
        <div id="content1" class = "right-output1" >
        <div id="content" class = "right-output" >
 <div id="container1" oncontextmenu="return false;"></div>
@@ -77,28 +67,17 @@
 		var axis3 = new Axis(3, histObj1, 'Time', 'frequency', {legend: 'Time'});
        var hist1 = new Bar(axis3, histObj1, 'Time', 'frequency', {});
      
-       var AllAxisObjArr = [axis1, axis2, axis3]; // this is global for redrawing.
+       var AllAxisObjArr = [axis1, axis2, axis3]; // this is global for redrawing in hideselected.
        eventTrigger(AllAxisObjArr);
        </script>
         <script>
-        
-        var runOffload = {};
-        (function() {
-        	runOffload = function (dataObj) {
-        		this.dataObj = dataObj;
-        	};
-        	runOffload.prototype = {
-        		_send: function(){
-        			window.Shiny.onInputChange("hidden", this.dataObj.$isHidden);
-        		},
-        		_run: function(dataObj){
-        			// customized code in here.
-        			var tt = new MakeLineObj(dataObj, 'x', 'y');
-        			var tt2 = new Line(axis2, tt, 'x1', 'x2', 'y1', 'y2', {baseColor:'blue' , event:'false'});
-        		}
-        	};
-        })();
-        offload = new runOffload(mainArr1);
+        // offload part.
+        var mainArr3 = createOffloadStructure(); // name of mainArr3 can ve changed.
+		var loffObj1 = new MakeLineObj_off(mainArr3, 'x', 'y'); // name of x, y can be changed.
+		var loff1 = new Line_off(axis2, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
+		var loff2 = new Line_off(axis3, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
+		window['mainArr3'] = mainArr3;
+		//saveOffloadObjName(['mainArr3']);
         $(function() {
             setTimeout(function() {
             window.Shiny.onInputChange('first', 1);

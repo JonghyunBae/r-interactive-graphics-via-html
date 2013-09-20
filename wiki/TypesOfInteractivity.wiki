@@ -8,36 +8,39 @@
  * RIGHT supports a variety of interactivities.
  * Such as Tooltip Box, Simultaneous selection, Hiding/Reset, Searching, Table, Right-click Menu, and Regression.
 
-== Tooltip Box ==
+== 1. Tooltip Box ==
 A mouse hover on a node triggers tooltip box which includes all information about the node.
 
 <img src="http://thepotter.woobi.co.kr/img/tooltip.PNG">
 
-== Simultaneous selection == 
+== 2. Simultaneous selection == 
 Each data point on different graphs is connected so that they will be selected at the same time.
 Multiple selection with ctrl/shift key and box selection is also possible.
 
 <img src="http://thepotter.woobi.co.kr/img/simul_selection.PNG">
 
-== Hiding == 
+== 3. Hiding/Reset == 
 Selected nodes can be hidden. Also, hidden nodes can be reset.
 
+<img src="http://thepotter.woobi.co.kr/img/hide_before.PNG">
+<img src="http://thepotter.woobi.co.kr/img/hide_mid.PNG">
+<img src="http://thepotter.woobi.co.kr/img/hide_after.PNG">
 
-== Searching == 
+== 4. Searching == 
 Nodes can be searched and selected with boolean statements using search box.
 
 <img src="http://thepotter.woobi.co.kr/img/search.PNG">
 
-== Table == 
+== 5. Table == 
 Table shows all information about selected nodes.
 
 <img src="http://thepotter.woobi.co.kr/img/table.PNG">
 
-== Right-click Menu ==
+== 6. Right-click Menu ==
 When right click occurs, it will show context menu.
 
 <img src="http://thepotter.woobi.co.kr/img/rightmenu.PNG">
 
-==Regression == 
+== 7. Regression == 
 Draw a regression line(linear or loess) using server offloading in Shiny package.
 Check more detail in [RIGHTForShiny this page]

@@ -55,7 +55,7 @@ function refreshTable(tableID, mainArr){
 
 //create dynamic css style for dynamic table
 function makeTable(tableID, mainArr, height){
-	tableID = 'table' + tableID;
+	//tableID = 'table' + tableID;
 	var colWidth=100;
 	mainArr.refreshTable = refreshTable(tableID, mainArr);
 	document.write("<style>");

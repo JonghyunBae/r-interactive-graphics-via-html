@@ -87,10 +87,12 @@ var Line = {};
 	};
 	Line.prototype = {
 			_init: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
+				this.dataObj = dataObj;
 				this.xLabel1 = xLabel1;
 				this.xLabel2 = xLabel2;
 				this.yLabel1 = yLabel1;
 				this.yLabel2 = yLabel2;
+				this.optionObj = optionObj;
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				// set the base color.
@@ -144,7 +146,6 @@ var Line = {};
 				if(optionObj.event == undefined || optionObj.event != 'false'){
 					dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 					this.firstUpdate = firstUpdate(dataObj);
-					this.dataObj = dataObj;		        	
 		        	axisObj.graphObjArr[this.graphId] = this;
 		        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 					axisObj.hoverArr[this.graphId] = lineHover();
@@ -155,53 +156,12 @@ var Line = {};
 			},
 			_reDraw: function(axisObj){
 				var dataObj = this.dataObj;
-				var temp = axisObj._getPixelXY(dataObj[this.xLabel1], dataObj[this.yLabel1]);
-				var xArr1 = temp.xArr;
-				var yArr1 = temp.yArr;
-				var temp = axisObj._getPixelXY(dataObj[this.xLabel2], dataObj[this.yLabel2]);
-				var xArr2 = temp.xArr;
-				var yArr2 = temp.yArr;
-				var cnt = 0;
-				this.node = new Array();
-				for(var i = 0 ; i < xArr1.length - 1 ; i ++){
-					if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
-						this.node[cnt] = new Kinetic.Line({
-							name: i,
-							x: [xArr1[i], xArr2[i]],
-							y: [yArr1[i], yArr2[i]],
-							points: [ 
-							         xArr1[i],
-							         yArr1[i],
-							         xArr2[i],
-							         yArr2[i]
-							        ],
-							stroke: this.baseColor,
-							fill: this.baseColor,
-							selected: 0,
-							selectCnt: 0,
-							strokeWdith: 1,
-							opacity: 0.5,
-							info: "Node: " + i
-						});
-						this.dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
-						cnt ++;
-					}else{
-						this.dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
-					}
-				}
-				this.dataLayer = new Kinetic.Layer();	
-	        	for(var i = 0 ; i < this.node.length ; i ++){
-					this.dataLayer.add(this.node[i]);
-				}
-				// event add
-				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-				this.firstUpdate = firstUpdate(dataObj);		        	
-	        	axisObj.graphObjArr[this.graphId] = this;
-	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
-				axisObj.hoverArr[this.graphId] = lineHover();
-				axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
-				//add layer
-				axisObj.stage.add(this.dataLayer);
+				var xLabel1 = this.xLabel1;
+				var xLabel2 = this.xLabel2;
+				var yLabel1 = this.yLabel1;
+				var yLabel2 = this.yLabel2;
+				var optionObj = this.optionObj;
+				this._draw(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
 			}
 	};
 })();

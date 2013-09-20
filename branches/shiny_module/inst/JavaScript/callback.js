@@ -84,7 +84,6 @@ function hideSelected(Name)
 		}
 		
 		// recalculate all children dataObj.
-		// TODO: should add "recalculate" prototype in all dataObj!!!!
 		if(rootObjArr[i].child != null){
 			for(var j = 0 ; j < rootObjArr[i].child.length ; j ++){
 				childReCalculate(rootObjArr[i].child[j]);
@@ -97,8 +96,6 @@ function hideSelected(Name)
 		AllAxisObjArr[i]._reDraw();
 	}
 	eventTrigger(AllAxisObjArr);
-	
-	
 	// TODO: should call server offload!!
 }
 function childReCalculate(object)
@@ -114,27 +111,34 @@ function childReCalculate(object)
 	}
 }
 
-function resetSelected()
+function resetSelected(Name)
 {
-	alert('reset selected!');
-	/*
-	if(hideCnt > 0)
-		isSelected[isSelected.length - hideCnt][0] = 0; // delete last end check.
-	hideCnt = 0; // reset the hideCnt.
-	for(var i = 0 ; i < tempHidden.length ; i ++){
-		isHidden[tempHidden[i]] = false;	// make isHidden with false.
+	var rootObjArr = new Array();
+	var axisArr = new Array();
+	// find all rootObj related with this Axis.
+	for(var i = 0 ; i < Name.graphObjArr.length ; i ++){
+		// get dataObj of each graph on the axis.
+		var temp = Name.graphObjArr[i].dataObj;
+		// find root.
+		while(temp.parent != null){
+			temp = temp.parent;
+		}
+		// save all rootObj in the rootObjArr.
+		for(var j = 0 ; j < rootObjArr.length ; j ++){
+			if(temp == rootObjArr[j]) // prevent duplicate.
+				break;
+		}
+		if(j == rootObjArr.length){
+			rootObjArr.push(temp);
+		}
 	}
-	tempHidden = new Array();	// reset the tempHidden.
-	tempData = mainArr; 	// reset the tempData.
 	
-	// redraw graphs.
-	for(var i = 0 ; i < objArr.length ; i ++)
-	{
-		objArr[i]._init(objArr[i]._id, tempData, {});
-		objArr[i].draw(objArr[i]._id);
-		eventTrigger(objArr[i]);
+	// TODO: update datafield!
+	for(var i = 0 ; i < rootObjArr.length ; i ++){
+		
 	}
-	*/
+	
+	// TODO: should call server offload!!
 }
 
 

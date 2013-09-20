@@ -9,7 +9,7 @@ function menu(Name)
     });
     Name.menuText = new Array();
     Name.menuRect = new Array();
-    var menuName = ["Hide", "Reset", "User", "Regression", "Options"]; //add topmenu element you want.    
+    var menuName = ["Hide", "Reset"]; //add topmenu element you want.    
     for(var i = 0 ; i < menuName.length ; i ++){
         Name.menuText[i] = new Kinetic.Text({
                 y: 25 * i,
@@ -47,30 +47,6 @@ function menu(Name)
                         Name.regressionMenu[j].hide();
                         Name.regressionMenuLayer.draw();
                     }
-                }else if(i == 3){		// on Regression
-                	for(var j = 0; j < optionMenuName.length ; j ++){
-                        Name.optionMenu[j].hide();
-                        Name.optionMenuLayer.draw();
-                        Name.subMenu[j].hide();
-                        Name.subMenuLayer[j].draw();
-                	}
-                	for(var j = 0; j < regressionMenuName.length ; j ++){
-                        Name.regressionMenu[j].show();
-                        Name.regressionMenuLayer.moveToTop();
-                        Name.regressionMenuLayer.draw();
-                	}
-                	Name.regressionMenuLayer.draw();
-                }else{		// on option
-                	for(var j = 0; j < regressionMenuName.length ; j ++){
-                        Name.regressionMenu[j].hide();
-                        Name.regressionMenuLayer.draw();
-                	}
-                    for(var j = 0; j < optionMenuName.length ; j ++){
-                            Name.optionMenu[j].show();
-                            Name.optionMenuLayer.moveToTop();
-                            Name.optionMenuLayer.draw();
-                    }
-                    Name.optionMenuLayer.draw();
                 }
             });
             Name.menuRect[i].on('mouseover', function(evt){
@@ -92,30 +68,6 @@ function menu(Name)
                         Name.regressionMenu[j].hide();
                         Name.regressionMenuLayer.draw();
                     }
-                }else if(i == 3){	// on Regression 
-                	for(var j = 0; j < optionMenuName.length ; j ++){
-                        Name.optionMenu[j].hide();
-                        Name.optionMenuLayer.draw();
-                        Name.subMenu[j].hide();
-                        Name.subMenuLayer[j].draw();
-                	}
-                	for(var j = 0; j < regressionMenuName.length ; j ++){
-                        Name.regressionMenu[j].show();
-                        Name.regressionMenuLayer.moveToTop();
-                        Name.regressionMenuLayer.draw();
-                	}
-                	Name.regressionMenuLayer.draw();
-                }else{	// on option
-                	for(var j = 0 ; j < regressionMenuName.length ; j ++){
-                        Name.regressionMenu[j].hide();
-                        Name.regressionMenuLayer.draw();
-                	}
-                    for(var j = 0 ; j < optionMenuName.length ; j ++){
-                        Name.optionMenu[j].show();
-                        Name.optionMenuLayer.moveToTop();
-                        Name.optionMenuLayer.draw();
-                    }
-                    Name.optionMenuLayer.draw();
                 }
             });
 		    Name.menuText[i].on('mouseout', function(evt){
@@ -144,30 +96,16 @@ function menu(Name)
         Name.menuLayer.draw();  
     });
     Name.menuText[1].on('click', function(evt){
-        resetSelected();
+        resetSelected(Name);
         Name.menu.hide();
         Name.menuLayer.draw();  
     });
     Name.menuRect[1].on('click', function(evt){
-		resetSelected();
+		resetSelected(Name);
         Name.menu.hide();
         Name.menuLayer.draw();                  
     });
             
-    Name.menuText[2].on('click', function(evt){
-        /********************/
-    	/*		For User Function       */
-    	/********************/
-        Name.menu.hide();
-        Name.menuLayer.draw();  
-    });
-    Name.menuRect[2].on('click', function(evt){
-    	/********************/
-    	/*		For User Function       */
-    	/********************/
-        Name.menu.hide();
-        Name.menuLayer.draw();  
-    });
     
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -11,6 +11,8 @@ var Dot = {};
 			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				this.xLabel = xLabel;
 				this.yLabel = yLabel;
+				this.dataObj = dataObj;
+				this.optionObj = optionObj;
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
@@ -99,7 +101,6 @@ var Dot = {};
 				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
 				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
 	        	this.firstUpdate = firstUpdate(dataObj);
-	        	this.dataObj = dataObj;
 	        	this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
@@ -116,68 +117,8 @@ var Dot = {};
 				var dataObj = this.dataObj;
 				var xLabel = this.xLabel;
 				var yLabel = this.yLabel;
-				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
-				var xArr = temp.xArr;
-				var yArr = temp.yArr;
-				var labelArr = getFields(dataObj);
-				var cnt = 0;
-				this.node = new Array();
-				if(this.colorOn == true){
-					for(var i = 0 ; i < xArr.length ; i ++){						
-						if(!(xArr[i] == -1 || yArr[i] == -1) && (this.subSet == -1 || eval(this.subSet))){
-							this.node[cnt] = new Kinetic.Circle({
-								name: i,
-								x: xArr[i],
-								y: yArr[i],
-								radius: this.radius,
-								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
-								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
-								selected: 0,
-								opacity: 0.5,
-								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
-							});							
-							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
-							cnt ++;
-						}else{
-							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
-						}
-					}
-				}else{
-					for(var i = 0 ; i < xArr.length ; i ++){
-						if(!(xArr[i] == -1 || yArr[i] == -1) && (this.subSet == -1 || eval(this.subSet))){
-							this.node[cnt] = new Kinetic.Circle({
-								name: i,
-								x: xArr[i],
-								y: yArr[i],
-								radius: this.radius,
-								stroke: this.baseColor,
-								fill: this.baseColor,
-								selected: 0,
-								opacity: 0.5,
-								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
-							});
-							dataObj.$isSelected[i][this.dataId] = dotUpdate(this.node[cnt]);
-							cnt ++;
-						}else{
-							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
-						}
-					}
-				}
-	        	// event add
-				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-				//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
-				//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
-	        	this.firstUpdate = firstUpdate(this.dataObj);
-	        	this.dataLayer = new Kinetic.Layer();	
-	        	for(var i = 0 ; i < this.node.length ; i ++){
-					this.dataLayer.add(this.node[i]);
-				}
-	        	axisObj.graphObjArr[this.graphId] = this;
-	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
-				axisObj.hoverArr[this.graphId] = dotHover();
-				axisObj.boxSearchArr[this.graphId] = dotBoxSearch(this);
-				//add layer
-				axisObj.stage.add(this.dataLayer);
+				var optionObj = this.optionObj;
+				this._draw(axisObj, dataObj, xLabel, yLabel, optionObj);
 			}
 	}
 })();

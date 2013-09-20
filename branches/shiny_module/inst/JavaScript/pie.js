@@ -2,14 +2,16 @@
 var Pie = {};
 (function() {	
 	Pie = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-		this._init(axisObj, dataObj, optionObj);
-		//this._checkStacking(axisObj, dataObj, xLabel, yLabel);
+		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
 		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
 	Pie.prototype = {
-			_init: function(axisObj, dataObj, optionObj) {
+			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+				this.dataObj = dataObj;
+				this.xLabel = xLabel;
+				this.yLabel = yLabel;
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				this.barWidth = axisObj.xbarWidth;
@@ -26,39 +28,6 @@ var Pie = {};
 					this.colorOn = false;
 				}
 				this.colorLabel = legendLabel;
-			},
-			
-			_checkStacking: function(axisObj, dataObj, xLabel, yLabel) {
-				if(dataObj[yLabel].isDiscrete == undefined){
-					var temp = new Object();
-					var max = dataObj[yLabel][0];
-					var min = dataObj[yLabel][0];
-					for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
-						// frequency max count, stacking on...
-						if(temp[dataObj[xLabel][i]] == undefined){
-							temp[dataObj[xLabel][i]] = dataObj[yLabel][i];
-						}else{
-							temp[dataObj[xLabel][i]] = temp[dataObj[xLabel][i]] + dataObj[yLabel][i];
-							if(temp[dataObj[xLabel][i]] > max){
-								max = temp[dataObj[xLabel][i]];
-							}else if(temp[dataObj[xLabel][i]] < min){
-								min = temp[dataObj[xLabel][i]];
-							}
-							this.stacking = true;
-						}
-					}
-					if(this.stacking == true){
-						if(yLabel == 'freqeuncy'){
-							axisObj._setYContinuous(max, 0);
-						}else{
-							axisObj._setYContinuous(max, min);
-						}
-						axisObj._draw();
-					}
-					delete temp;
-					//this.xFreq = temp;
-					//alert(this.xFreq[0.6]);
-				}
 			},
 			_draw: function(axisObj, dataObj, xLabel, yLabel) {
 				this.node = new Array();
@@ -125,6 +94,15 @@ var Pie = {};
 				axisObj.boxSearchArr[this.graphId] = pieBoxSearch(this);
 				//add layer
 				axisObj.stage.add(this.dataLayer);
+			},
+			_reDraw: function(axisObj){
+				var dataObj = this.dataObj;
+				var xLabel = this.xLabel;
+				var yLabel = this.yLabel;
+				if(this.colorOn == true){
+					addColorField(dataObj[this.colorLabel]);
+				}
+				this._draw(axisObj, dataObj, xLabel, yLabel);
 			}
 	};
 })();

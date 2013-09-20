@@ -218,8 +218,7 @@ function firstUpdate(firstObj)
 			// child update
 			if(object.child != null && cnt > 0){
 				for(var i = 0 ; i < object.child.length ; i ++){
-					
-					var temp2 = object.parentTOchild[i](refineArr);					
+					var temp2 = object.parentTOchild[i](refineArr);
 					childUpdate(object.child[i], temp2, selectOn, firstObj);
 				}
 			}

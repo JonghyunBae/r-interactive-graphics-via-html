@@ -3273,6 +3273,9 @@ var Kinetic = {};
     Kinetic.Factory.addGetterSetter(Kinetic.Node, 'selectCnt', 0);
     Kinetic.Factory.addGetterSetter(Kinetic.Node, 'isOutlier', 0);
     
+    
+    
+    
     /**
      * set x position
      * @name setX
@@ -7483,6 +7486,7 @@ var Kinetic = {};
      * @method
      * @memberof Kinetic.Rect.prototype
      */
+    
 
 })();
 ;(function() {

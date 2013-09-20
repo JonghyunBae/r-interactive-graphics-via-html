@@ -30,7 +30,7 @@ There are five types of graph right now. More types will be updated.
 </tr>
 <tr>
 	<td>Line plot</td>
-	<td>line</td>
+	<td>lines</td>
 	<td></td>
 </tr>
 <tr>
@@ -51,52 +51,64 @@ Read more about [TypesOfInteractivity types of supported interactivity] and [Plo
 == 1. Scatter plot == 
  * [http://en.wikipedia.org/wiki/Scatter_plot Scatter plot], display values for two variables for a set of data.
  * Regression (linear, loess) is enabled. The calculation for a regression line is done by the server side with R. (Shiny library is used here)
-<img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
 
-To run the example type:
+To draw basic scatter graph type:
 
 {{{
 > RIGHT(plot(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
 }}}
 
+<img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
+
+
 
 == 2. Bar plot == 
  * [http://en.wikipedia.org/wiki/Bar_chart Bar plot], rectangular bars with lengths proportional to the values.
-<img src="http://thepotter.woobi.co.kr/img/bar_diamonds.PNG">
 
-To run the example type:
+To draw basic bar graph type:
 
 {{{
 > RIGHT(hist(price, diamonds), diamonds, dir = "TEST")
 }}}
 
+<img src="http://thepotter.woobi.co.kr/img/bar_diamonds.PNG">
+
+
 == 3. Box and Whisker plot == 
  * [http://en.wikipedia.org/wiki/Box_plot Box and Whisker plot], a convenient way of graphically depicting groups of numerical data through their quartiles.
-<img src="http://thepotter.woobi.co.kr/img/box_diamonds.PNG">
 
-To run the example type:
+To draw basic box and whisker graph type:
 
 {{{
-> RIGHT(box(price, diamonds), diamonds, dir = "TEST")
+> RIGHT(plot(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
+UNDER CONSTRUCTION UNDER CONSTRUCTION UNDER CONSTRUCTION
 }}}
+
+<img src="http://thepotter.woobi.co.kr/img/box_diamonds.PNG">
+
+
 
 == 4. Line plot == 
  * [http://en.wikipedia.org/wiki/Line_chart Line plot], displays information as a series of data points connected by straight line segments.
-<img src="http://thepotter.woobi.co.kr/img/line_diamonds.PNG">
 
-To run the example type:
+To draw basic line graph type:
 
 {{{
-> RIGHT(plot(price~carat, diamonds, type="l"), diamonds, dir = "TEST")
+> RIGHT(lines(price~carat, diamonds), diamonds, dir = "TEST")
 }}}
+
+<img src="http://thepotter.woobi.co.kr/img/line_diamonds.PNG">
+
+
 
 
 == 5. Pie chart == 
  * [http://en.wikipedia.org/wiki/Pie_chart Pie chart], circular chart divided into sectors, illustrating numerical proportion.
-<img src="http://thepotter.woobi.co.kr/img/pie_diamonds.PNG">
 
-To run the example type:
+To draw basic pie graph type:
 
 {{{
 > RIGHT(pie(color, diamonds), diamonds, dir = "TEST")
 }}}
+
+<img src="http://thepotter.woobi.co.kr/img/pie_diamonds.PNG">

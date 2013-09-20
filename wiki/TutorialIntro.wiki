@@ -16,3 +16,11 @@ With RIGHT, you can experience following amazing features.
  * Do complicated calculation with server offloading. (Using [http://www.rstudio.com/shiny/, Shiny])
  
 More detailed features are available in each page.
+ * [WelcomeRIGHT Welcome]
+ * [HelloRIGHT Hello RIGHT]
+ * [TypesOfPlots Supported Plot Types]
+ * [AdvancedRIGHT Advanced RIGHT]
+ * [TypesOfInteractivity Supported Interactivity]   
+ * [RIGHTForShiny Server Offloading in Shiny]
+ * [PlotOptions Supported Plotting Options]
+ * [MoreFeatures More Features]

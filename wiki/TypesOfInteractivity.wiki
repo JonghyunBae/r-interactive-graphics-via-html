@@ -3,37 +3,33 @@
 
 <wiki:toc max_depth="2"/>
 
-= Introduction =
-
- * RIGHT는 여러가지 interactivity를 지원합니다.
- * 그래프내에서의 툴팁박스
- * 여러 그래프간의 하이라이트
- * 선택 후 숨기기
- * 리그레션 (서버오프로딩)
-
 = Interactivity Features =
 
+ * RIGHT supports a variety of interactivities.
+ * Such as Tooltip Box, Simultaneous selection, Hiding/Reset, Searching, Table, Right-click Menu, and Regression.
+
 == Tooltip Box ==
-툴팁박스에 정보가 표시됩니다.
+A mouse hover on a node triggers tooltip box which includes all information about the node.
 
 <img src="http://thepotter.woobi.co.kr/img/tooltip.PNG">
 
 == Simultaneous selection == 
-Each data point on different charts is connected so that they will be selected at the same time. Multiple selection with ctrl/shift key and box selection is also possible.
+Each data point on different graphs is connected so that they will be selected at the same time.
+Multiple selection with ctrl/shift key and box selection is also possible.
 
 <img src="http://thepotter.woobi.co.kr/img/simul_selection.PNG">
 
 == Hiding == 
-Selected data points can be hidden.
+Selected nodes can be hidden. Also, hidden nodes can be reset.
 
 
 == Searching == 
-Data points can be searched with boolean statements.
+Nodes can be searched and selected with boolean statements using search box.
 
 <img src="http://thepotter.woobi.co.kr/img/search.PNG">
 
 == Table == 
-Table shows information about selected data points.
+Table shows all information about selected nodes.
 
 <img src="http://thepotter.woobi.co.kr/img/table.PNG">
 
@@ -43,4 +39,4 @@ When right click occurs, it will show context menu.
 <img src="http://thepotter.woobi.co.kr/img/rightmenu.PNG">
 
 ==Regression == 
-draw a regression line(linear or loess) using server offloading in Shiny package
+Draw a regression line(linear or loess) using server offloading in Shiny package.

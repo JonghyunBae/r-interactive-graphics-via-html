@@ -5,7 +5,7 @@
 
 =<font color = 'blue'>Types of graphs</font>=
 
-There are four types of graph right now. More types will be updated.
+There are five types of graph right now. More types will be updated.
 
 <table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
 <tr>
@@ -21,6 +21,11 @@ There are four types of graph right now. More types will be updated.
 <tr>
 	<td>Bar plot</td>
 	<td>hist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>Box and Whisker plot</td>
+	<td>box</td>
 	<td></td>
 </tr>
 <tr>
@@ -43,7 +48,7 @@ Read more about [TypesOfInteractivity types of supported interactivity] and [Plo
 
 
 
-== Scatter plot == 
+== 1. Scatter plot == 
  * [http://en.wikipedia.org/wiki/Scatter_plot Scatter plot], display values for two variables for a set of data.
  * Regression (linear, loess) is enabled. The calculation for a regression line is done by the server side with R. (Shiny library is used here)
 <img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
@@ -55,7 +60,7 @@ To run the example type:
 }}}
 
 
-== Bar plot == 
+== 2. Bar plot == 
  * [http://en.wikipedia.org/wiki/Bar_chart Bar plot], rectangular bars with lengths proportional to the values.
 <img src="http://thepotter.woobi.co.kr/img/bar_diamonds.PNG">
 
@@ -65,7 +70,7 @@ To run the example type:
 > RIGHT(hist(price, diamonds), diamonds, dir = "TEST")
 }}}
 
-== Box and Whisker plot == 
+== 3. Box and Whisker plot == 
  * [http://en.wikipedia.org/wiki/Box_plot Box and Whisker plot], a convenient way of graphically depicting groups of numerical data through their quartiles.
 <img src="http://thepotter.woobi.co.kr/img/box_diamonds.PNG">
 
@@ -75,7 +80,7 @@ To run the example type:
 > RIGHT(box(price, diamonds), diamonds, dir = "TEST")
 }}}
 
-== Line plot == 
+== 4. Line plot == 
  * [http://en.wikipedia.org/wiki/Line_chart Line plot], displays information as a series of data points connected by straight line segments.
 <img src="http://thepotter.woobi.co.kr/img/line_diamonds.PNG">
 
@@ -86,7 +91,7 @@ To run the example type:
 }}}
 
 
-== Pie chart == 
+== 5. Pie chart == 
  * [http://en.wikipedia.org/wiki/Pie_chart Pie chart], circular chart divided into sectors, illustrating numerical proportion.
 <img src="http://thepotter.woobi.co.kr/img/pie_diamonds.PNG">
 

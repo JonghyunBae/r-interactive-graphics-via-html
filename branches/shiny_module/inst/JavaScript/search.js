@@ -1,12 +1,16 @@
 function makeSearchButton(searchBoxIdString, mainArr)
 {
+	
 	var ans='';
 	var ansShow='';
 	//get searchBoxId from string
 	var searchBoxId=searchBoxIdString.slice(9);
 	
+	// to access mainArr from booleanSearch function later
+	window["mainArrOfSearch"+searchBoxId] = mainArr;
+	
 	// make form 
-	document.write("<div class=\"wrap\"><form id=\"searchForm");
+	document.write("<div class=\"search_wrap\"><form id=\"searchForm");
 	document.write(searchBoxId);
 	document.write("\">");
 	
@@ -14,9 +18,9 @@ function makeSearchButton(searchBoxIdString, mainArr)
 	for(var i = 0; i < mainArr.labelArr.length ; i ++){
 		document.write("<a id=\"labelArr[");
 		document.write(i);
-		document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox(");
+		document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox('");
 		document.write(mainArr.labelArr[i]);
-		document.write("); return false;\">");
+		document.write("'); return false;\">");
 		document.write(mainArr.labelArr[i]);
 		document.write("</a>");	  
 	}
@@ -47,11 +51,15 @@ function makeSearchButton(searchBoxIdString, mainArr)
 			"onkeydown=\"if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13))" +
 			" {booleanSearch(");
 	document.write(searchBoxId);
+	document.write(", mainArrOfSearch");
+	document.write(searchBoxId);
 	document.write("); printAns(); return false;}};\"/>");
 	
 	// make search button
 	document.write("<a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(");
-	document.write(""+searchBoxId);	
+	document.write(searchBoxId);
+	document.write(", mainArrOfSearch");
+	document.write(searchBoxId);
 	document.write("); printAns(); return false;\">Search</a>");
 	
 	// make clear button
@@ -89,7 +97,8 @@ function clearSearchBox(searchBoxId)
 
 function addValueToSearchBox(label)
 {
-    var textBox = document.getElementById("searchBox");
+	alert(label);
+    var textBox = document.getElementById("searchBox1");
     textBox.value = textBox.value + label;
 }
 
@@ -100,26 +109,24 @@ function addAnsToSearchBox(searchBoxId)
 }
 
 
-function booleanSearch(searchBoxId)
-{	
+function booleanSearch(searchBoxId, mainArr)
+{
 	var searchIdString = "searchId"+searchBoxId;
     var inputStr = document.getElementsByName(searchIdString)[0].value;
-    alert(inputStr);   
-	    
-	    if(1){
-		    /*if(inputString includes any other variables except given ones){
-		    alert("Please use given variables!");
-			}*/
-		   //if boolean expression is not logical, alert("Please use proper boolean expression!");
-	    	for(var i=0; i<labelArr.length; i++)
-		    {
-	    		var searchStr =new RegExp( labelArr[i], 'gi'); // "g" means all search, "i" menas not-case-sensitive
-	    		//    var newStr = tempData[j][i].toString();
-	    		inputStr = inputStr.replace(searchStr, "tempData["+i+"][i]");
-	    	}
+  //  var mainArr = "mainArrOfSearch"+searchBoxId;
+   // alert(mainArr.labelArr);
+   // alert(mainArr.$isSelected);
+
+	for(var i=0; i<mainArr.labelArr.length; i++)
+	{
+		var searchStr =new RegExp(mainArr.labelArr[i], 'gi'); // "g" means all search, "i" menas not-case-sensitive
+		//    var newStr = tempData[j][i].toString();
+		inputStr = inputStr.replace(searchStr, "tempData["+i+"][i]");
+		alert(inputStr);
+	 }
 	  //if "Time" is for "tempData[1][i]" and "labelArr[1]"    
 	//for example, "8<= Time && Time <=10" will be "8<=tempData[1][i] && tempData[1][i] <=10"
-	    	
+	/*    	
 	    	inputStr =inputStr.replace(/\[ans\]/gi, "("+ans+")"); //If there is "[ans]", change it to (ans).
 	    	ans=inputStr; //current answer update.
 	    	
@@ -170,9 +177,9 @@ function booleanSearch(searchBoxId)
 	    }    
 		//writeMsg(msgLayer);
 		//addRow('dataTable');
-		//saveWork();
-	}
-	///////////////////5<TIME ,,,,,,,bug found
+		//saveWork();*/
+}
+///////////////////5<TIME ,,,,,,,bug found
 
 
 

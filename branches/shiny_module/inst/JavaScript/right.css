@@ -25,7 +25,7 @@ a:hover {
 	}
 	
 	
-.wrap {	
+.search_wrap {	
 	width: 680px;
 	margin: 0 auto;
 	padding: 15px 15px 0px 15px;
@@ -58,7 +58,7 @@ a:hover {
         text-decoration:none;
 }
 
-#head label {
+.search_wrap label {
         display:inline-block;
         font-family:Trebuchet MS;
         color : #315ca1;

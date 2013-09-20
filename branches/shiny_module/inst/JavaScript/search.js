@@ -21,7 +21,9 @@ function makeSearchButton(searchBoxId, mainArr)
 	document.write("<br>");
 	
 	// make answer button
-	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(); return false;\">Ans</a>");
+	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(");
+	document.write(searchBoxId);
+	document.write("); return false;\">Ans</a>");
 	
 	// make answer clear button
 	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(");
@@ -37,13 +39,18 @@ function makeSearchButton(searchBoxId, mainArr)
 	// make text input box
 	document.write("<input type=\"text\" id=\"searchBox");
 	document.write(searchBoxId);
-	document.write("\" name=\"searchId\" placeholder=\"Please input boolean statement...\" " +
+	document.write("\" name=\"searchId");
+	document.write(searchBoxId);
+	document.write("\" placeholder=\"Please input boolean statement...\" " +
 			"onkeydown=\"if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13))" +
-			" {booleanSearch(searchForm1);  printAns(); return false;}};\"/>");
+			" {booleanSearch(");
+	document.write(searchBoxId);
+	document.write("); printAns(); return false;}};\"/>");
 	
 	// make search button
-	document.write("<a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(searchForm1);" +
-			" printAns(); return false;\">Search</a>");
+	document.write("<a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(");
+	document.write(searchBoxId);	
+	document.write("); printAns(); return false;\">Search</a>");
 	
 	// make clear button
 	document.write("<a id=\"clearBtn\" href=\"#\" class=\"myButton\" onClick=\"clearSearchBox(");
@@ -84,19 +91,19 @@ function addValueToSearchBox(label)
     textBox.value = textBox.value + label;
 }
 
-function addAnsToSearchBox()
+function addAnsToSearchBox(searchBoxId)
 {
-    var textBox = document.getElementById("searchBox");
+    var textBox = document.getElementById("searchBox"+searchBoxId);
     textBox.value = textBox.value + "[ans]";
 }
 
 
-	function booleanSearch(string)
-	{
-//		scatterAllDeselect();
-//		histAllDeselect();
-	    var inputStr = string.searchId.value;
-	       
+function booleanSearch(searchBoxId)
+{	
+	var searchIdString = "searchId"+searchBoxId;
+    var inputStr = document.getElementsByName(searchIdString)[0].value;
+    alert(inputStr);   
+	    
 	    if(1){
 		    /*if(inputString includes any other variables except given ones){
 		    alert("Please use given variables!");

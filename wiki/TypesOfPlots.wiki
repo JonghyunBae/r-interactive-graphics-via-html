@@ -80,7 +80,7 @@ To draw basic bar graph type:
 To draw basic box and whisker graph type:
 
 {{{
-> RIGHT(plot(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
+> RIGHT(plot(price~color, diamonds), diamonds, dir = "TEST")
 UNDER CONSTRUCTION UNDER CONSTRUCTION UNDER CONSTRUCTION
 }}}
 

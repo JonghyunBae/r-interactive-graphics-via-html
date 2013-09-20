@@ -3,7 +3,7 @@
 
 <wiki:toc max_depth="2"/>
 
-= Introduction =
+= Plotting Options=
  * For all types of graphs, some options are required, and some are optional.
  * Options will be added soon.
 

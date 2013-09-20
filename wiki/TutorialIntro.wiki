@@ -3,4 +3,16 @@
 
 = Overview =
 
-In this tutorial, we will introduce the following features.
+In this tutorial, we will explain how to use RIGHT package with ease. From basic graph types, to complicated functions, you can learn all about RIGHT with some example codes. 
+
+With RIGHT, you can experience following amazing features.
+ * Create beautiful and useful graphs on web browsers with only a few lines of code.
+ * RIGHT syntax is based on R-base graphic, so RIGHT users can draw graphs using R-base syntax simply with one bracket.
+ * All graphs are "interactive", so RIGHT users can easily know which node is connected to which node in other graphs.
+ * Provide handy information using various ways, such as tooltip box, search box, or table.
+ * Any nodes can be hidden or reset.
+ * Works in any R environment (Console R, Rgui for Windows or Mac, ESS, StatET, RStudio, etc.)
+ * Intuitive and colorful UI on graphs.
+ * Do complicated calculation with server offloading. (Using [http://www.rstudio.com/shiny/, Shiny])
+ 
+More detailed features are available in each page.

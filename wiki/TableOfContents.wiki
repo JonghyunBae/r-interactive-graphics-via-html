@@ -1,4 +1,5 @@
   * [TutorialIntro Tutorial]
+   * [WelcomeRIGHT Welcome]
    * [HelloRIGHT Hello RIGHT]
    * [TypesOfPlots Supported Plot Types]
    * [TypesOfInteractivity Supported Interactivity]

@@ -10,21 +10,33 @@ R Interactive Graphics via HTml (RIGHT) package enables interactive data visuali
 
 = Features =
 
-  * Interactivity features
-    * Tooltip Box : Hovering cursor display information about data point.
-    * Simultaneous selection : Each data point on different charts is connected so that they will be selected at the same time. Multiple selection with ctrl/shift key and box selection is also possible.
-    * Hiding : Selected data points can be hidden.
-    * Searching : Data points can be searched with boolean statements.
-    * Table : Table shows information about selected data points.
-    * Right-click Menu : When right click occurs, it will show context menu.
-    * Regression : draw a regression line(linear or loess) using server offloading in Shiny package
-  * Graphs
-    * Scatter graph
-    * Bar graph
-    * Line graph
-    * Pie graph
+ # Interactivity features
+  * Tooltip Box 
+   * A mouse hover on a node triggers tooltip box which includes all information about the node.
+   * Tooltip box is different 
+  * Simultaneous selection
+   * Each data point on different graphs is connected so that they will be selected at the same time.
+   * Multiple selection with ctrl/shift key and box selection is also possible.
+  * Hiding/Reset
+   * Selected nodes can be hidden.
+   * Hidden nodes can be reset
+  * Searching
+   * Nodes can be searched and selected with boolean statements using search box.
+  * Table
+   * Table shows all information about selected nodes.
+  * Right-click Menu
+   * When right click occurs, it will show context menu.
+   * Context menu can be modified.
+  * Regression
+   * Draw a regression line(linear or loess) using server offloading in Shiny package.
+ # Graphs
+   * Scatter graph
+   * Bar graph
+   * Line graph
+   * Pie graph
 
 = Installation =
+Start R on your computer and type:
 {{{
 install.packages("RIGHT")
 }}}

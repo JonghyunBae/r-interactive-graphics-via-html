@@ -3,7 +3,7 @@
    * [TypesOfPlots Supported Plot Types]
    * [TypesOfInteractivity Supported Interactivity]
    * [PlotOptions Supported Plotting Options]
-   * [RIGHTForShiny ServerOffloading in Shiny]
+   * [RIGHTForShiny Server Offloading in Shiny]
    * [MoreFeatures More Features]
   * [RAPIIntro R API Introduction]
   * [JavaScriptAPIIntro JavaScript API Introduction]

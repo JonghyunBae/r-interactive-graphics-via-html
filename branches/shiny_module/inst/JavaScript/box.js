@@ -161,6 +161,10 @@ var MakeBoxObj = {};
 				var boxNumDataNumArr = make2DArr(boxNum);
 				// push elements into each box.
 				for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+					if(dataObj[xLabel][i] == undefined){
+						alert(i + ", " + dataObj[xLabel][i]);
+					}
+					
 					boxNumDataArr[dataObj[xLabel][i]].push(dataObj[yLabel][i]);
 					boxNumDataNumArr[dataObj[xLabel][i]].push(i);
 				}			

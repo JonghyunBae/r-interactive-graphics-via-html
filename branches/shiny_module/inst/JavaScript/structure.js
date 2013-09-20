@@ -27,16 +27,16 @@ function csv2Arr(data, liveChar)
 
 function getData(fileName)
 {
-	var filePath = fileName;	
-	xmlhttp = new XMLHttpRequest();	
-	xmlhttp.open("GET",filePath,false);
+	var filePath = fileName;
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", filePath, false);
 	xmlhttp.send(null);
 	var fileContent = xmlhttp.responseText;
 	var tempArr = csv2Arr(fileContent);
 	var returnLabelArr = tempArr[0].toString().split(',');	
 	tempArr.shift();
 	var returnDataArr = tempArr;
-	return { 'dataArr' : returnDataArr, 'labelArr' : returnLabelArr };	
+	return { 'dataArr' : returnDataArr, 'labelArr' : returnLabelArr };
 }
 
 function make2DArr(rows) {
@@ -116,6 +116,7 @@ function createMainStructure(fileName)
 			mainArr[labelArr[i]].index.sort(function(a,b){return a-b});
 			for(var j = 0 ; j < mainArr[labelArr[i]].length ; j ++){
 				mainArr[labelArr[i]][j] = mainArr[labelArr[i]].index.indexOf(mainArr[labelArr[i]][j]);
+				
 			}
 		}else{
 			delete mainArr[labelArr[i]].isDiscrete;
@@ -345,7 +346,7 @@ var ddply = {};
 	
 	};
 	ddply.prototype = {
-		_reCalculate: function() {			
+		_reCalculate: function() {	
 			// reload data.
 			var dataObj = this.parent;
 			var labels = this.labels;
@@ -358,6 +359,7 @@ var ddply = {};
 					this[labels[i]].index = dataObj[labels[i]].index;
 				}
 			}
+			
 			this['frequency'] = new Array();
 			this['hasArr'] = new Array();
 			// binning continuous data.
@@ -365,6 +367,7 @@ var ddply = {};
 			var indexArr = make2DArr(labels.length);
 			var factoredArr = make2DArr(labels.length);
 			for(var i = 0 ; i < labels.length ; i ++){
+			//	alert(labels[i] + ", " + dataObj[labels[i]].isDiscrete);
 				if(dataObj[labels[i]].isDiscrete == undefined){
 					// find indexArr, factoredArr of continuous labels.
 					var temp = binning(dataObj[labels[i]], optionObj.bin);
@@ -379,7 +382,6 @@ var ddply = {};
 					}
 				}
 			}
-			
 			// calculate frequency
 			var tmpObj = new Object();
 			for(var i = 0 ; i < dataObj[labels[0]].length ; i ++){
@@ -406,10 +408,8 @@ var ddply = {};
 				}
 			}
 			
-			
 			// set the array of fields by using recursive function.
 			setNode(0, labels.length, labels, indexArr, tmpObj, this);
-			
 			// copy max and min value for matching with axis binnig.
 			for(var i = 0 ; i < labels.length ; i ++){
 				if(dataObj[labels[i]].max != undefined){
@@ -417,7 +417,6 @@ var ddply = {};
 					this[labels[i]].min = dataObj[labels[i]].min;
 				}
 			}
-			
 			var hasArr = this['hasArr'];
 			delete this['hasArr'];
 			// make event handle part

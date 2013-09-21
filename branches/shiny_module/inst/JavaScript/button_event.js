@@ -1,3 +1,4 @@
+//This JS file is not used.
 function addButtonEvent()
 {
 	var tableVisible = true;

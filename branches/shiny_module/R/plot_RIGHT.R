@@ -9,6 +9,13 @@
 #' @param type the type of plot. Currently, only "n", "b", "p", "l" are supported. See \code{\link{plot}} for more details.
 #'
 #' @export
+#' 
+#' @examples
+#' \donttest{
+#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p")}, Theoph)
+#' print(Obj)
+#' }
+#' ## End(Not run)
 
 plot_RIGHT <- function(form, data, type = "b") {
   
@@ -41,19 +48,19 @@ plot_RIGHT <- function(form, data, type = "b") {
   ## ---
   
   # Increment the number of axes:
-  .RIGHT$numAxis <<- .RIGHT$numAxis + 1
+  .RIGHT$numAxis <- .RIGHT$numAxis + 1
   
   # Add div in body:
-  .RIGHT$divArray <<- append(.RIGHT$divArray, 
-                             paste0('<div id="container', .RIGHT$numAxis,
-                                    '" oncontextmenu="return false;"></div>'))
+  .RIGHT$divArray <- append(.RIGHT$divArray, 
+                            paste0('<div id="container', .RIGHT$numAxis,
+                                   '" oncontextmenu="return false;"></div>'))
   
   # Add script in body:
-  .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
-                                paste0("var axis", .RIGHT$numAxis,
-                                       " = new Axis(", .RIGHT$numAxis, 
-                                       ", ", dataName,
-                                       ", '", axisName$x, "', '", axisName$y, "', {});"))
+  .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                               paste0("var axis", .RIGHT$numAxis,
+                                      " = new Axis(", .RIGHT$numAxis, 
+                                      ", ", dataName,
+                                      ", '", axisName$x, "', '", axisName$y, "', {});"))
   
   ## ---
   ## Plot lines if necessary:

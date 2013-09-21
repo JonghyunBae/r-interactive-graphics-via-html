@@ -13,7 +13,7 @@ addSource <- function(newSource = NULL) {
       stop("newSource should be a character vector.") 
     } # if
     
-    .RIGHT$sourceArray <<- append(.RIGHT$sourceArray, newSource) 
+    .RIGHT$sourceArray <- append(.RIGHT$sourceArray, newSource) 
     
   } # if
   
@@ -53,7 +53,7 @@ addLink <- function(newLink = NULL) {
       stop("newLink should be a character vector.") 
     } # if
     
-    .RIGHT$linkArray <<- append(.RIGHT$linkArray, newLink) 
+    .RIGHT$linkArray <- append(.RIGHT$linkArray, newLink) 
     
   } # if
   
@@ -78,11 +78,13 @@ createLink <- function(linkArray = NULL) {
 ## Create the head section with a title:
 ## ---
 
+#' @importFrom shiny tag
 createHead <- function(title) {
 
-  # CHECK (junghoon): do not use htmlEscape in the next version
-  # Escape the title using Shiny tags function:
-  title <- paste0("  <title>", shiny:::htmlEscape(title), "</title>")
+  # CHECK (junghoon): improve this later:
+  temp <- as.character(shiny::tag("title", title))
+  attributes(temp) <- NULL # remove all attributes
+  title <- paste0("  ", temp)
   
   meta <- '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
   

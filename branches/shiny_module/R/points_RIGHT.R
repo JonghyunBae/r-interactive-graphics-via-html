@@ -7,7 +7,7 @@
 #' 
 #' @export
 points_RIGHT <- function(form, data) {
-
+  
   ## ---
   ## Check input arguments:
   ## ---
@@ -27,7 +27,7 @@ points_RIGHT <- function(form, data) {
     dataName <- as.character(argArray$data) 
   } # if
   checkDataName(dataName)
-
+  
   # get is necessary in case a character string is given for data:
   dataArray <- get(dataName, envir = parent.frame())
   
@@ -42,14 +42,14 @@ points_RIGHT <- function(form, data) {
   ## ---
   
   # Increment the number of points:
-  .RIGHT$numPoints <<- .RIGHT$numPoints + 1
+  .RIGHT$numPoints <- .RIGHT$numPoints + 1
   
   # Add script in body:
-  .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
-                                paste0("var point", .RIGHT$numPoints,
-                                       " = new Dot(axis", .RIGHT$numAxis,
-                                       ", ", dataName,
-                                       ", '", axisName$x, "', '", axisName$y, "', {});"))
+  .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                               paste0("var point", .RIGHT$numPoints,
+                                      " = new Dot(axis", .RIGHT$numAxis,
+                                      ", ", dataName,
+                                      ", '", axisName$x, "', '", axisName$y, "', {});"))
   
   # Source dot.js in head:
   addSource(file.path(.RIGHT$libDir_RIGHT, "dot.js"))

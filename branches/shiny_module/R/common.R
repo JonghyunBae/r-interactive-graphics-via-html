@@ -1,4 +1,34 @@
-## Functions used by many other functions:
+## ---
+## Manipulate .RIGHT environment variable:
+## ---
+
+# This function is most useful for testing the code, making it possible to run both testthat and 
+# R CMD check while avoiding "cannot changee value of locked binding" error.
+
+# This function has side effects.
+clearRIGHT <- function() {
+  rm(list = ls(envir = .RIGHT), envir = .RIGHT)
+} # function clearRIGHT
+
+# This function has side effects.
+setRIGHT <- function(...) {
+  
+  varList <- list(...)
+  
+  nameArray <- names(varList)
+  if (is.null(nameArray) || any(nameArray == "")) {
+    stop("All arguments should have a name.")
+  } # if
+  
+  # CHECK (junghoon): is there a better way?
+  numVar <- length(nameArray)
+  for (iVar in 1:numVar) {
+    .RIGHT[[nameArray[iVar]]] <- varList[[iVar]] # note that <- is used instead of <<-
+  } # for
+  
+  invisible()
+  
+} # function setRIGHT
 
 ## ---
 ## Mark an object as character:

@@ -1,8 +1,8 @@
 ## RIGHT() that uses a special environment to evaluate the expressions:
 
-# CHECK (junghoon): is there a better way?
-# To avoid "no visible binding for '<<-' assignment to '.RIGHT'":
-.RIGHT <- NULL
+# CHECK (junghoon): should I use a reference class instead of .RIGHT?
+.RIGHT <- new.env(parent = emptyenv())
+# options(supportRIGHT = TRUE)
 
 # Environment used to collect all the necessary information to assemble the HTML file
 # that derives the RIGHT JavaScript API:
@@ -11,9 +11,9 @@
 #    http://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r
 # for more explanation.
 .onLoad <- function(libname, pkgname) {
-  
-  # CHECK (junghoon): should I use a reference class instead of .RIGHT?
-  assign(".RIGHT", new.env(), envir = parent.frame()) 
+
+  # CHECK (junghoon): is it necessary to do this here?
+#   .RIGHT <- new.env(parent = emptyenv())
   options(supportRIGHT = TRUE)
   
 } # function .onLoad
@@ -22,7 +22,7 @@
 initRIGHT <- function() {
   
   # Keep the location of the library:
-  libDir_RIGHT <- file.path(path.package("RIGHT"), "inst", "JavaScript")  
+  .RIGHT$libDir_RIGHT <- file.path(path.package("RIGHT"), "inst", "JavaScript")  
     
   # Script files always necessary:
   sourceArray <- c("kinetic-v4.6.0.js",
@@ -33,24 +33,26 @@ initRIGHT <- function() {
                    "callback.js",
                    "node_event.js",
                    "menu.js")
-  sourceArray <- file.path(libDir_RIGHT, sourceArray)
+  .RIGHT$sourceArray <- file.path(.RIGHT$libDir_RIGHT, sourceArray)
   
   # Css files always necessary:
   linkArray <- c("right.css")
-  linkArray <- file.path(libDir_RIGHT, linkArray)
+  .RIGHT$linkArray <- file.path(.RIGHT$libDir_RIGHT, linkArray)
   
-  .RIGHT <<- list2env(list(libDir_RIGHT = libDir_RIGHT,
-                           nameArray = c(), # keep variable names for checking
-                           sourceArray = sourceArray, # scripts to source
-                           linkArray = linkArray, # links for CSS
-                           divArray = c(), # div for plot layout
-                           scriptArray = c(), # JavaScript code
-                           numAxis = 0, # number of axis used
-                           numPoints = 0, # number of points objects
-                           numLines = 0, # number of lines objects
-                           numHist = 0,
-                           numPie = 0))
-                 
+  # Keep names of data.frame objects for checking:
+  .RIGHT$nameArray <- c()
+  
+  # Variables used to build the html file:
+  .RIGHT$divArray <- c()
+  .RIGHT$scriptArray <- c()
+  
+  # Variables used to track different plots:
+  .RIGHT$numAxis <- 0
+  .RIGHT$numPoints <- 0
+  .RIGHT$numLines <- 0
+  .RIGHT$numHist <- 0
+  .RIGHT$numPie <- 0
+                   
   invisible()
   
 } # function initRIGHT
@@ -128,7 +130,7 @@ RIGHT <- function(expr = {}, ...,
   addBlankLine()
 
   # Keep the name of the data.frame objects for checking:
-  .RIGHT$nameArray <<- dataArray 
+  .RIGHT$nameArray <- dataArray 
 
   ## ---
   ## Evaluate the given expression:

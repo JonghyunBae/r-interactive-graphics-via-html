@@ -1,9 +1,8 @@
 
-
 # Add blank script lines. This function has side effects:
 addBlankLine <- function(numLine = 1) {
   
-  .RIGHT$scriptArray <<- append(.RIGHT$scriptArray, rep("", numLine))
+  .RIGHT$scriptArray <- append(.RIGHT$scriptArray, rep("", numLine))
   
 } # function addBlankLine
 
@@ -18,7 +17,7 @@ prepareData <- function(dataList, dir = ".") {
   
   fileNameArray <- vector("character", numData)
   for (iData in 1:numData) {
-
+    
     fileNameArray[iData] <- paste0("_", nameArray[iData], ".csv")
     write.csv(dataList[[iData]], file = file.path(dir, fileNameArray[iData]), row.names = F)
     
@@ -30,15 +29,15 @@ prepareData <- function(dataList, dir = ".") {
 
 # Add JavsScript expressions to load data. This function has side effects:
 loadData <- function(nameArray = NULL, fileNameArray = paste0("_", nameArray, ".csv")) {
-
+  
   if (!is.null(nameArray)) {
     
     if (length(nameArray) != length(fileNameArray)) {
       stop("nameArray and fileNameArray should have the same length.")
     } # if
     
-    .RIGHT$scriptArray <<- append(.RIGHT$scriptArray, 
-                                  paste0(nameArray, ' = createMainStructure("', file.path("..", fileNameArray), '");')) 
+    .RIGHT$scriptArray <- append(.RIGHT$scriptArray, 
+                                 paste0(nameArray, ' = createMainStructure("', file.path("..", fileNameArray), '");')) 
     
   } # if
   
@@ -53,17 +52,17 @@ addEventTrigger <- function(numAxis = NULL) {
     return(NULL)
   } # if
   
-  .RIGHT$scriptArray <<- append(.RIGHT$scriptArray, 
-                                paste0("eventTrigger([", 
-                                       paste0(paste0("axis", 1:numAxis), collapse = ", "),
-                                       "]);"))
+  .RIGHT$scriptArray <- append(.RIGHT$scriptArray, 
+                               paste0("eventTrigger([", 
+                                      paste0(paste0("axis", 1:numAxis), collapse = ", "),
+                                      "]);"))
   
 } # function addEventTrigger
 
 # CHECK (junghoon): can these functions organized differently?
 # Create div block:
 createDiv <- function(divArray = NULL) {
-
+  
   if (is.null(divArray)) {
     return(NULL)
   } # if 

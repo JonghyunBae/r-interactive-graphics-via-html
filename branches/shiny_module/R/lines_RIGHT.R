@@ -7,7 +7,7 @@
 #' 
 #' @export
 lines_RIGHT <- function(form, data) {
-
+  
   ## ---
   ## Check input arguments:
   ##
@@ -29,7 +29,7 @@ lines_RIGHT <- function(form, data) {
     dataName <- as.character(argArray$data) 
   } # if
   checkDataName(dataName)
-
+  
   # get is necessary in case a character string is given for data:
   dataArray <- get(dataName, envir = parent.frame())
   
@@ -44,17 +44,17 @@ lines_RIGHT <- function(form, data) {
   ## ---
   
   # Increment the number of points:
-  .RIGHT$numLines <<- .RIGHT$numLines + 1
+  .RIGHT$numLines <- .RIGHT$numLines + 1
   
   # Add script in body:
-  .RIGHT$scriptArray <<- append(.RIGHT$scriptArray,
-                                c(paste0("var lineObj", .RIGHT$numLines,
-                                         " = new MakeLineObj(", dataName, 
-                                         ", '", axisName$x, "', '", axisName$y, "');"),
-                                  paste0("var line", .RIGHT$numLines,
-                                         " = new Line(axis", .RIGHT$numAxis,
-                                         ", lineObj", .RIGHT$numLines,
-                                         ", 'x1', 'x2', 'y1', 'y2', {});")))
+  .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                               c(paste0("var lineObj", .RIGHT$numLines,
+                                        " = new MakeLineObj(", dataName, 
+                                        ", '", axisName$x, "', '", axisName$y, "');"),
+                                 paste0("var line", .RIGHT$numLines,
+                                        " = new Line(axis", .RIGHT$numAxis,
+                                        ", lineObj", .RIGHT$numLines,
+                                        ", 'x1', 'x2', 'y1', 'y2', {});")))
   
   # Source dot.js in head:
   addSource(file.path(.RIGHT$libDir_RIGHT, "line.js"))

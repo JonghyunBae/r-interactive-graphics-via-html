@@ -5,7 +5,6 @@ function makeSearchButton(searchBoxIdString, mainArr)
 	
 	// to access mainArr from booleanSearch function later
 	window["mainArrOfSearch"+searchBoxId] = mainArr;
-	
 	// make form 
 	document.write("<div class=\"search_wrap\"><form id=\"searchForm");
 	document.write(searchBoxId);
@@ -150,9 +149,20 @@ function booleanSearch(searchBoxId, mainArr)
 	
 	// replace labelArr to mainArr[labelArr]
 	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
-	{
-		var searchStr = new RegExp(mainArr.labelArr[i], 'g'); // "g" means all search
-		inputStr = inputStr.replace(searchStr, "mainArr[\"" + mainArr.labelArr[i] + "\"][i]");		
+	{		
+		if(mainArr[mainArr.labelArr[i]].isDiscrete == undefined){//continuous
+			var searchStr = new RegExp(mainArr.labelArr[i], 'g'); // "g" means all search
+			inputStr = inputStr.replace(searchStr, "mainArr[\"" + mainArr.labelArr[i] + "\"][i]");		
+		}else{//discrete
+			var searchStr = new RegExp(mainArr.labelArr[i], 'g'); // "g" means all search
+			temp = new Array();
+			for(var j = 0 ; j < mainArr[mainArr.labelArr[i]].length ; j ++){
+				temp.push(mainArr[mainArr.labelArr[i]].index[mainArr[mainArr.labelArr[i]][j]]); 
+			}
+		//	alert(temp);			
+			inputStr = inputStr.replace(searchStr, "mainArr[\"" + mainArr.labelArr[i] + "\"][i]");		
+		}
+		
 	}
 	
 	//change [ans] to (ans)

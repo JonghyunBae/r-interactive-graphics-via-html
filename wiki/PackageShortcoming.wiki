@@ -10,7 +10,7 @@
   * subset =: select a subset to draw for points and lines 
 == !JavaScript code ==
  # Additional unit test.
- # Modify hide routine(CH knows it).
+ # send isHidden to server.R
 == Documentation ==
  # Add box documentaion.
 == Test ==

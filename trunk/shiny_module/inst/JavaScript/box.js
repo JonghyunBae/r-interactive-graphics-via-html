@@ -378,7 +378,7 @@ var Box = {};
 			this.node = new Array();
 			var cnt = 0;
 			for(var i = 0 ; i < median.length ; i ++){
-				if(!(x[i] == -1 || y[i] == -1)){
+				if(!(y[i] == -1)){
 					if(isOutlier[i] == false){
 						var IQR = q1[i] - q3[i];
 						var upFence = upperFence[i];
@@ -386,7 +386,7 @@ var Box = {};
 						var med = median[i];
 						this.node[cnt] =  new Kinetic.BoxWhisker({
 							name: i,
-							x: (axisObj.isXDiscrete == true) ?  x[i] : axisObj._getPixelX((axisObj.xMax - axisObj.xMin)/2),
+							x: (axisObj.isXDiscrete == true) ?  x[i] : axisObj._getPixelX((axisObj.xMax + axisObj.xMin)/2),
 							y:  y[i],
 							strokeWidth: 2,
 							width: width,

@@ -58,13 +58,28 @@ function hideSelected(Name)
 	for(var i = 0 ; i < rootObjArr.length ; i ++){
 		var tempData = make2DArr(rootObjArr[i].labelArr.length);
 		var labelArr = rootObjArr[i].labelArr;
+		var liveNumArr = new Array();
+		var deadNumArr = new Array();
 		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++){			
 			if(rootObjArr[i].$isSelected[j][0] == 0){
 				for(var t = 0 ; t < tempData.length ; t ++){
 					tempData[t].push(rootObjArr[i][labelArr[t]][j]);
 				}
+				liveNumArr.push(j);
+			}else{
+				deadNumArr.push(j);
 			}
 		}
+		// reset the isHiiden of mainArr. This calculation should be in front of resetting dataNumArr of mainArr.
+		for(var j = 0 ; j < deadNumArr.length ; j ++){
+			rootObjArr[i].$isHidden[rootObjArr[i].$dataNumArr[deadNumArr[j]]] = true;
+		}
+		// reset the dataNumArr of mainArr.
+		var tmp = new Array();
+		for(var j = 0 ; j < liveNumArr.length ; j ++){
+			tmp.push(rootObjArr[i].$dataNumArr[liveNumArr[j]]);
+		}
+		rootObjArr[i].$dataNumArr = tmp;		
 		// update dataField.
 		for(var j = 0 ; j < labelArr.length ; j ++){
 			for(var t = 0 ; t < tempData[j].length ; t ++){

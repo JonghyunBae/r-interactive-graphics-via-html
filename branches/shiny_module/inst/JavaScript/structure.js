@@ -98,7 +98,6 @@ function createMainStructure(fileName)
 	mainArr.child = null;
 	mainArr.$isSelected = isSelected;
 	mainArr.$ans = "undefined";
-	mainArr.$isHidden = new Array(isSelected.length);
 	for(var i = 0 ; i < mainArr.$isHidden ; i ++){
 		mainArr.$isHidden[i] = false;
 	}
@@ -122,6 +121,12 @@ function createMainStructure(fileName)
 		}else{
 			delete mainArr[labelArr[i]].isDiscrete;
 		}
+	}
+	// for hidden function.
+	mainArr.$OriginalDataLength = mainArr[labelArr[0]].length;
+	mainArr.$DataNumArr = new Array();
+	for(var i = 0 ; i < mainArr.$OriginalDataLength ; i ++){
+		mainArr.$DataNumArr[i] = i;
 	}
 	return mainArr;
 }

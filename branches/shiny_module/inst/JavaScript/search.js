@@ -127,10 +127,18 @@ function printAns(searchBoxId, mainArr)
 {
 	// save ans to ansShow in order to show it in label
 	var ansShow = mainArr.$ans;	   
+	var discreteCnt = 0;
+	
     for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
     {
-    	var tmpStr = "mainArr\[\""+mainArr.labelArr[i]+"\"]\[i\]";    
-	    ansShow = replaceAll(ansShow, tmpStr, mainArr.labelArr[i])
+    	if(mainArr[mainArr.labelArr[i]].isDiscrete == undefined){//continuous
+	    	var tmpStr = "mainArr\[\""+mainArr.labelArr[i]+"\"]\[i\]";    
+		    ansShow = replaceAll(ansShow, tmpStr, mainArr.labelArr[i]);
+    	}else{
+    		var tmpStr = "temp[\"" + discreteCnt + "\"][i]";
+    		ansShow = replaceAll(ansShow, tmpStr, mainArr.labelArr[i]);
+    		discreteCnt ++;
+    	}
     }
     
 	var tmpStr = '';	
@@ -147,6 +155,16 @@ function booleanSearch(searchBoxId, mainArr)
 	var inputStr = document.getElementsByName(searchIdString)[0].value;
 	var findingNumber = new Array();
 	
+	var discreteCnt = 0;
+	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
+	{		
+		if(mainArr[mainArr.labelArr[i]].isDiscrete == true){//continuous
+			discreteCnt++;
+		}
+	}
+	var temp = make2DArr(discreteCnt);
+	discreteCnt = 0;
+	
 	// replace labelArr to mainArr[labelArr]
 	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
 	{		
@@ -155,17 +173,14 @@ function booleanSearch(searchBoxId, mainArr)
 			inputStr = inputStr.replace(searchStr, "mainArr[\"" + mainArr.labelArr[i] + "\"][i]");		
 		}else{//discrete
 			var searchStr = new RegExp(mainArr.labelArr[i], 'g'); // "g" means all search
-			temp = new Array();
 			for(var j = 0 ; j < mainArr[mainArr.labelArr[i]].length ; j ++){
-				temp.push(mainArr[mainArr.labelArr[i]].index[mainArr[mainArr.labelArr[i]][j]]); 
+				temp[discreteCnt].push(mainArr[mainArr.labelArr[i]].index[mainArr[mainArr.labelArr[i]][j]]); 
 			}
-		//	alert(temp);			
-			inputStr = inputStr.replace(searchStr, "mainArr[\"" + mainArr.labelArr[i] + "\"][i]");		
+			inputStr = inputStr.replace(searchStr, "temp[\"" + discreteCnt + "\"][i]");
+			discreteCnt ++;
 		}
 		
 	}
-	
-	//change [ans] to (ans)
 	inputStr =inputStr.replace(/\[ans\]/gi, "("+mainArr.$ans+")"); 
 	
 	//current answer update.
@@ -173,7 +188,7 @@ function booleanSearch(searchBoxId, mainArr)
 	
 	// find node number which satisfies boolean condition
 	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
-	{		
+	{	
 		if(eval(inputStr)){			
 			findingNumber.push(i);
 		}

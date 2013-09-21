@@ -118,7 +118,6 @@ function clearSearchBox(searchBoxId)
 
 function addValueToSearchBox(label)
 {
-	alert(label);
     var textBox = document.getElementById("searchBox1");
     textBox.value = textBox.value + label;
 }
@@ -134,9 +133,22 @@ function booleanSearch(searchBoxId, mainArr)
 {
 	var searchIdString = "searchId" + searchBoxId;
 	var inputStr = document.getElementsByName(searchIdString)[0].value;
-	var findingNumber = [1, 2, 3, 5, 8];
+	var findingNumber = new Array();
 	
+	// replace labelArr to mainArr[labelArr]
+	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
+	{
+		var searchStr = new RegExp(mainArr.labelArr[i], 'g'); // "g" means all search
+		inputStr = inputStr.replace(searchStr, "mainArr[\"" + mainArr.labelArr[i] + "\"][i]");		
+	}
 	
+	// find node number which satisfies boolean condition
+	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
+	{		
+		if(eval(inputStr)){			
+			findingNumber.push(i);
+		}
+	}
 	
 	// root update
 	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
@@ -146,9 +158,9 @@ function booleanSearch(searchBoxId, mainArr)
 		}
 	}
 	for(var i = 0 ; i < findingNumber.length ; i ++){
-		mainArr.$isSelected[i][0] = 1;
-		for(var j = 1 ; j < mainArr.$isSelected[i].length ; j ++){
-			mainArr.$isSelected[i][j](1);
+		mainArr.$isSelected[findingNumber[i]][0] = 1;
+		for(var j = 1 ; j < mainArr.$isSelected[findingNumber[i]].length ; j ++){
+			mainArr.$isSelected[findingNumber[i]][j](1);
 		}
 	}
 	// table update

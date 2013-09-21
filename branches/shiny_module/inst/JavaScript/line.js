@@ -211,6 +211,9 @@ function lineUpdate(node)
 				}
 			}else if(selectOn == 1){	//select
 				node.setSelectCnt(node.getSelectCnt() + 1);
+				if(node.getSelectCnt() > 2){
+					node.setSelectCnt(2);
+				}
 				if(node.getSelected() == 0){
 					node.setStroke('red');
 					node.setOpacity(1);

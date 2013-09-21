@@ -18,4 +18,9 @@
   Function to create x-y scatter and line plots, including
   the axis.
 }
+\examples{
+obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"), Theoph)
+\donttest{print(obj)}
+\dontshow{cleanup(obj)}
+}
 

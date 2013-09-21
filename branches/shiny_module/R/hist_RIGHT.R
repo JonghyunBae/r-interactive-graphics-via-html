@@ -6,6 +6,11 @@
 #' @param data a data.frame object.
 #' 
 #' @export
+#' 
+#' @examples
+#' obj <- RIGHT(hist(Subject, Theoph), Theoph)
+#' \donttest{print(obj)}
+#' \dontshow{cleanup(obj)}
 hist_RIGHT <- function(x, data) {
   
   ## ---

@@ -68,9 +68,29 @@ initRIGHT <- function() {
 #' 
 #' @export
 #' @importFrom stringr str_trim
+#' 
+#' @examples
+#' library(ggplot2)
+#' 
+#' set.seed(123456)
+#' subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
+#' 
+#' # Create a loess line to overlay on the scatter plot:
+#' fitObj <- loess(price ~ carat, subArray)
+#' xRange <- range(subArray$carat)
+#' fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
+#' fitArray$price <- predict(fitObj, newdata = fitArray)
+#'
+#' obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
+#'               lines(price ~ carat, fitArray)
+#'               hist(color, subArray)
+#'               pie(cut, subArray)}, 
+#'              subArray, fitArray)
+#' \donttest{print(obj)}
+#' \dontshow{cleanup(obj)}
 RIGHT <- function(expr = {}, ..., 
                   title = "RIGHT: R Interactive Graphics via HTml",
-                  dir = tempfile(tmpdir = getwd()), # CHECK (junghoon): not used for now
+                  dir = tempfile(), 
                   isOverwrite = FALSE,
                   supportRIGHT = getOption("supportRIGHT")) {
   
@@ -105,11 +125,7 @@ RIGHT <- function(expr = {}, ...,
   initRIGHT()
 
   # Convert to absolute path:
-  # CHECK (junghoon): is this the best way?
-  dir <- stringr::str_trim(dir)
-  if (!stringr::str_detect(dir, "^[/\\\\]")) {
-    dir <- file.path(getwd(), dir)
-  } # if
+  dir <- normalizePath(dir, mustWork = FALSE)
   
   # Create a directory structure for all the necessary files for RIGHT:
   if (!file.exists(dir)) {

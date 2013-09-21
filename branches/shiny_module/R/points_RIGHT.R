@@ -6,6 +6,12 @@
 #' @param data a data.frame object.
 #' 
 #' @export
+#' 
+#' @examples
+#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+#'               points(conc ~ Time, Theoph)}, Theoph)
+#' \donttest{print(obj)}
+#' \dontshow{cleanup(obj)}
 points_RIGHT <- function(form, data) {
   
   ## ---

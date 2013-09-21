@@ -14,4 +14,10 @@
   points_RIGHT draws a sequence of points in the current
   axis.
 }
+\examples{
+obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+              points(conc ~ Time, Theoph)}, Theoph)
+\donttest{print(obj)}
+\dontshow{cleanup(obj)}
+}
 

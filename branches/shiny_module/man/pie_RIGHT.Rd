@@ -13,4 +13,9 @@
 \description{
   Draw a pie chart.
 }
+\examples{
+obj <- RIGHT(pie(Subject, Theoph), Theoph)
+\donttest{print(obj)}
+\dontshow{cleanup(obj)}
+}
 

@@ -5,21 +5,20 @@ var plotRadius = 2;
 function getNodeinfo(dataObj, id)
 {
 	var cnt = 0;
+	var info ='';
 	for(var name in dataObj){
-		if(cnt == 0){
-			if(!(name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
-				if(dataObj[name].isDiscrete == true){
-					var info =  name + ': ' + dataObj[name].index[dataObj[name][id]];
+		if(!(name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+			if(dataObj[name].isDiscrete == true){
+				if(cnt == 0){
+					info = name + ': ' + dataObj[name].index[dataObj[name][id]];
+					cnt ++;
 				}else{
-					var info =  name + ': ' + dataObj[name][id];
-				}
-			}
-				
-			cnt ++;
-		}else{
-			if(!(name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
-				if(dataObj[name].isDiscrete == true){
 					info = info + "\r\n" + name + ': ' + dataObj[name].index[dataObj[name][id]];
+				}					
+			}else{
+				if(cnt == 0){
+					info = name + ': ' + dataObj[name][id];
+					cnt ++;
 				}else{
 					info = info + "\r\n" + name + ': ' + dataObj[name][id];
 				}
@@ -33,7 +32,7 @@ function getFields(dataObj)
 {
 	var temp = new Array();
 	for(var name in dataObj){
-		if(!(name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+		if(!(name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
 			temp.push(name);
 		}
 	}

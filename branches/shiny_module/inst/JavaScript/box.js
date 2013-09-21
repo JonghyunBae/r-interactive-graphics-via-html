@@ -465,9 +465,8 @@ var Box = {};
             Kinetic.Shape.call(this, config);
             this.className = 'BoxWhisker';
         },
-        drawFunc: function(canvas) {
-            var context = canvas.getContext(),
-                width = this.getWidth(),
+        drawFunc: function(context) {
+            var width = this.getWidth(),
                 height = this.getHeight(),
                 upFence = this.getUpFence(),
                 loFence = this.getLoFence(),
@@ -481,7 +480,7 @@ var Box = {};
             context.moveTo(0, med);	// (0, relative median)
             context.lineTo(width, med); // (width, relative median)
             context.closePath();
-            canvas.fillStroke(this);
+            context.fillStrokeShape(this);
         }
     };
     Kinetic.Util.extend(Kinetic.BoxWhisker, Kinetic.Shape);    

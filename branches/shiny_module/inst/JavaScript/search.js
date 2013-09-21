@@ -1,9 +1,5 @@
-	var ans='';
-	var ansShow='';
-
 function makeSearchButton(searchBoxIdString, mainArr)
 {
-
 	//get searchBoxId from string
 	var searchBoxId=searchBoxIdString.slice(9);
 	
@@ -15,25 +11,29 @@ function makeSearchButton(searchBoxIdString, mainArr)
 	document.write(searchBoxId);
 	document.write("\">");
 	
-	// variable buttons update
+/*	// variable buttons update (omit this label because of auto-compelte function)
 	for(var i = 0; i < mainArr.labelArr.length ; i ++){
 		document.write("<a id=\"labelArr[");
 		document.write(i);
-		document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox('");
+		document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox(");
+		document.write(searchBoxId);
+		document.write(", '");
 		document.write(mainArr.labelArr[i]);
 		document.write("'); return false;\">");
 		document.write(mainArr.labelArr[i]);
 		document.write("</a>");	  
 	}
 	document.write("<br>");
-	
+*/	
 	// make answer button
 	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(");
 	document.write(searchBoxId);
 	document.write("); return false;\">Ans</a>");
 	
 	// make answer clear button
-	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\" ans=''; printClearAns(");
+	document.write("<a id=\"clearAnsId\" href=\"#\" class=\"ansButton\" onclick=\"printClearAns(");
+	document.write(searchBoxId);
+	document.write(", mainArrOfSearch");
 	document.write(searchBoxId);
 	document.write("); return false;\">Clr Ans</a>");
 	
@@ -54,15 +54,22 @@ function makeSearchButton(searchBoxIdString, mainArr)
 	document.write(searchBoxId);
 	document.write(", mainArrOfSearch");
 	document.write(searchBoxId);
-	document.write("); printAns(); return false;}};\"/>");
-	
+	document.write("); printAns(");
+	document.write(searchBoxId);
+	document.write(", mainArrOfSearch");
+	document.write(searchBoxId);
+	document.write("); return false;}};\"/>");	
 
 	// make search button
 	document.write("<a id=\"searchBtn\" href=\"#\" class=\"myButton\" onClick=\"booleanSearch(");
 	document.write(searchBoxId);
 	document.write(", mainArrOfSearch");
 	document.write(searchBoxId);
-	document.write("); printAns(); return false;\">Search</a>");
+	document.write("); printAns(");
+	document.write(searchBoxId);
+	document.write(", mainArrOfSearch");
+	document.write(searchBoxId);
+	document.write("); return false;\">Search</a>");
 	
 	// make clear button
 	document.write("<a id=\"clearBtn\" href=\"#\" class=\"myButton\" onClick=\"clearSearchBox(");
@@ -95,20 +102,19 @@ function makeSearchButton(searchBoxIdString, mainArr)
 
 function clearSearchBox(searchBoxId)
 {
-	//AllDeselect();
 	var textBox = document.getElementById("searchBox"+searchBoxId);
-	textBox.value = '';
-	//Table Update needed;  	
+	textBox.value = '';	
 }
-
-function addValueToSearchBox(label)
+/*//(omit this label because of auto-compelte function)
+function addValueToSearchBox(searchBoxId, label)
 {
-    var textBox = document.getElementById("searchBox1");
+    var textBox = document.getElementById("searchBox"+searchBoxId);
     textBox.value = textBox.value + label;
 }
-
-function printClearAns(searchBoxId)
+*/
+function printClearAns(searchBoxId, mainArr)
 {
+	mainArr.$ans = "undefined";
 	document.getElementById('label'+searchBoxId).innerHTML = "undefined";
 }
 
@@ -118,11 +124,19 @@ function addAnsToSearchBox(searchBoxId)
     textBox.value = textBox.value + "[ans]";
 }
 
-function printAns()
+function printAns(searchBoxId, mainArr)
 {
+	// save ans to ansShow in order to show it in label
+	var ansShow = mainArr.$ans;	   
+    for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
+    {
+    	var tmpStr = "mainArr\[\""+mainArr.labelArr[i]+"\"]\[i\]";    
+	    ansShow = replaceAll(ansShow, tmpStr, mainArr.labelArr[i])
+    }
+    
 	var tmpStr = '';	
 	tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.
-	document.getElementById('label1').innerHTML = tmpStr;
+	document.getElementById('label'+searchBoxId).innerHTML = tmpStr;
 	if(ansShow==''){		
 		printClearAns();
 	}
@@ -142,10 +156,10 @@ function booleanSearch(searchBoxId, mainArr)
 	}
 	
 	//change [ans] to (ans)
-	inputStr =inputStr.replace(/\[ans\]/gi, "("+ans+")"); 
+	inputStr =inputStr.replace(/\[ans\]/gi, "("+mainArr.$ans+")"); 
 	
 	//current answer update.
-	ans=inputStr; 
+	mainArr.$ans=inputStr; 
 	
 	// find node number which satisfies boolean condition
 	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
@@ -183,13 +197,6 @@ function booleanSearch(searchBoxId, mainArr)
 			childUpdate(mainArr.child[i], temp, 1, mainArr);
 		}
 	}	
-	// save ans to ansShow in order to show it in label
-	ansShow=ans;	   
-    for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
-    {
-    	var tmpStr = "mainArr\[\""+mainArr.labelArr[i]+"\"]\[i\]";    
-	    ansShow = replaceAll(ansShow, tmpStr, mainArr.labelArr[i])
-    }
 }
 
 // replace all string

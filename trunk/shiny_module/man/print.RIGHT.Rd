@@ -1,0 +1,16 @@
+\name{print.RIGHT}
+\alias{print.RIGHT}
+\title{Print RIGHT Object}
+\usage{
+  \method{print}{RIGHT} (x, ...)
+}
+\arguments{
+  \item{x}{RIGHT object.}
+
+  \item{...}{additional arguments affecting the summary
+  produced.}
+}
+\description{
+  Print RIGHT Object
+}
+

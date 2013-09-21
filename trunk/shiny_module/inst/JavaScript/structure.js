@@ -123,11 +123,13 @@ function createMainStructure(fileName)
 		}
 	}
 	// for hidden function.
-	mainArr.$OriginalDataLength = mainArr[labelArr[0]].length;
-	mainArr.$DataNumArr = new Array();
-	for(var i = 0 ; i < mainArr.$OriginalDataLength ; i ++){
-		mainArr.$DataNumArr[i] = i;
+	mainArr.$dataNumArr = new Array();
+	mainArr.$isHidden = new Array();
+	for(var i = 0 ; i < mainArr[labelArr[0]].length ; i ++){
+		mainArr.$dataNumArr[i] = i;
+		mainArr.$isHidden[i] = false;
 	}
+
 	return mainArr;
 }
 function createOffloadStructure()

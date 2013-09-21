@@ -1,0 +1,19 @@
+#summary List of problems/shortcomings that we should address, including code, documentation, and tests.
+
+== R code ==
+ # Modify directory path to solve problem(inst/Javascript -> Javascript).
+ # Add box plot.
+ # Add options.
+  * group =: to draw lines by group. a logical choice is Subject for Theoph.
+  * color =: change color by another variable for points, lines and hist
+  * col =: change base color for points and lines
+  * subset =: select a subset to draw for points and lines 
+== !JavaScript code ==
+ # Delete undefined in tooltip box when using ddply.
+ # delete kinetic 4.5.4 version, and update to kinetic 4.7.0 version(4.6.0 now).
+ # Additional unit test.
+ # Modify hide routine(CH knows it).
+== Documentation ==
+ # Add box documentaion.
+== Test ==
+ # Add box Test.

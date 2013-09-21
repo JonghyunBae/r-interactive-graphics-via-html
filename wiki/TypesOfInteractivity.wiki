@@ -29,7 +29,18 @@ Selected nodes can be hidden. Also, hidden nodes can be reset.
 == 4. Searching == 
 Nodes can be searched and selected with boolean statements using search box.
 
-<img src="http://thepotter.woobi.co.kr/img/search.PNG">
+ * Auto-complete is enabled for users' convenience.
+
+<img src="http://thepotter.woobi.co.kr/img/search01.PNG">
+
+ * Tye boolean statements, and it will select the nodes which satisfy the condition.
+
+<img src="http://thepotter.woobi.co.kr/img/search02.PNG">
+
+ * Recent boolean statements are saved in [ans], so you can re-use [ans] for further search.
+
+<img src="http://thepotter.woobi.co.kr/img/search03.PNG">
+
 
 == 5. Table == 
 Table shows all information about selected nodes.

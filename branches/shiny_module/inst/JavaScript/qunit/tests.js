@@ -1,4 +1,4 @@
-test("prettydate.format", function() {
+test("right.format", function() {
 	
 	/**  Test for get Data  **/
 	// get Data array component test.
@@ -31,10 +31,10 @@ test("prettydate.format", function() {
     
     /**  find max/min test **/
     function unitTest7(array, expected){
-    	equal(findMaxValue(array), expected);
+    	equal(findMaxMinValue(array).max, expected);
     }
     function unitTest8(array, expected){
-    	equal(findMinValue(array), expected);
+    	equal(findMaxMinValue(array).min, expected);
     }
     
     // get Data test

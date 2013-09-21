@@ -15,6 +15,30 @@
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
    * Discuss about Hardly Wickham's comments.
   # Use [https://github.com/douglascrockford/JSLint JSLint] or similar tool to ensure good coding style.
+  # *Code refine issue(updated: 9.21)*
+   # extract html generation code from "makeTable".
+   # delete use of global "!AllAxisObjArr".
+   # change use of axis id from 1 to container1.
+   # provide box-whisker with legend.
+   # legend structure(TBD with JH).
+   # search box.
+   # make event handle more convenient.
+   # design layout with "< div>" in html code.
+
+== 17SEP2013, 19SEP2013, 20SEP2013(temporary meetings) ==
+
+Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.
+
+  # Update from CH:
+   # basic box-whisker.
+   # fix some bugs with histogram.
+  # Update from TJ:
+   # make tutorial page.
+  # Update from JH:
+   # *upload package in CRAN(first cut).*
+  # To-do list
+   # design server offload system in javascript.
+   # add option in R side, and re-upload package.
 
 == 15SEP2013 ==
 

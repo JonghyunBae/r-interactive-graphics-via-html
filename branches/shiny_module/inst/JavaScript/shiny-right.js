@@ -7,23 +7,13 @@ rightOutputBinding.find = function(scope){
 rightOutputBinding.renderValue = function(el, data) {
 	if(cnt > 0){//if(data change)
 		cnt = 0;
-		if(data[0] != -1){
-			if(data[0] == 'first'){
-				//offload._run(data[2].x, data[2].y);
-				for(var i = 0 ; i < window.mainArr3.$isSelected.length ; i ++){
-					//alert(mainArr3.$isSelected[i]);
-					window.mainArr3.$isSelected[i](data[1]);
+		if(data[0] != -1){			
+			for(var i = 0 ; i < data.length ; i = i + 2){
+				for(var j = 0 ; j < window[data[i]].$isSelected.length ; j ++){
+					window[data[i]].$isSelected[j](data[i+1]);
 				}
-				//for(var i = 0 ; i < window[data[1]].$isSelected.length ; i ++){
-				//  window[data[1]].$isSelected(data[2]);
-				// }
-				//axisSaving1.getAxisObj(data[1])._drawRegression(data[2].x, data[2].y);
 			}
-		//	axisSaving1.getAxisObj(data[0])._drawRegression(data[1].xx, data[1].yy);
-				
-			//axis2._drawRegression(data[1].xx, data[1].yy);
-		//	objArr[data[0]-1].draw_regression(data[1], data[2].xx, data[2].yy);	
-		//	window.Shiny.onInputChange("start",-1);
+			window.Shiny.onInputChange("first",-1);
 		}
 	}
 	cnt ++;

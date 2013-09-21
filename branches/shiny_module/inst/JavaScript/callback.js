@@ -114,69 +114,6 @@ function resetSelected(Name)
 {
 	// refresh page.
 	window.top.location.reload();
-/*	var rootObjArr = new Array();
-	var axisArr = new Array();
-	// find all rootObj related with this Axis.
-	for(var i = 0 ; i < Name.graphObjArr.length ; i ++){
-		// get dataObj of each graph on the axis.
-		var temp = Name.graphObjArr[i].dataObj;
-		// find root.
-		while(temp.parent != null){
-			temp = temp.parent;
-		}
-		// save all rootObj in the rootObjArr.
-		for(var j = 0 ; j < rootObjArr.length ; j ++){
-			if(temp == rootObjArr[j]) // prevent duplicate.
-				break;
-		}
-		if(j == rootObjArr.length){
-			rootObjArr.push(temp);
-		}
-	}
-	
-	for(var i = 0 ; i < rootObjArr.length ; i ++){
-		// update dataField.
-		
-		var labelArr = rootObjArr[i].labelArr;
-
-		for(var j = 0 ; j < labelArr.length ; j ++){
-			alert(labelArr[j]);
-			alert(rootObjArr[i][labelArr[j]].index);
-			alert(rootObjArr[i][labelArr[j]]);
-			alert(rootObjArr[i][labelArr[j]].$Original);
-			for(var t = 0 ; t < rootObjArr[i][labelArr[j]].length ; t ++){
-				if(rootObjArr[i][labelArr[j]].isDiscrete == true){
-					rootObjArr[i][labelArr[j]][t] = rootObjArr[i][labelArr[j]].index.indexOf(rootObjArr[i][labelArr[j]].$Original[t]);
-				}else{
-					rootObjArr[i][labelArr[j]][t] = rootObjArr[i][labelArr[j]].$Original[t];
-				}				
-			}
-			for(t = t-1; t < rootObjArr[i][labelArr[j]].$Original.length ; t ++){
-				if(rootObjArr[i][labelArr[j]].isDiscrete == true){
-					rootObjArr[i][labelArr[j]].push(rootObjArr[i][labelArr[j]].index.indexOf(rootObjArr[i][labelArr[j]].$Original[t]));
-				}else{
-					rootObjArr[i][labelArr[j]].push(rootObjArr[i][labelArr[j]].$Original[t]);
-				}
-			}
-			alert('222');
-			alert(rootObjArr[i][labelArr[j]].isDiscrete);
-			alert(rootObjArr[i][labelArr[j]].index);
-			alert(rootObjArr[i][labelArr[j]]);
-		}		
-		// recalculate all children dataObj.
-		if(rootObjArr[i].child != null){
-			for(var j = 0 ; j < rootObjArr[i].child.length ; j ++){
-				childReCalculate(rootObjArr[i].child[j]);
-			}
-		}
-	}
-	// redraw all axis.
-	for(var i = 0 ; i < AllAxisObjArr.length ; i ++){
-		AllAxisObjArr[i]._reDraw();
-	}
-	eventTrigger(AllAxisObjArr);
-	// TODO: should call server offload!!
-	*/
 }
 
 

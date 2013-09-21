@@ -72,11 +72,10 @@
        </script>
         <script>
         // offload part.
-        var mainArr3 = createOffloadStructure(); // name of mainArr3 can ve changed.
-		var loffObj1 = new MakeLineObj_off(mainArr3, 'x', 'y'); // name of x, y can be changed.
+        var regArr = createOffloadStructure(); // name of mainArr3 can ve changed.
+		var loffObj1 = new MakeLineObj_off(regArr, 'xx', 'yy'); // name of x, y can be changed.
 		var loff1 = new Line_off(axis2, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
 		var loff2 = new Line_off(axis3, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
-		window['mainArr3'] = mainArr3;
 		//saveOffloadObjName(['mainArr3']);
         $(function() {
             setTimeout(function() {

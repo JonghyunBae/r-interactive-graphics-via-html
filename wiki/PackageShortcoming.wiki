@@ -9,8 +9,6 @@
   * col =: change base color for points and lines
   * subset =: select a subset to draw for points and lines 
 == !JavaScript code ==
- # Delete undefined in tooltip box when using ddply.
- # delete kinetic 4.5.4 version, and update to kinetic 4.7.0 version(4.6.0 now).
  # Additional unit test.
  # Modify hide routine(CH knows it).
 == Documentation ==

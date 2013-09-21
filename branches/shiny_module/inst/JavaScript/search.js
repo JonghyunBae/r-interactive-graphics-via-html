@@ -1,7 +1,9 @@
-function makeSearchButton(searchBoxIdString, mainArr)
-{
 	var ans='';
 	var ansShow='';
+
+function makeSearchButton(searchBoxIdString, mainArr)
+{
+
 	//get searchBoxId from string
 	var searchBoxId=searchBoxIdString.slice(9);
 	
@@ -91,23 +93,6 @@ function makeSearchButton(searchBoxIdString, mainArr)
 	document.write(");</script>");
 }
 
-	
-	
-function printAns()
-{
-	var tmpStr = '';	
-	tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.
-	document.getElementById('label1').innerHTML = tmpStr;
-	if(ansShow==''){		
-		printClearAns();
-	}
-}
-
-function printClearAns(searchBoxId)
-{
-	document.getElementById('label'+searchBoxId).innerHTML = "undefined";
-}
-
 function clearSearchBox(searchBoxId)
 {
 	//AllDeselect();
@@ -122,12 +107,26 @@ function addValueToSearchBox(label)
     textBox.value = textBox.value + label;
 }
 
+function printClearAns(searchBoxId)
+{
+	document.getElementById('label'+searchBoxId).innerHTML = "undefined";
+}
+
 function addAnsToSearchBox(searchBoxId)
 {
     var textBox = document.getElementById("searchBox"+searchBoxId);
     textBox.value = textBox.value + "[ans]";
 }
 
+function printAns()
+{
+	var tmpStr = '';	
+	tmpStr = ansShow.replace(/</g,'< ');//cannot understand why "<" do not work, "< " works.
+	document.getElementById('label1').innerHTML = tmpStr;
+	if(ansShow==''){		
+		printClearAns();
+	}
+}
 
 function booleanSearch(searchBoxId, mainArr)
 {
@@ -141,6 +140,12 @@ function booleanSearch(searchBoxId, mainArr)
 		var searchStr = new RegExp(mainArr.labelArr[i], 'g'); // "g" means all search
 		inputStr = inputStr.replace(searchStr, "mainArr[\"" + mainArr.labelArr[i] + "\"][i]");		
 	}
+	
+	//change [ans] to (ans)
+	inputStr =inputStr.replace(/\[ans\]/gi, "("+ans+")"); 
+	
+	//current answer update.
+	ans=inputStr; 
 	
 	// find node number which satisfies boolean condition
 	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
@@ -177,76 +182,20 @@ function booleanSearch(searchBoxId, mainArr)
 			var temp = mainArr.parentTOchild[i](findingNumber);
 			childUpdate(mainArr.child[i], temp, 1, mainArr);
 		}
-	}
-	
-	
-	
-	
-	/*
-	for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
-	{
-		var searchStr = new RegExp(mainArr.labelArr[i], 'gi'); // "g" means all search, "i" menas not-case-sensitive
-		//    var newStr = tempData[j][i].toString();
-		inputStr = inputStr.replace(searchStr, "tempData[" + i + "][i]");
-		//alert(inputStr);
-	 }
-	  //if "Time" is for "tempData[1][i]" and "labelArr[1]"    
-	//for example, "8<= Time && Time <=10" will be "8<=tempData[1][i] && tempData[1][i] <=10"
-	    	
-	    	inputStr =inputStr.replace(/\[ans\]/gi, "("+ans+")"); //If there is "[ans]", change it to (ans).
-	    	ans=inputStr; //current answer update.
-	    	
-
-	    	for(var i = 0 ; i < isSelected.length ; i++)
-	        {
-	    	    //    var tmpNameArr = new Array();
-	    		//    tmpNameArr = scatterData[i].name.split(',');   
-	    		//    alert("Please use given variables!");
-
-	    		if(eval(inputStr)){
-	    			if(isSelected[i][0] == 0)
-	    			{
-	    				for(var j = 1 ; j < isSelected[i].length ; j ++)
-	    				{
-	    					
-	    					isSelected[i][j](1);
-	    				}
-	    				isSelected[i][0] = 1;
-	    			}    	
-	       		}else{
-	       			if(isSelected[i][0] == 1)
-	    			{
-	    				for(var j = 1 ; j < isSelected[i].length ; j ++)
-	    				{
-	    					
-	    					isSelected[i][j](0);
-	    				}
-	    				isSelected[i][0] = 0;
-	    			}
-	       		}
-	    		
-	        }
-	    	addRow('dataTable');
-	    	refresh();
-	    	clearSearchBox();
-	    }
-	    ansShow=ans;
-	   
-	    for(var i=0; i<labelArr.length; i++)
-	    {
-		    var tmpStr = "tempData\\\["+i+"\\\]\\\[i\\\]";
-
-		    var searchStr1 =new RegExp( tmpStr, 'g'); // "g" means all search, "i" menas not-case-sensitive
-//	    var newStr = tempData[j][i].toString();
-			ansShow = ansShow.replace(searchStr1, labelArr[i]);
-			
-	    }    
-		//writeMsg(msgLayer);
-		//addRow('dataTable');
-		//saveWork();*/
+	}	
+	// save ans to ansShow in order to show it in label
+	ansShow=ans;	   
+    for(var i = 0 ; i < mainArr.labelArr.length ; i ++)
+    {
+    	var tmpStr = "mainArr\[\""+mainArr.labelArr[i]+"\"]\[i\]";    
+	    ansShow = replaceAll(ansShow, tmpStr, mainArr.labelArr[i])
+    }
 }
-///////////////////5<TIME ,,,,,,,bug found
 
+// replace all string
+function replaceAll(str, orginalStr, replacedStr){
+	return str.split(orginalStr).join(replacedStr);
+}
 
 //auto complete (Reference, http://jqueryui.com/autocomplete/#multiple)
 function autoComplete(searchBoxId, mainArr){
@@ -290,8 +239,6 @@ function autoComplete(searchBoxId, mainArr){
 	          }
 	        });
 	});	
-	
-	
-	
+
 }
 

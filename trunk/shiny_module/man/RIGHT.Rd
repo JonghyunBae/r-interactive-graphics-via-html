@@ -45,6 +45,7 @@ fitArray$price <- predict(fitObj, newdata = fitArray)
 obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
               lines(price ~ carat, fitArray)
               hist(color, subArray)
+              box(price ~ carat, subArray)
               pie(cut, subArray)},
              subArray, fitArray)
 \donttest{print(obj)}

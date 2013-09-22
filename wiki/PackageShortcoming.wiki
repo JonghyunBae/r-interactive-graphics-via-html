@@ -14,3 +14,6 @@
 == Documentation ==
  # Add box documentation.(Have been this done? -> check documentation part)
 == Test ==
+
+== Discuss ==
+ # How should we deal a legend option?

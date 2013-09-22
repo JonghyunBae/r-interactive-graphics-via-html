@@ -22,7 +22,7 @@
 initRIGHT <- function() {
   
   # Keep the location of the library:
-  .RIGHT$libDir_RIGHT <- file.path(path.package("RIGHT"), "inst", "JavaScript")  
+  .RIGHT$libDir_RIGHT <- system.file("JavaScript", package = "RIGHT")
     
   # Script files always necessary:
   sourceArray <- c("kinetic-v4.7.0.js",
@@ -82,14 +82,13 @@ initRIGHT <- function() {
 #' fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
 #' fitArray$price <- predict(fitObj, newdata = fitArray)
 #'
-#' obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
+#' \donttest{obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
 #'               lines(price ~ carat, fitArray)
 #'               hist(color, subArray)
 #                box(price ~ color, subArray)
 #'               pie(cut, subArray)}, 
-#'              subArray, fitArray)
+#'              subArray, fitArray)}
 #' \donttest{print(obj)}
-#' \dontshow{cleanup(obj)}
 RIGHT <- function(expr = {}, ..., 
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(), 

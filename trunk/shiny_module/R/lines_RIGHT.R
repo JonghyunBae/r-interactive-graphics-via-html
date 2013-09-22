@@ -8,11 +8,9 @@
 #' @export
 #' 
 #' @examples
-#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-#'               lines(conc ~ Time, Theoph)}, Theoph)
+#' \donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+#'               lines(conc ~ Time, Theoph)}, Theoph)}
 #' \donttest{print(obj)}
-#' \dontshow{cleanup(obj)}
-
 lines_RIGHT <- function(form, data, col = "n") {
   
   ## ---

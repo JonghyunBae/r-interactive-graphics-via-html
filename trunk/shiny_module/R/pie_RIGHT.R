@@ -8,9 +8,8 @@
 #' @export
 #' 
 #' @examples
-#' obj <- RIGHT(pie(Subject, Theoph), Theoph)
+#' \donttest{obj <- RIGHT(pie(Subject, Theoph), Theoph)}
 #' \donttest{print(obj)}
-#' \dontshow{cleanup(obj)}
 pie_RIGHT <- function(x, data) {
   
   ## ---

@@ -81,8 +81,7 @@ To draw basic box and whisker graph type:
 
 {{{
 > subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
-> RIGHT(box(price~color, subArray ), subArray , dir = "TEST")
-UNDER CONSTRUCTION UNDER CONSTRUCTION UNDER CONSTRUCTION
+> RIGHT(box(price ~ color, subArray ), subArray , dir = "TEST")
 }}}
 
 <img src="http://thepotter.woobi.co.kr/img/box_diamonds.PNG">

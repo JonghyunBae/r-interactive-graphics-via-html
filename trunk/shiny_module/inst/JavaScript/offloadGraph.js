@@ -1,6 +1,6 @@
 var MakeLineObj_off = {};
 (function() {
-	MakeLineObj_off = function(dataObj, xLabel, yLabel) {
+	MakeLineObj_off = function(dataObj, xLabel, yLabel, optionObj) {
 		if(dataObj.$readyState == false){
 			this.xLabel = xLabel;			
 			this.yLabel = yLabel;

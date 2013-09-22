@@ -2,6 +2,23 @@ var plotWidth = 300;  //default value for plot width
 var plotHeight = 300; //default value for plot height  
 var plotRadius = 2;
 
+function findSubSet(dataObj, labelArr, subSet)
+{
+	for(var i = 0 ; i < labelArr.length ; i ++){
+		if(dataObj[labelArr[i]].isDiscrete == undefined){
+			var searchStr = new RegExp(labelArr[i], 'g'); // "g" means all search
+    		subSet = subSet.replace(searchStr, "dataObj." + labelArr[i] + "[i]");
+		}else{
+			var searchStr = new RegExp(labelArr[i], 'g'); // "g" means all search
+    		subSet = subSet.replace(searchStr, "dataObj." + labelArr[i] + ".#[dataObj." + labelArr[i] + "[i]]");
+		}
+	}
+	var searchStr = new RegExp('#', 'g');
+	subSet = subSet.replace(searchStr, "index");
+	
+	return subSet;
+}
+
 function getNodeinfo(dataObj, id)
 {
 	var cnt = 0;

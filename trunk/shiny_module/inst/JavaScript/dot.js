@@ -35,25 +35,23 @@ var Dot = {};
 				}else{
 					this.baseColor = 'green';
 				}
+				
+				// find subSetting.				
+				if(optionObj.subSet != undefined && optionObj.subSet != 'n'){
+					var subSet = findSubSet(dataObj, dataObj.labelArr, optionObj.subSet);					
+				}else{
+					var subSet = -1;
+				}
+				this.subSet = subSet;
 			},
 			_draw: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				// get pixel values from axis
 				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
-				var labelArr = getFields(dataObj);
-				// find subSetting.
-				if(optionObj.subSet != undefined){
-					var subSet = optionObj.subSet;
-					for(var i = 0 ; i < labelArr.length ; i ++){
-			    		var searchStr = new RegExp(labelArr[i], 'g'); // "g" means all search
-			    		subSet = subSet.replace(searchStr, "dataObj." + labelArr[i] + "[i]");
-			    	}
-				}else{
-					var subSet = -1;
-				}
-				this.subSet = subSet;
+				var labelArr = getFields(dataObj);				
 				var cnt = 0;
+				var subSet = this.subSet;
 				this.node = new Array();
 				if(this.colorOn == true){
 					for(var i = 0 ; i < xArr.length ; i ++){						

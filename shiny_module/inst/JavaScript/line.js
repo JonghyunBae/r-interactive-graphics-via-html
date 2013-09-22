@@ -1,6 +1,6 @@
 var MakeLineObj = {};
 (function() {
-	MakeLineObj = function(dataObj, xLabel, yLabel) {
+	MakeLineObj = function(dataObj, xLabel, yLabel, optionObj) {
 		var temp = getFields(dataObj);
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;

@@ -18,7 +18,9 @@
   \item{dir}{directory name to store files used for the
   visualization. Temporary directory is created under the
   current working directory by default.}
-
+  
+  \item{col}{set the basic color of graph. 'green' by default.}
+  
   \item{isOverwrite}{rewrite exiting files if the directory
   name matches. FALSE by default.}
 

@@ -2,11 +2,11 @@
 \alias{box_RIGHT}
 \title{Box-whisker}
 \usage{
-  hist_RIGHT(x, data)
+  box_RIGHT(form, data)
 }
 \arguments{
-  \item{x}{variable name for which the box-whisker is
-  desired.}
+  \item{form}{a formula describing the x and y variables as
+  y ~ x.}
 
   \item{data}{a data.frame object.}
 }

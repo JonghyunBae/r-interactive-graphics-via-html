@@ -2,7 +2,6 @@
 
 == R code ==
  # Modify directory path to solve problem(inst/Javascript -> Javascript).
- # Add box plot.
  # Add options.
   * group =: to draw lines by group. a logical choice is Subject for Theoph.
   * color =: change color by another variable for points, lines and hist
@@ -12,6 +11,5 @@
  # Additional unit test.
  # send isHidden to server.R
 == Documentation ==
- # Add box documentaion.
+ # Add box documentaion.(is this done? -> check documentation part)
 == Test ==
- # Add box Test.

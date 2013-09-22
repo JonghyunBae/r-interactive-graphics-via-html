@@ -11,7 +11,7 @@
 #' obj <- RIGHT(box(Subject, Theoph), Theoph)
 #' \donttest{print(obj)}
 #' \dontshow{cleanup(obj)}
-box_RIGHT <- function(form, data) {
+box_RIGHT <- function(form, data, col = "n") {
   
   ## ---
   ## Check input arguments:
@@ -36,6 +36,9 @@ box_RIGHT <- function(form, data) {
   axisName <- checkFormula_xy(form) 
   checkAxisName(axisName$x, dataArray)
   checkAxisName(axisName$y, dataArray)
+  
+  # Set options (CH)
+  col <- paste0("'", col, "'")
   
   ## ---
   ## Create a box-whisker:
@@ -62,7 +65,7 @@ box_RIGHT <- function(form, data) {
                                  paste0("var box", .RIGHT$numBox,
                                         " = new Box(axis", .RIGHT$numAxis,
                                         ", boxObj", .RIGHT$numBox,
-                                        ", {});")))
+                                        ", ", createObject(baseColor = col, alwaysObject = TRUE), ");")))
   
   # Source box.js in head:
   addSource(file.path(.RIGHT$libDir_RIGHT, "box.js"))

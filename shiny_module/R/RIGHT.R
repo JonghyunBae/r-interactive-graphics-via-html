@@ -50,6 +50,7 @@ initRIGHT <- function() {
   .RIGHT$numAxis <- 0
   .RIGHT$numPoints <- 0
   .RIGHT$numLines <- 0
+  .RIGHT$numBox <- 0
   .RIGHT$numHist <- 0
   .RIGHT$numPie <- 0
                    
@@ -84,6 +85,7 @@ initRIGHT <- function() {
 #' obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
 #'               lines(price ~ carat, fitArray)
 #'               hist(color, subArray)
+#                box(price ~ color, subArray)
 #'               pie(cut, subArray)}, 
 #'              subArray, fitArray)
 #' \donttest{print(obj)}
@@ -158,6 +160,7 @@ RIGHT <- function(expr = {}, ...,
                                     points = points_RIGHT,
                                     lines = lines_RIGHT,
                                     hist = hist_RIGHT,
+                                    box = box_RIGHT,
                                     pie = pie_RIGHT))
 
   # Add event handler:

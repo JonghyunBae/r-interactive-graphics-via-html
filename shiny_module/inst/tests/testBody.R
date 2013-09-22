@@ -92,12 +92,12 @@ test_that("Test event trigger script generation", {
   
   addEventTrigger(1)
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   "eventTrigger([axis1]);")
+                   "var AllAxisObjArr = [axis1]; eventTrigger(AllAxisObjArr);")
   
   addEventTrigger(3)
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   c("eventTrigger([axis1]);", 
-                     "eventTrigger([axis1, axis2, axis3]);"))
+                   c("var AllAxisObjArr = [axis1]; eventTrigger(AllAxisObjArr);", 
+                     "var AllAxisObjArr = [axis1, axis2, axis3]; eventTrigger(AllAxisObjArr);"))
   
 }) # test_that
 

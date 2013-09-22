@@ -53,9 +53,9 @@ addEventTrigger <- function(numAxis = NULL) {
   } # if
   
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray, 
-                               paste0("eventTrigger([", 
+                               paste0("var AllAxisObjArr = [", 
                                       paste0(paste0("axis", 1:numAxis), collapse = ", "),
-                                      "]);"))
+                                      "]; eventTrigger(AllAxisObjArr);"))
   
 } # function addEventTrigger
 

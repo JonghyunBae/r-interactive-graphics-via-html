@@ -55,7 +55,7 @@ Read more about [TypesOfInteractivity types of supported interactivity] and [Plo
 To draw basic scatter graph type:
 
 {{{
-> RIGHT(plot(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
+> RIGHT(plot(price ~ carat, diamonds, type="p"), diamonds, dir = "TEST")
 }}}
 
 <img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
@@ -95,7 +95,7 @@ To draw basic line graph type:
 
 {{{
 > subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
-> RIGHT(lines(price~carat, subArray, type= "l"), subArray, dir = "TEST")
+> RIGHT(lines(price ~ carat, subArray, type= "l"), subArray, dir = "TEST")
 }}}
 
 <img src="http://thepotter.woobi.co.kr/img/line_diamonds.PNG">

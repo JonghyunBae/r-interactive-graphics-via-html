@@ -10,7 +10,7 @@ Since RIGHT syntax is based on R-basic graphic, even beginners can use RIGHT pac
 For example, in original R, you can draw basic scatter grpahs like below.
 
 {{{
-> plot(price~carat, diamonds, type="p")
+> plot(price ~ carat, diamonds, type="p")
 }}}
  
 And it will show like below graph. 

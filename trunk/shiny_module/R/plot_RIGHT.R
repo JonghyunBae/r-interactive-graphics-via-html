@@ -15,7 +15,7 @@
 #' \donttest{print(obj)}
 #' \dontshow{cleanup(obj)}
 
-plot_RIGHT <- function(form, data, type = "b") {
+plot_RIGHT <- function(form, data, type = "b", col = "n") {
   
   ## ---
   ## Check input arguments:
@@ -66,7 +66,7 @@ plot_RIGHT <- function(form, data, type = "b") {
 
   # CHECK (junghoon): refine this to support type == "c" as well.
   if (type == "l" || type == "b") {
-    lines_RIGHT(form, char(dataName))
+    lines_RIGHT(form, char(dataName), col)
   } # if
   
   ## ---
@@ -74,7 +74,7 @@ plot_RIGHT <- function(form, data, type = "b") {
   ## ---
   
   if (type == "p" || type == "b") {
-    points_RIGHT(form, char(dataName))
+    points_RIGHT(form, char(dataName), col)
   } # if
   
   invisible()

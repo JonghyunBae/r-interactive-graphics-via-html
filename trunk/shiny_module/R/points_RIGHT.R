@@ -12,7 +12,7 @@
 #'               points(conc ~ Time, Theoph)}, Theoph)
 #' \donttest{print(obj)}
 #' \dontshow{cleanup(obj)}
-points_RIGHT <- function(form, data) {
+points_RIGHT <- function(form, data, col = "n") {
   
   ## ---
   ## Check input arguments:
@@ -43,6 +43,9 @@ points_RIGHT <- function(form, data) {
   checkAxisName(axisName$x, dataArray)
   checkAxisName(axisName$y, dataArray)
   
+  # Set options (CH)
+  col <- paste0("'", col, "'")
+  
   ## ---
   ## Plot points:
   ## ---
@@ -55,7 +58,8 @@ points_RIGHT <- function(form, data) {
                                paste0("var point", .RIGHT$numPoints,
                                       " = new Dot(axis", .RIGHT$numAxis,
                                       ", ", dataName,
-                                      ", '", axisName$x, "', '", axisName$y, "', {});"))
+                                      ", '", axisName$x, "', '", axisName$y, "', ",
+                                      createObject(baseColor = col, alwaysObject = TRUE) ,");"))
   
   # Source dot.js in head:
   addSource(file.path(.RIGHT$libDir_RIGHT, "dot.js"))

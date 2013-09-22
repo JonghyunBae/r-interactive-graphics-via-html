@@ -55,7 +55,7 @@ test_that("Check script generation", {
                                     '<div id="container2" oncontextmenu="return false;"></div>'))
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});", 
                                        "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});",
-                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});"))
+                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {baseColor: 'n'});"))
   
   plot_RIGHT(conc ~ Time, Theoph, type = "l")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
@@ -67,10 +67,10 @@ test_that("Check script generation", {
                                     '<div id="container3" oncontextmenu="return false;"></div>'))
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});", 
                                        "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});",
-                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});",
+                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {baseColor: 'n'});",
                                        "var axis3 = new Axis(3, Theoph, 'Time', 'conc', {});",
                                        "var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
+                                       "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: 'n'});"))
   
   plot_RIGHT(conc ~ Time, Theoph, type = "b")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
@@ -83,13 +83,13 @@ test_that("Check script generation", {
                                     '<div id="container4" oncontextmenu="return false;"></div>'))
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});", 
                                        "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});",
-                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});",
+                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {baseColor: 'n'});",
                                        "var axis3 = new Axis(3, Theoph, 'Time', 'conc', {});",
                                        "var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
+                                       "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: 'n'});",
                                        "var axis4 = new Axis(4, Theoph, 'Time', 'conc', {});",
                                        "var lineObj2 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line2 = new Line(axis4, lineObj2, 'x1', 'x2', 'y1', 'y2', {});",
-                                       "var point2 = new Dot(axis4, Theoph, 'Time', 'conc', {});"))
+                                       "var line2 = new Line(axis4, lineObj2, 'x1', 'x2', 'y1', 'y2', {baseColor: 'n'});",
+                                       "var point2 = new Dot(axis4, Theoph, 'Time', 'conc', {baseColor: 'n'});"))
   
 }) # test_that

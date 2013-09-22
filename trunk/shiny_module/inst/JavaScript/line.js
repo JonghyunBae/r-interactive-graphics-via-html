@@ -96,7 +96,7 @@ var Line = {};
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
 				// set the base color.
-				if(optionObj.baseColor != undefined){
+				if(optionObj.baseColor != undefined && optionObj.baseColor != 'n'){
 					this.baseColor = optionObj.baseColor;
 				}else{
 					this.baseColor = 'black';

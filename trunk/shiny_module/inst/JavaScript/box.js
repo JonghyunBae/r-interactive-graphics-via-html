@@ -356,7 +356,7 @@ var Box = {};
 			this.graphId = axisObj.numberOfGraph;
 			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 			// set the base color.
-			if(optionObj.baseColor != undefined){
+			if(optionObj.baseColor != undefined && optionObj.baseColor != 'n'){
 				this.baseColor = optionObj.baseColor;
 			}else{
 				this.baseColor = 'green';

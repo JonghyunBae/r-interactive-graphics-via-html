@@ -36,7 +36,7 @@ test_that("Check script generation", {
   expect_identical(temp$scriptArray, 
                    c("var boxObj1 = new MakeBoxObj(Theoph, 'Subject', 'conc', {});",
                      "var axis1 = new Axis(1, boxObj1, 'Subject', 'conc', {});",
-                     "var box1 = new Box(axis1, boxObj1, {});"))
+                     "var box1 = new Box(axis1, boxObj1, {baseColor: 'n'});"))
   expect_true(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
   
 }) # test_that

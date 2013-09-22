@@ -42,16 +42,16 @@ test_that("Check script generation", {
   expect_identical(temp$numLines, 1)
   expect_identical(temp$scriptArray, 
                    c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                     "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
+                     "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: 'n'});"))
   expect_true(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
   
   lines_RIGHT(conc ~ Time, "Theoph")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numLines, 2)
   expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
+                                       "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: 'n'});",
                                        "var lineObj2 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line2 = new Line(axis1, lineObj2, 'x1', 'x2', 'y1', 'y2', {});"))
+                                       "var line2 = new Line(axis1, lineObj2, 'x1', 'x2', 'y1', 'y2', {baseColor: 'n'});"))
   expect_true(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
 
 }) # test_that

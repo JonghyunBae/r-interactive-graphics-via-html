@@ -28,6 +28,13 @@ var Bar = {};
 					this.colorOn = false;
 				}
 				this.colorLabel = legendLabel;
+				
+				// set the base color.
+				if(optionObj.baseColor != undefined && optionObj.baseColor != 'n'){
+					this.baseColor = optionObj.baseColor;
+				}else{
+					this.baseColor = 'green';
+				}
 			},
 			
 			_checkStacking: function(axisObj, dataObj, xLabel, yLabel) {
@@ -117,8 +124,8 @@ var Bar = {};
 									y: yArr[i],
 									width: this.barWidth,
 									height: axisObj.height + axisObj.plotYMargin - yArr[i],
-									stroke: 'green',
-									fill: 'green',
+									stroke: this.baseColor,
+									fill: this.baseColor,
 									selected: 0,
 									selectCnt : 0,
 									opacity: 0.5,

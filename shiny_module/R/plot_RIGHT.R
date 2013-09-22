@@ -11,10 +11,8 @@
 #' @export
 #' 
 #' @examples
-#' obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"), Theoph)
+#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"), Theoph)}
 #' \donttest{print(obj)}
-#' \dontshow{cleanup(obj)}
-
 plot_RIGHT <- function(form, data, type = "b", col = "n") {
   
   ## ---

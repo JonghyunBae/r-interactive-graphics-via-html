@@ -8,9 +8,8 @@
 #' @export
 #' 
 #' @examples
-#' obj <- RIGHT(box(Subject, Theoph), Theoph)
+#' \donttest{obj <- RIGHT(box(Subject, Theoph), Theoph)}
 #' \donttest{print(obj)}
-#' \dontshow{cleanup(obj)}
 box_RIGHT <- function(form, data, col = "n") {
   
   ## ---

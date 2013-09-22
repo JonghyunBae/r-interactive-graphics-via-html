@@ -6,7 +6,8 @@
   * group =: to draw lines by group. a logical choice is Subject for Theoph.
   * color =: change color by another variable for points, lines and hist
   * col =: change base color for points and lines(done)
-  * subset =: select a subset to draw for points and lines 
+  * subset =: select a subset to draw for points and lines
+ # histogram stacking check. Is it possible to draw a stacking histogram?
 == !JavaScript code ==
  # Additional unit test.
  # send isHidden to server.R

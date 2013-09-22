@@ -20,7 +20,7 @@ And it will show like below graph.
 
 Now, what you need to get our RIGHT graph is just wrapping with RIGHT bracket.
 {{{
-> RIGHT(plot(price~carat, diamonds, type="p"), diamonds, dir = "TEST")
+> RIGHT(plot(price ~ carat, diamonds, type="p"), diamonds, dir = "TEST")
 }}}
 
 Finally you can get the exactly same graph, but beautiful and interactive one, on your default browser!

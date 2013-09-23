@@ -32,4 +32,4 @@ Collate:
     'lines_RIGHT.R'
     'pie_RIGHT.R'
     'hist_RIGHT.R'
-    'box_RIGHT.R'
+    'boxplot_RIGHT.R'

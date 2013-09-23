@@ -4,14 +4,17 @@
 #' 
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
+#' @param col color of the points. The default is black.
+#' 
+#' @seealso \code{\link{points}}
 #' 
 #' @export
 #' 
 #' @examples
-#' \donttestobj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+#' \donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
 #'               points(conc ~ Time, Theoph)}, Theoph)}
 #' \donttest{print(obj)}
-points_RIGHT <- function(form, data, col = "n") {
+points_RIGHT <- function(form, data, col = "black") {
   
   ## ---
   ## Check input arguments:
@@ -41,9 +44,6 @@ points_RIGHT <- function(form, data, col = "n") {
   axisName <- checkFormula_xy(form)
   checkAxisName(axisName$x, dataArray)
   checkAxisName(axisName$y, dataArray)
-  
-  # Set options (CH)
-  col <- paste0("'", col, "'")
   
   ## ---
   ## Plot points:

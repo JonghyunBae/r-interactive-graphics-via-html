@@ -1,21 +1,25 @@
-\name{box_RIGHT}
-\alias{box_RIGHT}
+\name{boxplot_RIGHT}
+\alias{boxplot_RIGHT}
 \title{Box-whisker}
 \usage{
-  box_RIGHT(form, data)
+  boxplot_RIGHT(form, data, col = "black")
 }
 \arguments{
   \item{form}{a formula describing the x and y variables as
   y ~ x.}
 
   \item{data}{a data.frame object.}
+
+  \item{col}{color of the boxes. The default is black.}
 }
 \description{
   Draw a box-whisker of the given data values.
 }
 \examples{
-obj <- RIGHT(box(conc ~ Subject, Theoph), Theoph)
+\donttest{obj <- RIGHT(boxplot(Subject, Theoph), Theoph)}
 \donttest{print(obj)}
-\dontshow{cleanup(obj)}
+}
+\seealso{
+  \code{\link{boxplot}}
 }
 

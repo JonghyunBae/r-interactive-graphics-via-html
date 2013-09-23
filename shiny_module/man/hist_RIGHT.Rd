@@ -14,8 +14,10 @@
   Draw a histogram of the given data values.
 }
 \examples{
-obj <- RIGHT(hist(Subject, Theoph), Theoph)
+\donttest{obj <- RIGHT(hist(Subject, Theoph), Theoph)}
 \donttest{print(obj)}
-\dontshow{cleanup(obj)}
+}
+\seealso{
+  \code{\link{hist}}
 }
 

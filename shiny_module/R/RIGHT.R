@@ -85,7 +85,7 @@ initRIGHT <- function() {
 #' \donttest{obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
 #'               lines(price ~ carat, fitArray)
 #'               hist(color, subArray)
-#                box(price ~ color, subArray)
+#                boxplot(price ~ color, subArray)
 #'               pie(cut, subArray)}, 
 #'              subArray, fitArray)}
 #' \donttest{print(obj)}
@@ -159,7 +159,7 @@ RIGHT <- function(expr = {}, ...,
                                     points = points_RIGHT,
                                     lines = lines_RIGHT,
                                     hist = hist_RIGHT,
-                                    box = box_RIGHT,
+                                    boxplot = boxplot_RIGHT,
                                     pie = pie_RIGHT))
 
   # Add event handler:
@@ -194,6 +194,10 @@ RIGHT <- function(expr = {}, ...,
 #' 
 #' @method print RIGHT
 #' @export
+#' 
+#' @examples
+#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
+#' \donttest{print(obj)}
 print.RIGHT <- function(x, ...) {
   
   fileName_index <- file.path(x$dir, "www", "index.html")
@@ -217,6 +221,10 @@ print.RIGHT <- function(x, ...) {
 #' 
 #' @method summary RIGHT
 #' @export
+#' 
+#' @examples
+#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
+#' \donttest{summary(obj)}
 summary.RIGHT <- function(object, ...) {
   
   # CHECK: improve this?
@@ -229,10 +237,14 @@ summary.RIGHT <- function(object, ...) {
 #' @param obj RIGHT object.
 #' 
 #' @export
-cleanup <- function(obj) {
+#' 
+#' @examples
+#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
+#' \donttest{clean(obj)}
+clean <- function(obj) {
   
   # CHECK (junghoon): is there a way to tightly integrate this with rm()?  
   # CHECK (junghoon): more sophisticated cleanup is necessary.
   unlink(obj$dir, recursive = TRUE)
   
-} # function cleanup.RIGHT
+} # function clean

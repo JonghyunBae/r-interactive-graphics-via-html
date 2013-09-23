@@ -14,8 +14,10 @@
   Draw a pie chart.
 }
 \examples{
-obj <- RIGHT(pie(Subject, Theoph), Theoph)
+\donttest{obj <- RIGHT(pie(Subject, Theoph), Theoph)}
 \donttest{print(obj)}
-\dontshow{cleanup(obj)}
+}
+\seealso{
+  \code{\link{pie}}
 }
 

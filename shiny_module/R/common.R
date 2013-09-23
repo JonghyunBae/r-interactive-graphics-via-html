@@ -118,6 +118,11 @@ createArray <- function(valueArray = NULL, alwaysArray = FALSE) {
       stop("valueArray should be an atomic vector.")
     } # if
     
+    # Surround characters with single quotes:
+    if (is.character(valueArray)) {
+      valueArray <- paste0("'", valueArray, "'")
+    } # if
+    
     if (length(valueArray) == 1 && alwaysArray == FALSE) {
       returnArray <- as.character(valueArray)
     } else {

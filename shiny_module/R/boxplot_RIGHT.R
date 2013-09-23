@@ -2,15 +2,18 @@
 #' 
 #' @description Draw a box-whisker of the given data values.
 #' 
-#' @param x variable name for which the box-whisker is desired.
+#' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
+#' @param col color of the boxes. The default is black.
+#' 
+#' @seealso \code{\link{boxplot}}
 #' 
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(box(Subject, Theoph), Theoph)}
+#' \donttest{obj <- RIGHT(boxplot(Subject, Theoph), Theoph)}
 #' \donttest{print(obj)}
-box_RIGHT <- function(form, data, col = "n") {
+boxplot_RIGHT <- function(form, data, col = "black") {
   
   ## ---
   ## Check input arguments:
@@ -35,9 +38,6 @@ box_RIGHT <- function(form, data, col = "n") {
   axisName <- checkFormula_xy(form) 
   checkAxisName(axisName$x, dataArray)
   checkAxisName(axisName$y, dataArray)
-  
-  # Set options (CH)
-  col <- paste0("'", col, "'")
   
   ## ---
   ## Create a box-whisker:
@@ -69,4 +69,4 @@ box_RIGHT <- function(form, data, col = "n") {
   # Source box.js in head:
   addSource(file.path(.RIGHT$libDir_RIGHT, "box.js"))
   
-} # function box_RIGHT
+} # function boxplot_RIGHT

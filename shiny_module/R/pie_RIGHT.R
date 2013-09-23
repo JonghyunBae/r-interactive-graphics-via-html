@@ -5,6 +5,8 @@
 #' @param x variable name for which the histogram is desired.
 #' @param data a data.frame object.
 #'
+#' @seealso \code{\link{pie}}
+#' 
 #' @export
 #' 
 #' @examples

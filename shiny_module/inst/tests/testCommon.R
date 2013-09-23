@@ -149,10 +149,11 @@ test_that("check whether arrays are properly surrounded with []", {
 
 test_that("test createArray() for various types", {
   
-  expect_identical(createArray(c("a", "B", "C")), "[a, B, C]")
+  expect_identical(createArray(c("a", "B", "C")), "['a', 'B', 'C']")
   expect_identical(createArray(c(TRUE, FALSE, TRUE)), "[true, false, true]")
   expect_identical(createArray(c(F, T, F)), "[false, true, false]")
-  expect_identical(createArray(as.factor(c(1, 2, 3))), "[1, 2, 3]")
+  expect_identical(createArray(as.factor(c("a", "B", "C"))), "['a', 'B', 'C']")
+  expect_identical(createArray(as.factor(c(1, 2, 3))), "['1', '2', '3']") # CHECK (junghoon): is this the right behavior?
   
 }) # test_that
 
@@ -220,9 +221,10 @@ test_that("check whether arrays are properly surrounded with [] in objects", {
 # Check the use of createArray:
 test_that("check whether various types are supported in objects", {
   
-  expect_identical(createObject(a = c("a", "B", "C")), "{a: [a, B, C]}")
+  expect_identical(createObject(a = c("a", "B", "C")), "{a: ['a', 'B', 'C']}")
   expect_identical(createObject(a = c(TRUE, FALSE, TRUE)), "{a: [true, false, true]}")
   expect_identical(createObject(a = c(F, T, F)), "{a: [false, true, false]}")
-  expect_identical(createObject(a = as.factor(c(1, 2, 3))), "{a: [1, 2, 3]}")
+  expect_identical(createObject(a = as.factor(c("a", "B", "C"))), "{a: ['a', 'B', 'C']}")
+  expect_identical(createObject(a = as.factor(c(1, 2, 3))), "{a: ['1', '2', '3']}") # CHECK (junghoon): is this the right behavior?
   
 }) # test_that

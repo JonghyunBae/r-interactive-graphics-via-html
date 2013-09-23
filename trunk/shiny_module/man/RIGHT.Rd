@@ -18,9 +18,7 @@
   \item{dir}{directory name to store files used for the
   visualization. Temporary directory is created under the
   current working directory by default.}
-  
-  \item{col}{set the basic color of graph. 'green' by default.}
-  
+
   \item{isOverwrite}{rewrite exiting files if the directory
   name matches. FALSE by default.}
 
@@ -44,13 +42,11 @@ xRange <- range(subArray$carat)
 fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
 fitArray$price <- predict(fitObj, newdata = fitArray)
 
-obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
+\donttest{obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
               lines(price ~ carat, fitArray)
               hist(color, subArray)
-              box(price ~ carat, subArray)
               pie(cut, subArray)},
-             subArray, fitArray)
+             subArray, fitArray)}
 \donttest{print(obj)}
-\dontshow{cleanup(obj)}
 }
 

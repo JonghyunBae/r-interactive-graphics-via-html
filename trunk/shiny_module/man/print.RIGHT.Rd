@@ -13,4 +13,8 @@
 \description{
   Print RIGHT Object
 }
+\examples{
+\donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
+\donttest{print(obj)}
+}
 

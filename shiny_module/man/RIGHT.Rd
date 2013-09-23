@@ -36,17 +36,17 @@ library(ggplot2)
 set.seed(123456)
 subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
 
-# Create a loess line to overlay on the scatter plot:
 fitObj <- loess(price ~ carat, subArray)
 xRange <- range(subArray$carat)
 fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
 fitArray$price <- predict(fitObj, newdata = fitArray)
 
 \donttest{obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
-              lines(price ~ carat, fitArray)
-              hist(color, subArray)
-              pie(cut, subArray)},
-             subArray, fitArray)}
+                        lines(price ~ carat, fitArray)
+                        hist(color, subArray)
+                        boxplot(price ~ color, subArray)
+                        pie(cut, subArray)},
+                       subArray, fitArray)}
 \donttest{print(obj)}
 }
 

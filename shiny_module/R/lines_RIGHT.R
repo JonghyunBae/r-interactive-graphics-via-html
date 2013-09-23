@@ -4,7 +4,7 @@
 #' 
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
-#' @param col color of the boxes. The default is black.
+#' @param col color of the boxes. 
 #'
 #' @seealso \code{\link{lines}} 
 #' 
@@ -14,7 +14,7 @@
 #' \donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
 #'               lines(conc ~ Time, Theoph)}, Theoph)}
 #' \donttest{print(obj)}
-lines_RIGHT <- function(form, data, col = "black") {
+lines_RIGHT <- function(form, data, col = NULL) {
   
   ## ---
   ## Check input arguments:

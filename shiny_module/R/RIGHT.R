@@ -11,9 +11,9 @@
 #    http://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r
 # for more explanation.
 .onLoad <- function(libname, pkgname) {
-
+  
   # CHECK (junghoon): is it necessary to do this here?
-#   .RIGHT <- new.env(parent = emptyenv())
+  #   .RIGHT <- new.env(parent = emptyenv())
   options(supportRIGHT = TRUE)
   
 } # function .onLoad
@@ -23,7 +23,7 @@ initRIGHT <- function() {
   
   # Keep the location of the library:
   .RIGHT$libDir_RIGHT <- system.file("JavaScript", package = "RIGHT")
-    
+  
   # Script files always necessary:
   sourceArray <- c("kinetic-v4.7.0.js",
                    "common.js",
@@ -53,7 +53,7 @@ initRIGHT <- function() {
   .RIGHT$numBox <- 0
   .RIGHT$numHist <- 0
   .RIGHT$numPie <- 0
-                   
+  
   invisible()
   
 } # function initRIGHT
@@ -68,7 +68,6 @@ initRIGHT <- function() {
 #' @param supportRIGHT allow inserting Google AdSense to support further development of RIGHT. Use \code{\link{options}} and \code{\link{getOption}} to set and retrieve global option supportRIGHT.
 #' 
 #' @export
-#' @importFrom stringr str_trim
 #' 
 #' @examples
 #' library(ggplot2)
@@ -76,18 +75,17 @@ initRIGHT <- function() {
 #' set.seed(123456)
 #' subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
 #' 
-#' # Create a loess line to overlay on the scatter plot:
 #' fitObj <- loess(price ~ carat, subArray)
 #' xRange <- range(subArray$carat)
 #' fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
 #' fitArray$price <- predict(fitObj, newdata = fitArray)
-#'
+#' 
 #' \donttest{obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
-#'               lines(price ~ carat, fitArray)
-#'               hist(color, subArray)
-#                boxplot(price ~ color, subArray)
-#'               pie(cut, subArray)}, 
-#'              subArray, fitArray)}
+#'                         lines(price ~ carat, fitArray)
+#'                         hist(color, subArray)
+#'                         boxplot(price ~ color, subArray)
+#'                         pie(cut, subArray)},
+#'                        subArray, fitArray)}
 #' \donttest{print(obj)}
 RIGHT <- function(expr = {}, ..., 
                   title = "RIGHT: R Interactive Graphics via HTml",
@@ -102,7 +100,7 @@ RIGHT <- function(expr = {}, ...,
   if (isOverwrite == FALSE && file.exists(dir)) {
     stop(dir, " already exists.")
   } # if
-
+  
   # Get the data objects and their names:
   dataArray <- as.character(as.list(match.call(expand.dots = FALSE))$...)
   if (length(dataArray) == 0) {
@@ -124,7 +122,7 @@ RIGHT <- function(expr = {}, ...,
   
   # Initialize the environment that keeps track of the information:
   initRIGHT()
-
+  
   # Convert to absolute path:
   dir <- normalizePath(dir, mustWork = FALSE)
   
@@ -142,26 +140,26 @@ RIGHT <- function(expr = {}, ...,
   ## ---
   
   fileNameArray <- prepareData(dataList, dir) 
-
+  
   loadData(dataArray)
   addBlankLine()
-
+  
   # Keep the name of the data.frame objects for checking:
   .RIGHT$nameArray <- dataArray 
-
+  
   ## ---
   ## Evaluate the given expression:
   ## ---
-
+  
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
   eval(substitute(expr), envir = list(plot = plot_RIGHT,
-                                    points = points_RIGHT,
-                                    lines = lines_RIGHT,
-                                    hist = hist_RIGHT,
-                                    boxplot = boxplot_RIGHT,
-                                    pie = pie_RIGHT))
-
+                                      points = points_RIGHT,
+                                      lines = lines_RIGHT,
+                                      hist = hist_RIGHT,
+                                      boxplot = boxplot_RIGHT,
+                                      pie = pie_RIGHT))
+  
   # Add event handler:
   addBlankLine()
   addEventTrigger(.RIGHT$numAxis)
@@ -176,7 +174,7 @@ RIGHT <- function(expr = {}, ...,
                createBody(),
                "</html>"),
              con = file.path(dir, "www", "index.html"))
-             
+  
   ## ---
   ## Assemble the RIGHT object:
   ## ---

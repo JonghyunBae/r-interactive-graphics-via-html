@@ -7,7 +7,7 @@
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
 #' @param type the type of plot. Currently, only "n", "b", "p", "l" are supported. See \code{\link{plot}} for more details.
-#' @param col color of the visual elements. The default is black.
+#' @param col color of the visual elements. 
 #' 
 #' @seealso \code{\link{plot}}
 #' 
@@ -16,7 +16,7 @@
 #' @examples
 #' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"), Theoph)}
 #' \donttest{print(obj)}
-plot_RIGHT <- function(form, data, type = "b", col = "black") {
+plot_RIGHT <- function(form, data, type = "b", col = NULL) {
   
   ## ---
   ## Check input arguments:

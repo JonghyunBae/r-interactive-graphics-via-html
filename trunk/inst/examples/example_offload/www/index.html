@@ -72,14 +72,13 @@
        </script>
         <script>
         // offload part.
-        var regArr = createOffloadStructure(); // name of mainArr3 can ve changed.
+        var regArr = createOffloadStructure('mainArr1'); // name of mainArr3 can be changed.
 		var loffObj1 = new MakeLineObj_off(regArr, 'xx', 'yy'); // name of x, y can be changed.
 		var loff1 = new Line_off(axis2, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
 		var loff2 = new Line_off(axis3, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
-		//saveOffloadObjName(['mainArr3']);
         $(function() {
             setTimeout(function() {
-            window.Shiny.onInputChange('first', 1);
+            window.Shiny.onInputChange('mainArr1', mainArr1.$isHidden);
             }, 1)
           });
         </script>

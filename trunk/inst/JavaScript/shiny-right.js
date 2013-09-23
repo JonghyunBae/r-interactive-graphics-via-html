@@ -12,8 +12,8 @@ rightOutputBinding.renderValue = function(el, data) {
 				for(var j = 0 ; j < window[data[i]].$isSelected.length ; j ++){
 					window[data[i]].$isSelected[j](data[i+1]);
 				}
-			}
-			window.Shiny.onInputChange("first",-1);
+				//window.Shiny.onInputChange(data[i].relateObjName, -1);
+			}			
 		}
 	}
 	cnt ++;

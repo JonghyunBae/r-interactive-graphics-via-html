@@ -93,6 +93,7 @@ function createMainStructure(fileName)
 	}
 	// event components
 	mainArr._type = 'rootObj';
+	mainArr.offloadObjArr = null;
 	mainArr.labelArr = labelArr; // for table.
 	mainArr.parent = null;
 	mainArr.child = null;
@@ -132,7 +133,7 @@ function createMainStructure(fileName)
 
 	return mainArr;
 }
-function createOffloadStructure()
+function createOffloadStructure(relateObjName)
 {
 	var mainArr = new Object();
 	mainArr._type = 'offloadObj';
@@ -141,8 +142,23 @@ function createOffloadStructure()
 	mainArr.$id = 1;
 	mainArr.$readyState = false;
 	mainArr.$isSelected = new Array();
+	mainArr.relateObjName = relateObjName;
+	if(window[relateObjName].offloadObjArr == null){
+		window[relateObjName].offloadObjArr = new Array();
+		window[relateObjName].offloadObjArr.push(mainArr);
+	}else{
+		window[relateObjName].offloadObjArr.push(mainArr);
+	}
+	mainArr.$sendData = sendingData(relateObjName);
 	return mainArr;
-	
+}
+
+function sendingData(relateObjName)
+{
+	return function(isHiddenArr)
+		{
+			window.Shiny.onInputChange(relateObjName, window[relateObjName].$isHidden);
+		};
 }
 /**  create main structure of data End  **/
 

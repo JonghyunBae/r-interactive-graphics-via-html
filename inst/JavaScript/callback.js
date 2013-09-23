@@ -112,6 +112,14 @@ function hideSelected(Name)
 	}
 	eventTrigger(AllAxisObjArr);
 	// TODO: should call server offload!!
+	for(var i = 0 ; i < rootObjArr.length ; i ++){
+		if(rootObjArr[i].offloadObjArr != null){
+			for(var j = 0 ; j < rootObjArr[i].offloadObjArr.length ; j ++){
+				rootObjArr[i].offloadObjArr[j].$sendData(rootObjArr[i].$isHidden);
+			}
+		}
+	}
+	
 }
 function childReCalculate(object)
 {

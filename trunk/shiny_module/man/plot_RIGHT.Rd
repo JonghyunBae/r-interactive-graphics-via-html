@@ -2,7 +2,7 @@
 \alias{plot_RIGHT}
 \title{X-Y Plotting}
 \usage{
-  plot_RIGHT(form, data, type = "b", col = "black")
+  plot_RIGHT(form, data, type = "b", col = NULL)
 }
 \arguments{
   \item{form}{a formula describing the x and y variables as
@@ -14,8 +14,7 @@
   "p", "l" are supported. See \code{\link{plot}} for more
   details.}
 
-  \item{col}{color of the visual elements. The default is
-  black.}
+  \item{col}{color of the visual elements.}
 }
 \description{
   Function to create x-y scatter and line plots, including

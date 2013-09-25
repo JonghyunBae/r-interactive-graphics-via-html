@@ -1,0 +1,17 @@
+#summary Frequently Ask Questions for helping users.
+
+== Basic running ==
+ # Browser does not work with an error "XMLHttpRequest cannot load file:... Cross origin requests are only supported for HTTP. index.html:1"
+ -> You should change local files security policy. If you use
+   * Safari
+    * Enable the develop menu using the preferences panel, under Advanced -> "Show develop menu in menu bar"
+    * Then from the safari "Develop" menu, select "Disable local file restrictions", it is also worth noting safari has some odd behaviour with caches, so it is advisable to use the "Disable caches" option in the same menu; if you are editing & debugging using safari.
+   * Chrome
+    * Start Chrome executable with a command line flag: chrome --allow-file-access-from-files
+    * On Windows, the easiest is probably to create a special shortcut which has added flag (right-click on shortcut -> properties -> target).
+   * Firefox
+    * Go to about:config
+    * Find security.fileuri.strict_origin_policy parameter.
+    * Set it to false.
+   * IE
+    * local files security policy cannot be changed now.

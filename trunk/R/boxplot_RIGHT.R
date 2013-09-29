@@ -11,7 +11,7 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(boxplot(conc ~ Subject, Theoph), Theoph)}
+#' \donttest{obj <- RIGHT(boxplot(conc ~ Subject, Theoph))}
 #' \donttest{print(obj)}
 boxplot_RIGHT <- function(form, data, col = NULL) {
   
@@ -28,11 +28,13 @@ boxplot_RIGHT <- function(form, data, col = NULL) {
   } else {
     dataName <- as.character(argArray$data)
   } # if
-  checkDataName(dataName)
   
   # get is necessary in case a character string is given for data:
-  dataArray <- get(dataName, envir = parent.frame())
-  
+  if (!exists(dataName, envir = parent.frame())) {
+    stop(dataName, " does not exist.")
+  } # if
+  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
+    
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form) 
@@ -43,6 +45,9 @@ boxplot_RIGHT <- function(form, data, col = NULL) {
   ## Create a box-whisker:
   ## ---
   
+  # Keep name of the data object:
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
+
   # Increment the number of axes and Box-whisker:
   .RIGHT$numAxis <- .RIGHT$numAxis + 1
   .RIGHT$numBox <- .RIGHT$numBox + 1

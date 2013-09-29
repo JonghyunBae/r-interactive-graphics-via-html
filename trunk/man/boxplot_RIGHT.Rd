@@ -16,7 +16,7 @@
   Draw a box-whisker of the given data values.
 }
 \examples{
-\donttest{obj <- RIGHT(boxplot(conc ~ Subject, Theoph), Theoph)}
+\donttest{obj <- RIGHT(boxplot(conc ~ Subject, Theoph))}
 \donttest{print(obj)}
 }
 \seealso{

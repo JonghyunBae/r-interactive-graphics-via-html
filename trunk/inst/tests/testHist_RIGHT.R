@@ -1,7 +1,7 @@
 context("Test hist_RIGHT.R")
 
 setRIGHT(libDir_RIGHT = ".", 
-         nameArray = "Theoph",
+         nameArray = c("dummy"),
          divArray = c(),
          scriptArray = c(),
          numAxis = 0,
@@ -32,6 +32,7 @@ test_that("Check script generation", {
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numHist, 1)
+  expect_identical(temp$nameArray, c("dummy", "Theoph"))
   expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
   expect_identical(temp$scriptArray, 
                    c("var histObj1 = new ddply(Theoph, ['Subject'], {});",

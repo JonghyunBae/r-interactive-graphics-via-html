@@ -46,15 +46,15 @@ char <- function(obj) {
 ## Functions to check input arguments:
 ## ---
 
-checkDataName <- function(dataName) {
-  
-  if (!is.element(dataName, .RIGHT$nameArray)) {
-    stop(dataName, " does not exist.")
-  } # if
-  
-  invisible()
-  
-} # function checkDataName
+# checkDataName <- function(dataName) {
+#   
+#   if (!is.element(dataName, .RIGHT$nameArray)) {
+#     stop(dataName, " does not exist.")
+#   } # if
+#   
+#   invisible()
+#   
+# } # function checkDataName
 
 # CHECK (junghoon): use terms.formula next time?
 checkFormula_xy <- function(form) {

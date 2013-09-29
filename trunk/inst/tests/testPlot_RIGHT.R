@@ -6,7 +6,7 @@ context("Test plot_RIGHT.R")
 ## Test plot_RIGHT():
 ## ---
 
-setRIGHT(nameArray = "Theoph",
+setRIGHT(nameArray = "dummy",
          divArray = c(),
          scriptArray = c(),
          numAxis = 0,
@@ -43,6 +43,7 @@ test_that("Check script generation", {
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numPoints, 0)
   expect_identical(temp$numLines, 0)
+  expect_identical(temp$nameArray, c("dummy", "Theoph"))
   expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
   expect_identical(temp$scriptArray, "var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});")
   
@@ -51,6 +52,7 @@ test_that("Check script generation", {
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numPoints, 1)
   expect_identical(temp$numLines, 0)
+  expect_identical(temp$nameArray, c("dummy", "Theoph", "Theoph", "Theoph"))
   expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
                                     '<div id="container2" oncontextmenu="return false;"></div>'))
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});", 
@@ -62,6 +64,7 @@ test_that("Check script generation", {
   expect_identical(temp$numAxis, 3)
   expect_identical(temp$numPoints, 1)
   expect_identical(temp$numLines, 1)
+  expect_identical(temp$nameArray, c("dummy", "Theoph", "Theoph", "Theoph", "Theoph", "Theoph"))
   expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
                                     '<div id="container2" oncontextmenu="return false;"></div>',
                                     '<div id="container3" oncontextmenu="return false;"></div>'))
@@ -77,6 +80,7 @@ test_that("Check script generation", {
   expect_identical(temp$numAxis, 4)
   expect_identical(temp$numPoints, 2)
   expect_identical(temp$numLines, 2)
+  expect_identical(temp$nameArray, c("dummy", "Theoph", "Theoph", "Theoph", "Theoph", "Theoph", "Theoph", "Theoph", "Theoph"))
   expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
                                     '<div id="container2" oncontextmenu="return false;"></div>',
                                     '<div id="container3" oncontextmenu="return false;"></div>',

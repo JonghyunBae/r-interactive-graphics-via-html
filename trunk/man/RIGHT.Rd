@@ -10,7 +10,9 @@
 \arguments{
   \item{expr}{plotting expression to evaluate}
 
-  \item{...}{data.frame objects used in \code{expr}.}
+  \item{...}{data.frame objects used in \code{expr}. If
+  they are used in one of the plotting functions, it is not
+  necessary to list them.}
 
   \item{title}{title of the visualization. The default
   value is "RIGHT: R Interactive Graphics via HTml."}
@@ -45,8 +47,7 @@ fitArray$price <- predict(fitObj, newdata = fitArray)
                         lines(price ~ carat, fitArray)
                         hist(color, subArray)
                         boxplot(price ~ color, subArray)
-                        pie(cut, subArray)},
-                       subArray, fitArray)}
+                        pie(cut, subArray)})}
 \donttest{print(obj)}
 }
 

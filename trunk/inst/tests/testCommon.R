@@ -50,14 +50,14 @@ test_that("char() should set char attribute", {
 ## Check checkDataName():
 ## ---
 
-setRIGHT(nameArray = "Theoph")
-
-test_that("checkDataName() should check against .RIGHT$nameArray", {
-
-  expect_error(checkDataName("dummy"))
-  checkDataName("Theoph")
-  
-}) # test_that
+# setRIGHT(nameArray = "Theoph")
+# 
+# test_that("checkDataName() should check against .RIGHT$nameArray", {
+# 
+#   expect_error(checkDataName("dummy"))
+#   checkDataName("Theoph")
+#   
+# }) # test_that
 
 ## ---
 ## Check checkFormula_xy():

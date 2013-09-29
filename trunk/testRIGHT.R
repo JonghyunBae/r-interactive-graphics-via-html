@@ -24,8 +24,7 @@ print(ggplot(NULL, aes(x = carat, y = price)) +
 print(RIGHT({plot(price ~ carat, subArray, type = "p")
              lines(price ~ carat, fitArray)
              hist(color, subArray)
-             pie(cut, subArray)}, 
-            subArray, fitArray, 
+             pie(cut, subArray)},  
             dir = "TEMP",
             isOverwrite = TRUE))
 

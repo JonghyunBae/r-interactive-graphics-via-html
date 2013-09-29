@@ -4,13 +4,11 @@
 
   # Status update
   # Things to improve:
-   # Plot overlaying 
-   # Event handling for menu and plot update
-   # R API for code generation
+   # Explicit container names for plotting routines
+   # Breaks for hist
    # Package server offloading
    # Output packaging for Shiny
    # Testing
-   # Documentation
   # Look into [https://github.com/jcheng5/leaflet-shiny leaflet-shiny] as Joe suggested. This seems to be very similar to what we would like to do.
   # Where should we create an interface between R and JavaScript to minimize effort and support various plot types?
    * Discuss about Hardly Wickham's comments.

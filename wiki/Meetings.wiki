@@ -6,6 +6,8 @@
   # Things to improve:
    # Explicit container names for plotting routines
    # Breaks for hist
+   # Refine R API:
+    # Use strings or match.all() for some parameters? Bring isString option back?
    # Package server offloading
    # Output packaging for Shiny
    # Testing

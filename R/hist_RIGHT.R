@@ -4,14 +4,16 @@
 #' 
 #' @param x variable name for which the histogram is desired.
 #' @param data a data.frame object.
+#' @param color column used to define the colors used to fill the bars. Default is NULL.
 #' 
 #' @seealso \code{\link{hist}}
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(hist(Subject, Theoph))}
+#' \donttest{obj <- RIGHT(hist(Time, Theoph, color = "Subject"))}
 #' \donttest{print(obj)}
-hist_RIGHT <- function(x, data) {
+hist_RIGHT <- function(x, data,
+                       color = NULL) {
   
   ## ---
   ## Check input arguments:
@@ -58,12 +60,12 @@ hist_RIGHT <- function(x, data) {
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                c(paste0("var histObj", .RIGHT$numHist,
                                         " = new ddply(", dataName, 
-                                        ", ['", xName, "'], {});"),
+                                        ", ", createArray(unique(c(xName, color)), alwaysArray = TRUE), ", {});"),
                                  paste0("var axis", .RIGHT$numAxis,
                                         " = new Axis(", .RIGHT$numAxis, 
                                         ", histObj", .RIGHT$numHist, # hist object is used to set axis
                                         ", '", xName, 
-                                        "', 'frequency', {legend: '", xName, "'});"),
+                                        "', 'frequency', ", createObject(legend = color, alwaysObject = TRUE), ");"),
                                  paste0("var hist", .RIGHT$numHist,
                                         " = new Bar(axis", .RIGHT$numAxis,
                                         ", histObj", .RIGHT$numHist,

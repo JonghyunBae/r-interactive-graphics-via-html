@@ -1,0 +1,19 @@
+RIGHT 0.1.2
+===========
+
+ * Syntax simplified from, for instance, RIGHT(plot(conc ~ Time, Thoeph), Theoph) to RIGHT(plot(conc ~ Time, Thoeph)).
+   It is no longer necessary to specify data.frame objects used in the plots as long as they are used in one of the
+   plotting routines, i.e. plot_RIGHT(), points_RIGHT(), lines_RIGHT(), hist_RIGHT(), boxplot_RIGHT(), and 
+   pie_RIGHT().
+ * hist() supports filling bars with different colors by a column name.
+ 
+RIGHT 0.1.1
+===========
+
+ * Critical path bug is fixed.
+ * boxplot() added for Box-whisker plots.
+
+RIGHT 0.1.0
+===========
+
+ * First CRAN R package with support for a basic form of scatter plot, line plot, histogram, and pie chart.

@@ -1,8 +1,8 @@
 Package: RIGHT
 Type: Package
 Title: R Interactive Graphics via HTml
-Version: 0.1.1
-Date: 2013-09-22
+Version: 0.1.2
+Date: 2013-09-29
 Author: ChungHa Sung, TaeJoon Song, Jae W. Lee, and Junghoon Lee
 Maintainer: Junghoon Lee <flammy@gmail.com>
 Description: RIGHT enables interactive data visualization and analysis using

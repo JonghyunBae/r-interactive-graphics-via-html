@@ -26,6 +26,20 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 29SEP2013(Last regular meeting) ==
+
+Participants : Jae W.Lee, Jung Hoon Lee, Chung Ha Sung.
+
+  # Set the TO-DO list until AD.
+   # Server Offload part.
+    # Javascript & R API refine.
+   # Refine line plot for supporting options.
+    # group, color, subfitting.
+   # Refine Search box and table for supporting layout.
+    # extract HTML code(e.g. <div>) from table function.
+
+Next meeting : There will be no regular meeting for about two months.
+
 == 17SEP2013, 19SEP2013, 20SEP2013(temporary meetings) ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Tae Joon Song, Chung Ha Sung.

@@ -82,7 +82,7 @@ initRIGHT <- function() {
 #' 
 #' \donttest{obj <- RIGHT({plot(price ~ carat, subArray, type = "p")
 #'                         lines(price ~ carat, fitArray)
-#'                         hist(color, subArray)
+#'                         hist(color, subArray, color = "cut")
 #'                         boxplot(price ~ color, subArray)
 #'                         pie(cut, subArray)})}
 #' \donttest{print(obj)}

@@ -4,15 +4,27 @@ context("Test body.R")
 ## Test addBlankLine():
 ## ---
 
-setRIGHT(scriptArray = c())
+setRIGHT(scriptArray = c("LINE"))
 
 test_that("Test blank line insertion", {
   
-  addBlankLine()
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, "")
+  appendBlankLine()
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, c("LINE", 
+                                                                              ""))
   
-  addBlankLine(2)
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, rep("", 3))
+  appendBlankLine(2)
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, c("LINE", 
+                                                                              rep("", 3)))
+  
+  prependBlankLine()
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, c("", 
+                                                                              "LINE", 
+                                                                              rep("", 3)))
+
+  prependBlankLine(2)
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, c(rep("", 3), 
+                                                                              "LINE", 
+                                                                              rep("", 3)))
   
 }) # test_that
 
@@ -70,9 +82,9 @@ test_that("Test script generation for loading data", {
   
   loadData(c("B", "C"), c("BB.csv", "CC.csv"))
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   c(paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'),
-                     paste0('B = createMainStructure("', file.path("..", "BB.csv"), '");'),
-                     paste0('C = createMainStructure("', file.path("..", "CC.csv"), '");')))
+                   c(paste0('B = createMainStructure("', file.path("..", "BB.csv"), '");'),
+                     paste0('C = createMainStructure("', file.path("..", "CC.csv"), '");'),
+                     paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");')))
   
 }) # test_that
 

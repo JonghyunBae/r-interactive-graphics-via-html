@@ -1,10 +1,16 @@
 
 # Add blank script lines. This function has side effects:
-addBlankLine <- function(numLine = 1) {
+appendBlankLine <- function(numLine = 1) {
   
-  .RIGHT$scriptArray <- append(.RIGHT$scriptArray, rep("", numLine))
+  .RIGHT$scriptArray <- c(.RIGHT$scriptArray, rep("", numLine))
   
-} # function addBlankLine
+} # function appendBlankLine
+
+prependBlankLine <- function(numLine = 1) {
+  
+  .RIGHT$scriptArray <- c(rep("", numLine), .RIGHT$scriptArray)
+  
+} # function prependBlankLine
 
 # Save data.frame objects in temporary files:
 prepareData <- function(dataList, dir = ".") {
@@ -36,8 +42,9 @@ loadData <- function(nameArray = NULL, fileNameArray = paste0("_", nameArray, ".
       stop("nameArray and fileNameArray should have the same length.")
     } # if
     
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray, 
-                                 paste0(nameArray, ' = createMainStructure("', file.path("..", fileNameArray), '");')) 
+    # Data objects should be loaded before any plotting:
+    .RIGHT$scriptArray <- c(paste0(nameArray, ' = createMainStructure("', file.path("..", fileNameArray), '");'), 
+                            .RIGHT$scriptArray) 
     
   } # if
   

@@ -61,7 +61,7 @@ initRIGHT <- function() {
 #' @title Entry Function for RIGHT
 #' 
 #' @param expr plotting expression to evaluate
-#' @param ... data.frame objects used in \code{expr}.
+#' @param ... data.frame objects used in \code{expr}. If they are used in one of the plotting functions, it is not necessary to list them.
 #' @param title title of the visualization. The default value is "RIGHT: R Interactive Graphics via HTml."
 #' @param dir directory name to store files used for the visualization. Temporary directory is created under the current working directory by default.
 #' @param isOverwrite rewrite exiting files if the directory name matches. FALSE by default.
@@ -84,10 +84,10 @@ initRIGHT <- function() {
 #'                         lines(price ~ carat, fitArray)
 #'                         hist(color, subArray)
 #'                         boxplot(price ~ color, subArray)
-#'                         pie(cut, subArray)},
-#'                        subArray, fitArray)}
+#'                         pie(cut, subArray)})}
 #' \donttest{print(obj)}
-RIGHT <- function(expr = {}, ..., 
+RIGHT <- function(expr = {},
+                  ...,
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(), 
                   isOverwrite = FALSE,
@@ -101,27 +101,63 @@ RIGHT <- function(expr = {}, ...,
     stop(dir, " already exists.")
   } # if
   
-  # Get the data objects and their names:
-  dataArray <- as.character(as.list(match.call(expand.dots = FALSE))$...)
-  if (length(dataArray) == 0) {
+  ## ---
+  ## Evaluate the given expression:
+  ## ---
+
+  # Initialize the environment that keeps track of the information:
+  initRIGHT()
+  
+  # Special environment is created to overload base graphics plotting function when evaluating
+  # the given expression:
+  eval(substitute(expr), envir = list(plot = plot_RIGHT,
+                                      points = points_RIGHT,
+                                      lines = lines_RIGHT,
+                                      hist = hist_RIGHT,
+                                      boxplot = boxplot_RIGHT,
+                                      pie = pie_RIGHT))
+  
+  # Add event handler:
+  appendBlankLine()
+  addEventTrigger(.RIGHT$numAxis)
+  
+  ## ---
+  ## Process data.frame objects:
+  ## ---
+  
+  # Use only the unique names:
+  nameArray <- unique(c(as.character(as.list(match.call(expand.dots = FALSE))$...),
+                        .RIGHT$nameArray))
+  
+  # There should be at least one data object to plot:
+  if (length(nameArray) == 0) {
     stop("No data object is given.")
   } # if
-  if (any(grepl(".", dataArray, fixed = TRUE))) {
+  
+  # Check validitiy of the names:
+  if (any(grepl(".", nameArray, fixed = TRUE))) {
     stop("The names of the data objects cannot contain any periods.")
   } # if
   
-  #   dataList <- mget(dataArray, envir = parent.frame(), inherits = TRUE)
-  dataList <- setNames(list(...), dataArray)
+  # Check existance of the data objects and whether they are data.frame objects:
+  isExist <- exists(nameArray, envir = parent.frame())
+  if (any(!isExist)) {
+    stop("The following data objects do not exist: ", paste0(nameArray[!isExist], collapse = ", "))
+  } # if
+  dataList <- setNames(mget(nameArray, envir = parent.frame(), inherits = TRUE), nameArray)
   if (any(!sapply(dataList, is.data.frame))) {
     stop("All data objects should be given as data.frame objects.")
   } # if
   
+  # Add scripts to load data objects:
+  prependBlankLine()
+  loadData(nameArray)
+  
   ## ---
   ## Setup directory:
+  ##
+  ## Start creating files once most of the error checking is done.
   ## ---
-  
-  # Initialize the environment that keeps track of the information:
-  initRIGHT()
   
   # Convert to absolute path:
   dir <- normalizePath(dir, mustWork = FALSE)
@@ -134,35 +170,9 @@ RIGHT <- function(expr = {}, ...,
   if (!file.exists(tempDir)) {
     dir.create(tempDir)
   } # if
-  
-  ## ---
-  ## Process data.frame objects:
-  ## ---
-  
+
+  # Save data objects to file:
   fileNameArray <- prepareData(dataList, dir) 
-  
-  loadData(dataArray)
-  addBlankLine()
-  
-  # Keep the name of the data.frame objects for checking:
-  .RIGHT$nameArray <- dataArray 
-  
-  ## ---
-  ## Evaluate the given expression:
-  ## ---
-  
-  # Special environment is created to overload base graphics plotting function when evaluating
-  # the given expression:
-  eval(substitute(expr), envir = list(plot = plot_RIGHT,
-                                      points = points_RIGHT,
-                                      lines = lines_RIGHT,
-                                      hist = hist_RIGHT,
-                                      boxplot = boxplot_RIGHT,
-                                      pie = pie_RIGHT))
-  
-  # Add event handler:
-  addBlankLine()
-  addEventTrigger(.RIGHT$numAxis)
   
   ## ---
   ## Assemble client-side code:

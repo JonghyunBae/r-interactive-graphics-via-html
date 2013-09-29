@@ -21,7 +21,7 @@
   the axis.
 }
 \examples{
-\donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"), Theoph)}
+\donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"))}
 \donttest{print(obj)}
 }
 \seealso{

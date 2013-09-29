@@ -12,7 +12,7 @@
 #' 
 #' @examples
 #' \donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-#'               points(conc ~ Time, Theoph)}, Theoph)}
+#'               points(conc ~ Time, Theoph)})}
 #' \donttest{print(obj)}
 points_RIGHT <- function(form, data, col = NULL) {
   
@@ -34,10 +34,12 @@ points_RIGHT <- function(form, data, col = NULL) {
   } else {
     dataName <- as.character(argArray$data) 
   } # if
-  checkDataName(dataName)
-  
+
   # get is necessary in case a character string is given for data:
-  dataArray <- get(dataName, envir = parent.frame())
+  if (!exists(dataName, envir = parent.frame())) {
+    stop(dataName, " does not exist.")
+  } # if
+  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to check whether form is a formula?
@@ -49,6 +51,9 @@ points_RIGHT <- function(form, data, col = NULL) {
   ## Plot points:
   ## ---
   
+  # Keep name of the data object:
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
+
   # Increment the number of points:
   .RIGHT$numPoints <- .RIGHT$numPoints + 1
   

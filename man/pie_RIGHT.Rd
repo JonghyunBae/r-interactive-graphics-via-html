@@ -14,7 +14,7 @@
   Draw a pie chart.
 }
 \examples{
-\donttest{obj <- RIGHT(pie(Subject, Theoph), Theoph)}
+\donttest{obj <- RIGHT(pie(Subject, Theoph))}
 \donttest{print(obj)}
 }
 \seealso{

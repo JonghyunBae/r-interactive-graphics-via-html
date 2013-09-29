@@ -18,7 +18,7 @@
 }
 \examples{
 \donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-              lines(conc ~ Time, Theoph)}, Theoph)}
+              lines(conc ~ Time, Theoph)})}
 \donttest{print(obj)}
 }
 \seealso{

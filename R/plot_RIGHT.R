@@ -14,7 +14,7 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"), Theoph)}
+#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"))}
 #' \donttest{print(obj)}
 plot_RIGHT <- function(form, data, type = "b", col = NULL) {
   
@@ -31,10 +31,12 @@ plot_RIGHT <- function(form, data, type = "b", col = NULL) {
   } else {
     dataName <- as.character(argArray$data)
   } # if
-  checkDataName(dataName)
 
   # get is necessary in case a character string is given for data:
-  dataArray <- get(dataName, envir = parent.frame())
+  if (!exists(dataName, envir = parent.frame())) {
+    stop(dataName, " does not exist.")
+  } # if
+  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to check whether form is a formula?
@@ -46,6 +48,9 @@ plot_RIGHT <- function(form, data, type = "b", col = NULL) {
   ## Create an axis:
   ## ---
   
+  # Keep name of the data object:
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
+
   # Increment the number of axes:
   .RIGHT$numAxis <- .RIGHT$numAxis + 1
   

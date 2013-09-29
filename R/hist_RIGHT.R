@@ -9,7 +9,7 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(hist(Subject, Theoph), Theoph)}
+#' \donttest{obj <- RIGHT(hist(Subject, Theoph))}
 #' \donttest{print(obj)}
 hist_RIGHT <- function(x, data) {
   
@@ -26,10 +26,12 @@ hist_RIGHT <- function(x, data) {
   } else {
     dataName <- as.character(argArray$data)
   } # if
-  checkDataName(dataName)
   
   # get is necessary in case a character string is given for data:
-  dataArray <- get(dataName, envir = parent.frame())
+  if (!exists(dataName, envir = parent.frame())) {
+    stop(dataName, " does not exist.")
+  } # if
+  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to deal with strings? Why is this different from, say, plot_RIGHT()?
@@ -39,6 +41,9 @@ hist_RIGHT <- function(x, data) {
   ## ---
   ## Create a histogram:
   ## ---
+
+  # Keep name of the data object:
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
   
   # Increment the number of axes and histograms:
   .RIGHT$numAxis <- .RIGHT$numAxis + 1

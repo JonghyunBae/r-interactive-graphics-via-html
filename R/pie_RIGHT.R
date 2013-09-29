@@ -10,7 +10,7 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(pie(Subject, Theoph), Theoph)}
+#' \donttest{obj <- RIGHT(pie(Subject, Theoph))}
 #' \donttest{print(obj)}
 pie_RIGHT <- function(x, data) {
   
@@ -27,10 +27,12 @@ pie_RIGHT <- function(x, data) {
   } else {
     dataName <- as.character(argArray$data)
   } # if
-  checkDataName(dataName)
-  
+
   # get is necessary in case a character string is given for data:
-  dataArray <- get(dataName, envir = parent.frame())
+  if (!exists(dataName, envir = parent.frame())) {
+    stop(dataName, " does not exist.")
+  } # if
+  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to deal with strings? Why is this different from, say, plot_RIGHT()?
@@ -41,6 +43,9 @@ pie_RIGHT <- function(x, data) {
   ## Create a pie chart:
   ## ---
   
+  # Keep name of the data object:
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
+
   # Increment the number of axes and pie charts:
   .RIGHT$numAxis <- .RIGHT$numAxis + 1
   .RIGHT$numPie <- .RIGHT$numPie + 1

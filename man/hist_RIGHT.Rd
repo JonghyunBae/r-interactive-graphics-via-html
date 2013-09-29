@@ -14,7 +14,7 @@
   Draw a histogram of the given data values.
 }
 \examples{
-\donttest{obj <- RIGHT(hist(Subject, Theoph), Theoph)}
+\donttest{obj <- RIGHT(hist(Subject, Theoph))}
 \donttest{print(obj)}
 }
 \seealso{

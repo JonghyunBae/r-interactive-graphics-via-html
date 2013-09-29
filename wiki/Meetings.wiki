@@ -8,6 +8,7 @@
    # Breaks for hist
    # Refine R API:
     # Use strings or match.all() for some parameters? Bring isString option back?
+   # Provide clean axis for pie chart?
    # Package server offloading
    # Output packaging for Shiny
    # Testing

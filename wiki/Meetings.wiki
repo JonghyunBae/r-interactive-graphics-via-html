@@ -6,6 +6,7 @@
   # Things to improve:
    # Explicit container names for plotting routines
    # Breaks for hist
+   # Move color into Dot rather than Axis?
    # Refine R API:
     # Use strings or match.all() for some parameters? Bring isString option back?
    # Provide clean axis for pie chart?

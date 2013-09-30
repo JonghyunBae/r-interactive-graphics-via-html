@@ -26,7 +26,7 @@ You can see a difference from the original one. The right graph is using sub set
 RIGHT users can set colors. Default color is green. To use this feature type : 
 
 {{{
-> RIGHT(plot(price ~ carat, diamonds, type="p", col="red"), diamonds, dir = "TEST")
+> RIGHT(plot(price ~ carat, diamonds, type="p", col="red"))
 }}}
 
 You can see the graph with different color. The right graph is using "red" color. 

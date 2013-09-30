@@ -13,7 +13,7 @@ You can draw multiple graphs in one page very easily. If you want to draw three 
 {{{
 > RIGHT({plot(price ~ color, subArray, type = "p")
         hist(color, subArray)
-        pie(color, subArray)}, subArray, dir="TEMP", isOverwrite = TRUE)
+        pie(color, subArray)})
 }}}
 
 It will show three interactive graphs like below. From left, _plot_ draw a scatter graph, _hist_ draws a bar graph, and finally _pie_ draws a pie graph.
@@ -31,7 +31,7 @@ Multiple objects can be drawn in one container. To draw box-and-whisker and scat
 
 {{{
    RIGHT({box(price ~ carat, subArray)
-        plot(price ~ carat, subArray, col = 'blue', type = "p")}, subArray, dir="TEMP", isOverwrite = TRUE)
+        plot(price ~ carat, subArray, col = 'blue', type = "p")})
 UNDER CONSTRUCTION UNDER CONSTRUCTION UNDER CONSTRUCTION
 }}}
 
@@ -40,9 +40,7 @@ It will draw overlaid graphs in one axis.
 <img src="http://thepotter.woobi.co.kr/img/overlay.PNG">
 
 
-== 3. Fitting Lines == 
-
-You can build a fitting line to nodes. To get the fitting line, follow this example code : 
+Here is a more complex example where a loess line is overlaid on a scatter plot:
 
 {{{
 library(ggplot2)
@@ -57,24 +55,8 @@ xRange <- range(subArray$carat)
 fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
 fitArray$price <- predict(fitObj, newdata = fitArray)
 
-# ggplot:
-print(ggplot(NULL, aes(x = carat, y = price)) + 
-        geom_point(data = subArray, color = "green", size = 2) +
-        geom_line(data = fitArray, color = "black", size = 1.2))
-
-# RIGHT:
-print(RIGHT({plot(price ~ carat, subArray, type = "p")
-             lines(price ~ carat, fitArray)}, 
-            subArray, fitArray, 
-            dir = "TEMP",
-            isOverwrite = TRUE))
+RIGHT({plot(price ~ carat, subArray, type = "p")
+       lines(price ~ carat, fitArray)})
 }}}
-
-You can check the result from ggplot. But, this is not interactive at all.
-
-<img src="http://thepotter.woobi.co.kr/img/advanced05.PNG">
-
-
-RIGHT will show the same, but interactive one on your browser.
 
 <img src="http://thepotter.woobi.co.kr/img/advanced04.PNG">

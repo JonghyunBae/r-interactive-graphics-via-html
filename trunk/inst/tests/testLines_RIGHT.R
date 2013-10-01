@@ -35,7 +35,7 @@ test_that("Column names should exist", {
 
 }) # test_that
 
-test_that("Check script generation", {
+test_that("Check script generation without any options", {
   
   lines_RIGHT(conc ~ Time, Theoph)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
@@ -56,4 +56,8 @@ test_that("Check script generation", {
                                        "var line2 = new Line(axis1, lineObj2, 'x1', 'x2', 'y1', 'y2', {});"))
   expect_true(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
 
+}) # test_that
+
+test_that("Check col option:", {
+  
 }) # test_that

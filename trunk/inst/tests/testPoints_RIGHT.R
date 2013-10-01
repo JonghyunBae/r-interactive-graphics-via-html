@@ -39,7 +39,7 @@ test_that("Column names should exist", {
   
 }) # test_that
 
-test_that("Check script generation", {
+test_that("Check script generation without any options", {
   
   points_RIGHT(conc ~ Time, Theoph)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
@@ -55,5 +55,9 @@ test_that("Check script generation", {
   expect_identical(temp$scriptArray, c("var point1 = new Dot(axis1, Theoph, 'Time', 'conc', {});",
                                        "var point2 = new Dot(axis1, Theoph, 'Time', 'conc', {});"))
   expect_true(any(file.path(temp$libDir_RIGHT, "dot.js") %in% temp$sourceArray))
+  
+}) # test_that
+
+test_that("Check col option:", {
   
 }) # test_that

@@ -7,16 +7,17 @@
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
 #' @param type the type of plot. Currently, only "n", "b", "p", "l" are supported. See \code{\link{plot}} for more details.
-#' @param col color of the visual elements. 
+#' @param color column used to define the colors used to fill the bars. Default is NULL.
+#' @param col color used for all the visual elements. color option overrides col option.
 #' 
 #' @seealso \code{\link{plot}}
 #' 
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"))}
+#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = "Subject"))}
 #' \donttest{print(obj)}
-plot_RIGHT <- function(form, data, type = "b", col = NULL) {
+plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL) {
   
   ## ---
   ## Check input arguments:
@@ -64,7 +65,8 @@ plot_RIGHT <- function(form, data, type = "b", col = NULL) {
                                paste0("var axis", .RIGHT$numAxis,
                                       " = new Axis(", .RIGHT$numAxis, 
                                       ", ", dataName,
-                                      ", '", axisName$x, "', '", axisName$y, "', {});"))
+                                      ", '", axisName$x, "', '", axisName$y, 
+                                      "', ", createObject(legend = color, alwaysObject = TRUE), ");"))
   
   ## ---
   ## Plot lines if necessary:

@@ -5,7 +5,7 @@ RIGHT 0.1.2
    It is no longer necessary to specify data.frame objects used in the plots as long as they are used in one of the
    plotting routines, i.e. plot_RIGHT(), points_RIGHT(), lines_RIGHT(), hist_RIGHT(), boxplot_RIGHT(), and 
    pie_RIGHT().
- * hist() supports filling bars with different colors by a column name.
+ * hist() and plot() supports color option to use different colors for their visual elements by a column name.
  
 RIGHT 0.1.1
 ===========

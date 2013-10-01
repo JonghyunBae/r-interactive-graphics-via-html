@@ -4,7 +4,7 @@
 #' 
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
-#' @param col color of the points. 
+#' @param col color used for all the points. 
 #' 
 #' @seealso \code{\link{points}}
 #' 

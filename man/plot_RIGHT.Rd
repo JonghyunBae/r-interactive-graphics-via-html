@@ -2,7 +2,8 @@
 \alias{plot_RIGHT}
 \title{X-Y Plotting}
 \usage{
-  plot_RIGHT(form, data, type = "b", col = NULL)
+  plot_RIGHT(form, data, type = "b", color = NULL,
+    col = NULL)
 }
 \arguments{
   \item{form}{a formula describing the x and y variables as
@@ -14,14 +15,17 @@
   "p", "l" are supported. See \code{\link{plot}} for more
   details.}
 
-  \item{col}{color of the visual elements.}
+  \item{color}{column used to define the colors used to
+  fill the bars. Default is NULL.}
+
+  \item{col}{color used for all the visual elements.}
 }
 \description{
   Function to create x-y scatter and line plots, including
   the axis.
 }
 \examples{
-\donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b"))}
+\donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = "Subject"))}
 \donttest{print(obj)}
 }
 \seealso{

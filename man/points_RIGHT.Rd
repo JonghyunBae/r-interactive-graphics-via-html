@@ -10,7 +10,7 @@
 
   \item{data}{a data.frame object.}
 
-  \item{col}{color of the points.}
+  \item{col}{color used for all the points.}
 }
 \description{
   points_RIGHT draws a sequence of points in the current

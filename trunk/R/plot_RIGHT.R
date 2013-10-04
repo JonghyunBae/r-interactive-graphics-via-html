@@ -8,49 +8,59 @@
 #' @param data a data.frame object.
 #' @param type the type of plot. Currently, only "n", "b", "p", "l" are supported. See \code{\link{plot}} for more details.
 #' @param color column used to define the colors used to fill the bars. Default is NULL.
-#' @param col color used for all the visual elements. color option overrides col option.
+#' @param col color used for all the visual elements. color option overrides \code{col} option.
+#' @param isString a character is expected for \code{data} and \code{color} if \code{TRUE}. It is useful for programming.
 #' 
 #' @seealso \code{\link{plot}}
 #' 
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = "Subject"))}
+#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))}
 #' \donttest{print(obj)}
-plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL) {
+plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL,
+                       isString = FALSE) {
+  
+  ## ---
+  ## Take strings if asked:
+  ## ---
+  
+  argArray <- as.list(match.call())
+  
+  if (!isString) {
+    
+    data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
+    color <- if (is.null(argArray$color)) NULL else as.character(argArray$color)
+    
+  } # if
   
   ## ---
   ## Check input arguments:
   ## ---
   
-  # Make sure that data exists:
-  argArray <- as.list(match.call())
-  
-  dataAttr <- attr(data, "char")
-  if (!is.null(dataAttr) && dataAttr == TRUE) {
-    dataName <- data
-  } else {
-    dataName <- as.character(argArray$data)
-  } # if
-
   # get is necessary in case a character string is given for data:
-  if (!exists(dataName, envir = parent.frame())) {
-    stop(dataName, " does not exist.")
+  if (!exists(data, envir = parent.frame())) {
+    stop(data, " does not exist.")
   } # if
-  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
+  dataArray <- get(data, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form) 
-  checkAxisName(axisName$x, dataArray)
-  checkAxisName(axisName$y, dataArray)
+  checkColumnName(axisName$x, dataArray)
+  checkColumnName(axisName$y, dataArray)
+  
+  # Check color option:
+  checkColumnName(color, dataArray)
+  
+  # col option is checked by points_RIGHT() or line_RIGHT().
   
   ## ---
   ## Create an axis:
   ## ---
   
   # Keep name of the data object:
-  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
 
   # Increment the number of axes:
   .RIGHT$numAxis <- .RIGHT$numAxis + 1
@@ -64,7 +74,7 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL) {
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                paste0("var axis", .RIGHT$numAxis,
                                       " = new Axis(", .RIGHT$numAxis, 
-                                      ", ", dataName,
+                                      ", ", data,
                                       ", '", axisName$x, "', '", axisName$y, 
                                       "', ", createObject(legend = color, alwaysObject = TRUE), ");"))
   
@@ -74,7 +84,7 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL) {
 
   # CHECK (junghoon): refine this to support type == "c" as well.
   if (type == "l" || type == "b") {
-    lines_RIGHT(form, char(dataName), col = col)
+    lines_RIGHT(form, data, col = col, isString = TRUE)
   } # if
   
   ## ---
@@ -82,7 +92,7 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL) {
   ## ---
   
   if (type == "p" || type == "b") {
-    points_RIGHT(form, char(dataName), col = col)
+    points_RIGHT(form, data, col = col, isString = TRUE)
   } # if
   
   invisible()

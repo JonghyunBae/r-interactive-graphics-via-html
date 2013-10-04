@@ -1,7 +1,5 @@
 context("Test plot_RIGHT.R")
 
-# CHECK (junghoon): check use of char().
-
 ## ---
 ## Test plot_RIGHT():
 ## ---
@@ -106,12 +104,12 @@ setRIGHT(divArray = c(),
 
 test_that("Check color option:", {
 
-  plot_RIGHT(conc ~ Time, Theoph, type = "n", color = "Subject")
+  plot_RIGHT(conc ~ Time, Theoph, type = "n", color = Subject)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
   expect_identical(temp$scriptArray, "var axis1 = new Axis(1, Theoph, 'Time', 'conc', {legend: 'Subject'});")
 
-  plot_RIGHT(conc ~ Time, Theoph, type = "p", color = "Subject")
+  plot_RIGHT(conc ~ Time, Theoph, type = "p", color = Subject)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
                                     '<div id="container2" oncontextmenu="return false;"></div>'))
@@ -119,7 +117,7 @@ test_that("Check color option:", {
                                        "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {legend: 'Subject'});",
                                        "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});"))
 
-  plot_RIGHT(conc ~ Time, Theoph, type = "b", color = "Subject")
+  plot_RIGHT(conc ~ Time, Theoph, type = "b", color = Subject)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
                                     '<div id="container2" oncontextmenu="return false;"></div>',
@@ -137,5 +135,10 @@ test_that("Check color option:", {
 }) # test_that
 
 test_that("Check col option:", {
-  
+  # col option is checked at lines_RIGHT() and points_RIGHT() level.
 }) # test_that
+
+test_that("Check isString option:", {
+  # CHECK (junghoon)
+})
+

@@ -5,6 +5,7 @@
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
 #' @param col color used for all the points. 
+#' @param isString a character is expected for \code{data} if \code{TRUE}. It is useful for programming.
 #' 
 #' @seealso \code{\link{points}}
 #' 
@@ -14,7 +15,20 @@
 #' \donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
 #'               points(conc ~ Time, Theoph)})}
 #' \donttest{print(obj)}
-points_RIGHT <- function(form, data, col = NULL) {
+points_RIGHT <- function(form, data, col = NULL, isString = FALSE) {
+  
+  ## ---
+  ## Take strings if asked:
+  ## ---
+
+  # Make sure that data exists:
+  argArray <- as.list(match.call())
+  
+  if (!isString) {
+    
+    data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
+    
+  } # if
   
   ## ---
   ## Check input arguments:
@@ -25,34 +39,28 @@ points_RIGHT <- function(form, data, col = NULL) {
     stop("plot_RIGHT has not been called yet.")
   } # if
   
-  # Make sure that data exists:
-  argArray <- as.list(match.call())
-  
-  dataAttr <- attr(data, "char")
-  if (!is.null(dataAttr) && dataAttr == TRUE) {
-    dataName <- data
-  } else {
-    dataName <- as.character(argArray$data) 
-  } # if
-
   # get is necessary in case a character string is given for data:
-  if (!exists(dataName, envir = parent.frame())) {
-    stop(dataName, " does not exist.")
+  if (!exists(data, envir = parent.frame())) {
+    stop(data, " does not exist.")
   } # if
-  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
+  dataArray <- get(data, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form)
-  checkAxisName(axisName$x, dataArray)
-  checkAxisName(axisName$y, dataArray)
+  checkColumnName(axisName$x, dataArray)
+  checkColumnName(axisName$y, dataArray)
+  
+  # Check col option:
+  checkCol(col)
+  col <- getRGB(col)
   
   ## ---
   ## Plot points:
   ## ---
   
   # Keep name of the data object:
-  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
 
   # Increment the number of points:
   .RIGHT$numPoints <- .RIGHT$numPoints + 1
@@ -61,7 +69,7 @@ points_RIGHT <- function(form, data, col = NULL) {
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                paste0("var point", .RIGHT$numPoints,
                                       " = new Dot(axis", .RIGHT$numAxis,
-                                      ", ", dataName,
+                                      ", ", data,
                                       ", '", axisName$x, "', '", axisName$y, "', ",
                                       createObject(baseColor = col, alwaysObject = TRUE) ,");"))
   

@@ -31,18 +31,6 @@ setRIGHT <- function(...) {
 } # function setRIGHT
 
 ## ---
-## Mark an object as character:
-## ---
-
-char <- function(obj) {
-  
-  # CHECK (junghoon): class does not work!
-  attr(obj, "char") <- TRUE
-  return(obj)
-  
-} # function char
-
-## ---
 ## Functions to check input arguments:
 ## ---
 
@@ -81,15 +69,43 @@ checkFormula_x <- function(form) {
   
 } # function checkFormula_x
 
-checkAxisName <- function(axisName, dataArray) {
+checkColumnName <- function(axisName, dataArray) {
   
-  if (!is.element(axisName, names(dataArray))) {
+  if (!is.null(axisName) && !is.element(axisName, names(dataArray))) {
     stop(axisName, " column does not exist.")
   } # if
   
   invisible()
   
-} # function checkAxisName
+} # function checkColumnName
+
+checkCol <- function(col) {
+
+  if (!is.null(col)) {
+    
+    # CHECK (junghoon): should this work for factors as well?
+    
+    # CHECK (junghoon): is.numeric condition good enough? See Wickham's book.
+    if (!(is.character(col) && length(col) == 1) &&
+          !(is.numeric(col) && length(col) == 3)) {
+      stop("col should be a single color name or a RGB vector.")
+    } # if
+    
+  } # if
+  
+  invisible()
+  
+} # function checkCol
+
+getRGB <- function(col) {
+  
+  if (is.character(col)) {
+    col <- col2rgb(col)
+  } # if
+  
+  return(if (is.null(col)) NULL else as.integer(col))
+  
+} # function getRGB
 
 ## ---
 ## Functions to create options in JavaScript:

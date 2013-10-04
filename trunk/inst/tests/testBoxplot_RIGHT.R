@@ -19,7 +19,6 @@ test_that("data.frame object should exist", {
 test_that("Column name should exist", {
   
   expect_error(boxplot_RIGHT(conc1 ~ Subject1, Thoeph))
-  # expect_error(boxplot_RIGHT(char("conc1 ~ Subject1"), Thoeph)) # CHECK (junghoon)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numBox, 0)
@@ -41,3 +40,7 @@ test_that("Check script generation", {
   expect_true(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
   
 }) # test_that
+
+test_that("Check isString option:", {
+  # CHECK (junghoon)
+})

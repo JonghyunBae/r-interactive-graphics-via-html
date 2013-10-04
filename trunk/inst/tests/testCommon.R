@@ -37,16 +37,6 @@ test_that("clearRIGHT() clear .RIGHT in package namespace", {
 }) # test_that
 
 ## ---
-## Check char():
-## ---
-
-test_that("char() should set char attribute", {  
-  
-  expect_identical(attr(char("AA"), "char"), TRUE)
-  
-}) # test_that
-
-## ---
 ## Check checkDataName():
 ## ---
 
@@ -98,13 +88,54 @@ test_that("checkFormula_x() should return the x axis name in list", {
 }) # test_that
 
 ## ---
-## Check checkAxisName():
+## Check checkColumnName():
 ## ---
 
-test_that("CheckAxisName should flag non-existant columns", {
+test_that("CheckColumnName() should flag non-existant columns", {
   
-  expect_error(checkAxisName("dummy", Theoph))
-  checkAxisName("conc", Theoph)
+  # NULL should pass:
+  checkColumnName(NULL, Theoph)
+  
+  expect_error(checkColumnName("dummy", Theoph))
+  checkColumnName("conc", Theoph)
+  
+}) # test_that
+
+## ---
+## Check checkCol() and getRGB():
+## ---
+
+test_that("checkCol() should flag invalid color values", {
+  
+  # NULL should pass:
+  checkCol(NULL)
+  
+  checkCol("a") # should work even if it is not a valid color name
+  checkCol(c(1L, 2L, 3L)) # should work even if it is not a valid RGB vector
+  checkCol(c(1.0, 2.0, 3.0)) # CHECK (junghoon): should this pass?
+  
+  expect_error(checkCol(c("a", "b")))
+  expect_error(checkCol(c(1L, 2L)))
+  expect_error(checkCol(c(1L, 2L, 3L, 4L)))
+  
+  # CHECK (junghoon): should I check for complex values?
+  
+  # CHECK (junghoon): should factors pass as well?
+  expect_error(checkCol(factor(c(1L, 2L, 3L)))) 
+  expect_error(checkCol(factor("red")))
+  
+  expect_error(checkCol(list(a = 1L, b = 2L, c = 3L)))
+  
+}) # test_that
+
+test_that("getRGB() should return an RGB vector", {
+  
+  expect_identical(getRGB(NULL), NULL)
+  
+  expect_identical(getRGB(c(1L, 2L, 3L)), c(1L, 2L, 3L))
+  expect_identical(getRGB(c(1.0, 2.0, 3.0)), c(1L, 2L, 3L))
+  
+  expect_identical(getRGB("red"), c(255L, 0L, 0L))
   
 }) # test_that
 

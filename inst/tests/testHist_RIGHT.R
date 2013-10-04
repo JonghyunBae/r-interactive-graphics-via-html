@@ -19,7 +19,6 @@ test_that("data.frame object should exist", {
 test_that("Column name should exist", {
   
   expect_error(hist_RIGHT(Subject1, Thoeph))
-  # expect_error(hist_RIGHT(char("Subject1"), Thoeph)) # CHECK (junghoon)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numHist, 0)
@@ -49,7 +48,7 @@ setRIGHT(divArray = c(),
 
 test_that("Check color option:", {
   
-  hist_RIGHT(Subject, Theoph, color = "Subject")
+  hist_RIGHT(Subject, Theoph, color = Subject)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
   expect_identical(temp$scriptArray, 
@@ -57,7 +56,7 @@ test_that("Check color option:", {
                      "var axis1 = new Axis(1, histObj1, 'Subject', 'frequency', {legend: 'Subject'});",
                      "var hist1 = new Bar(axis1, histObj1, 'Subject', 'frequency', {});"))
 
-  hist_RIGHT(Time, Theoph, color = "Subject")
+  hist_RIGHT(Time, Theoph, color = Subject)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>',
                                     '<div id="container2" oncontextmenu="return false;"></div>'))
@@ -70,3 +69,7 @@ test_that("Check color option:", {
                      "var hist2 = new Bar(axis2, histObj2, 'Time', 'frequency', {});"))
   
 }) # test_that
+
+test_that("Check isString option:", {
+  # CHECK (junghoon)
+})

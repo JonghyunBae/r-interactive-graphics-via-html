@@ -4,6 +4,7 @@
 #'
 #' @param x variable name for which the histogram is desired.
 #' @param data a data.frame object.
+#' @param isString a character is expected for \code{x} and \code{data} if \code{TRUE}. It is useful for programming.
 #'
 #' @seealso \code{\link{pie}}
 #' 
@@ -12,39 +13,41 @@
 #' @examples
 #' \donttest{obj <- RIGHT(pie(Subject, Theoph))}
 #' \donttest{print(obj)}
-pie_RIGHT <- function(x, data) {
+pie_RIGHT <- function(x, data, isString = FALSE) {
+  
+  ## ---
+  ## Take strings if asked:
+  ## ---
+  
+  argArray <- as.list(match.call())
+
+  if (!isString) {
+    
+    x <- if (is.null(argArray$x)) NULL else as.character(argArray$x)
+    data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
+    
+  } # if
   
   ## ---
   ## Check input arguments:
   ## ---
   
-  # Make sure that data exists:
-  argArray <- as.list(match.call())
-  
-  dataAttr <- attr(data, "char")
-  if (!is.null(dataAttr) && dataAttr == TRUE) {
-    dataName <- data
-  } else {
-    dataName <- as.character(argArray$data)
-  } # if
-
   # get is necessary in case a character string is given for data:
-  if (!exists(dataName, envir = parent.frame())) {
-    stop(dataName, " does not exist.")
+  if (!exists(data, envir = parent.frame())) {
+    stop(data, " does not exist.")
   } # if
-  dataArray <- get(dataName, envir = parent.frame(), inherits = TRUE)
+  dataArray <- get(data, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
   # CHECK (junghoon): is there a way to deal with strings? Why is this different from, say, plot_RIGHT()?
-  xName <- as.character(argArray$x)
-  checkAxisName(xName, dataArray)
+  checkColumnName(x, dataArray)
   
   ## ---
   ## Create a pie chart:
   ## ---
   
   # Keep name of the data object:
-  .RIGHT$nameArray <- append(.RIGHT$nameArray, dataName)
+  .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
 
   # Increment the number of axes and pie charts:
   .RIGHT$numAxis <- .RIGHT$numAxis + 1
@@ -58,17 +61,17 @@ pie_RIGHT <- function(x, data) {
   # Add script in body:
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                c(paste0("var pieObj", .RIGHT$numPie,
-                                        " = new ddply(", dataName, 
-                                        ", ['", xName, "'], {});"),
+                                        " = new ddply(", data, 
+                                        ", ['", x, "'], {});"),
                                  paste0("var axis", .RIGHT$numAxis,
                                         " = new Axis(", .RIGHT$numAxis, 
                                         ", pieObj", .RIGHT$numPie, # pie object is used to set axis
-                                        ", '", xName, "', '", 'frequency', 
-                                        "', {legend: '", xName, "'});"),
+                                        ", '", x, "', '", 'frequency', 
+                                        "', {legend: '", x, "'});"),
                                  paste0("var pie", .RIGHT$numPie,
                                         " = new Pie(axis", .RIGHT$numAxis,
                                         ", pieObj", .RIGHT$numPie,
-                                        ", '", xName, "', 'frequency', {});")))
+                                        ", '", x, "', 'frequency', {});")))
   
   # Source pie.js in head:
   addSource(file.path(.RIGHT$libDir_RIGHT, "pie.js"))

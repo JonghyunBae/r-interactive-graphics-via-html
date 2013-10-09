@@ -12,8 +12,10 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(boxplot(conc ~ Subject, Theoph))}
-#' \donttest{print(obj)}
+#' \donttest{
+#' obj <- RIGHT(boxplot(conc ~ Subject, Theoph))
+#' print(obj)
+#' }
 boxplot_RIGHT <- function(form, data, col = NULL, isString = FALSE) {
 
   ## ---

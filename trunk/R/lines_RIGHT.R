@@ -4,7 +4,6 @@
 #' 
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
-#' @param col color of the boxes. 
 #' @param isString a character is expected for \code{data} if \code{TRUE}. It is useful for programming.
 #'
 #' @seealso \code{\link{lines}} 
@@ -12,10 +11,14 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-#'               lines(conc ~ Time, Theoph)})}
-#' \donttest{print(obj)}
-lines_RIGHT <- function(form, data, col = NULL, isString = FALSE) {
+#' \donttest{
+#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+#'               lines(conc ~ Time, Theoph)})
+#' print(obj)
+#' }
+lines_RIGHT <- function(form, data, isString = FALSE) {
+  
+  col <- NULL # TEMPORARY
   
   ## ---
   ## Take strings if asked:

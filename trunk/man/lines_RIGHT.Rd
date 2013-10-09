@@ -2,7 +2,7 @@
 \alias{lines_RIGHT}
 \title{Add Lines to a Plot}
 \usage{
-  lines_RIGHT(form, data, col = NULL)
+  lines_RIGHT(form, data, isString = FALSE)
 }
 \arguments{
   \item{form}{a formula describing the x and y variables as
@@ -10,16 +10,19 @@
 
   \item{data}{a data.frame object.}
 
-  \item{col}{color of the boxes.}
+  \item{isString}{a character is expected for \code{data}
+  if \code{TRUE}. It is useful for programming.}
 }
 \description{
   lines_RIGHT draws a sequence of points in the current
   axis.
 }
 \examples{
-\donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-              lines(conc ~ Time, Theoph)})}
-\donttest{print(obj)}
+\donttest{
+obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+              lines(conc ~ Time, Theoph)})
+print(obj)
+}
 }
 \seealso{
   \code{\link{lines}}

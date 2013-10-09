@@ -2,7 +2,7 @@
 \alias{hist_RIGHT}
 \title{Histograms}
 \usage{
-  hist_RIGHT(x, data, color = NULL)
+  hist_RIGHT(x, data, color = NULL, isString = FALSE)
 }
 \arguments{
   \item{x}{variable name for which the histogram is
@@ -12,13 +12,19 @@
 
   \item{color}{column used to define the colors used to
   fill the bars. Default is NULL.}
+
+  \item{isString}{a character is expected for \code{x},
+  \code{data} and \code{color} if \code{TRUE}. It is useful
+  for programming.}
 }
 \description{
   Draw a histogram of the given data values.
 }
 \examples{
-\donttest{obj <- RIGHT(hist(Time, Theoph, color = "Subject"))}
-\donttest{print(obj)}
+\donttest{
+obj <- RIGHT(hist(Time, Theoph, color = Subject))
+print(obj)
+}
 }
 \seealso{
   \code{\link{hist}}

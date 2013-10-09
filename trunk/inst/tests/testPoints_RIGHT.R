@@ -56,24 +56,24 @@ test_that("Check script generation without any options", {
   
 }) # test_that
 
-setRIGHT(numAxis = 1,
-         numPoints = 0,
-         scriptArray = c())
-
-test_that("Check col option:", {
-
-  points_RIGHT(conc ~ Time, Theoph, col = "red")
-  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
-  expect_identical(temp$numPoints, 1)
-  expect_identical(temp$scriptArray, "var point1 = new Dot(axis1, Theoph, 'Time', 'conc', {baseColor: [255, 0, 0]});")
-
-  points_RIGHT(conc ~ Time, Theoph, col = c(1.0, 2.0, 3.0))
-  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
-  expect_identical(temp$numPoints, 2)
-  expect_identical(temp$scriptArray, c("var point1 = new Dot(axis1, Theoph, 'Time', 'conc', {baseColor: [255, 0, 0]});",
-                                       "var point2 = new Dot(axis1, Theoph, 'Time', 'conc', {baseColor: [1, 2, 3]});"))
-  
-}) # test_that
+# setRIGHT(numAxis = 1,
+#          numPoints = 0,
+#          scriptArray = c())
+# 
+# test_that("Check col option:", {
+# 
+#   points_RIGHT(conc ~ Time, Theoph, col = "red")
+#   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+#   expect_identical(temp$numPoints, 1)
+#   expect_identical(temp$scriptArray, "var point1 = new Dot(axis1, Theoph, 'Time', 'conc', {baseColor: [255, 0, 0]});")
+# 
+#   points_RIGHT(conc ~ Time, Theoph, col = c(1.0, 2.0, 3.0))
+#   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+#   expect_identical(temp$numPoints, 2)
+#   expect_identical(temp$scriptArray, c("var point1 = new Dot(axis1, Theoph, 'Time', 'conc', {baseColor: [255, 0, 0]});",
+#                                        "var point2 = new Dot(axis1, Theoph, 'Time', 'conc', {baseColor: [1, 2, 3]});"))
+#   
+# }) # test_that
 
 test_that("Check isString option:", {
   # CHECK (junghoon)

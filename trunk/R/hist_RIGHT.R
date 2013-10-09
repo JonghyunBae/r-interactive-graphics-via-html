@@ -11,8 +11,10 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(hist(Time, Theoph, color = Subject))}
-#' \donttest{print(obj)}
+#' \donttest{
+#' obj <- RIGHT(hist(Time, Theoph, color = Subject))
+#' print(obj)
+#' }
 hist_RIGHT <- function(x, data, color = NULL, isString = FALSE) {
   
   ## ---

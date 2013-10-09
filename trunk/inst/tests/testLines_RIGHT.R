@@ -58,27 +58,27 @@ test_that("Check script generation without any options", {
 
 }) # test_that
 
-setRIGHT(numAxis = 1,
-         numLines = 0,
-         scriptArray = c())
-
-test_that("Check col option:", {
-  
-  lines_RIGHT(conc ~ Time, Theoph, col = "red")
-  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
-  expect_identical(temp$numLines, 1)
-  expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: [255, 0, 0]});"))
-  
-  lines_RIGHT(conc ~ Time, Theoph, col = c(1.0, 2.0, 3.0))
-  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
-  expect_identical(temp$numLines, 2)
-  expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: [255, 0, 0]});",
-                                       "var lineObj2 = new MakeLineObj(Theoph, 'Time', 'conc');",
-                                       "var line2 = new Line(axis1, lineObj2, 'x1', 'x2', 'y1', 'y2', {baseColor: [1, 2, 3]});"))
-                                    
-}) # test_that
+# setRIGHT(numAxis = 1,
+#          numLines = 0,
+#          scriptArray = c())
+# 
+# test_that("Check col option:", {
+#   
+#   lines_RIGHT(conc ~ Time, Theoph, col = "red")
+#   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+#   expect_identical(temp$numLines, 1)
+#   expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
+#                                        "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: [255, 0, 0]});"))
+#   
+#   lines_RIGHT(conc ~ Time, Theoph, col = c(1.0, 2.0, 3.0))
+#   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+#   expect_identical(temp$numLines, 2)
+#   expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc');",
+#                                        "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {baseColor: [255, 0, 0]});",
+#                                        "var lineObj2 = new MakeLineObj(Theoph, 'Time', 'conc');",
+#                                        "var line2 = new Line(axis1, lineObj2, 'x1', 'x2', 'y1', 'y2', {baseColor: [1, 2, 3]});"))
+#                                     
+# }) # test_that
 
 test_that("Check isString option:", {
   # CHECK (junghoon)

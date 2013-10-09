@@ -2,7 +2,7 @@
 \alias{points_RIGHT}
 \title{Add Points to a Plot}
 \usage{
-  points_RIGHT(form, data, col = NULL)
+  points_RIGHT(form, data, isString = FALSE)
 }
 \arguments{
   \item{form}{a formula describing the x and y variables as
@@ -10,16 +10,19 @@
 
   \item{data}{a data.frame object.}
 
-  \item{col}{color used for all the points.}
+  \item{isString}{a character is expected for \code{data}
+  if \code{TRUE}. It is useful for programming.}
 }
 \description{
   points_RIGHT draws a sequence of points in the current
   axis.
 }
 \examples{
-\donttest{obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-              points(conc ~ Time, Theoph)})}
-\donttest{print(obj)}
+\donttest{
+obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+              points(conc ~ Time, Theoph)})
+print(obj)
+}
 }
 \seealso{
   \code{\link{points}}

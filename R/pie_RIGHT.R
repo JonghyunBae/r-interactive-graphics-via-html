@@ -11,8 +11,10 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(pie(Subject, Theoph))}
-#' \donttest{print(obj)}
+#' \donttest{
+#' obj <- RIGHT(pie(Subject, Theoph))
+#' print(obj)
+#' }
 pie_RIGHT <- function(x, data, isString = FALSE) {
   
   ## ---

@@ -2,7 +2,7 @@
 \alias{boxplot_RIGHT}
 \title{Box-whisker}
 \usage{
-  boxplot_RIGHT(form, data, col = NULL)
+  boxplot_RIGHT(form, data, col = NULL, isString = FALSE)
 }
 \arguments{
   \item{form}{a formula describing the x and y variables as
@@ -11,13 +11,19 @@
   \item{data}{a data.frame object.}
 
   \item{col}{color of the boxes.}
+
+  \item{isString}{a character is expected for \code{x} and
+  \code{data} if \code{TRUE}. It is useful for
+  programming.}
 }
 \description{
   Draw a box-whisker of the given data values.
 }
 \examples{
-\donttest{obj <- RIGHT(boxplot(conc ~ Subject, Theoph))}
-\donttest{print(obj)}
+\donttest{
+obj <- RIGHT(boxplot(conc ~ Subject, Theoph))
+print(obj)
+}
 }
 \seealso{
   \code{\link{boxplot}}

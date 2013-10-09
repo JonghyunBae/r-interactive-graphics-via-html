@@ -8,7 +8,6 @@
 #' @param data a data.frame object.
 #' @param type the type of plot. Currently, only "n", "b", "p", "l" are supported. See \code{\link{plot}} for more details.
 #' @param color column used to define the colors used to fill the bars. Default is NULL.
-#' @param col color used for all the visual elements. color option overrides \code{col} option.
 #' @param isString a character is expected for \code{data} and \code{color} if \code{TRUE}. It is useful for programming.
 #' 
 #' @seealso \code{\link{plot}}
@@ -16,10 +15,15 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))}
-#' \donttest{print(obj)}
-plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL,
+#' \donttest{
+#' obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
+#' print(obj)
+#' }
+plot_RIGHT <- function(form, data, type = "b", color = NULL,
                        isString = FALSE) {
+
+  # @param col color used for all the visual elements. color option overrides \code{col} option.
+  col <- NULL # TEMPORARY
   
   ## ---
   ## Take strings if asked:
@@ -84,7 +88,8 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL,
 
   # CHECK (junghoon): refine this to support type == "c" as well.
   if (type == "l" || type == "b") {
-    lines_RIGHT(form, data, col = col, isString = TRUE)
+#     lines_RIGHT(form, data, col = col, isString = TRUE)
+    lines_RIGHT(form, data, isString = TRUE)
   } # if
   
   ## ---
@@ -92,7 +97,8 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, col = NULL,
   ## ---
   
   if (type == "p" || type == "b") {
-    points_RIGHT(form, data, col = col, isString = TRUE)
+#     points_RIGHT(form, data, col = col, isString = TRUE)
+    points_RIGHT(form, data, isString = TRUE)
   } # if
   
   invisible()

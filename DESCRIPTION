@@ -32,3 +32,5 @@ Collate:
     'pie_RIGHT.R'
     'hist_RIGHT.R'
     'boxplot_RIGHT.R'
+    'search_RIGHT.R'
+    'table_RIGHT.R'

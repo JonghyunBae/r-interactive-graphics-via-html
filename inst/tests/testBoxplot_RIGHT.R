@@ -13,6 +13,8 @@ test_that("data.frame object should exist", {
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numBox, 0)
+  expect_identical(temp$nameArray, "dummy")
+  expect_false(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
   
 }) # test_that
 
@@ -22,6 +24,8 @@ test_that("Column name should exist", {
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numBox, 0)
+  expect_identical(temp$nameArray, "dummy")
+  expect_false(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
   
 }) # test_that
 

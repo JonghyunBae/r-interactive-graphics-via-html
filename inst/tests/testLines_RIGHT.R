@@ -14,8 +14,11 @@ setRIGHT(libDir_RIGHT = ".",
 test_that("There should be an axis to use lines_RIGHT()", {
 
   expect_error(lines_RIGHT(conc ~ Time, Theoph)) 
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$numLines, 0)
-
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$numLines, 0)
+  expect_identical(temp$nameArray, "dummy")
+  expect_false(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
+  
 }) # test_that
 
 setRIGHT(numAxis = 1)
@@ -23,16 +26,22 @@ setRIGHT(numAxis = 1)
 test_that("data.frame object should exist", {
   
   expect_error(lines_RIGHT(conc ~ Time, dummy))
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$numLines, 0)
-
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$numLines, 0)
+  expect_identical(temp$nameArray, "dummy")
+  expect_false(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
+  
 }) # test_that
 
 test_that("Column names should exist", {
   
   expect_error(lines_RIGHT(conc1 ~ Time, Thoeph))
   expect_error(lines_RIGHT(conc ~ Time1, Thoeph))
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$numLines, 0)
-
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$numLines, 0)
+  expect_identical(temp$nameArray, "dummy")
+  expect_false(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
+  
 }) # test_that
 
 test_that("Check script generation without any options", {

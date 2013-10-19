@@ -6,6 +6,8 @@ RIGHT 0.1.2
    plotting routines, i.e. plot_RIGHT(), points_RIGHT(), lines_RIGHT(), hist_RIGHT(), boxplot_RIGHT(), and 
    pie_RIGHT().
  * hist() and plot() supports color option to use different colors for their visual elements by a column name.
+ * Search boxes can be added after all the plots.
+ * Interactive tables can be added after all the plots.
  
 RIGHT 0.1.1
 ===========

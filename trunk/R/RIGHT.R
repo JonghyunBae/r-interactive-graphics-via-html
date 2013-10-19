@@ -53,6 +53,8 @@ initRIGHT <- function() {
   .RIGHT$numBox <- 0
   .RIGHT$numHist <- 0
   .RIGHT$numPie <- 0
+  .RIGHT$numSearch <- 0
+  .RIGHT$numTable <- 0
   
   invisible()
   
@@ -85,7 +87,9 @@ initRIGHT <- function() {
 #'               lines(price ~ carat, fitArray)
 #'               hist(color, subArray, color = "cut")
 #'               boxplot(price ~ color, subArray)
-#'               pie(cut, subArray)})
+#'               pie(cut, subArray)
+#'               search(subArray)
+#'               table(subArray)})
 #' print(obj)
 #' }
 RIGHT <- function(expr = {},
@@ -117,7 +121,9 @@ RIGHT <- function(expr = {},
                                       lines = lines_RIGHT,
                                       hist = hist_RIGHT,
                                       boxplot = boxplot_RIGHT,
-                                      pie = pie_RIGHT))
+                                      pie = pie_RIGHT,
+                                      search = search_RIGHT,
+                                      table = table_RIGHT))
   
   # Add event handler:
   appendBlankLine()

@@ -18,7 +18,8 @@ test_that("data.frame object should exist", {
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numPoints, 0)
   expect_identical(temp$numLines, 0)
-
+  expect_identical(temp$nameArray, "dummy")
+  
 }) # test_that
 
 test_that("Column names should exist", {
@@ -29,7 +30,8 @@ test_that("Column names should exist", {
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numPoints, 0)
   expect_identical(temp$numLines, 0)
-
+  expect_identical(temp$nameArray, "dummy")
+  
 }) # test_that
 
 # CHECK (junghoon): should check default option?

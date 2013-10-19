@@ -48,7 +48,9 @@ obj <- RIGHT({plot(price ~ carat, subArray, type = "p", color = "color")
               lines(price ~ carat, fitArray)
               hist(color, subArray, color = "cut")
               boxplot(price ~ color, subArray)
-              pie(cut, subArray)})
+              pie(cut, subArray)
+              search(subArray)
+              table(subArray)})
 print(obj)
 }
 }

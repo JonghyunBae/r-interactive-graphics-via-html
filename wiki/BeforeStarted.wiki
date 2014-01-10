@@ -13,6 +13,7 @@ If you use
  * Chrome
   * Start Chrome executable with a command line flag: chrome --allow-file-access-from-files
   * On Windows, the easiest is probably to create a special shortcut which has added flag (right-click on shortcut -> properties -> target). Before changing this option, you should turn off all instances of Chrome. 
+<img src="http://thepotter.woobi.co.kr/img/scatter_R.PNG">
  * Firefox
   * Go to about:config
   * Find security.fileuri.strict_origin_policy parameter.

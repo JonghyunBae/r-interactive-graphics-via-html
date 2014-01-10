@@ -7,14 +7,14 @@ Before running RIGHT package, you should change browser security option.
 
 If you use
 
- * Safari
+ * *Safari*
   * Enable the develop menu using the preferences panel, under Advanced -> "Show develop menu in menu bar"
   * Then from the safari "Develop" menu, select "Disable local file restrictions", it is also worth noting safari has some odd behaviour with caches, so it is advisable to use the "Disable caches" option in the same menu; if you are editing & debugging using safari.
- * Chrome
+ * *Chrome*
   * Start Chrome executable with a command line flag: chrome --allow-file-access-from-files
   * On Windows, the easiest is probably to create a special shortcut which has added flag (right-click on shortcut -> properties -> target). Before changing this option, you should turn off all instances of Chrome. 
-<img src="https://lh3.googleusercontent.com/-td7GmiZsi3M/Us-HKkyyoXI/AAAAAAAAAFI/4zDpQZ0Nltw/w378-h538-no/Chrome_window.png" width=550 height=450>>
- * Firefox
+  <img src="https://lh3.googleusercontent.com/-td7GmiZsi3M/Us-HKkyyoXI/AAAAAAAAAFI/4zDpQZ0Nltw/w378-h538-no/Chrome_window.png">
+ * *Firefox*
   * Go to about:config
   * Find security.fileuri.strict_origin_policy parameter.
   * Set it to false.

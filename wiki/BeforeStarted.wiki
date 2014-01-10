@@ -8,8 +8,9 @@ Before running RIGHT package, you should change browser security option.
 If you use
 
  * *Safari*
-  * Enable the develop menu using the preferences panel, under Advanced -> "Show develop menu in menu bar"
-  * Then from the safari "Develop" menu, select "Disable local file restrictions", it is also worth noting safari has some odd behaviour with caches, so it is advisable to use the "Disable caches" option in the same menu; if you are editing & debugging using safari.
+  * On Windows, you don't have to change any option.
+  * ~~Enable the develop menu using the preferences panel, under Advanced -> "Show develop menu in menu bar"~~
+  * ~~Then from the safari "Develop" menu, select "Disable local file restrictions", it is also worth noting safari has some odd behaviour with caches, so it is advisable to use the "Disable caches" option in the same menu; if you are editing & debugging using safari.~~
  * *Chrome*
   * Before changing this option, you should turn off all instances of Chrome.
   * On Linux, start Chrome executable with a command line flag: chrome --allow-file-access-from-files

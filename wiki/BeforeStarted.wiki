@@ -12,7 +12,7 @@ If you use
   * Then from the safari "Develop" menu, select "Disable local file restrictions", it is also worth noting safari has some odd behaviour with caches, so it is advisable to use the "Disable caches" option in the same menu; if you are editing & debugging using safari.
  * Chrome
   * Start Chrome executable with a command line flag: chrome --allow-file-access-from-files
-  * On Windows, the easiest is probably to create a special shortcut which has added flag (right-click on shortcut -> properties -> target).
+  * On Windows, the easiest is probably to create a special shortcut which has added flag (right-click on shortcut -> properties -> target). Before changing this option, you should turn off all instances of Chrome. 
  * Firefox
   * Go to about:config
   * Find security.fileuri.strict_origin_policy parameter.

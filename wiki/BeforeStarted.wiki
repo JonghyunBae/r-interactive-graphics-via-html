@@ -18,4 +18,11 @@ If you use
   * Find security.fileuri.strict_origin_policy parameter.
   * Set it to false.
  * IE
-  *local files security policy cannot be changed now
+  * local files security policy cannot be changed now
+
+== live examples ==
+ * Chrome (window & linux)
+ * Firefox (window & linux)
+ * Safari (window & linux)
+
+After change this option, you are ready to enjoy RIGHT package completely!

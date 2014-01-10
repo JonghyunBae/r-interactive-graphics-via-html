@@ -18,15 +18,11 @@ If you use
   <img src="https://lh3.googleusercontent.com/-td7GmiZsi3M/Us-HKkyyoXI/AAAAAAAAAFI/4zDpQZ0Nltw/w378-h538-no/Chrome_window.png">
 
  * *Firefox*
+  * On Linux, you don't have to change any option.
   * Go to about:config
   * Find security.fileuri.strict_origin_policy parameter.
   * Set it to false.
  * IE
   * local files security policy cannot be changed now
 
-== live examples ==
- * Chrome (window & linux)
- * Firefox (window & linux)
- * Safari (window & linux)
-
-After change this option, you are ready to enjoy RIGHT package completely!
+===After change this option, you are ready to enjoy RIGHT package completely!===

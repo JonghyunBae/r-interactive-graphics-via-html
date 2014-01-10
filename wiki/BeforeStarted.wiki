@@ -19,9 +19,7 @@ If you use
 
  * *Firefox*
   * On Linux, you don't have to change any option.
-  * Go to about:config
-  * Find security.fileuri.strict_origin_policy parameter.
-  * Set it to false.
+  * On Windows, you don't have to change any option.
  * IE
   * local files security policy cannot be changed now
 

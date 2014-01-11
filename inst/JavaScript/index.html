@@ -16,7 +16,7 @@
                              <title>RIGHT: R Interactive Graphics via HTml</title>
   <script src="shiny-right.js"></script>
   <script src="callback.js"></script>
-  <script src="kinetic-v4.6.0.js"></script>
+  <script src="kinetic-v4.7.4.js"></script>
   <script src="structure.js"></script>
   <script src="common.js"></script>
   <script src="axis.js"></script>
@@ -35,32 +35,15 @@
 </head>
 <body>
 <script> var mainArr1 = createMainStructure('Theoph-from-R.csv');</script>
-<div id="head"> 
-       <div class="wrap">
-       <form id="searchForm1">
-      <script>makeSearchButton(mainArr1);</script>
-       <input type="text" id="searchBox" name="searchId" placeholder="Please input boolean statement..." onkeydown="if (event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {booleanSearch(searchForm1);  printAns(); return false;}};"/>
-       <a id="searchBtn" href="#" class="myButton" onClick="booleanSearch(searchForm1); printAns(); return false;">Search</a>
-       <a id="clearBtn" href="#" class="myButton" onClick="clearSearchBox(); return false;">Clear</a>
-       <a id="showTable" href="#" class="myButton" onClick="return false;">Hide Table</a>
-       <a id="saveImg" href="#" class="myButton" onClick="return false;">Save Image</a>
-       </form>
-       </div>
-       </div>
-        <script>
-         	addButtonEvent();
-       	</script>
-       <div id="content1" class = "right-output1" >
-       <div id="content" class = "right-output" >
-<div id="container1" oncontextmenu="return false;"></div>
-<div id="container2" oncontextmenu="return false;"></div>
-<div id="container3" oncontextmenu="return false;"></div>
-<div id="container4" oncontextmenu="return false;"></div>
-<div id="container5" oncontextmenu="return false;"></div>
-<div id="container6" oncontextmenu="return false;"></div>
 
+
+       <div id="content" class = "right-output" >
+       <script>makeSearchButton("searchBox1", mainArr1);</script>
+		<div id="container1" oncontextmenu="return false;"></div>
+		<div id="container2" oncontextmenu="return false;"></div>
+		<div id="container3" oncontextmenu="return false;"></div>
        </div>
-       </div>
+
        
        <script>
 

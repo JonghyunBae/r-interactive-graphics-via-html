@@ -428,7 +428,7 @@ function menu(Name)
             //update menu
             var menuHeight = 25*menuName.length;
             var menuWidth = 90;
-            var mousePos = node.getStage().getMousePosition();
+            var mousePos = node.getStage().getPointerPosition();
             /*****************/
             /*	2	|	1	*/
             /*---------------*/

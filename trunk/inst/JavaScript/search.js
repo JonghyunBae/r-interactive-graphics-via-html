@@ -1,8 +1,7 @@
 function makeSearchButton(searchBoxIdString, mainArr)
 {
-	//get searchBoxId from string
-	var searchBoxId=searchBoxIdString.slice(9);
-	
+	// get searchBoxId from string
+	var searchBoxId = searchBoxIdString.slice(9);
 	// to access mainArr from booleanSearch function later
 	window["mainArrOfSearch"+searchBoxId] = mainArr;
 	// make form 

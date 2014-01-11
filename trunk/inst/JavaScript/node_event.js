@@ -114,7 +114,7 @@ function drag(Name)
           //  	touch = false;
            //     Name.rangeBoxLayer.draw();
            // }else{
-                var mousePos = Name.stage.getMousePosition();
+                var mousePos = Name.stage.getPointerPosition();
                 Name.rangeBox.setX(mousePos.x);
                 Name.rangeBox.setY(mousePos.y);
                 Name.rangeBox.setWidth(0);
@@ -258,8 +258,8 @@ function hover(Name)
 	        }
 			var node = evt.targetNode;
 			document.body.style.cursor = "pointer";
-			var mousePos = node.getStage().getMousePosition();
-			var mousePos = node.getStage().getMousePosition();
+			var mousePos = node.getStage().getPointerPosition();
+			var mousePos = node.getStage().getPointerPosition();
 			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
 	            Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
 		    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){

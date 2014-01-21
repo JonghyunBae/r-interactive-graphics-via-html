@@ -67,6 +67,7 @@ initRIGHT <- function() {
 #' @param title title of the visualization. The default value is "RIGHT: R Interactive Graphics via HTml."
 #' @param dir directory name to store files used for the visualization. Temporary directory is created under the current working directory by default.
 #' @param isOverwrite rewrite exiting files if the directory name matches. FALSE by default.
+#' @param browser a character string giving the name of the browser. It should be in the PATH, or a full path specified. getOption("browser") by default.
 #' @param supportRIGHT allow inserting Google AdSense to support further development of RIGHT. Use \code{\link{options}} and \code{\link{getOption}} to set and retrieve global option supportRIGHT.
 #' 
 #' @export
@@ -97,6 +98,7 @@ RIGHT <- function(expr = {},
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(), 
                   isOverwrite = FALSE,
+                  browser = getOption("browser"),
                   supportRIGHT = getOption("supportRIGHT")) {
   
   ## ---
@@ -198,6 +200,7 @@ RIGHT <- function(expr = {},
   ## ---
   
   return(structure(list(dir = dir,
+                        browser = browser, 
                         fileNameArray = fileNameArray),
                    class = "RIGHT"))
   
@@ -221,12 +224,7 @@ print.RIGHT <- function(x, ...) {
     stop("cleanup was called on the object.")
   } # if
   
-  # CHECK (junghoon): is there a better way?
-  if (Sys.info()["sysname"] == "Windows") {
-    shell.exec(fileName_index)
-  } else {
-    system(paste0("firefox -new-tab ", fileName_index, " &"))
-  } # if
+  browseURL(fileName_index, browser = x$browser)
   
 } # function print.RIGHT
 

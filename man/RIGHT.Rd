@@ -5,6 +5,7 @@
   RIGHT(expr = { }, ...,
     title = "RIGHT: R Interactive Graphics via HTml",
     dir = tempfile(), isOverwrite = FALSE,
+    browser = getOption("browser"),
     supportRIGHT = getOption("supportRIGHT"))
 }
 \arguments{
@@ -23,6 +24,10 @@
 
   \item{isOverwrite}{rewrite exiting files if the directory
   name matches. FALSE by default.}
+
+  \item{browser}{a character string giving the name of the
+  browser. It should be in the PATH, or a full path
+  specified. getOption("browser") by default.}
 
   \item{supportRIGHT}{allow inserting Google AdSense to
   support further development of RIGHT. Use

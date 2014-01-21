@@ -1,3 +1,8 @@
+RIGHT 0.1.3
+===========
+
+ * Added browser parameter to RIGHT() to support various browsers.
+
 RIGHT 0.1.2
 ===========
 

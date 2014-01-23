@@ -33,10 +33,19 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung.
   * Set the goals for this semester.
    # Code revision.
    # Improve performance.
-   # Add server offload functionality.
-   # Move low level routine (e.g. calculation for drawing plots, mid-part object in ggplot2) from Javascript to R.
-    * This goal may be processed as an undergraduate students project.
-    * Simple example of this goal is needed.
+   # Support server offload.
+   # Move R-JavaScript API to lower level routines:
+    * Determine plot layout in R (using ggplot2) and JavaScript provides only low-level drawing functions for code generation.
+{{{
+library(ggplot2)
+diamonds_sample <- diamonds[sample(1:nrow(diamonds), 20, T), ]
+obj <- ggplot(diamonds_sample, aes(x = carat, y = price)) + geom_point()
+ggplot_build(obj) # the result exposes most of the layout information
+}}}
+    * This may be pursued as an undergraduate students project.
+    * Simple example of this goal is needed. [https://www.stat.auckland.ac.nz/~paul/grid/grid.html grid package] may provide some examples of lower-level API.
+   # Improve plot layout
+
  * TO-DO list
   # Make drawing line function with group -> release for new version.
   # UseR conference: check submission requirement for each track (e.g. poster and abstract needed?)

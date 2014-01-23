@@ -27,6 +27,22 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 23JAN2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung.
+  * Set the goals for this semester.
+   # Code revision.
+   # Improve performance.
+   # Add server offload functionality.
+   # Move low level routine (e.g. calculation for drawing plots, mid-part object in ggplot2) from Javascript to R.
+    * This goal may be processed as an undergraduate students project.
+    * Simple example of this goal is needed.
+ * TO-DO list
+  # Make drawing line function with group -> release for new version.
+  # UseR conference: check submission requirement for each track (e.g. poster and abstract needed?)
+  # Make simple example for undergraduate students project.
+  Next meeting : 10:00 (Korea time) on Thu, 2/6
+
 == 29SEP2013(Last regular meeting) ==
 
 Participants : Jae W.Lee, Jung Hoon Lee, Chung Ha Sung.

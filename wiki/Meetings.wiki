@@ -44,7 +44,7 @@ ggplot_build(obj) # the result exposes most of the layout information
 }}}
     * This may be pursued as an undergraduate students project.
     * Simple example of this goal is needed. [https://www.stat.auckland.ac.nz/~paul/grid/grid.html grid package] may provide some examples of lower-level API.
-   # Improve plot layout
+   # Improve plot layout. This may also be suitable for an undergraduate side project once they get used to the code.
 
  * TO-DO list
   # Make drawing line function with group -> release for new version.

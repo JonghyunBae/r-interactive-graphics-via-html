@@ -10,29 +10,36 @@
  <script src="../../JavaScript/structure.js"></script>
  <script src="../../JavaScript/common.js"></script>
  <script src="../../JavaScript/axis.js"></script>
+ <script src="../../JavaScript/color.js"></script>
  <script src="../../JavaScript/line.js"></script>
  <script src="../../JavaScript/dot.js"></script>
  <script src="../../JavaScript/node_event.js"></script>
  <script src="../../JavaScript/menu.js"></script>
+ <script src="../../JavaScript/legend.js"></script>
 </head>
 <body>
 <script>
-var mainArr1 = createMainStructure('../../JavaScript/_sub.diamonds.csv');
+
+var mainArr1 = createMainStructure('../../JavaScript/sample.csv');
 </script>
+
 
  		<div id="content" class = "right-output" >
 		<div id="container1" oncontextmenu="return false;"></div>
 		<div id="container2" oncontextmenu="return false;"></div>
+		<div id="container3" oncontextmenu="return false;"></div>
        </div>
        
        <script>
-       var lobj1 = new MakeLineObj(mainArr1, 'depth', 'price');
-       var axis1 = new Axis(1, lobj1, 'depth', 'price', {});
-       var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
+    //   var axis1 = new Axis(1, mainArr1, 'Time', 'conc', {legend:'Subject'});
+     //  var lobj1 = new MakeLineObj(axis1, mainArr1, 'Time', 'conc');
+     //  var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
        
-       var axis2 = new Axis(2, mainArr1, 'carat', 'price', {});
-       var d1 = new Dot(axis2, mainArr1, 'carat', 'price', {});
-
+       var axis2 = new Axis(2, mainArr1, 'Time', 'conc', {});
+       var d1 = new Dot(axis2, mainArr1, 'Time', 'conc', {});
+       
+       var axis1 = new Axis(1, mainArr1, 'Time', 'conc', {legend:'Subject'});
+       
        var AllAxisObjArr = [axis1, axis2];
        eventTrigger(AllAxisObjArr); // this is global for redrawing in hideselected.
       

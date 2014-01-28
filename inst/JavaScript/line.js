@@ -1,37 +1,85 @@
 var MakeLineObj = {};
 (function() {
-	MakeLineObj = function(dataObj, xLabel, yLabel, optionObj) {
-		var temp = getFields(dataObj);
+	MakeLineObj = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+		
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
 		// copy data field.
-        for(var i = 0 ; i < temp.length ; i ++){
-                this[temp[i]] = dataObj[temp[i]];
-        }
-        this.labelArr = dataObj.labelArr;
-		this.x1 = new Array(dataObj[xLabel].length - 1);
-		this.x2 = new Array(dataObj[xLabel].length - 1);
-		this.y1 = new Array(dataObj[yLabel].length - 1);
-		this.y2 = new Array(dataObj[yLabel].length - 1);
-		
-		for(var i = 0 ; i < this.x1.length ; i ++){
-			this.x1[i] = dataObj[xLabel][i];
-			this.x2[i] = dataObj[xLabel][i+1];
-			this.y1[i] = dataObj[yLabel][i];
-			this.y2[i] = dataObj[yLabel][i+1];
+		var temp = getFields(dataObj);
+		for(var i = 0 ; i < temp.length ; i ++){
+			this[temp[i]] = dataObj[temp[i]];
+		}
+		this.labelArr = dataObj.labelArr;
+		var legendLabel = axisObj.legendLabel;
+		if(legendLabel != undefined && dataObj[legendLabel].isDiscrete == true){
+			this.groupOn = true;
+		}else{
+			this.groupOn = false;
 		}
 		
-		// make event handle part.
-		this.$isSelected = make2DArr(this.x1.length);
-		var p2cArr = new Array(this.$isSelected.length + 1);
-		var c2pArr = new Array(this.$isSelected.length);
-		for(var i = 0 ; i < this.$isSelected.length ; i ++){
-			this.$isSelected[i][0] = 0;
-			p2cArr[i] = [i-1, i];
-			c2pArr[i] = [i, i+1];
-		}
-		p2cArr[0] = 0;
-		p2cArr[i] = i-1;
+		if(this.groupOn == true){ // draw line with group
+			this.x1 = new Array();
+			this.x2 = new Array();
+			this.y1 = new Array();
+			this.y2 = new Array();
+			this.colorArr = new Array();
+			var p2cArr = new Array(dataObj[xLabel].length);
+			var c2pArr = new Array();
+			var lineCnt = -1;
+			for(var i = 0 ; i < dataObj[legendLabel].index.length ; i ++){ // for one sub group
+				var groupTemp = new Array();
+				for(var j = 0 ; j < dataObj[legendLabel].length ; j ++){ // search all data
+					if(i == dataObj[legendLabel][j]){ // save groupTemp
+						groupTemp.push(j);
+					}
+				}
+				for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
+					this.x1.push(dataObj[xLabel][groupTemp[j]]);
+					this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
+					this.y1.push(dataObj[yLabel][groupTemp[j]]);
+					this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
+					this.colorArr.push(i);
+					p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+					lineCnt ++;
+					c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+				}
+				p2cArr[groupTemp[0]] = p2cArr[groupTemp[0]][1];
+				p2cArr[groupTemp[j]] = lineCnt;
+				lineCnt ++;				
+			}
+			// make event handle part.
+			this.$isSelected = make2DArr(this.x1.length);
+			for(var i = 0 ; i < this.$isSelected.length ; i ++){
+				this.$isSelected[i][0] = 0;
+			}
+			
+		}else{			
+			this.x1 = new Array(dataObj[xLabel].length - 1);
+			this.x2 = new Array(dataObj[xLabel].length - 1);
+			this.y1 = new Array(dataObj[xLabel].length - 1);
+			this.y2 = new Array(dataObj[xLabel].length - 1);
+			this.colorArr = new Array(dataObj[xLabel].length - 1);
+			
+			for(var i = 0 ; i < this.x1.length ; i ++){
+				this.x1[i] = dataObj[xLabel][i];
+				this.x2[i] = dataObj[xLabel][i+1];
+				this.y1[i] = dataObj[yLabel][i];
+				this.y2[i] = dataObj[yLabel][i+1];
+				this.colorArr[i] = i;
+			}
+			
+			// make event handle part.
+			this.$isSelected = make2DArr(this.x1.length);
+			var p2cArr = new Array(this.$isSelected.length + 1);
+			var c2pArr = new Array(this.$isSelected.length);
+			for(var i = 0 ; i < this.$isSelected.length ; i ++){
+				this.$isSelected[i][0] = 0;
+				p2cArr[i] = [i-1, i];
+				c2pArr[i] = [i, i+1];
+			}
+			p2cArr[0] = 0;
+			p2cArr[i] = i-1;
+		}		
 		this.$id = 1;
 		this._type = 'lineObj';
 		birthReport(dataObj, this, p2cArr, c2pArr);
@@ -95,6 +143,21 @@ var Line = {};
 				this.optionObj = optionObj;
 				this.dataId = dataObj.$id;
 				this.graphId = axisObj.numberOfGraph;
+				
+				// check color
+				if(axisObj.legendLabel != undefined){
+					var legendLabel = axisObj.legendLabel;
+					if(dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined){
+						addColorField(dataObj[legendLabel]);
+					}else if(dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined){
+						addColorField(dataObj[legendLabel]);
+					}
+					this.colorOn = true;
+				}else{
+					this.colorOn = false;
+				}
+				this.colorLabel = legendLabel;
+				
 				// set the base color.
 				if(optionObj.baseColor != undefined && optionObj.baseColor != 'n'){
 					this.baseColor = optionObj.baseColor;
@@ -124,8 +187,8 @@ var Line = {};
 							         xArr2[i],
 							         yArr2[i]
 							        ],
-							stroke: this.baseColor,
-							fill: this.baseColor,
+							stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+							fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
 							selected: 0,
 							selectCnt: 0,
 							strokeWdith: 1,

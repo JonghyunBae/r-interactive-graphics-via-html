@@ -33,19 +33,27 @@ var MakeLineObj = {};
 						groupTemp.push(j);
 					}
 				}
-				for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
-					this.x1.push(dataObj[xLabel][groupTemp[j]]);
-					this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
-					this.y1.push(dataObj[yLabel][groupTemp[j]]);
-					this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
-					this.colorArr.push(i);
-					p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+				if(groupTemp.length > 1){
+					for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
+						this.x1.push(dataObj[xLabel][groupTemp[j]]);
+						this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
+						this.y1.push(dataObj[yLabel][groupTemp[j]]);
+						this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
+						this.colorArr.push(i);
+						p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+					//	alert("p2c: " + groupTemp[j] + ", " + p2cArr[groupTemp[j]]);
+						if(lineCnt == -1)
+							lineCnt ++;
+						c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+					//	alert("c2p: " + lineCnt + ", " + c2pArr[lineCnt]);
+						
+					}
+					p2cArr[groupTemp[0]] = p2cArr[groupTemp[0]][1];
+					p2cArr[groupTemp[j]] = lineCnt;
 					lineCnt ++;
-					c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+				}else{
+					p2cArr[groupTemp] = -1;
 				}
-				p2cArr[groupTemp[0]] = p2cArr[groupTemp[0]][1];
-				p2cArr[groupTemp[j]] = lineCnt;
-				lineCnt ++;				
 			}
 			// make event handle part.
 			this.$isSelected = make2DArr(this.x1.length);
@@ -175,7 +183,7 @@ var Line = {};
 				var yArr2 = temp.yArr;
 				var cnt = 0;
 				this.node = new Array();
-				for(var i = 0 ; i < xArr1.length - 1 ; i ++){
+				for(var i = 0 ; i < xArr1.length; i ++){
 					if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
 						this.node[cnt] = new Kinetic.Line({
 							name: i,
@@ -187,13 +195,13 @@ var Line = {};
 							         xArr2[i],
 							         yArr2[i]
 							        ],
-							stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
-							fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+							stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
+							fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
 							selected: 0,
 							selectCnt: 0,
 							strokeWdith: 1,
 							opacity: 0.5,
-							info: "Node: " + i
+							info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj.colorArr[i]]
 						});
 						dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
 						cnt ++;

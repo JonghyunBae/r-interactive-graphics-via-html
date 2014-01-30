@@ -150,6 +150,7 @@ function setMapping(index)
 				returnArr = index[nodes];
 			}else{
 				for(var i = 0 ; i < nodes.length ; i ++){
+					
 					returnArr = returnArr.concat(index[nodes[i]]);
 				}
 			}
@@ -168,6 +169,7 @@ function firstUpdate(firstObj)
 {
 	return function(nodes, selectOn)
 		{
+			//alert(nodes);
 			var object = firstObj;
 			var temp = nodes;
 			
@@ -194,7 +196,7 @@ function firstUpdate(firstObj)
 					object.refreshArr[i]();
 				}
 			}
-			
+		//	alert(temp);
 			// find root
 			while(object.parent != null){
 				temp = object.childTOparent(temp);
@@ -202,6 +204,7 @@ function firstUpdate(firstObj)
 			}
 			var refineArr = new Array();
 			var cnt = 0;
+		//	alert(temp);
 			// if just one node.
 			if(temp.length == undefined){
 				if(object.$isSelected[temp][0] != selectOn){ // prevent duplicate 

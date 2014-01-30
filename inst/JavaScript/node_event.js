@@ -209,7 +209,7 @@ function select(Name)
 					Name.touch = false;
 					for(var i = 0 ; i < Name.graphObjArr.length ; i ++){
 						allDeselect(Name.graphObjArr[i]);
-					}					
+					}
 				}
 			}
 		}		

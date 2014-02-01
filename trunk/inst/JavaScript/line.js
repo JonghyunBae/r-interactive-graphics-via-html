@@ -26,6 +26,7 @@ var MakeLineObj = {};
 			var p2cArr = new Array(dataObj[xLabel].length);
 			var c2pArr = new Array();
 			var lineCnt = -1;
+			var newGroup = 1;
 			for(var i = 0 ; i < dataObj[legendLabel].index.length ; i ++){ // for one sub group
 				var groupTemp = new Array();
 				for(var j = 0 ; j < dataObj[legendLabel].length ; j ++){ // search all data
@@ -34,26 +35,46 @@ var MakeLineObj = {};
 					}
 				}
 				if(groupTemp.length > 1){
-					for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
-						this.x1.push(dataObj[xLabel][groupTemp[j]]);
-						this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
-						this.y1.push(dataObj[yLabel][groupTemp[j]]);
-						this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
+					if(groupTemp.length > 2){
+						for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
+							this.x1.push(dataObj[xLabel][groupTemp[j]]);
+							this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
+							this.y1.push(dataObj[yLabel][groupTemp[j]]);
+							this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
+							this.colorArr.push(i);
+							if(lineCnt == -1){
+								lineCnt ++;
+							}						
+							if(newGroup == 1){
+								newGroup = 0;
+								p2cArr[groupTemp[j]] = lineCnt;
+							}else{
+								p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+								lineCnt ++;
+							}						
+							c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+						}
+						newGroup = 1;
+						p2cArr[groupTemp[j]] = lineCnt;
+						lineCnt ++;
+					}else{ // groupTemp.length == 2
+						this.x1.push(dataObj[xLabel][groupTemp[0]]);
+						this.x2.push(dataObj[xLabel][groupTemp[1]]);
+						this.y1.push(dataObj[yLabel][groupTemp[0]]);
+						this.y2.push(dataObj[yLabel][groupTemp[1]]);
 						this.colorArr.push(i);
-						p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
-					//	alert("p2c: " + groupTemp[j] + ", " + p2cArr[groupTemp[j]]);
-						if(lineCnt == -1)
+						if(lineCnt == -1){
 							lineCnt ++;
-						c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
-					//	alert("c2p: " + lineCnt + ", " + c2pArr[lineCnt]);
-						
+						}
+						p2cArr[groupTemp[0]] = lineCnt;
+						p2cArr[groupTemp[1]] = lineCnt;
+						c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
+						lineCnt ++;
 					}
-					p2cArr[groupTemp[0]] = p2cArr[groupTemp[0]][1];
-					p2cArr[groupTemp[j]] = lineCnt;
-					lineCnt ++;
 				}else{
 					p2cArr[groupTemp] = -1;
 				}
+				
 			}
 			// make event handle part.
 			this.$isSelected = make2DArr(this.x1.length);

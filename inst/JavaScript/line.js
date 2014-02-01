@@ -4,6 +4,7 @@ var MakeLineObj = {};
 		
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
+		this.axisObj = axisObj;
 		// copy data field.
 		var temp = getFields(dataObj);
 		for(var i = 0 ; i < temp.length ; i ++){
@@ -115,39 +116,114 @@ var MakeLineObj = {};
 	};
 	MakeLineObj.prototype = {
 		_reCalculate: function() {
-			// reload data.
-			var dataObj = this.parent;
 			xLabel = this.xLabel;
 			yLabel = this.yLabel;
-			var temp = getFields(dataObj);
+			dataObj = this.parent;
+			axisObj = this.axisObj;
 			// copy data field.
-	        for(var i = 0 ; i < temp.length ; i ++){
-	                this[temp[i]] = dataObj[temp[i]];
-	        }
-	        this.labelArr = dataObj.labelArr;
-			this.x1 = new Array(dataObj[xLabel].length - 1);
-			this.x2 = new Array(dataObj[xLabel].length - 1);
-			this.y1 = new Array(dataObj[yLabel].length - 1);
-			this.y2 = new Array(dataObj[yLabel].length - 1);
-			
-			for(var i = 0 ; i < this.x1.length ; i ++){
-				this.x1[i] = dataObj[xLabel][i];
-				this.x2[i] = dataObj[xLabel][i+1];
-				this.y1[i] = dataObj[yLabel][i];
-				this.y2[i] = dataObj[yLabel][i+1];
+			var temp = getFields(dataObj);
+			for(var i = 0 ; i < temp.length ; i ++){
+				this[temp[i]] = dataObj[temp[i]];
+			}
+			var legendLabel = axisObj.legendLabel;
+			if(legendLabel != undefined && dataObj[legendLabel].isDiscrete == true){
+				this.groupOn = true;
+			}else{
+				this.groupOn = false;
 			}
 			
-			// make event handle part.
-			this.$isSelected = make2DArr(this.x1.length);
-			var p2cArr = new Array(this.$isSelected.length + 1);
-			var c2pArr = new Array(this.$isSelected.length);
-			for(var i = 0 ; i < this.$isSelected.length ; i ++){
-				this.$isSelected[i][0] = 0;
-				p2cArr[i] = [i-1, i];
-				c2pArr[i] = [i, i+1];
+			if(this.groupOn == true){ // draw line with group
+				this.x1 = new Array();
+				this.x2 = new Array();
+				this.y1 = new Array();
+				this.y2 = new Array();
+				this.colorArr = new Array();
+				var p2cArr = new Array(dataObj[xLabel].length);
+				var c2pArr = new Array();
+				var lineCnt = -1;
+				var newGroup = 1;
+				for(var i = 0 ; i < dataObj[legendLabel].index.length ; i ++){ // for one sub group
+					var groupTemp = new Array();
+					for(var j = 0 ; j < dataObj[legendLabel].length ; j ++){ // search all data
+						if(i == dataObj[legendLabel][j]){ // save groupTemp
+							groupTemp.push(j);
+						}
+					}
+					if(groupTemp.length > 1){
+						if(groupTemp.length > 2){
+							for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
+								this.x1.push(dataObj[xLabel][groupTemp[j]]);
+								this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
+								this.y1.push(dataObj[yLabel][groupTemp[j]]);
+								this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
+								this.colorArr.push(i);
+								if(lineCnt == -1){
+									lineCnt ++;
+								}						
+								if(newGroup == 1){
+									newGroup = 0;
+									p2cArr[groupTemp[j]] = lineCnt;
+								}else{
+									p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+									lineCnt ++;
+								}						
+								c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+							}
+							newGroup = 1;
+							p2cArr[groupTemp[j]] = lineCnt;
+							lineCnt ++;
+						}else{ // groupTemp.length == 2
+							this.x1.push(dataObj[xLabel][groupTemp[0]]);
+							this.x2.push(dataObj[xLabel][groupTemp[1]]);
+							this.y1.push(dataObj[yLabel][groupTemp[0]]);
+							this.y2.push(dataObj[yLabel][groupTemp[1]]);
+							this.colorArr.push(i);
+							if(lineCnt == -1){
+								lineCnt ++;
+							}
+							p2cArr[groupTemp[0]] = lineCnt;
+							p2cArr[groupTemp[1]] = lineCnt;
+							c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
+							lineCnt ++;
+						}
+					}else{
+						p2cArr[groupTemp] = -1;
+					}
+					
+				}
+				// make event handle part.
+				this.$isSelected = make2DArr(this.x1.length);
+				for(var i = 0 ; i < this.$isSelected.length ; i ++){
+					this.$isSelected[i][0] = 0;
+				}
+				
+			}else{			
+				this.x1 = new Array(dataObj[xLabel].length - 1);
+				this.x2 = new Array(dataObj[xLabel].length - 1);
+				this.y1 = new Array(dataObj[xLabel].length - 1);
+				this.y2 = new Array(dataObj[xLabel].length - 1);
+				this.colorArr = new Array(dataObj[xLabel].length - 1);
+				
+				for(var i = 0 ; i < this.x1.length ; i ++){
+					this.x1[i] = dataObj[xLabel][i];
+					this.x2[i] = dataObj[xLabel][i+1];
+					this.y1[i] = dataObj[yLabel][i];
+					this.y2[i] = dataObj[yLabel][i+1];
+					this.colorArr[i] = i;
+				}
+				
+				// make event handle part.
+				this.$isSelected = make2DArr(this.x1.length);
+				var p2cArr = new Array(this.$isSelected.length + 1);
+				var c2pArr = new Array(this.$isSelected.length);
+				for(var i = 0 ; i < this.$isSelected.length ; i ++){
+					this.$isSelected[i][0] = 0;
+					p2cArr[i] = [i-1, i];
+					c2pArr[i] = [i, i+1];
+				}
+				p2cArr[0] = 0;
+				p2cArr[i] = i-1;
 			}
-			p2cArr[0] = 0;
-			p2cArr[i] = i-1;
 			ModifyBirth(dataObj, this, p2cArr, c2pArr);
 		}
 	};

@@ -25,7 +25,7 @@ initRIGHT <- function() {
   .RIGHT$libDir_RIGHT <- system.file("JavaScript", package = "RIGHT")
   
   # Script files always necessary:
-  sourceArray <- c("kinetic-v4.7.0.js",
+  sourceArray <- c("kinetic-v4.7.4.js",
                    "common.js",
                    "structure.js",
                    "axis.js",

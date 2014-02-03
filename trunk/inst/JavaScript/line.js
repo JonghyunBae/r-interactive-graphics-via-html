@@ -280,32 +280,61 @@ var Line = {};
 				var yArr2 = temp.yArr;
 				var cnt = 0;
 				this.node = new Array();
-				for(var i = 0 ; i < xArr1.length; i ++){
-					if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
-						this.node[cnt] = new Kinetic.Line({
-							name: i,
-							x: [xArr1[i], xArr2[i]],
-							y: [yArr1[i], yArr2[i]],
-							points: [ 
-							         xArr1[i],
-							         yArr1[i],
-							         xArr2[i],
-							         yArr2[i]
-							        ],
-							stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
-							fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
-							selected: 0,
-							selectCnt: 0,
-							strokeWdith: 1,
-							opacity: 0.5,
-							info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj.colorArr[i]]
-						});
-						dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
-						cnt ++;
-					}else{
-						dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+				if(this.colorOn == true){
+					for(var i = 0 ; i < xArr1.length; i ++){
+						if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
+							this.node[cnt] = new Kinetic.Line({
+								name: i,
+								x: [xArr1[i], xArr2[i]],
+								y: [yArr1[i], yArr2[i]],
+								points: [ 
+								         xArr1[i],
+								         yArr1[i],
+								         xArr2[i],
+								         yArr2[i]
+								        ],
+								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
+								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
+								selected: 0,
+								selectCnt: 0,
+								strokeWdith: 1,
+								opacity: 0.5,
+								info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj.colorArr[i]]
+							});
+							dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
+							cnt ++;
+						}else{
+							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+						}
 					}
-				}
+				}else{
+					for(var i = 0 ; i < xArr1.length; i ++){
+						if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
+							this.node[cnt] = new Kinetic.Line({
+								name: i,
+								x: [xArr1[i], xArr2[i]],
+								y: [yArr1[i], yArr2[i]],
+								points: [ 
+								         xArr1[i],
+								         yArr1[i],
+								         xArr2[i],
+								         yArr2[i]
+								        ],
+								stroke: this.baseColor,
+								fill: this.baseColor,
+								selected: 0,
+								selectCnt: 0,
+								strokeWdith: 1,
+								opacity: 0.5,
+								info: "Node: " + i
+							});
+							dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
+							cnt ++;
+						}else{
+							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+						}
+					}
+				}				
 				this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);

@@ -73,7 +73,7 @@ lines_RIGHT <- function(form, data, isString = FALSE) {
   # Add script in body:
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                c(paste0("var lineObj", .RIGHT$numLines,
-                                        " = new MakeLineObj(axis", .RIGHT$numAxis, "', '", data, 
+                                        " = new MakeLineObj(axis", .RIGHT$numAxis, ", ", data, 
                                         ", '", axisName$x, "', '", axisName$y, "');"),
                                  paste0("var line", .RIGHT$numLines,
                                         " = new Line(axis", .RIGHT$numAxis,

@@ -26,6 +26,14 @@
    # search box.
    # make event handle more convenient.
    # design layout with "< div>" in html code.
+== 05Feb2014 ==
+
+Participants : Jung Hoon Lee, Chung Ha Sung.
+ * TO-DO list
+  # Modify MakeLineObj API to support non color group-drawing
+  # Make a list of small projects to help undergraduate students
+  # Check R conference requirements and schedule.
+  # Make a list of interactivity data fields for code refine.
 
 == 23JAN2014 ==
 

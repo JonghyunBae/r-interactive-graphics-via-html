@@ -26,7 +26,27 @@
    # search box.
    # make event handle more convenient.
    # design layout with "< div>" in html code.
-== 05Feb2014 ==
+
+== 06Feb2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung.
+ * Plan for undergraduate students
+  # Give them online - R courses to study.
+  # Let them try to use RIGHT, and get feedback. (It will be helpful to view big picture)
+  # Assign small-projects.
+ * Use R Conference
+  # Abstract paper due: 3/30 (but must be done before 3/14)
+  # Wait for tutorial result
+ * GSOC 2014
+  # Decide whether participate in it or not according to undergraduate's circumstance
+  # How organize team? (e.g. metor- CH?)
+ * TO-DO list for this weekend
+  # Separate color from grouping in line function
+  # Make a list of interactivity data fields for code refine.
+
+  Next meeting : 10:00 (Korea time) on Thu, 2/20
+
+== 05Feb2014 (Temporary) ==
 
 Participants : Jung Hoon Lee, Chung Ha Sung.
  * TO-DO list

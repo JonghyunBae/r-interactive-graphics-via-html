@@ -19,7 +19,7 @@
 #' obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
 #' print(obj)
 #' }
-plot_RIGHT <- function(form, data, type = "b", color = NULL,
+plot_RIGHT <- function(form, data, type = "b", color = NULL, byVal = NULL,
                        isString = FALSE) {
 
   # @param col color used for all the visual elements. color option overrides \code{col} option.
@@ -35,6 +35,7 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL,
     
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     color <- if (is.null(argArray$color)) NULL else as.character(argArray$color)
+    byVal <- if (is.null(argArray$byVal)) NULL else as.character(argArray$byVal)
     
   } # if
   
@@ -56,6 +57,9 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL,
   
   # Check color option:
   checkColumnName(color, dataArray)
+  
+  # Check byVal option:
+  checkColumnName(byVal, dataArray)
   
   # col option is checked by points_RIGHT() or line_RIGHT().
   
@@ -89,7 +93,7 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL,
   # CHECK (junghoon): refine this to support type == "c" as well.
   if (type == "l" || type == "b") {
 #     lines_RIGHT(form, data, col = col, isString = TRUE)
-    lines_RIGHT(form, data, isString = TRUE)
+    lines_RIGHT(form, data, byVal, isString = TRUE)
   } # if
   
   ## ---

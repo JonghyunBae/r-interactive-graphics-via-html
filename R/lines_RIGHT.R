@@ -16,7 +16,7 @@
 #'               lines(conc ~ Time, Theoph)})
 #' print(obj)
 #' }
-lines_RIGHT <- function(form, data, isString = FALSE) {
+lines_RIGHT <- function(form, data, isString = FALSE, byVal = NULL) {
   
   col <- NULL # TEMPORARY
   
@@ -30,6 +30,7 @@ lines_RIGHT <- function(form, data, isString = FALSE) {
   if (!isString) {
     
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
+    byVal <- if (is.null(argArray$byVal)) NULL else as.character(argArray$byVal)
     
   } # if
   
@@ -60,6 +61,9 @@ lines_RIGHT <- function(form, data, isString = FALSE) {
   checkCol(col)
   col <- getRGB(col)
   
+  # Check byVal option:
+  checkColumnName(byVal, dataArray)
+  
   ## ---
   ## Plot points:
   ## ---
@@ -73,8 +77,9 @@ lines_RIGHT <- function(form, data, isString = FALSE) {
   # Add script in body:
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                c(paste0("var lineObj", .RIGHT$numLines,
-                                        " = new MakeLineObj(axis", .RIGHT$numAxis, ", ", data, 
-                                        ", '", axisName$x, "', '", axisName$y, "');"),
+                                        " = new MakeLineObj(", data, 
+                                        ", '", axisName$x, "', '", axisName$y, "', ",
+                                        createObject(group = byVal, alwaysObject = TRUE),");"),
                                  paste0("var line", .RIGHT$numLines,
                                         " = new Line(axis", .RIGHT$numAxis,
                                         ", lineObj", .RIGHT$numLines,

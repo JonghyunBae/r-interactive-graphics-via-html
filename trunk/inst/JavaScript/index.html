@@ -47,7 +47,7 @@
        
        <script>
        var axis1 = new Axis(1, lobj1, 'Time', 'conc', {legend:'Subject'});
-       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', 'NULL', {});       
+       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', {group: 'Subject'});       
        var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
        
        

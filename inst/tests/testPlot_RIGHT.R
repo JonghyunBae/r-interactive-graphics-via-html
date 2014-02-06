@@ -136,6 +136,80 @@ test_that("Check color option:", {
   
 }) # test_that
 
+setRIGHT(divArray = c(),
+         scriptArray = c(),
+         numAxis = 0,
+         numPoints = 0,
+         numLines = 0)
+
+test_that("Check by option:", {
+  
+  plot_RIGHT(conc ~ Time, Theoph, type = "n", by = Subject)
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
+  expect_identical(temp$scriptArray, "var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});")
+  
+  plot_RIGHT(conc ~ Time, Theoph, type = "p", by = Subject)
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
+                                    '<div id="container2" oncontextmenu="return false;"></div>'))
+  expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});", 
+                                       "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});",
+                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});"))
+  
+  plot_RIGHT(conc ~ Time, Theoph, type = "b", by = Subject)
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
+                                    '<div id="container2" oncontextmenu="return false;"></div>',
+                                    '<div id="container3" oncontextmenu="return false;"></div>'))
+  expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {});", 
+                                       "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});",
+                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});",
+                                       "var axis3 = new Axis(3, Theoph, 'Time', 'conc', {});",
+                                       "var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc', {group: 'Subject'});",
+                                       "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
+                                       "var point2 = new Dot(axis3, Theoph, 'Time', 'conc', {});"))
+  
+}) # test_that
+
+setRIGHT(divArray = c(),
+         scriptArray = c(),
+         numAxis = 0,
+         numPoints = 0,
+         numLines = 0)
+
+test_that("Check multiple options:", {
+  
+  # Check (chungha): Now, these are just test for legend and by options. Additional options further..
+  
+  plot_RIGHT(conc ~ Time, Theoph, type = "n", color = Subject, by = Subject)
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
+  expect_identical(temp$scriptArray, "var axis1 = new Axis(1, Theoph, 'Time', 'conc', {legend: 'Subject'});")
+  
+  plot_RIGHT(conc ~ Time, Theoph, type = "p", color = Subject, by = Subject)
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
+                                    '<div id="container2" oncontextmenu="return false;"></div>'))
+  expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {legend: 'Subject'});", 
+                                       "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {legend: 'Subject'});",
+                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});"))
+  
+  plot_RIGHT(conc ~ Time, Theoph, type = "b", color = Subject, by = Subject)
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$divArray, c('<div id="container1" oncontextmenu="return false;"></div>', 
+                                    '<div id="container2" oncontextmenu="return false;"></div>',
+                                    '<div id="container3" oncontextmenu="return false;"></div>'))
+  expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'Time', 'conc', {legend: 'Subject'});", 
+                                       "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {legend: 'Subject'});",
+                                       "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});",
+                                       "var axis3 = new Axis(3, Theoph, 'Time', 'conc', {legend: 'Subject'});",
+                                       "var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc', {group: 'Subject'});",
+                                       "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
+                                       "var point2 = new Dot(axis3, Theoph, 'Time', 'conc', {});"))
+  
+}) # test_that
+
 test_that("Check col option:", {
   # col option is checked at lines_RIGHT() and points_RIGHT() level.
 }) # test_that

@@ -1,12 +1,16 @@
 var MakeLineObj = {};
 (function() {
-	MakeLineObj = function(dataObj, xLabel, yLabel, gLabel, optionObj) {
+	MakeLineObj = function(dataObj, xLabel, yLabel, optionObj) {
 
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
-		this.gLabel = gLabel;
 		this.dataObj = dataObj;
-		
+		if(optionObj.group != undefined){
+			gLabel = optionObj.group;
+		}else{
+			gLabel = 'NULL';			
+		}
+		this.gLabel = gLabel;
 		if(gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined){
 			this.groupOn = true;
 			this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];

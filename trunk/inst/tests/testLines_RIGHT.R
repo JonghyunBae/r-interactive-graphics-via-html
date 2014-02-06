@@ -51,7 +51,7 @@ test_that("Check script generation without any options", {
   expect_identical(temp$numLines, 1)
   expect_identical(temp$nameArray, c("dummy", "Theoph"))
   expect_identical(temp$scriptArray, 
-                   c("var lineObj1 = new MakeLineObj(axis1, Theoph, 'Time', 'conc');",
+                   c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc', {});",
                      "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
   expect_true(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
   
@@ -59,9 +59,9 @@ test_that("Check script generation without any options", {
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numLines, 2)
   expect_identical(temp$nameArray, c("dummy", "Theoph", "Theoph"))
-  expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(axis1, Theoph, 'Time', 'conc');",
+  expect_identical(temp$scriptArray, c("var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc', {});",
                                        "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
-                                       "var lineObj2 = new MakeLineObj(axis1, Theoph, 'Time', 'conc');",
+                                       "var lineObj2 = new MakeLineObj(Theoph, 'Time', 'conc', {});",
                                        "var line2 = new Line(axis1, lineObj2, 'x1', 'x2', 'y1', 'y2', {});"))
   expect_true(any(file.path(temp$libDir_RIGHT, "line.js") %in% temp$sourceArray))
 

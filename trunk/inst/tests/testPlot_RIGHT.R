@@ -72,7 +72,7 @@ test_that("Check script generation without any options", {
                                        "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});",
                                        "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});",
                                        "var axis3 = new Axis(3, Theoph, 'Time', 'conc', {});",
-                                       "var lineObj1 = new MakeLineObj(axis3, Theoph, 'Time', 'conc');",
+                                       "var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc', {});",
                                        "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
   
   plot_RIGHT(conc ~ Time, Theoph, type = "b")
@@ -89,10 +89,10 @@ test_that("Check script generation without any options", {
                                        "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});",
                                        "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});",
                                        "var axis3 = new Axis(3, Theoph, 'Time', 'conc', {});",
-                                       "var lineObj1 = new MakeLineObj(axis3, Theoph, 'Time', 'conc');",
+                                       "var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc', {});",
                                        "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
                                        "var axis4 = new Axis(4, Theoph, 'Time', 'conc', {});",
-                                       "var lineObj2 = new MakeLineObj(axis4, Theoph, 'Time', 'conc');",
+                                       "var lineObj2 = new MakeLineObj(Theoph, 'Time', 'conc', {});",
                                        "var line2 = new Line(axis4, lineObj2, 'x1', 'x2', 'y1', 'y2', {});",
                                        "var point2 = new Dot(axis4, Theoph, 'Time', 'conc', {});"))
   
@@ -128,7 +128,7 @@ test_that("Check color option:", {
                                        "var axis2 = new Axis(2, Theoph, 'Time', 'conc', {legend: 'Subject'});",
                                        "var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});",
                                        "var axis3 = new Axis(3, Theoph, 'Time', 'conc', {legend: 'Subject'});",
-                                       "var lineObj1 = new MakeLineObj(axis3, Theoph, 'Time', 'conc');",
+                                       "var lineObj1 = new MakeLineObj(Theoph, 'Time', 'conc', {});",
                                        "var line1 = new Line(axis3, lineObj1, 'x1', 'x2', 'y1', 'y2', {});",
                                        "var point2 = new Dot(axis3, Theoph, 'Time', 'conc', {});"))
   

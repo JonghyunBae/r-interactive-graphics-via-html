@@ -38,8 +38,8 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung.
   # Abstract paper due: 3/30 (but must be done before 3/14)
   # Wait for tutorial result
  * GSOC 2014
-  # Decide whether participate in it or not according to undergraduate's circumstance
-  # How organize team? (e.g. metor- CH?)
+  # Decide whether participate in it or not according to semester schedule
+  # How to organize team? (e.g. mentor- CH?)
  * TO-DO list for this weekend
   # Separate color from grouping in line function
   # Make a list of interactivity data fields for code refine.

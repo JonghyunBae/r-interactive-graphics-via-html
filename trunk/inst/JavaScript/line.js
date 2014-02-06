@@ -1,37 +1,34 @@
 var MakeLineObj = {};
 (function() {
-	MakeLineObj = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-		
+	MakeLineObj = function(dataObj, xLabel, yLabel, gLabel, optionObj) {
+
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
-		this.axisObj = axisObj;
-		// copy data field.
-		var temp = getFields(dataObj);
-		for(var i = 0 ; i < temp.length ; i ++){
-			this[temp[i]] = dataObj[temp[i]];
-		}
-		this.labelArr = dataObj.labelArr;
-		var legendLabel = axisObj.legendLabel;
-		if(legendLabel != undefined && dataObj[legendLabel].isDiscrete == true){
+		this.gLabel = gLabel;
+		this.dataObj = dataObj;
+		
+		if(gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined){
 			this.groupOn = true;
+			this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
 		}else{
 			this.groupOn = false;
+			this.labelArr = ['x1', 'y1', 'x2', 'y2'];
 		}
-		
+
 		if(this.groupOn == true){ // draw line with group
 			this.x1 = new Array();
 			this.x2 = new Array();
 			this.y1 = new Array();
 			this.y2 = new Array();
-			this.colorArr = new Array();
+			this[gLabel] = new Array();
 			var p2cArr = new Array(dataObj[xLabel].length);
 			var c2pArr = new Array();
 			var lineCnt = -1;
 			var newGroup = 1;
-			for(var i = 0 ; i < dataObj[legendLabel].index.length ; i ++){ // for one sub group
+			for(var i = 0 ; i < dataObj[gLabel].index.length ; i ++){ // for one sub group
 				var groupTemp = new Array();
-				for(var j = 0 ; j < dataObj[legendLabel].length ; j ++){ // search all data
-					if(i == dataObj[legendLabel][j]){ // save groupTemp
+				for(var j = 0 ; j < dataObj[gLabel].length ; j ++){ // search all data
+					if(i == dataObj[gLabel][j]){ // save groupTemp
 						groupTemp.push(j);
 					}
 				}
@@ -42,7 +39,7 @@ var MakeLineObj = {};
 							this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
 							this.y1.push(dataObj[yLabel][groupTemp[j]]);
 							this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
-							this.colorArr.push(i);
+							this[gLabel].push(i);
 							if(lineCnt == -1){
 								lineCnt ++;
 							}						
@@ -63,7 +60,7 @@ var MakeLineObj = {};
 						this.x2.push(dataObj[xLabel][groupTemp[1]]);
 						this.y1.push(dataObj[yLabel][groupTemp[0]]);
 						this.y2.push(dataObj[yLabel][groupTemp[1]]);
-						this.colorArr.push(i);
+						this[gLabel].push(i);
 						if(lineCnt == -1){
 							lineCnt ++;
 						}
@@ -75,27 +72,28 @@ var MakeLineObj = {};
 				}else{
 					p2cArr[groupTemp] = -1;
 				}
-				
 			}
+			this[gLabel].isDiscrete = true;
+			this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
+			this[gLabel].index = dataObj[gLabel].index;
 			// make event handle part.
 			this.$isSelected = make2DArr(this.x1.length);
 			for(var i = 0 ; i < this.$isSelected.length ; i ++){
 				this.$isSelected[i][0] = 0;
 			}
 			
-		}else{			
+		}else{
 			this.x1 = new Array(dataObj[xLabel].length - 1);
 			this.x2 = new Array(dataObj[xLabel].length - 1);
 			this.y1 = new Array(dataObj[xLabel].length - 1);
 			this.y2 = new Array(dataObj[xLabel].length - 1);
-			this.colorArr = new Array(dataObj[xLabel].length - 1);
-			
+			this[gLabel] = new Array();
 			for(var i = 0 ; i < this.x1.length ; i ++){
 				this.x1[i] = dataObj[xLabel][i];
 				this.x2[i] = dataObj[xLabel][i+1];
 				this.y1[i] = dataObj[yLabel][i];
 				this.y2[i] = dataObj[yLabel][i+1];
-				this.colorArr[i] = i;
+				this[gLabel].push(i);
 			}
 			
 			// make event handle part.
@@ -116,36 +114,33 @@ var MakeLineObj = {};
 	};
 	MakeLineObj.prototype = {
 		_reCalculate: function() {
-			xLabel = this.xLabel;
-			yLabel = this.yLabel;
-			dataObj = this.parent;
-			axisObj = this.axisObj;
-			// copy data field.
-			var temp = getFields(dataObj);
-			for(var i = 0 ; i < temp.length ; i ++){
-				this[temp[i]] = dataObj[temp[i]];
-			}
-			var legendLabel = axisObj.legendLabel;
-			if(legendLabel != undefined && dataObj[legendLabel].isDiscrete == true){
+			var xLabel = this.xLabel;
+			var yLabel = this.yLabel;
+			var gLabel = this.gLabel;
+			var dataObj = this.dataObj;
+			
+			if(gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined){
 				this.groupOn = true;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
 			}else{
 				this.groupOn = false;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2'];
 			}
-			
+
 			if(this.groupOn == true){ // draw line with group
 				this.x1 = new Array();
 				this.x2 = new Array();
 				this.y1 = new Array();
 				this.y2 = new Array();
-				this.colorArr = new Array();
+				this[gLabel] = new Array();
 				var p2cArr = new Array(dataObj[xLabel].length);
 				var c2pArr = new Array();
 				var lineCnt = -1;
 				var newGroup = 1;
-				for(var i = 0 ; i < dataObj[legendLabel].index.length ; i ++){ // for one sub group
+				for(var i = 0 ; i < dataObj[gLabel].index.length ; i ++){ // for one sub group
 					var groupTemp = new Array();
-					for(var j = 0 ; j < dataObj[legendLabel].length ; j ++){ // search all data
-						if(i == dataObj[legendLabel][j]){ // save groupTemp
+					for(var j = 0 ; j < dataObj[gLabel].length ; j ++){ // search all data
+						if(i == dataObj[gLabel][j]){ // save groupTemp
 							groupTemp.push(j);
 						}
 					}
@@ -156,7 +151,7 @@ var MakeLineObj = {};
 								this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
 								this.y1.push(dataObj[yLabel][groupTemp[j]]);
 								this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
-								this.colorArr.push(i);
+								this[gLabel].push(i);
 								if(lineCnt == -1){
 									lineCnt ++;
 								}						
@@ -177,7 +172,7 @@ var MakeLineObj = {};
 							this.x2.push(dataObj[xLabel][groupTemp[1]]);
 							this.y1.push(dataObj[yLabel][groupTemp[0]]);
 							this.y2.push(dataObj[yLabel][groupTemp[1]]);
-							this.colorArr.push(i);
+							this[gLabel].push(i);
 							if(lineCnt == -1){
 								lineCnt ++;
 							}
@@ -189,27 +184,28 @@ var MakeLineObj = {};
 					}else{
 						p2cArr[groupTemp] = -1;
 					}
-					
 				}
+				this[gLabel].isDiscrete = true;
+				this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
+				this[gLabel].index = dataObj[gLabel].index;
 				// make event handle part.
 				this.$isSelected = make2DArr(this.x1.length);
 				for(var i = 0 ; i < this.$isSelected.length ; i ++){
 					this.$isSelected[i][0] = 0;
 				}
 				
-			}else{			
+			}else{
 				this.x1 = new Array(dataObj[xLabel].length - 1);
 				this.x2 = new Array(dataObj[xLabel].length - 1);
 				this.y1 = new Array(dataObj[xLabel].length - 1);
 				this.y2 = new Array(dataObj[xLabel].length - 1);
-				this.colorArr = new Array(dataObj[xLabel].length - 1);
-				
+				this[gLabel] = new Array();
 				for(var i = 0 ; i < this.x1.length ; i ++){
 					this.x1[i] = dataObj[xLabel][i];
 					this.x2[i] = dataObj[xLabel][i+1];
 					this.y1[i] = dataObj[yLabel][i];
 					this.y2[i] = dataObj[yLabel][i+1];
-					this.colorArr[i] = i;
+					this[gLabel].push(i);
 				}
 				
 				// make event handle part.
@@ -250,8 +246,8 @@ var Line = {};
 				this.graphId = axisObj.numberOfGraph;
 				
 				// check color
-				if(axisObj.legendLabel != undefined){
-					var legendLabel = axisObj.legendLabel;
+				if(axisObj.legendLabel != undefined && dataObj[axisObj.legendLabel] != undefined){
+					var legendLabel = axisObj.legendLabel;					
 					if(dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined){
 						addColorField(dataObj[legendLabel]);
 					}else if(dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined){
@@ -293,13 +289,13 @@ var Line = {};
 								         xArr2[i],
 								         yArr2[i]
 								        ],
-								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
-								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj.colorArr[i]],
+								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
 								selected: 0,
 								selectCnt: 0,
 								strokeWdith: 1,
 								opacity: 0.5,
-								info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj.colorArr[i]]
+								info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj[this.colorLabel][i]]
 							});
 							dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
 							cnt ++;
@@ -308,6 +304,13 @@ var Line = {};
 						}
 					}
 				}else{
+					//get group Name.
+					var groupName;
+					for(var name in dataObj){
+						if(!(name == 'x1' || name == 'x2' || name == 'y1' || name == 'y2' ||name == 'offloadObjArr' ||name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+							groupName = name;
+						}
+					}
 					for(var i = 0 ; i < xArr1.length; i ++){
 						if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
 							this.node[cnt] = new Kinetic.Line({
@@ -326,7 +329,7 @@ var Line = {};
 								selectCnt: 0,
 								strokeWdith: 1,
 								opacity: 0.5,
-								info: "Node: " + i
+								info: (dataObj[groupName].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[groupName].index[dataObj[groupName][i]]
 							});
 							dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
 							cnt ++;

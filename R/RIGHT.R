@@ -66,7 +66,7 @@ initRIGHT <- function() {
 #' @param ... data.frame objects used in \code{expr}. If they are used in one of the plotting functions, it is not necessary to list them.
 #' @param title title of the visualization. The default value is "RIGHT: R Interactive Graphics via HTml."
 #' @param dir directory name to store files used for the visualization. Temporary directory is created under the current working directory by default.
-#' @param isOverwrite rewrite exiting files if the directory name matches. FALSE by default.
+#' @param overwrite rewrite exiting files if the directory name matches. FALSE by default.
 #' @param browser a character string giving the name of the browser. It should be in the PATH, or a full path specified. getOption("browser") by default.
 #' @param supportRIGHT allow inserting Google AdSense to support further development of RIGHT. Use \code{\link{options}} and \code{\link{getOption}} to set and retrieve global option supportRIGHT.
 #' 
@@ -97,7 +97,7 @@ RIGHT <- function(expr = {},
                   ...,
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(), 
-                  isOverwrite = FALSE,
+                  overwrite = FALSE,
                   browser = getOption("browser"),
                   supportRIGHT = getOption("supportRIGHT")) {
   
@@ -105,7 +105,7 @@ RIGHT <- function(expr = {},
   ## Check input arguments:
   ## ---
   
-  if (isOverwrite == FALSE && file.exists(dir)) {
+  if (overwrite == FALSE && file.exists(dir)) {
     stop(dir, " already exists.")
   } # if
   

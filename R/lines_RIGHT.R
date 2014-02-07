@@ -4,6 +4,7 @@
 #' 
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
+#' @param by column used to group lines. Default is NULL.
 #' @param isString a character is expected for \code{data} if \code{TRUE}. It is useful for programming.
 #'
 #' @seealso \code{\link{lines}} 
@@ -16,7 +17,7 @@
 #'               lines(conc ~ Time, Theoph)})
 #' print(obj)
 #' }
-lines_RIGHT <- function(form, data, isString = FALSE, by = NULL) {
+lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   
   col <- NULL # TEMPORARY
   
@@ -57,15 +58,15 @@ lines_RIGHT <- function(form, data, isString = FALSE, by = NULL) {
   checkColumnName(axisName$x, dataArray)
   checkColumnName(axisName$y, dataArray)
 
+  # Check by option:
+  checkColumnName(by, dataArray)
+  
   # Check col option:
   checkCol(col)
   col <- getRGB(col)
   
-  # Check by option:
-  checkColumnName(by, dataArray)
-  
   ## ---
-  ## Plot points:
+  ## Plot lines:
   ## ---
 
   # Keep name of the data object:

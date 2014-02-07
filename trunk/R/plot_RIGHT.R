@@ -7,7 +7,8 @@
 #' @param form a formula describing the x and y variables as y ~ x.
 #' @param data a data.frame object.
 #' @param type the type of plot. Currently, only "n", "b", "p", "l" are supported. See \code{\link{plot}} for more details.
-#' @param color column used to define the colors used to fill the bars. Default is NULL.
+#' @param by column used to group lines. Default is the same as \code{color}.
+#' @param color column used to define line or point color. Default is NULL.
 #' @param isString a character is expected for \code{data} and \code{color} if \code{TRUE}. It is useful for programming.
 #' 
 #' @seealso \code{\link{plot}}
@@ -19,7 +20,7 @@
 #' obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
 #' print(obj)
 #' }
-plot_RIGHT <- function(form, data, type = "b", color = NULL, by = NULL,
+plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
                        isString = FALSE) {
 
   # @param col color used for all the visual elements. color option overrides \code{col} option.
@@ -35,7 +36,7 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, by = NULL,
     
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     color <- if (is.null(argArray$color)) NULL else as.character(argArray$color)
-    by <- if (is.null(argArray$by)) NULL else as.character(argArray$by)
+    by <- if (is.null(argArray$by)) color else as.character(argArray$by) # CHECK (junghoon): is this the best way?
     
   } # if
   
@@ -55,11 +56,13 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, by = NULL,
   checkColumnName(axisName$x, dataArray)
   checkColumnName(axisName$y, dataArray)
   
-  # Check color option:
+  # Check by and color option:
   checkColumnName(color, dataArray)
-  
-  # Check by option:
   checkColumnName(by, dataArray)
+  
+  if (!is.null(color) && color != by) {
+    stop("color and by should be the same.")
+  } # if
   
   # col option is checked by points_RIGHT() or line_RIGHT().
   
@@ -93,7 +96,7 @@ plot_RIGHT <- function(form, data, type = "b", color = NULL, by = NULL,
   # CHECK (junghoon): refine this to support type == "c" as well.
   if (type == "l" || type == "b") {
 #     lines_RIGHT(form, data, col = col, isString = TRUE)
-    lines_RIGHT(form, data, by, isString = TRUE)
+    lines_RIGHT(form, data, by = by, isString = TRUE)
   } # if
   
   ## ---

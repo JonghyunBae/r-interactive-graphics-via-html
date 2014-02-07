@@ -4,7 +4,7 @@
 \usage{
   RIGHT(expr = { }, ...,
     title = "RIGHT: R Interactive Graphics via HTml",
-    dir = tempfile(), isOverwrite = FALSE,
+    dir = tempfile(), overwrite = FALSE,
     browser = getOption("browser"),
     supportRIGHT = getOption("supportRIGHT"))
 }
@@ -22,7 +22,7 @@
   visualization. Temporary directory is created under the
   current working directory by default.}
 
-  \item{isOverwrite}{rewrite exiting files if the directory
+  \item{overwrite}{rewrite exiting files if the directory
   name matches. FALSE by default.}
 
   \item{browser}{a character string giving the name of the

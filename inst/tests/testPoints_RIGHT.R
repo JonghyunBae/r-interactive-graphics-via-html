@@ -37,8 +37,8 @@ test_that("data.frame object should exist", {
 
 test_that("Column names should exist", {
   
-  expect_error(points_RIGHT(conc1 ~ Time, Thoeph))
-  expect_error(points_RIGHT(conc ~ Time1, Thoeph))
+  expect_error(points_RIGHT(conc1 ~ Time, Theoph))
+  expect_error(points_RIGHT(conc ~ Time1, Theoph))
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numPoints, 0)
   expect_identical(temp$nameArray, "dummy")
@@ -84,6 +84,18 @@ test_that("Check script generation without any options", {
 #   
 # }) # test_that
 
+setRIGHT(numPoints = 0,
+         nameArray = c(),
+         sourceArray = c(),
+         scriptArray = c())
+
 test_that("Check isString option:", {
-  # CHECK (junghoon)
-})
+
+  points_RIGHT(conc ~ Time, "Theoph", isString = TRUE)
+  temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  expect_identical(temp$numPoints, 1)
+  expect_identical(temp$nameArray, c("Theoph"))
+  expect_identical(temp$scriptArray, "var point1 = new Dot(axis1, Theoph, 'Time', 'conc', {});")
+  expect_true(any(file.path(temp$libDir_RIGHT, "dot.js") %in% temp$sourceArray))
+
+}) # test_that

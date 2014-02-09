@@ -1,3 +1,5 @@
+// This file is not used now.
+
 /**  basic legend function  **/
 function legend(legendName, axisObj, position, nameArr, colorArr)
 {
@@ -7,7 +9,6 @@ function legend(legendName, axisObj, position, nameArr, colorArr)
 	if(position == null){
 		position = 'right'; // default value of legend postion.
 	}
-	
 	// set the legendX and legendY.
 	if(position == 'topright' || position == 'right' || position == 'bottomright'){
         //legendX = axisObj.plotXMargin + axisObj.width + axisObj.plotLength*5;

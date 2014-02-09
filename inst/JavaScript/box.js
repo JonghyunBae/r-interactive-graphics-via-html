@@ -388,6 +388,7 @@ var Box = {};
 							name: i,
 							x: (axisObj.isXDiscrete == true) ?  x[i] : axisObj._getPixelX((axisObj.xMax + axisObj.xMin)/2),
 							y:  y[i],
+							stroke: 'black',
 							strokeWidth: 2,
 							width: width,
 							height: IQR,
@@ -464,8 +465,9 @@ var Box = {};
         ___init: function(config) {
             Kinetic.Shape.call(this, config);
             this.className = 'BoxWhisker';
+            this.sceneFunc(this._sceneFunc);
         },
-        drawFunc: function(context) {
+        _sceneFunc: function(context) {
             var width = this.getWidth(),
                 height = this.getHeight(),
                 upFence = this.getUpFence(),

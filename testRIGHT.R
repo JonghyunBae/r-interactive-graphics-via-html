@@ -23,10 +23,11 @@ print(ggplot(NULL, aes(x = carat, y = price)) +
 # dir = "TEMP" is just for ease of debugging
 print(RIGHT({plot(price ~ carat, subArray, type = "p")
              lines(price ~ carat, fitArray)
+             boxplot(pirce ~ color, subArray)
              hist(color, subArray)
              pie(cut, subArray)
              search(subArray)
              table(subArray)},  
             dir = "TEMP",
-            isOverwrite = TRUE))
+            overwrite = TRUE))
 

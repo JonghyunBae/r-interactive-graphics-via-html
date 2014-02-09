@@ -584,7 +584,7 @@ function makeYLabelLayer(obj, label)
 		fontStyle: 'bold',
 		fontFamily: 'Calibri',
 		fill: 'black',
-		rotation: (Math.PI)*3/2
+		rotation: 270
 	});
 }
 /**  make x, y label layers end  **/
@@ -661,7 +661,7 @@ function makeYAxisLayer(obj)
 	       fill: 'black',
 	       width: 60,
 	       align: 'center',
-	       rotation: (Math.PI)*3/2
+	       rotation: 270
 	   });
 	}
 }

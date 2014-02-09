@@ -261,13 +261,20 @@ function hover(Name)
 			var mousePos = node.getStage().getPointerPosition();
 			var mousePos = node.getStage().getPointerPosition();
 			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
-	            Name.tooltip.setPosition(mousePos.x + 8, mousePos.y + 2);
+				Name.tooltip.setX(mousePos.x + 8);
+				Name.tooltip.setY(mousePos.y + 2);
 		    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
-		            Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
+		    	Name.tooltip.setX(mousePos.x + 2);
+				Name.tooltip.setY(mousePos.y - 2 - Name.tooltip.getHeight());
+		        //Name.tooltip.setPosition(mousePos.x + 2, mousePos.y - 2 - Name.tooltip.getHeight());
 		    }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
-		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
+		    	Name.tooltip.setX(mousePos.x - 2 - Name.tooltip.getWidth());
+				Name.tooltip.setY(mousePos.y + 2);
+		      //Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y + 2);
 		    }else{
-		            Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
+		    	Name.tooltip.setX(mousePos.x - 2 - Name.tooltip.getWidth());
+				Name.tooltip.setY(mousePos.y - 2 - Name.tooltip.getHeight());
+		      //Name.tooltip.setPosition(mousePos.x - 2 - Name.tooltip.getWidth(), mousePos.y - 2 - Name.tooltip.getHeight());
 		    }
 			Name.tooltip.getText().setText(node.getInfo());
 			Name.tooltipLayer.moveToTop();

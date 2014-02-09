@@ -16,7 +16,7 @@
                              <title>RIGHT: R Interactive Graphics via HTml</title>
   <script src="../../../JavaScript/shiny-right.js"></script>
   <script src="../../../JavaScript/callback.js"></script>
-  <script src="../../../JavaScript/kinetic-v4.7.4.js"></script>
+  <script src="../../../JavaScript/kinetic-v5.0.1.js"></script>
   <script src="../../../JavaScript/structure.js"></script>
   <script src="../../../JavaScript/common.js"></script>
   <script src="../../../JavaScript/axis.js"></script>
@@ -53,9 +53,8 @@
        </div>
        
        <script>
-
-       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc');
-       var axis1 = new Axis(1, lobj1, 'Time', 'conc', {});
+       var axis1 = new Axis(1, mainArr1, 'Time', 'conc', {});
+       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', {});       
        var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
        
        

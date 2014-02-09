@@ -199,11 +199,11 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 			x: legendX+15,
 			y: legendY + 47 + 20*((newMax-newMin)/tickRange-1) - 20*(max - min )/tickRange - 20*(min -newMin)/tickRange,
 			width :20,
-			height :  20*(max - min)/tickRange,
+			height : 20*(max - min)/tickRange,
 			opacity: 0.7,
 			fillLinearGradientStartPoint: [0, 0],
-	        fillLinearGradientEndPoint: [0, 20*(max - min)/tickRange],
-	        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],
+	        fillLinearGradientEndPoint: [0, 20*(max - min)/tickRange]
+	     //   fillPatternRotation: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],
 		});
 	}
 	

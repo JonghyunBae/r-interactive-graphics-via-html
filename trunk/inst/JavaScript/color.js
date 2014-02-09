@@ -201,9 +201,9 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 			width :20,
 			height : 20*(max - min)/tickRange,
 			opacity: 0.7,
-			fillLinearGradientStartPoint: [0, 0],
-	        fillLinearGradientEndPoint: [0, 20*(max - min)/tickRange]
-	     //   fillPatternRotation: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)'],
+			fillLinearGradientStartPoint: {x: 0, y: 0},
+	        fillLinearGradientEndPoint: {x:0, y:20*(max - min)/tickRange},
+	        fillLinearGradientColorStops: [0, 'rgb(0,255,0)', 1, 'rgb(0,128,0)']
 		});
 	}
 	

@@ -435,32 +435,32 @@ function menu(Name)
             /*	3	|	4	*/
             /****************/      
             if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//2nd quadrant
-                Name.menu.setPosition(mousePos.x, mousePos.y);
-                Name.optionMenuLayer.setPosition(mousePos.x , mousePos.y);
-                Name.regressionMenuLayer.setPosition(mousePos.x , mousePos.y + 75);
+                Name.menu.setPosition({x: mousePos.x, y: mousePos.y});
+                Name.optionMenuLayer.setPosition({x: mousePos.x, y: mousePos.y});
+                Name.regressionMenuLayer.setPosition({x: mousePos.x, y: mousePos.y + 75});
                 for(var j = 0 ; j < subMenuName.length ; j ++){
-                	Name.subMenuLayer[j].setPosition(mousePos.x , mousePos.y);
+                	Name.subMenuLayer[j].setPosition({x: mousePos.x, y: mousePos.y});
                 }                                
             }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){//3rd quadrant
-                Name.menu.setPosition(mousePos.x, mousePos.y - menuHeight);
-                Name.optionMenuLayer.setPosition(mousePos.x, mousePos.y - menuHeight);
-                Name.regressionMenuLayer.setPosition(mousePos.x, mousePos.y - menuHeight + 75);
+                Name.menu.setPosition({x: mousePos.x, y: mousePos.y - menuHeight});
+                Name.optionMenuLayer.setPosition({x: mousePos.x, y: mousePos.y - menuHeight});
+                Name.regressionMenuLayer.setPosition({x: mousePos.x, y: mousePos.y - menuHeight + 75});
                 for(var j = 0 ; j < subMenuName.length ; j ++){
-                	Name.subMenuLayer[j].setPosition(mousePos.x , mousePos.y - 25*optionMenuName[0].length - 25*(subMenuName[j].length-1)/2);
+                	Name.subMenuLayer[j].setPosition({x: mousePos.x , y: mousePos.y - 25*optionMenuName[0].length - 25*(subMenuName[j].length-1)/2});
                 }                    
             }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//1st quadrant
-                Name.menu.setPosition(mousePos.x - menuWidth, mousePos.y );
-                Name.optionMenuLayer.setPosition(mousePos.x  - menuWidth, mousePos.y );
-                Name.regressionMenuLayer.setPosition(mousePos.x  - menuWidth, mousePos.y + 75);
+                Name.menu.setPosition({x: mousePos.x - menuWidth, y: mousePos.y});
+                Name.optionMenuLayer.setPosition({x: mousePos.x  - menuWidth, y: mousePos.y});
+                Name.regressionMenuLayer.setPosition({x: mousePos.x  - menuWidth, y: mousePos.y + 75});
                 for(var j = 0 ; j < subMenuName.length ; j ++){
-                	Name.subMenuLayer[j].setPosition(mousePos.x - 5 - 3*menuWidth, mousePos.y );
+                	Name.subMenuLayer[j].setPosition({x: mousePos.x - 5 - 3*menuWidth, y: mousePos.y});
                 }
             }else{//4th quadrant
-                Name.menu.setPosition(mousePos.x  - menuWidth , mousePos.y - menuHeight);
-                Name.optionMenuLayer.setPosition(mousePos.x  - menuWidth , mousePos.y  - menuHeight);
-                Name.regressionMenuLayer.setPosition(mousePos.x  - menuWidth , mousePos.y  - menuHeight + 75);
+                Name.menu.setPosition({x: mousePos.x  - menuWidth , y: mousePos.y - menuHeight});
+                Name.optionMenuLayer.setPosition({x: mousePos.x  - menuWidth , y: mousePos.y  - menuHeight});
+                Name.regressionMenuLayer.setPosition({x: mousePos.x  - menuWidth , y: mousePos.y  - menuHeight + 75});
                 for(var j = 0 ; j < subMenuName.length ; j ++){
-                	Name.subMenuLayer[j].setPosition(mousePos.x - 5 - 3*menuWidth, mousePos.y - 25*optionMenuName[0].length  - 25*(subMenuName[j].length-1)/2);
+                	Name.subMenuLayer[j].setPosition({x: mousePos.x - 5 - 3*menuWidth, y: mousePos.y - 25*optionMenuName[0].length  - 25*(subMenuName[j].length-1)/2});
                 }
             }
             Name.menuLayer.moveToTop();

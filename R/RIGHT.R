@@ -2,7 +2,6 @@
 
 # CHECK (junghoon): should I use a reference class instead of .RIGHT?
 .RIGHT <- new.env(parent = emptyenv())
-# options(supportRIGHT = TRUE)
 
 # Environment used to collect all the necessary information to assemble the HTML file
 # that derives the RIGHT JavaScript API:

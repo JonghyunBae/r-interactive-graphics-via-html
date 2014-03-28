@@ -27,6 +27,19 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 28Mar2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
+
+ * GSOC 2014
+  # Discuss about collaboration with Toby Dylan Hocking who work about 'animint'
+  # Ready to show about example(what kinds of calculations we would and would not do on the server)
+ * TO-DO list for this weekend
+  # Solve single-origin policy to use data array in html directly.
+  # Use 'animint' package.
+
+  Next meeting : 10:00 (Korea time) on Fri, 4/04
+
 == 06Feb2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung.

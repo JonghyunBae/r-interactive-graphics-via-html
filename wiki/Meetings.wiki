@@ -34,13 +34,10 @@ Participants : Jae W. Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
  * GSOC 2014
   # Toby's suggestion : multiple selecetion in animint, make compiler to seperate sever-offloading part automatically
   # Write comment 
-    (1) Suggest about our multiple selection code to Toby that can 
-      check and change himself.
-    (2) Make compiler is long term project. It will be hard for us 
-      to complete during GSOC period
+    (1) Suggest about our multiple selection code to Toby that can check and change himself.
+    (2) Make compiler is long term project. It will be hard for us to complete during GSOC period
  * TO-DO list for this weekend
-  # Increase performance single-origin policy to use .csv file  
-   input/output method, reduce paste function to reduce delay
+  # Increase performance single-origin policy to use .csv file input/output method, reduce paste function to reduce delay
   # Consider another method to increase performance anyway.
 
   Next meeting : 10:00 (Korea time) on Fri, 4/11

@@ -12,14 +12,100 @@ prependBlankLine <- function(numLine = 1) {
   
 } # function prependBlankLine
 
+levelParsing <- function(dataList) {
+  mainFrame <- data.frame(dataList)
+  count <- 1
+  
+  saveLev <- ""
+  mainLev <- "{ 'Pos' : ["
+  
+  for(i in 1:ncol(mainFrame)) {
+    tmpCol <- levels(mainFrame[[i]])
+    tmpLen <- length(tmpCol)
+    
+    if(length(tmpCol) != 0) {
+      saveLev[count] <- paste(i-1)
+      count <- (count + 1)
+    }
+  }
+  
+  for(i in 1:(count-1) ) {
+    mainLev <- paste(mainLev, "\"", saveLev[i], "\"", sep = "")
+    if(i < (count-1) ) {
+      mainLev <- paste(mainLev, ", ", sep = "")
+    } else {
+      mainLev <- paste(mainLev, "], 'Levels' : [", sep = "") 
+    }
+  }
+  
+  for(i in 1:(count-1) ) {
+    mainLev <- paste(mainLev, "[", sep = "")
+    
+    tmpCol <- as.character(levels(mainFrame[[as.numeric(saveLev[i])+1]]))
+    tmpLen <- length(tmpCol)
+    
+    for(j in 1:tmpLen) {
+      mainLev <- paste(mainLev, "\"", tmpCol[j], "\"", sep = "")
+      if(j < tmpLen) {
+        mainLev <- paste(mainLev, ", ", sep = "")
+      } else {
+        if(i < count-1) {
+          mainLev <- paste(mainLev, "], ", sep = "")
+        } else {
+          mainLev <- paste(mainLev, "]", sep = "")
+        }
+      }
+    }
+  }
+  
+  mainLev <- paste(mainLev, "]}", sep = "")
+  return (mainLev)
+}
+
 # Save data.frame objects in temporary files:
+prepareDataE <- function(dataList) {
+  
+  # CHECK (junghoon): what happens if no names are given?
+  nameArray <- names(dataList)
+  dataframe <- data.frame(dataList)
+
+  # print(dataList[[nameArray]]["carat"])
+  
+  # lapply will not work since it does not preserve the names of the list entries
+  numData <- length(nameArray)  
+  
+  mainLev <- levelParsing(dataList)
+  
+  for(i in 1:ncol(dataframe)) {
+    check <- levels(dataframe[, i])
+    if(length(check) > 0) {
+      dataList[[nameArray]][i] <- as.numeric(dataframe[, i])
+    }  
+  }
+  
+  mainArr <- toJSON(dataList)
+  
+  .RIGHT$scriptArray <- c(paste0("rawArr = ", mainArr, ";"), .RIGHT$scriptArray)
+  .RIGHT$scriptArray <- c(paste0("rawLev = ", mainLev, ";"), .RIGHT$scriptArray)
+} # function prepareData
+
 prepareData <- function(dataList, dir = ".") {
   
   # CHECK (junghoon): what happens if no names are given?
   nameArray <- names(dataList)
   
   # lapply will not work since it does not preserve the names of the list entries
+  dataframe <- data.frame(dataList)
   numData <- length(nameArray)
+  
+  mainLev <- levelParsing(dataList)
+  
+  for(i in 1:ncol(dataframe)) {
+    check <- levels(dataframe[, i])
+    if(length(check) > 0) {
+      dataList[[nameArray]][i] <- as.numeric(dataframe[, i])
+    }  
+  }
   
   fileNameArray <- vector("character", numData)
   for (iData in 1:numData) {
@@ -28,12 +114,25 @@ prepareData <- function(dataList, dir = ".") {
     write.csv(dataList[[iData]], file = file.path(dir, fileNameArray[iData]), row.names = F)
     
   } # for
-  
+  .RIGHT$scriptArray <- c(paste0("rawLev = ", mainLev, ";"), .RIGHT$scriptArray)
   return(fileNameArray)
   
 } # function prepareData
 
 # Add JavsScript expressions to load data. This function has side effects:
+loadDataE <- function(nameArray = NULL) {
+  
+  if (!is.null(nameArray)) {
+    
+    # Data objects should be loaded before any plotting:
+    .RIGHT$scriptArray <- c(paste0(nameArray, ' = createMainStructureE(rawArr, rawLev);'), 
+                            .RIGHT$scriptArray) 
+  } # if
+  
+  invisible()
+  
+} # function loadData
+
 loadData <- function(nameArray = NULL, fileNameArray = paste0("_", nameArray, ".csv")) {
   
   if (!is.null(nameArray)) {
@@ -43,7 +142,7 @@ loadData <- function(nameArray = NULL, fileNameArray = paste0("_", nameArray, ".
     } # if
     
     # Data objects should be loaded before any plotting:
-    .RIGHT$scriptArray <- c(paste0(nameArray, ' = createMainStructure("', file.path("..", fileNameArray), '");'), 
+    .RIGHT$scriptArray <- c(paste0(nameArray, ' = createMainStructure("', file.path("..", fileNameArray), '", rawLev);'), 
                             .RIGHT$scriptArray) 
     
   } # if

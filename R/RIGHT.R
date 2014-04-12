@@ -97,6 +97,7 @@ RIGHT <- function(expr = {},
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(), 
                   overwrite = FALSE,
+                  embed = TRUE,
                   browser = getOption("browser"),
                   supportRIGHT = getOption("supportRIGHT")) {
   
@@ -111,7 +112,7 @@ RIGHT <- function(expr = {},
   ## ---
   ## Evaluate the given expression:
   ## ---
-
+  
   # Initialize the environment that keeps track of the information:
   initRIGHT()
   
@@ -160,7 +161,12 @@ RIGHT <- function(expr = {},
   
   # Add scripts to load data objects:
   prependBlankLine()
-  loadData(nameArray)
+  
+  if(embed == TRUE) {
+    loadDataE(nameArray)
+  } else {
+    loadData(nameArray)
+  }
   
   ## ---
   ## Setup directory:
@@ -179,9 +185,14 @@ RIGHT <- function(expr = {},
   if (!file.exists(tempDir)) {
     dir.create(tempDir)
   } # if
-
+  
   # Save data objects to file:
-  fileNameArray <- prepareData(dataList, dir) 
+  
+  if(embed == TRUE) {
+    fileNameArray <- prepareDataE(dataList) 
+  } else {
+    fileNameArray <- prepareData(dataList, dir)
+  }
   
   ## ---
   ## Assemble client-side code:

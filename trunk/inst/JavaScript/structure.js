@@ -47,12 +47,10 @@ function make2DArr (rows) {
 function createMainStructureE (rawArr, rawLev) {
 	
 	var mainArr = new Object();
-	var obKeys = Object.keys(rawArr);
-	var labelArr = Object.keys(rawArr[obKeys]);
-	
+	var labelArr = Object.keys(rawArr);
 	var posCnt = 0, cnt = 0;
-	for (name in rawArr[obKeys]) {
-		mainArr[name] = rawArr[obKeys][name];
+	for (name in rawArr) {
+		mainArr[name] = rawArr[name];
 		if (rawLev.Pos[posCnt] != undefined && cnt == rawLev.Pos[posCnt]) { // if discrete
 			mainArr[name].isDiscrete = true;
 			mainArr[name].index = rawLev.Levels[posCnt];

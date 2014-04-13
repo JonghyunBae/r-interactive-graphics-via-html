@@ -2,6 +2,7 @@
 var Dot = {};
 (function() {
 	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+		alert("ddd");
 		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel, optionObj);
 		axisObj.numberOfGraph ++;

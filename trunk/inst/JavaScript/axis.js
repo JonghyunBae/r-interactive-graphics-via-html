@@ -98,7 +98,7 @@ var Axis = {};
 					}else{
 						this.yMax = dataObj[yLabel].max;
 			            this.yMin = dataObj[yLabel].min;
-					}					
+					}
 		            // frequency's min value should be 0
 		            if(yLabel == 'frequency'){
 		            	this.yMin = 0;

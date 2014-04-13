@@ -85,3 +85,4 @@ function printArr (array, dimension) {
 			document.write("]");
 		}
 	}
+}

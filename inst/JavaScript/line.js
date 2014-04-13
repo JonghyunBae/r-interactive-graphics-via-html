@@ -116,8 +116,8 @@ var MakeLineObj = {};
 		this.$id = 1;
 		this._type = 'lineObj';
 		this.statusArr = new Array(c2pArr.length);
-		for (var i=0; i<statusArr.length; i++) {
-			statusArr[i] = 0;
+		for (var i=0; i<this.statusArr.length; i++) {
+			this.statusArr[i] = 0;
 		}
 		birthReport(dataObj, this, mergeArr);
 	};

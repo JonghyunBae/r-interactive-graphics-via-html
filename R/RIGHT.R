@@ -31,7 +31,8 @@ initRIGHT <- function() {
                    "color.js",
                    "callback.js",
                    "node_event.js",
-                   "menu.js")
+                   "menu.js",
+                   "array.js")
   .RIGHT$sourceArray <- file.path(.RIGHT$libDir_RIGHT, sourceArray)
   
   # Css files always necessary:

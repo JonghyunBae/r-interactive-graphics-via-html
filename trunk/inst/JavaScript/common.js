@@ -109,38 +109,32 @@ function getXYpos(elm) {
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+//makeEventComponent is underconstruction becuase of its purpose 
+function makeEventComponent (dataObj) {
+	dataObj.$id = 1;
+	dataObj.parent = null;
+	dataObj.child = null;
+	dataObj.$isHidden = new Array();
+	dataObj.$isSelected = new Array();
+}
 
-function birthReport(parent, child, p2cArr, c2pArr){
+function birthReport (parent, child, mergeArr) {
 	child.parent = parent;
 	if(parent.child == null){
 		parent.child = new Array();
-		parent.parentTOchild = new Array();
 	}
 	parent.child.push(child);
-	parent.parentTOchild.push(setMapping(p2cArr));
 	child.child = null;
-	child.parentTOchild = null;
-	child.childTOparent = setMapping(c2pArr);
+	child.mergeArr = mergeArr;
 	child.updateArr = new Array();
 	child.refreshArr = new Array();
 }
 
-function ModifyBirth(parent, child, p2cArr, c2pArr){
-	for(var i = 0 ; i < parent.child.length ; i ++){
-		if(parent.child[i] == child)
-			break;
-	}
-	
-	if(i == parent.child.length){
-		// error check.
-		alert('There is no child which matches it.');
-	}
-	
-	parent.parentTOchild[i] = setMapping(p2cArr);
-	child.childTOparent = setMapping(c2pArr);
+function ModifyBirth (child, mergeArr) {
+	child.mergeArr = mergeArr;
 }
 
-
+/*
 function setMapping(index)
 {
 	return function(nodes)
@@ -157,6 +151,7 @@ function setMapping(index)
 			return returnArr;
 		};
 }
+*/
 
 //allGraphUpdate is used for only select & unselect
 function allGraphUpdate(graphObj, nodes, selectOn) 
@@ -165,10 +160,9 @@ function allGraphUpdate(graphObj, nodes, selectOn)
 	graphObj.firstUpdate(nodes, selectOn);
 }
 
-function firstUpdate(firstObj)
-{
-	return function(nodes, selectOn)
-		{
+function firstUpdate (firstObj) {
+	return function (nodes, selectOn) {
+
 			//alert(nodes);
 			var object = firstObj;
 			var temp = nodes;
@@ -275,55 +269,50 @@ function childUpdate(object, nodes, selectOn, firstObj)
 		}
 	}
 }
-function makeRefresh(stage){
-	return function()
-		{
+
+function makeRefresh (stage) {
+	return function () {
 			stage.draw();
 		}
 }
-
-function nullUpdate(node)
-{
-	return function(temp)
-		{
+/*
+function nullUpdate (node) {
+	return function (temp) {
 			return;
 		};
 }
+*/
 
-function allSelect(graphObj)
-{
+function allSelect (graphObj) {
 	var tmpNodeArr = new Array();
-	for(var i = 0 ; i < graphObj.node.length ; i ++){
+	for (var i=0; i<graphObj.node.length; i++) {
 		tmpNodeArr.push(graphObj.node[i].getName());
 	}
 	allGraphUpdate(graphObj, tmpNodeArr, 1);	
 }
-function allDeselect(graphObj)
-{
+
+function allDeselect (graphObj) {
 	var tmpNodeArr = new Array();
-//	alert("deselect");
-	for(var i = 0 ; i < graphObj.node.length ; i ++){
+	for (var i=0; i<graphObj.node.length; i++) {
 		tmpNodeArr.push(graphObj.node[i].getName());
 	}
 	allGraphUpdate(graphObj, tmpNodeArr, 0);
 
 }
-function findMaxMinValue(Data)
-{	
-	if(Data.length != undefined){
+
+function findMaxMinValue (Data) {	
+	if (Data.length != undefined) {
 		var maxValue = Data[0];
 		var minValue = Data[0];
-		for(var i = 1 ; i < Data.length ; i ++){
-			if(Data[i]>maxValue)
-			{
-				maxValue=Data[i];					
+		for (var i=1; i<Data.length; i++) {
+			if (Data[i]>maxValue) {
+				maxValue=Data[i];
 			}
-			if(Data[i]<minValue)
-			{
-				minValue=Data[i];					
+			if (Data[i]<minValue) {
+				minValue=Data[i];
 			}
 		}
-	}else{
+	} else {
 		var maxValue = Data;
 		var minValue = Data;
 	}
@@ -332,21 +321,20 @@ function findMaxMinValue(Data)
 		'min' : minValue
 	};
 }
-function setTickRange(x, tickRange)
-{
-	if(tickRange/Math.pow(10,x) < 0.1){tickRange = 0.1 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.2){tickRange = 0.2 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.25){tickRange = 0.25 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.3){tickRange = 0.3 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.4){tickRange = 0.4 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.5){tickRange = 0.5 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.6){tickRange = 0.6 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.7){tickRange = 0.7 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.75){tickRange = 0.75 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.8){tickRange = 0.8 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 0.9){tickRange = 0.9 * Math.pow(10,x); }
-	else if(tickRange/Math.pow(10,x) <= 1.0){tickRange = 1.0 * Math.pow(10,x); }
 
+function setTickRange (x, tickRange) {
+	if (tickRange/Math.pow(10,x) < 0.1) {tickRange = 0.1 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.2) {tickRange = 0.2 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.25) {tickRange = 0.25 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.3) {tickRange = 0.3 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.4) {tickRange = 0.4 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.5) {tickRange = 0.5 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.6) {tickRange = 0.6 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.7) {tickRange = 0.7 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.75 ){tickRange = 0.75 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.8) {tickRange = 0.8 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 0.9) {tickRange = 0.9 * Math.pow(10,x); }
+	else if (tickRange/Math.pow(10,x) <= 1.0) {tickRange = 1.0 * Math.pow(10,x); }
 	return tickRange;
 }
 Array.prototype.remove = function(idx) {

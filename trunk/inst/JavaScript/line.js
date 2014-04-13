@@ -74,7 +74,7 @@ var MakeLineObj = {};
 						lineCnt ++;
 					}
 				}else{
-					p2cArr[groupTemp] = -1;
+					p2cArr[groupTemp] = -1; // disconnected dot
 				}
 			}
 			this[gLabel].isDiscrete = true;
@@ -112,9 +112,14 @@ var MakeLineObj = {};
 			p2cArr[0] = 0;
 			p2cArr[i] = i-1;
 		}		
+		var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
 		this.$id = 1;
 		this._type = 'lineObj';
-		birthReport(dataObj, this, p2cArr, c2pArr);
+		this.statusArr = new Array(c2pArr.length);
+		for (var i=0; i<statusArr.length; i++) {
+			statusArr[i] = 0;
+		}
+		birthReport(dataObj, this, mergeArr);
 	};
 	MakeLineObj.prototype = {
 		_reCalculate: function() {
@@ -224,7 +229,8 @@ var MakeLineObj = {};
 				p2cArr[0] = 0;
 				p2cArr[i] = i-1;
 			}
-			ModifyBirth(dataObj, this, p2cArr, c2pArr);
+			var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
+			ModifyBirth(this, mergeArr);
 		}
 	};
 })();
@@ -270,7 +276,7 @@ var Line = {};
 					this.baseColor = 'black';
 				}
 			},
-			_draw: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
+			_draw: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 				// get pixel values from axis
 				var temp = axisObj._getPixelXY(dataObj[xLabel1], dataObj[yLabel1]);
 				var xArr1 = temp.xArr;
@@ -301,17 +307,17 @@ var Line = {};
 								opacity: 0.5,
 								info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj[this.colorLabel][i]]
 							});
-							dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
+							dataObj.$isSelected[i][this.dataId] = this.node[cnt];
 							cnt ++;
 						}else{
-							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+							dataObj.$isSelected[i][this.dataId] = null;
 						}
 					}
 				}else{
 					//get group Name.
 					var groupName;
-					for(var name in dataObj){
-						if(!(name == 'x1' || name == 'x2' || name == 'y1' || name == 'y2' ||name == 'offloadObjArr' ||name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+					for (var name in dataObj) {
+						if (!(name == 'x1' || name == 'x2' || name == 'y1' || name == 'y2' ||name == 'offloadObjArr' ||name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'updateArr' || name == 'refreshArr' || name == 'mergeArr' )) {
 							groupName = name;
 						}
 					}
@@ -335,10 +341,10 @@ var Line = {};
 								opacity: 0.5,
 								info: (dataObj[groupName].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[groupName].index[dataObj[groupName][i]]
 							});
-							dataObj.$isSelected[i][this.dataId] = lineUpdate(this.node[cnt]);
+							dataObj.$isSelected[i][this.dataId] = this.node[cnt];
 							cnt ++;
 						}else{
-							dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+							dataObj.$isSelected[i][this.dataId] = null;
 						}
 					}
 				}				
@@ -346,19 +352,19 @@ var Line = {};
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
 				}
-				// event add
-				if(optionObj.event == undefined || optionObj.event != 'false'){
-					dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-					this.firstUpdate = firstUpdate(dataObj);
-		        	axisObj.graphObjArr[this.graphId] = this;
-		        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
-					axisObj.hoverArr[this.graphId] = lineHover();
-					axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
-				}
-				//add layer
+	        	//add layer
 				axisObj.stage.add(this.dataLayer);
+				
+				// event add
+				dataObj.$isSelected[dataObj.$isSelected.length-1][this.graphId] = lineUpdate();
+				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+				this.firstUpdate = firstUpdate(dataObj);
+	        	axisObj.graphObjArr[this.graphId] = this;
+	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
+				axisObj.hoverArr[this.graphId] = lineHover();
+				axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
 			},
-			_reDraw: function(axisObj){
+			_reDraw: function (axisObj) {
 				var dataObj = this.dataObj;
 				var xLabel1 = this.xLabel1;
 				var xLabel2 = this.xLabel2;
@@ -402,23 +408,21 @@ function lineBoxSearch(graphObj)
 			
 		};
 }
-function lineUpdate(node)
-{
-	return	function(selectOn)
-		{
-			if(node.getSelected() == 1 && selectOn == 0){		//unselect
+function lineUpdate () {
+	return	function (node, selectOn) {
+			if (node.getSelected() == 1 && selectOn == 0) {		//unselect
 				node.setSelectCnt(node.getSelectCnt() - 1);
-				if(node.getSelectCnt() == 0){
+				if (node.getSelectCnt() == 0) {
 					node.setStroke(node.getFill());
 					node.setOpacity(0.5);
 					node.setSelected(0);
 				}
-			}else if(selectOn == 1){	//select
+			} else if (selectOn == 1) {	//select
 				node.setSelectCnt(node.getSelectCnt() + 1);
-				if(node.getSelectCnt() > 2){
+				if (node.getSelectCnt() > 2) {
 					node.setSelectCnt(2);
 				}
-				if(node.getSelected() == 0){
+				if (node.getSelected() == 0) {
 					node.setStroke('red');
 					node.setOpacity(1);
 					node.setSelected(1);

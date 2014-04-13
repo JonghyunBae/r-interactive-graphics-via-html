@@ -11,91 +11,71 @@ var zPressed = false;
 var gPressed = false;
 var tmpShift = false;
 
-function checkKeyDown(e) 
-{               
-//      alert(e.keyCode);
-        if(e.keyCode == 17 || e.keyCode == 25)//ctrl key pressed
-        {
-                ctrlPressed = true;
-        }
-        if(e.keyCode == 16)//shift key pressed
-        {
-                shiftPressed = true;
-        }
-        if(e.keyCode == 65)//a key pressed
-        {
-                aPressed = true;
-        }
-        if(e.keyCode == 71)//g key pressed
-        {
-                gPressed = true;
-        }
-        if(e.keyCode == 90)//z key pressed
-        {
-                zPressed = true;
-        }
-        if(ctrlPressed == true && e.keyCode == 46)//del key pressed
-        {
-                hideSelected();
-        }
-        if(ctrlPressed == true && e.keyCode == 45)//insert key pressed
-        {
-                resetSelected();
-        }
-        if(ctrlPressed == true &&  e.keyCode == 36)//ctrl key and home key pressed at the same time
-        {
-                if(tPressed == true){
-                        tPressed = false;
-                        document.getElementById('dataTable').style.display = 'none';
-                        document.getElementById('tableScrollableContainer').style.display = 'none';                     
-                }else{
-                        tPressed = true;
-                        document.getElementById('dataTable').style.display = 'block';
-                        document.getElementById('tableScrollableContainer').style.display = 'block';            
-                }                       
-        }
-        if(ctrlPressed == true && zPressed == true)//ctrl key and z key pressed at the same time
-        {
-        }
-}       
-function checkKeyUp(e) 
-{
-        if(ctrlPressed == true && zPressed != true)
-        {
-                ctrlPressed = false;
-        }
-        if(shiftPressed == true)
-        {
-                shiftPressed = false;
-        }
-        if(aPressed == true)
-        {
-                aPressed = false;
-        }
-        if(gPressed == true)
-        {
-                gPressed = false;
-        }
-        if(zPressed == true)
-        {
-                zPressed = false;
-        }
+function checkKeyDown (e) {               
+	if (e.keyCode == 17 || e.keyCode == 25) { //ctrl key pressed
+		ctrlPressed = true;
+    }
+	if (e.keyCode == 16) {  //shift key pressed
+		shiftPressed = true;
+    }
+	if (e.keyCode == 65) {  //a key pressed
+    	aPressed = true;
+    }
+	if (e.keyCode == 71) {  //g key pressed
+    	gPressed = true;
+    }
+	if (e.keyCode == 90) {  //z key pressed
+		zPressed = true;
+    }
+	if (ctrlPressed == true && e.keyCode == 46) {  //del key pressed
+		hideSelected();
+    }
+	if (ctrlPressed == true && e.keyCode == 45) {  //insert key pressed
+		resetSelected();
+    }
+	if (ctrlPressed == true &&  e.keyCode == 36) {  //ctrl key and home key pressed at the same time
+		if (tPressed == true) {
+			tPressed = false;
+			document.getElementById('dataTable').style.display = 'none';
+			document.getElementById('tableScrollableContainer').style.display = 'none';                     
+		} else {
+			tPressed = true;
+			document.getElementById('dataTable').style.display = 'block';
+			document.getElementById('tableScrollableContainer').style.display = 'block';            
+		}                 
+	}
+}
+
+function checkKeyUp(e) {
+	if (ctrlPressed == true && zPressed != true) {
+		ctrlPressed = false;
+    }
+	if (shiftPressed == true) {
+		shiftPressed = false;
+    }
+	if (aPressed == true) {
+		aPressed = false;
+    }
+	if (gPressed == true) {
+		gPressed = false;
+    }
+	if (zPressed == true) {
+		zPressed = false;
+    }
 }       
 //////////////////////////////////////Chk key event End//////////////////////////////////////
-function eventTrigger(NameArr)
-{
-	for(var i = 0 ; i < NameArr.length ; i ++){
+function eventTrigger (NameArr) {
+	for (var i=0; i<NameArr.length; i++) {
 		hover(NameArr[i]);
 		select(NameArr[i]);
 		drag(NameArr[i]);
 		menu(NameArr[i]);
-	}      
+	}
 }
 
 
 var dragOn = false;
-function drag(Name)
-{
+function drag (Name) {
     var preDragMousePos;
     var aftDragMousePos;
     
@@ -193,49 +173,48 @@ function drag(Name)
     }, true);
 }
 
-function select(Name)
-{
+function select (Name) {
 	var tmpNodeArr = new Array();
 	// temporary method for unselecting nodes.
-	Name.stage.on('click', function(evt){
-		if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-			if(!(ctrlPressed || shiftPressed || aPressed || gPressed)){
+	Name.stage.on('click', function (evt) {
+		if ((evt.which && evt.which == 1) || (evt.button && evt.button == 0)) { //left click
+			if (!(ctrlPressed || shiftPressed || aPressed || gPressed)) {
 				var node = evt.targetNode;
-				if(isNaN(node.getName())){
-					if(dragOn == true){
+				if (isNaN(node.getName())) {
+					if (dragOn == true) {
 			            dragOn = false;
 			            return;
 			        }
 					Name.touch = false;
-					for(var i = 0 ; i < Name.graphObjArr.length ; i ++){
+					for (var i=0; i<Name.graphObjArr.length; i++) {
 						allDeselect(Name.graphObjArr[i]);
 					}
 				}
 			}
 		}		
 	});
-	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
+	for (var i=0; i<Name.dataLayerArr.length; i++) {
 		(function (i) {
-			Name.dataLayerArr[i].on('click', function(evt){
+			Name.dataLayerArr[i].on('click', function (evt) {
 				var node = evt.targetNode;
-				if(dragOn == true){
+				if (dragOn == true) {
 					dragOn = false;
 		            return;
 		        }
 				Name.touch = false;
-				if(!isNaN(node.getName())){
-					if(aPressed){
-						for(var j = 0 ; j < Name.graphObjArr.length ; j ++){
+				if (!isNaN(node.getName())) {
+					if (aPressed) {
+						for (var j=0; j<Name.graphObjArr.length; j++) {
 							allSelect(Name.graphObjArr[j]);
 						}	            		
-	            	}else if(ctrlPressed){
-	            		if(node.getSelected() == 0){
+	            	} else if (ctrlPressed) {
+	            		if (node.getSelected() == 0) {
 	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
-	                	}else if(node.getSelected() == 1){
+	                	} else if (node.getSelected() == 1) {
 	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 0);
 	                	}
-	            	}else{
-	            		for(var j = 0 ; j < Name.graphObjArr.length ; j ++){
+	            	} else {
+	            		for (var j=0 ; j<Name.graphObjArr.length; j++) {
 							allDeselect(Name.graphObjArr[j]);
 						}
 						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);

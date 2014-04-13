@@ -1,5 +1,40 @@
-function mulArr (array1, dimension1, array2, dimension2)
-{
+function subtractArr (array1, array2) {
+	var returnArray;
+	if (array1.length == array2.length) {
+		returnArry = new Array(array1.length);
+		for (var i=0; i<array1.length; i++) {
+			returnArray[i] = array1[i] - array2[i];
+		}
+	} else {
+		alert("Cannot subtract arrays: the length of arrays are different");
+	}
+	return returnArray;	
+}
+
+function mergeParentChildArr (p2cArr, c2pArr) {
+	var returnArray = new Array(p2cArr.length);
+	for (var i=0; i<returnArray.length; i++) {
+		returnArray[i] = new Array(c2pArr.length);
+		//zero initialize
+		for (var j=0; j<returnArray[i].length; j++) {
+			returnArray[i][j] = 0;
+		}
+	}	
+	for (var i=0; i<p2cArr.length; i++) {
+		if (p2cArr[i].length == undefined) {
+			if (p2cArr[i] != -1) {
+				returnArray[i][p2cArr[i]] = 1;
+			}
+		} else {
+			for (var j=0; j<p2cArr[i].length; j++) {
+				returnArray[i][p2cArr[i][j]] = 1;
+			}
+		}
+	}
+	return returnArray;
+}
+
+function mulArr (array1, dimension1, array2, dimension2) {
 	var returnArray;
 	if (dimension1 == 1 && dimension2 == 2) { // 1D X 2D
 		if (array1.length == array2.length) {
@@ -18,8 +53,7 @@ function mulArr (array1, dimension1, array2, dimension2)
 	return returnArray;
 }
 
-function makeOrthogonalArr (array, dimension)
-{
+function makeOrthogonalArr (array, dimension) {
 	var returnArray;
 	if (dimension == 2) {
 		returnArray = new Array(array[0].length);
@@ -35,8 +69,7 @@ function makeOrthogonalArr (array, dimension)
 	return returnArray;
 }
 
-function printArr (array, dimension)
-{
+function printArr (array, dimension) {
 	if (dimension == 1) {
 		document.write("[ ");
 		for (var i=0; i<array.length; i++) {
@@ -52,4 +85,3 @@ function printArr (array, dimension)
 			document.write("]");
 		}
 	}
-}

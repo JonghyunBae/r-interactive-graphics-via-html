@@ -67,11 +67,11 @@ function createMainStructureE (rawArr, rawLev) {
 	mainArr._type = 'rootObj';
 	mainArr.offloadObjArr = null;
 	mainArr.labelArr = labelArr; // for table.
-	mainArr.parent = null;
-	mainArr.child = null;
+	
+	makeEventComponent(mainArr);
 	mainArr.$isSelected = isSelected;
 	mainArr.$ans = "undefined";
-  
+	mainArr.statusArr = new Array();
 	mainArr.$id = 1;
 	mainArr.refreshArr = new Array();
 	mainArr.refreshArr[0] = null;  
@@ -114,11 +114,11 @@ function createMainStructure (fileName, rawLev) {
 	mainArr._type = 'rootObj';
 	mainArr.offloadObjArr = null;
 	mainArr.labelArr = labelArr; // for table.
-	mainArr.parent = null;
-	mainArr.child = null;
+	
+	makeEventComponent(mainArr);
 	mainArr.$isSelected = isSelected;
 	mainArr.$ans = "undefined";
- 
+	mainArr.statusArr = new Array();
 	mainArr.$id = 1;
 	mainArr.refreshArr = new Array();
 	mainArr.refreshArr[0] = null;

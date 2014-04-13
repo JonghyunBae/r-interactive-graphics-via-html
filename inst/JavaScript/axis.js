@@ -13,7 +13,6 @@ var Axis = {};
 	Axis.prototype = {
 			
 			_init: function(containerId, dataObj, xLabel, yLabel, optionObj) {
-				this.numberOfGraph = 0;
 				this.containerId = containerId;
 				this.dataObj = dataObj;
 				this.xLabelAxis = xLabel;
@@ -34,6 +33,7 @@ var Axis = {};
 				document.getElementById('container'+ containerId).onclick = function() {
 			        document.getElementById('regcoords');
 			    };
+			    this.numberOfGraph = 0;
 			    this.graphObjArr = new Array();
 			    this.dataLayerArr = new Array();
 			    this.hoverArr = new Array();

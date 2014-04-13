@@ -124,9 +124,9 @@ prepareData <- function(dataList, dir = ".") {
     for (j in 1:ncol(dataframe)) {
       
       check <- levels(dataframe[, j]) 
-      if (length(check) > 0)
-        dataList[[nameArray]][j] <- as.numeric(dataframe[, iData])
-          
+      if (length(check) > 0) {
+        dataList[[nameArray[iData]]][j] <- as.numeric(dataframe[ , j]) - 1
+      }
     } # for
     
     fileNameArray[iData] <- paste0("_", nameArray[iData], ".csv")

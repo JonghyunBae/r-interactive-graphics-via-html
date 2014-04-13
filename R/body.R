@@ -12,6 +12,7 @@ prependBlankLine <- function(numLine = 1) {
   
 } # function prependBlankLine
 
+# Find discrete data and return
 levelParsing <- function(dataList) {
   mainFrame <- data.frame(dataList)
   count <- 1
@@ -19,122 +20,145 @@ levelParsing <- function(dataList) {
   saveLev <- ""
   mainLev <- "{ 'Pos' : ["
   
-  for(i in 1:ncol(mainFrame)) {
+  # Fine discrete column
+  for (i in 1:ncol(mainFrame)) {
+    
     tmpCol <- levels(mainFrame[[i]])
     tmpLen <- length(tmpCol)
     
-    if(length(tmpCol) != 0) {
+    if (length(tmpCol) != 0) {
+     
       saveLev[count] <- paste(i-1)
       count <- (count + 1)
-    }
-  }
-  
-  for(i in 1:(count-1) ) {
-    mainLev <- paste(mainLev, "\"", saveLev[i], "\"", sep = "")
-    if(i < (count-1) ) {
-      mainLev <- paste(mainLev, ", ", sep = "")
-    } else {
-      mainLev <- paste(mainLev, "], 'Levels' : [", sep = "") 
-    }
-  }
-  
-  for(i in 1:(count-1) ) {
-    mainLev <- paste(mainLev, "[", sep = "")
     
+    } # if
+  
+  } # for
+  
+  # Save column that can use in javascript object
+  for (i in 1:(count-1) ) {
+    
+    mainLev <- paste(mainLev, "\"", saveLev[i], "\"", sep = "")
+    if (i < (count-1) )
+      mainLev <- paste(mainLev, ", ", sep = "")
+    else
+      mainLev <- paste(mainLev, "], 'Levels' : [", sep = "") 
+
+  } # for
+  
+  # Save levels that can use in javascript object
+  for (i in 1:(count-1) ) {
+    
+    mainLev <- paste(mainLev, "[", sep = "")
     tmpCol <- as.character(levels(mainFrame[[as.numeric(saveLev[i])+1]]))
     tmpLen <- length(tmpCol)
     
-    for(j in 1:tmpLen) {
+    for (j in 1:tmpLen) {
       mainLev <- paste(mainLev, "\"", tmpCol[j], "\"", sep = "")
-      if(j < tmpLen) {
+      if(j < tmpLen)
         mainLev <- paste(mainLev, ", ", sep = "")
-      } else {
-        if(i < count-1) {
+      else {
+        
+        if(i < count-1)
           mainLev <- paste(mainLev, "], ", sep = "")
-        } else {
+        else 
           mainLev <- paste(mainLev, "]", sep = "")
-        }
-      }
-    }
-  }
+        
+      } # if
+      
+    } # for
+    
+  } # for
   
   mainLev <- paste(mainLev, "]}", sep = "")
   return (mainLev)
-}
+  
+} # function leveParsing
 
-# Save data.frame objects in temporary files:
+# Save data.frame objects in html code:
 prepareDataE <- function(dataList) {
   
   # CHECK (junghoon): what happens if no names are given?
   nameArray <- names(dataList)
-  dataframe <- data.frame(dataList)
-
-  # print(dataList[[nameArray]]["carat"])
   
   # lapply will not work since it does not preserve the names of the list entries
   numData <- length(nameArray)  
-  
-  mainLev <- levelParsing(dataList)
-  
-  for(i in 1:ncol(dataframe)) {
-    check <- levels(dataframe[, i])
-    if(length(check) > 0) {
-      dataList[[nameArray]][i] <- as.numeric(dataframe[, i])
-    }  
-  }
-  
-  mainArr <- toJSON(dataList)
-  
-  .RIGHT$scriptArray <- c(paste0("rawArr = ", mainArr, ";"), .RIGHT$scriptArray)
-  .RIGHT$scriptArray <- c(paste0("rawLev = ", mainLev, ";"), .RIGHT$scriptArray)
-} # function prepareData
 
+  # Save data array using json form
+  for (iData in 1:numData) {
+    
+    dataframe <- data.frame(dataList[[nameArray[iData]]])
+    mainLev <- levelParsing(dataList[[nameArray[iData]]])
+    
+    for (j in 1:ncol(dataframe)) {
+      
+      check <- levels(dataframe[, j])
+      
+      if (length(check) > 0){
+        dataList[[nameArray[iData]]][j] <- as.numeric(dataframe[, j]) - 1
+      }
+    } # for
+  
+    mainArr <- toJSON(dataList[[nameArray[iData]]])
+    .RIGHT$scriptArray <- c(paste0("rawArr", iData, "= ", mainArr, ";"), .RIGHT$scriptArray)
+    .RIGHT$scriptArray <- c(paste0("rawLev", iData, "= ", mainLev, ";"), .RIGHT$scriptArray)
+  } # for
+  
+} # function prepareDataE
+
+# Save data.frame objects in temporary files:
 prepareData <- function(dataList, dir = ".") {
   
   # CHECK (junghoon): what happens if no names are given?
   nameArray <- names(dataList)
   
   # lapply will not work since it does not preserve the names of the list entries
-  dataframe <- data.frame(dataList)
   numData <- length(nameArray)
-  
-  mainLev <- levelParsing(dataList)
-  
-  for(i in 1:ncol(dataframe)) {
-    check <- levels(dataframe[, i])
-    if(length(check) > 0) {
-      dataList[[nameArray]][i] <- as.numeric(dataframe[, i])
-    }  
-  }
-  
   fileNameArray <- vector("character", numData)
+  
   for (iData in 1:numData) {
+    
+    dataframe <- data.frame(dataList[[nameArray[iData]]])
+    mainLev <- levelParsing(dataList[[nameArray[iData]]])
+  
+    for (j in 1:ncol(dataframe)) {
+      
+      check <- levels(dataframe[, j]) 
+      if (length(check) > 0)
+        dataList[[nameArray]][j] <- as.numeric(dataframe[, iData])
+          
+    } # for
     
     fileNameArray[iData] <- paste0("_", nameArray[iData], ".csv")
     write.csv(dataList[[iData]], file = file.path(dir, fileNameArray[iData]), row.names = F)
-    
+    .RIGHT$scriptArray <- c(paste0("rawLev", iData, "= ", mainLev, ";"), .RIGHT$scriptArray)
+  
   } # for
-  .RIGHT$scriptArray <- c(paste0("rawLev = ", mainLev, ";"), .RIGHT$scriptArray)
+  
   return(fileNameArray)
   
 } # function prepareData
 
-# Add JavsScript expressions to load data. This function has side effects:
+# Add JavsScript expressions to load data using embed option. This function has side effects:
 loadDataE <- function(nameArray = NULL) {
   
+  numData <- length(nameArray)
   if (!is.null(nameArray)) {
     
     # Data objects should be loaded before any plotting:
-    .RIGHT$scriptArray <- c(paste0(nameArray, ' = createMainStructureE(rawArr, rawLev);'), 
+    for(iData in 1:numData)
+      .RIGHT$scriptArray <- c(paste0(nameArray[iData], ' = createMainStructureE(rawArr',iData, ', rawLev',iData,');'), 
                             .RIGHT$scriptArray) 
   } # if
   
   invisible()
   
-} # function loadData
+} # function loadDataE
 
+# Add JavsScript expressions to load data not using embed option. This function has side effects:
 loadData <- function(nameArray = NULL, fileNameArray = paste0("_", nameArray, ".csv")) {
   
+  numData <- length(nameArray)
   if (!is.null(nameArray)) {
     
     if (length(nameArray) != length(fileNameArray)) {
@@ -142,7 +166,8 @@ loadData <- function(nameArray = NULL, fileNameArray = paste0("_", nameArray, ".
     } # if
     
     # Data objects should be loaded before any plotting:
-    .RIGHT$scriptArray <- c(paste0(nameArray, ' = createMainStructure("', file.path("..", fileNameArray), '", rawLev);'), 
+    for(iData in 1:numData)
+      .RIGHT$scriptArray <- c(paste0(nameArray[iData], ' = createMainStructure("', file.path("..", fileNameArray[iData]), '", rawLev', iData, ");"), 
                             .RIGHT$scriptArray) 
     
   } # if

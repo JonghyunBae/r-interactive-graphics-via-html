@@ -27,6 +27,21 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 25Apr2014 ==
+
+Participants : Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for this weekend
+  # High priority : Make example that operate RIGHT package with server-offloading locally using shiny package
+  # Materialize and change server-offloading code using new version of shiny and rebuild
+  # Modify about new R code and javascript code (Test, example code)
+  # Delete embed option and use only "data.js" file
+  # Make shiny server account
+  # Optimize about discrete data parsing
+  # Make data object in "srtucture.js" to save data array
+
+  Next meeting : 10:00 (Korea time) on Fri, 5/02
+
 == 18Apr2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae

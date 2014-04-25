@@ -44,21 +44,20 @@ function make2DArr (rows) {
 }
 
 /**  create main structure of data  **/
-function createMainStructureE (rawArr, rawLev) {
-	
+function createMainStructureE (rawArr) {
 	var mainArr = new Object();
-	var labelArr = Object.keys(rawArr);
-	var posCnt = 0, cnt = 0;
-	for (name in rawArr) {
-		mainArr[name] = rawArr[name];
-		if (rawLev.Pos[posCnt] != undefined && cnt == rawLev.Pos[posCnt]) { // if discrete
-			mainArr[name].isDiscrete = true;
-			mainArr[name].index = rawLev.Levels[posCnt];
-			posCnt ++;
-		}
-		cnt ++;
-	}
+  var labelArr = Object.keys(rawArr);
 	
+  for (i=0; i<labelArr.length; i++) {
+    if(rawArr[labelArr[i]].level == null) {
+      mainArr[labelArr[i]] = rawArr[labelArr[i]];
+    } else {
+      mainArr[labelArr[i]] = rawArr[labelArr[i]].index;
+      mainArr[labelArr[i]].index = rawArr[labelArr[i]].level;
+      mainArr[labelArr[i]].isDiscrete = true;
+    }
+  }
+
 	var isSelected = make2DArr(mainArr[labelArr[0]].length);
 	for (var i=0; i<isSelected.length; i++) {
 		isSelected[i][0] = 0;
@@ -86,6 +85,7 @@ function createMainStructureE (rawArr, rawLev) {
 	return mainArr;
 }
 
+/*
 function createMainStructure (fileName, rawLev) {  
 	var tmpArr = getData(fileName);	
 	var mainArr = new Object();
@@ -133,7 +133,6 @@ function createMainStructure (fileName, rawLev) {
 	return mainArr;
 }
 
-/*
 function createOffloadStructure(relateObjName)
 {
   var mainArr = new Object();
@@ -162,6 +161,7 @@ function sendingData(relateObjName)
   };
 }
 */
+
 /**  create main structure of data End  **/
   
   /**  binning  **/

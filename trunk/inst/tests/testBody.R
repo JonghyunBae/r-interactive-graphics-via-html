@@ -37,26 +37,16 @@ B <- data.frame(VALUE = 1:5)
 
 test_that("Check whether data.frame objects are properly saved", {
   
-  fileNameArray <- prepareData(list(A = A, B = B))
-  expect_identical(fileNameArray, c("_A.csv", "_B.csv"))
-  
-  expect_true(file.exists("_A.csv"))
-  expect_identical(A, read.csv("_A.csv"))
-  
-  expect_true(file.exists("_B.csv"))
-  expect_identical(B, read.csv("_B.csv"))
-  
-  unlink(fileNameArray)
+  prepareData(list(A = A, B = B))
+  expect_true(file.exists("data.js"))
   
 }) # test_that
 
 test_that("Check whether data.frame objects can be saved in another directory", {
   
   dir.create("TEMP")
-  fileNameArray <- prepareData(list(A = A), "TEMP")
-  expect_identical(fileNameArray, "_A.csv")
-  
-  expect_true(file.exists(file.path("TEMP", "_A.csv")))
+  prepareData(list(A = A), "TEMP")  
+  expect_true(file.exists(file.path("TEMP", "data.js")))
   
   unlink("TEMP", recursive = TRUE)
   
@@ -72,20 +62,19 @@ test_that("Test script generation for loading data", {
   
   loadData("A")
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'))
+                   paste0('A = createMainStructureE(rawArr1);'))
   
   loadData()
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");'))
+                   paste0('A = createMainStructureE(rawArr1);'))
   
-  expect_error(loadData(c("B", "C"), "BB.csv"))
+  expect_error(loadData(c("B", "C"), "data.js"))
   
-  loadData(c("B", "C"), c("BB.csv", "CC.csv"))
+  loadData(c("B", "C"))
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   c(paste0('B = createMainStructure("', file.path("..", "BB.csv"), '");'),
-                     paste0('C = createMainStructure("', file.path("..", "CC.csv"), '");'),
-                     paste0('A = createMainStructure("', file.path("..", "_A.csv"), '");')))
-  
+                   c(paste0('C = createMainStructureE(rawArr2);'),
+                     paste0('B = createMainStructureE(rawArr1);'),
+                     paste0('A = createMainStructureE(rawArr1);')))      
 }) # test_that
 
 ## ---

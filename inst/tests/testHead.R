@@ -103,7 +103,9 @@ test_that("Test script creation with createHead()", {
                      "",
                      '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>',
                      "",
-                     "  <title>NOTHING &amp; EMPTY</title>", 
+                     "  <title>NOTHING &amp; EMPTY</title>",
+                     "",
+                     '  <script src="../data.js" type="text/javascript"></script>',
                      "",
                      "</head>"))
   
@@ -118,6 +120,8 @@ test_that("Test script creation with createHead()", {
                      '  <link rel="stylesheet" type="text/css" href="right.css"/>',
                      "",
                      "  <title>LINK&lt; GIVEN</title>", 
+                     "",
+                     '  <script src="../data.js" type="text/javascript"></script>',
                      "",
                      "</head>"))
   
@@ -134,6 +138,7 @@ test_that("Test script creation with createHead()", {
                      "  <title>BOTH GIVEN</title>", 
                      "",
                      '  <script src="common.js" type="text/javascript"></script>',
+                     '  <script src="../data.js" type="text/javascript"></script>',
                      "",
                      "</head>"))
   

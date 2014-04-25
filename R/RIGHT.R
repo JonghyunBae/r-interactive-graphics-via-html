@@ -98,7 +98,6 @@ RIGHT <- function(expr = {},
                   title = "RIGHT: R Interactive Graphics via HTml",
                   dir = tempfile(), 
                   overwrite = FALSE,
-                  embed = TRUE,
                   browser = getOption("browser"),
                   supportRIGHT = getOption("supportRIGHT")) {
   
@@ -162,12 +161,7 @@ RIGHT <- function(expr = {},
   
   # Add scripts to load data objects:
   prependBlankLine()
-  
-  if(embed == TRUE) {
-    loadDataE(nameArray)
-  } else {
-    loadData(nameArray)
-  }
+  loadData(nameArray)
   
   ## ---
   ## Setup directory:
@@ -188,12 +182,7 @@ RIGHT <- function(expr = {},
   } # if
   
   # Save data objects to file:
-  
-  if(embed == TRUE) {
-    fileNameArray <- prepareDataE(dataList) 
-  } else {
-    fileNameArray <- prepareData(dataList, dir)
-  }
+  prepareData(dataList, dir)
   
   ## ---
   ## Assemble client-side code:
@@ -211,8 +200,7 @@ RIGHT <- function(expr = {},
   ## ---
   
   return(structure(list(dir = dir,
-                        browser = browser, 
-                        fileNameArray = fileNameArray),
+                        browser = browser),
                    class = "RIGHT"))
   
 } # function RIGHT

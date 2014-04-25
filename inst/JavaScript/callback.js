@@ -138,10 +138,3 @@ function resetSelected(Name)
 	// refresh page.
 	window.top.location.reload();
 }
-
-
-
-
-
-
-

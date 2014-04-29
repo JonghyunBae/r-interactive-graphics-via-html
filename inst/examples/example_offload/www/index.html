@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" type="text/css" href="shared/bootstrap/css/bootstrap-responsive.min.css"/>
   <link rel="stylesheet" href="right.css"/>
-                             <title>RIGHT: R Interactive Graphics via HTml</title>
+  <title>RIGHT: R Interactive Graphics via HTml</title>
   <script src="shiny-right.js"></script>
   <script src="callback.js"></script>
   <script src="kinetic-v5.0.1.js"></script>
@@ -48,8 +48,8 @@
        
        <script>
        var axis1 = new Axis(1, mainArr1, 'Time', 'conc', {});
-       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', {});       
-       var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {group: 'Subject'});   
+       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', {group: 'Subject'});       
+       var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});   
        
        var axis2 = new Axis(2, mainArr1, 'Time', 'conc', {});
        var d1 = new Dot(axis2, mainArr1, 'Time', 'conc', {});

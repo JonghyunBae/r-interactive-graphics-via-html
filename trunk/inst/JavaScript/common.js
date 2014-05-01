@@ -24,7 +24,7 @@ function getNodeinfo(dataObj, id)
 	var cnt = 0;
 	var info ='';
 	for(var name in dataObj){
-		if(!(name == 'offloadObjArr' ||name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+		if(!(name == 'offloadObjArr' ||name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'refreshArr' || name == 'graphObjArr' || name == 'statusArr')) {
 			if(dataObj[name].isDiscrete == true){
 				if(cnt == 0){
 					info = name + ': ' + dataObj[name].index[dataObj[name][id]];
@@ -49,7 +49,7 @@ function getFields(dataObj)
 {
 	var temp = new Array();
 	for(var name in dataObj){
-		if(!(name == 'offloadObjArr' || name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+		if(!(name == 'offloadObjArr' || name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'refreshArr' || name == 'graphObjArr' || name == 'statusArr')) {
 			temp.push(name);
 		}
 	}
@@ -110,12 +110,18 @@ function getXYpos(elm) {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //makeEventComponent is underconstruction becuase of its purpose 
-function makeEventComponent (dataObj) {
-	dataObj.$id = 1;
+function makeEventComponent (dataObj, length) {
+	dataObj.$id = 0;
 	dataObj.parent = null;
 	dataObj.child = null;
-	dataObj.$isHidden = new Array();
 	dataObj.$isSelected = new Array();
+	dataObj.graphObjArr = new Array();
+	dataObj.statusArr = new Array(length);
+	dataObj.$isHidden = new Array(length);
+	for (var i=0; i<length; i++) {
+		dataObj.statusArr[i] = 0;
+		dataObj.$isHidden[i] = false;
+	}
 }
 
 function birthReport (parent, child, mergeArr) {
@@ -134,170 +140,97 @@ function ModifyBirth (child, mergeArr) {
 	child.mergeArr = mergeArr;
 }
 
-/*
-function setMapping(index)
-{
-	return function(nodes)
-		{
-			var returnArr = new Array();
-			if(nodes.length == undefined){
-				returnArr = index[nodes];
-			}else{
-				for(var i = 0 ; i < nodes.length ; i ++){
-					
-					returnArr = returnArr.concat(index[nodes[i]]);
-				}
-			}
-			return returnArr;
-		};
-}
-*/
 
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate(graphObj, nodes, selectOn) 
-{	
-//	alert('allupdate ' + nodes + ', ' + selectOn);
+function allGraphUpdate (graphObj, nodes, selectOn) {
 	graphObj.firstUpdate(nodes, selectOn);
 }
 
+// process of firstUpdate
+// 1. AfterStatus - statusArr => update nodes
+// 2. Propagate afterStatus to parent & child
 function firstUpdate (firstObj) {
 	return function (nodes, selectOn) {
-
-			//alert(nodes);
 			var object = firstObj;
-			var temp = nodes;
-			
-			// when lineObj.
-			if(firstObj._type == 'lineObj'){
-				// my update
-				if(nodes.length == undefined){
-					object.$isSelected[nodes][0] = selectOn;
-					for(var i = 1 ; i < object.$isSelected[nodes].length ; i ++){
-						object.$isSelected[nodes][i](selectOn);
-						object.$isSelected[nodes][i](selectOn);
-					}
-				}else{
-					for(var j = 0 ; j < nodes.length ; j ++){
-						object.$isSelected[nodes[j]][0] = selectOn;
-						for(var i = 1 ; i < object.$isSelected[nodes[j]].length ; i ++){
-							object.$isSelected[nodes[j]][i](selectOn);
-							object.$isSelected[nodes[j]][i](selectOn);
-						}
-					}
-				}
-				// refresh
-				for(var i = 1 ; i < object.refreshArr.length ; i ++){
-					object.refreshArr[i]();
-				}
-			}
-		//	alert(temp);
-			// find root
-			while(object.parent != null){
-				temp = object.childTOparent(temp);
-				object = object.parent;
-			}
-			var refineArr = new Array();
-			var cnt = 0;
-		//	alert(temp);
-			// if just one node.
-			if(temp.length == undefined){
-				if(object.$isSelected[temp][0] != selectOn){ // prevent duplicate 
-					object.$isSelected[temp][0] = selectOn;
-					for(var i = 1 ; i < object.$isSelected[temp].length ; i ++){
-						object.$isSelected[temp][i](selectOn);
-					}
-					refineArr[cnt++] = temp;
-				}
-			}else{ // more than one node.
-				for(var j = 0 ; j < temp.length ; j ++){
-					if(object.$isSelected[temp[j]][0] != selectOn){ // prevent duplicate 
-						object.$isSelected[temp[j]][0] = selectOn;
-						for(var i = 1 ; i < object.$isSelected[temp[j]].length ; i ++){
-							object.$isSelected[temp[j]][i](selectOn);
-						}
-						refineArr[cnt++] = temp[j];
-					}
-				}
-			}
-			if(object.refreshTable != undefined){
-				object.refreshTable();
-			}
-			
-			// refresh
-			for(var i = 1 ; i < object.refreshArr.length ; i ++){
-				object.refreshArr[i]();
-			}
-			
-			// child update
-			if(object.child != null && cnt > 0){
-				for(var i = 0 ; i < object.child.length ; i ++){
-					var temp2 = object.parentTOchild[i](refineArr);
-					childUpdate(object.child[i], temp2, selectOn, firstObj);
-				}
-			}
-		};
+			var temp = extensionArr(nodes, object.statusArr.length, selectOn);
+			updateRecursive(object, temp, null);
+	};
 }
 
-function childUpdate(object, nodes, selectOn, firstObj)
-{
-	// my update
-	if(!(object == firstObj && object._type == 'lineObj')){
-		if(nodes.length == undefined){
-			object.$isSelected[nodes][0] = selectOn;
-			for(var i = 1 ; i < object.$isSelected[nodes].length ; i ++){
-				object.$isSelected[nodes][i](selectOn);
-			}
-		}else{
-			for(var j = 0 ; j < nodes.length ; j ++){
-				object.$isSelected[nodes[j]][0] = selectOn;
-				for(var i = 1 ; i < object.$isSelected[nodes[j]].length ; i ++){
-					object.$isSelected[nodes[j]][i](selectOn);
-				}
+function updateRecursive (object, nodeArr, beforeObject) {
+	//my update
+	var temp = subtractArr(nodeArr, object.statusArr);
+	var nodeArr = new Array();
+	var nodeVal = new Array();
+	for (var i=0; i<temp.length; i++) {
+		// for non-zero values
+		if (temp[i] != 0) {
+			nodeArr.push(i)
+			nodeVal.push(temp[i]);
+		}
+	}
+	if (nodeArr.length != 0) {
+		for (var i=0; i<object.graphObjArr.length; i++) {
+			var node = object.graphObjArr[i].node;
+			var func = object.$isSelected[i];
+			for (var j=0; j<nodeArr.length; j++) {
+				func(node[nodeArr[j]], nodeVal[j]);
 			}
 		}
-		// refresh
-		for(var i = 1 ; i < object.refreshArr.length ; i ++){
-			object.refreshArr[i]();
-		}
+	} else {
+		return;
+	}
+	// update statusArr
+	object.statusArr = addArr(object.statusArr, temp);
+	// refresh
+	for (var i=0; i<object.refreshArr.length; i++) {
+		object.refreshArr[i]();
+	}
+	if(object.refreshTable != undefined){
+		object.refreshTable();
 	}
 	
-	//child update
-	if(object.child != null){
-		for(var i = 0 ; i < object.child.length ; i ++){
-			var temp = object.parentTOchild[i](nodes);
-			childUpdate(object.child[i], temp, selectOn, firstObj);
+	// Parent Update
+	if (object.parent != null && object.parent != beforeObject) {
+		var parent = object.parent;
+		var mergeArr = object.mergeArr;
+		mergeArr = makeOrthogonalArr(mergeArr, 2);
+		var temp = mulArr(object.statusArr, 1, mergeArr, 2);
+		updateRecursive(parent, temp, object);
+	}
+	// Child Update
+	if (object.child != null) {
+		for (var i=0; i<object.child.length; i++) {
+			var child = object.child[i];
+			if (child != beforeObject) {
+				var mergeArr = child.mergeArr;
+				var temp = mulArr(object.statusArr, 1, mergeArr, 2);
+				updateRecursive(child, temp, object);
+			}
 		}
 	}
 }
 
-function makeRefresh (stage) {
+function makeRefresh (stage, id) {
 	return function () {
 			stage.draw();
 		}
 }
-/*
-function nullUpdate (node) {
-	return function (temp) {
-			return;
-		};
-}
-*/
 
 function allSelect (graphObj) {
-	var tmpNodeArr = new Array();
+	var temp = new Array();
 	for (var i=0; i<graphObj.node.length; i++) {
-		tmpNodeArr.push(graphObj.node[i].getName());
+		temp.push(graphObj.node[i].getName());
 	}
-	allGraphUpdate(graphObj, tmpNodeArr, 1);	
+	allGraphUpdate(graphObj, temp, 1);	
 }
 
 function allDeselect (graphObj) {
-	var tmpNodeArr = new Array();
+	var temp = new Array();
 	for (var i=0; i<graphObj.node.length; i++) {
-		tmpNodeArr.push(graphObj.node[i].getName());
+		temp.push(graphObj.node[i].getName());
 	}
-	allGraphUpdate(graphObj, tmpNodeArr, 0);
-
+	allGraphUpdate(graphObj, temp, 0);
 }
 
 function findMaxMinValue (Data) {	

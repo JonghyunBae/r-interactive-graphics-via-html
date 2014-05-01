@@ -50,13 +50,12 @@ var Dot = {};
 				var xArr = temp.xArr;
 				var yArr = temp.yArr;
 				var labelArr = getFields(dataObj);				
-				var cnt = 0;
 				var subSet = this.subSet;
 				this.node = new Array();
 				if (this.colorOn == true) {
 					for (var i=0; i<xArr.length; i++) {						
 						if (!(xArr[i] == -1 || yArr[i] == -1) && (subSet == -1 || eval(subSet))) {
-							this.node[cnt] = new Kinetic.Circle({
+							this.node[i] = new Kinetic.Circle({
 								name: i,
 								x: xArr[i],
 								y: yArr[i],
@@ -67,16 +66,14 @@ var Dot = {};
 								opacity: 0.5,
 								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 							});
-							dataObj.$isSelected[i][this.dataId] = this.node[cnt];
-							cnt ++;
 						} else {
-							dataObj.$isSelected[i][this.dataId] = null;
+							this.node[i] = null;
 						}
 					}
 				} else {
 					for (var i=0; i<xArr.length; i++) {
 						if (!(xArr[i] == -1 || yArr[i] == -1) && (subSet == -1 || eval(subSet))) {
-							this.node[cnt] = new Kinetic.Circle({
+							this.node[i] = new Kinetic.Circle({
 								name: i,
 								x: xArr[i],
 								y: yArr[i],
@@ -87,23 +84,23 @@ var Dot = {};
 								opacity: 0.5,
 								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 							});
-							dataObj.$isSelected[i][this.dataId] = this.node[cnt];
-							cnt ++;
 						} else {
-							dataObj.$isSelected[i][this.dataId] = null;
+							this.node[i] = null;
 						}
 					}
 				}
-
 				this.dataLayer = new Kinetic.Layer();	
 				for (var i=0; i<this.node.length; i++) {
-					this.dataLayer.add(this.node[i]);
+					if (this.node[i] != null) {
+						this.dataLayer.add(this.node[i]);
+					}
 				}
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 				
 	        	// event add
-				dataObj.$isSelected[dataObj.$isSelected.length-1][this.graphId] = dotUpdate();
+				dataObj.graphObjArr[this.dataId] = this;
+				dataObj.$isSelected[this.dataId] = dotUpdate();
 				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);				
 	        	this.firstUpdate = firstUpdate(dataObj);
 	        	axisObj.graphObjArr[this.graphId] = this;
@@ -122,29 +119,28 @@ var Dot = {};
 	}
 })();
 /**  Draw Dot graph(scatter) End  **/
-function dotBoxSearch(graphObj)
-{
-	return function(smallX, smallY, bigX, bigY)
-		{
+
+function dotBoxSearch (graphObj) {
+	return function (smallX, smallY, bigX, bigY) {
 			var tmpNodeArr = new Array();
 			var tmpNodeArr1 = new Array();
-			if(ctrlPressed == true) {
-				for(var i = 0 ; i < graphObj.node.length ; i ++){
-					if(smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY){
-						if(graphObj.node[i].getSelected()==1){
+			if (ctrlPressed == true) {
+				for (var i=0; i<graphObj.node.length; i++) {
+					if (smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY) {
+						if (graphObj.node[i].getSelected()==1) {
 							tmpNodeArr.push(graphObj.node[i].getName());
-						}else{
+						} else {
 							tmpNodeArr1.push(graphObj.node[i].getName());
-						}					                   
+						}
 	                }
 				}
 				allGraphUpdate(graphObj, tmpNodeArr, 0);
 				allGraphUpdate(graphObj, tmpNodeArr1, 1);
-			}else{
-				for(var i = 0 ; i < graphObj.node.length ; i ++){
-					if(smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY){
-						tmpNodeArr.push(graphObj.node[i].getName());              
-	                }                        
+			} else {
+				for (var i=0; i<graphObj.node.length; i++) {
+					if (smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY) {
+						tmpNodeArr.push(graphObj.node[i].getName());
+	                }
 				}
 				allGraphUpdate(graphObj, tmpNodeArr, 1);
 			}
@@ -156,13 +152,13 @@ function dotBoxSearch(graphObj)
 //"set" syntax has not changed during many versions.
 function dotUpdate () {
 	return	function (node, selectOn) {
-			if (node.getSelected() == 1 && selectOn == 0) {		//unselect
+			if (node.getSelected() == 1 && selectOn < 0) {		//unselect
 				node.setStroke(node.getFill());
 				node.setScaleX(1);
 				node.setScaleY(1);
 				node.setOpacity(0.5);
 				node.setSelected(0);
-			} else if (node.getSelected() == 0 && selectOn == 1) {	//select
+			} else if (node.getSelected() == 0 && selectOn > 0) {	//select
 				node.setStroke('black');
 				node.setScaleX(2);
 				node.setScaleY(2);
@@ -172,17 +168,15 @@ function dotUpdate () {
 			}
 		};
 }
-
 /**  update function end  **/
-function dotHover()
-{
-	return function(node, overOff) // over: 1 , off: 0
-		{
-			if(overOff == 1){
+
+function dotHover () {
+	return function (node, overOff) {// over: 1 , off: 0
+			if (overOff == 1) {
 				node.setScaleX(1.5);
                 node.setScaleY(1.5);
                 node.draw();
-			}else if(overOff == 0){
+			} else if (overOff == 0) {
 				var tween = new Kinetic.Tween({
         			node: node, 
 			        duration: 0.01,
@@ -190,11 +184,12 @@ function dotHover()
 			        scaleY: 1
         		}).play(); 
 			}
-		};
+	};
 }
 
 
 /**  Regression functions for scatter  **/
+/*
 //linear regression.
 function linearSendArr(Name)
 {
@@ -241,6 +236,7 @@ function loessSendArr(Name)
 	window.Shiny.onInputChange("graph", "loess");
 	window.Shiny.onInputChange("start", 1);
 }
+*/
 /**  Regression functions for scatter end  **/
 
 

@@ -5,21 +5,21 @@ var MakeLineObj = {};
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
 		this.dataObj = dataObj;
-		if(optionObj.group != undefined){
+		if (optionObj.group != undefined) {
 			gLabel = optionObj.group;
-		}else{
+		} else {
 			gLabel = 'NULL';			
 		}
 		this.gLabel = gLabel;
-		if(gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined){
+		if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
 			this.groupOn = true;
 			this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
-		}else{
+		} else {
 			this.groupOn = false;
 			this.labelArr = ['x1', 'y1', 'x2', 'y2'];
 		}
 
-		if(this.groupOn == true){ // draw line with group
+		if (this.groupOn == true) { // draw line with group
 			this.x1 = new Array();
 			this.x2 = new Array();
 			this.y1 = new Array();
@@ -29,28 +29,28 @@ var MakeLineObj = {};
 			var c2pArr = new Array();
 			var lineCnt = -1;
 			var newGroup = 1;
-			for(var i = 0 ; i < dataObj[gLabel].index.length ; i ++){ // for one sub group
+			for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
 				var groupTemp = new Array();
-				for(var j = 0 ; j < dataObj[gLabel].length ; j ++){ // search all data
-					if(i == dataObj[gLabel][j]){ // save groupTemp
+				for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
+					if (i == dataObj[gLabel][j]) { // save groupTemp
 						groupTemp.push(j);
 					}
 				}
-				if(groupTemp.length > 1){
-					if(groupTemp.length > 2){
-						for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
+				if (groupTemp.length > 1) {
+					if (groupTemp.length > 2) {
+						for (var j=0; j<groupTemp.length-1; j++) {
 							this.x1.push(dataObj[xLabel][groupTemp[j]]);
 							this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
 							this.y1.push(dataObj[yLabel][groupTemp[j]]);
 							this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
 							this[gLabel].push(i);
-							if(lineCnt == -1){
+							if (lineCnt == -1) {
 								lineCnt ++;
 							}						
-							if(newGroup == 1){
+							if (newGroup == 1) {
 								newGroup = 0;
 								p2cArr[groupTemp[j]] = lineCnt;
-							}else{
+							} else {
 								p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
 								lineCnt ++;
 							}						
@@ -59,13 +59,13 @@ var MakeLineObj = {};
 						newGroup = 1;
 						p2cArr[groupTemp[j]] = lineCnt;
 						lineCnt ++;
-					}else{ // groupTemp.length == 2
+					} else { // groupTemp.length == 2
 						this.x1.push(dataObj[xLabel][groupTemp[0]]);
 						this.x2.push(dataObj[xLabel][groupTemp[1]]);
 						this.y1.push(dataObj[yLabel][groupTemp[0]]);
 						this.y2.push(dataObj[yLabel][groupTemp[1]]);
 						this[gLabel].push(i);
-						if(lineCnt == -1){
+						if (lineCnt == -1) {
 							lineCnt ++;
 						}
 						p2cArr[groupTemp[0]] = lineCnt;
@@ -73,26 +73,20 @@ var MakeLineObj = {};
 						c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
 						lineCnt ++;
 					}
-				}else{
+				} else {
 					p2cArr[groupTemp] = -1; // disconnected dot
 				}
 			}
 			this[gLabel].isDiscrete = true;
 			this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
-			this[gLabel].index = dataObj[gLabel].index;
-			// make event handle part.
-			this.$isSelected = make2DArr(this.x1.length);
-			for(var i = 0 ; i < this.$isSelected.length ; i ++){
-				this.$isSelected[i][0] = 0;
-			}
-			
-		}else{
+			this[gLabel].index = dataObj[gLabel].index;		
+		} else {
 			this.x1 = new Array(dataObj[xLabel].length - 1);
 			this.x2 = new Array(dataObj[xLabel].length - 1);
 			this.y1 = new Array(dataObj[xLabel].length - 1);
 			this.y2 = new Array(dataObj[xLabel].length - 1);
 			this[gLabel] = new Array();
-			for(var i = 0 ; i < this.x1.length ; i ++){
+			for (var i=0; i<this.x1.length; i++) {
 				this.x1[i] = dataObj[xLabel][i];
 				this.x2[i] = dataObj[xLabel][i+1];
 				this.y1[i] = dataObj[yLabel][i];
@@ -100,25 +94,19 @@ var MakeLineObj = {};
 				this[gLabel].push(i);
 			}
 			
-			// make event handle part.
-			this.$isSelected = make2DArr(this.x1.length);
-			var p2cArr = new Array(this.$isSelected.length + 1);
-			var c2pArr = new Array(this.$isSelected.length);
-			for(var i = 0 ; i < this.$isSelected.length ; i ++){
-				this.$isSelected[i][0] = 0;
+			var p2cArr = new Array(dataObj[xLabel].length);
+			var c2pArr = new Array(dataObj[xLabel].length - 1);
+			for (var i=0; i<c2pArr.length; i++) {
 				p2cArr[i] = [i-1, i];
 				c2pArr[i] = [i, i+1];
 			}
 			p2cArr[0] = 0;
 			p2cArr[i] = i-1;
-		}		
-		var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
-		this.$id = 1;
-		this._type = 'lineObj';
-		this.statusArr = new Array(c2pArr.length);
-		for (var i=0; i<this.statusArr.length; i++) {
-			this.statusArr[i] = 0;
 		}
+		this._type = 'lineObj';
+		// make event handle part.
+		makeEventComponent(this, c2pArr.length);
+		var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
 		birthReport(dataObj, this, mergeArr);
 	};
 	MakeLineObj.prototype = {
@@ -136,7 +124,15 @@ var MakeLineObj = {};
 				this.labelArr = ['x1', 'y1', 'x2', 'y2'];
 			}
 
-			if(this.groupOn == true){ // draw line with group
+			if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
+				this.groupOn = true;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
+			} else {
+				this.groupOn = false;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2'];
+			}
+
+			if (this.groupOn == true) { // draw line with group
 				this.x1 = new Array();
 				this.x2 = new Array();
 				this.y1 = new Array();
@@ -146,28 +142,28 @@ var MakeLineObj = {};
 				var c2pArr = new Array();
 				var lineCnt = -1;
 				var newGroup = 1;
-				for(var i = 0 ; i < dataObj[gLabel].index.length ; i ++){ // for one sub group
+				for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
 					var groupTemp = new Array();
-					for(var j = 0 ; j < dataObj[gLabel].length ; j ++){ // search all data
-						if(i == dataObj[gLabel][j]){ // save groupTemp
+					for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
+						if (i == dataObj[gLabel][j]) { // save groupTemp
 							groupTemp.push(j);
 						}
 					}
-					if(groupTemp.length > 1){
-						if(groupTemp.length > 2){
-							for(var j = 0 ; j < groupTemp.length - 1 ; j ++){
+					if (groupTemp.length > 1) {
+						if (groupTemp.length > 2) {
+							for (var j=0; j<groupTemp.length-1; j++) {
 								this.x1.push(dataObj[xLabel][groupTemp[j]]);
 								this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
 								this.y1.push(dataObj[yLabel][groupTemp[j]]);
 								this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
 								this[gLabel].push(i);
-								if(lineCnt == -1){
+								if (lineCnt == -1) {
 									lineCnt ++;
 								}						
-								if(newGroup == 1){
+								if (newGroup == 1) {
 									newGroup = 0;
 									p2cArr[groupTemp[j]] = lineCnt;
-								}else{
+								} else {
 									p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
 									lineCnt ++;
 								}						
@@ -176,13 +172,13 @@ var MakeLineObj = {};
 							newGroup = 1;
 							p2cArr[groupTemp[j]] = lineCnt;
 							lineCnt ++;
-						}else{ // groupTemp.length == 2
+						} else { // groupTemp.length == 2
 							this.x1.push(dataObj[xLabel][groupTemp[0]]);
 							this.x2.push(dataObj[xLabel][groupTemp[1]]);
 							this.y1.push(dataObj[yLabel][groupTemp[0]]);
 							this.y2.push(dataObj[yLabel][groupTemp[1]]);
 							this[gLabel].push(i);
-							if(lineCnt == -1){
+							if (lineCnt == -1) {
 								lineCnt ++;
 							}
 							p2cArr[groupTemp[0]] = lineCnt;
@@ -190,26 +186,20 @@ var MakeLineObj = {};
 							c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
 							lineCnt ++;
 						}
-					}else{
-						p2cArr[groupTemp] = -1;
+					} else {
+						p2cArr[groupTemp] = -1; // disconnected dot
 					}
 				}
 				this[gLabel].isDiscrete = true;
 				this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
-				this[gLabel].index = dataObj[gLabel].index;
-				// make event handle part.
-				this.$isSelected = make2DArr(this.x1.length);
-				for(var i = 0 ; i < this.$isSelected.length ; i ++){
-					this.$isSelected[i][0] = 0;
-				}
-				
-			}else{
+				this[gLabel].index = dataObj[gLabel].index;		
+			} else {
 				this.x1 = new Array(dataObj[xLabel].length - 1);
 				this.x2 = new Array(dataObj[xLabel].length - 1);
 				this.y1 = new Array(dataObj[xLabel].length - 1);
 				this.y2 = new Array(dataObj[xLabel].length - 1);
 				this[gLabel] = new Array();
-				for(var i = 0 ; i < this.x1.length ; i ++){
+				for (var i=0; i<this.x1.length; i++) {
 					this.x1[i] = dataObj[xLabel][i];
 					this.x2[i] = dataObj[xLabel][i+1];
 					this.y1[i] = dataObj[yLabel][i];
@@ -217,23 +207,23 @@ var MakeLineObj = {};
 					this[gLabel].push(i);
 				}
 				
-				// make event handle part.
-				this.$isSelected = make2DArr(this.x1.length);
-				var p2cArr = new Array(this.$isSelected.length + 1);
-				var c2pArr = new Array(this.$isSelected.length);
-				for(var i = 0 ; i < this.$isSelected.length ; i ++){
-					this.$isSelected[i][0] = 0;
+				var p2cArr = new Array(dataObj[xLabel].length);
+				var c2pArr = new Array(dataObj[xLabel].length - 1);
+				for (var i=0; i<c2pArr.length; i++) {
 					p2cArr[i] = [i-1, i];
 					c2pArr[i] = [i, i+1];
 				}
 				p2cArr[0] = 0;
 				p2cArr[i] = i-1;
 			}
+			// make event handle part.
+			makeEventComponent(this, c2pArr.length);
 			var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
 			ModifyBirth(this, mergeArr);
 		}
 	};
 })();
+
 /**  draw line graph  **/
 // not event handle yet.
 var Line = {};
@@ -284,12 +274,11 @@ var Line = {};
 				var temp = axisObj._getPixelXY(dataObj[xLabel2], dataObj[yLabel2]);
 				var xArr2 = temp.xArr;
 				var yArr2 = temp.yArr;
-				var cnt = 0;
 				this.node = new Array();
 				if(this.colorOn == true){
 					for(var i = 0 ; i < xArr1.length; i ++){
 						if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
-							this.node[cnt] = new Kinetic.Line({
+							this.node[i] = new Kinetic.Line({
 								name: i,
 								x: [xArr1[i], xArr2[i]],
 								y: [yArr1[i], yArr2[i]],
@@ -307,10 +296,8 @@ var Line = {};
 								opacity: 0.5,
 								info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj[this.colorLabel][i]]
 							});
-							dataObj.$isSelected[i][this.dataId] = this.node[cnt];
-							cnt ++;
 						}else{
-							dataObj.$isSelected[i][this.dataId] = null;
+							this.node[i] = null;
 						}
 					}
 				}else{
@@ -323,7 +310,7 @@ var Line = {};
 					}
 					for(var i = 0 ; i < xArr1.length; i ++){
 						if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
-							this.node[cnt] = new Kinetic.Line({
+							this.node[i] = new Kinetic.Line({
 								name: i,
 								x: [xArr1[i], xArr2[i]],
 								y: [yArr1[i], yArr2[i]],
@@ -341,22 +328,24 @@ var Line = {};
 								opacity: 0.5,
 								info: (dataObj[groupName].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[groupName].index[dataObj[groupName][i]]
 							});
-							dataObj.$isSelected[i][this.dataId] = this.node[cnt];
-							cnt ++;
 						}else{
-							dataObj.$isSelected[i][this.dataId] = null;
+							this.node[i] = null;
 						}
 					}
-				}				
-				this.dataLayer = new Kinetic.Layer();	
-	        	for(var i = 0 ; i < this.node.length ; i ++){
-					this.dataLayer.add(this.node[i]);
+				}
+				
+				this.dataLayer = new Kinetic.Layer();
+	        	for (var i=0; i<this.node.length; i++) {
+	        		if (this.node[i] != null) {
+	        			this.dataLayer.add(this.node[i]);
+	        		}
 				}
 	        	//add layer
 				axisObj.stage.add(this.dataLayer);
 				
 				// event add
-				dataObj.$isSelected[dataObj.$isSelected.length-1][this.graphId] = lineUpdate();
+				dataObj.graphObjArr[this.dataId] = this;
+				dataObj.$isSelected[this.dataId] = lineUpdate();
 				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 				this.firstUpdate = firstUpdate(dataObj);
 	        	axisObj.graphObjArr[this.graphId] = this;
@@ -410,14 +399,14 @@ function lineBoxSearch(graphObj)
 }
 function lineUpdate () {
 	return	function (node, selectOn) {
-			if (node.getSelected() == 1 && selectOn == 0) {		//unselect
+			if (node.getSelected() == 1 && selectOn < 0) {		//unselect
 				node.setSelectCnt(node.getSelectCnt() - 1);
 				if (node.getSelectCnt() == 0) {
 					node.setStroke(node.getFill());
 					node.setOpacity(0.5);
 					node.setSelected(0);
 				}
-			} else if (selectOn == 1) {	//select
+			} else if (selectOn > 0) {	//select
 				node.setSelectCnt(node.getSelectCnt() + 1);
 				if (node.getSelectCnt() > 2) {
 					node.setSelectCnt(2);
@@ -431,15 +420,13 @@ function lineUpdate () {
 			}
 		};
 }
-function lineHover()
-{
-	return function(node, overOff) // over: 1 , off: 0
-		{
-			if(overOff == 1){
+function lineHover() {
+	return function(node, overOff) { // over: 1 , off: 0
+			if (overOff == 1) {
 				node.setOpacity(1);
 			//	node.setStroke('red');
 				node.draw();
-			}else if(overOff == 0){
+			} else if (overOff == 0) {
 				var tween = new Kinetic.Tween({
 		        	node: node, 
 		        	duration: 0.01,

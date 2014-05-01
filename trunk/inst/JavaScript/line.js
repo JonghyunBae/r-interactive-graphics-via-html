@@ -46,14 +46,14 @@ var MakeLineObj = {};
 							this[gLabel].push(i);
 							if (lineCnt == -1) {
 								lineCnt ++;
-							}						
+							}
 							if (newGroup == 1) {
 								newGroup = 0;
 								p2cArr[groupTemp[j]] = lineCnt;
 							} else {
 								p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
 								lineCnt ++;
-							}						
+							}
 							c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
 						}
 						newGroup = 1;
@@ -110,19 +110,11 @@ var MakeLineObj = {};
 		birthReport(dataObj, this, mergeArr);
 	};
 	MakeLineObj.prototype = {
-		_reCalculate: function() {
+		_reCalculate: function () {
 			var xLabel = this.xLabel;
 			var yLabel = this.yLabel;
 			var gLabel = this.gLabel;
 			var dataObj = this.dataObj;
-			
-			if(gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined){
-				this.groupOn = true;
-				this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
-			}else{
-				this.groupOn = false;
-				this.labelArr = ['x1', 'y1', 'x2', 'y2'];
-			}
 
 			if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
 				this.groupOn = true;
@@ -228,14 +220,14 @@ var MakeLineObj = {};
 // not event handle yet.
 var Line = {};
 (function() {	
-	Line = function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
+	Line = function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 		this._init(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
 		this._draw(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
 		axisObj.numberOfGraph ++;
 		dataObj.$id ++;
 	};
 	Line.prototype = {
-			_init: function(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
+			_init: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 				this.dataObj = dataObj;
 				this.xLabel1 = xLabel1;
 				this.xLabel2 = xLabel2;
@@ -246,23 +238,23 @@ var Line = {};
 				this.graphId = axisObj.numberOfGraph;
 				
 				// check color
-				if(axisObj.legendLabel != undefined && dataObj[axisObj.legendLabel] != undefined){
+				if (axisObj.legendLabel != undefined && dataObj[axisObj.legendLabel] != undefined) {
 					var legendLabel = axisObj.legendLabel;					
-					if(dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined){
+					if (dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined) {
 						addColorField(dataObj[legendLabel]);
-					}else if(dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined){
+					} else if (dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined) {
 						addColorField(dataObj[legendLabel]);
 					}
 					this.colorOn = true;
-				}else{
+				} else {
 					this.colorOn = false;
 				}
 				this.colorLabel = legendLabel;
 				
 				// set the base color.
-				if(optionObj.baseColor != undefined && optionObj.baseColor != 'n'){
+				if (optionObj.baseColor != undefined && optionObj.baseColor != 'n') {
 					this.baseColor = optionObj.baseColor;
-				}else{
+				} else {
 					this.baseColor = 'black';
 				}
 			},
@@ -275,9 +267,9 @@ var Line = {};
 				var xArr2 = temp.xArr;
 				var yArr2 = temp.yArr;
 				this.node = new Array();
-				if(this.colorOn == true){
-					for(var i = 0 ; i < xArr1.length; i ++){
-						if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
+				if (this.colorOn == true) {
+					for (var i=0; i<xArr1.length; i++) {
+						if (!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)) {
 							this.node[i] = new Kinetic.Line({
 								name: i,
 								x: [xArr1[i], xArr2[i]],
@@ -296,11 +288,11 @@ var Line = {};
 								opacity: 0.5,
 								info: (dataObj[this.colorLabel].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[this.colorLabel].index[dataObj[this.colorLabel][i]]
 							});
-						}else{
+						} else {
 							this.node[i] = null;
 						}
 					}
-				}else{
+				} else {
 					//get group Name.
 					var groupName;
 					for (var name in dataObj) {
@@ -308,8 +300,8 @@ var Line = {};
 							groupName = name;
 						}
 					}
-					for(var i = 0 ; i < xArr1.length; i ++){
-						if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
+					for (var i=0; i<xArr1.length; i++) {
+						if (!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)) {
 							this.node[i] = new Kinetic.Line({
 								name: i,
 								x: [xArr1[i], xArr2[i]],
@@ -328,7 +320,7 @@ var Line = {};
 								opacity: 0.5,
 								info: (dataObj[groupName].isDiscrete == undefined) ? "Node: " + i : "Node: " + i + "\nGroup: " + dataObj[groupName].index[dataObj[groupName][i]]
 							});
-						}else{
+						} else {
 							this.node[i] = null;
 						}
 					}
@@ -364,39 +356,29 @@ var Line = {};
 			}
 	};
 })();
-function lineBoxSearch(graphObj)
-{
-	return function(smallX, smallY, bigX, bigY)
-		{	
+
+function lineBoxSearch (graphObj) {
+	return function (smallX, smallY, bigX, bigY) {	
 			var tmpNodeArr = new Array();
 			var tmpNodeArr1 = new Array();
-			if(ctrlPressed == true) {
-				for(var i = 0 ; i < graphObj.node.length ; i ++){
-					if(((smallX <= graphObj.node[i].getX()[0] && graphObj.node[i].getX()[0] <= bigX) && (smallY <= graphObj.node[i].getY()[0] && graphObj.node[i].getY()[0] <= bigY)) || ((smallX <= graphObj.node[i].getX()[1] && graphObj.node[i].getX()[1] <= bigX) && (smallY <= graphObj.node[i].getY()[1] && graphObj.node[i].getY()[1] <= bigY))){
-						if(graphObj.node[i].getSelected() == 1){
-							tmpNodeArr.push(graphObj.node[i].getName());
-						}else{
-							tmpNodeArr1.push(graphObj.node[i].getName());
-						}        
+			if (ctrlPressed == true) {
+				for (var i=0; i<graphObj.node.length; i++) {
+					if (((smallX <= graphObj.node[i].getX()[0] && graphObj.node[i].getX()[0] <= bigX) && (smallY <= graphObj.node[i].getY()[0] && graphObj.node[i].getY()[0] <= bigY)) || ((smallX <= graphObj.node[i].getX()[1] && graphObj.node[i].getX()[1] <= bigX) && (smallY <= graphObj.node[i].getY()[1] && graphObj.node[i].getY()[1] <= bigY))) {
+						tmpNodeArr.push(graphObj.node[i].getName());					
 					}
 				}
-				if(tmpNodeArr.length != undefined){
-					allGraphUpdate(graphObj, tmpNodeArr, 0);
-				}
-				if(tmpNodeArr1.length != undefined){
-					allGraphUpdate(graphObj, tmpNodeArr1, 1);
-				}				
-			}else{
-				for(var i = 0 ; i < graphObj.node.length ; i ++){
-					if(((smallX <= graphObj.node[i].getX()[0] && graphObj.node[i].getX()[0] <= bigX) && (smallY <= graphObj.node[i].getY()[0] && graphObj.node[i].getY()[0] <= bigY)) || ((smallX <= graphObj.node[i].getX()[1] && graphObj.node[i].getX()[1] <= bigX) && (smallY <= graphObj.node[i].getY()[1] && graphObj.node[i].getY()[1] <= bigY))){
+				allGraphUpdate(graphObj, tmpNodeArr, null, 'ctrl');
+			} else {
+				for (var i=0; i<graphObj.node.length; i++) {
+					if (((smallX <= graphObj.node[i].getX()[0] && graphObj.node[i].getX()[0] <= bigX) && (smallY <= graphObj.node[i].getY()[0] && graphObj.node[i].getY()[0] <= bigY)) || ((smallX <= graphObj.node[i].getX()[1] && graphObj.node[i].getX()[1] <= bigX) && (smallY <= graphObj.node[i].getY()[1] && graphObj.node[i].getY()[1] <= bigY))) {
 						tmpNodeArr.push(graphObj.node[i].getName());
 	                }
 	           	}
-				allGraphUpdate(graphObj, tmpNodeArr, 1);
+				allGraphUpdate(graphObj, tmpNodeArr, 1, null);
 	        }
-			
 		};
 }
+
 function lineUpdate () {
 	return	function (node, selectOn) {
 			if (node.getSelected() == 1 && selectOn < 0) {		//unselect
@@ -420,8 +402,9 @@ function lineUpdate () {
 			}
 		};
 }
-function lineHover() {
-	return function(node, overOff) { // over: 1 , off: 0
+
+function lineHover () {
+	return function (node, overOff) { // over: 1 , off: 0
 			if (overOff == 1) {
 				node.setOpacity(1);
 			//	node.setStroke('red');

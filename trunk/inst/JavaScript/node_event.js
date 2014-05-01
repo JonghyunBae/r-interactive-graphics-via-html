@@ -83,9 +83,9 @@ function drag (Name) {
     var touch = false;
     var divid;
     Name.stage.on('mousedown touchstart', function(evt){
-        if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
+        if ((evt.which && evt.which == 1) || (evt.button && evt.button == 0)) { //left click
         	var node = evt.targetNode;
-        	if(node.getName() == 'legend'){
+        	if (node.getName() == 'legend') {
         		return;
         	}
             divid = mouseName;
@@ -107,17 +107,17 @@ function drag (Name) {
     }); 
     var tmpx, tmpy, tmpName;
     Name.stage.on("mousemove", function (evt){
-    	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click                            
-		    if(Name.touch == true){
+    	if ((evt.which && evt.which == 1) || (evt.button && evt.button == 0)) { //left click                            
+		    if (Name.touch == true) {
 		    	//alert(Name.containerId);
 		    	Name.moving = true;
 	            dragOn = true;
-	            if(divid == mouseName){
+	            if (divid == mouseName) {
 	                var mousePos = {x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
 	                tmpx = divOffsetX;
 	                tmpy = divOffsetY;
 	                tmpName = Name;
-	            }else{
+	            } else {
 	                var mousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
 	            }
 	            var x, y;
@@ -133,36 +133,36 @@ function drag (Name) {
     }, true);
     
     Name.stage.on("mouseup", function (evt){
-    	if((evt.which && evt.which == 1) || (evt.button && evt.button == 0)){ //left click
-            if(Name.moving == true){
+    	if ((evt.which && evt.which == 1) || (evt.button && evt.button == 0)) { //left click
+            if (Name.moving == true) {
                 aftDragMousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
                 Name.rangeBox.setWidth(0);
                 Name.rangeBox.setHeight(0);
                 Name.rangeBoxLayer.drawScene();
-                if(ctrlPressed == false){
-                	for(var j = 0 ; j < Name.graphObjArr.length ; j ++){
+                if (ctrlPressed == false) {
+                	for (var j=0; j<Name.graphObjArr.length; j++) {
 						allDeselect(Name.graphObjArr[j]);
 					}
                 }
                 // find small x,y and big x,y
                 var smallX, bigX;
     			var smallY, bigY;
-    			if(preDragMousePos.x >= aftDragMousePos.x){
+    			if (preDragMousePos.x >= aftDragMousePos.x) {
     				smallX = aftDragMousePos.x;
     				bigX = preDragMousePos.x;
-    			}else if(preDragMousePos.x < aftDragMousePos.x){
+    			} else if (preDragMousePos.x < aftDragMousePos.x) {
     		        smallX = preDragMousePos.x;
     		        bigX = aftDragMousePos.x;
     			}
-    			if(preDragMousePos.y >= aftDragMousePos.y){
+    			if (preDragMousePos.y >= aftDragMousePos.y) {
     		        smallY = aftDragMousePos.y;
     		        bigY = preDragMousePos.y;
-    			}else if(preDragMousePos.y < aftDragMousePos.y){
+    			} else if (preDragMousePos.y < aftDragMousePos.y) {
     		        smallY = preDragMousePos.y;
     		        bigY = aftDragMousePos.y;
     			}
     			// box search
-                for(var i = 0 ; i < Name.boxSearchArr.length ; i ++){
+                for (var i=0; i<Name.boxSearchArr.length; i++) {
                 	Name.boxSearchArr[i](smallX, smallY, bigX, bigY);
                 }
                 Name.moving = false;
@@ -206,19 +206,12 @@ function select (Name) {
 					if (aPressed) {
 						for (var j=0; j<Name.graphObjArr.length; j++) {
 							allSelect(Name.graphObjArr[j]);
-						}	            		
-	            	} else if (ctrlPressed) {
-	            		if (node.getSelected() == 0) {
-	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
-	                	} else if (node.getSelected() == 1) {
-	                		allGraphUpdate(Name.graphObjArr[i], node.getName(), 0);
-	                	}
-	            	} else {
-	            		for (var j=0 ; j<Name.graphObjArr.length; j++) {
-							allDeselect(Name.graphObjArr[j]);
 						}
-						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1);
-	            	}					
+	            	} else if (ctrlPressed) {
+	                	allGraphUpdate(Name.graphObjArr[i], node.getName(), null, 'ctrl');
+	            	} else {
+						allGraphUpdate(Name.graphObjArr[i], node.getName(), 1, null);
+	            	}
 				}
 			});
 		})(i);
@@ -226,12 +219,11 @@ function select (Name) {
 }
 
 
-function hover(Name)
-{
-	for(var i = 0 ; i < Name.dataLayerArr.length ; i ++){
+function hover (Name) {
+	for (var i=0; i<Name.dataLayerArr.length; i++) {
 		(function (i) { 
 		Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
-			if(Name.moving == true){                       
+			if (Name.moving == true) {                       
 	       //     dragOn = false;
 	            return;
 	        }
@@ -239,13 +231,13 @@ function hover(Name)
 			document.body.style.cursor = "pointer";
 			var mousePos = node.getStage().getPointerPosition();
 			var mousePos = node.getStage().getPointerPosition();
-			if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){//set tooltip box position
+			if (mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2) {//set tooltip box position
 				Name.tooltip.setPosition({x: mousePos.x + 8, y: mousePos.y + 2})
-		    }else if(mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2){
+		    } else if (mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2) {
 		    	Name.tooltip.setPosition({x: mousePos.x + 2, y: mousePos.y - 2 - Name.tooltip.getHeight()});
-		    }else if(mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2){
+		    } else if (mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2) {
 		    	Name.tooltip.setPosition({x: mousePos.x - 2 - Name.tooltip.getWidth(), y: mousePos.y + 2});
-		    }else{
+		    } else {
 		    	Name.tooltip.setPosition({x: mousePos.x - 2 - Name.tooltip.getWidth(), y: mousePos.y - 2 - Name.tooltip.getHeight()});
 		    }
 			Name.tooltip.getText().setText(node.getInfo());
@@ -257,7 +249,7 @@ function hover(Name)
 	        }
 		});
 		Name.dataLayerArr[i].on('mouseout', function(evt) {
-			if(dragOn == true){                       
+			if (dragOn == true) {                       
 	            dragOn = false;
 	            return;
 	        }
@@ -265,10 +257,10 @@ function hover(Name)
 			document.body.style.cursor = "default";
 			Name.tooltip.hide();
 			Name.tooltipLayer.draw();
-			if(node.getSelected() == 0){
+			if (node.getSelected() == 0) {
 				Name.hoverArr[i](node, 0);
-			}else{
-				if(node.getOpacity() == 0.5){
+			} else {
+				if (node.getOpacity() == 0.5) {
 					node.setOpacity(1);
 					node.draw();
 				}				
@@ -277,80 +269,3 @@ function hover(Name)
 		})(i);
 	}
 }
-
-//////////////////////// unused /////////////////////////////
-
-
-function RectRangeSelect(Name, pre, aft)
-{
-	var tmpNodeArr = new Array();
-	var tmpNodeArr1 = new Array();
-	var smallX, bigX;
-	var smallY, bigY;
-	if(pre.x >= aft.x){
-		smallX = aft.x;
-		bigX = pre.x;
-	}else if(pre.x < aft.x){
-        smallX = pre.x;
-        bigX = aft.x;
-	}
-	if(pre.y >= aft.y){
-        smallY = aft.y;
-        bigY = pre.y;
-	}else if(pre.y < aft.y){
-        smallY = pre.y;
-        bigY = aft.y;
-	}
-
-	if(ctrlPressed == false)
-	{
-       allDeselect(Name);
-	}       
-	if(Name._type == undefined)
-		return;
-	if(Name._type == "box"){
-		if(ctrlPressed == true) {
-			for(var i = 0 ; i < Name.node.length ; i ++)
-			{
-				if(Name.node[i].getIsOutlier()){
-					if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-					{
-						if(Name.node[i].getSelected()==1){
-							tmpNodeArr.push(i);
-						}else{
-							tmpNodeArr1.push(i);
-						}                      
-					}
-				}else{
-					if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
-					{
-						if(Name.node[i].getSelected()==1){
-							tmpNodeArr.push(i);
-						}else{
-							tmpNodeArr1.push(i);
-						}                     
-					}
-				}                               
-			}
-			allGraphUpdate(Name, tmpNodeArr, 0);
-			allGraphUpdate(Name, tmpNodeArr1, 1);
-		}else{
-			for(var i = 0 ; i < Name.node.length ; i ++)
-			{
-				if(Name.node[i].getIsOutlier()){
-					if(smallX <= Name.node[i].getX() && Name.node[i].getX() <= bigX && smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY)
-					{
-						tmpNodeArr.push(i);
-					}
-				}else{
-					if((smallX <= Name.node[i].getX()+Name.node[i].getWidth()/2 && Name.node[i].getX()-Name.node[i].getWidth()/2 <= bigX) && (smallY <= Name.node[i].getY() && Name.node[i].getY() <= bigY))
-					{
-						tmpNodeArr.push(i);     
-					}
-				}
-			}
-			allGraphUpdate(Name, tmpNodeArr, 1);
-		}
-	}
-}
-

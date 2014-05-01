@@ -1,3 +1,28 @@
+// array1 -> src, array2 -> dest
+/*
+function copyValueArr (array1, array2) {
+	if (array1.length == array2.length) {
+		for (var i=0; i<array1.length; i++) {
+			array2[i] = array1[i];
+		}
+	} else {
+		alert("Cannot copy arrays: the length of arrays are different");
+	}
+}
+*/
+
+function invertValueArr (array, numbers) {
+	var returnArray = array.slice(0);
+	if (numbers.length == undefined) {
+		returnArray[numbers] = (returnArray[numbers] + 1) % 2; 
+	} else {
+		for (var i=0; i<numbers.length; i++) {
+			returnArray[numbers[i]] = (returnArray[numbers[i]] + 1) % 2;
+		}
+	}
+	return returnArray;
+}
+
 function extensionArr (numbers, length, value) {
 	var returnArray = new Array(length);
 	for (var i=0; i<length; i++) {

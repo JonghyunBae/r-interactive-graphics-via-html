@@ -142,17 +142,21 @@ function ModifyBirth (child, mergeArr) {
 
 
 //allGraphUpdate is used for only select & unselect
-function allGraphUpdate (graphObj, nodes, selectOn) {
-	graphObj.firstUpdate(nodes, selectOn);
+function allGraphUpdate (graphObj, nodes, selectOn, keyBoard) {
+	graphObj.firstUpdate(nodes, selectOn, keyBoard);
 }
 
 // process of firstUpdate
 // 1. AfterStatus - statusArr => update nodes
 // 2. Propagate afterStatus to parent & child
 function firstUpdate (firstObj) {
-	return function (nodes, selectOn) {
+	return function (nodes, selectOn, keyBoard) {
 			var object = firstObj;
-			var temp = extensionArr(nodes, object.statusArr.length, selectOn);
+			if (keyBoard == 'ctrl') {
+				var temp = invertValueArr(object.statusArr, nodes);
+			} else {
+				var temp = extensionArr(nodes, object.statusArr.length, selectOn);
+			}
 			updateRecursive(object, temp, null);
 	};
 }
@@ -222,7 +226,7 @@ function allSelect (graphObj) {
 	for (var i=0; i<graphObj.node.length; i++) {
 		temp.push(graphObj.node[i].getName());
 	}
-	allGraphUpdate(graphObj, temp, 1);	
+	allGraphUpdate(graphObj, temp, 1, null);	
 }
 
 function allDeselect (graphObj) {
@@ -230,7 +234,7 @@ function allDeselect (graphObj) {
 	for (var i=0; i<graphObj.node.length; i++) {
 		temp.push(graphObj.node[i].getName());
 	}
-	allGraphUpdate(graphObj, temp, 0);
+	allGraphUpdate(graphObj, temp, 0, null);
 }
 
 function findMaxMinValue (Data) {	

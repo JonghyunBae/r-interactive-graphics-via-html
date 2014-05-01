@@ -1,14 +1,42 @@
+function extensionArr (numbers, length, value) {
+	var returnArray = new Array(length);
+	for (var i=0; i<length; i++) {
+		returnArray[i] = 0;
+	}
+	if (numbers.length == undefined) {
+		returnArray[numbers] = value;
+	} else {
+		for (var i=0; i<numbers.length; i++) {
+			returnArray[numbers[i]] = value;
+		}
+	}
+	return returnArray;
+}
+
+function addArr (array1, array2) {
+	var returnArray;
+	if (array1.length == array2.length) {
+		returnArray = new Array(array1.length);
+		for (var i=0; i<array1.length; i++) {
+			returnArray[i] = array1[i] + array2[i];
+		}
+	} else {
+		alert("Cannot add arrays: the length of arrays are different");
+	}
+	return returnArray;
+}
+
 function subtractArr (array1, array2) {
 	var returnArray;
 	if (array1.length == array2.length) {
-		returnArry = new Array(array1.length);
+		returnArray = new Array(array1.length);
 		for (var i=0; i<array1.length; i++) {
-			returnArray[i] = array1[i] - array2[i];
+			returnArray[i] = array1[i] - array2[i];			
 		}
 	} else {
 		alert("Cannot subtract arrays: the length of arrays are different");
 	}
-	return returnArray;	
+	return returnArray;
 }
 
 function mergeParentChildArr (p2cArr, c2pArr) {

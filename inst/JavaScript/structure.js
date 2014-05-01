@@ -17,7 +17,7 @@ function csv2Arr (data, liveChar) {
 		} else {
 			result_row += cursor;
 		}
-		cursor = data.charAt(i++);     
+		cursor = data.charAt(i++);
 	}
 	return result_array;
 }
@@ -46,42 +46,31 @@ function make2DArr (rows) {
 /**  create main structure of data  **/
 function createMainStructureE (rawArr) {
 	var mainArr = new Object();
-  var labelArr = Object.keys(rawArr);
+	var labelArr = Object.keys(rawArr);
 	
-  for (i=0; i<labelArr.length; i++) {
-    if(rawArr[labelArr[i]].level == null) {
-      mainArr[labelArr[i]] = rawArr[labelArr[i]];
-    } else {
-      mainArr[labelArr[i]] = rawArr[labelArr[i]].index;
-      mainArr[labelArr[i]].index = rawArr[labelArr[i]].level;
-      mainArr[labelArr[i]].isDiscrete = true;
-    }
-  }
-
-	var isSelected = make2DArr(mainArr[labelArr[0]].length);
-	for (var i=0; i<isSelected.length; i++) {
-		isSelected[i][0] = 0;
+	for (i=0; i<labelArr.length; i++) {
+		if(rawArr[labelArr[i]].level == null) {
+			mainArr[labelArr[i]] = rawArr[labelArr[i]];
+		} else {
+			mainArr[labelArr[i]] = rawArr[labelArr[i]].index;
+			mainArr[labelArr[i]].index = rawArr[labelArr[i]].level;
+			mainArr[labelArr[i]].isDiscrete = true;
+		}
 	}
-	
+
 	mainArr._type = 'rootObj';
 	mainArr.offloadObjArr = null;
 	mainArr.labelArr = labelArr; // for table.
 	
-	makeEventComponent(mainArr);
-	mainArr.$isSelected = isSelected;
+	makeEventComponent(mainArr, mainArr[labelArr[0]].length);
+
 	mainArr.$ans = "undefined";
-	mainArr.statusArr = new Array();
-	mainArr.$id = 1;
 	mainArr.refreshArr = new Array();
-	mainArr.refreshArr[0] = null;  
 	mainArr.$dataNumArr = new Array();
 	mainArr.$isHidden = new Array();
-  
 	for(var i=0; i<mainArr[labelArr[0]].length; i ++) {
 		mainArr.$dataNumArr[i] = i;
-		mainArr.$isHidden[i] = false;
 	}
-	
 	return mainArr;
 }
 

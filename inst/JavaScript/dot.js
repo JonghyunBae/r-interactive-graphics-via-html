@@ -127,22 +127,17 @@ function dotBoxSearch (graphObj) {
 			if (ctrlPressed == true) {
 				for (var i=0; i<graphObj.node.length; i++) {
 					if (smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY) {
-						if (graphObj.node[i].getSelected()==1) {
-							tmpNodeArr.push(graphObj.node[i].getName());
-						} else {
-							tmpNodeArr1.push(graphObj.node[i].getName());
-						}
+						tmpNodeArr.push(graphObj.node[i].getName());
 	                }
 				}
-				allGraphUpdate(graphObj, tmpNodeArr, 0);
-				allGraphUpdate(graphObj, tmpNodeArr1, 1);
+				allGraphUpdate(graphObj, tmpNodeArr, null, 'ctrl');
 			} else {
 				for (var i=0; i<graphObj.node.length; i++) {
 					if (smallX <= graphObj.node[i].getX() && graphObj.node[i].getX() <= bigX && smallY <= graphObj.node[i].getY() && graphObj.node[i].getY() <= bigY) {
 						tmpNodeArr.push(graphObj.node[i].getName());
 	                }
 				}
-				allGraphUpdate(graphObj, tmpNodeArr, 1);
+				allGraphUpdate(graphObj, tmpNodeArr, 1, null);
 			}
 		};
 }

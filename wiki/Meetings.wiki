@@ -27,6 +27,17 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 2 MAy2014 ==
+
+Participants : Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for this weekend
+  # Make code to generate "server.R"
+  # Make shiny 'Alpha' server account
+  # Understand code of example_offload
+
+  Next meeting : 10:00 (Korea time) on Fri, 5/09
+
 == 25Apr2014 ==
 
 Participants : Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae

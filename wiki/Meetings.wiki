@@ -29,7 +29,7 @@
 
 == 2 MAy2014 ==
 
-Participants : Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
+Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
 
  * TO-DO list for this weekend
   # Make code to generate "server.R"

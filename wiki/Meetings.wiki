@@ -27,6 +27,20 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 9 MAy2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for this weekend
+  # Make code to generate "server.R"
+    * runServer.RIGHT <- function(expr) {deparse(substitute(expr))}
+    * need to change data variable to other variable names that using in R code
+    * Use formatR packages that write more clean to make Server.R
+  # Arrange about code which works about server-offloading (javascript, R)
+
+  Next meeting : 10:00 (Korea time) on Fri, 5/16
+
+
 == 2 MAy2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae

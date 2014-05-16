@@ -27,6 +27,46 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 16 MAy2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for this weekend
+  # Make code to generate "server.R"
+   *
+  obj <- RIGHT({
+  plot(price ~ carat, sub.diamonds, color = color)
+
+  runServer.RIGHT(loessArray, { 
+
+     obj <- loess(price ~ carat, data = sub.diamonds)
+     xRange <- range(sub.diamonds$carat)
+     simArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
+     simArray$price <- predict(obj, newdata = simArray)
+  
+     return(simArray) # output$loessArray <- simArray
+
+  })
+  lines(loessArray, carat, price)
+
+  runServer.RIGHT(lmArray, { 
+
+     obj <- lm(conc ~ Time, data = Thoeph)
+     xRange <- range(Theoph$Time)
+     simArray <- data.frame(Time = seq(xRange[1], xRange[2], length.out = 100))
+     simArray$conc <- predict(obj, newdata = simArray)
+     
+     return(simArray) # output$lmArray <- simArray
+
+  })
+  plot(Time ~ conc, lmArray, type = "l")
+
+}, Thoeph)
+
+    * Makes code if we accept multiple input about server-offloading
+ 
+  Next meeting : 10:00 (Korea time) on Fri, 5/23
+
 == 9 MAy2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae

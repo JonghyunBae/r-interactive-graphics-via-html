@@ -11,7 +11,7 @@ shinyServer(function(input, output) {
        obj <- lm(y ~ x, p)
        xRange <- range(x)
        xArray <- seq(xRange[1], xRange[2], length.out = length(x))
-       yArray <- predict(obj, data.frame(x = xArray))       
+       yArray <- predict(obj, data.frame(x = xArray))
        output <- list("regArr", data.frame(xx = xArray, yy = yArray))
        return(output)
      } else {

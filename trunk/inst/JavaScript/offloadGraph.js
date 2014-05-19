@@ -33,31 +33,7 @@ var MakeLineObj_off = {};
 			}
 	};
 })();
-/*
-function calculateLine(object)
-{
-	return function(dataObj) {
-		var xLabel = object.xLabel;
-		var yLabel = object.yLabel;
-		object[xLabel] = dataObj[xLabel];
-		object[yLabel] = dataObj[yLabel];
-		object.x1 = new Array(dataObj[xLabel].length - 1);
-		object.x2 = new Array(dataObj[xLabel].length - 1);
-		object.y1 = new Array(dataObj[yLabel].length - 1);
-		object.y2 = new Array(dataObj[yLabel].length - 1);
-		for(var i = 0 ; i < object.x1.length ; i ++){
-			object.x1[i] = dataObj[xLabel][i];
-			object.x2[i] = dataObj[xLabel][i+1];
-			object.y1[i] = dataObj[yLabel][i];
-			object.y2[i] = dataObj[yLabel][i+1];
-		}
-		// draw graph.
-		for(var i = 0 ; i < object.graphObjArr.length ; i ++){
-			object.graphObjArr[i]();
-		}
-	};
-}
-*/
+
 /**  draw line graph  **/
 // not event handle yet.
 var Line_off = {};
@@ -125,56 +101,3 @@ var Line_off = {};
 			}
 	};
 })();
-/*
-function drawLine_off(object)
-{
-	return function() {
-		var axisObj = object.axisObj;
-		var dataObj = object.dataObj;
-		var xLabel1 = object.xLabel1;
-		var xLabel2 = object.xLabel2;
-		var yLabel1 = object.yLabel1;
-		var yLabel2 = object.yLabel2;
-		var optionObj = object.optionObj;
-		if(optionObj.baseColor != undefined){
-			object.baseColor = optionObj.baseColor;
-		}else{
-			object.baseColor = 'black';
-		}
-		var temp = axisObj._getPixelXY(dataObj[xLabel1], dataObj[yLabel1]);
-		var xArr1 = temp.xArr;
-		var yArr1 = temp.yArr;
-		var temp = axisObj._getPixelXY(dataObj[xLabel2], dataObj[yLabel2]);
-		var xArr2 = temp.xArr;
-		var yArr2 = temp.yArr;
-		var cnt = 0;
-		object.node = new Array();
-		for(var i = 0 ; i < xArr1.length - 1 ; i ++){
-			if(!(xArr1[i] == -1 || yArr1[i] == -1 || xArr2[i] == -1 || yArr2[i] == -1)){
-				object.node[cnt] = new Kinetic.Line({
-					name: i,
-					x: [xArr1[i], xArr2[i]],
-					y: [yArr1[i], yArr2[i]],
-					points: [ 
-					         xArr1[i],
-					         yArr1[i],
-					         xArr2[i],
-					         yArr2[i]
-					        ],
-					stroke: object.baseColor,
-					fill: object.baseColor,
-					strokeWdith: 1,
-					opacity: 1,
-				});
-				cnt ++;
-			}
-		}
-		object.dataLayer = new Kinetic.Layer();	
-    	for(var i = 0 ; i < object.node.length ; i ++){
-    		object.dataLayer.add(object.node[i]);
-		}
-    	//add layer
-		axisObj.stage.add(object.dataLayer);
-	};
-}
-*/

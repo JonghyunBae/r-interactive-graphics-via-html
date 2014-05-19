@@ -104,16 +104,7 @@ function createMainStructureE (rawArr) {
 		//mainArr.$isHidden = null;
 	}
 	mainArr.draw = function () {
-		for (var i=0; i<mainArr.graphObjArr.length; i++) {
-			mainArr.graphObjArr[i]._draw();
-		}
-		for (var i=0; i<mainArr.child.length; i++) {
-			var child = mainArr.child[i];
-			child._calculate();
-			for (var j=0; j<child.graphObjArr.length; j++) {
-				child.graphObjArr[j]._draw();
-			}
-		}
+		return draw(mainArr);
 	};
 	return mainArr;
 }
@@ -124,6 +115,19 @@ function sendingData (relateObjName) {
   };
 }
 
+function draw (dataObj) {
+	for (var i=0; i<dataObj.graphObjArr.length; i++) {
+		dataObj.graphObjArr[i]._draw();
+	}
+	
+	if (dataObj.child != null) {
+		for (var i=0; i<dataObj.child.length; i++) {
+			var child = dataObj.child[i];
+			child._calculate();
+			draw(child);
+		}
+	}	
+}
 /*
 function createOffloadStructure(relateObjName)
 {

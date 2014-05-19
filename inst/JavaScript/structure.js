@@ -46,33 +46,83 @@ function make2DArr (rows) {
 /**  create main structure of data  **/
 function createMainStructureE (rawArr) {
 	var mainArr = new Object();
-	var labelArr = Object.keys(rawArr);
 	
-	for (i=0; i<labelArr.length; i++) {
-		if(rawArr[labelArr[i]].level == null) {
-			mainArr[labelArr[i]] = rawArr[labelArr[i]];
-		} else {
-			mainArr[labelArr[i]] = rawArr[labelArr[i]].index;
-			mainArr[labelArr[i]].index = rawArr[labelArr[i]].level;
-			mainArr[labelArr[i]].isDiscrete = true;
+	if (typeof(rawArr) == "object") {
+
+		var labelArr = Object.keys(rawArr);		
+		for (i=0; i<labelArr.length; i++) {
+			if(rawArr[labelArr[i]].level == null) {
+				mainArr[labelArr[i]] = rawArr[labelArr[i]];
+			} else {
+				mainArr[labelArr[i]] = rawArr[labelArr[i]].index;
+				mainArr[labelArr[i]].index = rawArr[labelArr[i]].level;
+				mainArr[labelArr[i]].isDiscrete = true;
+			}
 		}
-	}
 
-	mainArr._type = 'rootObj';
-	mainArr.offloadObjArr = null;
-	mainArr.labelArr = labelArr; // for table.
-	
-	makeEventComponent(mainArr, mainArr[labelArr[0]].length);
+		mainArr._type = 'rootObj';
+		mainArr.offloadObjArr = null;
+		mainArr.labelArr = labelArr; // for table.
+		
+		makeEventComponent(mainArr, mainArr[labelArr[0]].length);
 
-	mainArr.$ans = "undefined";
-	mainArr.refreshArr = new Array();
-	mainArr.$dataNumArr = new Array();
-	mainArr.$isHidden = new Array();
-	for(var i=0; i<mainArr[labelArr[0]].length; i ++) {
-		mainArr.$dataNumArr[i] = i;
+		mainArr.$ans = "undefined";
+		mainArr.refreshArr = new Array();
+		mainArr.$dataNumArr = new Array();
+		mainArr.$isHidden = new Array();
+		for(var i=0; i<mainArr[labelArr[0]].length; i ++) {
+			mainArr.$dataNumArr[i] = i;
+		}
+	} else {
+
+		  mainArr._type = 'offloadObj';
+		  mainArr.parent = null;
+		  mainArr.child = null;
+		  mainArr.$id = 1;
+		  mainArr.$readyState = false;
+		  mainArr.$isSelected = new Array();
+		  mainArr.relateObjName = rawArr;
+		  if(window[relateObjName].offloadObjArr == null){
+		    window[relateObjName].offloadObjArr = new Array();
+		    window[relateObjName].offloadObjArr.push(mainArr);
+		  }else{
+		    window[relateObjName].offloadObjArr.push(mainArr);
+		  }
+		  mainArr.$sendData = sendingData(rawArr);
 	}
 	return mainArr;
 }
+
+function sendingData(relateObjName)
+{
+  return function(isHiddenArr)
+  {
+    window.Shiny.onInputChange(relateObjName, window[relateObjName].$isHidden);
+  };
+}
+
+/*
+function createOffloadStructure(relateObjName)
+{
+  var mainArr = new Object();
+  mainArr._type = 'offloadObj';
+  mainArr.parent = null;
+  mainArr.child = null;
+  mainArr.$id = 1;
+  mainArr.$readyState = false;
+  mainArr.$isSelected = new Array();
+  mainArr.relateObjName = relateObjName;
+  if(window[relateObjName].offloadObjArr == null){
+    window[relateObjName].offloadObjArr = new Array();
+    window[relateObjName].offloadObjArr.push(mainArr);
+  }else{
+    window[relateObjName].offloadObjArr.push(mainArr);
+  }
+  mainArr.$sendData = sendingData(relateObjName);
+  return mainArr;
+}
+*/
+
 
 /*
 function createMainStructure (fileName, rawLev) {  
@@ -122,34 +172,6 @@ function createMainStructure (fileName, rawLev) {
 	return mainArr;
 }
 */
-function createOffloadStructure(relateObjName)
-{
-  var mainArr = new Object();
-  mainArr._type = 'offloadObj';
-  mainArr.parent = null;
-  mainArr.child = null;
-  mainArr.$id = 1;
-  mainArr.$readyState = false;
-  mainArr.$isSelected = new Array();
-  mainArr.relateObjName = relateObjName;
-  if(window[relateObjName].offloadObjArr == null){
-    window[relateObjName].offloadObjArr = new Array();
-    window[relateObjName].offloadObjArr.push(mainArr);
-  }else{
-    window[relateObjName].offloadObjArr.push(mainArr);
-  }
-  mainArr.$sendData = sendingData(relateObjName);
-  return mainArr;
-}
-
-function sendingData(relateObjName)
-{
-  return function(isHiddenArr)
-  {
-    window.Shiny.onInputChange(relateObjName, window[relateObjName].$isHidden);
-  };
-}
-
 
 /**  create main structure of data End  **/
   

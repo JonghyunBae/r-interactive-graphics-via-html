@@ -3,36 +3,36 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script src="shared/jquery.js" type="text/javascript"></script>
-  <script src="shared/shiny.js" type="text/javascript"></script>
-  <link rel="stylesheet" type="text/css" href="shared/shiny.css"/>
-  <link rel="stylesheet" type="text/css" href="shared/slider/css/jquery.slider.min.css"/>
-  <script src="shared/slider/js/jquery.slider.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="shared/bootstrap/css/bootstrap.min.css"/>
-  <script src="shared/bootstrap/js/bootstrap.min.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/jquery.js" type="text/javascript"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/shiny.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/shiny.css"/>
+  <link rel="stylesheet" type="text/css" href="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/slider/css/jquery.slider.min.css"/>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/slider/js/jquery.slider.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/bootstrap/css/bootstrap.min.css"/>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/bootstrap/js/bootstrap.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" type="text/css" href="shared/bootstrap/css/bootstrap-responsive.min.css"/>
-  <link rel="stylesheet" href="right.css"/>
+  <link rel="stylesheet" type="text/css" href="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shared/bootstrap/css/bootstrap-responsive.min.css"/>
+  <link rel="stylesheet" href="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/right.css"/>
   <title>RIGHT: R Interactive Graphics via HTml</title>
-  <script src="shiny-right.js"></script>
-  <script src="callback.js"></script>
-  <script src="kinetic-v5.0.1.js"></script>
-  <script src="structure.js"></script>
-  <script src="common.js"></script>
-  <script src="axis.js"></script>
-  <script src="color.js"></script>
-  <script src="dot.js"></script>
-  <script src="bar.js"></script>
-  <script src="box.js"></script>
-  <script src="pie.js"></script>
-  <script src="line.js"></script>
-  <script src="array.js"></script>
-  <script src="node_event.js"></script>
-  <script src="menu.js"></script>
-  <script src="button_event.js"></script>
-  <script src="legend.js"></script>
-  <script src="offloadGraph.js"></script>
-  <script src="data.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/shiny-right.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/callback.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/kinetic-v5.0.1.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/structure.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/common.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/axis.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/color.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/dot.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/bar.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/box.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/pie.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/line.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/array.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/node_event.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/menu.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/button_event.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/legend.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/offloadGraph.js"></script>
+  <script src="C:/Users/Chungha/Desktop/r-interactive-graphics-via-html/trunk/inst/JavaScript/data.js"></script>
 </head>
 <body>
 <script> var mainArr1 = createMainStructureE(rawArr1);</script>
@@ -63,7 +63,7 @@
        </script>
         <script>
         // offload part.
-        var regArr = createOffloadStructure('mainArr1'); // name of mainArr3 can be changed.
+        var regArr = createMainStructureE('mainArr1'); // name of mainArr3 can be changed.
 		var loffObj1 = new MakeLineObj_off(regArr, 'xx', 'yy'); // name of x, y can be changed.
 		var loff1 = new Line_off(axis2, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
 		var loff2 = new Line_off(axis3, loffObj1, 'x1', 'x2', 'y1', 'y2', {});

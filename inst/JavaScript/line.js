@@ -1,217 +1,139 @@
 var MakeLineObj = {};
 (function() {
 	MakeLineObj = function(dataObj, xLabel, yLabel, optionObj) {
-
+		// for tree & event part //
+		this.$id = 0;
+		this.parent = dataObj;
+		if (dataObj.child == null) {
+			dataObj.child = new Array();
+		}
+		dataObj.child.push(this);
+		this.child = null;
+		this.$isSelected = new Array();
+		this.graphObjArr = new Array();
+		this.refreshArr = new Array();
+		this.statusArr = new Array();
+		///////////////////////////
+		this._type = 'lineObj';
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
 		this.dataObj = dataObj;
-		if (optionObj.group != undefined) {
-			gLabel = optionObj.group;
-		} else {
-			gLabel = 'NULL';			
-		}
-		this.gLabel = gLabel;
-		if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
-			this.groupOn = true;
-			this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
-		} else {
-			this.groupOn = false;
-			this.labelArr = ['x1', 'y1', 'x2', 'y2'];
-		}
-
-		if (this.groupOn == true) { // draw line with group
-			this.x1 = new Array();
-			this.x2 = new Array();
-			this.y1 = new Array();
-			this.y2 = new Array();
-			this[gLabel] = new Array();
-			var p2cArr = new Array(dataObj[xLabel].length);
-			var c2pArr = new Array();
-			var lineCnt = -1;
-			var newGroup = 1;
-			for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
-				var groupTemp = new Array();
-				for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
-					if (i == dataObj[gLabel][j]) { // save groupTemp
-						groupTemp.push(j);
-					}
-				}
-				if (groupTemp.length > 1) {
-					if (groupTemp.length > 2) {
-						for (var j=0; j<groupTemp.length-1; j++) {
-							this.x1.push(dataObj[xLabel][groupTemp[j]]);
-							this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
-							this.y1.push(dataObj[yLabel][groupTemp[j]]);
-							this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
-							this[gLabel].push(i);
-							if (lineCnt == -1) {
-								lineCnt ++;
-							}
-							if (newGroup == 1) {
-								newGroup = 0;
-								p2cArr[groupTemp[j]] = lineCnt;
-							} else {
-								p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
-								lineCnt ++;
-							}
-							c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
-						}
-						newGroup = 1;
-						p2cArr[groupTemp[j]] = lineCnt;
-						lineCnt ++;
-					} else { // groupTemp.length == 2
-						this.x1.push(dataObj[xLabel][groupTemp[0]]);
-						this.x2.push(dataObj[xLabel][groupTemp[1]]);
-						this.y1.push(dataObj[yLabel][groupTemp[0]]);
-						this.y2.push(dataObj[yLabel][groupTemp[1]]);
-						this[gLabel].push(i);
-						if (lineCnt == -1) {
-							lineCnt ++;
-						}
-						p2cArr[groupTemp[0]] = lineCnt;
-						p2cArr[groupTemp[1]] = lineCnt;
-						c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
-						lineCnt ++;
-					}
-				} else {
-					p2cArr[groupTemp] = -1; // disconnected dot
-				}
-			}
-			this[gLabel].isDiscrete = true;
-			this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
-			this[gLabel].index = dataObj[gLabel].index;		
-		} else {
-			this.x1 = new Array(dataObj[xLabel].length - 1);
-			this.x2 = new Array(dataObj[xLabel].length - 1);
-			this.y1 = new Array(dataObj[xLabel].length - 1);
-			this.y2 = new Array(dataObj[xLabel].length - 1);
-			this[gLabel] = new Array();
-			for (var i=0; i<this.x1.length; i++) {
-				this.x1[i] = dataObj[xLabel][i];
-				this.x2[i] = dataObj[xLabel][i+1];
-				this.y1[i] = dataObj[yLabel][i];
-				this.y2[i] = dataObj[yLabel][i+1];
-				this[gLabel].push(i);
-			}
-			
-			var p2cArr = new Array(dataObj[xLabel].length);
-			var c2pArr = new Array(dataObj[xLabel].length - 1);
-			for (var i=0; i<c2pArr.length; i++) {
-				p2cArr[i] = [i-1, i];
-				c2pArr[i] = [i, i+1];
-			}
-			p2cArr[0] = 0;
-			p2cArr[i] = i-1;
-		}
-		this._type = 'lineObj';
-		// make event handle part.
-		makeEventComponent(this, c2pArr.length);
-		var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
-		birthReport(dataObj, this, mergeArr);
+		this.optionObj = optionObj;
+		this.$isOffload = dataObj.$isOffload;
 	};
 	MakeLineObj.prototype = {
-		_reCalculate: function () {
-			var xLabel = this.xLabel;
-			var yLabel = this.yLabel;
-			var gLabel = this.gLabel;
-			var dataObj = this.dataObj;
+		_calculate: function () {
+				var xLabel = this.xLabel;
+				var yLabel = this.yLabel;
+				var dataObj = this.dataObj;
+				var optionObj = this.optionObj;
+				
+				if (optionObj.group != undefined) {
+					gLabel = optionObj.group;
+				} else {
+					gLabel = 'NULL';
+				}
+				this.gLabel = gLabel;
+				if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
+					this.groupOn = true;
+					this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
+				} else {
+					this.groupOn = false;
+					this.labelArr = ['x1', 'y1', 'x2', 'y2'];
+				}
 
-			if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
-				this.groupOn = true;
-				this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
-			} else {
-				this.groupOn = false;
-				this.labelArr = ['x1', 'y1', 'x2', 'y2'];
-			}
-
-			if (this.groupOn == true) { // draw line with group
-				this.x1 = new Array();
-				this.x2 = new Array();
-				this.y1 = new Array();
-				this.y2 = new Array();
-				this[gLabel] = new Array();
-				var p2cArr = new Array(dataObj[xLabel].length);
-				var c2pArr = new Array();
-				var lineCnt = -1;
-				var newGroup = 1;
-				for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
-					var groupTemp = new Array();
-					for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
-						if (i == dataObj[gLabel][j]) { // save groupTemp
-							groupTemp.push(j);
+				if (this.groupOn == true) { // draw line with group
+					this.x1 = new Array();
+					this.x2 = new Array();
+					this.y1 = new Array();
+					this.y2 = new Array();
+					this[gLabel] = new Array();
+					var p2cArr = new Array(dataObj[xLabel].length);
+					var c2pArr = new Array();
+					var lineCnt = -1;
+					var newGroup = 1;
+					for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
+						var groupTemp = new Array();
+						for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
+							if (i == dataObj[gLabel][j]) { // save groupTemp
+								groupTemp.push(j);
+							}
 						}
-					}
-					if (groupTemp.length > 1) {
-						if (groupTemp.length > 2) {
-							for (var j=0; j<groupTemp.length-1; j++) {
-								this.x1.push(dataObj[xLabel][groupTemp[j]]);
-								this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
-								this.y1.push(dataObj[yLabel][groupTemp[j]]);
-								this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
+						if (groupTemp.length > 1) {
+							if (groupTemp.length > 2) {
+								for (var j=0; j<groupTemp.length-1; j++) {
+									this.x1.push(dataObj[xLabel][groupTemp[j]]);
+									this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
+									this.y1.push(dataObj[yLabel][groupTemp[j]]);
+									this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
+									this[gLabel].push(i);
+									if (lineCnt == -1) {
+										lineCnt ++;
+									}
+									if (newGroup == 1) {
+										newGroup = 0;
+										p2cArr[groupTemp[j]] = lineCnt;
+									} else {
+										p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+										lineCnt ++;
+									}
+									c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+								}
+								newGroup = 1;
+								p2cArr[groupTemp[j]] = lineCnt;
+								lineCnt ++;
+							} else { // groupTemp.length == 2
+								this.x1.push(dataObj[xLabel][groupTemp[0]]);
+								this.x2.push(dataObj[xLabel][groupTemp[1]]);
+								this.y1.push(dataObj[yLabel][groupTemp[0]]);
+								this.y2.push(dataObj[yLabel][groupTemp[1]]);
 								this[gLabel].push(i);
 								if (lineCnt == -1) {
 									lineCnt ++;
-								}						
-								if (newGroup == 1) {
-									newGroup = 0;
-									p2cArr[groupTemp[j]] = lineCnt;
-								} else {
-									p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
-									lineCnt ++;
-								}						
-								c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
-							}
-							newGroup = 1;
-							p2cArr[groupTemp[j]] = lineCnt;
-							lineCnt ++;
-						} else { // groupTemp.length == 2
-							this.x1.push(dataObj[xLabel][groupTemp[0]]);
-							this.x2.push(dataObj[xLabel][groupTemp[1]]);
-							this.y1.push(dataObj[yLabel][groupTemp[0]]);
-							this.y2.push(dataObj[yLabel][groupTemp[1]]);
-							this[gLabel].push(i);
-							if (lineCnt == -1) {
+								}
+								p2cArr[groupTemp[0]] = lineCnt;
+								p2cArr[groupTemp[1]] = lineCnt;
+								c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
 								lineCnt ++;
 							}
-							p2cArr[groupTemp[0]] = lineCnt;
-							p2cArr[groupTemp[1]] = lineCnt;
-							c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
-							lineCnt ++;
+						} else {
+							p2cArr[groupTemp] = -1; // disconnected dot
 						}
-					} else {
-						p2cArr[groupTemp] = -1; // disconnected dot
 					}
+					this[gLabel].isDiscrete = true;
+					this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
+					this[gLabel].index = dataObj[gLabel].index;		
+				} else {
+					this.x1 = new Array(dataObj[xLabel].length - 1);
+					this.x2 = new Array(dataObj[xLabel].length - 1);
+					this.y1 = new Array(dataObj[xLabel].length - 1);
+					this.y2 = new Array(dataObj[xLabel].length - 1);
+					this[gLabel] = new Array();
+					for (var i=0; i<this.x1.length; i++) {
+						this.x1[i] = dataObj[xLabel][i];
+						this.x2[i] = dataObj[xLabel][i+1];
+						this.y1[i] = dataObj[yLabel][i];
+						this.y2[i] = dataObj[yLabel][i+1];
+						this[gLabel].push(i);
+					}
+					
+					var p2cArr = new Array(dataObj[xLabel].length);
+					var c2pArr = new Array(dataObj[xLabel].length - 1);
+					for (var i=0; i<c2pArr.length; i++) {
+						p2cArr[i] = [i-1, i];
+						c2pArr[i] = [i, i+1];
+					}
+					p2cArr[0] = 0;
+					p2cArr[i] = i-1;
 				}
-				this[gLabel].isDiscrete = true;
-				this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
-				this[gLabel].index = dataObj[gLabel].index;		
-			} else {
-				this.x1 = new Array(dataObj[xLabel].length - 1);
-				this.x2 = new Array(dataObj[xLabel].length - 1);
-				this.y1 = new Array(dataObj[xLabel].length - 1);
-				this.y2 = new Array(dataObj[xLabel].length - 1);
-				this[gLabel] = new Array();
-				for (var i=0; i<this.x1.length; i++) {
-					this.x1[i] = dataObj[xLabel][i];
-					this.x2[i] = dataObj[xLabel][i+1];
-					this.y1[i] = dataObj[yLabel][i];
-					this.y2[i] = dataObj[yLabel][i+1];
-					this[gLabel].push(i);
-				}
-				
-				var p2cArr = new Array(dataObj[xLabel].length);
-				var c2pArr = new Array(dataObj[xLabel].length - 1);
+				// make event handle part.
+				//makeEventComponent(this, c2pArr.length);
+				//var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
+				//birthReport(dataObj, this, mergeArr);
+				this.mergeArr = mergeParentChildArr(p2cArr, c2pArr);
 				for (var i=0; i<c2pArr.length; i++) {
-					p2cArr[i] = [i-1, i];
-					c2pArr[i] = [i, i+1];
+					this.statusArr[i] = 0;
 				}
-				p2cArr[0] = 0;
-				p2cArr[i] = i-1;
-			}
-			// make event handle part.
-			makeEventComponent(this, c2pArr.length);
-			var mergeArr = mergeParentChildArr(p2cArr, c2pArr);
-			ModifyBirth(this, mergeArr);
 		}
 	};
 })();
@@ -219,24 +141,45 @@ var MakeLineObj = {};
 /**  draw line graph  **/
 // not event handle yet.
 var Line = {};
-(function() {	
+(function () {	
 	Line = function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
-		this._init(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
-		this._draw(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
-		axisObj.numberOfGraph ++;
-		dataObj.$id ++;
+			this.axisObj = axisObj;
+			this.dataObj = dataObj;
+			this.xLabel1 = xLabel1;
+			this.xLabel2 = xLabel2;
+			this.yLabel1 = yLabel1;
+			this.yLabel2 = yLabel2;
+			this.optionObj = optionObj;
+			this.dataId = dataObj.$id ++;
+			this.graphId = axisObj.numberOfGraph ++;
+			this.firstDraw = true;
+
+			// event add
+			dataObj.graphObjArr[this.dataId] = this;
+			axisObj.graphObjArr[this.graphId] = this;
+			if (dataObj.$isOffload) {
+				dataObj.$isSelected[this.dataId] = nullUpdate;
+				dataObj.refreshArr[this.dataId] = nullUpdate;
+				this.firstUpdate = nullUpdate;	        	
+	        	axisObj.hoverArr[this.graphId] = nullUpdate;
+				axisObj.boxSearchArr[this.graphId] = nullUpdate;
+			} else {
+				dataObj.$isSelected[this.dataId] = lineUpdate();
+				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+				this.firstUpdate = firstUpdate(dataObj);
+	        	axisObj.hoverArr[this.graphId] = lineHover();
+				axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
+			}
 	};
 	Line.prototype = {
+			_draw: function () {
+				if (this.firstDraw) {
+					this._init(this.axisObj, this.dataObj, this.xLabel1, this.xLabel2, this.yLabel1, this.yLabel2, this.optionObj);
+					this.firstDraw = false;
+				}
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel1, this.xLabel2, this.yLabel1, this.yLabel2, this.optionObj);
+			},
 			_init: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
-				this.dataObj = dataObj;
-				this.xLabel1 = xLabel1;
-				this.xLabel2 = xLabel2;
-				this.yLabel1 = yLabel1;
-				this.yLabel2 = yLabel2;
-				this.optionObj = optionObj;
-				this.dataId = dataObj.$id;
-				this.graphId = axisObj.numberOfGraph;
-				
 				// check color
 				if (axisObj.legendLabel != undefined && dataObj[axisObj.legendLabel] != undefined) {
 					var legendLabel = axisObj.legendLabel;					
@@ -250,7 +193,6 @@ var Line = {};
 					this.colorOn = false;
 				}
 				this.colorLabel = legendLabel;
-				
 				// set the base color.
 				if (optionObj.baseColor != undefined && optionObj.baseColor != 'n') {
 					this.baseColor = optionObj.baseColor;
@@ -258,7 +200,7 @@ var Line = {};
 					this.baseColor = 'black';
 				}
 			},
-			_draw: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
+			_drawSet: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 				// get pixel values from axis
 				var temp = axisObj._getPixelXY(dataObj[xLabel1], dataObj[yLabel1]);
 				var xArr1 = temp.xArr;
@@ -333,26 +275,10 @@ var Line = {};
 	        		}
 				}
 	        	//add layer
+	        	// TODO: should check the old dataLayer is removed when add function runs again.
 				axisObj.stage.add(this.dataLayer);
-				
 				// event add
-				dataObj.graphObjArr[this.dataId] = this;
-				dataObj.$isSelected[this.dataId] = lineUpdate();
-				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-				this.firstUpdate = firstUpdate(dataObj);
-	        	axisObj.graphObjArr[this.graphId] = this;
 	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
-				axisObj.hoverArr[this.graphId] = lineHover();
-				axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
-			},
-			_reDraw: function (axisObj) {
-				var dataObj = this.dataObj;
-				var xLabel1 = this.xLabel1;
-				var xLabel2 = this.xLabel2;
-				var yLabel1 = this.yLabel1;
-				var yLabel2 = this.yLabel2;
-				var optionObj = this.optionObj;
-				this._draw(axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj);
 			}
 	};
 })();

@@ -43,6 +43,8 @@
        var axis1 = new Axis(1, mainArr1, 'Time', 'conc', {});
 		var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', {group: 'Subject'} );
 		var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
+		
+		mainArr1.draw();
        var AllAxisObjArr = [axis1, axis2];
        eventTrigger(AllAxisObjArr); // this is global for redrawing in hideselected.
       

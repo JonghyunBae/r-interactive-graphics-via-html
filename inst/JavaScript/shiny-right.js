@@ -4,19 +4,22 @@ var rightOutputBinding = new Shiny.OutputBinding();
 rightOutputBinding.find = function(scope){
 	return $(scope).find(".right-output");
 };
-rightOutputBinding.renderValue = function(el, data) {
-	if(cnt > 0){//if(data change)
-		cnt = 0;
-		if(data[0] != -1){			
-			for(var i = 0 ; i < data.length ; i = i + 2){
+rightOutputBinding.renderValue = function (el, data) {
+	if (cnt > 0) {//if(data change)
+		cnt=0;
+		if (data[0] != -1) {			
+			for (var i=0; i<data.length; i=i+2) {
+				window[data[i]].xx = data[i+1].xx;
+				window[data[i]].yy = data[i+1].yy;
+				window[data[i]].draw();
 				for(var j = 0 ; j < window[data[i]].$isSelected.length ; j ++){
-					window[data[i]].$isSelected[j](data[i+1]);
+					//window[data[i]].$isSelected[j](data[i+1]);
 				}
 				//window.Shiny.onInputChange(data[i].relateObjName, -1);
 			}			
 		}
 	}
-	cnt ++;
+	cnt++;
 };
 Shiny.outputBindings.register(rightOutputBinding, 'div.rightOutputBinding');
 

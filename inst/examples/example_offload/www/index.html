@@ -57,16 +57,21 @@
        var histObj1 = new ddply(mainArr1, ['Time'], {});
 		var axis3 = new Axis(3, histObj1, 'Time', 'frequency', {legend: 'Time'});
        var hist1 = new Bar(axis3, histObj1, 'Time', 'frequency', {});
-     
+       
+       mainArr1.draw();
+       
        var AllAxisObjArr = [axis1, axis2, axis3]; // this is global for redrawing in hideselected.
        eventTrigger(AllAxisObjArr);
+       
+       
        </script>
         <script>
         // offload part.
         var regArr = createMainStructureE('mainArr1'); // name of mainArr3 can be changed.
-		var loffObj1 = new MakeLineObj_off(regArr, 'xx', 'yy'); // name of x, y can be changed.
-		var loff1 = new Line_off(axis2, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
-		var loff2 = new Line_off(axis3, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
+		var loffObj1 = new MakeLineObj(regArr, 'xx', 'yy', {}); // name of x, y can be changed.
+		var loff1 = new Line(axis2, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
+		var loff2 = new Line(axis3, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
+		
         $(function() {
             setTimeout(function() {
             window.Shiny.onInputChange('mainArr1', mainArr1.$isHidden);

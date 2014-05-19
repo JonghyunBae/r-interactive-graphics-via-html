@@ -45,10 +45,18 @@ function make2DArr (rows) {
 
 /**  create main structure of data  **/
 function createMainStructureE (rawArr) {
-	var mainArr = new Object();
-	
+	var mainArr = new Object();	
+	mainArr._type = 'rootObj';
+	// for tree & event part //
+	mainArr.$id = 0;
+	mainArr.parent = null;
+	mainArr.child = null;
+	mainArr.$isSelected = new Array();
+	mainArr.graphObjArr = new Array();
+	mainArr.$drawGraphArr = new Array();
+	mainArr.refreshArr = new Array();
+	///////////////////////////
 	if (typeof(rawArr) == "object") {
-
 		var labelArr = Object.keys(rawArr);		
 		for (i=0; i<labelArr.length; i++) {
 			if(rawArr[labelArr[i]].level == null) {
@@ -59,44 +67,59 @@ function createMainStructureE (rawArr) {
 				mainArr[labelArr[i]].isDiscrete = true;
 			}
 		}
-
-		mainArr._type = 'rootObj';
-		mainArr.offloadObjArr = null;
+		mainArr.$isOffload = false;
 		mainArr.labelArr = labelArr; // for table.
+		mainArr.$ans = {};
 		
-		makeEventComponent(mainArr, mainArr[labelArr[0]].length);
-
-		mainArr.$ans = "undefined";
-		mainArr.refreshArr = new Array();
+		//mainArr.relateObjName = null;
+		//mainArr.$sendData = null;
+		//mainArr.offloadObjArr = null;
+		//mainArr.$sendData = null;
+		
+		mainArr.statusArr = new Array();
 		mainArr.$dataNumArr = new Array();
-		mainArr.$isHidden = new Array();
+		mainArr.$isHidden = new Array();		
 		for(var i=0; i<mainArr[labelArr[0]].length; i ++) {
+			mainArr.statusArr[i] = 0;
 			mainArr.$dataNumArr[i] = i;
-		}
+			mainArr.$isHidden[i] = false;
+		}		
 	} else {
-
-		  mainArr._type = 'offloadObj';
-		  mainArr.parent = null;
-		  mainArr.child = null;
-		  mainArr.$id = 1;
-		  mainArr.$readyState = false;
-		  mainArr.$isSelected = new Array();
-		  mainArr.relateObjName = rawArr;
-		  if(window[relateObjName].offloadObjArr == null){
-		    window[relateObjName].offloadObjArr = new Array();
-		    window[relateObjName].offloadObjArr.push(mainArr);
-		  }else{
-		    window[relateObjName].offloadObjArr.push(mainArr);
-		  }
-		  mainArr.$sendData = sendingData(rawArr);
+		mainArr.$isOffload = true;
+		//mainArr.labelArr = null; // for table.
+		//mainArr.$ans = null;
+		//mainArr.refreshArr = null;
+		
+		mainArr.relateObjName = rawArr;
+		if (window[rawArr].offloadObjArr == null) {
+			window[rawArr].offloadObjArr = new Array();
+		    window[rawArr].offloadObjArr.push(mainArr);
+		} else {
+			window[rawArr].offloadObjArr.push(mainArr);
+		}
+		mainArr.$sendData = sendingData(rawArr);
+		
+		//mainArr.statusArr = null;
+		//mainArr.$dataNumArr = null;
+		//mainArr.$isHidden = null;
 	}
+	mainArr.draw = function () {
+		for (var i=0; i<mainArr.graphObjArr.length; i++) {
+			mainArr.graphObjArr[i]._draw();
+		}
+		for (var i=0; i<mainArr.child.length; i++) {
+			var child = mainArr.child[i];
+			child._calculate();
+			for (var j=0; j<child.graphObjArr.length; j++) {
+				child.graphObjArr[j]._draw();
+			}
+		}
+	};
 	return mainArr;
 }
 
-function sendingData(relateObjName)
-{
-  return function(isHiddenArr)
-  {
+function sendingData (relateObjName) {
+  return function (isHiddenArr) {
     window.Shiny.onInputChange(relateObjName, window[relateObjName].$isHidden);
   };
 }

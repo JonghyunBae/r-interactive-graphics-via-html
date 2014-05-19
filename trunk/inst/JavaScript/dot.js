@@ -2,19 +2,42 @@
 var Dot = {};
 (function() {
 	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
-		this._draw(axisObj, dataObj, xLabel, yLabel, optionObj);
-		axisObj.numberOfGraph ++;
-		dataObj.$id ++;
+		this.axisObj = axisObj;
+		this.dataObj = dataObj;
+		this.xLabel = xLabel;
+		this.yLabel = yLabel;
+		this.optionObj = optionObj;
+		this.dataId = dataObj.$id ++;
+		this.graphId = axisObj.numberOfGraph ++;
+		this.firstDraw = true;
+		
+		// event add
+		dataObj.graphObjArr[this.dataId] = this;
+		axisObj.graphObjArr[this.graphId] = this;
+		if (dataObj.$isOffload) {
+			dataObj.$isSelected[this.dataId] = nullUpdate;
+			dataObj.refreshArr[this.dataId] = nullUpdate;				
+	    	this.firstUpdate = nullUpdate;
+			axisObj.hoverArr[this.graphId] = nullUpdate;
+			axisObj.boxSearchArr[this.graphId] = nullUpdate;
+		} else {
+			dataObj.$isSelected[this.dataId] = dotUpdate();
+			dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);				
+	    	this.firstUpdate = firstUpdate(dataObj);
+			axisObj.hoverArr[this.graphId] = dotHover();
+			axisObj.boxSearchArr[this.graphId] = dotBoxSearch(this);
+		}
+		
 	};
 	Dot.prototype = {
-			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-				this.xLabel = xLabel;
-				this.yLabel = yLabel;
-				this.dataObj = dataObj;
-				this.optionObj = optionObj;
-				this.dataId = dataObj.$id;
-				this.graphId = axisObj.numberOfGraph;
+			_draw: function () {
+				if (this.firstDraw) {
+					this._init(this.axisObj, this.dataObj, this.xLabel, this.yLabel,this.optionObj);
+					this.firstDraw = false;
+				}
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
+			},
+			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
 				this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 				// check color 
 				if(axisObj.legendLabel != undefined){
@@ -44,7 +67,7 @@ var Dot = {};
 				}
 				this.subSet = subSet;
 			},
-			_draw: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+			_drawSet: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				// get pixel values from axis
 				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
 				var xArr = temp.xArr;
@@ -99,22 +122,7 @@ var Dot = {};
 				axisObj.stage.add(this.dataLayer);
 				
 	        	// event add
-				dataObj.graphObjArr[this.dataId] = this;
-				dataObj.$isSelected[this.dataId] = dotUpdate();
-				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);				
-	        	this.firstUpdate = firstUpdate(dataObj);
-	        	axisObj.graphObjArr[this.graphId] = this;
-	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
-				axisObj.hoverArr[this.graphId] = dotHover();
-				axisObj.boxSearchArr[this.graphId] = dotBoxSearch(this);
-			},
-			_reDraw: function (axisObj) {
-				// get pixel values from axis
-				var dataObj = this.dataObj;
-				var xLabel = this.xLabel;
-				var yLabel = this.yLabel;
-				var optionObj = this.optionObj;
-				this._draw(axisObj, dataObj, xLabel, yLabel, optionObj);
+				axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 			}
 	}
 })();

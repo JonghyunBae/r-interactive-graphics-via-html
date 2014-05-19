@@ -116,11 +116,15 @@ function makeEventComponent (dataObj, length) {
 	dataObj.child = null;
 	dataObj.$isSelected = new Array();
 	dataObj.graphObjArr = new Array();
-	dataObj.statusArr = new Array(length);
-	dataObj.$isHidden = new Array(length);
-	for (var i=0; i<length; i++) {
-		dataObj.statusArr[i] = 0;
-		dataObj.$isHidden[i] = false;
+	dataObj.$drawGraphArr = new Array();
+	
+	if (length != 0) { // if 0 -> offload object
+		dataObj.statusArr = new Array(length);
+		dataObj.$isHidden = new Array(length);
+		for (var i=0; i<length; i++) {
+			dataObj.statusArr[i] = 0;
+			dataObj.$isHidden[i] = false;
+		}
 	}
 }
 
@@ -132,12 +136,15 @@ function birthReport (parent, child, mergeArr) {
 	parent.child.push(child);
 	child.child = null;
 	child.mergeArr = mergeArr;
-	child.updateArr = new Array();
 	child.refreshArr = new Array();
 }
 
 function ModifyBirth (child, mergeArr) {
 	child.mergeArr = mergeArr;
+}
+
+function nullUpdate (a, b, c) {
+	return;
 }
 
 

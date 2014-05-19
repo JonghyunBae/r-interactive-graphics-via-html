@@ -399,7 +399,7 @@ function getAxisLabels(dataObj)
 {
 	var tmpNameArr = new Array();
 	for(var name in dataObj){
-		if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'parentTOchild' || name == 'childTOparent' || name == 'updateArr' || name == 'refreshArr')){
+		if(!(name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'refreshArr')){
 			tmpNameArr.push(name);
 		}
 	}

@@ -63,7 +63,7 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun
 
 }, Thoeph)
 }}}
-    # Makes code if we accept multiple input about server-offloading
+  # Makes code if we accept multiple input about server-offloading
  
   Next meeting : 10:00 (Korea time) on Fri, 5/23
 

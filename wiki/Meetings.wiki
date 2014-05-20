@@ -33,7 +33,7 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun
 
  * TO-DO list for this weekend
   # Make code to generate "server.R"
-   *
+{{{
   obj <- RIGHT({
   plot(price ~ carat, sub.diamonds, color = color)
 
@@ -62,7 +62,7 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun
   plot(Time ~ conc, lmArray, type = "l")
 
 }, Thoeph)
-
+}}}
     * Makes code if we accept multiple input about server-offloading
  
   Next meeting : 10:00 (Korea time) on Fri, 5/23

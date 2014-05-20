@@ -6,36 +6,18 @@ rightOutputBinding.find = function(scope){
 };
 rightOutputBinding.renderValue = function (el, data) {
 	if (cnt > 0) {//if(data change)
-		cnt=0;
-		if (data[0] != -1) {
-			// TODO: Shoul we apply this method? xx and yy ?
-			for (var i=0; i<data.length; i=i+2) {
-				window[data[i]].xx = data[i+1].xx;
-				window[data[i]].yy = data[i+1].yy;
-				window[data[i]].draw();
-			}			
-		}
+		if (data != null) {
+			if (data[0] != -1) {
+				// TODO: Shoul we apply this method? xx and yy ?
+				window[data[0]].xx = data[1].xx;
+				window[data[0]].yy = data[1].yy;
+				window[data[0]].draw();		
+			}
+		}		
 	}
 	cnt++;
 };
 Shiny.outputBindings.register(rightOutputBinding, 'div.rightOutputBinding');
-
-var cnt1 = 0;
-var rightOutputBinding1 = new Shiny.OutputBinding();
-rightOutputBinding1.find = function(scope){
-	return $(scope).find(".right-output1");
-};
-rightOutputBinding1.renderValue = function(el, data) {
-	if(cnt1 > 0){//if(data change)
-		cnt1 = 0;
-		if(data[0] != -1){
-			objArr[data[0]-1].draw_regression(data[1], data[2].xx1, data[2].yy1);	
-			window.Shiny.onInputChange("id1",-1);
-		}
-	}
-	cnt1 ++;
-};
-Shiny.outputBindings.register(rightOutputBinding1, 'div.rightOutputBinding1');
 
 
 

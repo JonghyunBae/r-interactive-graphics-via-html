@@ -153,7 +153,7 @@ var Line = {};
 			this.dataId = dataObj.$id ++;
 			this.graphId = axisObj.numberOfGraph ++;
 			this.firstDraw = true;
-
+			this._type = "lineGraph";
 			// event add
 			dataObj.graphObjArr[this.dataId] = this;
 			axisObj.graphObjArr[this.graphId] = this;

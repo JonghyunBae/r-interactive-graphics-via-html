@@ -94,7 +94,6 @@ createHead <- function(title) {
     linkArray <- paste0("  ", linkArray)
   } # if
   
-  addSource('../data.js')
   sourceArray <- createSource(.RIGHT$sourceArray)
   
   # Write html code to load data in 'data.js' file

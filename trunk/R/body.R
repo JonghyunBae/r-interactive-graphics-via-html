@@ -37,6 +37,7 @@ prepareData <- function(dataList, dir = ".") {
   
   # Write dataScript to "data.js" file
   writeLines(as.character(dataScript), con=file.path(dir, "data.js"))
+  addSource('../data.js')
   
 } # function prepareDataE
 
@@ -48,7 +49,7 @@ loadData <- function(nameArray = NULL) {
     
     # Data objects should be loaded before any plotting:
     for(iData in 1:numData)
-      .RIGHT$scriptArray <- c(paste0(nameArray[iData], ' = createMainStructureE(rawArr',iData, ');'), 
+      .RIGHT$scriptArray <- c(paste0("var ",nameArray[iData], ' = createMainStructureE(rawArr',iData, ');'), 
                             .RIGHT$scriptArray) 
   } # if
   
@@ -78,9 +79,19 @@ createDiv <- function(divArray = NULL) {
     return(NULL)
   } # if 
   
-  return(c('<div id="content" class="right-output">',
-           paste0("  ", divArray),
-           "</div>"))
+  tempArray <- '<div id="content">\n'
+  divIndex <- 1
+  
+  # match 1 content to 1 container
+  for(temp in divArray) {
+	  
+    tempArray <- paste(tempArray, '<div id="content', divIndex, '" class = "right-output">\n',
+						           temp, "</div>\n", sep = "")					
+	  divIndex <- divIndex + 1
+  
+  } # for
+  
+  return(c(tempArray, "</div>"))
   
 } # function createDiv
 
@@ -124,6 +135,7 @@ createBody <- function() {
   return(c("<body>", "",
            divArray, if (!is.null(divArray)) "" else NULL, 
            scriptArray, if (!is.null(scriptArray)) "" else NULL,
+           .RIGHT$serverScript,
            paste0("  ", createFooter()), "",
            "</body>"))
   

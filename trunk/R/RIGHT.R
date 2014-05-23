@@ -46,6 +46,15 @@ initRIGHT <- function() {
   .RIGHT$divArray <- c()
   .RIGHT$scriptArray <- c()
   
+  # Variables used to build the server.R file:
+  .RIGHT$serverArray <- c()
+  .RIGHT$numServer <- 0
+  
+  # Variables used to build the html file using server-offloading:
+  .RIGHT$serverScript <- "<script>\n"
+  .RIGHT$offNameArr <- c()
+  .RIGHT$offDataArr <- c()
+  
   # Variables used to track different plots:
   .RIGHT$numAxis <- 0
   .RIGHT$numPoints <- 0
@@ -185,6 +194,37 @@ RIGHT <- function(expr = {},
   prepareData(dataList, dir)
   
   ## ---
+  ## Assemble server.R code if user uses server-offloading
+  ## ---
+  
+  if(.RIGHT$numServer != 0) {
+    
+    writeLines(c("library(shiny)",
+                 "shinyServer(function(input, output) {",
+                 .RIGHT$serverArray,
+                 "})" ),
+               con = file.path(dir, "server.R"))
+    
+    .RIGHT$serverScript <- paste(.RIGHT$serverScript,
+                                 "$(function() {\n",
+                                 "setTimeout(function() {\n",
+                                 sep="")
+    
+    for(iData in 1:length(.RIGHT$offNameArr)) {
+      .RIGHT$serverScript <- paste(.RIGHT$serverScript,
+                                   "window.Shiny.onInputChange('", .RIGHT$offNameArr[iData], "', ", .RIGHT$offDataArr[iData],
+                                   "$.isHidden);\n",
+                                   sep = "")
+    }
+    
+    .RIGHT$serverScript <- paste(.RIGHT$serverScript, "}, 1)\n",
+                                 "});\n", sep = "")
+    
+  } # if
+  
+  .RIGHT$serverScript <- paste(.RIGHT$serverScript, "</script>\n")
+    
+  ## ---
   ## Assemble client-side code:
   ## ---
   
@@ -193,12 +233,12 @@ RIGHT <- function(expr = {},
                createHead(title),
                createBody(),
                "</html>"),
-             con = file.path(dir, "www", "index.html"))
+             con = file.path(dir, "www", "index.html"))  
   
   ## ---
   ## Assemble the RIGHT object:
   ## ---
-  
+
   return(structure(list(dir = dir,
                         browser = browser),
                    class = "RIGHT"))
@@ -261,3 +301,28 @@ clean <- function(obj) {
   unlink(obj$dir, recursive = TRUE)
   
 } # function clean
+
+runServer.RIGHT <- function(dataObj, offName, expr = {}) {
+  
+  .RIGHT$numServer <- .RIGHT$numServer + 1
+  
+  .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
+                              "output$content", .RIGHT$numAxis, " <- reactive({ \n",
+                              "if (length(input$", offName, ") != 0) { \n",
+                              "if (length(input$", offName, ") > 1) { \n",
+                              expr, "\n",
+                              "} else { \n",
+                              "output <- list(-1, -1) \n",
+                              "return (output) \n",
+                              "}  }  }) \n" , sep = "")
+  
+  .RIGHT$offDataArr <- c(.RIGHT$offDataArr, dataObj)
+  .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)                     
+  
+  .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
+                               "var regArr", .RIGHT$numServer, " = createMainStructureE('", dataObj, "');\n",
+                               "var loffObj", .RIGHT$numServer, " = new MakeLineObj(regArr", .RIGHT$numServer, ", 'xx', 'yy', {});\n",
+                               "var loff", .RIGHT$numServer, " = new Line(axis", .RIGHT$numAxis, ", loffObj", .RIGHT$numServer, ", 'x1', 'x2', 'y1', 'y2', {});\n",
+                               sep = "")
+} # function runServer.RIGHT
+  

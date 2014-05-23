@@ -27,7 +27,19 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
-== 16 MAy2014 ==
+== 20 May2014 ==
+
+Participants : Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for this weekend
+  # Make code to operating server-offloading example locally
+    * divide contents that makes server-offloading code more easier
+    * generate server.R code using divided contents
+  # Arrange about code which works about server-offloading (javascript, R)
+
+  Next meeting : 10:00 (Korea time) on Fri, 5/30
+
+== 16 May2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
 
@@ -65,7 +77,7 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun
 }}}
   # Makes code if we accept multiple input about server-offloading
  
-  Next meeting : 10:00 (Korea time) on Fri, 5/23
+  Next meeting : 10:00 (Korea time) on Fri, 5/20
 
 == 9 MAy2014 ==
 

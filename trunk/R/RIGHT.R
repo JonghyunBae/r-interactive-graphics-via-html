@@ -213,7 +213,7 @@ RIGHT <- function(expr = {},
     for(iData in 1:length(.RIGHT$offNameArr)) {
       .RIGHT$serverScript <- paste(.RIGHT$serverScript,
                                    "window.Shiny.onInputChange('", .RIGHT$offNameArr[iData], "', ", .RIGHT$offDataArr[iData],
-                                   "$.isHidden);\n",
+                                   ".$isHidden);\n",
                                    sep = "")
     }
     
@@ -320,8 +320,8 @@ runServer.RIGHT <- function(dataObj, offName, expr = {}) {
   .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)                     
   
   .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
-                               "var regArr", .RIGHT$numServer, " = createMainStructureE('", dataObj, "');\n",
-                               "var loffObj", .RIGHT$numServer, " = new MakeLineObj(regArr", .RIGHT$numServer, ", 'xx', 'yy', {});\n",
+                               "var ", offName, " = createMainStructureE('", dataObj, "');\n",
+                               "var loffObj", .RIGHT$numServer, " = new MakeLineObj(", offName, ", 'xx', 'yy', {});\n",
                                "var loff", .RIGHT$numServer, " = new Line(axis", .RIGHT$numAxis, ", loffObj", .RIGHT$numServer, ", 'x1', 'x2', 'y1', 'y2', {});\n",
                                sep = "")
 } # function runServer.RIGHT

@@ -138,6 +138,7 @@ RIGHT <- function(expr = {},
   
   # Add event handler:
   appendBlankLine()
+  addDrawTrigger(.RIGHT$nameArray)
   addEventTrigger(.RIGHT$numAxis)
   
   ## ---
@@ -302,7 +303,7 @@ clean <- function(obj) {
   
 } # function clean
 
-runServer.RIGHT <- function(dataObj, offName, expr = {}) {
+runServer.RIGHT <- function(dataObj, offName, xArray, yArray, expr = {}) {
   
   .RIGHT$numServer <- .RIGHT$numServer + 1
   
@@ -311,6 +312,8 @@ runServer.RIGHT <- function(dataObj, offName, expr = {}) {
                               "if (length(input$", offName, ") != 0) { \n",
                               "if (length(input$", offName, ") > 1) { \n",
                               expr, "\n",
+                              "output <- list(\"", offName, "\", data.frame(xx = ", xArray, ", yy = ", yArray, "))\n",
+                              "return (output)\n",
                               "} else { \n",
                               "output <- list(-1, -1) \n",
                               "return (output) \n",

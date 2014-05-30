@@ -58,6 +58,17 @@ loadData <- function(nameArray = NULL) {
 } # function loadDataE
 
 # This function has side effects:
+addDrawTrigger <- function(nameArray = NULL) {
+  
+  if(is.null(nameArray)) {
+    return(NULL)
+  } # if
+  
+  .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                               paste0(nameArray, ".draw();"))
+}
+
+# This function has side effects:
 addEventTrigger <- function(numAxis = NULL) {
   
   if (is.null(numAxis) || numAxis == 0) {

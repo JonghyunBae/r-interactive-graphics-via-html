@@ -308,17 +308,14 @@ function lineBoxSearch (graphObj) {
 function lineUpdate () {
 	return	function (node, selectOn) {
 			if (node.getSelected() == 1 && selectOn < 0) {		//unselect
-				node.setSelectCnt(node.getSelectCnt() - 1);
+				node.setSelectCnt(node.getSelectCnt() + selectOn);
 				if (node.getSelectCnt() == 0) {
 					node.setStroke(node.getFill());
 					node.setOpacity(0.5);
 					node.setSelected(0);
 				}
 			} else if (selectOn > 0) {	//select
-				node.setSelectCnt(node.getSelectCnt() + 1);
-				if (node.getSelectCnt() > 2) {
-					node.setSelectCnt(2);
-				}
+				node.setSelectCnt(node.getSelectCnt() + selectOn);
 				if (node.getSelected() == 0) {
 					node.setStroke('red');
 					node.setOpacity(1);

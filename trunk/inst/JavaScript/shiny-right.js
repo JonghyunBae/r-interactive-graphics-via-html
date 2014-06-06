@@ -9,9 +9,10 @@ rightOutputBinding.renderValue = function (el, data) {
 		if (data != null) {
 			if (data[0] != -1) {
 				// TODO: Shoul we apply this method? xx and yy ?
-				window[data[0]].xx = data[1].xx;
-				window[data[0]].yy = data[1].yy;
-				window[data[0]].draw();		
+				for (var name in window[data[0]]) {
+					window[data[0]][name] = data[1][name];
+				}
+				window[data[0]].draw();
 			}
 		}		
 	}

@@ -21,7 +21,7 @@ var Bar = {};
         	axisObj.hoverArr[this.graphId] = nullUpdate;
 			axisObj.boxSearchArr[this.graphId] = nullUpdate;
 		} else {
-			dataObj.$isSelected[this.dataId] = lineUpdate();
+			dataObj.$isSelected[this.dataId] = barUpdate();
 			dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 			this.firstUpdate = firstUpdate(dataObj);
         	axisObj.hoverArr[this.graphId] = barHover();
@@ -38,7 +38,7 @@ var Bar = {};
 						addColorField(dataObj[this.colorLabel]);
 					}
 				}
-				this.barWidth = axisObj.xbarWidth;
+				this.barWidth = this.axisObj.xbarWidth;
 				this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 			},
@@ -210,7 +210,6 @@ var Bar = {};
 						}
 					}
 				}				
-				
 	        	this.dataLayer = new Kinetic.Layer();	
 	        	for (var i=0; i<this.node.length; i++) {
 	        		if (this.node[i] != null) {

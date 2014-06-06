@@ -38,7 +38,7 @@
 <script> var mainArr2 = createMainStructureE(rawArr1);</script>
 
 <div id="content">
-<div id="content1" class = "right-output" >
+<div id="loessArray1" class = "right-output" >
 <div id="container1" oncontextmenu="return false;"></div>
 </div>
 <div id="content2" class = "right-output" >
@@ -69,8 +69,10 @@
        </script>
         <script>
         // offload part.
-        var regArr1 = createMainStructureE('mainArr1'); // name of mainArr3 can be changed.
-		var loffObj1 = new MakeLineObj(regArr1, 'xx', 'yy', {}); // name of x, y can be changed.
+        var loessArray1 = createMainStructureE('mainArr1'); // name of mainArr3 can be changed.
+        
+        
+		var loffObj1 = new MakeLineObj(loessArray1, 'price', 'carat', {}); // name of x, y can be changed.
 		var loff1 = new Line(axis1, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
 		
 		var regArr2 = createMainStructureE('mainArr2');

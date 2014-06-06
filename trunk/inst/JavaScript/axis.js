@@ -66,7 +66,6 @@ var Axis = {};
 						this.xMax = dataObj[xLabel].max;
 			            this.xMin = dataObj[xLabel].min;
 					}
-					//alert(this.xMax + ", " + this.xMin);
 		            // frequency's min value should be 0
 		            if(xLabel == 'frequency'){
 		            	this.yMin = 0;
@@ -153,7 +152,6 @@ var Axis = {};
 			},
 			
 			_draw: function() {
-				
 				// make stage.
 				makeStageLayer(this);
 				this.refresh = makeRefresh(this.stage);
@@ -239,7 +237,6 @@ var Axis = {};
 			_getPixelXY: function(xArr, yArr) {
 				var xPixelArr = new Array();
 				var yPixelArr = new Array();
-				var outNumber = new Array();
 				if(xArr.length == undefined){
 					var temp = new Array();
 					temp[0] = xArr;
@@ -299,7 +296,6 @@ var Axis = {};
 			},
 			_getPixelX: function(xArr) {
 				var xPixelArr = new Array();
-				var outNumber = new Array();
 				if(xArr.length == undefined){
 					var temp = new Array();
 					temp[0] = xArr;
@@ -330,7 +326,6 @@ var Axis = {};
 			},			
 			_getPixelY: function(yArr) {
 				var yPixelArr = new Array();
-				var outNumber = new Array();
 				if(yArr.length == undefined){
 					var temp = new Array();
 					temp[0] = yArr;

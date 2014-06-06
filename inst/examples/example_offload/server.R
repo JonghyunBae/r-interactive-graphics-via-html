@@ -1,40 +1,24 @@
 library(shiny)
 
 shinyServer(function(input, output) {
-  output$loessArray1 <- reactive({
+  output$loessArray <- reactive({
     if (length(input$mainArr1) != 0) {
-     if (length(input$mainArr1) > 1) {
-       # just copy
-       obj <- loess(price ~ carat, data = sub.diamonds)
-       xRange <- range(sub.diamonds$carat)
-       simArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
-       simArray$price <- predict(obj, newdata = simArray)
+      if (length(input$mainArr1) > 1) {
        
-       # generation
-       for loop in length
-        simArray <- simArray[colname[i]][!input$mmainArr1]
-       return("loessArray1", simArray) # output$loessArray <- simArray
+        # just copy
+        obj <- loess(conc ~ Time, data = Theoph)
+        xRange <- range(Theoph$Time)
+        simArray <- data.frame(Time = seq(xRange[1], xRange[2], length.out = 132))
+        simArray$conc <- predict(obj, newdata = simArray)
        
-     } else {
-       output <- list(-1, -1)
-       return (output)
-     }
-    }
-  })
-  
-  output$content2 <- reactive({
-    if (length(input$mainArr2) != 0) {
-      if (length(input$mainArr2) > 1) {
-        x <- Theoph$Time[!input$mainArr2]
-        y <- Theoph$conc[!input$mainArr2]
-        p <- cbind(x, y)
-        p <- data.frame(p)
-        obj <- lm(y ~ x, p)
-        xRange <- range(x)
-        xArray <- seq(xRange[1], xRange[2], length.out = length(x))
-        yArray <- predict(obj, data.frame(x = xArray))
-        output <- list("regArr2", data.frame(xx = xArray, yy = yArray))
-        return(output)
+        # generation
+        # some problem
+        for(i in 1:length(simArray))
+          simArray[[colnames(simArray)[i]]] <- simArray[[colnames(simArray)[i]]][!input$mainArr1]
+        
+        # no multiple output
+        return(list("loessArray", simArray)) # output$loessArray <- simArray
+       
       } else {
         output <- list(-1, -1)
         return (output)

@@ -36,7 +36,7 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun
     * Make server-offloading example code locally (check to Jung Hoon Lee using gmail)
     * generate server.R code using local server-offloading example
     * Prototype of server.R code
- 
+{{{ 
   output$loessArray <- reactive({
     if (length(input$mainArr1) != 0) {
      if (length(input$mainArr1) > 1) {
@@ -55,7 +55,7 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun
        return (output)
      }
   })  
-
+}}}
   # Check about event part in javascript file with CH
 
   Next meeting : 10:00 (Korea time) on Fri, 6/13

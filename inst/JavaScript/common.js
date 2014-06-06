@@ -194,6 +194,7 @@ function updateRecursive (object, nodeArr, beforeObject) {
 	// update statusArr
 	object.statusArr = addArr(object.statusArr, temp);
 	// refresh
+	//alert(object._type + ", " + object.refreshArr[0]);
 	for (var i=0; i<object.refreshArr.length; i++) {
 		object.refreshArr[i]();
 	}

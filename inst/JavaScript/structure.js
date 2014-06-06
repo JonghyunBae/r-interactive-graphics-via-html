@@ -366,18 +366,24 @@ var ddply = {};
 		this.optionObj = optionObj;
 		this.$isOffload = dataObj.$isOffload;
 		
-		// copy fields from dataObj (parent)
-		for (var i=0; i<labels.length; i++) {
-			this[labels[i]] = new Array();
-			if (dataObj[labels[i]].isDiscrete != undefined) {
-				this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
-				this[labels[i]].index = dataObj[labels[i]].index;
-			}
-		}
+		// I assume that there is no offloadObj for Histogram !!!!!!!!!!
+		this._calculate();
 	};
 	ddply.prototype = {
 			_calculate: function () {
+					var dataObj = this.dataObj;
 					var labels = this.labels;
+					var optionObj = this.optionObj;
+					
+					// copy fields from dataObj (parent)
+					for (var i=0; i<labels.length; i++) {
+						this[labels[i]] = new Array();
+						if (dataObj[labels[i]].isDiscrete != undefined) {
+							this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
+							this[labels[i]].index = dataObj[labels[i]].index;
+						}
+					}
+					
 				    this['frequency'] = new Array();
 				    this['hasArr'] = new Array();
 				    // binning continuous data.
@@ -450,25 +456,26 @@ var ddply = {};
 					for (var i=0; i<hasArr.length; i++) {
 						this.statusArr[i] = 0;
 					}
-				    /*                     
+			                    
 					// for debugging
-				    
-					//	document.write("<br>");
+				  /*
+						document.write("<br>");
 				    
 					for (var j=0; j<labels.length; j++) {
-						//document.write(labels[j] + " ");
+						document.write(labels[j] + " ");
 					}
-				    //	document.write("frequency <br>");
+				    	document.write("frequency <br>");
 					var cnt = 0;
 					for (var i=0; i<this[labels[0]].length; i++) {
 						for (var j=0; j<labels.length; j++) {
-				        //			document.write(this[labels[j]][i] + " ,  ");
+				        			document.write(this[labels[j]][i] + " ,  ");
 						}
-				      //		document.write(this.frequency[i] + "<br>");
+				      		document.write(this.frequency[i] + "<br>");
 						cnt = cnt + this.frequency[i];
 					}
-				    //	document.write("Total frequency: " + cnt);
-				    */
+				    	document.write("Total frequency: " + cnt);
+				   
+				  */
 			}
 	};
 })();

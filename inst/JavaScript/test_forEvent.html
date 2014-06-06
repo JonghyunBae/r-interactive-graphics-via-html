@@ -13,6 +13,7 @@
  <script src="color.js"></script>
  <script src="line.js"></script>
  <script src="dot.js"></script>
+ <script src="bar.js"></script> 
  <script src="node_event.js"></script>
  <script src="menu.js"></script>
  <script src="legend.js"></script>
@@ -44,8 +45,13 @@
 		var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', {group: 'Subject'} );
 		var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});
 		
+		
+		var hobj1 = new ddply(mainArr1, ['Time'], {});
+		var axis3 = new Axis(3, hobj1, 'Time', 'frequency', {});
+		var h1 = new Bar(axis3, hobj1, 'Time', 'frequency', {});
+		
 		mainArr1.draw();
-       var AllAxisObjArr = [axis1, axis2];
+       var AllAxisObjArr = [axis1, axis2, axis3];
        eventTrigger(AllAxisObjArr); // this is global for redrawing in hideselected.
       
        </script>

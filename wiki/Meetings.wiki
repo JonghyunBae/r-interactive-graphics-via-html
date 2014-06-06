@@ -41,13 +41,11 @@ Participants : Jae W. Lee, Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun
     if (length(input$mainArr1) != 0) {
      if (length(input$mainArr1) > 1) {
        
-       # user's code
        obj <- loess(price ~ carat, data = sub.diamonds)
        xRange <- range(sub.diamonds$carat)
        simArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
        simArray$price <- predict(obj, newdata = simArray)
        
-       # generation in R function
        for loop in length
         simArray <- simArray[colname[i]][!input$mainArr1]
        return("loessArray", simArray) # output$loessArray <- simArray

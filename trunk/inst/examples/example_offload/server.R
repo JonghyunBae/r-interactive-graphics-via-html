@@ -6,17 +6,22 @@ shinyServer(function(input, output) {
       if (length(input$mainArr1) > 1) {
        
         # just copy
-        obj <- loess(conc ~ Time, data = Theoph)
-        xRange <- range(Theoph$Time)
-        simArray <- data.frame(Time = seq(xRange[1], xRange[2], length.out = 132))
-        simArray$conc <- predict(obj, newdata = simArray)
+        obj <- loess(Time ~ conc, data = Theoph)
+        xRange <- range(Theoph$conc)
+        simArray <- data.frame(conc = seq(xRange[1], xRange[2], length.out = 132))
+        simArray$Time <- predict(obj, newdata = simArray)
        
         # generation
-        # some problem
-        for(i in 1:length(simArray))
-          simArray[[colnames(simArray)[i]]] <- simArray[[colnames(simArray)[i]]][!input$mainArr1]
+        temp.x <- simArray[[colnames(simArray)[1]]][!input$mainArr1]
+        temp.y <- simArray[[colnames(simArray)[2]]][!input$mainArr1]
         
-        # no multiple output
+        temp.names <- colnames(simArray)
+        simArray <- data.frame(temp.x, temp.y)
+        
+        for(i in 1:length(simArray))
+          colnames(simArray)[i] <- temp.names[i]
+        
+        # can't multiple output in R
         return(list("loessArray", simArray)) # output$loessArray <- simArray
        
       } else {

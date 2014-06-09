@@ -34,28 +34,28 @@
   <script src="jsfiles/data.js"></script>
 </head>
 <body>
-<script> var mainArr1 = createMainStructureE(rawArr1);</script>
-<script> var mainArr2 = createMainStructureE(rawArr1);</script>
+<script> var subDiamonds = createMainStructureE(rawArr1);</script>
+<script> var Theoph = createMainStructureE(rawArr2);</script>
 
 <div id="content">
 <div id="loessArray" class = "right-output" >
 <div id="container1" oncontextmenu="return false;"></div>
 </div>
-<div id="content2" class = "right-output" >
+<div id="lmArray" class = "right-output" >
 <div id="container2" oncontextmenu="return false;"></div>
 </div>
 </div>
        
        <script>
-       var axis1 = new Axis(1, mainArr1, 'Time', 'conc', {});
-       var lobj1 = new MakeLineObj(mainArr1, 'Time', 'conc', {group: 'Subject'});       
+       var axis1 = new Axis(1, subDiamonds, 'carat', 'price', {});
+       var lobj1 = new MakeLineObj(subDiamonds, 'carat', 'price', {group: 'clarity'});       
        var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});   
        
-       var axis2 = new Axis(2, mainArr2, 'Time', 'conc', {});
-       var d1 = new Dot(axis2, mainArr2, 'Time', 'conc', {});
+       var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});
+       var d1 = new Dot(axis2, Theoph, 'Time', 'conc', {});
        
-       mainArr1.draw();
-       mainArr2.draw();
+       subDiamonds.draw();
+       Theoph.draw();
        
        var AllAxisObjArr = [axis1, axis2]; // this is global for redrawing in hideselected.
        eventTrigger(AllAxisObjArr);
@@ -64,13 +64,19 @@
        </script>
         <script>
         // offload part.
-        var loessArray = createMainStructureE('mainArr1'); // name of mainArr3 can be changed.  
-		    var loffObj1 = new MakeLineObj(loessArray, 'conc', 'Time', {}); // name of x, y can be changed.
+        var loessArray = createMainStructureE('subDiamonds'); // name of mainArr3 can be changed.  
+		    var loffObj1 = new MakeLineObj(loessArray, 'carat', 'price', {}); // name of x, y can be changed.
 		    var loff1 = new Line(axis1, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
 		
+        var lmArray = createMainStructureE('Theoph'); // name of mainArr3 can be changed.  
+  	    var loffObj2 = new MakeLineObj(lmArray, 'Time', 'conc', {}); // name of x, y can be changed.
+		    var loff2 = new Line(axis2, loffObj2, 'x1', 'x2', 'y1', 'y2', {});
+        
         $(function() {
             setTimeout(function() {
-              window.Shiny.onInputChange('mainArr1', mainArr1.$isHidden);
+              window.Shiny.onInputChange('subDiamonds', subDiamonds.$isHidden);
+              window.Shiny.onInputChange('Theoph', Theoph.$isHidden);
+
             }, 1)
           });
         </script>

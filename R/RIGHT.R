@@ -52,7 +52,7 @@ initRIGHT <- function() {
   
   # Variables used to build the html file using server-offloading:
   .RIGHT$serverScript <- "<script>\n"
-  .RIGHT$offNameArr <- c()
+  # .RIGHT$offNameArr <- c()
   .RIGHT$offDataArr <- c()
   
   # Variables used to track different plots:
@@ -200,23 +200,31 @@ RIGHT <- function(expr = {},
   
   if(.RIGHT$numServer != 0) {
     
+    for(name in .RIGHT$offDataArr) {
+      
+      writeLines(toJSON(eval(parse(text = name))), 
+                 con = file.path(dir, paste0(name,".JSON")))
+    } # for
+      
     writeLines(c("library(shiny)",
+                 "rm(list = ls()",
                  "shinyServer(function(input, output) {",
                  .RIGHT$serverArray,
                  "})" ),
                con = file.path(dir, "server.R"))
-    
+        
     .RIGHT$serverScript <- paste(.RIGHT$serverScript,
                                  "$(function() {\n",
                                  "setTimeout(function() {\n",
                                  sep="")
     
-    for(iData in 1:length(.RIGHT$offNameArr)) {
+    for(name in .RIGHT$offDataArr) {
       .RIGHT$serverScript <- paste(.RIGHT$serverScript,
-                                   "window.Shiny.onInputChange('", .RIGHT$offNameArr[iData], "', ", .RIGHT$offDataArr[iData],
+                                   "window.Shiny.onInputChange('", name, "', ", name,
                                    ".$isHidden);\n",
                                    sep = "")
-    }
+    } # for
+
     
     .RIGHT$serverScript <- paste(.RIGHT$serverScript, "}, 1)\n",
                                  "});\n", sep = "")
@@ -303,29 +311,25 @@ clean <- function(obj) {
   
 } # function clean
 
-runServer.RIGHT <- function(dataObj, offName, xArray, yArray, expr = {}) {
-  
+runServer.RIGHT <- function(dataObj, offName, expr = {}) {
+    
   .RIGHT$numServer <- .RIGHT$numServer + 1
-  
+
+  # Copy user's code and base code about server-offloading
   .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
-                              "output$content", .RIGHT$numAxis, " <- reactive({ \n",
-                              "if (length(input$", offName, ") != 0) { \n",
-                              "if (length(input$", offName, ") > 1) { \n",
-                              expr, "\n",
-                              "output <- list(\"", offName, "\", data.frame(xx = ", xArray, ", yy = ", yArray, "))\n",
-                              "return (output)\n",
-                              "} else { \n",
-                              "output <- list(-1, -1) \n",
-                              "return (output) \n",
-                              "}  }  }) \n" , sep = "")
+                              "\toutput$", offName, " <- reactive({ \n",
+                              "\t\tif (length(input$", dataObj, ") != 0) { \n",
+                              "\t\t\tif (length(input$", dataObj, ") > 1) { \n",
+                              "\t\t\t\t",dataObj, " <- .", dataObj, "[!input$", dataObj, ", ]\n",
+                              "\t\t\t\t",expr, "\n",
+                              "\t\t\t} else { \n",
+                              "\t\t\t\toutput <- list(-1, -1) \n",
+                              "\t\t\t\treturn (output) \n",
+                              "\t\t\t}\n\t\t}\n\t})" , sep = "")
   
   .RIGHT$offDataArr <- c(.RIGHT$offDataArr, dataObj)
-  .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)                     
+  # .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
   
-  .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
-                               "var ", offName, " = createMainStructureE('", dataObj, "');\n",
-                               "var loffObj", .RIGHT$numServer, " = new MakeLineObj(", offName, ", 'xx', 'yy', {});\n",
-                               "var loff", .RIGHT$numServer, " = new Line(axis", .RIGHT$numAxis, ", loffObj", .RIGHT$numServer, ", 'x1', 'x2', 'y1', 'y2', {});\n",
-                               sep = "")
+  # assign(offName, eval(parse(text = expr)))                 
+  
 } # function runServer.RIGHT
-  

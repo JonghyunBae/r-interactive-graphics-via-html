@@ -36,7 +36,7 @@ Participants : Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae
      * Using JSON file to read origin data in server.R
      * Change <div> part in html (content named by offload object name likes loessArray)
      * Do not optimize now. 
-     * Dead line : 18 June or one day more.
+     * Dead line : 19 June or one day more.
    # Study about event part of javascript 
      * Hide option must know during this week
 

@@ -52,8 +52,10 @@ initRIGHT <- function() {
   
   # Variables used to build the html file using server-offloading:
   .RIGHT$serverScript <- "<script>\n"
-  # .RIGHT$offNameArr <- c()
+  .RIGHT$offFlag <- 0
+  .RIGHT$offIndex <- c()
   .RIGHT$offDataArr <- c()
+  .RIGHT$offNameArr <- c()
   
   # Variables used to track different plots:
   .RIGHT$numAxis <- 0
@@ -135,7 +137,7 @@ RIGHT <- function(expr = {},
                                       pie = pie_RIGHT,
                                       search = search_RIGHT,
                                       table = table_RIGHT))
-  
+  # print(.RIGHT$numAxis)
   # Add event handler:
   appendBlankLine()
   addDrawTrigger(.RIGHT$nameArray)
@@ -197,17 +199,19 @@ RIGHT <- function(expr = {},
   ## ---
   ## Assemble server.R code if user uses server-offloading
   ## ---
-  
+  tempArray <- c()
   if(.RIGHT$numServer != 0) {
     
     for(name in .RIGHT$offDataArr) {
       
       writeLines(toJSON(eval(parse(text = name))), 
                  con = file.path(dir, paste0(name,".JSON")))
-    } # for
       
-    writeLines(c("library(shiny)",
-                 "rm(list = ls()",
+      tempArray <- paste(tempArray, 
+                         ".", name, '<- data.frame(fromJSON("', name, '.JSON"))\n', sep="")
+    } # for
+    
+    writeLines(c(tempArray,
                  "shinyServer(function(input, output) {",
                  .RIGHT$serverArray,
                  "})" ),
@@ -312,9 +316,9 @@ clean <- function(obj) {
 } # function clean
 
 runServer.RIGHT <- function(dataObj, offName, expr = {}) {
-    
+  .RIGHT$offFlag <- 1
   .RIGHT$numServer <- .RIGHT$numServer + 1
-
+  
   # Copy user's code and base code about server-offloading
   .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
                               "\toutput$", offName, " <- reactive({ \n",
@@ -327,8 +331,9 @@ runServer.RIGHT <- function(dataObj, offName, expr = {}) {
                               "\t\t\t\treturn (output) \n",
                               "\t\t\t}\n\t\t}\n\t})" , sep = "")
   
+  .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
   .RIGHT$offDataArr <- c(.RIGHT$offDataArr, dataObj)
-  # .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
+  .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
   
   # assign(offName, eval(parse(text = expr)))                 
   

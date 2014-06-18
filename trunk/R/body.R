@@ -85,21 +85,49 @@ addEventTrigger <- function(numAxis = NULL) {
 # CHECK (junghoon): can these functions organized differently?
 # Create div block:
 createDiv <- function(divArray = NULL) {
-  
+ 
   if (is.null(divArray)) {
     return(NULL)
   } # if 
   
   tempArray <- '<div id="content">\n'
   divIndex <- 1
+  divId <- c()
+  
+  if(.RIGHT$numServer > 0) {
+    
+    for(iData in .RIGHT$numAxis) {
+      
+      divId <- c(divId, paste("content", iData, sep=""))
+      
+      for(i in 1:length(.RIGHT$offIndex) ) {
+        
+        if(iData == .RIGHT$offIndex[i]) {
+          
+          divId[iData] <- .RIGHT$offNameArr[divIndex]
+          divIndex <- divIndex+1
+          break
+          
+        } # if
+        
+      } # for
+      
+    } # for
+  
+  } else {
+    
+    for(iData in .RIGHT$numAxis) {
+      
+      divId <- c(divId, paste("content", iData, sep="")) 
+    } # for
+    
+  } # if
   
   # match 1 content to 1 container
   for(temp in divArray) {
-	  
-    tempArray <- paste(tempArray, '<div id="content', divIndex, '" class = "right-output">\n',
+    
+    tempArray <- paste(tempArray, '<div id="', divId, '" class = "right-output">\n',
 						           temp, "</div>\n", sep = "")					
-	  divIndex <- divIndex + 1
-  
   } # for
   
   return(c(tempArray, "</div>"))

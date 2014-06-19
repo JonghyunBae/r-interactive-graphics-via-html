@@ -48,24 +48,27 @@ loadData <- function(nameArray = NULL) {
   if (!is.null(nameArray)) {
     
     # Data objects should be loaded before any plotting:
-    for(iData in 1:numData)
+    for(iData in 1:numData) {
       .RIGHT$scriptArray <- c(paste0("var ",nameArray[iData], ' = createMainStructureE(rawArr',iData, ');'), 
                             .RIGHT$scriptArray) 
+      
+      .RIGHT$drawArray <- c(.RIGHT$drawArray, nameArray[iData])
+    } # for
   } # if
   
   invisible()
   
-} # function loadDataE
+} # function loadData
 
 # This function has side effects:
-addDrawTrigger <- function(nameArray = NULL) {
+addDrawTrigger <- function(drawArray = NULL) {
   
-  if(is.null(nameArray)) {
+  if(is.null(drawArray)) {
     return(NULL)
   } # if
   
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                               paste0(nameArray, ".draw();"))
+                               paste0(drawArray, ".draw();"))
 }
 
 # This function has side effects:
@@ -96,7 +99,7 @@ createDiv <- function(divArray = NULL) {
   
   if(.RIGHT$numServer > 0) {
     
-    for(iData in .RIGHT$numAxis) {
+    for(iData in 1:.RIGHT$numAxis) {
       
       divId <- c(divId, paste("content", iData, sep=""))
       
@@ -116,18 +119,16 @@ createDiv <- function(divArray = NULL) {
   
   } else {
     
-    for(iData in .RIGHT$numAxis) {
-      
+    for(iData in .RIGHT$numAxis) 
       divId <- c(divId, paste("content", iData, sep="")) 
-    } # for
     
   } # if
   
   # match 1 content to 1 container
-  for(temp in divArray) {
+  for(iData in 1:length(divArray)) {
     
-    tempArray <- paste(tempArray, '<div id="', divId, '" class = "right-output">\n',
-						           temp, "</div>\n", sep = "")					
+    tempArray <- paste(tempArray, '<div id="', divId[iData], '" class = "right-output">\n',
+                       divArray[iData], "</div>\n", sep = "")					
   } # for
   
   return(c(tempArray, "</div>"))

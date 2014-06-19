@@ -88,6 +88,10 @@ createHead <- function(title) {
   
   meta <- '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
   
+  if(.RIGHT$numServer > 0) {
+    meta <- c(meta, '  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>')
+  } # if
+  
   # Links and sourced scripts:
   linkArray <- createLink(.RIGHT$linkArray)
   if (!is.null(linkArray)) {

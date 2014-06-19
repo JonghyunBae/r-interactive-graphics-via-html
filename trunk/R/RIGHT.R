@@ -45,6 +45,7 @@ initRIGHT <- function() {
   # Variables used to build the html file:
   .RIGHT$divArray <- c()
   .RIGHT$scriptArray <- c()
+  .RIGHT$drawArray <- c()
   
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
@@ -137,11 +138,6 @@ RIGHT <- function(expr = {},
                                       pie = pie_RIGHT,
                                       search = search_RIGHT,
                                       table = table_RIGHT))
-  # print(.RIGHT$numAxis)
-  # Add event handler:
-  appendBlankLine()
-  addDrawTrigger(.RIGHT$nameArray)
-  addEventTrigger(.RIGHT$numAxis)
   
   ## ---
   ## Process data.frame objects:
@@ -175,6 +171,10 @@ RIGHT <- function(expr = {},
   prependBlankLine()
   loadData(nameArray)
   
+  # Add event handler:
+  appendBlankLine()
+  addDrawTrigger(.RIGHT$drawArray)
+  addEventTrigger(.RIGHT$numAxis)
   ## ---
   ## Setup directory:
   ##
@@ -251,7 +251,7 @@ RIGHT <- function(expr = {},
   ## ---
   ## Assemble the RIGHT object:
   ## ---
-
+  
   return(structure(list(dir = dir,
                         browser = browser),
                    class = "RIGHT"))
@@ -276,7 +276,11 @@ print.RIGHT <- function(x, ...) {
     stop("cleanup was called on the object.")
   } # if
   
-  browseURL(fileName_index, browser = x$browser)
+  if(!(.RIGHT$numServer)) {
+    browseURL(fileName_index, browser = x$browser)
+  } else {
+    runApp(x$dir)
+  } # if
   
 } # function print.RIGHT
 
@@ -319,9 +323,24 @@ runServer.RIGHT <- function(dataObj, offName, expr = {}) {
   .RIGHT$offFlag <- 1
   .RIGHT$numServer <- .RIGHT$numServer + 1
   
+  if(.RIGHT$numServer == 1) {
+    
+    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared"), "jquery.js"))
+    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared"), "shiny.js"))
+    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/bootstrap/js"), "bootstrap.min.js"))
+    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/slider/js"), "jquery.slider.min.js"))
+    addSource(file.path(.RIGHT$libDir_RIGHT, "shiny-right.js"))
+    
+    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared"), "shiny.css"))
+    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/bootstrap/css"), "bootstrap-responsive.min.css"))
+    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/bootstrap/css"), "bootstrap.min.css"))
+    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/slider/css"), "jquery.slider.min.css"))
+  
+  } # if
+  
   # Copy user's code and base code about server-offloading
   .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
-                              "\toutput$", offName, " <- reactive({ \n",
+                              "\n\toutput$", offName, " <- reactive({ \n",
                               "\t\tif (length(input$", dataObj, ") != 0) { \n",
                               "\t\t\tif (length(input$", dataObj, ") > 1) { \n",
                               "\t\t\t\t",dataObj, " <- .", dataObj, "[!input$", dataObj, ", ]\n",
@@ -334,7 +353,5 @@ runServer.RIGHT <- function(dataObj, offName, expr = {}) {
   .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
   .RIGHT$offDataArr <- c(.RIGHT$offDataArr, dataObj)
   .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
-  
-  # assign(offName, eval(parse(text = expr)))                 
   
 } # function runServer.RIGHT

@@ -76,7 +76,7 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   
     # Increment the number of points:
     .RIGHT$numLines <- .RIGHT$numLines + 1
-    print(data)
+ 
     # Add script in body:
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  c(paste0("var lineObj", .RIGHT$numLines,
@@ -89,22 +89,25 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
                                           ", 'x1', 'x2', 'y1', 'y2', ",
                                           createObject(baseColor = col, alwaysObject = TRUE), ");")))
     
-    # Source dot.js in head:
-    addSource(file.path(.RIGHT$libDir_RIGHT, "line.js"))
-    
     invisible()
   } else {
   
+    axis <- strsplit(form, "~")
+    
     .RIGHT$offFlag <- 0
     numServer <- .RIGHT$numServer
     numAxis <- .RIGHT$numAxis
-    # print(.RIGHT$numServer)
-    .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
-                                 "var ", data," = createMainStructureE('Theoph');\n",
-                                 "var loffObj", numServer, " = new MakeLineObj(", data, ", 'Time', 'conc', {} );\n",
-                                 "var lOff", numServer, " = new Line(axis", numAxis, ", loffObj", numServer,
-                                 ", 'x1', 'x2', 'y1', 'y2', {} );\n", sep="")
+    dataObj <- .RIGHT$offDataArr[numServer]
     
+    .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
+                                 "var ", data," = createMainStructureE('", dataObj, "');\n",
+                                 "var loffObj", numServer, " = new MakeLineObj(", data, ", '", axis[[1]][2], "', '", 
+                                 axis[[1]][1], "', {} );\n",
+                                 "var loff", numServer, " = new Line(axis", numAxis, ", loffObj", numServer,
+                                 ", 'x1', 'x2', 'y1', 'y2', {} );\n", sep="")
   } # if
+  
+  # Source dot.js in head:
+  addSource(file.path(.RIGHT$libDir_RIGHT, "line.js"))
   
 } # function lines_RIGHT

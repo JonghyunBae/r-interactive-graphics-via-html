@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="jsfiles/right.css"/>
+  <link rel="stylesheet" type="text/css" href="jsfiles/shared/shiny.css"/>
+  <link rel="stylesheet" type="text/css" href="jsfiles/shared/bootstrap/css/bootstrap-responsive.min.css"/>
+  <link rel="stylesheet" type="text/css" href="jsfiles/shared/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="jsfiles/shared/slider/css/jquery.slider.min.css"/>
+
+  <title>RIGHT: R Interactive Graphics via HTml</title>
+
+  <script src="jsfiles/kinetic-v5.0.1.js" type="text/javascript"></script>
+  <script src="jsfiles/common.js" type="text/javascript"></script>
+  <script src="jsfiles/structure.js" type="text/javascript"></script>
+  <script src="jsfiles/axis.js" type="text/javascript"></script>
+  <script src="jsfiles/color.js" type="text/javascript"></script>
+  <script src="jsfiles/callback.js" type="text/javascript"></script>
+  <script src="jsfiles/node_event.js" type="text/javascript"></script>
+  <script src="jsfiles/menu.js" type="text/javascript"></script>
+  <script src="jsfiles/array.js" type="text/javascript"></script>
+  <script src="jsfiles/dot.js" type="text/javascript"></script>
+  <script src="jsfiles/shared/jquery.js" type="text/javascript"></script>
+  <script src="jsfiles/shared/shiny.js" type="text/javascript"></script>
+  <script src="jsfiles/shared/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="jsfiles/shared/slider/js/jquery.slider.min.js" type="text/javascript"></script>
+  <script src="jsfiles/shiny-right.js" type="text/javascript"></script>
+  <script src="jsfiles/line.js" type="text/javascript"></script>
+  <script src="jsfiles/bar.js" type="text/javascript"></script>
+  <script src="jsfiles/data.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+  <div id="content">
+<div id="loessArray" class = "right-output">
+<div id="container1" oncontextmenu="return false;"></div></div>
+<div id="content2" class = "right-output">
+<div id="container2" oncontextmenu="return false;"></div></div>
+<div id="lmArray" class = "right-output">
+<div id="container3" oncontextmenu="return false;"></div></div>
+<div id="content4" class = "right-output">
+<div id="container4" oncontextmenu="return false;"></div></div>
+
+  </div>
+
+  <script>
+    var Theoph = createMainStructureE(rawArr2);
+    var subDiamonds = createMainStructureE(rawArr1);
+    
+    var axis1 = new Axis(1, subDiamonds, 'carat', 'price', {});
+    var point1 = new Dot(axis1, subDiamonds, 'carat', 'price', {});
+    var histObj1 = new ddply(subDiamonds, ['color'], {});
+    var axis2 = new Axis(2, histObj1, 'color', 'frequency', {});
+    var hist1 = new Bar(axis2, histObj1, 'color', 'frequency', {});
+    var axis3 = new Axis(3, Theoph, 'Time', 'conc', {});
+    var point2 = new Dot(axis3, Theoph, 'Time', 'conc', {});
+    var histObj2 = new ddply(Theoph, ['Time'], {});
+    var axis4 = new Axis(4, histObj2, 'Time', 'frequency', {});
+    var hist2 = new Bar(axis4, histObj2, 'Time', 'frequency', {});
+    
+    subDiamonds.draw();
+    Theoph.draw();
+    var AllAxisObjArr = [axis1, axis2, axis3, axis4]; eventTrigger(AllAxisObjArr);
+  </script>
+
+<script>
+var loessArray = createMainStructureE('subDiamonds');
+var loffObj1 = new MakeLineObj(loessArray, 'carat', 'price', {} );
+var loff1 = new Line(axis1, loffObj1, 'x1', 'x2', 'y1', 'y2', {} );
+var lmArray = createMainStructureE('Theoph');
+var loffObj2 = new MakeLineObj(lmArray, 'Time', 'conc', {} );
+var loff2 = new Line(axis3, loffObj2, 'x1', 'x2', 'y1', 'y2', {} );
+$(function() {
+setTimeout(function() {
+window.Shiny.onInputChange('subDiamonds', subDiamonds.$isHidden);
+window.Shiny.onInputChange('Theoph', Theoph.$isHidden);
+}, 1)
+});
+ </script>
+
+  <div id="footer">
+  <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>
+  <p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>
+  </div>
+
+</body>
+</html>

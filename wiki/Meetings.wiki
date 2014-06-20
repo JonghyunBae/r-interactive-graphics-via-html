@@ -27,6 +27,21 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 20 June2014 ==
+
+Participants : Jae W. Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for this weekend
+   # Make function in RIGHT.R to generate server.R and index.html
+     * Using JSON file to read origin data in server.R
+     * Problem : can't access using absolute path to use javascript source file
+     * Temporary solution : Think about using cookie file in javascript
+                             -> need to find more informaion
+   # Study about event part of javascript 
+     * Hide option must know during this week
+
+  Next meeting : 10:00 (Korea time) on Fri, 6/20
+
 == 13 June2014 ==
 
 Participants : Jung Hoon Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae

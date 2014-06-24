@@ -62,7 +62,7 @@ table_RIGHT <- function(data, height = 200L, isString = FALSE) {
                                    ', ', height, ');'))
   
   # Source dot.js in head:
-  addSource(file.path(.RIGHT$libDir_RIGHT, "table.js"))
+  addSource("table.js")
   
   invisible()
   

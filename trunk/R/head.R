@@ -35,6 +35,13 @@ createSource <- function(sourceArray = NULL) {
   # Remove empty strings:
   sourceArray <- sourceArray[sourceArray != ""]
   
+  if(!.RIGHT$numServer) 
+    sourceArray <- paste(.RIGHT$libDir_RIGHT, sourceArray, sep="/")
+  else
+    sourceArray <- paste("Javascript/", sourceArray, sep="")
+  
+  sourceArray <- append(sourceArray, "data.js")
+  
   return(paste0('<script src="', sourceArray, '" type="text/javascript"></script>'))
   
 } # createSource
@@ -69,6 +76,11 @@ createLink <- function(linkArray = NULL) {
 
   linkArray <- unique(linkArray)
   linkArray <- linkArray[linkArray != ""]
+    
+  if(!.RIGHT$numServer) 
+    linkArray <- paste(.RIGHT$libDir_RIGHT, linkArray, sep="/")
+  else
+    linkArray <- paste("Javascript/", linkArray, sep="")
   
   return(paste0('<link rel="stylesheet" type="text/css" href="', linkArray, '"/>'))
   
@@ -100,9 +112,6 @@ createHead <- function(title) {
   
   sourceArray <- createSource(.RIGHT$sourceArray)
   
-  # Write html code to load data in 'data.js' file
-  
-    
   if (!is.null(sourceArray)) {
     sourceArray <- paste0("  ", sourceArray)
   } # if

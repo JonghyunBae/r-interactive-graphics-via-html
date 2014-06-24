@@ -80,6 +80,6 @@ hist_RIGHT <- function(x, data, color = NULL, isString = FALSE) {
                                         ", '", x, "', 'frequency', {});")))
   
   # Source bar.js in head:
-  addSource(file.path(.RIGHT$libDir_RIGHT, "bar.js"))
+  addSource("bar.js")
   
 } # function hist_RIGHT

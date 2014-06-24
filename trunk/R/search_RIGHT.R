@@ -55,8 +55,8 @@ search_RIGHT <- function(data, isString = FALSE) {
                                       '", ', data, ');'))
   
   # Source dot.js in head:
-  addSource(file.path(.RIGHT$libDir_RIGHT, "search.js"))
-  
+  addSource("search.js")
+
   invisible()
   
 } # function search_RIGHT

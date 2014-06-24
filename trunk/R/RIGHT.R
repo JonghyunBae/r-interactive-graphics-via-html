@@ -24,20 +24,18 @@ initRIGHT <- function() {
   .RIGHT$libDir_RIGHT <- system.file("JavaScript", package = "RIGHT")
   
   # Script files always necessary:
-  sourceArray <- c("kinetic-v5.0.1.js",
-                   "common.js",
-                   "structure.js",
-                   "axis.js",
-                   "color.js",
-                   "callback.js",
-                   "node_event.js",
-                   "menu.js",
-                   "array.js")
-  .RIGHT$sourceArray <- file.path(.RIGHT$libDir_RIGHT, sourceArray)
+  .RIGHT$sourceArray <- c("kinetic-v5.0.1.js",
+                          "common.js",
+                          "structure.js",
+                          "axis.js",
+                          "color.js",
+                          "callback.js",
+                          "node_event.js",
+                          "menu.js",
+                          "array.js")
   
   # Css files always necessary:
-  linkArray <- c("right.css")
-  .RIGHT$linkArray <- file.path(.RIGHT$libDir_RIGHT, linkArray)
+  .RIGHT$linkArray <- c("right.css")
   
   # Keep names of data.frame objects for checking:
   .RIGHT$nameArray <- c()
@@ -45,7 +43,6 @@ initRIGHT <- function() {
   # Variables used to build the html file:
   .RIGHT$divArray <- c()
   .RIGHT$scriptArray <- c()
-  .RIGHT$drawArray <- c()
   
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
@@ -173,7 +170,7 @@ RIGHT <- function(expr = {},
   
   # Add event handler:
   appendBlankLine()
-  addDrawTrigger(.RIGHT$drawArray)
+  addDrawTrigger(nameArray)
   addEventTrigger(.RIGHT$numAxis)
   ## ---
   ## Setup directory:
@@ -201,6 +198,9 @@ RIGHT <- function(expr = {},
   ## ---
   tempArray <- c()
   if(.RIGHT$numServer != 0) {
+    
+    scriptTo <- file.path(dir, "www")    
+    file.copy(.RIGHT$libDir_RIGHT, scriptTo, recursive = TRUE)
     
     for(name in .RIGHT$offDataArr) {
       
@@ -319,22 +319,22 @@ clean <- function(obj) {
   
 } # function clean
 
-runServer.RIGHT <- function(dataObj, offName, expr = {}) {
+runServer <- function(dataObj, offName, expr = {}) {
   .RIGHT$offFlag <- 1
   .RIGHT$numServer <- .RIGHT$numServer + 1
   
   if(.RIGHT$numServer == 1) {
     
-    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared"), "jquery.js"))
-    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared"), "shiny.js"))
-    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/bootstrap/js"), "bootstrap.min.js"))
-    addSource(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/slider/js"), "jquery.slider.min.js"))
-    addSource(file.path(.RIGHT$libDir_RIGHT, "shiny-right.js"))
+    addSource("shared/jquery.js")
+    addSource("shared/shiny.js")
+    addSource("shared/bootstrap/js/bootstrap.min.js")
+    addSource("shared/slider/js/jquery.slider.min.js")
+    addSource("shiny-right.js")
     
-    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared"), "shiny.css"))
-    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/bootstrap/css"), "bootstrap-responsive.min.css"))
-    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/bootstrap/css"), "bootstrap.min.css"))
-    addLink(file.path(paste0(.RIGHT$libDir_RIGHT,"/shared/slider/css"), "jquery.slider.min.css"))
+    addLink("shared/shiny.css")
+    addLink("shared/bootstrap/css/bootstrap-responsive.min.css")
+    addLink("shared/bootstrap/css/bootstrap.min.css")
+    addLink("shared/slider/css/jquery.slider.min.css")
   
   } # if
   
@@ -353,5 +353,9 @@ runServer.RIGHT <- function(dataObj, offName, expr = {}) {
   .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
   .RIGHT$offDataArr <- c(.RIGHT$offDataArr, dataObj)
   .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
+  
+ 
+  assign(offName, eval(parse(text = expr)))  
+  return (structure(eval(parse(text = offName)), class = "RIGHTServer"))
   
 } # function runServer.RIGHT

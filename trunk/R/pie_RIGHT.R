@@ -76,6 +76,6 @@ pie_RIGHT <- function(x, data, isString = FALSE) {
                                         ", '", x, "', 'frequency', {});")))
   
   # Source pie.js in head:
-  addSource(file.path(.RIGHT$libDir_RIGHT, "pie.js"))
+  addSource("pie.js")
   
 } # function pie_RIGHT

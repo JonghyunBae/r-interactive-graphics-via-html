@@ -77,6 +77,10 @@ boxplot_RIGHT <- function(form, data, col = NULL, isString = FALSE) {
                                         ", ", createObject(baseColor = col, alwaysObject = TRUE), ");")))
   
   # Source box.js in head:
-  addSource(file.path(.RIGHT$libDir_RIGHT, "box.js"))
+  #if(!.RIGHT$numServer)
+  #  addSource(file.path(.RIGHT$libDir_RIGHT, "box.js"))
+  #else
+  
+  addSource("box.js")
   
 } # function boxplot_RIGHT

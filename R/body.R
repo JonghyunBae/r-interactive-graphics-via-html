@@ -36,8 +36,7 @@ prepareData <- function(dataList, dir = ".") {
   } # for
   
   # Write dataScript to "data.js" file
-  writeLines(as.character(dataScript), con=file.path(dir, "data.js"))
-  addSource('../data.js')
+  writeLines(as.character(dataScript), con=file.path(dir, "www", "data.js"))
   
 } # function prepareDataE
 
@@ -51,8 +50,6 @@ loadData <- function(nameArray = NULL) {
     for(iData in 1:numData) {
       .RIGHT$scriptArray <- c(paste0("var ",nameArray[iData], ' = createMainStructureE(rawArr',iData, ');'), 
                             .RIGHT$scriptArray) 
-      
-      .RIGHT$drawArray <- c(.RIGHT$drawArray, nameArray[iData])
     } # for
   } # if
   
@@ -61,14 +58,14 @@ loadData <- function(nameArray = NULL) {
 } # function loadData
 
 # This function has side effects:
-addDrawTrigger <- function(drawArray = NULL) {
+addDrawTrigger <- function(nameArray = NULL) {
   
-  if(is.null(drawArray)) {
+  if(is.null(nameArray)) {
     return(NULL)
   } # if
   
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                               paste0(drawArray, ".draw();"))
+                               paste0(nameArray, ".draw();"))
 }
 
 # This function has side effects:

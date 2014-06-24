@@ -77,7 +77,7 @@ points_RIGHT <- function(form, data, isString = FALSE) {
                                       createObject(baseColor = col, alwaysObject = TRUE) ,");"))
   
   # Source dot.js in head:
-  addSource(file.path(.RIGHT$libDir_RIGHT, "dot.js"))
+  addSource("dot.js")
   
   invisible()
   

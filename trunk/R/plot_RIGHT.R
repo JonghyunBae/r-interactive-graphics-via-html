@@ -25,7 +25,8 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
 
   # @param col color used for all the visual elements. color option overrides \code{col} option.
   col <- NULL # TEMPORARY
-  
+  offPlot <- FALSE
+   
   ## ---
   ## Take strings if asked:
   ## ---
@@ -33,11 +34,17 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
   argArray <- as.list(match.call())
   
   if (!isString) {
+        
+    if(is(data, "RIGHTServer") == TRUE) {
+      offPlot <- TRUE
+    } else {
+      .RIGHT$curDataObj <- argArray$data
+    }
     
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     color <- if (is.null(argArray$color)) NULL else as.character(argArray$color)
     by <- if (is.null(argArray$by)) color else as.character(argArray$by) # CHECK (junghoon): is this the best way?
-    
+      
   } # if
   
   ## ---
@@ -70,9 +77,11 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
   ## Create an axis:
   ## ---
   
-  # Keep name of the data object:
-  .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
-
+  if(offPlot == FALSE) {
+    # Keep name of the data object:
+    .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
+  } # if
+  
   # Increment the number of axes:
   .RIGHT$numAxis <- .RIGHT$numAxis + 1
   
@@ -81,31 +90,76 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
                             paste0('<div id="container', .RIGHT$numAxis,
                                    '" oncontextmenu="return false;"></div>'))
   
-  # Add script in body:
-  .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                               paste0("var axis", .RIGHT$numAxis,
-                                      " = new Axis(", .RIGHT$numAxis, 
-                                      ", ", data,
-                                      ", '", axisName$x, "', '", axisName$y, 
-                                      "', ", createObject(legend = color, alwaysObject = TRUE), ");"))
-  
-  ## ---
-  ## Plot lines if necessary:
-  ## ---
-
-  # CHECK (junghoon): refine this to support type == "c" as well.
-  if (type == "l" || type == "b") {
-#     lines_RIGHT(form, data, col = col, isString = TRUE)
-    lines_RIGHT(form, data, by = by, isString = TRUE)
-  } # if
-  
-  ## ---
-  ## Plot points if necessary:
-  ## ---
-  
-  if (type == "p" || type == "b") {
-#     points_RIGHT(form, data, col = col, isString = TRUE)
-    points_RIGHT(form, data, isString = TRUE)
+  if(offPlot == FALSE) {
+    
+    # Add script in body:
+    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                 paste0("var axis", .RIGHT$numAxis,
+                                        " = new Axis(", .RIGHT$numAxis, 
+                                        ", ", data,
+                                        ", '", axisName$x, "', '", axisName$y, 
+                                        "', ", createObject(legend = color, alwaysObject = TRUE), ");"))
+    ## ---
+    ## Plot lines if necessary:
+    ## ---
+    
+    # CHECK (junghoon): refine this to support type == "c" as well.
+    if (type == "l" || type == "b") {
+      #     lines_RIGHT(form, data, col = col, isString = TRUE)
+      lines_RIGHT(form, data, by = by, isString = TRUE)
+    } # if
+    
+    ## ---
+    ## Plot points if necessary:
+    ## ---
+    
+    if (type == "p" || type == "b") {
+      #     points_RIGHT(form, data, col = col, isString = TRUE)
+      points_RIGHT(form, data, isString = TRUE)
+    } # if
+    
+  } else {
+    for(iData in 1:length(.RIGHT$offNameArr)) {
+      
+      if(data == .RIGHT$offNameArr[iData]) {
+        break
+      } # if
+      
+    } # for
+    
+    .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
+    
+    .RIGHT$offDataArr <- c(.RIGHT$offDataArr, .RIGHT$curDataObj)
+ 
+    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                 paste0("var axis", .RIGHT$numAxis,
+                                        " = new Axis(", .RIGHT$numAxis, 
+                                        ", ", .RIGHT$curDataObj,
+                                        ", '", axisName$x, "', '", axisName$y, 
+                                        "', ", createObject(legend = color, alwaysObject = TRUE), ");", sep = ""))
+    
+    .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
+                                "\n\toutput$", data, " <- reactive({ \n",
+                                "\t\tif (length(input$", .RIGHT$curDataObj, ") != 0) { \n",
+                                "\t\t\tif (length(input$", .RIGHT$curDataObj, ") > 1) { \n",
+                                "\t\t\t\t",.RIGHT$curDataObj, " <- .", .RIGHT$curDataObj, "[!input$", .RIGHT$curDataObj, ", ]\n",
+                                "\t\t\t\t",.RIGHT$exprArray[iData], "\n",
+                                "\t\t\t} else { \n",
+                                "\t\t\t\toutput <- list(-1, -1) \n",
+                                "\t\t\t\treturn (output) \n",
+                                "\t\t\t}\n\t\t}\n\t})" , sep = "")
+    
+    .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
+                                 "var ", data," = createMainStructureE('", 
+                                 .RIGHT$curDataObj, "');\n",
+                                 "var loffObj", iData, 
+                                 " = new MakeLineObj(", data, 
+                                 ", '", axisName$x, "', '", axisName$y, "', { });\n",
+                                 "var loff", iData, 
+                                 " = new Line(axis", .RIGHT$numAxis, ", loffObj", iData,
+                                 ", 'x1', 'x2', 'y1', 'y2', { });\n", sep = "")
+    addSource("line.js")
+    
   } # if
   
   invisible()

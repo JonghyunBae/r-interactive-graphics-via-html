@@ -100,7 +100,7 @@ createDiv <- function(divArray = NULL) {
       
       divId <- c(divId, paste("content", iData, sep=""))
       
-      for(i in 1:length(.RIGHT$offIndex) ) {
+      for(i in 1:length(.RIGHT$offIndex)) {
         
         if(iData == .RIGHT$offIndex[i]) {
           

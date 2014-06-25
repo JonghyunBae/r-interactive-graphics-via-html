@@ -20,6 +20,7 @@
 lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   
   col <- NULL # TEMPORARY
+  offLines <- FALSE
   
   ## ---
   ## Take strings if asked:
@@ -29,6 +30,9 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   argArray <- as.list(match.call())
   
   if (!isString) {
+    if(is(data, "RIGHTServer")) {
+      offLines <- TRUE
+    }
     
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     by <- if (is.null(argArray$by)) NULL else as.character(argArray$by)
@@ -70,7 +74,7 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   ## ---
 
   # Keep name of the data object:
-  if(is(attr(argArray$data, "class"), "RIGHTServer")) {
+  if(offLines == FALSE) {
     
     .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
   
@@ -88,27 +92,44 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
                                           ", lineObj", .RIGHT$numLines,
                                           ", 'x1', 'x2', 'y1', 'y2', ",
                                           createObject(baseColor = col, alwaysObject = TRUE), ");")))
-    
-    invisible()
-  
   } else {
-  
-    .RIGHT$offFlag <- 0
+    
+    for(iData in 1:length(.RIGHT$offNameArr)) {
+      
+      if(data == .RIGHT$offNameArr[iData]) {
+        break
+      } # if
+      
+    } # for
+    
+    .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
+    .RIGHT$offDataArr <- c(.RIGHT$offDataArr, .RIGHT$curDataObj)
+    
+    .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
+                                "\n\toutput$", data, " <- reactive({ \n",
+                                "\t\tif (length(input$", .RIGHT$curDataObj, ") != 0) { \n",
+                                "\t\t\tif (length(input$", .RIGHT$curDataObj, ") > 1) { \n",
+                                "\t\t\t\t",.RIGHT$curDataObj, " <- .", .RIGHT$curDataObj, "[!input$", .RIGHT$curDataObj, ", ]\n",
+                                "\t\t\t\t",.RIGHT$exprArray[iData], "\n",
+                                "\t\t\t} else { \n",
+                                "\t\t\t\toutput <- list(-1, -1) \n",
+                                "\t\t\t\treturn (output) \n",
+                                "\t\t\t}\n\t\t}\n\t})" , sep = "")
     
     .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
                                  "var ", data," = createMainStructureE('", 
-                                 .RIGHT$offDataArr[.RIGHT$numServer], "');\n",
-                                 "var loffObj", .RIGHT$numServer, 
+                                 .RIGHT$curDataObj, "');\n",
+                                 "var loffObj", iData, 
                                  " = new MakeLineObj(", data, 
                                  ", '", axisName$x, "', '", axisName$y, "', ",
                                  createObject(group = by, alwaysObject = TRUE),");\n",
-                                 "var loff", .RIGHT$numServer, 
-                                 " = new Line(axis", .RIGHT$numAxis, ", loffObj", .RIGHT$numServer,
+                                 "var loff", iData, 
+                                 " = new Line(axis", .RIGHT$numAxis, ", loffObj", iData,
                                  ", 'x1', 'x2', 'y1', 'y2', ", 
                                  createObject(baseColor = col, alwaysObject = TRUE), ");\n", sep = "")
-    
-    invisible()
   }
+  
+  invisible()
   
   # Source dot.js in head:
   addSource("line.js")

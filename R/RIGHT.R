@@ -46,14 +46,15 @@ initRIGHT <- function() {
   
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
+  .RIGHT$exprArray <- c()
   .RIGHT$numServer <- 0
   
   # Variables used to build the html file using server-offloading:
   .RIGHT$serverScript <- "<script>\n"
-  .RIGHT$offFlag <- 0
   .RIGHT$offIndex <- c()
   .RIGHT$offDataArr <- c()
   .RIGHT$offNameArr <- c()
+  .RIGHT$curDataObj <- c()
   
   # Variables used to track different plots:
   .RIGHT$numAxis <- 0
@@ -127,6 +128,7 @@ RIGHT <- function(expr = {},
   
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
+  
   eval(substitute(expr), envir = list(plot = plot_RIGHT,
                                       points = points_RIGHT,
                                       lines = lines_RIGHT,
@@ -196,12 +198,27 @@ RIGHT <- function(expr = {},
   ## ---
   ## Assemble server.R code if user uses server-offloading
   ## ---
-  tempArray <- c()
+  
   if(.RIGHT$numServer != 0) {
     
+    # add files to use server-offloading
+    addSource("shared/jquery.js")
+    addSource("shared/shiny.js")
+    addSource("shared/bootstrap/js/bootstrap.min.js")
+    addSource("shared/slider/js/jquery.slider.min.js")
+    addSource("shiny-right.js")
+    
+    addLink("shared/shiny.css")
+    addLink("shared/bootstrap/css/bootstrap-responsive.min.css")
+    addLink("shared/bootstrap/css/bootstrap.min.css")
+    addLink("shared/slider/css/jquery.slider.min.css")
+    
+    # copt files about javascript polder
     scriptTo <- file.path(dir, "www")    
     file.copy(.RIGHT$libDir_RIGHT, scriptTo, recursive = TRUE)
+    tempArray <- c()
     
+    # make JSON file to open in server.R
     for(name in .RIGHT$offDataArr) {
       
       writeLines(toJSON(eval(parse(text = name))), 
@@ -211,12 +228,14 @@ RIGHT <- function(expr = {},
                          ".", name, '<- data.frame(fromJSON("', name, '.JSON"))\n', sep="")
     } # for
     
+    # make server.R file
     writeLines(c(tempArray,
                  "shinyServer(function(input, output) {",
                  .RIGHT$serverArray,
                  "})" ),
                con = file.path(dir, "server.R"))
-        
+    
+    # generate html code about server-offloading
     .RIGHT$serverScript <- paste(.RIGHT$serverScript,
                                  "$(function() {\n",
                                  "setTimeout(function() {\n",
@@ -319,43 +338,14 @@ clean <- function(obj) {
   
 } # function clean
 
-runServer <- function(dataObj, offName, expr = {}) {
-  .RIGHT$offFlag <- 1
+runServer <- function(offName, expr = {}) {
+  
   .RIGHT$numServer <- .RIGHT$numServer + 1
   
-  if(.RIGHT$numServer == 1) {
-    
-    addSource("shared/jquery.js")
-    addSource("shared/shiny.js")
-    addSource("shared/bootstrap/js/bootstrap.min.js")
-    addSource("shared/slider/js/jquery.slider.min.js")
-    addSource("shiny-right.js")
-    
-    addLink("shared/shiny.css")
-    addLink("shared/bootstrap/css/bootstrap-responsive.min.css")
-    addLink("shared/bootstrap/css/bootstrap.min.css")
-    addLink("shared/slider/css/jquery.slider.min.css")
-  
-  } # if
-  
   # Copy user's code and base code about server-offloading
-  .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
-                              "\n\toutput$", offName, " <- reactive({ \n",
-                              "\t\tif (length(input$", dataObj, ") != 0) { \n",
-                              "\t\t\tif (length(input$", dataObj, ") > 1) { \n",
-                              "\t\t\t\t",dataObj, " <- .", dataObj, "[!input$", dataObj, ", ]\n",
-                              "\t\t\t\t",expr, "\n",
-                              "\t\t\t} else { \n",
-                              "\t\t\t\toutput <- list(-1, -1) \n",
-                              "\t\t\t\treturn (output) \n",
-                              "\t\t\t}\n\t\t}\n\t})" , sep = "")
-  
-  .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
-  .RIGHT$offDataArr <- c(.RIGHT$offDataArr, dataObj)
+  .RIGHT$exprArray <- c(.RIGHT$exprArray, expr)
   .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
-  
- 
-  assign(offName, eval(parse(text = expr)))  
-  return (structure(eval(parse(text = offName)), class = "RIGHTServer"))
+   
+  return (structure(eval(parse(text = expr)), class = "RIGHTServer"))
   
 } # function runServer.RIGHT

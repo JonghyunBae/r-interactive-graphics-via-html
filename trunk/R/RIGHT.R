@@ -47,13 +47,13 @@ initRIGHT <- function() {
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
   .RIGHT$exprArray <- c()
-  .RIGHT$numServer <- 0
+  .RIGHT$numServer <- FALSE
   
   # Variables used to build the html file using server-offloading:
   .RIGHT$serverScript <- "<script>\n"
-  .RIGHT$offIndex <- c()
   .RIGHT$offDataArr <- c()
   .RIGHT$offNameArr <- c()
+  .RIGHT$offIndex <- c()
   .RIGHT$curDataObj <- c()
   
   # Variables used to track different plots:
@@ -199,7 +199,7 @@ RIGHT <- function(expr = {},
   ## Assemble server.R code if user uses server-offloading
   ## ---
   
-  if(.RIGHT$numServer != 0) {
+  if(.RIGHT$numServer) {
     
     # add files to use server-offloading
     addSource("shared/jquery.js")
@@ -219,13 +219,14 @@ RIGHT <- function(expr = {},
     tempArray <- c()
     
     # make JSON file to open in server.R
-    for(name in .RIGHT$offDataArr) {
+    
+    for(name in unique(.RIGHT$offDataArr)) {
       
       writeLines(toJSON(eval(parse(text = name))), 
                  con = file.path(dir, paste0(name,".JSON")))
       
-      tempArray <- paste(tempArray, 
-                         ".", name, '<- data.frame(fromJSON("', name, '.JSON"))\n', sep="")
+      tempArray <- paste0(tempArray, 
+                         ".", name, '<- data.frame(fromJSON("', name, '.JSON"))\n')
     } # for
     
     # make server.R file
@@ -236,25 +237,26 @@ RIGHT <- function(expr = {},
                con = file.path(dir, "server.R"))
     
     # generate html code about server-offloading
-    .RIGHT$serverScript <- paste(.RIGHT$serverScript,
-                                 "$(function() {\n",
-                                 "setTimeout(function() {\n",
-                                 sep="")
+    .RIGHT$serverScript <- paste0(.RIGHT$serverScript,
+                                  "$(function() {\n",
+                                  "setTimeout(function() {\n")
     
+    tempArray <- c()
     for(name in .RIGHT$offDataArr) {
-      .RIGHT$serverScript <- paste(.RIGHT$serverScript,
-                                   "window.Shiny.onInputChange('", name, "', ", name,
-                                   ".$isHidden);\n",
-                                   sep = "")
+      tempArray <- append(tempArray,
+                          paste0("window.Shiny.onInputChange('", name, "', ", name,
+                                 ".$isHidden);\n"))
     } # for
 
+    for(name in unique(tempArray)) {
+      .RIGHT$serverScript <- paste0(.RIGHT$serverScript, name)  
+    } # for
     
-    .RIGHT$serverScript <- paste(.RIGHT$serverScript, "}, 1)\n",
-                                 "});\n", sep = "")
+    .RIGHT$serverScript <- paste0(.RIGHT$serverScript, "}, 1)\n});\n")  
     
   } # if
   
-  .RIGHT$serverScript <- paste(.RIGHT$serverScript, "</script>\n")
+  .RIGHT$serverScript <- paste0(.RIGHT$serverScript, "</script>\n")
     
   ## ---
   ## Assemble client-side code:
@@ -340,12 +342,12 @@ clean <- function(obj) {
 
 runServer <- function(offName, expr = {}) {
   
-  .RIGHT$numServer <- .RIGHT$numServer + 1
+  .RIGHT$numServer <- TRUE
   
   # Copy user's code and base code about server-offloading
   .RIGHT$exprArray <- c(.RIGHT$exprArray, expr)
   .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
    
-  return (structure(eval(parse(text = expr)), class = "RIGHTServer"))
+  return(structure(eval(parse(text = expr)), class = "RIGHTServer"))
   
 } # function runServer.RIGHT

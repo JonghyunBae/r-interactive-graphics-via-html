@@ -85,7 +85,7 @@ addEventTrigger <- function(numAxis = NULL) {
 # CHECK (junghoon): can these functions organized differently?
 # Create div block:
 createDiv <- function(divArray = NULL) {
- 
+   
   if (is.null(divArray)) {
     return(NULL)
   } # if 
@@ -94,24 +94,40 @@ createDiv <- function(divArray = NULL) {
   divIndex <- 1
   divId <- c()
   
-  if(.RIGHT$numServer > 0) {
+  if(.RIGHT$numServer) {
     
     for(iData in 1:.RIGHT$numAxis) {
       
-      divId <- c(divId, paste("content", iData, sep=""))
-      
+      tempIndex <- 0      
+      divId <- append(divId, "")
       for(i in 1:length(.RIGHT$offIndex)) {
         
         if(iData == .RIGHT$offIndex[i]) {
           
-          divId[iData] <- .RIGHT$offNameArr[divIndex]
-          divIndex <- divIndex+1
-          break
+          divId[iData] <- paste0(divId[iData], 
+                                 '<div id = "', .RIGHT$offNameArr[divIndex], '" class = "right-output">\n')
+          divIndex <- divIndex + 1
+          tempIndex <- tempIndex + 1
           
         } # if
         
       } # for
+            
+      if(tempIndex == 0) {
+        
+        divId[iData] <- paste0(divId[iData], 
+                               '<div id = "content', iData, '" class = "right-output">\n')
+        tempIndex <- tempIndex + 1
+        
+      } # if
       
+      tempArray <- paste0(tempArray, divId[iData], divArray[iData])
+      
+      for(i in 1:tempIndex) {
+        tempArray <- paste0(tempArray, "</div>")
+      } # for
+      tempArray <- paste0(tempArray, "\n")
+ 
     } # for
   
   } else {
@@ -120,14 +136,7 @@ createDiv <- function(divArray = NULL) {
       divId <- c(divId, paste("content", iData, sep="")) 
     
   } # if
-  
-  # match 1 content to 1 container
-  for(iData in 1:length(divArray)) {
     
-    tempArray <- paste(tempArray, '<div id="', divId[iData], '" class = "right-output">\n',
-                       divArray[iData], "</div>\n", sep = "")					
-  } # for
-  
   return(c(tempArray, "</div>"))
   
 } # function createDiv

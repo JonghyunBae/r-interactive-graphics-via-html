@@ -26,6 +26,7 @@ boxplot_RIGHT <- function(form, data, col = NULL, isString = FALSE) {
   
   if (!isString) {
     
+    .RIGHT$curDataObj <- argArray$data
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     
   } # if

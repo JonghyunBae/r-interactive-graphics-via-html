@@ -25,6 +25,7 @@ pie_RIGHT <- function(x, data, isString = FALSE) {
 
   if (!isString) {
     
+    .RIGHT$curDataObj <- argArray$data
     x <- if (is.null(argArray$x)) NULL else as.character(argArray$x)
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     

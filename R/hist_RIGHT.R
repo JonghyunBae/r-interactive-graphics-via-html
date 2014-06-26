@@ -25,6 +25,7 @@ hist_RIGHT <- function(x, data, color = NULL, isString = FALSE) {
   
   if (!isString) {
     
+    .RIGHT$curDataObj <- argArray$data
     x <- if (is.null(argArray$x)) NULL else as.character(argArray$x)
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     color <- if (is.null(argArray$color)) NULL else as.character(argArray$color)

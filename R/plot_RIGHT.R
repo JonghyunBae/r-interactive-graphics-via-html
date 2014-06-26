@@ -126,9 +126,8 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
       } # if
       
     } # for
-    
+        
     .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
-    
     .RIGHT$offDataArr <- c(.RIGHT$offDataArr, .RIGHT$curDataObj)
  
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
@@ -138,26 +137,26 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
                                         ", '", axisName$x, "', '", axisName$y, 
                                         "', ", createObject(legend = color, alwaysObject = TRUE), ");", sep = ""))
     
-    .RIGHT$serverArray <- paste(.RIGHT$serverArray, 
-                                "\n\toutput$", data, " <- reactive({ \n",
-                                "\t\tif (length(input$", .RIGHT$curDataObj, ") != 0) { \n",
-                                "\t\t\tif (length(input$", .RIGHT$curDataObj, ") > 1) { \n",
-                                "\t\t\t\t",.RIGHT$curDataObj, " <- .", .RIGHT$curDataObj, "[!input$", .RIGHT$curDataObj, ", ]\n",
-                                "\t\t\t\t",.RIGHT$exprArray[iData], "\n",
-                                "\t\t\t} else { \n",
-                                "\t\t\t\toutput <- list(-1, -1) \n",
-                                "\t\t\t\treturn (output) \n",
-                                "\t\t\t}\n\t\t}\n\t})" , sep = "")
+    .RIGHT$serverArray <- paste0(.RIGHT$serverArray, 
+                                 "\n\toutput$", data, " <- reactive({ \n",
+                                 "\t\tif (length(input$", .RIGHT$curDataObj, ") != 0) { \n",
+                                 "\t\t\tif (length(input$", .RIGHT$curDataObj, ") > 1) { \n",
+                                 "\t\t\t\t",.RIGHT$curDataObj, " <- .", .RIGHT$curDataObj, "[!input$", .RIGHT$curDataObj, ", ]\n",
+                                 "\t\t\t\t",.RIGHT$exprArray[iData], "\n",
+                                 "\t\t\t} else { \n",
+                                 "\t\t\t\toutput <- list(-1, -1) \n",
+                                 "\t\t\t\treturn (output) \n",
+                                 "\t\t\t}\n\t\t}\n\t})")
     
-    .RIGHT$serverScript <- paste(.RIGHT$serverScript, 
-                                 "var ", data," = createMainStructureE('", 
-                                 .RIGHT$curDataObj, "');\n",
-                                 "var loffObj", iData, 
-                                 " = new MakeLineObj(", data, 
-                                 ", '", axisName$x, "', '", axisName$y, "', { });\n",
-                                 "var loff", iData, 
-                                 " = new Line(axis", .RIGHT$numAxis, ", loffObj", iData,
-                                 ", 'x1', 'x2', 'y1', 'y2', { });\n", sep = "")
+    .RIGHT$serverScript <- paste0(.RIGHT$serverScript, 
+                                  "var ", data," = createMainStructureE('", 
+                                  .RIGHT$curDataObj, "');\n",
+                                  "var loffObj", iData, 
+                                  " = new MakeLineObj(", data, 
+                                  ", '", axisName$x, "', '", axisName$y, "', { });\n",
+                                  "var loff", iData, 
+                                  " = new Line(axis", .RIGHT$numAxis, ", loffObj", iData,
+                                  ", 'x1', 'x2', 'y1', 'y2', { });\n")
     addSource("line.js")
     
   } # if

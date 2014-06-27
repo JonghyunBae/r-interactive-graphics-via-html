@@ -29,6 +29,58 @@
 
 == 20 June2014 ==
 
+Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for this weekend
+   # Using runServer parameter "expr" -> not string
+   # Using data.js to parse data instead of using .JSON file
+   # Change example folder and folder name to use data.js
+   # Delete parameter about "offName"
+   # Debugging when we do not use data object before server-offloading graph
+   # change variable name "rawArr" to data object name
+   # make unit test code about R files
+   # Hide option must change during this week
+
+{{{
+RIGHT({ loessArray1 <- runServer({obj <- loess(carat ~ price, data = subDiamonds)
+			  	  xRange <- range(subDiamonds$price)
+				  simArray <- data.frame(price = seq(xRange[1], xRange[2], length.out = 132))
+				  simArray$carat <- predict(obj, newdata = simArray)                        
+			  	  return(simArray)})
+        lmArray1 <- runServer({obj <- lm(carat ~ price, data = subDiamonds)
+           		       xRange <- range(subDiamonds$price)
+ 			       simArray <- data.frame(price = seq(xRange[1], xRange[2], length.out = 132))
+ 			       simArray$carat <- predict(obj, newdata = simArray)                        
+ 			       return(simArray)})
+        plot(carat~price, subDiamonds, type="p")
+        lines(carat~price, loessArray1)
+        lines(carat~price, lmArray1)   
+	hist(depth, subDiamonds)
+        lmArray2 <- runServer({obj <- lm(depth ~ price, data = subDiamonds)
+       			       xRange <- range(subDiamonds$price)
+ 			       simArray <- data.frame(price = seq(xRange[1], xRange[2], length.out = 132))
+ 			       simArray$depth <- predict(obj, newdata = simArray)                        
+ 			       return(simArray)})
+        plot(depth ~ price, lmArray2, type="l") 
+        loessArray2 <- runServer({obj <- loess(conc ~ Time, data = Theoph)
+         			  xRange <- range(Theoph$Time)
+ 				  simArray <- data.frame(Time = seq(xRange[1], xRange[2], length.out = 132))
+ 				  simArray$conc <- predict(obj, newdata = simArray)                        
+ 				  return(simArray)})
+        lmArray3 <- runServer({obj <- lm(conc ~ Time, data = Theoph)
+         		       xRange <- range(Theoph$Time)
+ 			       simArray <- data.frame(Time = seq(xRange[1], xRange[2], length.out = 132))
+ 			       simArray$conc <- predict(obj, newdata = simArray)                        
+ 			       return(simArray)})
+        plot(conc~Time, loessArray2, type="l")
+        lines(conc~Time, lmArray3)}, Theoph)
+
+}}}
+
+  Next meeting : 10:00 (Korea time) on Fri, 7/04
+
+== 20 June2014 ==
+
 Participants : Jae W. Lee, Sang Gi Hong, Jong Hyun Bae
 
  * TO-DO list for this weekend

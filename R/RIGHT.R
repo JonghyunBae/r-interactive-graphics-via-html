@@ -47,7 +47,94 @@ initRIGHT <- function() {
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
   .RIGHT$exprArray <- c()
-  .RIGHT$numServer <- FALSE
+  .RIGHT$flagServer <- FALSE
+  .RIGHT$numServer <- 0
+  .RIGHT$parseData <- 'AlldataArr <- scan("./www/data.js", what="")
+
+dataObj <- c()
+  levelSt <- c()
+  levelArr <- c()
+  indexSt <- c()
+  indexEd <- c()
+  dataArr <- c()
+  
+  for(index in 1:length(AlldataArr)) {
+  
+  if(AlldataArr[index] == "=") {
+  
+  start <- index+1
+  objName <- paste0(".",AlldataArr[index-1])
+  
+  } else if(AlldataArr[index] == "};") {
+  
+  end <- index
+  AlldataArr[index] <- "}"
+  
+  dataObj <- AlldataArr[start:end]
+  
+  for(iData in start:end - start + 1) {
+  
+  if(dataObj[iData] == "level") {
+  levelSt <- append(levelSt, iData+3)
+  } else if(dataObj[iData] == "index") {
+  indexSt <- append(indexSt, iData+3)
+  } 
+  
+  } 
+  
+  for(iData in 1:length(levelSt)) {
+  
+  for(jData in seq(levelSt[iData], (indexSt[iData]-5), 2)) {
+  levelArr <- append(levelArr, dataObj[jData])
+  }
+  
+  jData <- indexSt[iData]
+  
+  while(dataObj[jData] != "]") {
+  
+  if(dataObj[jData+1] == "]") {
+  dataObj[jData] <- paste0(\'"\', levelArr[as.integer(dataObj[jData]) + 1], \'"\') 
+  } else {        
+  tempArr <- strsplit(dataObj[jData], ",")
+  dataObj[jData] <- paste0(\'"\', levelArr[as.integer(tempArr[[1]]) + 1], \'",\')        
+  } 
+  
+  jData <- jData+1
+  
+  } 
+  
+  indexEd <- append(indexEd, jData+1)
+  
+  if(dataObj[indexEd[iData]] == "},") {
+  dataObj[[indexEd[iData]]] <- "], "
+  } 
+  
+  levelArr <- c()
+  } 
+  
+  for(iData in length(levelSt):1) {  
+  dataObj <- dataObj[c(-(indexEd[iData]-1), -((indexSt[iData]-2) : (levelSt[iData]-4)))]
+  } 
+  
+  for(iData in 1:length(dataObj)) {
+  
+  if(dataObj[iData + 1] == ":" && iData < length(dataObj)) {
+  dataObj[iData] <- paste0(\'"\', dataObj[iData], \'"\')
+  } 
+  
+  dataArr <- paste0(dataArr, dataObj[iData])
+  } 
+  
+  assign(objName, data.frame(fromJSON(dataArr)))
+  
+  dataArr <- c()
+  dataObj <- c()
+  levelSt <- c()
+  indexSt <- c()
+  indexEd <- c()
+  
+  } 
+  } '
   
   # Variables used to build the html file using server-offloading:
   .RIGHT$serverScript <- "<script>\n"
@@ -199,7 +286,7 @@ RIGHT <- function(expr = {},
   ## Assemble server.R code if user uses server-offloading
   ## ---
   
-  if(.RIGHT$numServer) {
+  if(.RIGHT$flagServer) {
     
     # add files to use server-offloading
     addSource("shared/jquery.js")
@@ -216,21 +303,9 @@ RIGHT <- function(expr = {},
     # copt files about javascript polder
     scriptTo <- file.path(dir, "www")    
     file.copy(.RIGHT$libDir_RIGHT, scriptTo, recursive = TRUE)
-    tempArray <- c()
-    
-    # make JSON file to open in server.R
-    
-    for(name in unique(.RIGHT$offDataArr)) {
-      
-      writeLines(toJSON(eval(parse(text = name))), 
-                 con = file.path(dir, paste0(name,".JSON")))
-      
-      tempArray <- paste0(tempArray, 
-                         ".", name, '<- data.frame(fromJSON("', name, '.JSON"))\n')
-    } # for
-    
+        
     # make server.R file
-    writeLines(c(tempArray,
+    writeLines(c(.RIGHT$parseData,
                  "shinyServer(function(input, output) {",
                  .RIGHT$serverArray,
                  "})" ),
@@ -297,7 +372,7 @@ print.RIGHT <- function(x, ...) {
     stop("cleanup was called on the object.")
   } # if
   
-  if(!(.RIGHT$numServer)) {
+  if(!(.RIGHT$flagServer)) {
     browseURL(fileName_index, browser = x$browser)
   } else {
     runApp(x$dir)
@@ -340,14 +415,17 @@ clean <- function(obj) {
   
 } # function clean
 
-runServer <- function(offName, expr = {}) {
+runServer <- function(expr={}) {
   
-  .RIGHT$numServer <- TRUE
+  # Flag on about sever-offloading
+  .RIGHT$flagServer <- TRUE
   
-  # Copy user's code and base code about server-offloading
-  .RIGHT$exprArray <- c(.RIGHT$exprArray, expr)
-  .RIGHT$offNameArr <- c(.RIGHT$offNameArr, offName)
-   
-  return(structure(eval(parse(text = expr)), class = "RIGHTServer"))
+  # Count sever-offloading graphs
+  .RIGHT$numServer <- .RIGHT$numServer + 1
+  
+  # Copy user's code with special class name
+  .RIGHT$exprArray <- c(.RIGHT$exprArray, structure(substitute(expr), class = paste0("RIGHTServer", .RIGHT$numServer)))  
+  
+  return(structure(eval(substitute(expr)), class = paste0("RIGHTServer", .RIGHT$numServer)))
   
 } # function runServer.RIGHT

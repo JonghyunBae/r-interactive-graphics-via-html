@@ -26,7 +26,7 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
   # @param col color used for all the visual elements. color option overrides \code{col} option.
   col <- NULL # TEMPORARY
   offPlot <- FALSE
-   
+ 
   ## ---
   ## Take strings if asked:
   ## ---
@@ -35,11 +35,16 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
   
   if (!isString) {
         
-    if(is(data, "RIGHTServer") == TRUE) {
-      offPlot <- TRUE
-    } else {
+    for(iData in 1:.RIGHT$numServer) {
+      if(is(data, paste0("RIGHTServer", iData))) {
+        offPlot <- TRUE
+        break
+      } # if
+    } # for
+    
+    if(!offPlot) {
       .RIGHT$curDataObj <- argArray$data
-    }
+    } # if
     
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     color <- if (is.null(argArray$color)) NULL else as.character(argArray$color)
@@ -119,17 +124,11 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
     } # if
     
   } else {
-    for(iData in 1:length(.RIGHT$offNameArr)) {
-      
-      if(data == .RIGHT$offNameArr[iData]) {
-        break
-      } # if
-      
-    } # for
-        
+    
     .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
     .RIGHT$offDataArr <- c(.RIGHT$offDataArr, .RIGHT$curDataObj)
- 
+    .RIGHT$offNameArr <- c(.RIGHT$offNameArr, data)
+    
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  paste0("var axis", .RIGHT$numAxis,
                                         " = new Axis(", .RIGHT$numAxis, 

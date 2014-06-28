@@ -35,7 +35,7 @@ createSource <- function(sourceArray = NULL) {
   # Remove empty strings:
   sourceArray <- sourceArray[sourceArray != ""]
   
-  if(!.RIGHT$numServer) 
+  if(!.RIGHT$flagServer) 
     sourceArray <- paste(.RIGHT$libDir_RIGHT, sourceArray, sep="/")
   else
     sourceArray <- paste("Javascript/", sourceArray, sep="")
@@ -77,7 +77,7 @@ createLink <- function(linkArray = NULL) {
   linkArray <- unique(linkArray)
   linkArray <- linkArray[linkArray != ""]
     
-  if(!.RIGHT$numServer) 
+  if(!.RIGHT$flagServer) 
     linkArray <- paste(.RIGHT$libDir_RIGHT, linkArray, sep="/")
   else
     linkArray <- paste("Javascript/", linkArray, sep="")
@@ -100,7 +100,7 @@ createHead <- function(title) {
   
   meta <- '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
   
-  if(.RIGHT$numServer > 0) {
+  if(.RIGHT$flagServer) {
     meta <- c(meta, '  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>')
   } # if
   

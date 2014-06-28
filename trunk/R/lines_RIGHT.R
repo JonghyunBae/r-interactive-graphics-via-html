@@ -20,7 +20,7 @@
 lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   
   col <- NULL # TEMPORARY
-  offLines <- FALSE
+  offPlot <- FALSE
   
   ## ---
   ## Take strings if asked:
@@ -30,9 +30,13 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   argArray <- as.list(match.call())
   
   if (!isString) {
-    if(is(data, "RIGHTServer")) {
-      offLines <- TRUE
-    }
+    
+    for(iData in 1:.RIGHT$numServer) {
+      if(is(data, paste0("RIGHTServer", iData))) {
+        offPlot <- TRUE
+        break
+      } # if
+    } # for
     
     data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
     by <- if (is.null(argArray$by)) NULL else as.character(argArray$by)
@@ -74,7 +78,7 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   ## ---
 
   # Keep name of the data object:
-  if(offLines == FALSE) {
+  if(!offPlot) {
     
     .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
   
@@ -94,16 +98,9 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
                                           createObject(baseColor = col, alwaysObject = TRUE), ");")))
   } else {
     
-    for(iData in 1:length(.RIGHT$offNameArr)) {
-      
-      if(data == .RIGHT$offNameArr[iData]) {
-        break
-      } # if
-      
-    } # for
-    
     .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)
     .RIGHT$offDataArr <- c(.RIGHT$offDataArr, .RIGHT$curDataObj)
+    .RIGHT$offNameArr <- c(.RIGHT$offNameArr, data)
     
     .RIGHT$serverArray <- paste0(.RIGHT$serverArray, 
                                  "\n\toutput$", data, " <- reactive({ \n",

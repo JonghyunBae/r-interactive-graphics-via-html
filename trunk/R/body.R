@@ -32,7 +32,7 @@ prepareData <- function(dataList, dir = ".") {
     
     mainArr <- toJSON(dataArr)
     
-    dataScript <- c(paste0("var rawArr", iData, "= ", mainArr, ";"), dataScript)
+    dataScript <- c(dataScript, paste0("var ", nameArray[iData], " = ", mainArr, ";"))
   } # for
   
   # Write dataScript to "data.js" file
@@ -48,7 +48,7 @@ loadData <- function(nameArray = NULL) {
     
     # Data objects should be loaded before any plotting:
     for(iData in 1:numData) {
-      .RIGHT$scriptArray <- c(paste0("var ",nameArray[iData], ' = createMainStructureE(rawArr',iData, ');'), 
+      .RIGHT$scriptArray <- c(paste0("var ",nameArray[iData], " = createMainStructureE(", nameArray[iData], ");"), 
                             .RIGHT$scriptArray) 
     } # for
   } # if
@@ -94,7 +94,7 @@ createDiv <- function(divArray = NULL) {
   divIndex <- 1
   divId <- c()
   
-  if(.RIGHT$numServer) {
+  if(.RIGHT$flagServer) {
     
     for(iData in 1:.RIGHT$numAxis) {
       
@@ -132,8 +132,10 @@ createDiv <- function(divArray = NULL) {
   
   } else {
     
-    for(iData in .RIGHT$numAxis) 
-      divId <- c(divId, paste("content", iData, sep="")) 
+    for(iData in .RIGHT$numAxis) {
+      tempArray <- paste0(tempArray, '<div id="content', iData, '" class = "right-output">\n',
+                          divArray[iData], "</div>\n")
+    } # for
     
   } # if
     

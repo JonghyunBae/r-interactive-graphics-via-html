@@ -132,7 +132,7 @@ createDiv <- function(divArray = NULL) {
   
   } else {
     
-    for(iData in .RIGHT$numAxis) {
+    for(iData in 1:.RIGHT$numAxis) {
       tempArray <- paste0(tempArray, '<div id="content', iData, '" class = "right-output">\n',
                           divArray[iData], "</div>\n")
     } # for

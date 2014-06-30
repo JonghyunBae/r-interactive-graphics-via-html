@@ -16,7 +16,7 @@ prependBlankLine <- function(numLine = 1) {
 prepareData <- function(dataList, dir = ".") {
   
   # Array to save all data (data array, discrete data level)
-  dataScript <- ""
+  dataScript <- c()
   
   # CHECK (junghoon): what happens if no names are given?
   nameArray <- names(dataList)
@@ -34,6 +34,12 @@ prepareData <- function(dataList, dir = ".") {
     
     dataScript <- c(dataScript, paste0("var ", nameArray[iData], " = ", mainArr, ";"))
   } # for
+  
+  tempDir <- file.path(dir, "www")
+  
+  if (!file.exists(tempDir)) {
+    dir.create(tempDir)
+  }
   
   # Write dataScript to "data.js" file
   writeLines(as.character(dataScript), con=file.path(dir, "www", "data.js"))
@@ -84,7 +90,7 @@ addEventTrigger <- function(numAxis = NULL) {
 
 # CHECK (junghoon): can these functions organized differently?
 # Create div block:
-createDiv <- function(divArray = NULL) {
+createDiv <- function(divArray = NULL, flag = FALSE) {
    
   if (is.null(divArray)) {
     return(NULL)
@@ -94,7 +100,7 @@ createDiv <- function(divArray = NULL) {
   divIndex <- 1
   divId <- c()
   
-  if(.RIGHT$flagServer) {
+  if(flag) {
     
     for(iData in 1:.RIGHT$numAxis) {
       
@@ -105,7 +111,7 @@ createDiv <- function(divArray = NULL) {
         if(iData == .RIGHT$offIndex[i]) {
           
           divId[iData] <- paste0(divId[iData], 
-                                 '<div id = "', .RIGHT$offNameArr[divIndex], '" class = "right-output">\n')
+                                 '<div id="', .RIGHT$offNameArr[divIndex], '" class="right-output">\n')
           divIndex <- divIndex + 1
           tempIndex <- tempIndex + 1
           
@@ -116,7 +122,7 @@ createDiv <- function(divArray = NULL) {
       if(tempIndex == 0) {
         
         divId[iData] <- paste0(divId[iData], 
-                               '<div id = "content', iData, '" class = "right-output">\n')
+                               '<div id="content', iData, '" class="right-output">\n')
         tempIndex <- tempIndex + 1
         
       } # if
@@ -132,8 +138,8 @@ createDiv <- function(divArray = NULL) {
   
   } else {
     
-    for(iData in 1:.RIGHT$numAxis) {
-      tempArray <- paste0(tempArray, '<div id="content', iData, '" class = "right-output">\n',
+    for(iData in 1:length(divArray)) {
+      tempArray <- paste0(tempArray, '<div id="content', iData, '" class="right-output">\n',
                           divArray[iData], "</div>\n")
     } # for
     
@@ -170,12 +176,14 @@ createFooter <- function() {
 createBody <- function() {
   
   # Links and sourced scripts:
-  divArray <- createDiv(.RIGHT$divArray)
+  divArray <- createDiv(.RIGHT$divArray, .RIGHT$flagServer)
+  
   if (!is.null(divArray)) {
     divArray <- paste0("  ", divArray)
   } # if
   
   scriptArray <- createScript(.RIGHT$scriptArray)
+  
   if (!is.null(scriptArray)) {
     scriptArray <- paste0("  ", scriptArray)
   } # if

@@ -55,8 +55,8 @@ var Pie = {};
 	    					selectCnt : 0,
 	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
-						dataObj.$isSelected[i][this.dataId] = pieUpdate(this.node[i]);
-	        			degree = degree + dataObj[yLabel][i]/totalFreq * 360;
+						  dataObj.$isSelected[i][this.dataId] = pieUpdate(this.node[i]);
+	        		degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}
 				}else{
 					for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
@@ -123,7 +123,7 @@ function pieBoxSearch(graphObj)
 						}        
 					}
 				}
-			//	alert("ddd");
+			
 				if(tmpNodeArr.length != undefined){
 					allGraphUpdate(graphObj, tmpNodeArr, 0);
 				}

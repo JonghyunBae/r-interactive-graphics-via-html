@@ -76,15 +76,15 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   ## ---
   ## Plot lines:
   ## ---
-
+  
   # Keep name of the data object:
   if(!offPlot) {
     
     .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
-  
+    
     # Increment the number of points:
     .RIGHT$numLines <- .RIGHT$numLines + 1
-  
+    
     # Add script in body:
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  c(paste0("var lineObj", .RIGHT$numLines,
@@ -96,6 +96,7 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
                                           ", lineObj", .RIGHT$numLines,
                                           ", 'x1', 'x2', 'y1', 'y2', ",
                                           createObject(baseColor = col, alwaysObject = TRUE), ");")))
+  
   } else {
     
     .RIGHT$offIndex <- c(.RIGHT$offIndex, .RIGHT$numAxis)

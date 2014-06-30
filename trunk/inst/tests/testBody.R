@@ -36,17 +36,18 @@ A <- data.frame(ID = 1:10, NAME = letters[1:10])
 B <- data.frame(VALUE = 1:5)
 
 test_that("Check whether data.frame objects are properly saved", {
-  
+
   prepareData(list(A = A, B = B))
-  expect_true(file.exists("data.js"))
+  expect_true(file.exists(file.path("www", "data.js")))
   
+  unlink("www", recursive = TRUE)
 }) # test_that
 
 test_that("Check whether data.frame objects can be saved in another directory", {
   
   dir.create("TEMP")
   prepareData(list(A = A), "TEMP")  
-  expect_true(file.exists(file.path("TEMP", "data.js")))
+  expect_true(file.exists(file.path("TEMP", "www","data.js")))
   
   unlink("TEMP", recursive = TRUE)
   
@@ -62,21 +63,40 @@ test_that("Test script generation for loading data", {
   
   loadData("A")
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   paste0('A = createMainStructureE(rawArr1);'))
+                   paste0('var A = createMainStructureE(A);'))
   
   loadData()
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   paste0('A = createMainStructureE(rawArr1);'))
+                   paste0('var A = createMainStructureE(A);'))
   
   expect_error(loadData(c("B", "C"), "data.js"))
   
   loadData(c("B", "C"))
   expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   c(paste0('C = createMainStructureE(rawArr2);'),
-                     paste0('B = createMainStructureE(rawArr1);'),
-                     paste0('A = createMainStructureE(rawArr1);')))      
+                   c("var C = createMainStructureE(C);",
+                     "var B = createMainStructureE(B);",
+                     "var A = createMainStructureE(A);"))      
 }) # test_that
 
+## ---
+## Test addDrawTrigger():
+## ---
+
+setRIGHT(scriptArray = c())
+
+test_that("Test draw trigger script generation", {
+  
+  addDrawTrigger()
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, c())
+  
+  addDrawTrigger("A")
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, "A.draw();")
+  
+  addDrawTrigger(c("B", "C"))
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+                   c("A.draw();", "B.draw();", "C.draw();"))
+  
+})
 ## ---
 ## Test addEventTrigger():
 ## ---
@@ -111,11 +131,26 @@ test_that("Test div block generation:", {
   expect_identical(createDiv(), NULL)
   expect_identical(createDiv(c()), NULL)
   expect_identical(createDiv(c("A", "B")),
-                   c('<div id="content" class="right-output">',
-                     "  A",
-                     "  B",
+                   c('<div id="content">\n<div id="content1" class="right-output">\nA</div>\n<div id="content2" class="right-output">\nB</div>\n',
                      "</div>"))
   
+  setRIGHT(numAxis = 3,
+           offIndex = c(1, 1),
+           offNameArr = c("A", "B"))
+
+  expect_identical(createDiv(c("div1", "div2", "div3") , TRUE),
+                   c(paste0('<div id="content">\n<div id="A" class="right-output">\n<div id="B" class="right-output">\ndiv1</div></div>\n',
+                            '<div id="content2" class="right-output">\ndiv2</div>\n',
+                            '<div id="content3" class="right-output">\ndiv3</div>\n'), "</div>"))
+  
+  setRIGHT(offIndex = c(1, 3))
+  print(createDiv(c("div1", "div2", "div3") , TRUE))
+  expect_identical(createDiv(c("div1", "div2", "div3") , TRUE),
+                   c(paste0('<div id="content">\n',
+                            '<div id="A" class="right-output">\ndiv1</div>\n',
+                            '<div id="content2" class="right-output">\ndiv2</div>\n',
+                            '<div id="B" class="right-output">\ndiv3</div>\n'), "</div>"))
+                   
 }) # test_that
 
 ## ---
@@ -154,14 +189,13 @@ test_that("Check body block generation", {
                      "</body>"))
   
   setRIGHT(divArray = c("A", "B"),
+           flagServer = FALSE,
            scriptArray = c())
   
   expect_identical(createBody(),
                    c("<body>",
                      "",
-                     '  <div id="content" class="right-output">',
-                     "    A",
-                     "    B",
+                     '  <div id="content">\n<div id="content1" class="right-output">\nA</div>\n<div id="content2" class="right-output">\nB</div>\n',
                      "  </div>",
                      "",
                      '  <div id="footer">',
@@ -177,9 +211,7 @@ test_that("Check body block generation", {
   expect_identical(createBody(),
                    c("<body>",
                      "",
-                     '  <div id="content" class="right-output">',
-                     "    A",
-                     "    B",
+                     '  <div id="content">\n<div id="content1" class="right-output">\nA</div>\n<div id="content2" class="right-output">\nB</div>\n',
                      "  </div>",
                      "",
                      "  <script>",

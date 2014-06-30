@@ -14,7 +14,7 @@ test_that("data.frame object should exist", {
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numBox, 0)
   expect_identical(temp$nameArray, "dummy")
-  expect_false(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
+  expect_false(any("box.js" %in% temp$sourceArray))
   
 }) # test_that
 
@@ -25,7 +25,7 @@ test_that("Column name should exist", {
   expect_identical(temp$numAxis, 0)
   expect_identical(temp$numBox, 0)
   expect_identical(temp$nameArray, "dummy")
-  expect_false(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
+  expect_false(any("box.js" %in% temp$sourceArray))
   
 }) # test_that
 
@@ -33,6 +33,7 @@ test_that("Check script generation", {
   
   boxplot_RIGHT(conc ~ Subject, Theoph)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
+  
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numBox, 1)
   expect_identical(temp$nameArray, c("dummy", "Theoph"))
@@ -41,8 +42,8 @@ test_that("Check script generation", {
                    c("var boxObj1 = new MakeBoxObj(Theoph, 'Subject', 'conc', {});",
                      "var axis1 = new Axis(1, boxObj1, 'Subject', 'conc', {});",
                      "var box1 = new Box(axis1, boxObj1, {});"))
-  expect_true(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
-  
+  expect_true(any("box.js" %in% temp$sourceArray))
+
 }) # test_that
 
 setRIGHT(divArray = c(),
@@ -61,6 +62,6 @@ test_that("Check isString option:", {
                    c("var boxObj1 = new MakeBoxObj(Theoph, 'Subject', 'conc', {});",
                      "var axis1 = new Axis(1, boxObj1, 'Subject', 'conc', {});",
                      "var box1 = new Box(axis1, boxObj1, {});"))
-  expect_true(any(file.path(temp$libDir_RIGHT, "box.js") %in% temp$sourceArray))
+  expect_true(any("box.js" %in% temp$sourceArray))
 
 }) # test_that

@@ -41,7 +41,7 @@ test_that("Check script generation without any options", {
                    c("var histObj1 = new ddply(Theoph, ['Subject'], {});",
                      "var axis1 = new Axis(1, histObj1, 'Subject', 'frequency', {});",
                      "var hist1 = new Bar(axis1, histObj1, 'Subject', 'frequency', {});"))
-  expect_true(any(file.path(temp$libDir_RIGHT, "bar.js") %in% temp$sourceArray))
+  expect_true(any("bar.js" %in% temp$sourceArray))
   
 }) # test_that
 

@@ -12,7 +12,7 @@ test_that("data.frame object should exist", {
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numTable, 0)
   expect_identical(temp$nameArray, "dummy")
-  expect_false(any(file.path(temp$libDir_RIGHT, "table.js") %in% temp$sourceArray))
+  expect_false(any("table.js" %in% temp$sourceArray))
   
 }) # test_that
 
@@ -26,7 +26,7 @@ test_that("height should be an integer", {
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numTable, 0)
   expect_identical(temp$nameArray, "dummy")
-  expect_false(any(file.path(temp$libDir_RIGHT, "table.js") %in% temp$sourceArray))
+  expect_false(any("table.js" %in% temp$sourceArray))
   
 }) # test_that
 
@@ -38,7 +38,7 @@ test_that("Check script generation", {
   expect_identical(temp$numTable, 1)
   expect_identical(temp$nameArray, c("dummy", "Theoph"))
   expect_identical(temp$scriptArray, 'makeTable("table1", Theoph, 200);')
-  expect_true(any(file.path(temp$libDir_RIGHT, "table.js") %in% temp$sourceArray))
+  expect_true(any("table.js" %in% temp$sourceArray))
 
   table_RIGHT(Theoph, 300)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
@@ -46,6 +46,6 @@ test_that("Check script generation", {
   expect_identical(temp$nameArray, c("dummy", "Theoph", "Theoph"))
   expect_identical(temp$scriptArray, c('makeTable("table1", Theoph, 200);',
                                        'makeTable("table2", Theoph, 300);'))
-  expect_true(any(file.path(temp$libDir_RIGHT, "table.js") %in% temp$sourceArray))
+  expect_true(any("table.js" %in% temp$sourceArray))
   
 }) # test_that

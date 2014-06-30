@@ -9,7 +9,8 @@ setRIGHT(nameArray = "dummy",
          scriptArray = c(),
          numAxis = 0,
          numPoints = 0,
-         numLines = 0)
+         numLines = 0,
+         numServer = 0)
 
 test_that("data.frame object should exist", {
   

@@ -1,89 +1,93 @@
-
 <!DOCTYPE html>
 <html>
 <head>
+
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script src="jsfiles/shared/jquery.js" type="text/javascript"></script>
-  <script src="jsfiles/shared/shiny.js" type="text/javascript"></script>
-  <link rel="stylesheet" type="text/css" href="jsfiles/shared/shiny.css"/>
-  <link rel="stylesheet" type="text/css" href="jsfiles/shared/slider/css/jquery.slider.min.css"/>
-  <script src="shared/slider/js/jquery.slider.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="jsfiles/shared/bootstrap/css/bootstrap.min.css"/>
-  <script src="jsfiles/shared/bootstrap/js/bootstrap.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" type="text/css" href="jsfiles/shared/bootstrap/css/bootstrap-responsive.min.css"/>
-  <link rel="stylesheet" href="jsfiles/right.css"/>
+
+  <link rel="stylesheet" type="text/css" href="Javascript/right.css"/>
+  <link rel="stylesheet" type="text/css" href="Javascript/shared/shiny.css"/>
+  <link rel="stylesheet" type="text/css" href="Javascript/shared/bootstrap/css/bootstrap-responsive.min.css"/>
+  <link rel="stylesheet" type="text/css" href="Javascript/shared/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="Javascript/shared/slider/css/jquery.slider.min.css"/>
+
   <title>RIGHT: R Interactive Graphics via HTml</title>
-  <script src="jsfiles/shiny-right.js"></script>
-  <script src="jsfiles/callback.js"></script>
-  <script src="jsfiles/kinetic-v5.0.1.js"></script>
-  <script src="jsfiles/structure.js"></script>
-  <script src="jsfiles/common.js"></script>
-  <script src="jsfiles/axis.js"></script>
-  <script src="jsfiles/color.js"></script>
-  <script src="jsfiles/dot.js"></script>
-  <script src="jsfiles/bar.js"></script>
-  <script src="jsfiles/box.js"></script>
-  <script src="jsfiles/pie.js"></script>
-  <script src="jsfiles/line.js"></script>
-  <script src="jsfiles/array.js"></script>
-  <script src="jsfiles/node_event.js"></script>
-  <script src="jsfiles/menu.js"></script>
-  <script src="jsfiles/button_event.js"></script>
-  <script src="jsfiles/legend.js"></script>
-  <script src="jsfiles/data.js"></script>
+
+  <script src="Javascript/kinetic-v5.0.1.js" type="text/javascript"></script>
+  <script src="Javascript/common.js" type="text/javascript"></script>
+  <script src="Javascript/structure.js" type="text/javascript"></script>
+  <script src="Javascript/axis.js" type="text/javascript"></script>
+  <script src="Javascript/color.js" type="text/javascript"></script>
+  <script src="Javascript/callback.js" type="text/javascript"></script>
+  <script src="Javascript/node_event.js" type="text/javascript"></script>
+  <script src="Javascript/menu.js" type="text/javascript"></script>
+  <script src="Javascript/array.js" type="text/javascript"></script>
+  <script src="Javascript/dot.js" type="text/javascript"></script>
+  <script src="Javascript/line.js" type="text/javascript"></script>
+  <script src="Javascript/bar.js" type="text/javascript"></script>
+  <script src="Javascript/shared/jquery.js" type="text/javascript"></script>
+  <script src="Javascript/shared/shiny.js" type="text/javascript"></script>
+  <script src="Javascript/shared/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="Javascript/shared/slider/js/jquery.slider.min.js" type="text/javascript"></script>
+  <script src="Javascript/shiny-right.js" type="text/javascript"></script>
+  <script src="data.js" type="text/javascript"></script>
+
 </head>
 <body>
-<script> var subDiamonds = createMainStructureE(rawArr1);</script>
-<script> var Theoph = createMainStructureE(rawArr2);</script>
 
-<div id="content">
-<div id="loessArray" class = "right-output" >
-<div id="container1" oncontextmenu="return false;"></div>
-</div>
-<div id="lmArray" class = "right-output" >
-<div id="container2" oncontextmenu="return false;"></div>
-</div>
-</div>
-       
-       <script>
-       var axis1 = new Axis(1, subDiamonds, 'carat', 'price', {});
-       var lobj1 = new MakeLineObj(subDiamonds, 'carat', 'price', {group: 'clarity'});       
-       var l1 = new Line(axis1, lobj1, 'x1', 'x2', 'y1', 'y2', {});   
-       
-       var axis2 = new Axis(2, Theoph, 'Time', 'conc', {});
-       var d1 = new Dot(axis2, Theoph, 'Time', 'conc', {});
-       
-       subDiamonds.draw();
-       Theoph.draw();
-       
-       var AllAxisObjArr = [axis1, axis2]; // this is global for redrawing in hideselected.
-       eventTrigger(AllAxisObjArr);
-       
-       
-       </script>
-        <script>
-        // offload part.
-        var loessArray = createMainStructureE('subDiamonds'); // name of mainArr3 can be changed.  
-		    var loffObj1 = new MakeLineObj(loessArray, 'carat', 'price', {}); // name of x, y can be changed.
-		    var loff1 = new Line(axis1, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
-		
-        var lmArray = createMainStructureE('Theoph'); // name of mainArr3 can be changed.  
-  	    var loffObj2 = new MakeLineObj(lmArray, 'Time', 'conc', {}); // name of x, y can be changed.
-		    var loff2 = new Line(axis2, loffObj2, 'x1', 'x2', 'y1', 'y2', {});
-        
-        $(function() {
-            setTimeout(function() {
-              window.Shiny.onInputChange('subDiamonds', subDiamonds.$isHidden);
-              window.Shiny.onInputChange('Theoph', Theoph.$isHidden);
+  <div id="content">
+<div id = "loessArray1" class = "right-output">
+<div id = "lmArray1" class = "right-output">
+<div id="container1" oncontextmenu="return false;"></div></div></div>
+<div id = "content2" class = "right-output">
+<div id="container2" oncontextmenu="return false;"></div></div>
+<div id = "loessArray2" class = "right-output">
+<div id = "lmArray2" class = "right-output">
+<div id="container3" oncontextmenu="return false;"></div></div></div>
 
-            }, 1)
-          });
-        </script>
-       <div id="footer">
-       <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>
-       <p id="dont-delete-this">E-mail : <a href="mailto:teamrightjs@gmail.com">team.right.js@gmail.com</a></p>
-       </div>
-       
+  </div>
+
+  <script>
+    var Theoph = createMainStructureE(Theoph);
+    var subDiamonds = createMainStructureE(subDiamonds);
+    
+    var axis1 = new Axis(1, subDiamonds, 'price', 'carat', {});
+    var point1 = new Dot(axis1, subDiamonds, 'price', 'carat', {});
+    var histObj1 = new ddply(Theoph, ['Time'], {});
+    var axis2 = new Axis(2, histObj1, 'Time', 'frequency', {});
+    var hist1 = new Bar(axis2, histObj1, 'Time', 'frequency', {});
+    var axis3 = new Axis(3, Theoph, 'Time', 'conc', {});
+    
+    subDiamonds.draw();
+    Theoph.draw();
+    var AllAxisObjArr = [axis1, axis2, axis3]; eventTrigger(AllAxisObjArr);
+  </script>
+
+<script>
+var loessArray1 = createMainStructureE('subDiamonds');
+var loffObj1 = new MakeLineObj(loessArray1, 'price', 'carat', {});
+var loff1 = new Line(axis1, loffObj1, 'x1', 'x2', 'y1', 'y2', {});
+var lmArray1 = createMainStructureE('subDiamonds');
+var loffObj2 = new MakeLineObj(lmArray1, 'price', 'carat', {});
+var loff2 = new Line(axis1, loffObj2, 'x1', 'x2', 'y1', 'y2', {});
+var loessArray2 = createMainStructureE('Theoph');
+var loffObj4 = new MakeLineObj(loessArray2, 'Time', 'conc', { });
+var loff4 = new Line(axis3, loffObj4, 'x1', 'x2', 'y1', 'y2', { });
+var lmArray2 = createMainStructureE('Theoph');
+var loffObj3 = new MakeLineObj(lmArray2, 'Time', 'conc', {});
+var loff3 = new Line(axis3, loffObj3, 'x1', 'x2', 'y1', 'y2', {});
+$(function() {
+setTimeout(function() {
+window.Shiny.onInputChange('subDiamonds', subDiamonds.$isHidden);
+window.Shiny.onInputChange('Theoph', Theoph.$isHidden);
+}, 1)
+});
+</script>
+
+  <div id="footer">
+  <p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>
+  <p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>
+  </div>
+
 </body>
 </html>

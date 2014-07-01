@@ -44,9 +44,10 @@ var Bar = {};
 			},
 			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
 				// check color
+				
 				if (axisObj.legendLabel != undefined) {
 					var legendLabel = axisObj.legendLabel;
-					if (dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined) {
+					if (dataObj[legendLabel].colorIndex == undefined) {
 						addColorField(dataObj[legendLabel]);
 					} else if (dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined) {
 						addColorField(dataObj[legendLabel]);
@@ -108,6 +109,7 @@ var Bar = {};
 						var x = 0;
 						var y = 0;
 						for (var i=0; i<xArr.length; i++) {
+
 							if (!(xArr[i] == -1 || yArr[i] == -1)) {
 								if (tempHeight[xArr[i]] == undefined) {
 									tempHeight[xArr[i]] = axisObj.height + axisObj.plotYMargin - yArr[i];

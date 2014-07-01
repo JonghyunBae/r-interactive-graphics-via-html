@@ -52,6 +52,7 @@ var Bar = {};
 					} else if (dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined) {
 						addColorField(dataObj[legendLabel]);
 					}
+
 					this.colorOn = true;
 				} else {
 					this.colorOn = false;

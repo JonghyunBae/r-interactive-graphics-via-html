@@ -18,11 +18,12 @@ var Pie = {};
 				// check color
 				if(axisObj.legendLabel != undefined){
 					var legendLabel = axisObj.legendLabel;
-					if(dataObj[legendLabel].isDiscrete != true && dataObj[legendLabel].colorIndex == undefined){
+					if(dataObj[legendLabel].colorIndex == undefined){
 						addColorField(dataObj[legendLabel]);
 					}else if(dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined){
 						addColorField(dataObj[legendLabel]);
 					}
+
 					this.colorOn = true;
 				}else{
 					this.colorOn = false;
@@ -55,8 +56,10 @@ var Pie = {};
 	    					selectCnt : 0,
 	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
-						  dataObj.$isSelected[i][this.dataId] = pieUpdate(this.node[i]);
-	        		degree = degree + dataObj[yLabel][i]/totalFreq * 360;
+	    				
+						dataObj.$isSelected[i] = new Array;
+						dataObj.$isSelected[i][this.dataId] = pieUpdate(this.node[i]);
+	        		    degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}
 				}else{
 					for(var i = 0 ; i < dataObj[xLabel].length ; i ++){

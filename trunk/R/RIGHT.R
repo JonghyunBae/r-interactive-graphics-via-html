@@ -125,7 +125,7 @@ dataObj <- c()
   dataArr <- paste0(dataArr, dataObj[iData])
   } 
   
-  assign(objName, data.frame(fromJSON(dataArr)))
+  assign(objName, data.frame(rjson::fromJSON(dataArr)))
   
   dataArr <- c()
   dataObj <- c()

@@ -30,7 +30,7 @@ prepareData <- function(dataList, dir = ".") {
     tempData <- as.list(dataList[[nameArray[iData]]])
     dataArr <- lapply(tempData, function(x) if (is.factor(x)) list(level = levels(x), index = as.numeric(x) - 1) else x)
     
-    mainArr <- rjson::toJSON(dataArr)
+    mainArr <- jsonlite::prettify(rjson::toJSON(dataArr))
     
     dataScript <- c(dataScript, paste0("var ", nameArray[iData], " = ", mainArr, ";"))
   } # for

@@ -67,7 +67,7 @@ boxplot_RIGHT <- function(form, data, col = NULL, isString = FALSE) {
   .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                c(paste0("var boxObj", .RIGHT$numBox,
                                         " = new MakeBoxObj(", data,
-                                        ", '", axisName$x, "', '", axisName$y, "', {});"),
+                                        ", ['", axisName$x, "'], ['", axisName$y, "'], {});"),
                                  paste0("var axis", .RIGHT$numAxis,
                                         " = new Axis(", .RIGHT$numAxis, 
                                         ", boxObj", .RIGHT$numBox, # box object is used to set axis

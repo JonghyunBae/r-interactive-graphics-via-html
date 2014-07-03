@@ -341,7 +341,195 @@ var MakeLineObj = {};
 	};
 })();
 /**  MakeLineObj End  **/
+var MakeBoxObj = {};
+(function() {
+	
+	MakeBoxObj = function(dataObj, xLabel, yLabel, optionObj) {
+		// check y is continuous.
+		
+		this.$id = 0;
+		this.parent = dataObj;
+		if (dataObj.child == null) {
+			dataObj.child = new Array();
+		}
+		dataObj.child.push(this);
+		this.child = null;
+		this.$isSelected = new Array();
+		this.graphObjArr = new Array();
+		this.refreshArr = new Array();
+		this.statusArr = new Array();
+		///////////////////////////
+		this._type = 'boxObj';
+		this.dataObj = dataObj;
+		this.xLabel = xLabel;
+		this.yLabel = yLabel;
+		this.optionObj = optionObj;
+		this.$isOffload = dataObj.$isOffload;
+		
+		this._calculate();
+	};
+	MakeBoxObj.prototype = {
+		_calculate: function() {
+			// reload data.
+			var dataObj = this.dataObj;
+			var xLabel = this.xLabel;
+			var yLabel = this.yLabel;
+			var optionObj = this.optionObj;
+			
+			for (var i=0; i<xLabel.length; i++) {
+					this[xLabel[i]] = new Array();
+					if (dataObj[xLabel[i]].isDiscrete != undefined) {
+						this[xLabel[i]].isDiscrete = dataObj[xLabel[i]].isDiscrete;
+						this[xLabel[i]].index = dataObj[xLabel[i]].index;
+					}
+			}
+			
+			if(dataObj[xLabel].isDiscrete == true){
+				// discrete.
+				var isDiscrete = true;
+				var boxNum = dataObj[xLabel].index.length;
+				var boxNumDataArr = make2DArr(boxNum);
+				var boxNumDataNumArr = make2DArr(boxNum);
+				// push elements into each box.
+				for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+					if(dataObj[xLabel][i] == undefined){
+						alert(i + ", " + dataObj[xLabel][i]);
+					}
+					
+					boxNumDataArr[dataObj[xLabel][i]].push(dataObj[yLabel][i]);
+					boxNumDataNumArr[dataObj[xLabel][i]].push(i);
+				}			
+			}else{
+				var isDiscrete = false;
+				var boxNum = 1;
+				var boxNumDataArr = new Array();
+				var boxNumDataNumArr = new Array();
+				boxNumDataArr[0] = dataObj[yLabel];
+				boxNumDataNumArr[0] = new Array();
+				for(var i = 0 ; i < dataObj[yLabel].length ; i ++){
+					boxNumDataNumArr[0][i] = i;
+				}
+			}
+			
+			this[xLabel] = dataObj[xLabel];
+			this[yLabel] = dataObj[yLabel];
+			// make tags.
+			this.x = new Array();
+			this.y = new Array();
 
+			this.median = new Array();
+			this.q1 = new Array();
+			this.q3 = new Array();
+			this.upperFence = new Array();
+			this.lowerFence = new Array();
+			this.isOutlier = new Array();
+			var hasArr = new Array();
+			var stableSort = function(dataA, dataB){
+			    if (dataA.a == dataB.a) return dataA.b > dataB.b ? 1 : -1;
+			    if (dataA.a > dataB.a) return 1;
+			    return -1;
+			};		
+			// calculate tags.
+			var nodeCnt = 0;
+			for(var i = 0 ; i < boxNum ; i ++){
+				// copy value of array.
+				var tempArr = boxNumDataArr[i].slice(0);
+				var tempDataNumberArr = new Array();
+				var outliers = new Array();
+				var outliersDataNumber = new Array();			
+
+				for(j = 0 ; j < tempArr.length; j ++){
+					tempArr[j] = {a: tempArr[j], b: j};
+				}
+				// sort data
+				tempArr.sort(stableSort);
+				
+				for(var j = 0 ; j < tempArr.length ; j ++){
+					tempDataNumberArr[j] = boxNumDataNumArr[i][tempArr[j].b];
+					tempArr[j] = tempArr[j].a;
+				}
+				// get values which are needed to draw box.
+				var q3 = findQuartile(tempArr, 3);
+				var median = findQuartile(tempArr, 2);
+				var q1 = findQuartile(tempArr, 1);
+				// calculate upper fence.
+				var tmpUpFence = findMaxBelowFence(tempArr, q1, q3);
+				var upperFence = tmpUpFence.fence;
+				var upperFenceNumber = tmpUpFence.fenceNumber;
+				// extract upper outliers.
+				for(var j = upperFenceNumber + 1 ; j < tempArr.length ; j ++){
+					outliers.push(tempArr[j]);
+					outliersDataNumber.push(tempDataNumberArr[j]);
+				}
+				// calculate below fence.
+				var tmpDownFence = findMinAboveFence(tempArr, q1, q3);
+				var lowerFence = tmpDownFence.fence;
+				var lowerFenceNumber = tmpDownFence.fenceNumber;
+				// extract upper outliers.
+				for(var j = 0 ; j < lowerFenceNumber ; j ++){
+					outliers.push(tempArr[j]);
+					outliersDataNumber.push(tempDataNumberArr[j]);
+				}
+				
+				//set tag and hasArr with box data.
+				this.median[nodeCnt] = median;
+				this.isOutlier[nodeCnt] = false;
+				this.q1[nodeCnt] = q1;
+				this.q3[nodeCnt] = q3;
+				this.upperFence[nodeCnt] = upperFence;
+				this.lowerFence[nodeCnt] = lowerFence;
+				this.x[nodeCnt] = i;
+				this.y[nodeCnt] = q3;
+				// save hasArr.
+				hasArr[nodeCnt] = new Array();
+				
+				for(var j = lowerFenceNumber ; j < upperFenceNumber + 1 ; j ++){
+					hasArr[nodeCnt].push(tempDataNumberArr[j]);
+				}
+				//alert(hasArr[nodeCnt]);
+				nodeCnt ++;
+				//set tag and hasArr with outlier data.
+				for(var j = 0 ; j < outliers.length ; j ++){
+					this.median[nodeCnt] = 0;
+					this.isOutlier[nodeCnt] = true;
+					this.q1[nodeCnt] = 0;
+					this.q3[nodeCnt] = 0;
+					this.upperFence[nodeCnt] = 0;
+					this.lowerFence[nodeCnt] = 0;
+					this.x[nodeCnt] = i;
+					this.y[nodeCnt] = outliers[j];
+					hasArr[nodeCnt] = outliersDataNumber[j];
+					nodeCnt ++;
+				}
+			}
+			// event set
+			var p2cArr = new Array(dataObj[xLabel].length);
+			var isSelected = make2DArr(nodeCnt);
+			
+			for(var i = 0 ; i < nodeCnt ; i ++){
+				isSelected[i][0] = 0;
+				if(hasArr[i].length != undefined){					
+					for(var j = 0 ; j < hasArr[i].length ; j ++){
+						p2cArr[hasArr[i][j]] = i;
+					}		
+				}
+			}	
+			
+			for(var i = 0; i < p2cArr.length; i++) {
+				if(p2cArr[i] == undefined) {
+					p2cArr[i] = i;
+				}
+			}
+			
+			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
+			this.$isSelected = isSelected;
+			
+			for (var i=0; i<hasArr.length; i++) {
+				this.statusArr[i] = 0;
+			}
+		}
+	};
+})();
 /**  ddply  **/
 //optionObj can be bin.
 var ddply = {};

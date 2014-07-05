@@ -27,7 +27,7 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
-== 20 June2014 ==
+== 27 June 2014 ==
 
 Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
 

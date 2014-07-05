@@ -27,6 +27,29 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 05 July2014 ==
+
+Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for Tuesday
+   # Make list to change event option
+     * isSelected, isHidden, Hover, Reset
+     * graph object - event check
+     * check table, search box function
+     * understand isSelected <-> isHidden calculation
+ 
+ * TO-DO list for this weekend
+   # make event part (possible, high priority)
+   # change data.js parsing in server.R (low priority)
+   # ggvis, animint code (lowest priority)
+
+ * TO-DO list for GSOC
+   # update in CRAN to use anyone
+   # rebuild broken part of event function
+   # change API likes ggplot2
+
+  Next meeting : 10:00 (Korea time) on Tue, 7/08
+
 == 27 June 2014 ==
 
 Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae

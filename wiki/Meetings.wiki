@@ -36,7 +36,7 @@ Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
      * isSelected, isHidden, Hover, Reset
      * graph object - event check
      * check table, search box function
-     * understand isSelected <-> isHidden calculation
+     * understand isSelected <=> isHidden calculation
  
  * TO-DO list for this weekend
    # make event part (possible, high priority)

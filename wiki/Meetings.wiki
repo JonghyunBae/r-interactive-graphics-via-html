@@ -31,22 +31,20 @@
 
 Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
 
- * TO-DO list for Tuesday
-   # Make list to change event option
-     * isSelected, isHidden, Hover, Reset
-     * graph object - event check
+ * TO-DO list for next Tuesday
+   # Make a table summarizing the current status
+     * events (rows): isSelected, isHidden, Hover, Reset
+     * chart types (columns): dot, line, box, box-whisker, pie
      * check table, search box function
      * understand isSelected <=> isHidden calculation
  
- * TO-DO list for this weekend
-   # make event part (possible, high priority)
+ * TO-DO list for the next two weekend
+   # fix all the borken parts and submit to CRAN (possible, high priority)
    # change data.js parsing in server.R (low priority)
-   # ggvis, animint code (lowest priority)
+   # understand ggvis, animint code (lowest priority)
 
  * TO-DO list for GSOC
-   # update in CRAN to use anyone
-   # rebuild broken part of event function
-   # change API likes ggplot2
+   # implement ggplot2-like API using ggvis or animint
 
   Next meeting : 10:00 (Korea time) on Tue, 7/08
 

@@ -46,6 +46,13 @@ Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
  * TO-DO list for GSOC
    # implement ggplot2-like API using ggvis or animint
 
+|| *Plot* || *isSelecte* || || *isHidden* || || *hover* || || *reset* ||
+|| Dot || O || X || O || O ||
+|| Lines || O || X || O || O ||
+|| Hist || O || X || O || O ||
+|| Boxplot || X || X || O || O ||
+|| Pie || X || X || O || O ||
+ 
   Next meeting : 10:00 (Korea time) on Tue, 7/08
 
 == 27 June 2014 ==

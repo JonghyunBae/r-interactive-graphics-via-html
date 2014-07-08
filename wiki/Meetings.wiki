@@ -38,7 +38,7 @@ Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
      * check table, search box function
      * understand isSelected <=> isHidden calculation
  
- * TO-DO list for the next two weekend
+ * TO-DO list for the next two weeks
    # fix all the borken parts and submit to CRAN (possible, high priority)
    # change data.js parsing in server.R (low priority)
    # understand ggvis, animint code (lowest priority)

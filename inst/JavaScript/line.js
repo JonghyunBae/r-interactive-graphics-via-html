@@ -9,8 +9,8 @@ var Line = {};
 			this.yLabel1 = yLabel1;
 			this.yLabel2 = yLabel2;
 			this.optionObj = optionObj;
-			this.dataId = dataObj.$id ++;
-			this.graphId = axisObj.numberOfGraph ++;
+			this.dataId = dataObj.$id++;
+			this.graphId = axisObj.numberOfGraph++;
 			this.firstDraw = true;
 			this._type = "lineGraph";
 			// event add
@@ -36,6 +36,10 @@ var Line = {};
 					this._init(this.axisObj, this.dataObj, this.xLabel1, this.xLabel2, this.yLabel1, this.yLabel2, this.optionObj);
 					this.firstDraw = false;
 				}
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel1, this.xLabel2, this.yLabel1, this.yLabel2, this.optionObj);
+			},
+			_reDraw: function () {
+				
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel1, this.xLabel2, this.yLabel1, this.yLabel2, this.optionObj);
 			},
 			_init: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {

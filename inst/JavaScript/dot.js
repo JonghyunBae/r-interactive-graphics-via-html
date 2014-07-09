@@ -7,8 +7,8 @@ var Dot = {};
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
 		this.optionObj = optionObj;
-		this.dataId = dataObj.$id ++;
-		this.graphId = axisObj.numberOfGraph ++;
+		this.dataId = dataObj.$id++;
+		this.graphId = axisObj.numberOfGraph++;
 		this.firstDraw = true;
 		this._type = "dotGraph";
 		// event add
@@ -35,6 +35,10 @@ var Dot = {};
 					this._init(this.axisObj, this.dataObj, this.xLabel, this.yLabel,this.optionObj);
 					this.firstDraw = false;
 				}
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
+			},
+			_reDraw: function () {
+						
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			},
 			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {

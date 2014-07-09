@@ -61,10 +61,12 @@ var Box = {};
 			this.axisObj = axisObj;
 			this.dataObj = dataObj;
 			this.optionObj = optionObj;
-			this.dataId = dataObj.$id;
-			this.graphId = axisObj.numberOfGraph;
+			this.dataId = dataObj.$id++;
+			this.graphId = axisObj.numberOfGraph++;
+			
 			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 			// set the base color.
+
 			if(optionObj.baseColor != undefined && optionObj.baseColor != 'n'){
 				this.baseColor = optionObj.baseColor;
 			}else{
@@ -141,6 +143,7 @@ var Box = {};
 			}
         	// event add
 			dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+
 			//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
 			//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
         	this.firstUpdate = firstUpdate(this.dataObj);

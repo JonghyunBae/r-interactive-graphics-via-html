@@ -42,6 +42,10 @@ var Bar = {};
 				this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 			},
+			_reDraw: function () {
+				
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
+			},
 			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
 				// check color
 				

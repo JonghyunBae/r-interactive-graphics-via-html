@@ -4,6 +4,7 @@ var plotRadius = 2;
 
 function findSubSet(dataObj, labelArr, subSet)
 {
+	//alert("common_findSubSet");
 	for(var i = 0 ; i < labelArr.length ; i ++){
 		if(dataObj[labelArr[i]].isDiscrete == undefined){
 			var searchStr = new RegExp(labelArr[i], 'g'); // "g" means all search
@@ -47,6 +48,7 @@ function getNodeinfo(dataObj, id)
 
 function getFields(dataObj)
 {
+	//alert("common_getFields");
 	var temp = new Array();
 	for(var name in dataObj){
 		if(!(name == 'offloadObjArr' || name == '$dataNumArr' || name == '$ans' || name == 'optionObj' || name == '_reCalculate' || name == 'labels' || name == 'parent' || name == 'child' || name == 'refreshTable' || name == 'labelArr' || name == '_type' || name == 'refreshArr' || name == '$id' || name == '$isSelected' || name == '$isHidden' || name == 'refreshArr' || name == 'graphObjArr' || name == 'statusArr')) {
@@ -61,7 +63,6 @@ var mouseName;
 var divOffsetX, divOffsetY;
 function getCoords(e) {
     // coursesweb.net/
-
 		var divX, divY = 0; 
 		mouseName = this.id;
 		var xy_pos = getXYpos(this);
@@ -111,6 +112,7 @@ function getXYpos(elm) {
 
 //makeEventComponent is underconstruction becuase of its purpose 
 function makeEventComponent (dataObj, length) {
+	//alert("common_makeEventComponent");
 	dataObj.$id = 0;
 	dataObj.parent = null;
 	dataObj.child = null;
@@ -129,6 +131,7 @@ function makeEventComponent (dataObj, length) {
 }
 
 function birthReport (parent, child, mergeArr) {
+	//alert("common_birthReport");
 	child.parent = parent;
 	if(parent.child == null){
 		parent.child = new Array();
@@ -140,6 +143,7 @@ function birthReport (parent, child, mergeArr) {
 }
 
 function ModifyBirth (child, mergeArr) {
+	//alert("common_ModifyBirth");
 	child.mergeArr = mergeArr;
 }
 
@@ -150,6 +154,7 @@ function nullUpdate (a, b, c) {
 
 //allGraphUpdate is used for only select & unselect
 function allGraphUpdate (graphObj, nodes, selectOn, keyBoard) {
+	//alert("common_allGraphUpdate");
 	graphObj.firstUpdate(nodes, selectOn, keyBoard);
 }
 
@@ -157,6 +162,7 @@ function allGraphUpdate (graphObj, nodes, selectOn, keyBoard) {
 // 1. AfterStatus - statusArr => update nodes
 // 2. Propagate afterStatus to parent & child
 function firstUpdate (firstObj) {
+	//alert("common_firstUpdate");
 	return function (nodes, selectOn, keyBoard) {
 			var object = firstObj;
 			if (keyBoard == 'ctrl') {
@@ -170,7 +176,14 @@ function firstUpdate (firstObj) {
 
 function updateRecursive (object, nodeArr, beforeObject) {
 	//my update
+	
+	//alert("common_updateRecursive");
+	//alert(nodeArr);
+	//alert(object.statusArr);
+	
+	//sub temp, object.statusArr
 	var temp = subtractArr(nodeArr, object.statusArr);
+		
 	var nodeArr = new Array();
 	var nodeVal = new Array();
 	for (var i=0; i<temp.length; i++) {
@@ -180,6 +193,11 @@ function updateRecursive (object, nodeArr, beforeObject) {
 			nodeVal.push(temp[i]);
 		}
 	}
+	
+	//alert(nodeArr);
+	//alert(nodeVal);
+	//alert(object.graphObjArr);
+	
 	if (nodeArr.length != 0) {
 		for (var i=0; i<object.graphObjArr.length; i++) {
 			var node = object.graphObjArr[i].node;
@@ -193,6 +211,9 @@ function updateRecursive (object, nodeArr, beforeObject) {
 	}
 	// update statusArr
 	object.statusArr = addArr(object.statusArr, temp);
+	
+	// alert(object.statusArr);
+	
 	// refresh
 	//alert(object._type + ", " + object.refreshArr[0]);
 	for (var i=0; i<object.refreshArr.length; i++) {
@@ -230,6 +251,7 @@ function makeRefresh (stage, id) {
 }
 
 function allSelect (graphObj) {
+	//alert("common_allSelect");
 	var temp = new Array();
 	for (var i=0; i<graphObj.node.length; i++) {
 		temp.push(graphObj.node[i].getName());
@@ -238,6 +260,7 @@ function allSelect (graphObj) {
 }
 
 function allDeselect (graphObj) {
+	//alert("common_allDeselect");
 	var temp = new Array();
 	for (var i=0; i<graphObj.node.length; i++) {
 		temp.push(graphObj.node[i].getName());
@@ -245,7 +268,7 @@ function allDeselect (graphObj) {
 	allGraphUpdate(graphObj, temp, 0, null);
 }
 
-function findMaxMinValue (Data) {	
+function findMaxMinValue (Data) {
 	if (Data.length != undefined) {
 		var maxValue = Data[0];
 		var minValue = Data[0];

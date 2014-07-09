@@ -12,6 +12,7 @@ function copyValueArr (array1, array2) {
 */
 
 function invertValueArr (array, numbers) {
+	//alert("array_invertValueArr");
 	var returnArray = array.slice(0);
 	if (numbers.length == undefined) {
 		returnArray[numbers] = (returnArray[numbers] + 1) % 2; 
@@ -24,6 +25,8 @@ function invertValueArr (array, numbers) {
 }
 
 function extensionArr (numbers, length, value) {
+	//alert("array_extensionArr");
+	
 	var returnArray = new Array(length);
 	for (var i=0; i<length; i++) {
 		returnArray[i] = 0;
@@ -35,10 +38,12 @@ function extensionArr (numbers, length, value) {
 			returnArray[numbers[i]] = value;
 		}
 	}
+		
 	return returnArray;
 }
 
 function addArr (array1, array2) {
+	//alert("array_addArr");
 	var returnArray;
 	if (array1.length == array2.length) {
 		returnArray = new Array(array1.length);
@@ -52,6 +57,7 @@ function addArr (array1, array2) {
 }
 
 function subtractArr (array1, array2) {
+	//alert("array_subtractArr");
 	var returnArray;
 	if (array1.length == array2.length) {
 		returnArray = new Array(array1.length);
@@ -65,6 +71,7 @@ function subtractArr (array1, array2) {
 }
 
 function mergeParentChildArr (p2cArr, c2pArr) {
+	//alert("array_mergeParentChildArr");
 	var returnArray = new Array(p2cArr.length);
 	for (var i=0; i<returnArray.length; i++) {
 		returnArray[i] = new Array(c2pArr.length);
@@ -88,6 +95,7 @@ function mergeParentChildArr (p2cArr, c2pArr) {
 }
 
 function mulArr (array1, dimension1, array2, dimension2) {
+	//alert("array_mulArr");
 	var returnArray;
 	if (dimension1 == 1 && dimension2 == 2) { // 1D X 2D
 		if (array1.length == array2.length) {
@@ -107,6 +115,7 @@ function mulArr (array1, dimension1, array2, dimension2) {
 }
 
 function makeOrthogonalArr (array, dimension) {
+	//alert("array_makeOrthogonalArr");
 	var returnArray;
 	if (dimension == 2) {
 		returnArray = new Array(array[0].length);
@@ -123,6 +132,7 @@ function makeOrthogonalArr (array, dimension) {
 }
 
 function printArr (array, dimension) {
+	//alert("array_printArr");
 	if (dimension == 1) {
 		document.write("[ ");
 		for (var i=0; i<array.length; i++) {

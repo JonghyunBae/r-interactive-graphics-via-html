@@ -35,8 +35,10 @@ var hideCnt = 0;
 var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected(Name)
 {
+	//alert("callback_hideSelected");
 	var rootObjArr = new Array();
 	var axisArr = new Array();
+	
 	// find all rootObj related with this Axis.
 	for(var i = 0 ; i < Name.graphObjArr.length ; i ++){
 		// get dataObj of each graph on the axis.
@@ -45,6 +47,7 @@ function hideSelected(Name)
 		while(temp.parent != null){
 			temp = temp.parent;
 		}
+		
 		// save all rootObj in the rootObjArr.
 		for(var j = 0 ; j < rootObjArr.length ; j ++){
 			if(temp == rootObjArr[j]) // prevent duplicate.
@@ -54,17 +57,28 @@ function hideSelected(Name)
 			rootObjArr.push(temp);
 		}
 	}
-	// update $isSelected and update dataField.
+	// update $isSelected and update dataField.	
+	//alert(rootObjArr.length);
 	for(var i = 0 ; i < rootObjArr.length ; i ++){
-		var tempData = make2DArr(rootObjArr[i].labelArr.length);
+		var tempData = make2DArr(rootObjArr[i].labelArr.length); //n by n
+		var tempStatus = new Array();
+		var tempSelect = new Array();
 		var labelArr = rootObjArr[i].labelArr;
 		var liveNumArr = new Array();
 		var deadNumArr = new Array();
-		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++){			
-			if(rootObjArr[i].$isSelected[j][0] == 0){
+		
+		//alert(rootObjArr[i].$isSelected.length);
+		for(var j=0; j<rootObjArr[i].$isSelected.length; j++) {
+			tempSelect.push(rootObjArr[i].$isSelected[j]);
+			//alert(rootObjArr[i].$isSelected[j]);
+		}
+			
+		for(var j = 0; j < rootObjArr[i].statusArr.length ; j ++){
+			//if(rootObjArr[i].$isSelected[j][0] == 0){ // ?
+			if(rootObjArr[i].statusArr[j] == 0) {
 				for(var t = 0 ; t < tempData.length ; t ++){
 					tempData[t].push(rootObjArr[i][labelArr[t]][j]);
-				}
+				}	
 				liveNumArr.push(j);
 			}else{
 				deadNumArr.push(j);
@@ -74,8 +88,10 @@ function hideSelected(Name)
 		for(var j = 0 ; j < deadNumArr.length ; j ++){
 			rootObjArr[i].$isHidden[rootObjArr[i].$dataNumArr[deadNumArr[j]]] = true;
 		}
+				
 		// reset the dataNumArr of mainArr.
 		var tmp = new Array();
+		
 		for(var j = 0 ; j < liveNumArr.length ; j ++){
 			tmp.push(rootObjArr[i].$dataNumArr[liveNumArr[j]]);
 		}
@@ -90,14 +106,19 @@ function hideSelected(Name)
 			}
 			rootObjArr[i][labelArr[j]].splice(t, (rootObjArr[i][labelArr[j]].length - t));
 		}
-		//alert(rootObjArr[i].conc);
 
-		// update $isSelected.
+		// update $isSelected & statusArr.
 		rootObjArr[i].$isSelected = make2DArr(rootObjArr[i][labelArr[0]].length);
+		
 		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++ ){
-			rootObjArr[i].$isSelected[j][0] = 0;
+			rootObjArr[i].$isSelected[j] = tempSelect[j];
 		}
 		
+		rootObjArr[i].statusArr = new Array(liveNumArr.length);
+		for(var j = 0; j < rootObjArr[i].statusArr.length; j++) {
+			rootObjArr[i].statusArr[j] = 0;
+		}
+				
 		// recalculate all children dataObj.
 		if(rootObjArr[i].child != null){
 			for(var j = 0 ; j < rootObjArr[i].child.length ; j ++){
@@ -123,6 +144,8 @@ function hideSelected(Name)
 }
 function childReCalculate(object)
 {
+	//alert("callback_childReCalculate");
+	
 	// my recalculate.
 	object._reCalculate();	
 	// child recalculate.
@@ -136,5 +159,6 @@ function childReCalculate(object)
 function resetSelected(Name)
 {
 	// refresh page.
+	//alert("callback_resetSelected");
 	window.top.location.reload();
 }

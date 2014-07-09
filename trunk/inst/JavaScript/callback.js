@@ -36,6 +36,7 @@ var tempHidden = new Array();	// collect total hidden nodes.
 function hideSelected(Name)
 {
 	//alert("callback_hideSelected");
+
 	var rootObjArr = new Array();
 	var axisArr = new Array();
 	
@@ -58,8 +59,12 @@ function hideSelected(Name)
 		}
 	}
 	// update $isSelected and update dataField.	
-	//alert(rootObjArr.length);
+	
 	for(var i = 0 ; i < rootObjArr.length ; i ++){
+		
+		if(rootObjArr[i].$isOffload)
+			continue;
+		
 		var tempData = make2DArr(rootObjArr[i].labelArr.length); //n by n
 		var tempStatus = new Array();
 		var tempSelect = new Array();
@@ -133,6 +138,7 @@ function hideSelected(Name)
 	}
 	eventTrigger(AllAxisObjArr);
 	// TODO: should call server offload!!
+	
 	for(var i = 0 ; i < rootObjArr.length ; i ++){
 		if(rootObjArr[i].offloadObjArr != null){
 			for(var j = 0 ; j < rootObjArr[i].offloadObjArr.length ; j ++){

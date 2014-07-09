@@ -26,7 +26,6 @@ function invertValueArr (array, numbers) {
 
 function extensionArr (numbers, length, value) {
 	//alert("array_extensionArr");
-	
 	var returnArray = new Array(length);
 	for (var i=0; i<length; i++) {
 		returnArray[i] = 0;

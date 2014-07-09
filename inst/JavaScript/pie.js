@@ -4,16 +4,14 @@ var Pie = {};
 	Pie = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
-		axisObj.numberOfGraph ++;
-		dataObj.$id ++;
 	};
 	Pie.prototype = {
 			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				this.dataObj = dataObj;
 				this.xLabel = xLabel;
 				this.yLabel = yLabel;
-				this.dataId = dataObj.$id;
-				this.graphId = axisObj.numberOfGraph;
+				this.dataId = dataObj.$id ++;
+				this.graphId = axisObj.numberOfGraph ++;
 				this.barWidth = axisObj.xbarWidth;
 				// check color
 				if(axisObj.legendLabel != undefined){
@@ -57,8 +55,6 @@ var Pie = {};
 	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
 	    				
-						dataObj.$isSelected[i] = new Array;
-						dataObj.$isSelected[i][this.dataId] = pieUpdate(this.node[i]);
 	        		    degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}
 				}else{
@@ -79,12 +75,13 @@ var Pie = {};
 	    					selectCnt : 0,
 	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
-						dataObj.$isSelected[i][this.dataId] = pieUpdate(this.node[i]);
 	        			degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}
 				}
 				// event add
 				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+				dataObj.$isSelected[this.dataId] = pieUpdate();
+
 				this.firstUpdate = firstUpdate(dataObj);
 				this.dataObj = dataObj;
 				this.dataLayer = new Kinetic.Layer();	
@@ -148,19 +145,17 @@ function pieBoxSearch(graphObj)
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
-function pieUpdate(node)
-{
-	return	function(selectOn)
-		{
-			if(node.getSelected() == 1 && selectOn == 0){		//unselect
-				node.setSelectCnt(node.getSelectCnt() - 1);	
+function pieUpdate() {
+	return	function(node, selectOn) {
+			if(node.getSelected() == 1 && selectOn < 0){		//unselect
+				node.setSelectCnt(node.getSelectCnt() + selectOn);	
 				if(node.getSelectCnt() == 0){
 					node.setOpacity(0.5);
 					node.setStroke(node.getFill());
 					node.setSelected(0);
 				}
-			}else if(selectOn == 1){		// select
-				node.setSelectCnt(node.getSelectCnt() + 1);
+			}else if(selectOn > 0){		// select
+				node.setSelectCnt(node.getSelectCnt() + selectOn);
 				if(node.getSelected() == 0){
 					node.setStroke('black');
 					node.setOpacity(1);

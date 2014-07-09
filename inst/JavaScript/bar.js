@@ -35,7 +35,7 @@ var Bar = {};
 					this.firstDraw = false;
 				} else {
 					if (this.colorOn == true) {
-						addColorField(dataObj[this.colorLabel]);
+						addColorField(this.dataObj[this.colorLabel]);
 					}
 				}
 				this.barWidth = this.axisObj.xbarWidth;
@@ -44,6 +44,12 @@ var Bar = {};
 			},
 			_reDraw: function () {
 				
+				if (this.colorOn == true) {
+						addColorField(this.dataObj[this.colorLabel]);
+				}
+				
+				this.barWidth = this.axisObj.xbarWidth;
+				this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 			},
 			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {

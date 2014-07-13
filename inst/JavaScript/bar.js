@@ -54,7 +54,6 @@ var Bar = {};
 			},
 			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
 				// check color
-				
 				if (axisObj.legendLabel != undefined) {
 					var legendLabel = axisObj.legendLabel;
 					if (dataObj[legendLabel].colorIndex == undefined) {

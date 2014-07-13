@@ -53,16 +53,24 @@ var Box = {};
 (function() {
 	
 	Box = function(axisObj, dataObj, optionObj) {
-		this._init(axisObj, dataObj, optionObj);
-		this._draw(axisObj, dataObj, optionObj);
+		this.axisObj = axisObj;
+		this.dataObj = dataObj;
+		this.optionObj = optionObj;
+		this.dataId = dataObj.$id++;
+		this.graphId = axisObj.numberOfGraph++;
+		this.firstDraw = true;
+		// event add
+		dataObj.graphObjArr[this.dataId] = this;
+		axisObj.graphObjArr[this.graphId] = this;
+		
+		dataObj.$isSelected[this.dataId] = boxUpdate();
+		dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+		this.firstUpdate = firstUpdate(this.dataObj);
+		axisObj.hoverArr[this.graphId] = boxHover();
+		axisObj.boxSearchArr[this.graphId] = boxBoxSearch(this);			
 	};
 	Box.prototype = {
 		_init: function(axisObj, dataObj, optionObj) {
-			this.axisObj = axisObj;
-			this.dataObj = dataObj;
-			this.optionObj = optionObj;
-			this.dataId = dataObj.$id++;
-			this.graphId = axisObj.numberOfGraph++;
 			
 			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 			// set the base color.
@@ -73,19 +81,27 @@ var Box = {};
 				this.baseColor = 'green';
 			}
 		},
-		_draw: function(axisObj, dataObj, optionObj) {
-			//alert(dataObj.median[0] + ", " + dataObj.q1[0] + ", " +dataObj.q3[0] + ", " +dataObj.upperFence[0] + ", " +dataObj.lowerFence[0]  );
+		_draw: function() {
+			
+			if (this.firstDraw) {
+				this._init(this.axisObj, this.dataObj, this.optionObj);
+				this.firstDraw = false;
+			}
+			
+			this._drawSet(this.axisObj, this.dataObj, this.optionObj);
+		},
+		_drawSet : function(axisObj, dataObj, optionObj) {
+			
 			var median = axisObj._getPixelY(dataObj.median);
 			var isOutlier = dataObj.isOutlier;
 			var q1 = axisObj._getPixelY(dataObj.q1);
-			//alert(dataObj.q3);
 			var q3 = axisObj._getPixelY(dataObj.q3);
 			var upperFence = axisObj._getPixelY(dataObj.upperFence);
 			var lowerFence = axisObj._getPixelY(dataObj.lowerFence);
 			var x = axisObj._getPixelX(dataObj.x);
 			var y = axisObj._getPixelY(dataObj.y);
-			//alert(median[0] + ", " + q1[0] + ", " +q3[0] + ", " +upperFence[0] + ", " +lowerFence[0]  );
 			var width = (axisObj.isXDiscrete == true) ? axisObj.xbarWidth : axisObj.width - 20;
+			
 			this.node = new Array();
 			var cnt = 0;
 			for(var i = 0 ; i < median.length ; i ++){
@@ -114,7 +130,6 @@ var Box = {};
 							info: "Node: " + i + "\r\n" + "UpFence: " + dataObj.upperFence[i] + "\r\n" + "LoFence: " + dataObj.lowerFence[i] + "\r\n" + "q3: " + dataObj.q3[i] + "\r\n" + "q1: " + dataObj.q1[i] + "\r\n" + "Median: " + dataObj.median[i], 
 							offset: {x: width/2, y:0}
 						});
-						dataObj.$isSelected[i][this.dataId] = boxUpdate(this.node[cnt]);
 						cnt ++;
 					}else{
 						this.node[cnt] = new Kinetic.Circle({
@@ -130,38 +145,22 @@ var Box = {};
 							isOutlier: true,
 							info: "Node: " + i + "\r\n" + "X: " + dataObj.x[i] + "\r\n" +"Y: : " + dataObj.y[i]
 						});
-						dataObj.$isSelected[i][this.dataId] = boxUpdate(this.node[cnt]);
 						cnt ++;
 					}
 				}else{
-					dataObj.$isSelected[i][this.dataId] = nullUpdate(0);
+					//dataObj.$isSelected[this.dataId] = nullUpdate;
 				}
 			}
 			this.dataLayer = new Kinetic.Layer();	
         	for(var i = 0 ; i < this.node.length ; i ++){
 				this.dataLayer.add(this.node[i]);
 			}
-        	// event add
-			dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-
-			//scatterObj.refreshArr[this.id] = makeRefresh(this.stage);
-			//scatterObj.updateArr[this.id] = scatterUpdate(this.node);
-        	this.firstUpdate = firstUpdate(this.dataObj);
-        	this.dataLayer = new Kinetic.Layer();	
-        	for(var i = 0 ; i < this.node.length ; i ++){
-				this.dataLayer.add(this.node[i]);
-			}
-        	axisObj.graphObjArr[this.graphId] = this;
+        	
         	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
-			axisObj.hoverArr[this.graphId] = boxHover();
-			axisObj.boxSearchArr[this.graphId] = boxBoxSearch(this);
-			//add layer
 			axisObj.stage.add(this.dataLayer);
 		},
-		_reDraw: function(axisObj) {
-			var dataObj = this.dataObj;
-			var optionObj = this.optionObj;
-			this._draw(axisObj, dataObj, optionObj);
+		_reDraw: function() {
+			this._drawSet(this.axisObj, this.dataObj, this.optionObj);
 		}
 	};
 })();
@@ -237,12 +236,12 @@ function boxBoxSearch(graphObj)
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
-function boxUpdate(node)
+function boxUpdate()
 {
-	return	function(selectOn)
+	return	function(node, selectOn)
 		{
 			//box
-			if(node.getSelected() == 1 && selectOn == 0){		//unselect	
+			if(node.getSelected() == 1 && selectOn < 0){		//unselect	
 				if(node.getIsOutlier()){//if isOutlier == true
 					node.setStroke(node.getFill());
 					node.setScaleX(1);
@@ -256,7 +255,7 @@ function boxUpdate(node)
 						node.setSelected(0);
 					}
 				}
-			}else if(selectOn == 1){		// select
+			}else if(selectOn > 0){		// select
 				if(node.getIsOutlier()){//if isOutlier == true
 					node.setStroke('black');
 					node.setScaleX(2);

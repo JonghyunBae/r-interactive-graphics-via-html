@@ -162,8 +162,8 @@ function allGraphUpdate (graphObj, nodes, selectOn, keyBoard) {
 // 1. AfterStatus - statusArr => update nodes
 // 2. Propagate afterStatus to parent & child
 function firstUpdate (firstObj) {
-	//alert("common_firstUpdate");
 	return function (nodes, selectOn, keyBoard) {
+			//alert("common_firstUpdate");
 			var object = firstObj;
 			if (keyBoard == 'ctrl') {
 				var temp = invertValueArr(object.statusArr, nodes);
@@ -178,8 +178,9 @@ function updateRecursive (object, nodeArr, beforeObject) {
 	//my update
 	
 	//alert("common_updateRecursive");
-	//alert(nodeArr);
-	//alert(object.statusArr);
+	
+	/*alert("nodeArr");
+	alert(nodeArr);*/
 	
 	//sub temp, object.statusArr
 	var temp = subtractArr(nodeArr, object.statusArr);
@@ -194,9 +195,9 @@ function updateRecursive (object, nodeArr, beforeObject) {
 		}
 	}
 	
-	//alert(nodeArr);
-	//alert(nodeVal);
-	//alert(object.graphObjArr);
+	/*alert(nodeArr);
+	  alert(nodeVal);
+	  alert(object.graphObjArr);*/
 	
 	if (nodeArr.length != 0) {
 		for (var i=0; i<object.graphObjArr.length; i++) {
@@ -212,7 +213,8 @@ function updateRecursive (object, nodeArr, beforeObject) {
 	// update statusArr
 	object.statusArr = addArr(object.statusArr, temp);
 	
-	// alert(object.statusArr);
+	/*alert("statusArr");
+	alert(object.statusArr);*/
 	
 	// refresh
 	//alert(object._type + ", " + object.refreshArr[0]);
@@ -228,7 +230,7 @@ function updateRecursive (object, nodeArr, beforeObject) {
 		var parent = object.parent;
 		var mergeArr = object.mergeArr;
 		mergeArr = makeOrthogonalArr(mergeArr, 2);
-		var temp = mulArr(object.statusArr, 1, mergeArr, 2);
+		var temp = mulArr(object.statusArr, 1, mergeArr, 2);	
 		updateRecursive(parent, temp, object);
 	}
 	// Child Update
@@ -245,6 +247,7 @@ function updateRecursive (object, nodeArr, beforeObject) {
 }
 
 function makeRefresh (stage, id) {
+	//alert("makeRefresh");
 	return function () {
 			stage.draw();
 		}
@@ -269,6 +272,7 @@ function allDeselect (graphObj) {
 }
 
 function findMaxMinValue (Data) {
+	//alert("findMaxMinValue");
 	if (Data.length != undefined) {
 		var maxValue = Data[0];
 		var minValue = Data[0];
@@ -291,6 +295,7 @@ function findMaxMinValue (Data) {
 }
 
 function setTickRange (x, tickRange) {
+	//alert("setTickRange");
 	if (tickRange/Math.pow(10,x) < 0.1) {tickRange = 0.1 * Math.pow(10,x); }
 	else if (tickRange/Math.pow(10,x) <= 0.2) {tickRange = 0.2 * Math.pow(10,x); }
 	else if (tickRange/Math.pow(10,x) <= 0.25) {tickRange = 0.25 * Math.pow(10,x); }

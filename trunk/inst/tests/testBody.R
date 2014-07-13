@@ -144,7 +144,6 @@ test_that("Test div block generation:", {
                             '<div id="content3" class="right-output">\ndiv3</div>\n'), "</div>"))
   
   setRIGHT(offIndex = c(1, 3))
-  print(createDiv(c("div1", "div2", "div3") , TRUE))
   expect_identical(createDiv(c("div1", "div2", "div3") , TRUE),
                    c(paste0('<div id="content">\n',
                             '<div id="A" class="right-output">\ndiv1</div>\n',

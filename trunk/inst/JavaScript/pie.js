@@ -2,7 +2,6 @@
 var Pie = {};
 (function() {	
 	Pie = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-<<<<<<< .mine
 		this.axisObj = axisObj;
 		this.dataObj = dataObj;
 		this.xLabel = xLabel;
@@ -28,22 +27,9 @@ var Pie = {};
 			axisObj.hoverArr[this.graphId] = pieHover();
 			axisObj.boxSearchArr[this.graphId] = pieBoxSearch(this);
 		}
-=======
-		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
-		this._draw(axisObj, dataObj, xLabel, yLabel);
->>>>>>> .r834
 	};
 	Pie.prototype = {
 			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
-<<<<<<< .mine
-=======
-				this.dataObj = dataObj;
-				this.xLabel = xLabel;
-				this.yLabel = yLabel;
-				this.dataId = dataObj.$id ++;
-				this.graphId = axisObj.numberOfGraph ++;
-				this.barWidth = axisObj.xbarWidth;
->>>>>>> .r834
 				// check color
 				if(axisObj.legendLabel != undefined){
 					var legendLabel = axisObj.legendLabel;
@@ -69,7 +55,7 @@ var Pie = {};
 					}
 				}
 				
-				this.barWidth = axisObj.xbarWidth;
+				this.barWidth = this.axisObj.xbarWidth;
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			},
 			_drawSet: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
@@ -98,10 +84,6 @@ var Pie = {};
 	    					selectCnt : 0,
 	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
-<<<<<<< .mine
-=======
-	    				
->>>>>>> .r834
 	        		    degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}
 				}else{
@@ -126,16 +108,6 @@ var Pie = {};
 					}
 				}
 				// event add
-<<<<<<< .mine
-				
-				
-=======
-				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
-				dataObj.$isSelected[this.dataId] = pieUpdate();
-
-				this.firstUpdate = firstUpdate(dataObj);
-				this.dataObj = dataObj;
->>>>>>> .r834
 				this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
@@ -151,7 +123,7 @@ var Pie = {};
 						addColorField(this.dataObj[this.colorLabel]);
 				}
 				
-				this._drawset(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			}
 	};
 })();
@@ -194,19 +166,11 @@ function pieBoxSearch(graphObj)
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
-<<<<<<< .mine
-function pieUpdate()
-{
-	return	function(node, selectOn)
-		{
-			if(node.getSelected() == 1 && selectOn < 0){		//unselect
-				node.setSelectCnt(node.getSelectCnt() + selectOn);	
-=======
 function pieUpdate() {
 	return	function(node, selectOn) {
 			if(node.getSelected() == 1 && selectOn < 0){		//unselect
 				node.setSelectCnt(node.getSelectCnt() + selectOn);	
->>>>>>> .r834
+
 				if(node.getSelectCnt() == 0){
 					node.setOpacity(0.5);
 					node.setStroke(node.getFill());

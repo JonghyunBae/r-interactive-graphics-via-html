@@ -58,11 +58,8 @@ function hideSelected(Name)
 			rootObjArr.push(temp);
 		}
 	}
-	// update $isSelected and update dataField.	
-<<<<<<< .mine
-=======
 	
->>>>>>> .r834
+	// update $isSelected and update dataField.	
 	for(var i = 0 ; i < rootObjArr.length ; i ++){
 		
 		if(rootObjArr[i].$isOffload)

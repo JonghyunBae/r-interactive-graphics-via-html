@@ -2,17 +2,48 @@
 var Pie = {};
 (function() {	
 	Pie = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+<<<<<<< .mine
+		this.axisObj = axisObj;
+		this.dataObj = dataObj;
+		this.xLabel = xLabel;
+		this.yLabel = yLabel;
+		this.optionObj = optionObj;
+		this.dataId = dataObj.$id ++;
+		this.graphId = axisObj.numberOfGraph ++;
+		this.firstDraw = true;
+		this._type = 'pieGraph'
+		
+		dataObj.graphObjArr[this.dataId] = this;
+		axisObj.graphObjArr[this.graphId] = this;
+		if (dataObj.$isOffload) {
+			dataObj.$isSelected[this.dataId] = nullUpdate;
+			dataObj.refreshArr[this.dataId] = nullUpdate;
+			this.firstUpdate = nullUpdate;	        	
+        	axisObj.hoverArr[this.graphId] = nullUpdate;
+			axisObj.boxSearchArr[this.graphId] = nullUpdate;
+		} else {
+			dataObj.$isSelected[this.dataId] = pieUpdate();
+			dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
+			this.firstUpdate = firstUpdate(dataObj);
+			axisObj.hoverArr[this.graphId] = pieHover();
+			axisObj.boxSearchArr[this.graphId] = pieBoxSearch(this);
+		}
+=======
 		this._init(axisObj, dataObj, xLabel, yLabel, optionObj);
 		this._draw(axisObj, dataObj, xLabel, yLabel);
+>>>>>>> .r834
 	};
 	Pie.prototype = {
 			_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
+<<<<<<< .mine
+=======
 				this.dataObj = dataObj;
 				this.xLabel = xLabel;
 				this.yLabel = yLabel;
 				this.dataId = dataObj.$id ++;
 				this.graphId = axisObj.numberOfGraph ++;
 				this.barWidth = axisObj.xbarWidth;
+>>>>>>> .r834
 				// check color
 				if(axisObj.legendLabel != undefined){
 					var legendLabel = axisObj.legendLabel;
@@ -28,7 +59,20 @@ var Pie = {};
 				}
 				this.colorLabel = legendLabel;
 			},
-			_draw: function(axisObj, dataObj, xLabel, yLabel) {
+			_draw: function() {
+				if (this.firstDraw) {
+					this._init(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
+					this.firstDraw = false;
+				} else {
+					if (this.colorOn == true) {
+						addColorField(this.dataObj[this.colorLabel]);
+					}
+				}
+				
+				this.barWidth = axisObj.xbarWidth;
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
+			},
+			_drawSet: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				this.node = new Array();
 				var degree = 0;
 				// calculate total frequency.
@@ -54,7 +98,10 @@ var Pie = {};
 	    					selectCnt : 0,
 	    					info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
 	    				});
+<<<<<<< .mine
+=======
 	    				
+>>>>>>> .r834
 	        		    degree = degree + dataObj[yLabel][i]/totalFreq * 360;
 					}
 				}else{
@@ -79,30 +126,32 @@ var Pie = {};
 					}
 				}
 				// event add
+<<<<<<< .mine
+				
+				
+=======
 				dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 				dataObj.$isSelected[this.dataId] = pieUpdate();
 
 				this.firstUpdate = firstUpdate(dataObj);
 				this.dataObj = dataObj;
+>>>>>>> .r834
 				this.dataLayer = new Kinetic.Layer();	
 	        	for(var i = 0 ; i < this.node.length ; i ++){
 					this.dataLayer.add(this.node[i]);
 				}
-	        	axisObj.graphObjArr[this.graphId] = this;
+	        	
 	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
-				axisObj.hoverArr[this.graphId] = pieHover();
-				axisObj.boxSearchArr[this.graphId] = pieBoxSearch(this);
+				
 				//add layer
 				axisObj.stage.add(this.dataLayer);
 			},
-			_reDraw: function(axisObj){
-				var dataObj = this.dataObj;
-				var xLabel = this.xLabel;
-				var yLabel = this.yLabel;
-				if(this.colorOn == true){
-					addColorField(dataObj[this.colorLabel]);
+			_reDraw: function(){
+				if (this.colorOn == true) {
+						addColorField(this.dataObj[this.colorLabel]);
 				}
-				this._draw(axisObj, dataObj, xLabel, yLabel);
+				
+				this._drawset(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			}
 	};
 })();
@@ -145,10 +194,19 @@ function pieBoxSearch(graphObj)
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
+<<<<<<< .mine
+function pieUpdate()
+{
+	return	function(node, selectOn)
+		{
+			if(node.getSelected() == 1 && selectOn < 0){		//unselect
+				node.setSelectCnt(node.getSelectCnt() + selectOn);	
+=======
 function pieUpdate() {
 	return	function(node, selectOn) {
 			if(node.getSelected() == 1 && selectOn < 0){		//unselect
 				node.setSelectCnt(node.getSelectCnt() + selectOn);	
+>>>>>>> .r834
 				if(node.getSelectCnt() == 0){
 					node.setOpacity(0.5);
 					node.setStroke(node.getFill());

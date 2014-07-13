@@ -59,7 +59,10 @@ function hideSelected(Name)
 		}
 	}
 	// update $isSelected and update dataField.	
+<<<<<<< .mine
+=======
 	
+>>>>>>> .r834
 	for(var i = 0 ; i < rootObjArr.length ; i ++){
 		
 		if(rootObjArr[i].$isOffload)
@@ -93,14 +96,14 @@ function hideSelected(Name)
 		for(var j = 0 ; j < deadNumArr.length ; j ++){
 			rootObjArr[i].$isHidden[rootObjArr[i].$dataNumArr[deadNumArr[j]]] = true;
 		}
-				
+		
 		// reset the dataNumArr of mainArr.
 		var tmp = new Array();
-		
 		for(var j = 0 ; j < liveNumArr.length ; j ++){
 			tmp.push(rootObjArr[i].$dataNumArr[liveNumArr[j]]);
 		}
 		rootObjArr[i].$dataNumArr = tmp;		
+		
 		// update dataField.
 		for(var j = 0 ; j < labelArr.length ; j ++){
 			for(var t = 0 ; t < tempData[j].length ; t ++){
@@ -113,9 +116,9 @@ function hideSelected(Name)
 		}
 
 		// update $isSelected & statusArr.
-		rootObjArr[i].$isSelected = make2DArr(rootObjArr[i][labelArr[0]].length);
+		rootObjArr[i].$isSelected = new Array();
 		
-		for(var j = 0 ; j < rootObjArr[i].$isSelected.length ; j ++ ){
+		for(var j = 0 ; j < tempSelect.length ; j ++ ){
 			rootObjArr[i].$isSelected[j] = tempSelect[j];
 		}
 		

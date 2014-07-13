@@ -230,229 +230,231 @@ var MakeLineObj = {};
 	};
 	MakeLineObj.prototype = {
 		_calculate: function () {
-				var xLabel = this.xLabel;
-				var yLabel = this.yLabel;
-				var dataObj = this.dataObj;
-				var optionObj = this.optionObj;
-				
-				if (optionObj.group != undefined) {
-					gLabel = optionObj.group;
-				} else {
-					gLabel = 'NULL';
-				}
-				this.gLabel = gLabel;
-				if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
-					this.groupOn = true;
-					this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
-				} else {
-					this.groupOn = false;
-					this.labelArr = ['x1', 'y1', 'x2', 'y2'];
-				}
+			var xLabel = this.xLabel;
+			var yLabel = this.yLabel;
+			var dataObj = this.dataObj;
+			var optionObj = this.optionObj;
+			
+			if (optionObj.group != undefined) {
+				gLabel = optionObj.group;
+			} else {
+				gLabel = 'NULL';
+			}
+			this.gLabel = gLabel;
+			if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
+				this.groupOn = true;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
+			} else {
+				this.groupOn = false;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2'];
+			}
 
-				if (this.groupOn == true) { // draw line with group
-					this.x1 = new Array();
-					this.x2 = new Array();
-					this.y1 = new Array();
-					this.y2 = new Array();
-					this[gLabel] = new Array();
-					var p2cArr = new Array(dataObj[xLabel].length);
-					var c2pArr = new Array();
-					var lineCnt = -1;
-					var newGroup = 1;
-					for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
-						var groupTemp = new Array();
-						for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
-							if (i == dataObj[gLabel][j]) { // save groupTemp
-								groupTemp.push(j);
-							}
+			if (this.groupOn == true) { // draw line with group
+				this.x1 = new Array();
+				this.x2 = new Array();
+				this.y1 = new Array();
+				this.y2 = new Array();
+				this[gLabel] = new Array();
+				var p2cArr = new Array(dataObj[xLabel].length);
+				var c2pArr = new Array();
+				var lineCnt = -1;
+				var newGroup = 1;
+				for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
+					var groupTemp = new Array();
+					for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
+						if (i == dataObj[gLabel][j]) { // save groupTemp
+							groupTemp.push(j);
 						}
-						if (groupTemp.length > 1) {
-							if (groupTemp.length > 2) {
-								for (var j=0; j<groupTemp.length-1; j++) {
-									this.x1.push(dataObj[xLabel][groupTemp[j]]);
-									this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
-									this.y1.push(dataObj[yLabel][groupTemp[j]]);
-									this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
-									this[gLabel].push(i);
-									if (lineCnt == -1) {
-										lineCnt ++;
-									}
-									if (newGroup == 1) {
-										newGroup = 0;
-										p2cArr[groupTemp[j]] = lineCnt;
-									} else {
-										p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
-										lineCnt ++;
-									}
-									c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
-								}
-								newGroup = 1;
-								p2cArr[groupTemp[j]] = lineCnt;
-								lineCnt ++;
-							} else { // groupTemp.length == 2
-								this.x1.push(dataObj[xLabel][groupTemp[0]]);
-								this.x2.push(dataObj[xLabel][groupTemp[1]]);
-								this.y1.push(dataObj[yLabel][groupTemp[0]]);
-								this.y2.push(dataObj[yLabel][groupTemp[1]]);
+					}
+					if (groupTemp.length > 1) {
+						if (groupTemp.length > 2) {
+							for (var j=0; j<groupTemp.length-1; j++) {
+								this.x1.push(dataObj[xLabel][groupTemp[j]]);
+								this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
+								this.y1.push(dataObj[yLabel][groupTemp[j]]);
+								this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
 								this[gLabel].push(i);
 								if (lineCnt == -1) {
 									lineCnt ++;
 								}
-								p2cArr[groupTemp[0]] = lineCnt;
-								p2cArr[groupTemp[1]] = lineCnt;
-								c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
+								if (newGroup == 1) {
+									newGroup = 0;
+									p2cArr[groupTemp[j]] = lineCnt;
+								} else {
+									p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+									lineCnt ++;
+								}
+								c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+							}
+							newGroup = 1;
+							p2cArr[groupTemp[j]] = lineCnt;
+							lineCnt ++;
+						} else { // groupTemp.length == 2
+							this.x1.push(dataObj[xLabel][groupTemp[0]]);
+							this.x2.push(dataObj[xLabel][groupTemp[1]]);
+							this.y1.push(dataObj[yLabel][groupTemp[0]]);
+							this.y2.push(dataObj[yLabel][groupTemp[1]]);
+							this[gLabel].push(i);
+							if (lineCnt == -1) {
 								lineCnt ++;
 							}
-						} else {
-							p2cArr[groupTemp] = -1; // disconnected dot
+							p2cArr[groupTemp[0]] = lineCnt;
+							p2cArr[groupTemp[1]] = lineCnt;
+							c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
+							lineCnt ++;
 						}
+					} else {
+						p2cArr[groupTemp] = -1; // disconnected dot
 					}
-					this[gLabel].isDiscrete = true;
-					this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
-					this[gLabel].index = dataObj[gLabel].index;		
-				} else {
-					this.x1 = new Array(dataObj[xLabel].length - 1);
-					this.x2 = new Array(dataObj[xLabel].length - 1);
-					this.y1 = new Array(dataObj[xLabel].length - 1);
-					this.y2 = new Array(dataObj[xLabel].length - 1);
-					this[gLabel] = new Array();
-					for (var i=0; i<this.x1.length; i++) {
-						this.x1[i] = dataObj[xLabel][i];
-						this.x2[i] = dataObj[xLabel][i+1];
-						this.y1[i] = dataObj[yLabel][i];
-						this.y2[i] = dataObj[yLabel][i+1];
-						this[gLabel].push(i);
-					}
-					
-					var p2cArr = new Array(dataObj[xLabel].length);
-					var c2pArr = new Array(dataObj[xLabel].length - 1);
-					for (var i=0; i<c2pArr.length; i++) {
-						p2cArr[i] = [i-1, i];
-						c2pArr[i] = [i, i+1];
-					}
-					p2cArr[0] = 0;
-					p2cArr[i] = i-1;
 				}
-				// make event handle part.
-				this.mergeArr = mergeParentChildArr(p2cArr, c2pArr);
+				this[gLabel].isDiscrete = true;
+				this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
+				this[gLabel].index = dataObj[gLabel].index;		
+			} else {
+				this.x1 = new Array(dataObj[xLabel].length - 1);
+				this.x2 = new Array(dataObj[xLabel].length - 1);
+				this.y1 = new Array(dataObj[xLabel].length - 1);
+				this.y2 = new Array(dataObj[xLabel].length - 1);
+				this[gLabel] = new Array();
+				for (var i=0; i<this.x1.length; i++) {
+					this.x1[i] = dataObj[xLabel][i];
+					this.x2[i] = dataObj[xLabel][i+1];
+					this.y1[i] = dataObj[yLabel][i];
+					this.y2[i] = dataObj[yLabel][i+1];
+					this[gLabel].push(i);
+				}
+				
+				var p2cArr = new Array(dataObj[xLabel].length);
+				var c2pArr = new Array(dataObj[xLabel].length - 1);
 				for (var i=0; i<c2pArr.length; i++) {
-					this.statusArr[i] = 0;
+					p2cArr[i] = [i-1, i];
+					c2pArr[i] = [i, i+1];
 				}
+				p2cArr[0] = 0;
+				p2cArr[i] = i-1;
+			}
+			// make event handle part.
+			this.mergeArr = mergeParentChildArr(p2cArr, c2pArr);
+			for (var i=0; i<c2pArr.length; i++) {
+				this.statusArr[i] = 0;
+			}
 		},
 		_reCalculate: function () {
-				var xLabel = this.xLabel;
-				var yLabel = this.yLabel;
-				var dataObj = this.dataObj;
-				var optionObj = this.optionObj;
-				
-				if (optionObj.group != undefined) {
-					gLabel = optionObj.group;
-				} else {
-					gLabel = 'NULL';
-				}
-				this.gLabel = gLabel;
-				if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
-					this.groupOn = true;
-					this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
-				} else {
-					this.groupOn = false;
-					this.labelArr = ['x1', 'y1', 'x2', 'y2'];
-				}
+			var xLabel = this.xLabel;
+			var yLabel = this.yLabel;
+			var dataObj = this.dataObj;
+			var optionObj = this.optionObj;
+			
+			if (optionObj.group != undefined) {
+				gLabel = optionObj.group;
+			} else {
+				gLabel = 'NULL';
+			}
+			this.gLabel = gLabel;
+			if (gLabel != 'NULL' && dataObj[gLabel].isDiscrete != undefined) {
+				this.groupOn = true;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2', gLabel];
+			} else {
+				this.groupOn = false;
+				this.labelArr = ['x1', 'y1', 'x2', 'y2'];
+			}
 
-				if (this.groupOn == true) { // draw line with group
-					this.x1 = new Array();
-					this.x2 = new Array();
-					this.y1 = new Array();
-					this.y2 = new Array();
-					this[gLabel] = new Array();
-					var p2cArr = new Array(dataObj[xLabel].length);
-					var c2pArr = new Array();
-					var lineCnt = -1;
-					var newGroup = 1;
-					for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
-						var groupTemp = new Array();
-						for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
-							if (i == dataObj[gLabel][j]) { // save groupTemp
-								groupTemp.push(j);
-							}
+			if (this.groupOn == true) { // draw line with group
+				this.x1 = new Array();
+				this.x2 = new Array();
+				this.y1 = new Array();
+				this.y2 = new Array();
+				this[gLabel] = new Array();
+				var p2cArr = new Array(dataObj[xLabel].length);
+				var c2pArr = new Array();
+				var lineCnt = -1;
+				var newGroup = 1;
+				for (var i=0; i<dataObj[gLabel].index.length; i++) { // for one sub group
+					var groupTemp = new Array();
+					for (var j=0; j<dataObj[gLabel].length; j++) { // search all data
+						if (i == dataObj[gLabel][j]) { // save groupTemp
+							groupTemp.push(j);
 						}
-						if (groupTemp.length > 1) {
-							if (groupTemp.length > 2) {
-								for (var j=0; j<groupTemp.length-1; j++) {
-									this.x1.push(dataObj[xLabel][groupTemp[j]]);
-									this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
-									this.y1.push(dataObj[yLabel][groupTemp[j]]);
-									this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
-									this[gLabel].push(i);
-									if (lineCnt == -1) {
-										lineCnt ++;
-									}
-									if (newGroup == 1) {
-										newGroup = 0;
-										p2cArr[groupTemp[j]] = lineCnt;
-									} else {
-										p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
-										lineCnt ++;
-									}
-									c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
-								}
-								newGroup = 1;
-								p2cArr[groupTemp[j]] = lineCnt;
-								lineCnt ++;
-							} else { // groupTemp.length == 2
-								this.x1.push(dataObj[xLabel][groupTemp[0]]);
-								this.x2.push(dataObj[xLabel][groupTemp[1]]);
-								this.y1.push(dataObj[yLabel][groupTemp[0]]);
-								this.y2.push(dataObj[yLabel][groupTemp[1]]);
+					}
+					if (groupTemp.length > 1) {
+						if (groupTemp.length > 2) {
+							for (var j=0; j<groupTemp.length-1; j++) {
+								this.x1.push(dataObj[xLabel][groupTemp[j]]);
+								this.x2.push(dataObj[xLabel][groupTemp[j+1]]);
+								this.y1.push(dataObj[yLabel][groupTemp[j]]);
+								this.y2.push(dataObj[yLabel][groupTemp[j+1]]);
 								this[gLabel].push(i);
 								if (lineCnt == -1) {
 									lineCnt ++;
 								}
-								p2cArr[groupTemp[0]] = lineCnt;
-								p2cArr[groupTemp[1]] = lineCnt;
-								c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
+								if (newGroup == 1) {
+									newGroup = 0;
+									p2cArr[groupTemp[j]] = lineCnt;
+								} else {
+									p2cArr[groupTemp[j]] = [lineCnt, lineCnt+1];
+									lineCnt ++;
+								}
+								c2pArr[lineCnt] = [groupTemp[j], groupTemp[j+1]];
+							}
+							newGroup = 1;
+							p2cArr[groupTemp[j]] = lineCnt;
+							lineCnt ++;
+						} else { // groupTemp.length == 2
+							this.x1.push(dataObj[xLabel][groupTemp[0]]);
+							this.x2.push(dataObj[xLabel][groupTemp[1]]);
+							this.y1.push(dataObj[yLabel][groupTemp[0]]);
+							this.y2.push(dataObj[yLabel][groupTemp[1]]);
+							this[gLabel].push(i);
+							if (lineCnt == -1) {
 								lineCnt ++;
 							}
-						} else {
-							p2cArr[groupTemp] = -1; // disconnected dot
+							p2cArr[groupTemp[0]] = lineCnt;
+							p2cArr[groupTemp[1]] = lineCnt;
+							c2pArr[lineCnt] = [groupTemp[0], groupTemp[1]];
+							lineCnt ++;
 						}
+					} else {
+						p2cArr[groupTemp] = -1; // disconnected dot
 					}
-					this[gLabel].isDiscrete = true;
-					this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
-					this[gLabel].index = dataObj[gLabel].index;		
-				} else {
-					this.x1 = new Array(dataObj[xLabel].length - 1);
-					this.x2 = new Array(dataObj[xLabel].length - 1);
-					this.y1 = new Array(dataObj[xLabel].length - 1);
-					this.y2 = new Array(dataObj[xLabel].length - 1);
-					this[gLabel] = new Array();
-					for (var i=0; i<this.x1.length; i++) {
-						this.x1[i] = dataObj[xLabel][i];
-						this.x2[i] = dataObj[xLabel][i+1];
-						this.y1[i] = dataObj[yLabel][i];
-						this.y2[i] = dataObj[yLabel][i+1];
-						this[gLabel].push(i);
-					}
-					
-					var p2cArr = new Array(dataObj[xLabel].length);
-					var c2pArr = new Array(dataObj[xLabel].length - 1);
-					for (var i=0; i<c2pArr.length; i++) {
-						p2cArr[i] = [i-1, i];
-						c2pArr[i] = [i, i+1];
-					}
-					p2cArr[0] = 0;
-					p2cArr[i] = i-1;
 				}
-				// make event handle part.
-				this.statusArr = new Array();
-				this.mergeArr = mergeParentChildArr(p2cArr, c2pArr);
+				this[gLabel].isDiscrete = true;
+				this[gLabel].colorIndex = dataObj[gLabel].colorIndex;
+				this[gLabel].index = dataObj[gLabel].index;		
+			} else {
+				this.x1 = new Array(dataObj[xLabel].length - 1);
+				this.x2 = new Array(dataObj[xLabel].length - 1);
+				this.y1 = new Array(dataObj[xLabel].length - 1);
+				this.y2 = new Array(dataObj[xLabel].length - 1);
+				this[gLabel] = new Array();
+				for (var i=0; i<this.x1.length; i++) {
+					this.x1[i] = dataObj[xLabel][i];
+					this.x2[i] = dataObj[xLabel][i+1];
+					this.y1[i] = dataObj[yLabel][i];
+					this.y2[i] = dataObj[yLabel][i+1];
+					this[gLabel].push(i);
+				}
+				
+				var p2cArr = new Array(dataObj[xLabel].length);
+				var c2pArr = new Array(dataObj[xLabel].length - 1);
 				for (var i=0; i<c2pArr.length; i++) {
-					this.statusArr[i] = 0;
+					p2cArr[i] = [i-1, i];
+					c2pArr[i] = [i, i+1];
 				}
+				p2cArr[0] = 0;
+				p2cArr[i] = i-1;
+			}
+			// make event handle part.
+			this.statusArr = new Array();
+			this.mergeArr = mergeParentChildArr(p2cArr, c2pArr);
+			for (var i=0; i<c2pArr.length; i++) {
+				this.statusArr[i] = 0;
+			}
 		}
 	};
 })();
 /**  MakeLineObj End  **/
+
+/**  MakeBoxObj  **/
 var MakeBoxObj = {};
 (function() {
 	
@@ -489,11 +491,159 @@ var MakeBoxObj = {};
 			var optionObj = this.optionObj;
 			
 			for (var i=0; i<xLabel.length; i++) {
-					this[xLabel[i]] = new Array();
-					if (dataObj[xLabel[i]].isDiscrete != undefined) {
-						this[xLabel[i]].isDiscrete = dataObj[xLabel[i]].isDiscrete;
-						this[xLabel[i]].index = dataObj[xLabel[i]].index;
+				this[xLabel[i]] = new Array();
+				if (dataObj[xLabel[i]].isDiscrete != undefined) {
+					this[xLabel[i]].isDiscrete = dataObj[xLabel[i]].isDiscrete;
+					this[xLabel[i]].index = dataObj[xLabel[i]].index;
+				}
+			}
+			
+			if(dataObj[xLabel].isDiscrete == true){
+				// discrete.
+				var isDiscrete = true;
+				var boxNum = dataObj[xLabel].index.length;
+				var boxNumDataArr = make2DArr(boxNum);
+				var boxNumDataNumArr = make2DArr(boxNum);
+				// push elements into each box.
+				for(var i = 0 ; i < dataObj[xLabel].length ; i ++){
+					if(dataObj[xLabel][i] == undefined){
+						alert(i + ", " + dataObj[xLabel][i]);
 					}
+					
+					boxNumDataArr[dataObj[xLabel][i]].push(dataObj[yLabel][i]);
+					boxNumDataNumArr[dataObj[xLabel][i]].push(i);
+				}			
+			}else{
+				var isDiscrete = false;
+				var boxNum = 1;
+				var boxNumDataArr = new Array();
+				var boxNumDataNumArr = new Array();
+				boxNumDataArr[0] = dataObj[yLabel];
+				boxNumDataNumArr[0] = new Array();
+				for(var i = 0 ; i < dataObj[yLabel].length ; i ++){
+					boxNumDataNumArr[0][i] = i;
+				}
+			}
+			
+			this[xLabel] = dataObj[xLabel];
+			this[yLabel] = dataObj[yLabel];
+			// make tags.
+			this.x = new Array();
+			this.y = new Array();
+
+			this.median = new Array();
+			this.q1 = new Array();
+			this.q3 = new Array();
+			this.upperFence = new Array();
+			this.lowerFence = new Array();
+			this.isOutlier = new Array();
+			
+			var hasArr = new Array();
+			var stableSort = function(dataA, dataB){
+			    if (dataA.a == dataB.a) return dataA.b > dataB.b ? 1 : -1;
+			    if (dataA.a > dataB.a) return 1;
+			    return -1;
+			};		
+			// calculate tags.
+			var nodeCnt = 0;
+			for(var i = 0 ; i < boxNum ; i ++){
+				// copy value of array.
+				var tempArr = boxNumDataArr[i].slice(0);
+				var tempDataNumberArr = new Array();
+				var outliers = new Array();
+				var outliersDataNumber = new Array();			
+
+				for(j = 0 ; j < tempArr.length; j ++){
+					tempArr[j] = {a: tempArr[j], b: j};
+				}
+				// sort data
+				tempArr.sort(stableSort);
+				
+				for(var j = 0 ; j < tempArr.length ; j ++){
+					tempDataNumberArr[j] = boxNumDataNumArr[i][tempArr[j].b];
+					tempArr[j] = tempArr[j].a;
+				}
+				// get values which are needed to draw box.
+				var q3 = findQuartile(tempArr, 3);
+				var median = findQuartile(tempArr, 2);
+				var q1 = findQuartile(tempArr, 1);
+				// calculate upper fence.
+				var tmpUpFence = findMaxBelowFence(tempArr, q1, q3);
+				var upperFence = tmpUpFence.fence;
+				var upperFenceNumber = tmpUpFence.fenceNumber;
+				// extract upper outliers.
+				for(var j = upperFenceNumber + 1 ; j < tempArr.length ; j ++){
+					outliers.push(tempArr[j]);
+					outliersDataNumber.push(tempDataNumberArr[j]);
+				}
+				// calculate below fence.
+				var tmpDownFence = findMinAboveFence(tempArr, q1, q3);
+				var lowerFence = tmpDownFence.fence;
+				var lowerFenceNumber = tmpDownFence.fenceNumber;
+				// extract upper outliers.
+				for(var j = 0 ; j < lowerFenceNumber ; j ++){
+					outliers.push(tempArr[j]);
+					outliersDataNumber.push(tempDataNumberArr[j]);
+				}
+				
+				//set tag and hasArr with box data.
+				this.median[nodeCnt] = median;
+				this.isOutlier[nodeCnt] = false;
+				this.q1[nodeCnt] = q1;
+				this.q3[nodeCnt] = q3;
+				this.upperFence[nodeCnt] = upperFence;
+				this.lowerFence[nodeCnt] = lowerFence;
+				this.x[nodeCnt] = i;
+				this.y[nodeCnt] = q3;
+				
+				// save hasArr.
+				hasArr[nodeCnt] = new Array();
+				for(var j = lowerFenceNumber ; j < upperFenceNumber + 1 ; j ++){
+					hasArr[nodeCnt].push(tempDataNumberArr[j]);
+				}
+				//alert(hasArr[nodeCnt]);
+				nodeCnt ++;
+				
+				//set tag and hasArr with outlier data.
+				for(var j = 0 ; j < outliers.length ; j ++, nodeCnt ++){
+					this.median[nodeCnt] = 0;
+					this.isOutlier[nodeCnt] = true;
+					this.q1[nodeCnt] = 0;
+					this.q3[nodeCnt] = 0;
+					this.upperFence[nodeCnt] = 0;
+					this.lowerFence[nodeCnt] = 0;
+					this.x[nodeCnt] = i;
+					this.y[nodeCnt] = outliers[j];
+					hasArr[nodeCnt] = new Array();
+					hasArr[nodeCnt].push(outliersDataNumber[j]);
+				}
+			}
+			// event set
+			var p2cArr = new Array(dataObj[xLabel].length);			
+			for(var i = 0 ; i < hasArr.length ; i ++){
+				for(var j = 0 ; j < hasArr[i].length ; j ++){
+					p2cArr[hasArr[i][j]] = i;
+				}		
+			}	
+		
+			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);			
+			for (var i=0; i<hasArr.length; i++) {
+				this.statusArr[i] = 0;
+			}
+		},
+		_reCalculate: function() {
+			// reload data.
+			var dataObj = this.dataObj;
+			var xLabel = this.xLabel;
+			var yLabel = this.yLabel;
+			var optionObj = this.optionObj;
+			
+			for (var i=0; i<xLabel.length; i++) {
+				this[xLabel[i]] = new Array();
+				if (dataObj[xLabel[i]].isDiscrete != undefined) {
+					this[xLabel[i]].isDiscrete = dataObj[xLabel[i]].isDiscrete;
+					this[xLabel[i]].index = dataObj[xLabel[i]].index;
+				}
 			}
 			
 			if(dataObj[xLabel].isDiscrete == true){
@@ -592,16 +742,17 @@ var MakeBoxObj = {};
 				this.lowerFence[nodeCnt] = lowerFence;
 				this.x[nodeCnt] = i;
 				this.y[nodeCnt] = q3;
+				
 				// save hasArr.
 				hasArr[nodeCnt] = new Array();
-				
 				for(var j = lowerFenceNumber ; j < upperFenceNumber + 1 ; j ++){
 					hasArr[nodeCnt].push(tempDataNumberArr[j]);
 				}
 				//alert(hasArr[nodeCnt]);
 				nodeCnt ++;
+				
 				//set tag and hasArr with outlier data.
-				for(var j = 0 ; j < outliers.length ; j ++){
+				for(var j = 0 ; j < outliers.length ; j ++, nodeCnt++){
 					this.median[nodeCnt] = 0;
 					this.isOutlier[nodeCnt] = true;
 					this.q1[nodeCnt] = 0;
@@ -610,32 +761,20 @@ var MakeBoxObj = {};
 					this.lowerFence[nodeCnt] = 0;
 					this.x[nodeCnt] = i;
 					this.y[nodeCnt] = outliers[j];
-					hasArr[nodeCnt] = outliersDataNumber[j];
-					nodeCnt ++;
+					hasArr[nodeCnt] = new Array();
+					hasArr[nodeCnt].push(outliersDataNumber[j]);
 				}
 			}
 			// event set
-			var p2cArr = new Array(dataObj[xLabel].length);
-			var isSelected = make2DArr(nodeCnt);
-			
-			for(var i = 0 ; i < nodeCnt ; i ++){
-				isSelected[i][0] = 0;
-				if(hasArr[i].length != undefined){					
-					for(var j = 0 ; j < hasArr[i].length ; j ++){
-						p2cArr[hasArr[i][j]] = i;
-					}		
-				}
+			var p2cArr = new Array(dataObj[xLabel].length);		
+			for(var i = 0 ; i < hasArr.length ; i ++){
+				for(var j = 0 ; j < hasArr[i].length ; j ++){
+					p2cArr[hasArr[i][j]] = i;
+				}		
 			}	
 			
-			for(var i = 0; i < p2cArr.length; i++) {
-				if(p2cArr[i] == undefined) {
-					p2cArr[i] = i;
-				}
-			}
-			
-			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
-			this.$isSelected = isSelected;
-			
+			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);		
+			this.statusArr = new Array();
 			for (var i=0; i<hasArr.length; i++) {
 				this.statusArr[i] = 0;
 			}
@@ -670,221 +809,183 @@ var ddply = {};
 		this._calculate();
 	};
 	ddply.prototype = {
-			_calculate: function () {
-					var dataObj = this.dataObj;
-					var labels = this.labels;
-					var optionObj = this.optionObj;
-					
-					// copy fields from dataObj (parent)
-					for (var i=0; i<labels.length; i++) {
-						this[labels[i]] = new Array();
-						if (dataObj[labels[i]].isDiscrete != undefined) {
-							this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
-							this[labels[i]].index = dataObj[labels[i]].index;
-						}
-					}
-					
-				    this['frequency'] = new Array();
-				    this['hasArr'] = new Array();
-				    // binning continuous data.
-				    var binArr = new Array(labels.length);
-				    var indexArr = make2DArr(labels.length);
-				    var factoredArr = make2DArr(labels.length);
-				    for (var i=0; i<labels.length; i++) {
-				    	if (dataObj[labels[i]].isDiscrete == undefined) {
-				    		// find indexArr, factoredArr of continuous labels.
-				    		var temp = binning(dataObj[labels[i]], optionObj.bin);
-				    		indexArr[i] = temp.indexArr;
-				    		factoredArr[i] = temp.factoredArr;
-				    		dataObj[labels[i]].max = temp.tempMax;
-				    		dataObj[labels[i]].min = temp.tempMin;
-				      } else {
-				        // make indexArr of discrete label.
-				        for (var j=0; j<dataObj[labels[i]].index.length; j++) {
-				        	indexArr[i][j] = j;
-				        }
-				      }
-					}
-				    
-				 // calculate frequency
-					var tmpObj = new Object();
-					for (var i=0; i<dataObj[labels[0]].length; i++) {
-						var temp = tmpObj;
-						for (var j=0; j<labels.length; j++) {
-							if (dataObj[labels[j]].isDiscrete == undefined) {
-								cnt = indexArr[j][factoredArr[j][i]];
-							} else {
-								cnt = dataObj[labels[j]][i];
-							}
-							temp = addField(temp, cnt);
-						}
-						// for debugging
-						// document.write("<br>");
-						if (temp['frequency'] == undefined) {
-							temp['frequency'] = 1;
-							temp['hasArr'] = new Array();
-							temp['hasArr'].push(i);
-						} else {
-							temp['frequency'] ++;
-							temp['hasArr'].push(i);
-						}
-					}
-				    
-				    // set the array of fields by using recursive function.
-					setNode(0, labels.length, labels, indexArr, tmpObj, this);
-				    
-				    // copy max and min value for matching with axis binnig.
-					for (var i=0; i<labels.length; i++) {
-						if (dataObj[labels[i]].max != undefined) {
-							this[labels[i]].max = dataObj[labels[i]].max;
-							this[labels[i]].min = dataObj[labels[i]].min;
-						}
-					}
-				    
-					var hasArr = this['hasArr'];
-					delete this['hasArr'];
-					// make event handle part
-					var p2cArr = new Array(dataObj[labels[0]].length);
-					for (var i=0; i<hasArr.length; i++) {
-						for (var j=0; j<hasArr[i].length; j++) {
-							p2cArr[hasArr[i][j]] = i;
-						}
-					}
-					
-					// make event handle part.
-					this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
-					for (var i=0; i<hasArr.length; i++) {
-						this.statusArr[i] = 0;
-					}
-			                    
-					// for debugging
-				  /*
-						document.write("<br>");
-				    
-					for (var j=0; j<labels.length; j++) {
-						document.write(labels[j] + " ");
-					}
-				    	document.write("frequency <br>");
-					var cnt = 0;
-					for (var i=0; i<this[labels[0]].length; i++) {
-						for (var j=0; j<labels.length; j++) {
-				        			document.write(this[labels[j]][i] + " ,  ");
-						}
-				      		document.write(this.frequency[i] + "<br>");
-						cnt = cnt + this.frequency[i];
-					}
-				    	document.write("Total frequency: " + cnt);
-				   
-				  */
-			},
-			_reCalculate: function () {
-					var dataObj = this.dataObj;
-					var labels = this.labels;
-					var optionObj = this.optionObj;
-					this.statusArr = new Array();
-					
-					// copy fields from dataObj (parent)
-					for (var i=0; i<labels.length; i++) {
-						this[labels[i]] = new Array();
-						if (dataObj[labels[i]].isDiscrete != undefined) {
-							this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
-							this[labels[i]].index = dataObj[labels[i]].index;
-						}
-					}
-					
-					this['frequency'] = new Array();
-					this['hasArr'] = new Array();
-					// binning continuous data.
-					var binArr = new Array(labels.length);
-					var indexArr = make2DArr(labels.length);
-					var factoredArr = make2DArr(labels.length);
-					for (var i=0; i<labels.length; i++) {
-						if (dataObj[labels[i]].isDiscrete == undefined) {
-							// find indexArr, factoredArr of continuous labels.
-							var temp = binning(dataObj[labels[i]], optionObj.bin);
-							indexArr[i] = temp.indexArr;
-							factoredArr[i] = temp.factoredArr;
-							dataObj[labels[i]].max = temp.tempMax;
-							dataObj[labels[i]].min = temp.tempMin;
-					  } else {
-						// make indexArr of discrete label.
-						for (var j=0; j<dataObj[labels[i]].index.length; j++) {
-							indexArr[i][j] = j;
-						}
-					  }
-					}
-					
-				 // calculate frequency
-					var tmpObj = new Object();
-					for (var i=0; i<dataObj[labels[0]].length; i++) {
-						var temp = tmpObj;
-						for (var j=0; j<labels.length; j++) {
-							if (dataObj[labels[j]].isDiscrete == undefined) {
-								cnt = indexArr[j][factoredArr[j][i]];
-							} else {
-								cnt = dataObj[labels[j]][i];
-							}
-							temp = addField(temp, cnt);
-						}
-						// for debugging
-						// document.write("<br>");
-						if (temp['frequency'] == undefined) {
-							temp['frequency'] = 1;
-							temp['hasArr'] = new Array();
-							temp['hasArr'].push(i);
-						} else {
-							temp['frequency'] ++;
-							temp['hasArr'].push(i);
-						}
-					}
-					
-					// set the array of fields by using recursive function.
-					setNode(0, labels.length, labels, indexArr, tmpObj, this);
-					
-					// copy max and min value for matching with axis binnig.
-					for (var i=0; i<labels.length; i++) {
-						if (dataObj[labels[i]].max != undefined) {
-							this[labels[i]].max = dataObj[labels[i]].max;
-							this[labels[i]].min = dataObj[labels[i]].min;
-						}
-					}
-					
-					var hasArr = this['hasArr'];
-					delete this['hasArr'];
-					// make event handle part
-					var p2cArr = new Array(dataObj[labels[0]].length);
-					for (var i=0; i<hasArr.length; i++) {
-						for (var j=0; j<hasArr[i].length; j++) {
-							p2cArr[hasArr[i][j]] = i;
-						}
-					}
-					
-					// make event handle part.
-					this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
-					for (var i=0; i<hasArr.length; i++) {
-						this.statusArr[i] = 0;
-					}
-								
-					// for debugging
-				  /*
-						document.write("<br>");
-					
-					for (var j=0; j<labels.length; j++) {
-						document.write(labels[j] + " ");
-					}
-						document.write("frequency <br>");
-					var cnt = 0;
-					for (var i=0; i<this[labels[0]].length; i++) {
-						for (var j=0; j<labels.length; j++) {
-									document.write(this[labels[j]][i] + " ,  ");
-						}
-							document.write(this.frequency[i] + "<br>");
-						cnt = cnt + this.frequency[i];
-					}
-						document.write("Total frequency: " + cnt);
-				   
-				  */
+		_calculate: function () {
+			var dataObj = this.dataObj;
+			var labels = this.labels;
+			var optionObj = this.optionObj;
+			
+			// copy fields from dataObj (parent)
+			for (var i=0; i<labels.length; i++) {
+				this[labels[i]] = new Array();
+				if (dataObj[labels[i]].isDiscrete != undefined) {
+					this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
+					this[labels[i]].index = dataObj[labels[i]].index;
+				}
 			}
+			
+			this['frequency'] = new Array();
+			this['hasArr'] = new Array();
+			// binning continuous data.
+			var binArr = new Array(labels.length);
+			var indexArr = make2DArr(labels.length);
+			var factoredArr = make2DArr(labels.length);
+			for (var i=0; i<labels.length; i++) {
+				if (dataObj[labels[i]].isDiscrete == undefined) {
+					// find indexArr, factoredArr of continuous labels.
+					var temp = binning(dataObj[labels[i]], optionObj.bin);
+					indexArr[i] = temp.indexArr;
+					factoredArr[i] = temp.factoredArr;
+					dataObj[labels[i]].max = temp.tempMax;
+					dataObj[labels[i]].min = temp.tempMin;
+			  } else {
+				// make indexArr of discrete label.
+				for (var j=0; j<dataObj[labels[i]].index.length; j++) {
+					indexArr[i][j] = j;
+				}
+			  }
+			}
+			
+		 // calculate frequency
+			var tmpObj = new Object();
+			for (var i=0; i<dataObj[labels[0]].length; i++) {
+				var temp = tmpObj;
+				for (var j=0; j<labels.length; j++) {
+					if (dataObj[labels[j]].isDiscrete == undefined) {
+						cnt = indexArr[j][factoredArr[j][i]];
+					} else {
+						cnt = dataObj[labels[j]][i];
+					}
+					temp = addField(temp, cnt);
+				}
+				// for debugging
+				// document.write("<br>");
+				if (temp['frequency'] == undefined) {
+					temp['frequency'] = 1;
+					temp['hasArr'] = new Array();
+					temp['hasArr'].push(i);
+				} else {
+					temp['frequency'] ++;
+					temp['hasArr'].push(i);
+				}
+			}
+			
+			// set the array of fields by using recursive function.
+			setNode(0, labels.length, labels, indexArr, tmpObj, this);
+			
+			// copy max and min value for matching with axis binnig.
+			for (var i=0; i<labels.length; i++) {
+				if (dataObj[labels[i]].max != undefined) {
+					this[labels[i]].max = dataObj[labels[i]].max;
+					this[labels[i]].min = dataObj[labels[i]].min;
+				}
+			}
+			
+			var hasArr = this['hasArr'];
+			delete this['hasArr'];
+			// make event handle part
+			var p2cArr = new Array(dataObj[labels[0]].length);
+			
+			for (var i=0; i<hasArr.length; i++) {
+				for (var j=0; j<hasArr[i].length; j++) {
+					p2cArr[hasArr[i][j]] = i;
+				}
+			}
+		
+			// make event handle part.
+			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
+			for (var i=0; i<hasArr.length; i++) {
+				this.statusArr[i] = 0;
+			}
+		},
+		_reCalculate: function () {
+			var dataObj = this.dataObj;
+			var labels = this.labels;
+			var optionObj = this.optionObj;
+			
+			// copy fields from dataObj (parent)
+			for (var i=0; i<labels.length; i++) {
+				this[labels[i]] = new Array();
+				if (dataObj[labels[i]].isDiscrete != undefined) {
+					this[labels[i]].isDiscrete = dataObj[labels[i]].isDiscrete;
+					this[labels[i]].index = dataObj[labels[i]].index;
+				}
+			}
+			
+			this['frequency'] = new Array();
+			this['hasArr'] = new Array();
+			// binning continuous data.
+			var binArr = new Array(labels.length);
+			var indexArr = make2DArr(labels.length);
+			var factoredArr = make2DArr(labels.length);
+			for (var i=0; i<labels.length; i++) {
+				if (dataObj[labels[i]].isDiscrete == undefined) {
+					// find indexArr, factoredArr of continuous labels.
+					var temp = binning(dataObj[labels[i]], optionObj.bin);
+					indexArr[i] = temp.indexArr;
+					factoredArr[i] = temp.factoredArr;
+					dataObj[labels[i]].max = temp.tempMax;
+					dataObj[labels[i]].min = temp.tempMin;
+			  } else {
+				// make indexArr of discrete label.
+				for (var j=0; j<dataObj[labels[i]].index.length; j++) {
+					indexArr[i][j] = j;
+				}
+			  }
+			}
+			
+		 // calculate frequency
+			var tmpObj = new Object();
+			for (var i=0; i<dataObj[labels[0]].length; i++) {
+				var temp = tmpObj;
+				for (var j=0; j<labels.length; j++) {
+					if (dataObj[labels[j]].isDiscrete == undefined) {
+						cnt = indexArr[j][factoredArr[j][i]];
+					} else {
+						cnt = dataObj[labels[j]][i];
+					}
+					temp = addField(temp, cnt);
+				}
+				// for debugging
+				// document.write("<br>");
+				if (temp['frequency'] == undefined) {
+					temp['frequency'] = 1;
+					temp['hasArr'] = new Array();
+					temp['hasArr'].push(i);
+				} else {
+					temp['frequency'] ++;
+					temp['hasArr'].push(i);
+				}
+			}
+			
+			// set the array of fields by using recursive function.
+			setNode(0, labels.length, labels, indexArr, tmpObj, this);
+			
+			// copy max and min value for matching with axis binnig.
+			for (var i=0; i<labels.length; i++) {
+				if (dataObj[labels[i]].max != undefined) {
+					this[labels[i]].max = dataObj[labels[i]].max;
+					this[labels[i]].min = dataObj[labels[i]].min;
+				}
+			}
+			
+			var hasArr = this['hasArr'];
+			delete this['hasArr'];
+			
+			// make event handle part
+			var p2cArr = new Array(dataObj[labels[0]].length);
+			for (var i=0; i<hasArr.length; i++) {
+				for (var j=0; j<hasArr[i].length; j++) {
+					p2cArr[hasArr[i][j]] = i;
+				}
+			}
+			
+			// make event handle part.
+			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
+			this.statusArr = new Array();
+			for (var i=0; i<hasArr.length; i++) {
+				this.statusArr[i] = 0;
+			}
+		}
 	};
 })();
 /**  ddply End  **/

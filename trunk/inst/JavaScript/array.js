@@ -25,7 +25,11 @@ function invertValueArr (array, numbers) {
 }
 
 function extensionArr (numbers, length, value) {
+<<<<<<< .mine
+	//alert("array_extensionArr");	
+=======
 	//alert("array_extensionArr");
+>>>>>>> .r834
 	var returnArray = new Array(length);
 	for (var i=0; i<length; i++) {
 		returnArray[i] = 0;

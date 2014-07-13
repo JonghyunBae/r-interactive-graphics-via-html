@@ -38,7 +38,7 @@ var Dot = {};
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			},
 			_reDraw: function () {
-						
+				this.dataObj.$isSelected[this.dataId] = dotUpdate();		
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			},
 			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {

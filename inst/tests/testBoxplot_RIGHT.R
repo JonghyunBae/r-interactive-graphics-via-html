@@ -39,7 +39,7 @@ test_that("Check script generation", {
   expect_identical(temp$nameArray, c("dummy", "Theoph"))
   expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
   expect_identical(temp$scriptArray, 
-                   c("var boxObj1 = new MakeBoxObj(Theoph, 'Subject', 'conc', {});",
+                   c("var boxObj1 = new MakeBoxObj(Theoph, ['Subject'], ['conc'], {});",
                      "var axis1 = new Axis(1, boxObj1, 'Subject', 'conc', {});",
                      "var box1 = new Box(axis1, boxObj1, {});"))
   expect_true(any("box.js" %in% temp$sourceArray))
@@ -59,7 +59,7 @@ test_that("Check isString option:", {
   expect_identical(temp$numBox, 1)
   expect_identical(temp$divArray, '<div id="container1" oncontextmenu="return false;"></div>')
   expect_identical(temp$scriptArray, 
-                   c("var boxObj1 = new MakeBoxObj(Theoph, 'Subject', 'conc', {});",
+                   c("var boxObj1 = new MakeBoxObj(Theoph, ['Subject'], ['conc'], {});",
                      "var axis1 = new Axis(1, boxObj1, 'Subject', 'conc', {});",
                      "var box1 = new Box(axis1, boxObj1, {});"))
   expect_true(any("box.js" %in% temp$sourceArray))

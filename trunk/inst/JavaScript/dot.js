@@ -38,7 +38,8 @@ var Dot = {};
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			},
 			_reDraw: function () {
-				this.dataObj.$isSelected[this.dataId] = dotUpdate();		
+				this.dataObj.refreshArr[this.dataId] = makeRefresh(this.axisObj.stage);
+				this.axisObj.boxSearchArr[this.graphId] = dotBoxSearch(this);
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			},
 			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
@@ -173,6 +174,7 @@ function dotUpdate () {
 				node.setSelected(1);
 				node.moveToTop();
 			}
+			node.draw();
 		};
 }
 /**  update function end  **/

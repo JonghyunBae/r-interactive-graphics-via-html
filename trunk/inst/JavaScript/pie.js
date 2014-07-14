@@ -58,6 +58,14 @@ var Pie = {};
 				this.barWidth = this.axisObj.xbarWidth;
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			},
+			_reDraw: function(){
+				if (this.colorOn == true) {
+						addColorField(this.dataObj[this.colorLabel]);
+				}
+				this.dataObj.refreshArr[this.dataId] = makeRefresh(this.axisObj.stage);
+				this.axisObj.boxSearchArr[this.graphId] = pieBoxSearch(this);
+				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
+			},
 			_drawSet: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 				this.node = new Array();
 				var degree = 0;
@@ -117,13 +125,6 @@ var Pie = {};
 				
 				//add layer
 				axisObj.stage.add(this.dataLayer);
-			},
-			_reDraw: function(){
-				if (this.colorOn == true) {
-						addColorField(this.dataObj[this.colorLabel]);
-				}
-				
-				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
 			}
 	};
 })();
@@ -170,10 +171,9 @@ function pieUpdate() {
 	return	function(node, selectOn) {
 			if(node.getSelected() == 1 && selectOn < 0){		//unselect
 				node.setSelectCnt(node.getSelectCnt() + selectOn);	
-
 				if(node.getSelectCnt() == 0){
-					node.setOpacity(0.5);
 					node.setStroke(node.getFill());
+					node.setOpacity(0.5);
 					node.setSelected(0);
 				}
 			}else if(selectOn > 0){		// select
@@ -184,7 +184,7 @@ function pieUpdate() {
 					node.setSelected(1);
 				}
 			}
-			
+			node.draw();
 		};
 }
 /**  update function end  **/

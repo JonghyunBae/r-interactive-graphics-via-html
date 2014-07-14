@@ -62,20 +62,20 @@ setRIGHT(scriptArray = c())
 test_that("Test script generation for loading data", {
   
   loadData("A")
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$structArray, 
                    paste0('var A = createMainStructureE(A);'))
   
   loadData()
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$structArray, 
                    paste0('var A = createMainStructureE(A);'))
   
   expect_error(loadData(c("B", "C"), "data.js"))
   
   loadData(c("B", "C"))
-  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$scriptArray, 
-                   c("var C = createMainStructureE(C);",
+  expect_identical(get(".RIGHT", envir = asNamespace("RIGHT"))$structArray, 
+                   c("var A = createMainStructureE(A);",
                      "var B = createMainStructureE(B);",
-                     "var A = createMainStructureE(A);"))      
+                     "var C = createMainStructureE(C);"))      
 }) # test_that
 
 ## ---
@@ -126,13 +126,16 @@ test_that("Test event trigger script generation", {
 ## Test createDiv():
 ## ---
 
+setRIGHT(structArray = c(),
+         numSearch = 0)
+
 test_that("Test div block generation:", {
   
   expect_identical(createDiv(), NULL)
   expect_identical(createDiv(c()), NULL)
   expect_identical(createDiv(c("A", "B")),
-                   c('<div id="content">\n<div id="content1" class="right-output">\nA</div>\n<div id="content2" class="right-output">\nB</div>\n',
-                     "</div>"))
+                   c(paste0('<div id="content">\n<div id="content1" class="right-output">\nA</div>\n',
+                            '<div id="content2" class="right-output">\nB</div>\n'), "</div>"))
   
   setRIGHT(numAxis = 3,
            offIndex = c(1, 1),

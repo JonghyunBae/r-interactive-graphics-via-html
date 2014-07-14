@@ -22,7 +22,7 @@ test_that("Check script generation", {
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numSearch, 1)
   expect_identical(temp$nameArray, c("dummy", "Theoph"))
-  expect_identical(temp$scriptArray, 'makeSearchButton("searchBox1", Theoph);')
+  expect_identical(temp$searchArray, 'makeSearchButton("searchBox1", Theoph);')
   expect_true(any("search.js" %in% temp$sourceArray))
   
 }) # test_that

@@ -39,7 +39,8 @@ var Line = {};
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel1, this.xLabel2, this.yLabel1, this.yLabel2, this.optionObj);
 			},
 			_reDraw: function () {
-				
+				this.dataObj.refreshArr[this.dataId] = makeRefresh(this.axisObj.stage);
+				this.axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel1, this.xLabel2, this.yLabel1, this.yLabel2, this.optionObj);
 			},
 			_init: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
@@ -186,6 +187,7 @@ function lineUpdate () {
 					node.moveToTop();
 				}
 			}
+			node.draw();
 		};
 }
 

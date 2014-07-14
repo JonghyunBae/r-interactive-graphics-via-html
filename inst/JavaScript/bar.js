@@ -49,6 +49,8 @@ var Bar = {};
 				}
 				
 				this.barWidth = this.axisObj.xbarWidth;
+				this.dataObj.refreshArr[this.dataId] = makeRefresh(this.axisObj.stage);
+				this.axisObj.boxSearchArr[this.graphId] = barBoxSearch(this);
 				this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
 			},
@@ -268,18 +270,17 @@ function barBoxSearch (graphObj) {
 	        }
 		};
 }
-
 /**  update function  **/
 //Kinetic version update
 //just remove transitient, and change it with "set" syntax.
 //"set" syntax has not changed during many versions.
 function barUpdate () {
 	return	function(node, selectOn) {
-			if (node.getSelected() == 1 && selectOn < 0) {		//unselect
-				node.setSelectCnt(node.getSelectCnt() + selectOn);	
-				if (node.getSelectCnt() == 0) {
-					node.setOpacity(0.5);
-					node.setStroke(node.getFill());
+			if(node.getSelected() == 1 && selectOn < 0) {		//unselect
+				node.setSelectCnt(node.getSelectCnt() + selectOn);
+				if(node.getSelectCnt() == 0) {
+					node.setStroke(node.getFill());	
+					node.setOpacity(0.5);	
 					node.setSelected(0);
 				}
 			} else if (selectOn > 0) {		// select
@@ -290,6 +291,7 @@ function barUpdate () {
 					node.setSelected(1);
 				}
 			}
+			node.draw();
 		};
 }
 /**  update function end  **/

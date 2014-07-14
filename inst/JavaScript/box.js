@@ -90,6 +90,11 @@ var Box = {};
 			
 			this._drawSet(this.axisObj, this.dataObj, this.optionObj);
 		},
+		_reDraw: function() {
+			this.dataObj.refreshArr[this.dataId] = makeRefresh(this.axisObj.stage);
+			this.axisObj.boxSearchArr[this.graphId] = boxBoxSearch(this);			
+			this._drawSet(this.axisObj, this.dataObj, this.optionObj);
+		},
 		_drawSet : function(axisObj, dataObj, optionObj) {
 			
 			var median = axisObj._getPixelY(dataObj.median);
@@ -158,9 +163,6 @@ var Box = {};
         	
         	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
 			axisObj.stage.add(this.dataLayer);
-		},
-		_reDraw: function() {
-			this._drawSet(this.axisObj, this.dataObj, this.optionObj);
 		}
 	};
 })();
@@ -271,6 +273,7 @@ function boxUpdate()
 					}
 				}				
 			}
+			node.draw();
 		};
 }
 ////////////////////////////////////////////////////////////////////////////////////////

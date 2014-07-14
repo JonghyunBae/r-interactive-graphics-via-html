@@ -184,43 +184,32 @@ function booleanSearch(searchBoxId, mainArr)
 	
 	//current answer update.
 	mainArr.$ans=inputStr; 
-	
 	// find node number which satisfies boolean condition
-	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
+	var temp = new Array(mainArr.statusArr.length);
+	for(var i = 0 ; i < mainArr.statusArr.length ; i ++)
 	{	
+		temp[i] = 0;
 		if(eval(inputStr)){			
 			findingNumber.push(i);
 		}
 	}
-	
+
 	// root update
-	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
+	/*for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
 		mainArr.$isSelected[i][0] = 0;
 		for(var j = 1 ; j < mainArr.$isSelected[i].length ; j ++){
 			mainArr.$isSelected[i][j](0);
 		}
-	}
+	}*/
+	
 	for(var i = 0 ; i < findingNumber.length ; i ++){
-		mainArr.$isSelected[findingNumber[i]][0] = 1;
-		for(var j = 1 ; j < mainArr.$isSelected[findingNumber[i]].length ; j ++){
-			mainArr.$isSelected[findingNumber[i]][j](1);
-		}
+		temp[findingNumber[i]] = 1;
+		//for(var j = 1 ; j < mainArr.$isSelected[findingNumber[i]].length ; j ++){
+		//	mainArr.$isSelected[findingNumber[i]][j](1);
+		//}
 	}
-	// table update
-	if(mainArr.refreshTable != undefined){
-		mainArr.refreshTable();
-	}
-	// refresh
-	for(var i = 1 ; i < mainArr.refreshArr.length ; i ++){
-		mainArr.refreshArr[i]();
-	}
-	// mainArr update
-	if(mainArr.child != null){
-		for(var i = 0 ; i < mainArr.child.length ; i ++){
-			var temp = mainArr.parentTOchild[i](findingNumber);
-			childUpdate(mainArr.child[i], temp, 1, mainArr);
-		}
-	}	
+	
+	updateRecursive(mainArr, temp, mainArr.statusArr);
 }
 
 // replace all string
@@ -230,7 +219,7 @@ function replaceAll(str, orginalStr, replacedStr){
 
 //auto complete (Reference, http://jqueryui.com/autocomplete/#multiple)
 function autoComplete(searchBoxId, mainArr){
-	$(function(){
+	(function(){
 	    var availableTags = mainArr.labelArr;
 	    function split( val ) {
 	        return val.split( / \s*/ );

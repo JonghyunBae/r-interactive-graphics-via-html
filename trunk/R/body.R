@@ -54,8 +54,9 @@ loadData <- function(nameArray = NULL) {
     
     # Data objects should be loaded before any plotting:
     for(iData in 1:numData) {
-      .RIGHT$scriptArray <- c(paste0("var ",nameArray[iData], " = createMainStructureE(", nameArray[iData], ");"), 
-                            .RIGHT$scriptArray) 
+      .RIGHT$structArray <- append(.RIGHT$structArray,
+                                   paste0("var ",nameArray[iData], 
+                                          " = createMainStructureE(", nameArray[iData], ");")) 
     } # for
   } # if
   
@@ -144,7 +145,15 @@ createDiv <- function(divArray = NULL, flag = FALSE) {
     } # for
     
   } # if
-    
+  
+  if(.RIGHT$numSearch > 0) {
+    tempArray <- paste0(tempArray, "<script>", .RIGHT$searchArray, "</script>")
+  }
+  
+  if(length(.RIGHT$structArray) != 0) {
+    tempArray <- c("<script>", .RIGHT$structArray, "</script>", tempArray)
+  }
+  
   return(c(tempArray, "</div>"))
   
 } # function createDiv

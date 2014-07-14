@@ -43,6 +43,8 @@ initRIGHT <- function() {
   # Variables used to build the html file:
   .RIGHT$divArray <- c()
   .RIGHT$scriptArray <- c()
+  .RIGHT$searchArray <- c()
+  .RIGHT$structArray <- c()
   
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
@@ -52,89 +54,77 @@ initRIGHT <- function() {
   .RIGHT$parseData <- 'AlldataArr <- scan("./www/data.js", what="")
 
 dataObj <- c()
-  levelSt <- c()
-  levelArr <- c()
-  indexSt <- c()
-  indexEd <- c()
-  dataArr <- c()
-  
-  for(index in 1:length(AlldataArr)) {
-  
-  if(AlldataArr[index] == "=") {
-  
-  start <- index+1
-  objName <- paste0(".",AlldataArr[index-1])
-  
+levelSt <- c()
+levelArr <- c()
+indexSt <- c()
+indexEd <- c()
+dataArr <- c()
+
+for(index in 1:length(AlldataArr)) {
+
+  if(AlldataArr[index] == "=") {  
+    start <- index+1
+    objName <- paste0(".",AlldataArr[index-1])
   } else if(AlldataArr[index] == "};") {
+    end <- index
+    AlldataArr[index] <- "}"  
+    dataObj <- AlldataArr[start:end]
   
-  end <- index
-  AlldataArr[index] <- "}"
+    for(iData in start:end - start + 1) {
+      if(dataObj[iData] == "level") {
+        levelSt <- append(levelSt, iData+3)
+      } else if(dataObj[iData] == "index") {
+        indexSt <- append(indexSt, iData+3)
+      } 
+    } 
   
-  dataObj <- AlldataArr[start:end]
+    for(iData in 1:length(levelSt)) {
   
-  for(iData in start:end - start + 1) {
+      for(jData in seq(levelSt[iData], (indexSt[iData]-5), 2)) {
+        levelArr <- append(levelArr, dataObj[jData])
+      }
   
-  if(dataObj[iData] == "level") {
-  levelSt <- append(levelSt, iData+3)
-  } else if(dataObj[iData] == "index") {
-  indexSt <- append(indexSt, iData+3)
+      jData <- indexSt[iData]
+  
+      while(dataObj[jData] != "]") {
+        if(dataObj[jData+1] == "]") {
+          dataObj[jData] <- paste0(\'"\', levelArr[as.integer(dataObj[jData]) + 1], \'"\') 
+        } else {        
+          tempArr <- strsplit(dataObj[jData], ",")
+          dataObj[jData] <- paste0(\'"\', levelArr[as.integer(tempArr[[1]]) + 1], \'",\')        
+        } 
+  
+        jData <- jData+1
+      } 
+  
+      indexEd <- append(indexEd, jData+1)
+  
+      if(dataObj[indexEd[iData]] == "},") {
+        dataObj[[indexEd[iData]]] <- "], "
+      } 
+  
+      levelArr <- c()
+    } 
+  
+    for(iData in length(levelSt):1) {  
+      dataObj <- dataObj[c(-(indexEd[iData]-1), -((indexSt[iData]-2) : (levelSt[iData]-4)))]
+    } 
+  
+    for(iData in 1:length(dataObj)) {  
+      if(dataObj[iData + 1] == ":" && iData < length(dataObj)) {
+        dataObj[iData] <- paste0(\'"\', dataObj[iData], \'"\')
+      } 
+      dataArr <- paste0(dataArr, dataObj[iData])
+    } 
+  
+    assign(objName, data.frame(rjson::fromJSON(dataArr)))  
+    dataArr <- c()
+    dataObj <- c()
+    levelSt <- c()
+    indexSt <- c()
+    indexEd <- c()
   } 
-  
-  } 
-  
-  for(iData in 1:length(levelSt)) {
-  
-  for(jData in seq(levelSt[iData], (indexSt[iData]-5), 2)) {
-  levelArr <- append(levelArr, dataObj[jData])
-  }
-  
-  jData <- indexSt[iData]
-  
-  while(dataObj[jData] != "]") {
-  
-  if(dataObj[jData+1] == "]") {
-  dataObj[jData] <- paste0(\'"\', levelArr[as.integer(dataObj[jData]) + 1], \'"\') 
-  } else {        
-  tempArr <- strsplit(dataObj[jData], ",")
-  dataObj[jData] <- paste0(\'"\', levelArr[as.integer(tempArr[[1]]) + 1], \'",\')        
-  } 
-  
-  jData <- jData+1
-  
-  } 
-  
-  indexEd <- append(indexEd, jData+1)
-  
-  if(dataObj[indexEd[iData]] == "},") {
-  dataObj[[indexEd[iData]]] <- "], "
-  } 
-  
-  levelArr <- c()
-  } 
-  
-  for(iData in length(levelSt):1) {  
-  dataObj <- dataObj[c(-(indexEd[iData]-1), -((indexSt[iData]-2) : (levelSt[iData]-4)))]
-  } 
-  
-  for(iData in 1:length(dataObj)) {
-  
-  if(dataObj[iData + 1] == ":" && iData < length(dataObj)) {
-  dataObj[iData] <- paste0(\'"\', dataObj[iData], \'"\')
-  } 
-  
-  dataArr <- paste0(dataArr, dataObj[iData])
-  } 
-  
-  assign(objName, data.frame(rjson::fromJSON(dataArr)))
-  
-  dataArr <- c()
-  dataObj <- c()
-  levelSt <- c()
-  indexSt <- c()
-  indexEd <- c()
-  
-  } 
-  } '
+} '
   
   # Variables used to build the html file using server-offloading:
   .RIGHT$serverScript <- "<script>\n"

@@ -18,26 +18,34 @@
   <script src="../../JavaScript/menu.js" type="text/javascript"></script>
   <script src="../../JavaScript/array.js" type="text/javascript"></script>
   <script src="../../JavaScript/pie.js" type="text/javascript"></script>
+  <script src="../../JavaScript/bar.js" type="text/javascript"></script>
   <script src="data.js" type="text/javascript"></script>
 
 </head>
 <body>
 
+  <script>
+  var Theoph = createMainStructureE(Theoph);
+  </script>
   <div id="content">
 <div id="content1" class="right-output">
 <div id="container1" oncontextmenu="return false;"></div></div>
+<div id="content2" class="right-output">
+<div id="container2" oncontextmenu="return false;"></div></div>
 
   </div>
 
   <script>
-    var subDiamonds = createMainStructureE(subDiamonds);
     
-    var pieObj1 = new ddply(subDiamonds, ['color'], {});
-    var axis1 = new Axis(1, pieObj1, 'color', 'frequency', {legend: 'color'});
-    var pie1 = new Pie(axis1, pieObj1, 'color', 'frequency', {});
+    var pieObj1 = new ddply(Theoph, ['Time'], {});
+    var axis1 = new Axis(1, pieObj1, 'Time', 'frequency', {legend: 'Time'});
+    var pie1 = new Pie(axis1, pieObj1, 'Time', 'frequency', {});
+    var histObj1 = new ddply(Theoph, ['conc', 'Time'], {});
+    var axis2 = new Axis(2, histObj1, 'conc', 'frequency', {legend: 'Time'});
+    var hist1 = new Bar(axis2, histObj1, 'conc', 'frequency', {});
     
-    subDiamonds.draw();
-    var AllAxisObjArr = [axis1]; eventTrigger(AllAxisObjArr);
+    Theoph.draw();
+    var AllAxisObjArr = [axis1, axis2]; eventTrigger(AllAxisObjArr);
   </script>
 
 <script>

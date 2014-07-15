@@ -147,8 +147,14 @@ createDiv <- function(divArray = NULL, flag = FALSE) {
   } # if
   
   if(.RIGHT$numSearch > 0) {
-    tempArray <- paste0(tempArray, "<script>", .RIGHT$searchArray, "</script>")
-  }
+    tempArray <- c(tempArray, "<script>")
+    
+    for(array in .RIGHT$searchArray) {
+      tempArray <- append(tempArray, array)
+    } # for
+  
+    tempArray <- c(tempArray, "</script>")
+  } # if
   
   if(length(.RIGHT$structArray) != 0) {
     tempArray <- c("<script>", .RIGHT$structArray, "</script>", tempArray)

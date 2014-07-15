@@ -17,8 +17,9 @@
   <script src="../../JavaScript/node_event.js" type="text/javascript"></script>
   <script src="../../JavaScript/menu.js" type="text/javascript"></script>
   <script src="../../JavaScript/array.js" type="text/javascript"></script>
-  <script src="../../JavaScript/pie.js" type="text/javascript"></script>
   <script src="../../JavaScript/dot.js" type="text/javascript"></script>
+  <script src="../../JavaScript/bar.js" type="text/javascript"></script>
+  <script src="../../JavaScript/table.js" type="text/javascript"></script>
   <script src="data.js" type="text/javascript"></script>
 
 </head>
@@ -37,11 +38,12 @@
 
   <script>
     
-    var pieObj1 = new ddply(Theoph, ['Subject'], {});
-    var axis1 = new Axis(1, pieObj1, 'Subject', 'frequency', {legend: 'Subject'});
-    var pie1 = new Pie(axis1, pieObj1, 'Subject', 'frequency', {});
-    var axis2 = new Axis(2, Theoph, 'Time', 'conc', {legend: 'Subject'});
-    var point1 = new Dot(axis2, Theoph, 'Time', 'conc', {});
+    var axis1 = new Axis(1, Theoph, 'Time', 'conc', {legend: 'Subject'});
+    var point1 = new Dot(axis1, Theoph, 'Time', 'conc', {});
+    var histObj1 = new ddply(Theoph, ['Time', 'Wt'], {});
+    var axis2 = new Axis(2, histObj1, 'Time', 'frequency', {legend: 'Wt'});
+    var hist1 = new Bar(axis2, histObj1, 'Time', 'frequency', {});
+    makeTable("table1", Theoph, 200);
     
     Theoph.draw();
     var AllAxisObjArr = [axis1, axis2]; eventTrigger(AllAxisObjArr);

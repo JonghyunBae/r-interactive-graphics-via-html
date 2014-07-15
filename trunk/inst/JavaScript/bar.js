@@ -280,10 +280,14 @@ function barUpdate () {
 				node.setSelectCnt(node.getSelectCnt() + selectOn);
 				if(node.getSelectCnt() == 0) {
 					node.setStroke(node.getFill());	
-					node.setOpacity(0.5);	
 					node.setSelected(0);
+					var tween = new Kinetic.Tween({
+						node: node, 
+						duration: 0.01,
+						opacity: 0.5
+					}).play(); 
 				}
-			} else if (selectOn > 0) {		// select
+			} else if (node.getSelected() == 0 && selectOn > 0) {		// select
 				node.setSelectCnt(node.getSelectCnt() + selectOn);
 				if (node.getSelected() == 0) {
 					node.setStroke('black');

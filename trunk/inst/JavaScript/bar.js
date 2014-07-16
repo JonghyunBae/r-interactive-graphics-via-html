@@ -11,17 +11,18 @@ var Bar = {};
 		this.graphId = axisObj.numberOfGraph ++;
 		this.firstDraw = true;
 		this._type = 'barGraph';
-		// event add
+		
 		dataObj.graphObjArr[this.dataId] = this;
 		axisObj.graphObjArr[this.graphId] = this;
+		
 		if (dataObj.$isOffload) {
-			dataObj.$isSelected[this.dataId] = nullUpdate;
+			dataObj.$drawFence[this.dataId] = nullUpdate;
 			dataObj.refreshArr[this.dataId] = nullUpdate;
 			this.firstUpdate = nullUpdate;	        	
         	axisObj.hoverArr[this.graphId] = nullUpdate;
 			axisObj.boxSearchArr[this.graphId] = nullUpdate;
 		} else {
-			dataObj.$isSelected[this.dataId] = barUpdate();
+			dataObj.$drawFence[this.dataId] = barUpdate();
 			dataObj.refreshArr[this.dataId] = makeRefresh(axisObj.stage);
 			this.firstUpdate = firstUpdate(dataObj);
         	axisObj.hoverArr[this.graphId] = barHover();
@@ -29,213 +30,210 @@ var Bar = {};
 		}
 	};
 	Bar.prototype = {
-			_draw: function () {
-				if (this.firstDraw) {
-					this._init(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
-					this.firstDraw = false;
-				} else {
-					if (this.colorOn == true) {
-						addColorField(this.dataObj[this.colorLabel]);
-					}
+		_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
+			if (axisObj.legendLabel != undefined) {
+				var legendLabel = axisObj.legendLabel;
+				if (dataObj[legendLabel].colorIndex == undefined) {
+					addColorField(dataObj[legendLabel]);
+				} else if (dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined) {
+					addColorField(dataObj[legendLabel]);
 				}
-				this.barWidth = this.axisObj.xbarWidth;
-				this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
-				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
-			},
-			_reDraw: function () {
-				
-				if (this.colorOn == true) {
-						addColorField(this.dataObj[this.colorLabel]);
-				}
-				
-				this.barWidth = this.axisObj.xbarWidth;
-				this.dataObj.refreshArr[this.dataId] = makeRefresh(this.axisObj.stage);
-				this.axisObj.boxSearchArr[this.graphId] = barBoxSearch(this);
-				this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
-				this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
-			},
-			_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
-				// check color
-				if (axisObj.legendLabel != undefined) {
-					var legendLabel = axisObj.legendLabel;
-					if (dataObj[legendLabel].colorIndex == undefined) {
-						addColorField(dataObj[legendLabel]);
-					} else if (dataObj[legendLabel].isDiscrete == undefined && dataObj[legendLabel].color == undefined) {
-						addColorField(dataObj[legendLabel]);
-					}
 
-					this.colorOn = true;
-				} else {
-					this.colorOn = false;
-				}
-				this.colorLabel = legendLabel;
-				
-				// set the base color.
-				if (optionObj.baseColor != undefined && optionObj.baseColor != 'n') {
-					this.baseColor = optionObj.baseColor;
-				} else {
-					this.baseColor = 'green';
-				}
-			},
-			
-			_checkStacking: function (axisObj, dataObj, xLabel, yLabel) {
-				if (dataObj[yLabel].isDiscrete == undefined) {
-					var temp = new Object();
-					var max = dataObj[yLabel][0];
-					var min = dataObj[yLabel][0];
-					for (var i=0; i<dataObj[xLabel].length; i++) {
-						// frequency max count, stacking on...
-						if (temp[dataObj[xLabel][i]] == undefined) {
-							temp[dataObj[xLabel][i]] = dataObj[yLabel][i];
-						} else {
-							temp[dataObj[xLabel][i]] = temp[dataObj[xLabel][i]] + dataObj[yLabel][i];
-							if (temp[dataObj[xLabel][i]] > max) {
-								max = temp[dataObj[xLabel][i]];
-							} else if (temp[dataObj[xLabel][i]] < min) {
-								min = temp[dataObj[xLabel][i]];
-							}
-							this.stacking = true;
-						}
-					}
-					if (this.stacking == true) {
-						if (yLabel == 'frequency') {
-							axisObj._setYContinuous(max, 0);
-						} else {
-							axisObj._setYContinuous(max, min);
-						}
-						axisObj._draw();
-					}
-					delete temp;
-				}
-			},
-			
-			_drawSet: function (axisObj, dataObj, xLabel, yLabel) {
-				// get pixel values from axis
-				var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
-				var xArr = temp.xArr;
-				var yArr = temp.yArr;
-				if (this.stacking == true) {
-					this.node = new Array();
-					var tempHeight = new Object();
-					if (this.colorOn == true) {
-						var x = 0;
-						var y = 0;
-						for (var i=0; i<xArr.length; i++) {
-
-							if (!(xArr[i] == -1 || yArr[i] == -1)) {
-								if (tempHeight[xArr[i]] == undefined) {
-									tempHeight[xArr[i]] = axisObj.height + axisObj.plotYMargin - yArr[i];
-									y = yArr[i];
-								} else {
-									y = yArr[i] - tempHeight[xArr[i]];
-									tempHeight[xArr[i]] = axisObj.height + axisObj.plotYMargin - y;
-								}
-								if (axisObj.isXDiscrete) {
-									xArr[i] = xArr[i] - this.barWidth/2;
-								}
-								this.node[i] = new Kinetic.Rect({
-									name: i,
-									x: xArr[i],
-									y: y,
-									width: this.barWidth,
-									height: axisObj.height + axisObj.plotYMargin - yArr[i],
-									stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
-									fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
-									selected: 0,
-									selectCnt : 0,
-									opacity: 0.5,
-									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
-								});
-							} else {
-								this.node[i] = null;
-							}
-						}
-					}else{
-						for (var i=0; i<xArr.length; i++) {
-							if (!(xArr[i] == -1 || yArr[i] == -1)) {
-								if (axisObj.isXDiscrete) {
-									xArr[i] = xArr[i] - this.barWidth/2;
-								}
-								this.node[i] = new Kinetic.Rect({
-									name: i,
-									x: xArr[i],
-									y: yArr[i],
-									width: this.barWidth,
-									height: axisObj.height + axisObj.plotYMargin - yArr[i],
-									stroke: this.baseColor,
-									fill: this.baseColor,
-									selected: 0,
-									selectCnt : 0,
-									opacity: 0.5,
-									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
-								});
-							} else {
-								this.node[i] = null;
-							}
-						}
-					}					
-				}else{
-					this.node = new Array();
-					if(this.colorOn == true){
-						for(var i = 0 ; i < xArr.length ; i ++){
-							if(!(xArr[i] == -1 || yArr[i] == -1)){
-								if(axisObj.isXDiscrete){
-									xArr[i] = xArr[i] - this.barWidth/2;
-								}
-								this.node[i] = new Kinetic.Rect({
-									name: i,
-									x: xArr[i],
-									y: yArr[i],
-									width: this.barWidth,
-									height: axisObj.height + axisObj.plotYMargin - yArr[i],
-									stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
-									fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
-									selected: 0,
-									selectCnt : 0,
-									opacity: 0.5,
-									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
-								});
-							}else{
-								this.node[i] = null;
-							}
-						}
-					}else{
-						for(var i = 0 ; i < xArr.length ; i ++){
-							if(!(xArr[i] == -1 || yArr[i] == -1)){
-								if(axisObj.isXDiscrete){
-									xArr[i] = xArr[i] - this.barWidth/2;
-								}
-								this.node[i] = new Kinetic.Rect({
-									name: i,
-									x: xArr[i],
-									y: yArr[i],
-									width: this.barWidth,
-									height: axisObj.height + axisObj.plotYMargin - yArr[i],
-									stroke: 'green',
-									fill: 'green',
-									selected: 0,
-									selectCnt : 0,
-									opacity: 0.5,
-									info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
-								});
-							}else{
-								this.node[i] = null;
-							}
-						}
-					}
-				}				
-	        	this.dataLayer = new Kinetic.Layer();	
-	        	for (var i=0; i<this.node.length; i++) {
-	        		if (this.node[i] != null) {
-	        			this.dataLayer.add(this.node[i]);
-	        		}
-				}
-	        	//add layer
-	        	// TODO: should check the old dataLayer is removed when add function runs again.
-				axisObj.stage.add(this.dataLayer);
-				// event add
-	        	axisObj.dataLayerArr[this.graphId] = this.dataLayer;
+				this.colorOn = true;
+			} else {
+				this.colorOn = false;
 			}
+			this.colorLabel = legendLabel;
+			
+			if (optionObj.baseColor != undefined && optionObj.baseColor != 'n') {
+				this.baseColor = optionObj.baseColor;
+			} else {
+				this.baseColor = 'green';
+			}
+		},
+		_draw: function () {
+			if (this.firstDraw) {
+				this._init(this.axisObj, this.dataObj, this.xLabel, this.yLabel, this.optionObj);
+				this.firstDraw = false;
+			} else {
+				if (this.colorOn == true) {
+					addColorField(this.dataObj[this.colorLabel]);
+				}
+			}
+			
+			this.barWidth = this.axisObj.xbarWidth;
+			this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
+			this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
+		},
+		_reDraw: function () {		
+			if (this.colorOn == true) {
+					addColorField(this.dataObj[this.colorLabel]);
+			}
+			
+			this.dataObj.refreshArr[this.dataId] = makeRefresh(this.axisObj.stage);
+			this.axisObj.boxSearchArr[this.graphId] = barBoxSearch(this);
+			
+			this.barWidth = this.axisObj.xbarWidth;
+			this._checkStacking(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
+			this._drawSet(this.axisObj, this.dataObj, this.xLabel, this.yLabel);
+		},
+		_checkStacking: function (axisObj, dataObj, xLabel, yLabel) {
+			if (dataObj[yLabel].isDiscrete == undefined) {
+				var temp = new Object();
+				var max = dataObj[yLabel][0];
+				var min = dataObj[yLabel][0];
+				
+				for (var i=0; i<dataObj[xLabel].length; i++) {
+					if (temp[dataObj[xLabel][i]] == undefined) {
+						temp[dataObj[xLabel][i]] = dataObj[yLabel][i];
+					} else {
+						temp[dataObj[xLabel][i]] = temp[dataObj[xLabel][i]] + dataObj[yLabel][i];
+						if (temp[dataObj[xLabel][i]] > max) {
+							max = temp[dataObj[xLabel][i]];
+						} else if (temp[dataObj[xLabel][i]] < min) {
+							min = temp[dataObj[xLabel][i]];
+						}
+						this.stacking = true;
+					}
+				}
+				
+				if (this.stacking == true) {
+					if (yLabel == 'frequency') {
+						axisObj._setYContinuous(max, 0);
+					} else {
+						axisObj._setYContinuous(max, min);
+					}
+					axisObj._draw();
+				}
+				
+				delete temp;
+			}
+		},
+		
+		_drawSet: function (axisObj, dataObj, xLabel, yLabel) {
+			var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
+			var xArr = temp.xArr;
+			var yArr = temp.yArr;
+			if (this.stacking == true) {
+				this.node = new Array();
+				var tempHeight = new Object();
+				if (this.colorOn == true) {
+					var x = 0;
+					var y = 0;
+					for (var i=0; i<xArr.length; i++) {
+
+						if (!(xArr[i] == -1 || yArr[i] == -1)) {
+							if (tempHeight[xArr[i]] == undefined) {
+								tempHeight[xArr[i]] = axisObj.height + axisObj.plotYMargin - yArr[i];
+								y = yArr[i];
+							} else {
+								y = yArr[i] - tempHeight[xArr[i]];
+								tempHeight[xArr[i]] = axisObj.height + axisObj.plotYMargin - y;
+							}
+							if (axisObj.isXDiscrete) {
+								xArr[i] = xArr[i] - this.barWidth/2;
+							}
+							this.node[i] = new Kinetic.Rect({
+								name: i,
+								x: xArr[i],
+								y: y,
+								width: this.barWidth,
+								height: axisObj.height + axisObj.plotYMargin - yArr[i],
+								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								selected: 0,
+								selectCnt : 0,
+								opacity: 0.5,
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
+							});
+						} else {
+							this.node[i] = null;
+						}
+					}
+				}else{
+					for (var i=0; i<xArr.length; i++) {
+						if (!(xArr[i] == -1 || yArr[i] == -1)) {
+							if (axisObj.isXDiscrete) {
+								xArr[i] = xArr[i] - this.barWidth/2;
+							}
+							this.node[i] = new Kinetic.Rect({
+								name: i,
+								x: xArr[i],
+								y: yArr[i],
+								width: this.barWidth,
+								height: axisObj.height + axisObj.plotYMargin - yArr[i],
+								stroke: this.baseColor,
+								fill: this.baseColor,
+								selected: 0,
+								selectCnt : 0,
+								opacity: 0.5,
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
+							});
+						} else {
+							this.node[i] = null;
+						}
+					}
+				}					
+			}else{
+				this.node = new Array();
+				if(this.colorOn == true){
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(!(xArr[i] == -1 || yArr[i] == -1)){
+							if(axisObj.isXDiscrete){
+								xArr[i] = xArr[i] - this.barWidth/2;
+							}
+							this.node[i] = new Kinetic.Rect({
+								name: i,
+								x: xArr[i],
+								y: yArr[i],
+								width: this.barWidth,
+								height: axisObj.height + axisObj.plotYMargin - yArr[i],
+								stroke: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								fill: (dataObj[this.colorLabel].isDiscrete == undefined) ? dataObj[this.colorLabel].color[i] : dataObj[this.colorLabel].colorIndex[dataObj[this.colorLabel][i]],
+								selected: 0,
+								selectCnt : 0,
+								opacity: 0.5,
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
+							});
+						}else{
+							this.node[i] = null;
+						}
+					}
+				}else{
+					for(var i = 0 ; i < xArr.length ; i ++){
+						if(!(xArr[i] == -1 || yArr[i] == -1)){
+							if(axisObj.isXDiscrete){
+								xArr[i] = xArr[i] - this.barWidth/2;
+							}
+							this.node[i] = new Kinetic.Rect({
+								name: i,
+								x: xArr[i],
+								y: yArr[i],
+								width: this.barWidth,
+								height: axisObj.height + axisObj.plotYMargin - yArr[i],
+								stroke: 'green',
+								fill: 'green',
+								selected: 0,
+								selectCnt : 0,
+								opacity: 0.5,
+								info: "Node: " + i + "\r\n" + getNodeinfo(dataObj, i)
+							});
+						}else{
+							this.node[i] = null;
+						}
+					}
+				}
+			}				
+			this.dataLayer = new Kinetic.Layer();	
+			for (var i=0; i<this.node.length; i++) {
+				if (this.node[i] != null) {
+					this.dataLayer.add(this.node[i]);
+				}
+			}
+			
+			axisObj.stage.add(this.dataLayer);
+			axisObj.dataLayerArr[this.graphId] = this.dataLayer;
+		}
 	};
 })();
 /**  Draw Bar graph(histogram) End  **/
@@ -270,13 +268,11 @@ function barBoxSearch (graphObj) {
 	        }
 		};
 }
+
 /**  update function  **/
-//Kinetic version update
-//just remove transitient, and change it with "set" syntax.
-//"set" syntax has not changed during many versions.
 function barUpdate () {
 	return	function(node, selectOn) {
-			if(node.getSelected() == 1 && selectOn < 0) {		//unselect
+			if(node.getSelected() == 1 && selectOn < 0) {
 				node.setSelectCnt(node.getSelectCnt() + selectOn);
 				if(node.getSelectCnt() == 0) {
 					node.setStroke(node.getFill());	
@@ -287,7 +283,7 @@ function barUpdate () {
 						opacity: 0.5
 					}).play(); 
 				}
-			} else if (node.getSelected() == 0 && selectOn > 0) {		// select
+			} else if (node.getSelected() == 0 && selectOn > 0) {	
 				node.setSelectCnt(node.getSelectCnt() + selectOn);
 				if (node.getSelected() == 0) {
 					node.setStroke('black');
@@ -300,16 +296,16 @@ function barUpdate () {
 }
 /**  update function end  **/
 function barHover () {
-	return function(node, overOff) { // over: 1 , off: 0
-			if (overOff == 1) {
-				node.setOpacity(1);
-                node.draw();
-			} else if (overOff == 0) {
-				var tween = new Kinetic.Tween({
-        			node: node, 
-			        duration: 0.01,
-			        opacity: 0.5
-        		}).play(); 
-			}
-		};
+	return function(node, overOff) { 
+		if (overOff == 1) {
+			node.setOpacity(1);
+			node.draw();
+		} else if (overOff == 0) {
+			var tween = new Kinetic.Tween({
+				node: node, 
+				duration: 0.01,
+				opacity: 0.5
+			}).play(); 
+		}
+	};
 }

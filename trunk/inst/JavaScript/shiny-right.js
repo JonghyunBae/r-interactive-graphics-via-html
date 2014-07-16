@@ -7,12 +7,10 @@ rightOutputBinding.find = function(scope){
 rightOutputBinding.renderValue = function (el, data) {
 	if (cnt > 0) {//if(data change)
 		if (data != null) {
-			
-      for (var name in data) {
-        window[el.id][name] = data[name];
-      }
-        
-    	window[el.id].draw();
+			for (var name in data) {
+				window[el.id][name] = data[name];
+			}
+			window[el.id].draw();
 		}		
 	}
 	cnt++;

@@ -35,7 +35,6 @@ function getData (fileName) {
 	return { 'dataArr' : returnDataArr, 'labelArr' : returnLabelArr };
 }
 
-// should be moved to array.js
 function make2DArr (rows) {
 	var arr = [];
 	for (var i=0; i<rows; i++)
@@ -51,7 +50,7 @@ function createMainStructureE (rawArr) {
 	mainArr.$id = 0;
 	mainArr.parent = null;
 	mainArr.child = null;
-	mainArr.$isSelected = new Array();
+	mainArr.$drawFence = new Array();
 	mainArr.graphObjArr = new Array();
 	mainArr.$drawGraphArr = new Array();
 	mainArr.refreshArr = new Array();
@@ -71,25 +70,16 @@ function createMainStructureE (rawArr) {
 		mainArr.labelArr = labelArr; // for table.
 		mainArr.$ans = {};
 		
-		//mainArr.relateObjName = null;
-		//mainArr.$sendData = null;
-		//mainArr.offloadObjArr = null;
-		//mainArr.$sendData = null;
-		
-		mainArr.statusArr = new Array();
+		mainArr.$isSelected = new Array();
 		mainArr.$dataNumArr = new Array();
 		mainArr.$isHidden = new Array();		
 		for(var i=0; i<mainArr[labelArr[0]].length; i ++) {
-			mainArr.statusArr[i] = 0;
+			mainArr.$isSelected[i] = 0;
 			mainArr.$dataNumArr[i] = i;
 			mainArr.$isHidden[i] = false;
 		}		
 	} else {
-		mainArr.$isOffload = true;
-		//mainArr.labelArr = null; // for table.
-		//mainArr.$ans = null;
-		//mainArr.refreshArr = null;
-		
+		mainArr.$isOffload = true;		
 		mainArr.relateObjName = rawArr;
 		if (window[rawArr].offloadObjArr == null) {
 			window[rawArr].offloadObjArr = new Array();
@@ -98,10 +88,6 @@ function createMainStructureE (rawArr) {
 			window[rawArr].offloadObjArr.push(mainArr);
 		}
 		mainArr.$sendData = sendingData(rawArr);
-		
-		//mainArr.statusArr = null;
-		//mainArr.$dataNumArr = null;
-		//mainArr.$isHidden = null;
 	}
 	mainArr.draw = function () {
 		return draw(mainArr);
@@ -110,13 +96,12 @@ function createMainStructureE (rawArr) {
 }
 
 function sendingData (relateObjName) {
-  return function (isHiddenArr) {
-    window.Shiny.onInputChange(relateObjName, window[relateObjName].$isHidden);
-  };
+	return function () {
+		window.Shiny.onInputChange(relateObjName, window[relateObjName].$isHidden);
+	};
 }
 
 function draw (dataObj) {
-	//alert("structure_draw");
 	for (var i=0; i<dataObj.graphObjArr.length; i++) {
 		dataObj.graphObjArr[i]._draw();
 	}
@@ -138,7 +123,7 @@ function createOffloadStructure(relateObjName)
   mainArr.child = null;
   mainArr.$id = 1;
   mainArr.$readyState = false;
-  mainArr.$isSelected = new Array();
+  mainArr.$drawFence = new Array();
   mainArr.relateObjName = relateObjName;
   if(window[relateObjName].offloadObjArr == null){
     window[relateObjName].offloadObjArr = new Array();
@@ -183,9 +168,9 @@ function createMainStructure (fileName, rawLev) {
 	mainArr.labelArr = labelArr; // for table.
 	
 	makeEventComponent(mainArr);
-	mainArr.$isSelected = isSelected;
+	mainArr.$drawFence = isSelected;
 	mainArr.$ans = "undefined";
-	mainArr.statusArr = new Array();
+	mainArr.$isSelected = new Array();
 	mainArr.$id = 1;
 	mainArr.refreshArr = new Array();
 	mainArr.refreshArr[0] = null;
@@ -216,11 +201,10 @@ var MakeLineObj = {};
 		}
 		dataObj.child.push(this);
 		this.child = null;
-		this.$isSelected = new Array();
+		this.$drawFence = new Array();
 		this.graphObjArr = new Array();
 		this.refreshArr = new Array();
-		this.statusArr = new Array();
-		///////////////////////////
+		this.$isSelected = new Array();
 		this._type = 'lineObj';
 		this.dataObj = dataObj;
 		this.xLabel = xLabel;
@@ -336,7 +320,7 @@ var MakeLineObj = {};
 			// make event handle part.
 			this.mergeArr = mergeParentChildArr(p2cArr, c2pArr);
 			for (var i=0; i<c2pArr.length; i++) {
-				this.statusArr[i] = 0;
+				this.$isSelected[i] = 0;
 			}
 		},
 		_reCalculate: function () {
@@ -444,10 +428,10 @@ var MakeLineObj = {};
 				p2cArr[i] = i-1;
 			}
 			// make event handle part.
-			this.statusArr = new Array();
+			this.$isSelected = new Array();
 			this.mergeArr = mergeParentChildArr(p2cArr, c2pArr);
 			for (var i=0; i<c2pArr.length; i++) {
-				this.statusArr[i] = 0;
+				this.$isSelected[i] = 0;
 			}
 		}
 	};
@@ -458,9 +442,7 @@ var MakeLineObj = {};
 var MakeBoxObj = {};
 (function() {
 	
-	MakeBoxObj = function(dataObj, xLabel, yLabel, optionObj) {
-		// check y is continuous.
-		
+	MakeBoxObj = function(dataObj, xLabel, yLabel, optionObj) {		
 		this.$id = 0;
 		this.parent = dataObj;
 		if (dataObj.child == null) {
@@ -468,11 +450,11 @@ var MakeBoxObj = {};
 		}
 		dataObj.child.push(this);
 		this.child = null;
-		this.$isSelected = new Array();
+		this.$drawFence = new Array();
 		this.graphObjArr = new Array();
 		this.refreshArr = new Array();
-		this.statusArr = new Array();
-		///////////////////////////
+		this.$isSelected = new Array();
+		
 		this._type = 'boxObj';
 		this.dataObj = dataObj;
 		this.xLabel = xLabel;
@@ -628,7 +610,7 @@ var MakeBoxObj = {};
 		
 			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);			
 			for (var i=0; i<hasArr.length; i++) {
-				this.statusArr[i] = 0;
+				this.$isSelected[i] = 0;
 			}
 		},
 		_reCalculate: function() {
@@ -774,9 +756,9 @@ var MakeBoxObj = {};
 			}	
 			
 			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);		
-			this.statusArr = new Array();
+			this.$isSelected = new Array();
 			for (var i=0; i<hasArr.length; i++) {
-				this.statusArr[i] = 0;
+				this.$isSelected[i] = 0;
 			}
 		}
 	};
@@ -794,18 +776,16 @@ var ddply = {};
 		}
 		dataObj.child.push(this);
 		this.child = null;
-		this.$isSelected = new Array();
+		this.$drawFence = new Array();
 		this.graphObjArr = new Array();
 		this.refreshArr = new Array();
-		this.statusArr = new Array();
-		///////////////////////////
+		this.$isSelected = new Array();
 		this._type = 'histObj';
 		this.dataObj = dataObj;
 		this.labels = labels;
 		this.optionObj = optionObj;
 		this.$isOffload = dataObj.$isOffload;
 		
-		// I assume that there is no offloadObj for Histogram !!!!!!!!!!
 		this._calculate();
 	};
 	ddply.prototype = {
@@ -894,7 +874,7 @@ var ddply = {};
 			// make event handle part.
 			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
 			for (var i=0; i<hasArr.length; i++) {
-				this.statusArr[i] = 0;
+				this.$isSelected[i] = 0;
 			}
 		},
 		_reCalculate: function () {
@@ -981,9 +961,9 @@ var ddply = {};
 			
 			// make event handle part.
 			this.mergeArr = mergeParentChildArr(p2cArr, hasArr);
-			this.statusArr = new Array();
+			this.$isSelected = new Array();
 			for (var i=0; i<hasArr.length; i++) {
-				this.statusArr[i] = 0;
+				this.$isSelected[i] = 0;
 			}
 		}
 	};
@@ -1056,8 +1036,6 @@ function setNode (myNumber, endNumber, labels, indexArr, temp, root) {
 		var cnt1 = 0;
 		var cnt2 = 0;
 		for (var i=0; i<indexArr[myNumber].length; i++) {
-			// for debugging
-			// document.write(indexArr[myNumber][i] + " ");
 			if (temp[indexArr[myNumber][i]] != undefined) {
 				cnt1 = setNode(myNumber + 1, endNumber - 1, labels, indexArr, temp[indexArr[myNumber][i]], root);
 				for (t=0; t<cnt1; t++) {
@@ -1070,8 +1048,6 @@ function setNode (myNumber, endNumber, labels, indexArr, temp, root) {
 	} else {
 		var cnt = 0;
 		for (var i=0; i<indexArr[myNumber].length; i++) {
-			// for debugging
-			// document.write(indexArr[myNumber][i] + " ");
 			if (temp[indexArr[myNumber][i]] != undefined) {
 				var frequency = temp[indexArr[myNumber][i]].frequency;
 				cnt ++;
@@ -1088,8 +1064,6 @@ function setNode (myNumber, endNumber, labels, indexArr, temp, root) {
 /**  addField  **/
 //add new field and return added field.
 function addField (obj, fieldName) {
-	// for debugging
-	// document.write(fieldName + " ");
 	if (obj[fieldName] == undefined)
 		obj[fieldName] = new Object();
 	return obj[fieldName];

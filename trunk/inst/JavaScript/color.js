@@ -1,22 +1,16 @@
 /**  addColorField  **/
-// ex) mainArr1.carat.color 
-//     mainArr1.cut.colorIndex
 function addColorField(labelObj)
 {
 	if(labelObj.isDiscrete == undefined){
-		// continuous
 		labelObj['color'] = makeColor_continuous(labelObj);
 	}else{
-		// discrete
 		labelObj['colorIndex'] = makeColor_discrete(labelObj.index);
 	}
 }
 /**  addColorField End  **/
 
 /**  return color part  **/
-// TJ designed core.
-function makeColor_continuous(array) // under construction.
-{
+function makeColor_continuous(array) {
 	var colors = new Array();
 	var mainValueArr = new Array();
     var tmpColorArr = new Array();
@@ -31,22 +25,24 @@ function makeColor_continuous(array) // under construction.
 		};
 		j ++;
 	}
-	var stableSort = function(a,b) { //stable sort is needed because Chrome does not support stable sort.
+	
+	var stableSort = function(a,b) { 
 	    if (a.a === b.a) return a.stableSortKey > b.stableSortKey ? 1 : -1;
 	    if (a.a > b.a) return 1;
 	    return -1;
 	};
+	
 	for (i = 0; i < sortedColorArr.length; i++) {
 		sortedColorArr[i].stableSortKey = i;
 	}
-	sortedColorArr.sort(stableSort); //sort stably colorArr (temporarily saved in sortedColorArr)
+	
+	sortedColorArr.sort(stableSort); 
 	for(var i = 0 ; i < sortedColorArr.length ; i ++){		
 		if(i == 0){
 			mainValueArr[cnt] = sortedColorArr[0].a;
 			tmpColorArr[0] = 0;
 		}else{
-			if(sortedColorArr[i].a == sortedColorArr[i-1].a){
-				
+			if(sortedColorArr[i].a == sortedColorArr[i-1].a){			
 				tmpColorArr[i]=cnt;
 			}else{
 				cnt ++;
@@ -55,12 +51,12 @@ function makeColor_continuous(array) // under construction.
 			}
 		}
 	}
+	
 	for(var i = 0; i < sortedColorArr.length ; i ++){		// re assign
-		reTmpColorArr[sortedColorArr[i].b] = tmpColorArr[ i ]; 
-	}
-	for(var i = 0; i < sortedColorArr.length ; i ++){		//re re assign
+		reTmpColorArr[sortedColorArr[i].b] = tmpColorArr[i]; 
 		tmpColorArr[i] = reTmpColorArr[i];
 	}
+	
 	var rgb = {R: new Array(), G: new Array(), B: new Array()};
 	var start = {R: 0, G: 128, B: 0};
 	var end = {R: 0, G: 255, B: 0};
@@ -97,11 +93,10 @@ function makeColor_discrete(array)
 /**  legend part  **/
 function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 {
-	// get values from legend object.
 	var position = (legendPosition == undefined) ? 'right' : legendPosition;
 	var legendX = 0;
 	var legendY = 0;
-	// set legend position.
+
 	if(position == 'topright' || position == 'right' || position == 'bottomright'){
         legendX = axisObj.plotXMargin + axisObj.width + axisObj.plotLength*5;
         if(position == 'topright'){
@@ -120,20 +115,17 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
         }else{
         	legendY = axisObj.plotYMargin - axisObj.plotLength + axisObj.height/4;
         }                         
-	}else{ // if other words -> just set position as right.
+	}else{ 
 		position = 'right';
 		legendX = axisObj.plotXMargin+axisObj.width+axisObj.plotLength*5;
         legendY = axisObj.plotYMargin-axisObj.plotLength;
 	}
 	
-	// set legend layers.
 	var legendNode = new Array();	
 	var legendText = new Array();
 	if(legendObj.isDiscrete == true){ // discrete
 		if(legendObj.colorIndex == undefined){
 			addColorField(legendObj);
-			//alert("addColorField should be called before drawing legend");
-			//return -1;
 		}		
 		for(var i = 0 ; i < legendObj.index.length ; i ++)
 		{						
@@ -157,31 +149,29 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 				align:'center'
 			});
 		}
-	}else{ // continuous.
+	}else{ 
 		if(legendObj.color == undefined){
 			addColorField(legendObj);
-			//alert("addColorField should be called before drawing legend");
-			//return -1;
 		}
 		var temp = findMaxMinValue(legendObj);
 		var max = temp.max;
 		var min = temp.min;
-		var tick = 5; //default legend ticks is 5  
+		var tick = 5; 
 		var tickRange = (max - min) / tick;
 		tickRange = setTickRange( Math.ceil( Math.log(tickRange) / Math.log(10)) , tickRange);
 		var newMax = tickRange * Math.ceil(max/tickRange);
 		var newMin= tickRange * Math.floor(min/tickRange);
 		var plotArr = new Array(parseInt((newMax-newMin)/tickRange+1));
-		for(var i = 0 ; i < plotArr.length ; i ++)
-		{
+		
+		for(var i = 0 ; i < plotArr.length ; i ++) {
 			if((tickRange.toString().indexOf('.') == -1)){
 				plotArr[i] = newMin + i*tickRange;
 			}else{
 				plotArr[i] = (newMin + i*tickRange).toFixed(tickRange.toString().substring(tickRange.toString().indexOf('.')+1,tickRange.toString().length).length);
 			}
 		}
-    	for(var i = 0; i < plotArr.length ; i++)
-		{
+    	
+    	for(var i = 0; i < plotArr.length ; i++) {
 			legendText[i] = new Kinetic.Text({
 				name: 'legend',
 				x: legendX + 30,
@@ -207,17 +197,14 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 		});
 	}
 	
-	// find maximum length of legendText. -> it will set legend width.
 	var maxLengthLegendText = legendText[0].getWidth();
-	for(var i = 0; i < legendText.length; i ++)
-	{
+	for(var i = 0; i < legendText.length; i ++) 	{
 		if(legendText[i].getWidth() > maxLengthLegendText)
 		{
 			maxLengthLegendText = legendText[i].getWidth();
 		}
 	}
 	
-	// legend Main Label.
 	var legendMain= new Kinetic.Text({
 		name: 'legend',
 		x: legendX,
@@ -229,6 +216,7 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 		fontStyle: 'bold',
 		align:'center'
 	});		
+	
 	if(legendMain.getWidth() > maxLengthLegendText ){
 		maxLengthLegendText = legendMain.getWidth();
 	}
@@ -244,10 +232,10 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	});
 	legendMain.setWidth(legendRect.getWidth());
 	
-	// combine components into one group.
 	var group = new Kinetic.Group();	
 	group.add(legendRect);
 	group.add(legendMain);
+	
 	for(var i = 0; i < legendNode.length; i++){
 		group.add(legendNode[i]);
 	}
@@ -256,13 +244,11 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	}
 	
 	var layerWidth = legendRect.getWidth() + 20;
-	// set axis plotMargin.
 	if(position == 'left' || position == 'topleft'){
-		
 		axisObj.plotXMargin = axisObj.plotXMargin + layerWidth;
 		layerWidth = layerWidth - axisObj.plotXMargin;
 	}
-	// make legendLayer.
+	
 	axisObj.legendLayer = new Kinetic.Layer({
 		name: 'legend',
 		width: layerWidth,
@@ -278,4 +264,3 @@ function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 	axisObj.legendLayer.add(group);
 	return 1;	
 }
-

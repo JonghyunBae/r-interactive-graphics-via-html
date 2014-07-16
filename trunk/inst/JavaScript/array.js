@@ -1,18 +1,5 @@
-// array1 -> src, array2 -> dest
-/*
-function copyValueArr (array1, array2) {
-	if (array1.length == array2.length) {
-		for (var i=0; i<array1.length; i++) {
-			array2[i] = array1[i];
-		}
-	} else {
-		alert("Cannot copy arrays: the length of arrays are different");
-	}
-}
-*/
-
 function invertValueArr (array, numbers) {
-	//alert("array_invertValueArr");
+	
 	var returnArray = array.slice(0);
 	if (numbers.length == undefined) {
 		returnArray[numbers] = (returnArray[numbers] + 1) % 2; 
@@ -21,15 +8,17 @@ function invertValueArr (array, numbers) {
 			returnArray[numbers[i]] = (returnArray[numbers[i]] + 1) % 2;
 		}
 	}
+	
 	return returnArray;
 }
 
 function extensionArr (numbers, length, value) {
-	//alert("array_extensionArr");
+	
 	var returnArray = new Array(length);
 	for (var i=0; i<length; i++) {
 		returnArray[i] = 0;
 	}
+	
 	if (numbers.length == undefined) {
 		returnArray[numbers] = value;
 	} else {
@@ -42,43 +31,44 @@ function extensionArr (numbers, length, value) {
 }
 
 function addArr (array1, array2) {
-	//alert("array_addArr");
-	var returnArray;
-	if (array1.length == array2.length) {
-		returnArray = new Array(array1.length);
+	
+	var returnArray = new Array(array1.length);
+	if (array1.length == array2.length) {	
 		for (var i=0; i<array1.length; i++) {
 			returnArray[i] = array1[i] + array2[i];
 		}
 	} else {
 		alert("Cannot add arrays: the length of arrays are different");
 	}
+	
 	return returnArray;
 }
 
 function subtractArr (array1, array2) {
-	//alert("array_subtractArr");
-	var returnArray;
+	
+	var returnArray = new Array(array1.length);
 	if (array1.length == array2.length) {
-		returnArray = new Array(array1.length);
 		for (var i=0; i<array1.length; i++) {
 			returnArray[i] = array1[i] - array2[i];			
 		}
 	} else {
 		alert("Cannot subtract arrays: the length of arrays are different");
 	}
+	
 	return returnArray;
 }
 
 function mergeParentChildArr (p2cArr, c2pArr) {
-	//alert("array_mergeParentChildArr");
+
 	var returnArray = new Array(p2cArr.length);
 	for (var i=0; i<returnArray.length; i++) {
 		returnArray[i] = new Array(c2pArr.length);
-		//zero initialize
+		
 		for (var j=0; j<returnArray[i].length; j++) {
 			returnArray[i][j] = 0;
 		}
 	}	
+	
 	for (var i=0; i<p2cArr.length; i++) {
 		if (p2cArr[i].length == undefined) {
 			if (p2cArr[i] != -1) {
@@ -90,15 +80,15 @@ function mergeParentChildArr (p2cArr, c2pArr) {
 			}
 		}
 	}
+	
 	return returnArray;
 }
 
 function mulArr (array1, dimension1, array2, dimension2) {
-	//alert("array_mulArr");
-	var returnArray;
+	
+	var returnArray = new Array(array2[0].length);
 	if (dimension1 == 1 && dimension2 == 2) { // 1D X 2D
 		if (array1.length == array2.length) {
-			returnArray = new Array(array2[0].length);
 			for (var i=0; i<array2[0].length; i++) {
 				var temp = 0;
 				for (var j=0; j<array2.length; j++) {
@@ -110,14 +100,14 @@ function mulArr (array1, dimension1, array2, dimension2) {
 			alert("Cannot multply arrays: the length of arrays are different");
 		}
 	}
+	
 	return returnArray;
 }
 
 function makeOrthogonalArr (array, dimension) {
-	//alert("array_makeOrthogonalArr");
-	var returnArray;
+	
+	var returnArray = new Array(array[0].length);
 	if (dimension == 2) {
-		returnArray = new Array(array[0].length);
 		for (var i=0; i<returnArray.length; i++) {
 			returnArray[i] = new Array(array.length);
 		}
@@ -127,11 +117,12 @@ function makeOrthogonalArr (array, dimension) {
 			}
 		}
 	}
+	
 	return returnArray;
 }
 
 function printArr (array, dimension) {
-	//alert("array_printArr");
+	
 	if (dimension == 1) {
 		document.write("[ ");
 		for (var i=0; i<array.length; i++) {

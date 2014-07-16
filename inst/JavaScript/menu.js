@@ -1,29 +1,28 @@
 var menuOn = false;
 function menu(Name)
 {       
-//////////////////////////////////////Menu Start//////////////////////////////////////
     Name.menuLayer = new Kinetic.Layer();
     Name.menu = new Kinetic.Group({
-            opacity: 0.95,
-            visible: false
+		opacity: 0.95,
+        visible: false
     });
     Name.menuText = new Array();
     Name.menuRect = new Array();
     var menuName = ["Hide", "Reset"]; //add topmenu element you want.    
     for(var i = 0 ; i < menuName.length ; i ++){
         Name.menuText[i] = new Kinetic.Text({
-                y: 25 * i,
-                text: '',
-                fontFamily: 'Calibri',
-                fontSize: 15,
-                padding: 5,
-                fill: 'white'
+			y: 25 * i,
+			text: '',
+			fontFamily: 'Calibri',
+			fontSize: 15,
+			padding: 5,
+			fill: 'white'
         })      
         Name.menuRect[i] = new Kinetic.Rect({
-                y: 25 * i,
-                width: 90,
-                height: 25,
-                fill: '#93b21a'
+			y: 25 * i,
+			width: 90,
+			height: 25,
+			fill: '#93b21a'
         });
         Name.menu.add(Name.menuRect[i]).add(Name.menuText[i]);
         Name.menuText[i].setText(' ' + menuName[i]);                              
@@ -106,12 +105,6 @@ function menu(Name)
         Name.menuLayer.draw();                  
     });
             
-    
-    
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // under Regression.
     var regressionMenuName = ['linear', 'loess']; //add option element you want.
     Name.regressionMenuLayer = new Kinetic.Layer();
     Name.regressionMenu = new Array(regressionMenuName.length);
@@ -294,9 +287,7 @@ function menu(Name)
         Name.optionMenuLayer.add(Name.optionMenu[i]);
     }
     Name.stage.add(Name.optionMenuLayer);
-     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     Name.subMenuLayer = new Array(optionMenuName.length);
     Name.subMenu = new Array(optionMenuName.length);
     for(var i = 0; i < optionMenuName.length ; i ++){
@@ -390,24 +381,8 @@ function menu(Name)
         Name.subMenuLayer[j].add(Name.subMenu[j]);
         Name.stage.add(Name.subMenuLayer[j]);
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
     Name.stage.on('click', function(evt){
-     /*   for(var i = 0 ; i < objArr.length ; i ++){
-            objArr[i].menu.hide();
-            objArr[i].menuLayer.draw();
-            for(var j=0; j<optionMenuName.length; j++){
-        	 	objArr[i].optionMenu[j].hide();
-                objArr[i].subMenu[j].hide();
-                objArr[i].subMenuLayer[j].draw();       
-            }
-            for(var j=0; j<regressionMenuName.length; j++){
-            	objArr[i].regressionMenu[j].hide();                        	
-            }
-            objArr[i].regressionMenuLayer.draw();
-            objArr[i].optionMenuLayer.draw();  
-        }*/
         if((evt.which && evt.which == 3) || (evt.button && evt.button == 2)){ //right click
         	if(menuOn == true){
         		// hide all menu.
@@ -484,5 +459,4 @@ function menu(Name)
             }
         }
 	});        
-//////////////////////////////////////Menu End//////////////////////////////////////
 }

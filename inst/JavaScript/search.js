@@ -1,6 +1,5 @@
 function makeSearchButton(searchBoxIdString, mainArr)
 {
-	// get searchBoxId from string
 	var searchBoxId = searchBoxIdString.slice(9);
 	// to access mainArr from booleanSearch function later
 	window["mainArrOfSearch"+searchBoxId] = mainArr;
@@ -8,21 +7,7 @@ function makeSearchButton(searchBoxIdString, mainArr)
 	document.write("<div class=\"search_wrap\"><form id=\"searchForm");
 	document.write(searchBoxId);
 	document.write("\">");
-	
-/*	// variable buttons update (omit this label because of auto-compelte function)
-	for(var i = 0; i < mainArr.labelArr.length ; i ++){
-		document.write("<a id=\"labelArr[");
-		document.write(i);
-		document.write("]\" href=\"#\" class=\"variableButton\" onclick=\"addValueToSearchBox(");
-		document.write(searchBoxId);
-		document.write(", '");
-		document.write(mainArr.labelArr[i]);
-		document.write("'); return false;\">");
-		document.write(mainArr.labelArr[i]);
-		document.write("</a>");	  
-	}
-	document.write("<br>");
-*/	
+
 	// make answer button
 	document.write("<a id=\"ansId\" href=\"#\" class=\"ansButton\" onclick=\"addAnsToSearchBox(");
 	document.write(searchBoxId);
@@ -103,13 +88,7 @@ function clearSearchBox(searchBoxId)
 	var textBox = document.getElementById("searchBox"+searchBoxId);
 	textBox.value = '';	
 }
-/*//(omit this label because of auto-compelte function)
-function addValueToSearchBox(searchBoxId, label)
-{
-    var textBox = document.getElementById("searchBox"+searchBoxId);
-    textBox.value = textBox.value + label;
-}
-*/
+
 function printClearAns(searchBoxId, mainArr)
 {
 	mainArr.$ans = "undefined";
@@ -185,8 +164,8 @@ function booleanSearch(searchBoxId, mainArr)
 	//current answer update.
 	mainArr.$ans=inputStr; 
 	// find node number which satisfies boolean condition
-	var temp = new Array(mainArr.statusArr.length);
-	for(var i = 0 ; i < mainArr.statusArr.length ; i ++)
+	var temp = new Array(mainArr.$isSelected.length);
+	for(var i = 0 ; i < mainArr.$isSelected.length ; i ++)
 	{	
 		temp[i] = 0;
 		if(eval(inputStr)){			
@@ -194,22 +173,11 @@ function booleanSearch(searchBoxId, mainArr)
 		}
 	}
 
-	// root update
-	/*for(var i = 0 ; i < mainArr.$isSelected.length ; i ++){
-		mainArr.$isSelected[i][0] = 0;
-		for(var j = 1 ; j < mainArr.$isSelected[i].length ; j ++){
-			mainArr.$isSelected[i][j](0);
-		}
-	}*/
-	
 	for(var i = 0 ; i < findingNumber.length ; i ++){
 		temp[findingNumber[i]] = 1;
-		//for(var j = 1 ; j < mainArr.$isSelected[findingNumber[i]].length ; j ++){
-		//	mainArr.$isSelected[findingNumber[i]][j](1);
-		//}
 	}
 	
-	updateRecursive(mainArr, temp, mainArr.statusArr);
+	updateRecursive(mainArr, temp, mainArr.$isSelected);
 }
 
 // replace all string
@@ -229,36 +197,35 @@ function autoComplete(searchBoxId, mainArr){
 	    }
 	    $( "#searchBox"+searchBoxId )
 	    	// don't navigate away from the field on tab when selecting an item
-	        .bind( "keydown", function( event ) {
-	          if ( event.keyCode === $.ui.keyCode.TAB &&
-	              $( this ).data( "ui-autocomplete" ).menu.active ) {
-	            event.preventDefault();
-	          }
-	        })
-	        .autocomplete({
-	          minLength: 0,
-	          source: function( request, response ) {
-	            // delegate back to autocomplete, but extract the last term
-	            response( $.ui.autocomplete.filter(
-	              availableTags, extractLast( request.term ) ) );
-	          },
-	          focus: function() {
-	            // prevent value inserted on focus
-	            return false;
-	          },
-	          select: function( event, ui ) {
-	            var terms = split( this.value );
-	            // remove the current input
-	            terms.pop();
-	            // add the selected item
-	            terms.push( ui.item.value );
-	            // add placeholder to get the comma-and-space at the end
-	            terms.push( "" );
-	            this.value = terms.join( " " );
-	            return false;
-	          }
-	        });
+		.bind( "keydown", function( event ) {
+		  if ( event.keyCode === $.ui.keyCode.TAB &&
+			  $( this ).data( "ui-autocomplete" ).menu.active ) {
+			event.preventDefault();
+		  }
+		})
+		.autocomplete({
+			minLength: 0,
+			source: function( request, response ) {
+			// delegate back to autocomplete, but extract the last term
+			response( $.ui.autocomplete.filter(
+			  availableTags, extractLast( request.term ) ) );
+			},
+			focus: function() {
+			// prevent value inserted on focus
+			return false;
+			},
+			select: function( event, ui ) {
+				var terms = split( this.value );
+				// remove the current input
+				terms.pop();
+				// add the selected item
+				terms.push( ui.item.value );
+				// add placeholder to get the comma-and-space at the end
+				terms.push( "" );
+				this.value = terms.join( " " );
+				return false;
+			}
+		});
 	});	
-
 }
 

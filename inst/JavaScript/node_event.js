@@ -1,7 +1,3 @@
-
-
-//////////////////////////////////////Chk key event Start//////////////////////////////////////   
-
 window.addEventListener('keydown',checkKeyDown,false);  
 window.addEventListener('keyup',checkKeyUp,false);
 var ctrlPressed = false;
@@ -27,23 +23,14 @@ function checkKeyDown (e) {
 	if (e.keyCode == 90) {  //z key pressed
 		zPressed = true;
     }
+    /*
 	if (ctrlPressed == true && e.keyCode == 46) {  //del key pressed
 		hideSelected();
     }
+    */
 	if (ctrlPressed == true && e.keyCode == 45) {  //insert key pressed
 		resetSelected();
     }
-	if (ctrlPressed == true &&  e.keyCode == 36) {  //ctrl key and home key pressed at the same time
-		if (tPressed == true) {
-			tPressed = false;
-			document.getElementById('dataTable').style.display = 'none';
-			document.getElementById('tableScrollableContainer').style.display = 'none';                     
-		} else {
-			tPressed = true;
-			document.getElementById('dataTable').style.display = 'block';
-			document.getElementById('tableScrollableContainer').style.display = 'block';            
-		}                 
-	}
 }
 
 function checkKeyUp(e) {
@@ -63,7 +50,7 @@ function checkKeyUp(e) {
 		zPressed = false;
     }
 }       
-//////////////////////////////////////Chk key event End//////////////////////////////////////
+
 function eventTrigger (NameArr) {
 	for (var i=0; i<NameArr.length; i++) {
 		hover(NameArr[i]);
@@ -72,7 +59,6 @@ function eventTrigger (NameArr) {
 		menu(NameArr[i]);
 	}
 }
-
 
 var dragOn = false;
 function drag (Name) {
@@ -90,26 +76,20 @@ function drag (Name) {
         	}
             divid = mouseName;
             preDragMousePos={x: (evt.pageX-divOffsetX), y: (evt.pageY-divOffsetY)};
-         //   if(touch == true){
-          //  	touch = false;
-           //     Name.rangeBoxLayer.draw();
-           // }else{
-                var mousePos = Name.stage.getPointerPosition();
-                Name.rangeBox.setX(mousePos.x);
-                Name.rangeBox.setY(mousePos.y);
-                Name.rangeBox.setWidth(0);
-                Name.rangeBox.setHeight(0);
-                Name.touch = true;
-             //   moving = true;
-                Name.rangeBoxLayer.drawScene();
-           // }
+    
+			var mousePos = Name.stage.getPointerPosition();
+			Name.rangeBox.setX(mousePos.x);
+			Name.rangeBox.setY(mousePos.y);
+			Name.rangeBox.setWidth(0);
+			Name.rangeBox.setHeight(0);
+			Name.touch = true;
+			Name.rangeBoxLayer.drawScene();
         }
     }); 
     var tmpx, tmpy, tmpName;
     Name.stage.on("mousemove", function (evt){
     	if ((evt.which && evt.which == 1) || (evt.button && evt.button == 0)) { //left click                            
 		    if (Name.touch == true) {
-		    	//alert(Name.containerId);
 		    	Name.moving = true;
 	            dragOn = true;
 	            if (divid == mouseName) {
@@ -121,15 +101,14 @@ function drag (Name) {
 	                var mousePos = {x: (evt.pageX-tmpx), y: (evt.pageY-tmpy)};
 	            }
 	            var x, y;
-	            x = mousePos.x;// + plotXmargin;
-	            y = mousePos.y; //+ plotYmargin + plotHeight;
+	            x = mousePos.x;
+	            y = mousePos.y;
 	            Name.rangeBox.setWidth(x- Name.rangeBox.getX());
 	            Name.rangeBox.setHeight(y- Name.rangeBox.getY());
 	            Name.rangeBoxLayer.moveToTop();
 	            Name.rangeBoxLayer.drawScene();
 		    }
-    	}
-            
+    	}    
     }, true);
     
     Name.stage.on("mouseup", function (evt){
@@ -167,7 +146,6 @@ function drag (Name) {
                 }
                 Name.moving = false;
                 Name.touch = false;
-            //    dragOn = false;
             }
         }
     }, true);
@@ -175,7 +153,6 @@ function drag (Name) {
 
 function select (Name) {
 	var tmpNodeArr = new Array();
-	// temporary method for unselecting nodes.
 	Name.stage.on('click', function (evt) {
 		if ((evt.which && evt.which == 1) || (evt.button && evt.button == 0)) { //left click
 			if (!(ctrlPressed || shiftPressed || aPressed || gPressed)) {
@@ -218,54 +195,55 @@ function select (Name) {
 	}
 }
 
-
 function hover (Name) {
 	for (var i=0; i<Name.dataLayerArr.length; i++) {
 		(function (i) { 
-		Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
-			if (Name.moving == true) {                       
-	       //     dragOn = false;
-	            return;
-	        }
-			var node = evt.targetNode;
-			document.body.style.cursor = "pointer";
-			var mousePos = node.getStage().getPointerPosition();
-			var mousePos = node.getStage().getPointerPosition();
-			if (mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2) {//set tooltip box position
-				Name.tooltip.setPosition({x: mousePos.x + 8, y: mousePos.y + 2})
-		    } else if (mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2) {
-		    	Name.tooltip.setPosition({x: mousePos.x + 2, y: mousePos.y - 2 - Name.tooltip.getHeight()});
-		    } else if (mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2) {
-		    	Name.tooltip.setPosition({x: mousePos.x - 2 - Name.tooltip.getWidth(), y: mousePos.y + 2});
-		    } else {
-		    	Name.tooltip.setPosition({x: mousePos.x - 2 - Name.tooltip.getWidth(), y: mousePos.y - 2 - Name.tooltip.getHeight()});
-		    }
-			Name.tooltip.getText().setText(node.getInfo());
-			Name.tooltipLayer.moveToTop();
-			Name.tooltip.show();
-			Name.tooltipLayer.draw();
-			if(node.getSelected() == 0){
-				Name.hoverArr[i](node, 1);
-	        }
-		});
-		Name.dataLayerArr[i].on('mouseout', function(evt) {
-			if (dragOn == true) {                       
-	            dragOn = false;
-	            return;
-	        }
-			var node = evt.targetNode;
-			document.body.style.cursor = "default";
-			Name.tooltip.hide();
-			Name.tooltipLayer.draw();
-			if (node.getSelected() == 0) {
-				Name.hoverArr[i](node, 0);
-			} else {
-				if (node.getOpacity() == 0.5) {
-					node.setOpacity(1);
-					node.draw();
-				}				
-			}
-		});
+			Name.dataLayerArr[i].on('mouseover mousemove dragmove', function(evt) {
+				if (Name.moving == true) {                       
+					return;
+				}
+				var node = evt.targetNode;
+				document.body.style.cursor = "pointer";
+				var mousePos = node.getStage().getPointerPosition();
+				var mousePos = node.getStage().getPointerPosition();
+				
+				if (mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2) {//set tooltip box position
+					Name.tooltip.setPosition({x: mousePos.x + 8, y: mousePos.y + 2})
+				} else if (mousePos.x < Name.plotXMargin + Name.width/2 && mousePos.y > Name.plotYMargin + Name.height/2) {
+					Name.tooltip.setPosition({x: mousePos.x + 2, y: mousePos.y - 2 - Name.tooltip.getHeight()});
+				} else if (mousePos.x > Name.plotXMargin + Name.width/2 && mousePos.y < Name.plotYMargin + Name.height/2) {
+					Name.tooltip.setPosition({x: mousePos.x - 2 - Name.tooltip.getWidth(), y: mousePos.y + 2});
+				} else {
+					Name.tooltip.setPosition({x: mousePos.x - 2 - Name.tooltip.getWidth(), y: mousePos.y - 2 - Name.tooltip.getHeight()});
+				}
+				Name.tooltip.getText().setText(node.getInfo());
+				Name.tooltipLayer.moveToTop();
+				Name.tooltip.show();
+				Name.tooltipLayer.draw();
+				
+				if(node.getSelected() == 0){
+					Name.hoverArr[i](node, 1);
+				}
+			});
+			Name.dataLayerArr[i].on('mouseout', function(evt) {
+				if (dragOn == true) {                       
+					dragOn = false;
+					return;
+				}
+				
+				var node = evt.targetNode;
+				document.body.style.cursor = "default";
+				Name.tooltip.hide();
+				Name.tooltipLayer.draw();
+				if (node.getSelected() == 0) {
+					Name.hoverArr[i](node, 0);
+				} else {
+					if (node.getOpacity() == 0.5) {
+						node.setOpacity(1);
+						node.draw();
+					}				
+				}
+			});
 		})(i);
 	}
 }

@@ -27,6 +27,28 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 25 July2014 ==
+
+Participants : Jung Hoon Lee, Jae W. Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list for next Tuesday
+   # Make a code using ggplot2 (plot_RIGHT.R)
+     * RIGHT(ggplot(dataObject, aes(x=xaxis, y=yaxis)) + geom_point())
+     * same policy with RIGHT 
+     * meeting with Jung Hoon Lee about current progressing
+ 
+ * TO-DO list for the next weeks
+   # Make a code using ggplot2 (line_RIGHT.R & plot + line combination)
+     * RIGHT(ggplot(dataObject, aes(x=xaxis, y=yaxis)) + geom_lines())
+     * RIGHT(ggplot(dataObject, aes(x=xaxis, y=yaxis)) + geom_lines() + geom_plot())
+     * if possible, make multiple graph in one browser
+
+ * TO-DO list (advanced)
+   # upgrade kinetic js version (v5.0.1 -> v5.1.0)
+   # use server-offloading with shiny server
+
+  Next meeting : 10:00 (Korea time) on Fri, 8/01
+
 == 05 July2014 ==
 
 Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
@@ -47,12 +69,12 @@ Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
    # implement ggplot2-like API using ggvis or animint
 
 || *Plot* || *isSelected* || *isHidden* || *hover* || *reset* ||
-|| Dot || O || X || O || O ||
-|| Lines || O || X || O || O ||
-|| Hist || O || X || O || O ||
-|| Boxplot || X || X || O || O ||
-|| Pie || X || X || O || O ||
- 
+|| Dot || O || O || O || O ||
+|| Lines || O || O || O || O ||
+|| Hist || O || O || O || O ||
+|| Boxplot || O || O || O || O ||
+|| Pie || O || O || O || O ||
+ (UPDATED : 07/25)
   Next meeting : 10:00 (Korea time) on Tue, 7/08
 
 == 27 June 2014 ==

@@ -26,7 +26,7 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
   # @param col color used for all the visual elements. color option overrides \code{col} option.
   col <- NULL # TEMPORARY
   offPlot <- FALSE
- 
+  
   ## ---
   ## Take strings if asked:
   ## ---

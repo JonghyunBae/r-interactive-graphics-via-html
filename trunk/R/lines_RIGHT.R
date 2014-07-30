@@ -18,7 +18,7 @@
 #' print(obj)
 #' }
 lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
-  
+
   col <- NULL # TEMPORARY
   offPlot <- FALSE
   

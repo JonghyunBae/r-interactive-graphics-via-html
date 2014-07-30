@@ -142,6 +142,8 @@ for(index in 1:length(AlldataArr)) {
   .RIGHT$numPie <- 0
   .RIGHT$numSearch <- 0
   .RIGHT$numTable <- 0
+  .RIGHT$numggplot <- 1
+  .RIGHT$gg2data <- c()
   
   invisible()
   
@@ -206,6 +208,8 @@ RIGHT <- function(expr = {},
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
   
+  .RIGHT$str <- as.character(substitute(expr))
+  
   eval(substitute(expr), envir = list(plot = plot_RIGHT,
                                       points = points_RIGHT,
                                       lines = lines_RIGHT,
@@ -213,7 +217,8 @@ RIGHT <- function(expr = {},
                                       boxplot = boxplot_RIGHT,
                                       pie = pie_RIGHT,
                                       search = search_RIGHT,
-                                      table = table_RIGHT))
+                                      table = table_RIGHT,
+                                      qplot, ggplot = ggplot_RIGHT(.RIGHT$str)))
   
   ## ---
   ## Process data.frame objects:
@@ -404,18 +409,3 @@ clean <- function(obj) {
   unlink(obj$dir, recursive = TRUE)
   
 } # function clean
-
-runServer <- function(expr={}) {
-  
-  # Flag on about sever-offloading
-  .RIGHT$flagServer <- TRUE
-  
-  # Count sever-offloading graphs
-  .RIGHT$numServer <- .RIGHT$numServer + 1
-  
-  # Copy user's code with special class name
-  .RIGHT$exprArray <- c(.RIGHT$exprArray, structure(substitute(expr), class = paste0("RIGHTServer", .RIGHT$numServer)))  
-  
-  return(structure(eval(substitute(expr)), class = paste0("RIGHTServer", .RIGHT$numServer)))
-  
-} # function runServer.RIGHT

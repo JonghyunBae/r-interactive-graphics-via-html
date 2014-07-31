@@ -35,4 +35,4 @@ runServer <- function(expr={}) {
   
   return(structure(eval(substitute(expr)), class = paste0("RIGHTServer", .RIGHT$numServer)))
   
-} # function runServer.RIGHT
+} # function runServer

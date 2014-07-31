@@ -16,23 +16,10 @@ License: GPL-3
 Imports:
     shiny,
     rjson,
-    jsonlite
-Suggests:
-    testthat,
+    jsonlite,
     ggplot2
+Suggests:
+    testthat
 URL: https://code.google.com/p/r-interactive-graphics-via-html/
 BugReports:
     https://code.google.com/p/r-interactive-graphics-via-html/issues/list
-Collate:
-    'RIGHT.R'
-    'body.R'
-    'common.R'
-    'head.R'
-    'plot_RIGHT.R'
-    'points_RIGHT.R'
-    'lines_RIGHT.R'
-    'pie_RIGHT.R'
-    'hist_RIGHT.R'
-    'boxplot_RIGHT.R'
-    'search_RIGHT.R'
-    'table_RIGHT.R'

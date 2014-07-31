@@ -218,7 +218,8 @@ RIGHT <- function(expr = {},
                                       pie = pie_RIGHT,
                                       search = search_RIGHT,
                                       table = table_RIGHT,
-                                      qplot, ggplot = ggplot_RIGHT(.RIGHT$str)))
+                                      qplot = ggplot2::qplot,
+                                      ggplot = ggplot_RIGHT(.RIGHT$str)))
   
   ## ---
   ## Process data.frame objects:

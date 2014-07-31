@@ -1,4 +1,4 @@
-## runServer_RIGHT.R
+## runServer.R
 
 #' @title shiny server-offloading
 #' 

@@ -142,8 +142,8 @@ for(index in 1:length(AlldataArr)) {
   .RIGHT$numPie <- 0
   .RIGHT$numSearch <- 0
   .RIGHT$numTable <- 0
-  .RIGHT$numggplot <- 1
-  .RIGHT$gg2data <- c()
+  
+  .RIGHT$test <- c()
   
   invisible()
   
@@ -208,18 +208,25 @@ RIGHT <- function(expr = {},
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
   
-  .RIGHT$str <- as.character(substitute(expr))
   
-  eval(substitute(expr), envir = list(plot = plot_RIGHT,
-                                      points = points_RIGHT,
-                                      lines = lines_RIGHT,
-                                      hist = hist_RIGHT,
-                                      boxplot = boxplot_RIGHT,
-                                      pie = pie_RIGHT,
-                                      search = search_RIGHT,
-                                      table = table_RIGHT,
-                                      qplot = ggplot2::qplot,
-                                      ggplot = ggplot_RIGHT(.RIGHT$str)))
+  .RIGHT$test <- as.character(substitute(expr))
+  
+  for(iData in 2:length(.RIGHT$test)) {
+    obj <- eval(parse(text = .RIGHT$test[iData]), envir = list(plot = plot_RIGHT,
+                                                              points = points_RIGHT,
+                                                              lines = lines_RIGHT,
+                                                              hist = hist_RIGHT,
+                                                              boxplot = boxplot_RIGHT,
+                                                              pie = pie_RIGHT,
+                                                              search = search_RIGHT,
+                                                              table = table_RIGHT,
+                                                              qplot = ggplot2::qplot,
+                                                              ggplot = ggplot_RIGHT))
+    
+    if(class(obj)[1] == "gg") {
+      ggplot2RIGHT(obj)
+    }
+  }
   
   ## ---
   ## Process data.frame objects:

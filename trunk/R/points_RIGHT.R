@@ -55,6 +55,7 @@ points_RIGHT <- function(form, data, isString = FALSE) {
   checkColumnName(axisName$y, dataArray)
   
   # Check col option:
+ 
   checkCol(col)
   col <- getRGB(col)
   

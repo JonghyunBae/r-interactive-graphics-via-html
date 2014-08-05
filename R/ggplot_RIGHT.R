@@ -16,14 +16,17 @@
 #' print(obj)
 #' }
 ggplot_RIGHT <- function(data, ...) {
-
+  
   argArray <- as.list(match.call())
   
   obj <- ggplot2::ggplot(data, ...)
   
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
   attr(obj, "NAME") <- data
-   
+  
+  for(name in names(obj))
+    print(obj[name])
+  
   return(obj)
   
 } # function ggplot_RIGHT
@@ -31,6 +34,8 @@ ggplot_RIGHT <- function(data, ...) {
 qplot_RIGHT <- function(..., data) {
   
   argArray <- as.list(match.call())
+  
+  obj <- ggplot2::qplot(..., data)
   
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
   attr(obj, "NAME") <- data

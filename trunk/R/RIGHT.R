@@ -212,7 +212,8 @@ RIGHT <- function(expr = {},
   .RIGHT$test <- as.character(substitute(expr))
   
   for(iData in 2:length(.RIGHT$test)) {
-    obj <- eval(parse(text = .RIGHT$test[iData]), envir = list(plot = plot_RIGHT,
+
+    obj <- eval(substitute(expr), envir = list(plot = plot_RIGHT,
                                                               points = points_RIGHT,
                                                               lines = lines_RIGHT,
                                                               hist = hist_RIGHT,
@@ -220,9 +221,8 @@ RIGHT <- function(expr = {},
                                                               pie = pie_RIGHT,
                                                               search = search_RIGHT,
                                                               table = table_RIGHT,
-                                                              qplot = ggplot2::qplot,
                                                               ggplot = ggplot_RIGHT))
-    
+      
     if(class(obj)[1] == "gg") {
       ggplot2RIGHT(obj)
     }

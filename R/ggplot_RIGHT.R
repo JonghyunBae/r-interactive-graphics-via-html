@@ -12,7 +12,8 @@
 #' 
 #' @examples
 #' \donttest{
-#' obj <- RIGHT({ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()})
+#' obj <- RIGHT({ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()
+#'               ggplot(Theoph, aes(Time, fill=Subject)) + geom_bar()})
 #' print(obj)
 #' }
 ggplot_RIGHT <- function(data, ...) {
@@ -24,22 +25,6 @@ ggplot_RIGHT <- function(data, ...) {
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
   attr(obj, "NAME") <- data
   
-  for(name in names(obj))
-    print(obj[name])
-  
-  return(obj)
-  
-} # function ggplot_RIGHT
-
-qplot_RIGHT <- function(..., data) {
-  
-  argArray <- as.list(match.call())
-  
-  obj <- ggplot2::qplot(..., data)
-  
-  data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
-  attr(obj, "NAME") <- data
-    
   return(obj)
   
 } # function ggplot_RIGHT
@@ -202,9 +187,9 @@ ggplot2RIGHT <- function(obj) {
                                           ", ", createObject(baseColor = NULL, alwaysObject = TRUE), ");")))
     
     # Source box.js in head:
-    addSource("box.js")
+    addSource("box.js")  
     
-  }
+  } # if
   
   invisible()
   

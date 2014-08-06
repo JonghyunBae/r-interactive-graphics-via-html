@@ -18,7 +18,8 @@ Imports:
     shiny,
     rjson,
     jsonlite,
-    ggplot2
+    ggplot2,
+    plyr
 Suggests:
     testthat
 URL: https://code.google.com/p/r-interactive-graphics-via-html/

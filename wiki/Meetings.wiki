@@ -27,6 +27,26 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 01 Aug 2014 ==
+
+Participants : Jung Hoon Lee, Jae W. Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # Fix some ggplot in RIGHT 
+     * more general form (not using ggplot2 package)
+     * add box-whisker plot
+     * add option which used in RIGHT
+     * documentation about ggplot_RIGHT and packaging RIGHT
+     * check result
+
+ * TO-DO list (advanced)
+   # shiny server-offloading using shiny server (low priority)
+   # update kinetic js + optimization
+   # make demo video & update code.google.com
+   # R bloggers
+
+  Next meeting : 10:00 (Korea time) on Fri, 8/08
+
 == 25 July2014 ==
 
 Participants : Jung Hoon Lee, Jae W. Lee, Sang Gi Hong, Jong Hyun Bae

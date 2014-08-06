@@ -207,26 +207,25 @@ RIGHT <- function(expr = {},
   
   # Special environment is created to overload base graphics plotting function when evaluating
   # the given expression:
-  
-  
   .RIGHT$test <- as.character(substitute(expr))
   
   for(iData in 2:length(.RIGHT$test)) {
-
-    obj <- eval(substitute(expr), envir = list(plot = plot_RIGHT,
-                                                              points = points_RIGHT,
-                                                              lines = lines_RIGHT,
-                                                              hist = hist_RIGHT,
-                                                              boxplot = boxplot_RIGHT,
-                                                              pie = pie_RIGHT,
-                                                              search = search_RIGHT,
-                                                              table = table_RIGHT,
-                                                              ggplot = ggplot_RIGHT))
-      
+    
+    obj <- eval(parse(text = .RIGHT$test[iData]), envir = list(plot = plot_RIGHT,
+                                                               points = points_RIGHT,
+                                                               lines = lines_RIGHT,
+                                                               hist = hist_RIGHT,
+                                                               boxplot = boxplot_RIGHT,
+                                                               pie = pie_RIGHT,
+                                                               search = search_RIGHT,
+                                                               table = table_RIGHT,
+                                                               qplot = qplot_RIGHT,
+                                                               ggplot = ggplot_RIGHT))
+    
     if(class(obj)[1] == "gg") {
       ggplot2RIGHT(obj)
-    }
-  }
+    } # if
+  } # for
   
   ## ---
   ## Process data.frame objects:

@@ -14,11 +14,12 @@ Description: RIGHT enables interactive data visualization and analysis using
     the visualizations can be delivered to almost any device/platform for
     presentation purposes.
 License: GPL-3
+Depends:
+    ggplot2
 Imports:
     shiny,
     rjson,
     jsonlite,
-    ggplot2,
     plyr
 Suggests:
     testthat

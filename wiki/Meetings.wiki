@@ -27,6 +27,27 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 08 Aug 2014 ==
+
+Participants : Jung Hoon Lee, Jae W. Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # fix print.ggplot
+   # packaging RIGHT
+   # check result + test code (deadline : next Tuesday)
+   # documentation
+   # test javascript code(unit test, next week)
+
+ * TO-DO list (advanced)
+   # shiny server-offloading using shiny server (low priority)
+   # update kinetic js + optimization
+   # make demo video & update code.google.com
+   # layout improved 
+   # R bloggers 
+     * posting : help page update in google(manual, demovideo) end of August ~ middle of september
+
+  Next meeting : 10:00 (Korea time) on Fri, 8/15
+
 == 01 Aug 2014 ==
 
 Participants : Jung Hoon Lee, Jae W. Lee, Sang Gi Hong, Jong Hyun Bae

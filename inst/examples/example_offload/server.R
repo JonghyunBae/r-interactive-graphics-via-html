@@ -1,89 +1,52 @@
 AlldataArr <- scan("./www/data.js", what="")
-
+firstag <- FALSE
+changeJSON <- FALSE
+iData <- 1
 dataObj <- c()
-  levelSt <- c()
-  levelArr <- c()
-  indexSt <- c()
-  indexEd <- c()
-  dataArr <- c()
-  
-  for(index in 1:length(AlldataArr)) {
-  
-  if(AlldataArr[index] == "=") {
-  
-  start <- index+1
-  objName <- paste0(".",AlldataArr[index-1])
-  
-  } else if(AlldataArr[index] == "};") {
-  
-  end <- index
-  AlldataArr[index] <- "}"
-  
-  dataObj <- AlldataArr[start:end]
-  
-  for(iData in start:end - start + 1) {
-  
-  if(dataObj[iData] == "level") {
-  levelSt <- append(levelSt, iData+3)
-  } else if(dataObj[iData] == "index") {
-  indexSt <- append(indexSt, iData+3)
-  } 
-  
-  } 
-  
-  for(iData in 1:length(levelSt)) {
-  
-  for(jData in seq(levelSt[iData], (indexSt[iData]-5), 2)) {
-  levelArr <- append(levelArr, dataObj[jData])
+
+repeat { 
+  if(iData <= length(AlldataArr)) {
+    if(AlldataArr[iData] == "var" && firstag == FALSE) {
+      iFirst <- iData
+      firstag <- TRUE
+    } else if(AlldataArr[iData] == "var" && firstag == TRUE) {
+      iData <- iData - 1
+      iSecond <- iData
+      firstag <- FALSE
+      changeJSON <- TRUE
+    }
+  } else if(iData > length(AlldataArr) && firstag == TRUE) {
+    iSecond <- iData - 1
+    firstag <- FALSE
+    changeJSON <- TRUE
   }
   
-  jData <- indexSt[iData]
+  if(changeJSON == TRUE) {
+    dataName <- paste0(".", AlldataArr[iFirst + 1])
+    for(i in (iFirst+3):iSecond) {
+      dataObj <- paste0(dataObj, paste0(" ", AlldataArr[i]))
+    } 
+    dataObj <- rjson::fromJSON(dataObj) 
+    obj <- as.data.frame(lapply(dataObj, function (x) {
+      if (is.list(x)) {
+        return(factor(x$index, labels = x$level))
+      } else {
+        return(x)
+      } 
+    }))   
+    names(obj) <- names(dataObj)
+    assign(dataName, obj)
+    dataObj <- c()
+    changeJSON <- FALSE
+  }
   
-  while(dataObj[jData] != "]") {
-  
-  if(dataObj[jData+1] == "]") {
-  dataObj[jData] <- paste0('"', levelArr[as.integer(dataObj[jData]) + 1], '"') 
-  } else {        
-  tempArr <- strsplit(dataObj[jData], ",")
-  dataObj[jData] <- paste0('"', levelArr[as.integer(tempArr[[1]]) + 1], '",')        
-  } 
-  
-  jData <- jData+1
-  
-  } 
-  
-  indexEd <- append(indexEd, jData+1)
-  
-  if(dataObj[indexEd[iData]] == "},") {
-  dataObj[[indexEd[iData]]] <- "], "
-  } 
-  
-  levelArr <- c()
-  } 
-  
-  for(iData in length(levelSt):1) {  
-  dataObj <- dataObj[c(-(indexEd[iData]-1), -((indexSt[iData]-2) : (levelSt[iData]-4)))]
-  } 
-  
-  for(iData in 1:length(dataObj)) {
-  
-  if(dataObj[iData + 1] == ":" && iData < length(dataObj)) {
-  dataObj[iData] <- paste0('"', dataObj[iData], '"')
-  } 
-  
-  dataArr <- paste0(dataArr, dataObj[iData])
-  } 
-  
-  assign(objName, data.frame(fromJSON(dataArr)))
-  
-  dataArr <- c()
-  dataObj <- c()
-  levelSt <- c()
-  indexSt <- c()
-  indexEd <- c()
-  
-  } 
-  } 
+  if(iData > length(AlldataArr)) {
+    break
+  } else {  
+    iData <- iData + 1
+  }
+}
+
 shinyServer(function(input, output) {
 
 	output$loessArray1 <- reactive({ 

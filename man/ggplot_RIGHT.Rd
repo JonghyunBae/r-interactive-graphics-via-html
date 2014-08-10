@@ -7,6 +7,8 @@ ggplot_RIGHT(data, ...)
 }
 \arguments{
 \item{data}{a data.frame object.}
+
+\item{...}{other options to draw graph(colour, fill)}
 }
 \description{
 Function to create data object name in ggplot function.

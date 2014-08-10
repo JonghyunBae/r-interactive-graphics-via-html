@@ -6,7 +6,7 @@
 ggplot2RIGHT(obj)
 }
 \arguments{
-\item{data}{a data.frame object.}
+\item{obj}{a data.frame object.}
 }
 \description{
 Function to create data object name in ggplot function.

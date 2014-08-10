@@ -48,7 +48,17 @@ function hideSelected(Name) {
 		}
 	}
 	
+	for(var i=0; i<rootObjArr.length; i++) {
+		alert("start");
+		for(name in rootObjArr[i]) {
+			alert(name);
+			alert(rootObjArr[i][name]);
+		}
+	}
+	
+	
 	for(var i = 0 ; i < rootObjArr.length ; i ++){	
+		
 		if(rootObjArr[i].$isOffload)
 			continue;
 		
@@ -113,6 +123,7 @@ function hideSelected(Name) {
 			}
 		}
 	}
+	
 }
 function childReCalculate(object) {
 	object._reCalculate();	

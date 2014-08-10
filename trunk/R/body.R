@@ -30,9 +30,9 @@ prepareData <- function(dataList, dir = ".") {
     tempData <- as.list(dataList[[nameArray[iData]]])
     dataArr <- lapply(tempData, function(x) if (is.factor(x)) list(level = levels(x), index = as.numeric(x) - 1) else x)
     
-    mainArr <- jsonlite::prettify(rjson::toJSON(dataArr))
+    mainArr <- rjson::toJSON(dataArr)
     
-    dataScript <- c(dataScript, paste0("var ", nameArray[iData], " = ", mainArr, ";"))
+    dataScript <- c(dataScript, paste0("var ", nameArray[iData], " = ", mainArr))
   } # for
   
   tempDir <- file.path(dir, "www")
@@ -181,7 +181,7 @@ createScript <- function(scriptArray = NULL) {
 createFooter <- function() {
   
   return(c('<div id="footer">',
-           '<p id="copyright">&copy; 2013 - <a href="#">The RIGHT team</a></p>',
+           '<p id="copyright">&copy; 2014 - <a href="#">The RIGHT team</a></p>',
            '<p id="dont-delete-this">E-mail : <a href="mailto:right-user@googlegroups.com">right-user@googlegroups.com</a></p>',
            "</div>"))
   

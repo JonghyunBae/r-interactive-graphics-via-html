@@ -12,7 +12,6 @@ test_that("Check returned object from ggplot_RIGHT()", {
   
   expect_identical(obj$labels$x, "conc")
   expect_identical(obj$labels$y, "Time")
-  expect_identical(attr(obj, "NAME"), "Theoph")
   
 }) # test_that
 
@@ -27,8 +26,7 @@ setRIGHT(nameArray = c(),
 
 test_that("Check script generation without any options", {
   
-  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Time)) + ggplot2::geom_point()
-  ggplot2RIGHT(obj)
+  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Time)) + ggplot_point()
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numPoints, 1)
@@ -38,8 +36,7 @@ test_that("Check script generation without any options", {
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'conc', 'Time', {});",
                                        "var point1 = new Dot(axis1, Theoph, 'conc', 'Time', {});"))
   
-  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc)) + ggplot2::geom_bar()
-  ggplot2RIGHT(obj)
+  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc)) + ggplot_bar()
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numHist, 1)
@@ -61,8 +58,7 @@ test_that("Check script generation without any options", {
            numHist = 0,
            numBox = 0)
   
-  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Wt)) + ggplot2::geom_line()
-  ggplot2RIGHT(obj)
+  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Wt)) + ggplot_line()
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numLines, 1)
@@ -72,8 +68,7 @@ test_that("Check script generation without any options", {
                                        "var lineObj1 = new MakeLineObj(Theoph, 'conc', 'Wt', {});",         
                                        "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
   
-  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(Subject, Wt)) + ggplot2::geom_boxplot()
-  ggplot2RIGHT(obj)
+  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(Subject, Wt)) + ggplot_boxplot()
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numPoints, 0)
@@ -97,8 +92,7 @@ setRIGHT(nameArray = c(),
 
 test_that("Check color option:", {
     
-  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Time, colour=Subject)) + ggplot2::geom_point()
-  ggplot2RIGHT(obj)
+  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Time, colour=Subject)) + ggplot_point()
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numPoints, 1)
@@ -108,8 +102,7 @@ test_that("Check color option:", {
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'conc', 'Time', {legend: 'Subject'});",
                                        "var point1 = new Dot(axis1, Theoph, 'conc', 'Time', {});"))
   
-  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, fill=Time)) + ggplot2::geom_bar()
-  ggplot2RIGHT(obj)
+  obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, fill=Time)) + ggplot_bar()
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numHist, 1)

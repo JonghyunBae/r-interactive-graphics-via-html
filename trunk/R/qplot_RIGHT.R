@@ -6,6 +6,7 @@
 #' 
 #' @param x xaxis to draw graph.
 #' @param y yaxis to draw graph. Default is NULL
+#' @param ... other options to draw graph(colour, fill)
 #' @param data a data.frame object.
 #' @param geom graph type to draw(point, line, bar, boxplot). Default is "point"
 #' 
@@ -23,29 +24,24 @@ qplot_RIGHT <- function(x, y = NULL, ..., data, geom = "point") {
   
   .all_aesthetics <- c("adj", "alpha", "angle", "bg", "cex", "col", "color", "colour", "fg", "fill", "group", "hjust", "label", "linetype", "lower", "lty", "lwd", "max", "middle", "min", "order", "pch", "radius", "sample", "shape", "size", "srt", "upper", "vjust", "weight", "width", "x", "xend", "xmax", "xmin", "xintercept", "y", "yend", "ymax", "ymin", "yintercept", "z")
   argArray <- as.list(match.call())
-  
-  aesthetics <- plyr::compact(argArray[.all_aesthetics])
+  aesthetics <- plyr::compact(argArray[.all_aesthetics])  
   class(aesthetics) <- "uneval"
 
-  obj <- ggplot2::ggplot(data, aesthetics)
+  obj <- ggplot(data, aesthetics)
   
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
   attr(obj, "NAME") <- data
   
   if(geom == "point") {
-    obj <- obj + ggplot2::geom_point()
+    obj <- obj + geom_point()
   } else if(geom == "bar") {
-    obj <- obj + ggplot2::geom_bar()
+    obj <- obj + geom_bar()
   } else if(geom == "line") {
-    obj <- obj + ggplot2::geon_line()
+    obj <- obj + geom_line()
   } else if(geom == "boxplot") {
-    obj <- obj + ggplot2::geom_boxplot()
+    obj <- obj + geom_boxplot()
   } # if
  
-  return(obj)
+  ggplot2RIGHT(obj)
   
 } # function qplot_RIGHT
-
-is.constant <- function(x) {
-  sapply(x, function(x) "I" %in% all.names(asOneSidedFormula(x)))
-} # function is.constant

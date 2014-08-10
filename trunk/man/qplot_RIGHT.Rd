@@ -10,6 +10,8 @@ qplot_RIGHT(x, y = NULL, ..., data, geom = "point")
 
 \item{y}{yaxis to draw graph. Default is NULL}
 
+\item{...}{other options to draw graph(colour, fill)}
+
 \item{data}{a data.frame object.}
 
 \item{geom}{graph type to draw(point, line, bar, boxplot). Default is "point"}

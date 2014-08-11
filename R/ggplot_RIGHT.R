@@ -29,8 +29,11 @@ ggplot_RIGHT <- function(data, ...) {
   .RIGHT$axis.y <- obj$labels$y
   .RIGHT$axis.fill <- obj$labels$fill
   .RIGHT$axis.color <- obj$labels$colour
+  .RIGHT$axis.by <- obj$labels$group
   .RIGHT$axis.data <- data
-    
+  
+  .RIGHT$plot_line <- 0
+  
   return(obj)
   
 } # function ggplot_RIGHT
@@ -46,6 +49,8 @@ ggplot_point <- function() {
   obj <- ggplot(dataArray, aesthetics) + geom_point()
   attr(obj, "NAME") <- .RIGHT$axis.data
   
+  .RIGHT$plot_line <- .RIGHT$plot_line + 1
+  
   ggplot2RIGHT(obj)
   
 } # function ggplot_point
@@ -60,6 +65,8 @@ ggplot_line <- function() {
   
   obj <- ggplot(dataArray, aesthetics) + geom_line()
   attr(obj, "NAME") <- .RIGHT$axis.data
+  
+  .RIGHT$plot_line <- .RIGHT$plot_line + 1
   
   ggplot2RIGHT(obj)
   
@@ -111,6 +118,9 @@ is.axis.null <- function() {
   if(!is.null(.RIGHT$axis.color))
     argArray$colour <- as.symbol(.RIGHT$axis.color)    
   
+  if(!is.null(.RIGHT$axis.by))
+    argArray$group <- as.symbol(.RIGHT$axis.by)
+  
   return(argArray)
   
 } # function is.axis.null
@@ -145,15 +155,18 @@ ggplot2RIGHT <- function(obj) {
   # Keep name of the data object:
   .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
   
-  # Increment the number of axes:
-  .RIGHT$numAxis <- .RIGHT$numAxis + 1
-  
-  # Add div in body:
-  .RIGHT$divArray <- append(.RIGHT$divArray, 
-                            paste0('<div id="container', .RIGHT$numAxis,
-                                   '" oncontextmenu="return false;"></div>'))
-  
   if(type == "point") {
+    
+    if(.RIGHT$plot_line == 1) {
+      
+      # Increment the number of axes:
+      .RIGHT$numAxis <- .RIGHT$numAxis + 1
+      
+      # Add div in body:
+      .RIGHT$divArray <- append(.RIGHT$divArray, 
+                                paste0('<div id="container', .RIGHT$numAxis,
+                                       '" oncontextmenu="return false;"></div>'))
+    }
     
     # Increment the number of points:
     .RIGHT$numPoints <- .RIGHT$numPoints + 1
@@ -166,13 +179,16 @@ ggplot2RIGHT <- function(obj) {
     checkColumnName(axis.y, dataArray)
     checkColumnName(axis.color, dataArray)
     
-    # Add script in body:
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 paste0("var axis", .RIGHT$numAxis,
-                                        " = new Axis(", .RIGHT$numAxis, 
-                                        ", ", data,
-                                        ", '", axis.x, "', '", axis.y, 
-                                        "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+    if(.RIGHT$plot_line == 1) {
+      
+      # Add script in body:
+      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                   paste0("var axis", .RIGHT$numAxis,
+                                          " = new Axis(", .RIGHT$numAxis, 
+                                          ", ", data,
+                                          ", '", axis.x, "', '", axis.y, 
+                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+    }
     
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  paste0("var point", .RIGHT$numPoints,
@@ -186,6 +202,17 @@ ggplot2RIGHT <- function(obj) {
     
   } else if(type == "line") {
     
+    if(.RIGHT$plot_line == 1) {
+      
+      # Increment the number of axes:
+      .RIGHT$numAxis <- .RIGHT$numAxis + 1
+      
+      # Add div in body:
+      .RIGHT$divArray <- append(.RIGHT$divArray, 
+                                paste0('<div id="container', .RIGHT$numAxis,
+                                       '" oncontextmenu="return false;"></div>'))
+    }
+    
     # Increment the number of lines:
     .RIGHT$numLines <- .RIGHT$numLines + 1
     
@@ -198,13 +225,16 @@ ggplot2RIGHT <- function(obj) {
     checkColumnName(axis.y, dataArray)
     checkColumnName(axis.color, dataArray)
     
-    # Add script in body:
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 paste0("var axis", .RIGHT$numAxis,
-                                        " = new Axis(", .RIGHT$numAxis, 
-                                        ", ", data,
-                                        ", '", axis.x, "', '", axis.y, 
-                                        "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+    if(.RIGHT$plot_line == 1) {
+     
+      # Add script in body:
+      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                   paste0("var axis", .RIGHT$numAxis,
+                                          " = new Axis(", .RIGHT$numAxis, 
+                                          ", ", data,
+                                          ", '", axis.x, "', '", axis.y, 
+                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+    }
     
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  c(paste0("var lineObj", .RIGHT$numLines,
@@ -221,6 +251,14 @@ ggplot2RIGHT <- function(obj) {
     addSource("line.js")
     
   } else if(type == "bar") {
+    
+    # Increment the number of axes:
+    .RIGHT$numAxis <- .RIGHT$numAxis + 1
+    
+    # Add div in body:
+    .RIGHT$divArray <- append(.RIGHT$divArray, 
+                              paste0('<div id="container', .RIGHT$numAxis,
+                                     '" oncontextmenu="return false;"></div>'))
     
     # Increment the number of histograms:
     .RIGHT$numHist <- .RIGHT$numHist + 1
@@ -250,6 +288,14 @@ ggplot2RIGHT <- function(obj) {
     addSource("bar.js")
     
   } else if(type == "boxplot") {
+    
+    # Increment the number of axes:
+    .RIGHT$numAxis <- .RIGHT$numAxis + 1
+    
+    # Add div in body:
+    .RIGHT$divArray <- append(.RIGHT$divArray, 
+                              paste0('<div id="container', .RIGHT$numAxis,
+                                     '" oncontextmenu="return false;"></div>'))
     
     # Increment the number of Box-whisker:
     .RIGHT$numBox <- .RIGHT$numBox + 1

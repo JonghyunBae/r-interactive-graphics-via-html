@@ -33,10 +33,12 @@ qplot_RIGHT <- function(x, y = NULL, ..., data, geom = "point") {
   attr(obj, "NAME") <- data
   
   if(geom == "point") {
+    .RIGHT$plot_line <- 1
     obj <- obj + geom_point()
   } else if(geom == "bar") {
     obj <- obj + geom_bar()
   } else if(geom == "line") {
+    .RIGHT$plot_line <- 1
     obj <- obj + geom_line()
   } else if(geom == "boxplot") {
     obj <- obj + geom_boxplot()

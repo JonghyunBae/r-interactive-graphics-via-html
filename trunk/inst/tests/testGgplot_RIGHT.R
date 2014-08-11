@@ -18,11 +18,18 @@ test_that("Check returned object from ggplot_RIGHT()", {
 setRIGHT(nameArray = c(),
          divArray = c(),
          scriptArray = c(),
+         axis.x = c(),
+         axis.y = c(),
+         axis.fill = c(),
+         axis.color = c(),
+         axis.by = c(),
+         axis.data = c(),
          numAxis = 0,
          numPoints = 0,
          numLines = 0,
          numHist = 0,
-         numBox = 0)
+         numBox = 0,
+         plot_line = 0)
 
 test_that("Check script generation without any options", {
   

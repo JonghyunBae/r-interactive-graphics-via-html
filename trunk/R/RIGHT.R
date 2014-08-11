@@ -124,7 +124,9 @@ repeat {
   .RIGHT$axis.y <- c()
   .RIGHT$axis.fill <- c()
   .RIGHT$axis.colour <- c()
+  .RIGHT$axis.by <- c()
   .RIGHT$axis.data <- c()
+  .RIGHT$plot_line <- 0
   
   invisible()
   

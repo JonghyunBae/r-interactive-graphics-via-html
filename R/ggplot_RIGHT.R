@@ -9,6 +9,7 @@
 #' 
 #' @seealso \code{\link{ggplot2}}
 #' 
+#' @importFrom ggplot2 ggplot
 #' @export
 #' 
 #' @examples
@@ -33,12 +34,12 @@ ggplot_RIGHT <- function(data, ...) {
 
 "+.RIGHT" <- function(e1, e2) {
   
-  e2name <- deparse(substitute(e2))
-  obj <- ggplot2:::add_ggplot(e1, e2, e2name)
-  class(obj) <- "RIGHT"
+  type <- as.list(as.list(e2)$geom)$objname
   
-  ggplot2RIGHT(obj)
-  return(obj)
+  attr(e1, "TYPE") <- append(attr(e1, "TYPE"), type)     
+  ggplot2RIGHT(e1)
+  
+  return(e1)
 }
 
 #' @title Make RIGHT html code using ggplot object
@@ -58,11 +59,11 @@ ggplot_RIGHT <- function(data, ...) {
 #' }
 ggplot2RIGHT <- function(obj) {
   
-  if(length(obj$layers) > 1) {
-    type <- as.list(as.list(obj$layers[[2]])$geom)$objname
+  if(length(attr(obj, "TYPE")) > 1) {
+    type <- attr(obj, "TYPE")[2]
     double <- TRUE
   } else {
-    type <- as.list(as.list(obj$layers[[1]])$geom)$objname
+    type <- attr(obj, "TYPE")
     double <- FALSE
   }
   
@@ -130,7 +131,8 @@ ggplot2RIGHT <- function(obj) {
     axis.x <- obj$labels$x
     axis.y <- obj$labels$y
     axis.color <- obj$labels$colour
-    axis.by <- obj$labels$group
+    axis.by <- if(is.null(obj$labels$group)) axis.color else obj$labels$group
+    
     
     checkColumnName(axis.x, dataArray)
     checkColumnName(axis.y, dataArray)

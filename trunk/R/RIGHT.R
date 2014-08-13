@@ -119,15 +119,6 @@ repeat {
   .RIGHT$numSearch <- 0
   .RIGHT$numTable <- 0
   
-  # Vaviables used to draw with ggplot2 API
-  .RIGHT$axis.x <- c()
-  .RIGHT$axis.y <- c()
-  .RIGHT$axis.fill <- c()
-  .RIGHT$axis.colour <- c()
-  .RIGHT$axis.by <- c()
-  .RIGHT$axis.data <- c()
-  .RIGHT$plot_line <- 0
-  
   invisible()
   
 } # function initRIGHT
@@ -199,9 +190,9 @@ RIGHT <- function(expr = {},
                                       pie = pie_RIGHT,
                                       search = search_RIGHT,
                                       table = table_RIGHT,
-                                      qplot = qplot_RIGHT, ggplot = ggplot_RIGHT,
-                                      geom_point = ggplot_point, geom_line = ggplot_line,
-                                      geom_bar = ggplot_bar, geom_boxplot = ggplot_boxplot))
+                                      qplot = qplot_RIGHT, 
+                                      ggplot = ggplot_RIGHT,
+                                      "+" = "+.RIGHT"))
   
   ## ---
   ## Process data.frame objects:

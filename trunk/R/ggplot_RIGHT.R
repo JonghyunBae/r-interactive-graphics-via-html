@@ -24,106 +24,20 @@ ggplot_RIGHT <- function(data, ...) {
   obj <- ggplot(data, ...)
   
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
-  
-  .RIGHT$axis.x <- obj$labels$x
-  .RIGHT$axis.y <- obj$labels$y
-  .RIGHT$axis.fill <- obj$labels$fill
-  .RIGHT$axis.color <- obj$labels$colour
-  .RIGHT$axis.by <- obj$labels$group
-  .RIGHT$axis.data <- data
-  
-  .RIGHT$plot_line <- 0
-  
+  attr(obj, "NAME") <- data
+    
+  class(obj) <- "RIGHT"
   return(obj)
   
 } # function ggplot_RIGHT
 
-ggplot_point <- function() {
+"+.RIGHT" <- function(e1, e2) {
   
-  dataArray <- get(.RIGHT$axis.data, envir = parent.frame(), inherits = TRUE)
-  argArray <- is.axis.null()
-  
-  aesthetics <- plyr::compact(argArray)
-  class(aesthetics) <- "uneval"
-  
-  obj <- ggplot(dataArray, aesthetics) + geom_point()
-  attr(obj, "NAME") <- .RIGHT$axis.data
-  
-  .RIGHT$plot_line <- .RIGHT$plot_line + 1
+  e2name <- deparse(substitute(e2))
+  obj <- ggplot2:::add_ggplot(e1, e2, e2name)
   
   ggplot2RIGHT(obj)
-  
-} # function ggplot_point
-
-ggplot_line <- function() {
-  
-  dataArray <- get(.RIGHT$axis.data, envir = parent.frame(), inherits = TRUE)
-  argArray <- is.axis.null()
-  
-  aesthetics <- plyr::compact(argArray)
-  class(aesthetics) <- "uneval"
-  
-  obj <- ggplot(dataArray, aesthetics) + geom_line()
-  attr(obj, "NAME") <- .RIGHT$axis.data
-  
-  .RIGHT$plot_line <- .RIGHT$plot_line + 1
-  
-  ggplot2RIGHT(obj)
-  
-} # function ggplot_line
-
-ggplot_bar <- function() {
-  
-  dataArray <- get(.RIGHT$axis.data, envir = parent.frame(), inherits = TRUE)
-  argArray <- is.axis.null()
-  
-  aesthetics <- plyr::compact(argArray)
-  class(aesthetics) <- "uneval"
-  
-  obj <- ggplot(dataArray, aesthetics) + geom_bar()
-  attr(obj, "NAME") <- .RIGHT$axis.data
-  
-  ggplot2RIGHT(obj)
-  
-} # function ggplot_line
-
-ggplot_boxplot <- function() {
-  
-  dataArray <- get(.RIGHT$axis.data, envir = parent.frame(), inherits = TRUE)
-  argArray <-  is.axis.null()
-  
-  aesthetics <- plyr::compact(argArray)
-  class(aesthetics) <- "uneval"
-  
-  obj <- ggplot(dataArray, aesthetics) + geom_boxplot()
-  attr(obj, "NAME") <- .RIGHT$axis.data
-  
-  ggplot2RIGHT(obj)
-  
-} # function ggplot_line
-
-is.axis.null <- function() {
-  
-  argArray <- c()
-  
-  if(!is.null(.RIGHT$axis.x))
-    argArray$x <- as.symbol(.RIGHT$axis.x)
-  
-  if(!is.null(.RIGHT$axis.y))
-    argArray$y <- as.symbol(.RIGHT$axis.y)
-  
-  if(!is.null(.RIGHT$axis.fill))
-    argArray$fill <- as.symbol(.RIGHT$axis.fill)
-  
-  if(!is.null(.RIGHT$axis.color))
-    argArray$colour <- as.symbol(.RIGHT$axis.color)    
-  
-  if(!is.null(.RIGHT$axis.by))
-    argArray$group <- as.symbol(.RIGHT$axis.by)
-  
-  return(argArray)
-  
-} # function is.axis.null
+}
 
 #' @title Make RIGHT html code using ggplot object
 #' 
@@ -155,18 +69,15 @@ ggplot2RIGHT <- function(obj) {
   # Keep name of the data object:
   .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
   
+  # Increment the number of axes:
+  .RIGHT$numAxis <- .RIGHT$numAxis + 1
+  
+  # Add div in body:
+  .RIGHT$divArray <- append(.RIGHT$divArray, 
+                            paste0('<div id="container', .RIGHT$numAxis,
+                                   '" oncontextmenu="return false;"></div>'))
+  
   if(type == "point") {
-    
-    if(.RIGHT$plot_line == 1) {
-      
-      # Increment the number of axes:
-      .RIGHT$numAxis <- .RIGHT$numAxis + 1
-      
-      # Add div in body:
-      .RIGHT$divArray <- append(.RIGHT$divArray, 
-                                paste0('<div id="container', .RIGHT$numAxis,
-                                       '" oncontextmenu="return false;"></div>'))
-    }
     
     # Increment the number of points:
     .RIGHT$numPoints <- .RIGHT$numPoints + 1
@@ -178,18 +89,15 @@ ggplot2RIGHT <- function(obj) {
     checkColumnName(axis.x, dataArray)
     checkColumnName(axis.y, dataArray)
     checkColumnName(axis.color, dataArray)
-    
-    if(.RIGHT$plot_line == 1) {
-      
-      # Add script in body:
-      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                   paste0("var axis", .RIGHT$numAxis,
-                                          " = new Axis(", .RIGHT$numAxis, 
-                                          ", ", data,
-                                          ", '", axis.x, "', '", axis.y, 
-                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
-    }
-    
+          
+    # Add script in body:
+    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                 paste0("var axis", .RIGHT$numAxis,
+                                        " = new Axis(", .RIGHT$numAxis, 
+                                        ", ", data,
+                                        ", '", axis.x, "', '", axis.y, 
+                                        "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+  
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  paste0("var point", .RIGHT$numPoints,
                                         " = new Dot(axis", .RIGHT$numAxis,
@@ -201,17 +109,6 @@ ggplot2RIGHT <- function(obj) {
     addSource("dot.js")
     
   } else if(type == "line") {
-    
-    if(.RIGHT$plot_line == 1) {
-      
-      # Increment the number of axes:
-      .RIGHT$numAxis <- .RIGHT$numAxis + 1
-      
-      # Add div in body:
-      .RIGHT$divArray <- append(.RIGHT$divArray, 
-                                paste0('<div id="container', .RIGHT$numAxis,
-                                       '" oncontextmenu="return false;"></div>'))
-    }
     
     # Increment the number of lines:
     .RIGHT$numLines <- .RIGHT$numLines + 1
@@ -225,16 +122,13 @@ ggplot2RIGHT <- function(obj) {
     checkColumnName(axis.y, dataArray)
     checkColumnName(axis.color, dataArray)
     
-    if(.RIGHT$plot_line == 1) {
-     
-      # Add script in body:
-      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                   paste0("var axis", .RIGHT$numAxis,
-                                          " = new Axis(", .RIGHT$numAxis, 
-                                          ", ", data,
-                                          ", '", axis.x, "', '", axis.y, 
-                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
-    }
+    # Add script in body:
+    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                 paste0("var axis", .RIGHT$numAxis,
+                                        " = new Axis(", .RIGHT$numAxis, 
+                                        ", ", data,
+                                        ", '", axis.x, "', '", axis.y, 
+                                        "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
     
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  c(paste0("var lineObj", .RIGHT$numLines,
@@ -251,15 +145,7 @@ ggplot2RIGHT <- function(obj) {
     addSource("line.js")
     
   } else if(type == "bar") {
-    
-    # Increment the number of axes:
-    .RIGHT$numAxis <- .RIGHT$numAxis + 1
-    
-    # Add div in body:
-    .RIGHT$divArray <- append(.RIGHT$divArray, 
-                              paste0('<div id="container', .RIGHT$numAxis,
-                                     '" oncontextmenu="return false;"></div>'))
-    
+  
     # Increment the number of histograms:
     .RIGHT$numHist <- .RIGHT$numHist + 1
     
@@ -288,15 +174,7 @@ ggplot2RIGHT <- function(obj) {
     addSource("bar.js")
     
   } else if(type == "boxplot") {
-    
-    # Increment the number of axes:
-    .RIGHT$numAxis <- .RIGHT$numAxis + 1
-    
-    # Add div in body:
-    .RIGHT$divArray <- append(.RIGHT$divArray, 
-                              paste0('<div id="container', .RIGHT$numAxis,
-                                     '" oncontextmenu="return false;"></div>'))
-    
+  
     # Increment the number of Box-whisker:
     .RIGHT$numBox <- .RIGHT$numBox + 1
     

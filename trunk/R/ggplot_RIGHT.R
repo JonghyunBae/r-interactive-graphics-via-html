@@ -35,8 +35,10 @@ ggplot_RIGHT <- function(data, ...) {
   
   e2name <- deparse(substitute(e2))
   obj <- ggplot2:::add_ggplot(e1, e2, e2name)
+  class(obj) <- "RIGHT"
   
   ggplot2RIGHT(obj)
+  return(obj)
 }
 
 #' @title Make RIGHT html code using ggplot object
@@ -56,7 +58,14 @@ ggplot_RIGHT <- function(data, ...) {
 #' }
 ggplot2RIGHT <- function(obj) {
   
-  type <- as.list(as.list(obj$layers[[1]])$geom)$objname
+  if(length(obj$layers) > 1) {
+    type <- as.list(as.list(obj$layers[[2]])$geom)$objname
+    double <- TRUE
+  } else {
+    type <- as.list(as.list(obj$layers[[1]])$geom)$objname
+    double <- FALSE
+  }
+  
   data <- attr(obj, "NAME")
   col <- NULL # TEMPORARY
   
@@ -69,13 +78,15 @@ ggplot2RIGHT <- function(obj) {
   # Keep name of the data object:
   .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
   
-  # Increment the number of axes:
-  .RIGHT$numAxis <- .RIGHT$numAxis + 1
-  
-  # Add div in body:
-  .RIGHT$divArray <- append(.RIGHT$divArray, 
-                            paste0('<div id="container', .RIGHT$numAxis,
-                                   '" oncontextmenu="return false;"></div>'))
+  if(double == FALSE) {
+    # Increment the number of axes:
+    .RIGHT$numAxis <- .RIGHT$numAxis + 1
+    
+    # Add div in body:
+    .RIGHT$divArray <- append(.RIGHT$divArray, 
+                              paste0('<div id="container', .RIGHT$numAxis,
+                                     '" oncontextmenu="return false;"></div>'))
+  }
   
   if(type == "point") {
     
@@ -89,15 +100,18 @@ ggplot2RIGHT <- function(obj) {
     checkColumnName(axis.x, dataArray)
     checkColumnName(axis.y, dataArray)
     checkColumnName(axis.color, dataArray)
-          
-    # Add script in body:
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 paste0("var axis", .RIGHT$numAxis,
-                                        " = new Axis(", .RIGHT$numAxis, 
-                                        ", ", data,
-                                        ", '", axis.x, "', '", axis.y, 
-                                        "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
-  
+         
+    if(!double) {
+     
+      # Add script in body:
+      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                   paste0("var axis", .RIGHT$numAxis,
+                                          " = new Axis(", .RIGHT$numAxis, 
+                                          ", ", data,
+                                          ", '", axis.x, "', '", axis.y, 
+                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+    }
+    
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  paste0("var point", .RIGHT$numPoints,
                                         " = new Dot(axis", .RIGHT$numAxis,
@@ -122,13 +136,16 @@ ggplot2RIGHT <- function(obj) {
     checkColumnName(axis.y, dataArray)
     checkColumnName(axis.color, dataArray)
     
-    # Add script in body:
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 paste0("var axis", .RIGHT$numAxis,
-                                        " = new Axis(", .RIGHT$numAxis, 
-                                        ", ", data,
-                                        ", '", axis.x, "', '", axis.y, 
-                                        "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+    if(!double) {
+      
+      # Add script in body:
+      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                   paste0("var axis", .RIGHT$numAxis,
+                                          " = new Axis(", .RIGHT$numAxis, 
+                                          ", ", data,
+                                          ", '", axis.x, "', '", axis.y, 
+                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+    }
     
     .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
                                  c(paste0("var lineObj", .RIGHT$numLines,

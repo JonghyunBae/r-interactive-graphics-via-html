@@ -14,9 +14,9 @@
 #' 
 #' @examples
 #' \donttest{
-#' obj <- RIGHT({ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()
-#'               ggplot(Theoph, aes(Time, fill=Subject)) + geom_bar()})
-#' print(obj)
+#' RIGHT({obj <- ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()
+#'        print(obj)
+#'        print(obj + geom_bar())})
 #' }
 ggplot_RIGHT <- function(data, ...) {
   
@@ -27,20 +27,9 @@ ggplot_RIGHT <- function(data, ...) {
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
   attr(obj, "NAME") <- data
     
-  class(obj) <- "RIGHT"
   return(obj)
   
 } # function ggplot_RIGHT
-
-"+.RIGHT" <- function(e1, e2) {
-  
-  type <- as.list(as.list(e2)$geom)$objname
-  
-  attr(e1, "TYPE") <- append(attr(e1, "TYPE"), type)     
-  ggplot2RIGHT(e1)
-  
-  return(e1)
-}
 
 #' @title Make RIGHT html code using ggplot object
 #' 
@@ -59,14 +48,17 @@ ggplot_RIGHT <- function(data, ...) {
 #' }
 ggplot2RIGHT <- function(obj) {
   
-  if(length(attr(obj, "TYPE")) > 1) {
-    type <- attr(obj, "TYPE")[2]
-    double <- TRUE
-  } else {
-    type <- attr(obj, "TYPE")
-    double <- FALSE
-  }
+  type <- c()
   
+  if(length(as.list(obj$layers)) > 1) {
+    for(iData in 1:length(as.list(obj$layers))) {
+      type <- c(type, as.list(as.list(as.list(obj$layers[[iData]]))$geom)$objname)
+    } # for
+  } else {
+    type <- as.list(as.list(as.list(obj$layers[[1]]))$geom)$objname
+  } # if
+  
+  double <- FALSE
   data <- attr(obj, "NAME")
   col <- NULL # TEMPORARY
   
@@ -79,148 +71,151 @@ ggplot2RIGHT <- function(obj) {
   # Keep name of the data object:
   .RIGHT$nameArray <- append(.RIGHT$nameArray, data)
   
-  if(double == FALSE) {
-    # Increment the number of axes:
-    .RIGHT$numAxis <- .RIGHT$numAxis + 1
-    
-    # Add div in body:
-    .RIGHT$divArray <- append(.RIGHT$divArray, 
-                              paste0('<div id="container', .RIGHT$numAxis,
-                                     '" oncontextmenu="return false;"></div>'))
-  }
+  # Increment the number of axes:
+  .RIGHT$numAxis <- .RIGHT$numAxis + 1
   
-  if(type == "point") {
+  # Add div in body:
+  .RIGHT$divArray <- append(.RIGHT$divArray, 
+                            paste0('<div id="container', .RIGHT$numAxis,
+                                   '" oncontextmenu="return false;"></div>'))
+  
+  for(iData in 1:length(type)) {
     
-    # Increment the number of points:
-    .RIGHT$numPoints <- .RIGHT$numPoints + 1
-    
-    axis.x <- obj$labels$x
-    axis.y <- obj$labels$y  
-    axis.color <- obj$labels$colour
-    
-    checkColumnName(axis.x, dataArray)
-    checkColumnName(axis.y, dataArray)
-    checkColumnName(axis.color, dataArray)
-         
-    if(!double) {
-     
-      # Add script in body:
+    if(type[iData] == "point") {
+      
+      # Increment the number of points:
+      .RIGHT$numPoints <- .RIGHT$numPoints + 1
+      
+      axis.x <- obj$labels$x
+      axis.y <- obj$labels$y  
+      axis.color <- obj$labels$colour
+      
+      checkColumnName(axis.x, dataArray)
+      checkColumnName(axis.y, dataArray)
+      checkColumnName(axis.color, dataArray)
+           
+      if(!double) {
+       
+        # Add script in body:
+        .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                     paste0("var axis", .RIGHT$numAxis,
+                                            " = new Axis(", .RIGHT$numAxis, 
+                                            ", ", data,
+                                            ", '", axis.x, "', '", axis.y, 
+                                            "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+      }
+      
       .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                   paste0("var axis", .RIGHT$numAxis,
-                                          " = new Axis(", .RIGHT$numAxis, 
+                                   paste0("var point", .RIGHT$numPoints,
+                                          " = new Dot(axis", .RIGHT$numAxis,
                                           ", ", data,
-                                          ", '", axis.x, "', '", axis.y, 
-                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
-    }
+                                          ", '", axis.x, "', '", axis.y, "', ",
+                                          createObject(baseColor = col, alwaysObject = TRUE) ,");"))
+      
+      # Source dot.js in head:
+      addSource("dot.js")
+      
+    } else if(type[iData] == "line") {
+      
+      # Increment the number of lines:
+      .RIGHT$numLines <- .RIGHT$numLines + 1
+      
+      axis.x <- obj$labels$x
+      axis.y <- obj$labels$y
+      axis.color <- obj$labels$colour
+      axis.by <- if(is.null(obj$labels$group)) axis.color else obj$labels$group
+      
+      
+      checkColumnName(axis.x, dataArray)
+      checkColumnName(axis.y, dataArray)
+      checkColumnName(axis.color, dataArray)
+      
+      if(!double) {
+        
+        # Add script in body:
+        .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                     paste0("var axis", .RIGHT$numAxis,
+                                            " = new Axis(", .RIGHT$numAxis, 
+                                            ", ", data,
+                                            ", '", axis.x, "', '", axis.y, 
+                                            "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
+      }
+      
+      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                   c(paste0("var lineObj", .RIGHT$numLines,
+                                            " = new MakeLineObj(", data, 
+                                            ", '", axis.x, "', '", axis.y, "', ",
+                                            createObject(group = axis.by, alwaysObject = TRUE),");"),
+                                     paste0("var line", .RIGHT$numLines,
+                                            " = new Line(axis", .RIGHT$numAxis,
+                                            ", lineObj", .RIGHT$numLines,
+                                            ", 'x1', 'x2', 'y1', 'y2', ",
+                                            createObject(baseColor = col, alwaysObject = TRUE), ");")))
+      
+      # Source line.js in head:
+      addSource("line.js")
+      
+    } else if(type[iData] == "bar") {
     
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 paste0("var point", .RIGHT$numPoints,
-                                        " = new Dot(axis", .RIGHT$numAxis,
-                                        ", ", data,
-                                        ", '", axis.x, "', '", axis.y, "', ",
-                                        createObject(baseColor = col, alwaysObject = TRUE) ,");"))
-    
-    # Source dot.js in head:
-    addSource("dot.js")
-    
-  } else if(type == "line") {
-    
-    # Increment the number of lines:
-    .RIGHT$numLines <- .RIGHT$numLines + 1
-    
-    axis.x <- obj$labels$x
-    axis.y <- obj$labels$y
-    axis.color <- obj$labels$colour
-    axis.by <- if(is.null(obj$labels$group)) axis.color else obj$labels$group
-    
-    
-    checkColumnName(axis.x, dataArray)
-    checkColumnName(axis.y, dataArray)
-    checkColumnName(axis.color, dataArray)
-    
-    if(!double) {
+      # Increment the number of histograms:
+      .RIGHT$numHist <- .RIGHT$numHist + 1
+      
+      axis.x <- obj$labels$x
+      axis.color <- obj$labels$fill
+      
+      checkColumnName(axis.x, dataArray)
+      checkColumnName(axis.color, dataArray)
       
       # Add script in body:
       .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                   paste0("var axis", .RIGHT$numAxis,
-                                          " = new Axis(", .RIGHT$numAxis, 
-                                          ", ", data,
-                                          ", '", axis.x, "', '", axis.y, 
-                                          "', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"))
-    }
+                                   c(paste0("var histObj", .RIGHT$numHist,
+                                            " = new ddply(", data, 
+                                            ", ", createArray(unique(c(axis.x, axis.color)), alwaysArray = TRUE), ", {});"),
+                                     paste0("var axis", .RIGHT$numAxis,
+                                            " = new Axis(", .RIGHT$numAxis, 
+                                            ", histObj", .RIGHT$numHist, # hist object is used to set axis
+                                            ", '", axis.x, 
+                                            "', 'frequency', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"),
+                                     paste0("var hist", .RIGHT$numHist,
+                                            " = new Bar(axis", .RIGHT$numAxis,
+                                            ", histObj", .RIGHT$numHist,
+                                            ", '", axis.x, "', 'frequency', {});")))
+      
+      # Source bar.js in head:
+      addSource("bar.js")
+      
+    } else if(type[iData] == "boxplot") {
     
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 c(paste0("var lineObj", .RIGHT$numLines,
-                                          " = new MakeLineObj(", data, 
-                                          ", '", axis.x, "', '", axis.y, "', ",
-                                          createObject(group = axis.by, alwaysObject = TRUE),");"),
-                                   paste0("var line", .RIGHT$numLines,
-                                          " = new Line(axis", .RIGHT$numAxis,
-                                          ", lineObj", .RIGHT$numLines,
-                                          ", 'x1', 'x2', 'y1', 'y2', ",
-                                          createObject(baseColor = col, alwaysObject = TRUE), ");")))
+      # Increment the number of Box-whisker:
+      .RIGHT$numBox <- .RIGHT$numBox + 1
+      
+      axis.x <- obj$labels$x
+      axis.y <- obj$labels$y
+      
+      checkColumnName(axis.x, dataArray)
+      checkColumnName(axis.y, dataArray)
+      
+      # Add script in body:
+      .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
+                                   c(paste0("var boxObj", .RIGHT$numBox,
+                                            " = new MakeBoxObj(", data,
+                                            ", ['", axis.x, "'], ['", axis.y, "'], {});"),
+                                     paste0("var axis", .RIGHT$numAxis,
+                                            " = new Axis(", .RIGHT$numAxis, 
+                                            ", boxObj", .RIGHT$numBox, # box object is used to set axis
+                                            ", '", axis.x, "', '", axis.y, "', {});"),
+                                     paste0("var box", .RIGHT$numBox,
+                                            " = new Box(axis", .RIGHT$numAxis,
+                                            ", boxObj", .RIGHT$numBox,
+                                            ", ", createObject(baseColor = NULL, alwaysObject = TRUE), ");")))
+      
+      # Source box.js in head:
+      addSource("box.js")  
+      
+    } # if
     
-    # Source line.js in head:
-    addSource("line.js")
-    
-  } else if(type == "bar") {
-  
-    # Increment the number of histograms:
-    .RIGHT$numHist <- .RIGHT$numHist + 1
-    
-    axis.x <- obj$labels$x
-    axis.color <- obj$labels$fill
-    
-    checkColumnName(axis.x, dataArray)
-    checkColumnName(axis.color, dataArray)
-    
-    # Add script in body:
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 c(paste0("var histObj", .RIGHT$numHist,
-                                          " = new ddply(", data, 
-                                          ", ", createArray(unique(c(axis.x, axis.color)), alwaysArray = TRUE), ", {});"),
-                                   paste0("var axis", .RIGHT$numAxis,
-                                          " = new Axis(", .RIGHT$numAxis, 
-                                          ", histObj", .RIGHT$numHist, # hist object is used to set axis
-                                          ", '", axis.x, 
-                                          "', 'frequency', ", createObject(legend = axis.color, alwaysObject = TRUE), ");"),
-                                   paste0("var hist", .RIGHT$numHist,
-                                          " = new Bar(axis", .RIGHT$numAxis,
-                                          ", histObj", .RIGHT$numHist,
-                                          ", '", axis.x, "', 'frequency', {});")))
-    
-    # Source bar.js in head:
-    addSource("bar.js")
-    
-  } else if(type == "boxplot") {
-  
-    # Increment the number of Box-whisker:
-    .RIGHT$numBox <- .RIGHT$numBox + 1
-    
-    axis.x <- obj$labels$x
-    axis.y <- obj$labels$y
-    
-    checkColumnName(axis.x, dataArray)
-    checkColumnName(axis.y, dataArray)
-    
-    # Add script in body:
-    .RIGHT$scriptArray <- append(.RIGHT$scriptArray,
-                                 c(paste0("var boxObj", .RIGHT$numBox,
-                                          " = new MakeBoxObj(", data,
-                                          ", ['", axis.x, "'], ['", axis.y, "'], {});"),
-                                   paste0("var axis", .RIGHT$numAxis,
-                                          " = new Axis(", .RIGHT$numAxis, 
-                                          ", boxObj", .RIGHT$numBox, # box object is used to set axis
-                                          ", '", axis.x, "', '", axis.y, "', {});"),
-                                   paste0("var box", .RIGHT$numBox,
-                                          " = new Box(axis", .RIGHT$numAxis,
-                                          ", boxObj", .RIGHT$numBox,
-                                          ", ", createObject(baseColor = NULL, alwaysObject = TRUE), ");")))
-    
-    # Source box.js in head:
-    addSource("box.js")  
-    
-  } # if
+    double <- TRUE
+  } # for
   
   invisible()
   

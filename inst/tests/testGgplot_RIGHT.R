@@ -34,6 +34,7 @@ setRIGHT(nameArray = c(),
 test_that("Check script generation without any options", {
   
   obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Time)) + geom_point()
+  ggplot2RIGHT(obj)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numPoints, 1)
@@ -44,6 +45,7 @@ test_that("Check script generation without any options", {
                                        "var point1 = new Dot(axis1, Theoph, 'conc', 'Time', {});"))
   
   obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc)) + geom_bar()
+  ggplot2RIGHT(obj)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numHist, 1)
@@ -66,6 +68,7 @@ test_that("Check script generation without any options", {
            numBox = 0)
   
   obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Wt)) + geom_line()
+  ggplot2RIGHT(obj)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numLines, 1)
@@ -76,6 +79,7 @@ test_that("Check script generation without any options", {
                                        "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
   
   obj <- ggplot_RIGHT(Theoph, ggplot2::aes(Subject, Wt)) + geom_boxplot()
+  ggplot2RIGHT(obj)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numPoints, 0)
@@ -100,6 +104,7 @@ setRIGHT(nameArray = c(),
 test_that("Check color option:", {
     
   obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, Time, colour=Subject)) + geom_point()
+  ggplot2RIGHT(obj)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numPoints, 1)
@@ -110,6 +115,7 @@ test_that("Check color option:", {
                                        "var point1 = new Dot(axis1, Theoph, 'conc', 'Time', {});"))
   
   obj <- ggplot_RIGHT(Theoph, ggplot2::aes(conc, fill=Time)) + geom_bar()
+  ggplot2RIGHT(obj)
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numHist, 1)

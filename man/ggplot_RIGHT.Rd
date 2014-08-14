@@ -15,9 +15,9 @@ Function to create data object name in ggplot function.
 }
 \examples{
 \donttest{
-obj <- RIGHT({ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()
-              ggplot(Theoph, aes(Time, fill=Subject)) + geom_bar()})
-print(obj)
+RIGHT({obj <- ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()
+       print(obj)
+       print(obj + geom_bar())})
 }
 }
 \seealso{

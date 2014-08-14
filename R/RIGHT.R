@@ -192,7 +192,7 @@ RIGHT <- function(expr = {},
                                       table = table_RIGHT,
                                       qplot = qplot_RIGHT, 
                                       ggplot = ggplot_RIGHT,
-                                      "+" = "+.RIGHT"))
+                                      print.ggplot = ggplot2RIGHT))
   
   ## ---
   ## Process data.frame objects:

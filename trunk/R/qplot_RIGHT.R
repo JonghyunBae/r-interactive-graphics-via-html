@@ -16,9 +16,8 @@
 #' 
 #' @examples
 #' \donttest{
-#' obj <- RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
-#'               qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
-#' print(obj)
+#' RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
+#'        qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
 #' }
 qplot_RIGHT <- function(x, y = NULL, ..., data, geom = "point") {
   
@@ -31,8 +30,17 @@ qplot_RIGHT <- function(x, y = NULL, ..., data, geom = "point") {
   
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
   attr(obj, "NAME") <- data
-  attr(obj, "TYPE") <- append(attr(obj, "TYPE"), geom) 
 
+  if(geom == "point") {
+    obj <- obj + geom_point()
+  } else if(geom == "line") {
+    obj <- obj + geom_line()
+  } else if(geom == "bar") {
+    obj <- obj + geom_bar()
+  } else if(geom == "boxplot") {
+    obj <- obj + geom_boxplot()
+  }
+    
   ggplot2RIGHT(obj)
   
 } # function qplot_RIGHT

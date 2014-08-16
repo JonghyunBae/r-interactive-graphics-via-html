@@ -1,3 +1,9 @@
+
+/**
+ * @fileOverview operate to make server-offloading graphs
+ * @ignore
+ */
+ 
 var cnt = 0;
 var offload;
 var rightOutputBinding = new Shiny.OutputBinding();
@@ -16,6 +22,3 @@ rightOutputBinding.renderValue = function (el, data) {
 	cnt++;
 };
 Shiny.outputBindings.register(rightOutputBinding, 'div.rightOutputBinding');
-
-
-

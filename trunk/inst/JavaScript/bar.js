@@ -1,5 +1,16 @@
-/**  Draw Bar graph(histogram)  **/
-var Bar = {};
+
+/**
+ * @fileOverview operate base information to draw bar graph
+ */
+ 
+/**  
+ * @description draw bar(histogram) graph
+ * 
+ * @constructor  
+ *  
+ */
+ var Bar = {};
+
 (function() {
 	Bar = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this.axisObj = axisObj;
@@ -29,7 +40,11 @@ var Bar = {};
 			axisObj.boxSearchArr[this.graphId] = barBoxSearch(this);
 		}
 	};
+	/**
+      @lends Bar.prototype
+    */
 	Bar.prototype = {
+		/** @constructs */
 		_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
 			if (axisObj.legendLabel != undefined) {
 				var legendLabel = axisObj.legendLabel;
@@ -109,7 +124,6 @@ var Bar = {};
 				delete temp;
 			}
 		},
-		
 		_drawSet: function (axisObj, dataObj, xLabel, yLabel) {
 			var temp = axisObj._getPixelXY(dataObj[xLabel], dataObj[yLabel]);
 			var xArr = temp.xArr;
@@ -236,40 +250,55 @@ var Bar = {};
 		}
 	};
 })();
-/**  Draw Bar graph(histogram) End  **/
 
+/**  
+ * @description check location of mouse cursor on the graph
+ * 
+ * @param graphObj data object to draw graph
+ * @param smallX value of x_axis' minimum value
+ * @param smallY value of y_axis' minimum value
+ * @param bigX value of x_axis maximum value
+ * @param bigY value of y_axis maximum value
+ * 
+ */
 function barBoxSearch (graphObj) {
 	return function (smallX, smallY, bigX, bigY) {	
-			var tmpNodeArr = new Array();
-			var tmpNodeArr1 = new Array();
-			if (ctrlPressed == true) {
-				for (var i=0; i<graphObj.node.length; i++) {
-					if ((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)) {
-						if (graphObj.node[i].getSelected() == 1) {
-							tmpNodeArr.push(graphObj.node[i].getName());
-						} else {
-							tmpNodeArr1.push(graphObj.node[i].getName());
-						}        
-					}
-				}
-				if (tmpNodeArr.length != undefined) {
-					allGraphUpdate(graphObj, tmpNodeArr, 0);
-				}
-				if (tmpNodeArr1.length != undefined) {
-					allGraphUpdate(graphObj, tmpNodeArr1, 1);
-				}
-			} else {
-				for (var i=0; i<graphObj.node.length; i++) {
-					if ((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)) {
+		var tmpNodeArr = new Array();
+		var tmpNodeArr1 = new Array();
+		if (ctrlPressed == true) {
+			for (var i=0; i<graphObj.node.length; i++) {
+				if ((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)) {
+					if (graphObj.node[i].getSelected() == 1) {
 						tmpNodeArr.push(graphObj.node[i].getName());
-	                }
-	           	}
-				allGraphUpdate(graphObj, tmpNodeArr, 1);
-	        }
-		};
+					} else {
+						tmpNodeArr1.push(graphObj.node[i].getName());
+					}        
+				}
+			}
+			if (tmpNodeArr.length != undefined) {
+				allGraphUpdate(graphObj, tmpNodeArr, 0);
+			}
+			if (tmpNodeArr1.length != undefined) {
+				allGraphUpdate(graphObj, tmpNodeArr1, 1);
+			}
+		} else {
+			for (var i=0; i<graphObj.node.length; i++) {
+				if ((smallX <= graphObj.node[i].getX() + graphObj.node[i].getWidth() && graphObj.node[i].getX() <= bigX) && (smallY <= graphObj.node[i].getY() + graphObj.node[i].getHeight() && graphObj.node[i].getY() <= bigY)) {
+					tmpNodeArr.push(graphObj.node[i].getName());
+				}
+			}
+			allGraphUpdate(graphObj, tmpNodeArr, 1);
+		}
+	};
 }
 
-/**  update function  **/
+/**  
+ * @description change node shape when click or unclick event
+ * 
+ * @param node object that change node shape
+ * @param selectOn flag value about next state
+ * 
+ */
 function barUpdate () {
 	return	function(node, selectOn) {
 			if(node.getSelected() == 1 && selectOn < 0) {
@@ -294,8 +323,15 @@ function barUpdate () {
 			node.draw();
 		};
 }
-/**  update function end  **/
-function barHover () {
+
+/**  
+ * @description change node shape when mouse over on the node
+ * 
+ * @param node object that change node shape
+ * @param overOff flag value about next state
+ * 
+ */
+ function barHover () {
 	return function(node, overOff) { 
 		if (overOff == 1) {
 			node.setOpacity(1);

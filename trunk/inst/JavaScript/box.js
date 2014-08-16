@@ -1,3 +1,18 @@
+
+/**
+ * @fileOverview operate base information to draw box graph
+ */
+ 
+/**  
+ * @description operate max value of vertical line under fence
+ * 
+ * @param Data number array of corresponding data
+ * @param q1 min value of square box graph
+ * @param q3 max value of square box graph
+ * 
+ * @returns properties properties of value and number
+ *  
+ */
 function findMaxBelowFence(Data, q1, q3)
 {
     var iqr = q3 - q1;    
@@ -14,6 +29,17 @@ function findMaxBelowFence(Data, q1, q3)
 	}
 	return {fence : maxValue, fenceNumber: fenceNumber};
 }
+
+/**  
+ * @description operate min value of vertical line over fence
+ * 
+ * @param Data number array of corresponding data
+ * @param q1 min value of square box graph
+ * @param q3 max value of square box graph
+ * 
+ * @returns properties properties of value and number
+ *  
+ */
 function findMinAboveFence(Data, q1, q3)
 {
     var iqr = q3 - q1;    
@@ -30,8 +56,17 @@ function findMinAboveFence(Data, q1, q3)
 	}
     return {fence : minValue, fenceNumber: fenceNumber};
 }
-/**  find q1, q2, median  **/
 
+/**  
+ * @description operate max and min value of box graph (q1, q3)
+ * 
+ * @param Data number array of corresponding data
+ * @param q1 min value of square box graph
+ * @param q3 max value of square box graph
+ * 
+ * @returns Data[] data value of corresponding data q1, q3, median
+ *  
+ */
 function findQuartile(Data, _th)
 {     
     var p = _th/4;
@@ -45,8 +80,13 @@ function findQuartile(Data, _th)
     }
     
 }
-/**  find q1, q2, median end  **/
 
+/**  
+ * @description draw box-whisker graph
+ * 
+ * @constructor  
+ *  
+ */
 var Box = {};
 (function() {
 	
@@ -75,7 +115,11 @@ var Box = {};
 			axisObj.boxSearchArr[this.graphId] = boxBoxSearch(this);			
 		}
 	};
+	/**
+      @lends Box.prototype
+    */
 	Box.prototype = {
+		/** @constructs */
 		_init: function(axisObj, dataObj, optionObj) {			
 			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 
@@ -204,7 +248,16 @@ var Box = {};
     Kinetic.Factory.addGetterSetter(Kinetic.BoxWhisker, 'med', 0);
 })();
 
-/**  update function  **/
+/**  
+ * @description check location of mouse cursor on the graph
+ * 
+ * @param graphObj data object to draw graph
+ * @param smallX value of x_axis' minimum value
+ * @param smallY value of y_axis' minimum value
+ * @param bigX value of x_axis maximum value
+ * @param bigY value of y_axis maximum value
+ * 
+ */
 function boxBoxSearch(graphObj) {
 	return function(smallX, smallY, bigX, bigY) {
 		var tmpNodeArr = new Array();
@@ -232,6 +285,13 @@ function boxBoxSearch(graphObj) {
 	};
 }
 
+/**  
+ * @description change node shape when click or unclick event
+ * 
+ * @param node object that change node shape
+ * @param selectOn flag value about next state
+ * 
+ */
 function boxUpdate() {
 	return	function(node, selectOn) {
 		if(node.getSelected() == 1 && selectOn < 0) {
@@ -268,6 +328,13 @@ function boxUpdate() {
 	};
 }
 
+/**  
+ * @description change node shape when mouse over on the node
+ * 
+ * @param node object that change node shape
+ * @param overOff flag value about next state
+ * 
+ */
 function boxHover() {
 	return	function(node, overOff) {
 		if(overOff == 1){

@@ -1,3 +1,16 @@
+
+/**
+ * @fileOverview operate basic functions to load data from data.js
+ */
+
+ /**  
+ * @description make array which loaded data from csv file
+ * 
+ * @param data raw data which loaded from csv file
+ * 
+ * @returns result_array
+ * 
+ */
 function csv2Arr (data, liveChar) {  
 	var i = 0;
 	var eof = '';
@@ -22,6 +35,15 @@ function csv2Arr (data, liveChar) {
 	return result_array;
 }
 
+ /**  
+ * @description load data from csv file
+ * 
+ * @param fileName csv file name which want to load
+ * 
+ * @returns dataArr number of data
+ * @returns labelArr levels of data which are discrete
+ * 
+ */
 function getData (fileName) {
 	var filePath = fileName;
 	xmlhttp = new XMLHttpRequest();
@@ -35,6 +57,14 @@ function getData (fileName) {
 	return { 'dataArr' : returnDataArr, 'labelArr' : returnLabelArr };
 }
 
+/**  
+ * @description make 2 dimension arr
+ * 
+ * @param row number that want to make array size
+ * 
+ * @returns arr array which are made row by row
+ * 
+ */
 function make2DArr (rows) {
 	var arr = [];
 	for (var i=0; i<rows; i++)
@@ -42,7 +72,14 @@ function make2DArr (rows) {
 	return arr;
 }
 
-/**  create main structure of data  **/
+/**  
+ * @description create main structure of data
+ * 
+ * @param rawArr data which are loaded from data.js
+ * 
+ * @returns mainArr main structure which have basic information about data
+ * 
+ */
 function createMainStructureE (rawArr) {
 	var mainArr = new Object();	
 	mainArr._type = 'rootObj';
@@ -95,12 +132,26 @@ function createMainStructureE (rawArr) {
 	return mainArr;
 }
 
+/**  
+ * @description send changed data when server-offloading graph draw
+ * 
+ * @param relateObjName data object which want to draw server-offloading graph
+ * 
+ * @ignore
+ * 
+ */
 function sendingData (relateObjName) {
 	return function () {
 		window.Shiny.onInputChange(relateObjName, window[relateObjName].$isHidden);
 	};
 }
 
+/**  
+ * @description function call to draw graphs
+ * 
+ * @param dataObj data which want to draw graph
+ * 
+ */
 function draw (dataObj) {
 	for (var i=0; i<dataObj.graphObjArr.length; i++) {
 		dataObj.graphObjArr[i]._draw();
@@ -114,29 +165,18 @@ function draw (dataObj) {
 		}
 	}	
 }
-/*
-function createOffloadStructure(relateObjName)
-{
-  var mainArr = new Object();
-  mainArr._type = 'offloadObj';
-  mainArr.parent = null;
-  mainArr.child = null;
-  mainArr.$id = 1;
-  mainArr.$readyState = false;
-  mainArr.$drawFence = new Array();
-  mainArr.relateObjName = relateObjName;
-  if(window[relateObjName].offloadObjArr == null){
-    window[relateObjName].offloadObjArr = new Array();
-    window[relateObjName].offloadObjArr.push(mainArr);
-  }else{
-    window[relateObjName].offloadObjArr.push(mainArr);
-  }
-  mainArr.$sendData = sendingData(relateObjName);
-  return mainArr;
-}
-*/
 
-
+/**  
+ * @description create main structure of data when use csv file
+ * 
+ * @param fileName csv file name that want to load
+ * @param rawLev label array about discrete data
+ * 
+ * @returns mainArr main structure which have basic information about data
+ * 
+ * @ignore
+ * 
+ */
 /*
 function createMainStructure (fileName, rawLev) {  
 	var tmpArr = getData(fileName);	
@@ -184,10 +224,7 @@ function createMainStructure (fileName, rawLev) {
 	
 	return mainArr;
 }
-*/
-
-/**  create main structure of data End  **/
-  
+*/  
 
 /**  MakeLineObj  **/
 var MakeLineObj = {};

@@ -1,4 +1,14 @@
-/**  Axis draws an axis  **/
+
+/**
+ * @fileOverview decide axis informaion using data object's informaion
+ */
+
+/**  
+ * @description draws an axis  
+ * 
+ * @constructor  
+ *  
+ */
 var Axis = {};
 
 (function() {
@@ -9,9 +19,11 @@ var Axis = {};
 		this._build(dataObj, xLabel, yLabel, optionObj);
 		this._draw();
 	};
-	
+	/**
+      @lends Axis.prototype
+    */
 	Axis.prototype = {
-			
+			/** @constructs */
 			_init: function(containerId, dataObj, xLabel, yLabel, optionObj) {
 				this.containerId = containerId;
 				this.dataObj = dataObj;
@@ -376,7 +388,14 @@ var Axis = {};
 	}
 })();
 
-/**  getAxisLabels  **/
+/**  
+ * @description get axis label naames in data object  
+ * 
+ * @param {object} dataObj all data object to draw graph
+ * 
+ * @returns {array} tmpNameArr array of names in dataObj
+ * 
+ */
 function getAxisLabels(dataObj)
 {
 	var tmpNameArr = new Array();
@@ -387,9 +406,13 @@ function getAxisLabels(dataObj)
 	}
 	return tmpNameArr;
 }
-/**  getAxisLabels end  **/
 
-/**  set tooltip  **/
+/**  
+ * @description set tooltip layer and options
+ *
+ * @param {object} obj prototype of axis object
+ *  
+ */
 function setTooltip(obj)
 {
 	obj.tooltipLayer = new Kinetic.Layer();			 
@@ -420,9 +443,18 @@ function setTooltip(obj)
 	  }));
 	obj.tooltipLayer.add(obj.tooltip);
 }
-/**  set tooltip end  **/ 
 
-/**  set axis  **/
+/**  
+ * @description set axis information about continuous data
+ * 
+ * @param {Number} tempMax max value of x_axis
+ * @param {Number} tempMin min value of x_axis 
+ * @param {Number} tick section count of x_axis
+ * @param {Number} length section length
+ *  
+ * @returns {Object} properties of axis object
+ * 
+ */
 function setAxis_continue(tempMax, tempMin, tick, length)
 {
 	var tickRange = (tempMax - tempMin) / tick;
@@ -455,6 +487,15 @@ function setAxis_continue(tempMax, tempMin, tick, length)
 	};
 }
 
+/**  
+ * @description set axis information about discrete data
+ * 
+ * @param {Number} index levels data to draw x_axis with discrete label
+ * @param {Number} plotLength length of x_axis
+ * 
+ * @returns {Object} properties of axis object
+ * 
+ */
 function setAxis_discrete(index, plotLength)
 {
 	var plotArr = make2DArr(index.length);
@@ -469,9 +510,13 @@ function setAxis_discrete(index, plotLength)
 			'plotArr' : plotArr
 	};
 }
-/**  set axis end  **/
 
-/**  make rangeBox(drag box)  **/
+/**  
+ * @description make box layer
+ * 
+ * @param obj data object to draw graph
+ * 
+ */
 function makeRangeBoxLayer(obj)
 {
 	obj.rangeBox = new Kinetic.Rect({
@@ -487,10 +532,14 @@ function makeRangeBoxLayer(obj)
 	obj.rangeBoxLayer = new Kinetic.Layer();
 	obj.rangeBoxLayer.add(obj.rangeBox);
 }
-/**  make rangeBox(drag box) end  **/
 
-/**  make stage  **/
-function makeStageLayer(obj)
+/**  
+ * @description make graph stage box layer
+ * 
+ * @param obj data object to draw graph
+ * 
+ */
+ function makeStageLayer(obj)
 {
 	var addtionalMargin = 0;
 	if(obj.legendLayer != undefined){
@@ -504,10 +553,14 @@ function makeStageLayer(obj)
 		height: obj.height+obj.plotYMargin*2
 	});
 }
-/**  make stage end  **/
 
-/**  make plotRect  **/
-function makePlotRectLayer(obj)
+/**  
+ * @description make inner graph rectangle layer
+ * 
+ * @param obj data object to draw graph
+ * 
+ */
+ function makePlotRectLayer(obj)
 {
 	obj.plotRect = new Kinetic.Rect({
 		name : "baseRect",
@@ -519,9 +572,14 @@ function makePlotRectLayer(obj)
 		strokeWidth: 2
 	});
 }
-/**  make plotRect end **/
 
-/**  make Main Label layer  **/
+/**  
+ * @description make label rectangle layer
+ * 
+ * @param obj data object to draw graph
+ * @param label label data to add label box
+ * 
+ */
 function MakeMainLabelLayer(obj, label)
 {
 
@@ -537,9 +595,14 @@ function MakeMainLabelLayer(obj, label)
 	   fill: 'black',
 	});
 }
-/**  make Main Label end  **/
 
-/**  make x, y label layers  **/
+/**  
+ * @description make label name at x_axis
+ * 
+ * @param obj data object to draw graph
+ * @param label x_axis label data to add 
+ * 
+ */
 function makeXLabelLayer(obj, label)
 {
 	obj.xLabel = new Kinetic.Text({
@@ -555,6 +618,13 @@ function makeXLabelLayer(obj, label)
 	});
 }
 
+/**  
+ * @description make label name at y_axis
+ * 
+ * @param {Object} obj data object to draw graph
+ * @param label y_axis label data to add 
+ * 
+ */
 function makeYLabelLayer(obj, label)
 {
 	obj.yLabel = new Kinetic.Text({
@@ -570,9 +640,13 @@ function makeYLabelLayer(obj, label)
 		rotation: 270
 	});
 }
-/**  make x, y label layers end  **/
 
-/**  make axis layers  **/
+/**  
+ * @description make tick name on the graph's x_axis
+ * 
+ * @param {Object} obj data object to draw graph
+ * 
+ */
 function makeXAxisLayer(obj)
 {
 	obj.xLine = new Array();
@@ -614,6 +688,12 @@ function makeXAxisLayer(obj)
 	}
 }
 
+/**  
+ * @description make tick name on the graph's y_axis
+ * 
+ * @param {Object} obj data object to draw graph
+ * 
+ */
 function makeYAxisLayer(obj)
 {
 	obj.yLine = new Array();
@@ -645,4 +725,3 @@ function makeYAxisLayer(obj)
 	   });
 	}
 }
-/**  make axis layers end  **/

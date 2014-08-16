@@ -1,4 +1,13 @@
-/**  addColorField  **/
+/**
+ * @fileOverview operate color option using RGB values (dot, line, hist, label value)
+ */
+
+/**  
+ * @description add color values
+ * 
+ * @param labelObj array of label names
+ *   
+ */
 function addColorField(labelObj)
 {
 	if(labelObj.isDiscrete == undefined){
@@ -7,9 +16,15 @@ function addColorField(labelObj)
 		labelObj['colorIndex'] = makeColor_discrete(labelObj.index);
 	}
 }
-/**  addColorField End  **/
 
-/**  return color part  **/
+/**  
+ * @description assign RGB values to make color for continuous index
+ * 
+ * @param array object that have information about label
+ * 
+ * @returns indexArr include color value for each index
+ * 
+ */
 function makeColor_continuous(array) {
 	var colors = new Array();
 	var mainValueArr = new Array();
@@ -72,6 +87,15 @@ function makeColor_continuous(array) {
 	}
  	return indexArr;
 }
+
+/**  
+ * @description assign RGB values to make color for discrete index
+ * 
+ * @param array object that have information about label
+ * 
+ * @returns colors include color value for each index
+ * 
+ */
 function makeColor_discrete(array)
 {
 	var colors = new Array();
@@ -88,9 +112,16 @@ function makeColor_discrete(array)
  	}
  	return colors;
 }
-/**  return color part End  **/
 
-/**  legend part  **/
+/**  
+ * @description assign RGB values to make color legend box
+ * 
+ * @param axisObj object about axis information
+ * @param legendObj object about legend data
+ * @param legendPosition position of legend box on a graph
+ * @param legendName label name of legend value
+ *  
+ */
 function makeLegendLayer(axisObj, legendObj, legendPosition, legendName)
 {
 	var position = (legendPosition == undefined) ? 'right' : legendPosition;

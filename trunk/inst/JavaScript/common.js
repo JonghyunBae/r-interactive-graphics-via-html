@@ -1,7 +1,24 @@
+/**
+ * @fileOverview total operation functions to draw and update new state graph
+ */
+
+/**
+ * @static
+ * @ignore
+ * 
+ */
 var plotWidth = 300;  //default value for plot width
 var plotHeight = 300; //default value for plot height  
 var plotRadius = 2;
 
+/**  
+ * @description assign RGB values to make color for continuous index
+ * 
+ * @param array object that have information about label
+ * 
+ * @returns indexArr include color value for each index
+ * 
+ */
 function findSubSet(dataObj, labelArr, subSet) {
 	for(var i = 0 ; i < labelArr.length ; i ++){
 		if(dataObj[labelArr[i]].isDiscrete == undefined){
@@ -18,6 +35,15 @@ function findSubSet(dataObj, labelArr, subSet) {
 	return subSet;
 }
 
+/**  
+ * @description get information from each node
+ * 
+ * @param dataObj data object about drawing graph
+ * @param id number that assigned each nodes
+ * 
+ * @returns info string type that has node information
+ * 
+ */
 function getNodeinfo(dataObj, id) {
 	var cnt = 0;
 	var info ='';
@@ -43,6 +69,14 @@ function getNodeinfo(dataObj, id) {
 	return info;
 }
 
+/**  
+ * @description get all fields name that assigned in data object
+ * 
+ * @param dataObj data object about drawing graph
+ * 
+ * @returns temp include field name
+ * 
+ */
 function getFields(dataObj) {
 	var temp = new Array();
 	for(var name in dataObj) {
@@ -55,6 +89,16 @@ function getFields(dataObj) {
 
 var mouseName;
 var divOffsetX, divOffsetY;
+
+
+/**  
+ * @description get x-y position about mouse cursor
+ * 
+ * @param e cursor location data
+ * 
+ * @ignore
+ * 
+ */
 function getCoords(e) {
 	var divX, divY = 0; 
 	mouseName = this.id;
@@ -81,7 +125,17 @@ function getCoords(e) {
 	document.getElementById('coords');
 }
 
-//Get X, Y coords, and displays Mouse coordinates
+/**  
+ * @description get X, Y coords, and displays Mouse coordinates
+ * 
+ * @param elm cursor location data
+ * 
+ * @returns xp x position
+ * @returns yp y position
+ * 
+ * @ignore
+ * 
+ */
 function getXYpos(elm) {
 	X = elm.offsetLeft;       
 	Y = elm.offsetTop;        
@@ -100,25 +154,14 @@ function getXYpos(elm) {
 	return {'xp':X, 'yp':Y};
 }
 
-//makeEventComponent is underconstruction becuase of its purpose 
-function makeEventComponent (dataObj, length) {
-	dataObj.$id = 0;
-	dataObj.parent = null;
-	dataObj.child = null;
-	dataObj.$drawFence = new Array();
-	dataObj.graphObjArr = new Array();
-	dataObj.$drawGraphArr = new Array();
-	
-	if (length != 0) { // if 0 -> offload object
-		dataObj.$isSelected = new Array(length);
-		dataObj.$isHidden = new Array(length);
-		for (var i=0; i<length; i++) {
-			dataObj.$isSelected[i] = 0;
-			dataObj.$isHidden[i] = false;
-		}
-	}
-}
-
+/**  
+ * @description input child's array which means current state
+ * 
+ * @param parent graph object which locate upper level of tree
+ * @param child graph object which locate below level of tree
+ * @param mergeArr result of merge operation
+ * 
+ */
 function birthReport (parent, child, mergeArr) {
 	child.parent = parent;
 	if(parent.child == null){
@@ -130,15 +173,37 @@ function birthReport (parent, child, mergeArr) {
 	child.refreshArr = new Array();
 }
 
+/**  
+ * @description update child's array which means current state
+ * 
+ * @param child graph object which locate below level of tree
+ * @param mergeArr result of merge operation
+ * 
+ * @ignore
+ * 
+ */
 function ModifyBirth (child, mergeArr) {
 	child.mergeArr = mergeArr;
 }
 
+/**  
+ * @description update null
+ * 
+ * @ignore
+ */
 function nullUpdate (a, b, c) {
 	return;
 }
 
-//allGraphUpdate is used for only select & unselect
+/**  
+ * @description update all graphs after select & unselect event
+ * 
+ * @param graphObj graph object which have data
+ * @param nodes information object about each nodes
+ * @param selectOn state about selecr & unselect
+ * @param keyBoard state about ctrl keyboard
+ * 
+ */
 function allGraphUpdate (graphObj, nodes, selectOn, keyBoard) {
 	graphObj.firstUpdate(nodes, selectOn, keyBoard);
 }
@@ -146,6 +211,15 @@ function allGraphUpdate (graphObj, nodes, selectOn, keyBoard) {
 // process of firstUpdate
 // 1. AfterStatus - $isSelected => update nodes
 // 2. Propagate afterStatus to parent & child
+/**  
+ * @description determine select & unselect array operation between ctrl pressed or unpressed
+ * 
+ * @param firstObj graph object which have data
+ * @param nodes information object about each nodes
+ * @param selectOn state about selecr & unselect
+ * @param keyBoard state about ctrl keyboard
+ * 
+ */
 function firstUpdate (firstObj) {
 	return function (nodes, selectOn, keyBoard) {
 		var object = firstObj;
@@ -158,6 +232,14 @@ function firstUpdate (firstObj) {
 	};
 }
 
+/**  
+ * @description operate select & unselect array and reactive to graph
+ * 
+ * @param object graph object which have data
+ * @param nodeArr information object about each nodes
+ * @param beforeObject raw data about graph object before operation
+ * 
+ */
 function updateRecursive (object, nodeArr, beforeObject) {
 	var temp = subtractArr(nodeArr, object.$isSelected);
 	var nodeArr = new Array();
@@ -211,12 +293,25 @@ function updateRecursive (object, nodeArr, beforeObject) {
 	}
 }
 
+/**  
+ * @description draw each graph refreshable
+ * 
+ * @param stage draw from root graph object
+ * 
+ * @ignore
+ */
 function makeRefresh (stage, id) {
 	return function () {
 		stage.draw();
 	}
 }
 
+/**  
+ * @description operate when all nodes are selected
+ * 
+ * @param graphObj graph object which have data
+ * 
+ */
 function allSelect (graphObj) {
 	var temp = new Array();
 	for (var i=0; i<graphObj.node.length; i++) {
@@ -225,6 +320,12 @@ function allSelect (graphObj) {
 	allGraphUpdate(graphObj, temp, 1, null);	
 }
 
+/**  
+ * @description operate when all nodes are deselected
+ * 
+ * @param graphObj graph object which have data
+ * 
+ */
 function allDeselect (graphObj) {
 	var temp = new Array();
 	for (var i=0; i<graphObj.node.length; i++) {
@@ -233,6 +334,15 @@ function allDeselect (graphObj) {
 	allGraphUpdate(graphObj, temp, 0, null);
 }
 
+/**  
+ * @description find min, max value at data object
+ * 
+ * @param data data array which want to know min, max value
+ * 
+ * @returns max max value of data array
+ * @returns min min value of data array
+ * 
+ */
 function findMaxMinValue (Data) {
 	if (Data.length != undefined) {
 		var maxValue = Data[0];
@@ -255,6 +365,12 @@ function findMaxMinValue (Data) {
 	};
 }
 
+/**  
+ * @description set tik range of axis
+ *
+ * @ignore
+ * 
+ */
 function setTickRange (x, tickRange) {
 	if (tickRange/Math.pow(10,x) < 0.1) {tickRange = 0.1 * Math.pow(10,x); }
 	else if (tickRange/Math.pow(10,x) <= 0.2) {tickRange = 0.2 * Math.pow(10,x); }

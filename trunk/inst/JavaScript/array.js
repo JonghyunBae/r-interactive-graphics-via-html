@@ -1,3 +1,17 @@
+
+/**
+ * @fileOverview operate between array to array
+ */
+
+/**
+ * @description Function to invert data in array 
+ *
+ * @param {array} array an array to invert value(0 -> 1, 1 -> 0)
+ * @param {array} numbers an array that want to change nodes' value
+ * 
+ * @returns {array} returnArray array that have inverted value from array 
+ * 
+ */
 function invertValueArr (array, numbers) {
 	
 	var returnArray = array.slice(0);
@@ -12,6 +26,16 @@ function invertValueArr (array, numbers) {
 	return returnArray;
 }
 
+/**
+ * @description Function to make array data in array 
+ *
+ * @param {array} numbers an array that want to change nodes
+ * @param {number} length length of array that want to make
+ * @param {number} value number that want to insert in new array
+ * 
+ * @returns {array} returnArray new array with value 
+ * 
+ */
 function extensionArr (numbers, length, value) {
 	
 	var returnArray = new Array(length);
@@ -30,6 +54,15 @@ function extensionArr (numbers, length, value) {
 	return returnArray;
 }
 
+/**
+ * @description Function to make array that have result of two array's addition
+ *
+ * @param {array} array1 first array that want to add
+ * @param {array} array2 second array that want to add
+ * 
+ * @returns {array} returnArray new array with adding value 
+ * 
+ */
 function addArr (array1, array2) {
 	
 	var returnArray = new Array(array1.length);
@@ -44,6 +77,15 @@ function addArr (array1, array2) {
 	return returnArray;
 }
 
+/**
+ * @description Function to make array that have result of two array's substraction
+ *
+ * @param {array} array1 first array that want to substract
+ * @param {array} array2 second array that want to substract
+ * 
+ * @returns {array} returnArray new array with substracted value 
+ * 
+ */
 function subtractArr (array1, array2) {
 	
 	var returnArray = new Array(array1.length);
@@ -58,6 +100,15 @@ function subtractArr (array1, array2) {
 	return returnArray;
 }
 
+/**
+ * @description Function to make 2 dimension array that have p2cArr value
+ *
+ * @param {array} p2cArr array that want to copy in new array
+ * @param {array} c2pArr decision array length of returnArray
+ * 
+ * @returns {array} returnArray new array (p2cArr.length by c2pArr.length)
+ * 
+ */
 function mergeParentChildArr (p2cArr, c2pArr) {
 
 	var returnArray = new Array(p2cArr.length);
@@ -84,6 +135,17 @@ function mergeParentChildArr (p2cArr, c2pArr) {
 	return returnArray;
 }
 
+/**
+ * @description Function to make array that have result of two array's multiplication
+ *
+ * @param {array} array1 first array that want to multiply
+ * @param {number} dimension1 number of array1's dimension
+ * @param {array} array2 second array that want to multiply
+ * @param {number} dimension2 number of array2's dimension
+ * 
+ * @returns {array} returnArray new array with multiplied value 
+ * 
+ */
 function mulArr (array1, dimension1, array2, dimension2) {
 	
 	var returnArray = new Array(array2[0].length);
@@ -104,6 +166,15 @@ function mulArr (array1, dimension1, array2, dimension2) {
 	return returnArray;
 }
 
+/**
+ * @description Function to make array that have result of orthogonal operate
+ *
+ * @param {array} array first array that want to orthogonal operation
+ * @param {number} dimension number of array's dimension
+ * 
+ * @returns {array} returnArray new array with orthogonal array from param's array 
+ * 
+ */
 function makeOrthogonalArr (array, dimension) {
 	
 	var returnArray = new Array(array[0].length);
@@ -121,6 +192,13 @@ function makeOrthogonalArr (array, dimension) {
 	return returnArray;
 }
 
+/**
+ * @description Function to print array's value in html
+ *
+ * @param {array} array array that want to print
+ * @param {number} dimension number of array's dimension
+ * 
+ */
 function printArr (array, dimension) {
 	
 	if (dimension == 1) {

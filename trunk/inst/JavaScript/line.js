@@ -1,5 +1,15 @@
-/**  Draw Line graph  **/
-var Line = {};
+
+/**
+ * @fileOverview operate base information to draw line graph
+ */
+ 
+/**  
+ * @description draw line graph
+ * 
+ * @constructor  
+ *  
+ */
+ var Line = {};
 (function () {	
 	Line = function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 		this.axisObj = axisObj;
@@ -31,7 +41,11 @@ var Line = {};
 			axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
 		}
 	};
+	/**
+      @lends Bar.prototype
+    */
 	Line.prototype = {
+		/** @constructs */
 		_init: function (axisObj, dataObj, xLabel1, xLabel2, yLabel1, yLabel2, optionObj) {
 			// check color
 			if (axisObj.legendLabel != undefined && dataObj[axisObj.legendLabel] != undefined) {
@@ -148,6 +162,16 @@ var Line = {};
 	};
 })();
 
+/**  
+ * @description check location of mouse cursor on the graph
+ * 
+ * @param graphObj data object to draw graph
+ * @param smallX value of x_axis' minimum value
+ * @param smallY value of y_axis' minimum value
+ * @param bigX value of x_axis maximum value
+ * @param bigY value of y_axis maximum value
+ * 
+ */
 function lineBoxSearch (graphObj) {
 	return function (smallX, smallY, bigX, bigY) {	
 		var tmpNodeArr = new Array();
@@ -169,6 +193,13 @@ function lineBoxSearch (graphObj) {
 	};
 }
 
+/**  
+ * @description change node shape when click or unclick event
+ * 
+ * @param node object that change node shape
+ * @param selectOn flag value about next state
+ * 
+ */
 function lineUpdate () {
 	return	function (node, selectOn) {
 		if (node.getSelected() == 1 && selectOn < 0) {		//unselect
@@ -191,6 +222,13 @@ function lineUpdate () {
 	};
 }
 
+/**  
+ * @description change node shape when mouse over on the node
+ * 
+ * @param node object that change node shape
+ * @param overOff flag value about next state
+ * 
+ */
 function lineHover () {
 	return function (node, overOff) {
 		if (overOff == 1) {

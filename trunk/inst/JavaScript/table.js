@@ -1,3 +1,14 @@
+
+/**
+ * @fileOverview operate to make table which represent data
+ */
+ 
+ /**  
+ * @description delete row at table
+ * 
+ * @param tableID identical number that assigned for each table box
+ * 
+ */
 function deleteRow(tableID) {
 	try {
 		var table = document.getElementById(tableID);
@@ -16,6 +27,13 @@ function deleteRow(tableID) {
     }
 }
 
+ /**  
+ * @description reload table data
+ * 
+ * @param tableID identical number that assigned for each table box
+ * @param mainArr data object which want to write a data using table box
+ * 
+ */
 function refreshTable(tableID, mainArr){
 	return function() {
 		deleteRow(tableID);
@@ -52,6 +70,14 @@ function refreshTable(tableID, mainArr){
 	};
 }
 
+ /**  
+ * @description make html code to draw table on the browser
+ * 
+ * @param tableID identical number that assigned for each table box
+ * @param mainArr data object which want to write a data using table box
+ * @param height height of table box
+ * 
+ */
 function makeTable(tableID, mainArr, height){
 	var colWidth=100;
 	mainArr.refreshTable = refreshTable(tableID, mainArr);

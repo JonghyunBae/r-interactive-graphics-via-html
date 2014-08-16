@@ -1,4 +1,18 @@
-var menuOn = false;
+
+/**
+ * @fileOverview draw and manage menu box (right click on the graph or nodes)
+ */
+ 
+ var menuOn = false;
+ 
+ /**  
+ * @description draw and check menu box on the graph
+ * 
+ * @param Name graph object which want to draw menu box
+ * 
+ * @ignore
+ * 
+ */
 function menu(Name)
 {       
     Name.menuLayer = new Kinetic.Layer();

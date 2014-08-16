@@ -1,5 +1,15 @@
-/**  Draw Pie graph  **/
-var Pie = {};
+
+/**
+ * @fileOverview operate base information to draw pie graph
+ */
+ 
+ /**  
+ * @description draw pie graph
+ * 
+ * @constructor  
+ *  
+ */
+ var Pie = {};
 (function() {	
 	Pie = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this.axisObj = axisObj;
@@ -28,7 +38,11 @@ var Pie = {};
 			axisObj.boxSearchArr[this.graphId] = pieBoxSearch(this);
 		}
 	};
+	/**
+      @lends Bar.prototype
+    */
 	Pie.prototype = {
+		/** @constructs */
 		_init: function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 			// check color
 			if(axisObj.legendLabel != undefined){
@@ -128,6 +142,16 @@ var Pie = {};
 	};
 })();
 
+/**  
+ * @description check location of mouse cursor on the graph
+ * 
+ * @param graphObj data object to draw graph
+ * @param smallX value of x_axis' minimum value
+ * @param smallY value of y_axis' minimum value
+ * @param bigX value of x_axis maximum value
+ * @param bigY value of y_axis maximum value
+ * 
+ */
 function pieBoxSearch(graphObj) {
 	return function(smallX, smallY, bigX, bigY)	{	
 		var tmpNodeArr = new Array();
@@ -160,10 +184,14 @@ function pieBoxSearch(graphObj) {
 		
 	};
 }
-/**  update function  **/
-//Kinetic version update
-//just remove transitient, and change it with "set" syntax.
-//"set" syntax has not changed during many versions.
+
+/**  
+ * @description change node shape when click or unclick event
+ * 
+ * @param node object that change node shape
+ * @param selectOn flag value about next state
+ * 
+ */
 function pieUpdate() {
 	return	function(node, selectOn) {
 		if(node.getSelected() == 1 && selectOn < 0){		//unselect
@@ -184,8 +212,15 @@ function pieUpdate() {
 		node.draw();
 	};
 }
-/**  update function end  **/
-function pieHover() {
+
+/**  
+ * @description change node shape when mouse over on the node
+ * 
+ * @param node object that change node shape
+ * @param overOff flag value about next state
+ * 
+ */
+ function pieHover() {
 	return function(node, overOff) {
 		if(overOff == 1){
 			node.setOpacity(1);

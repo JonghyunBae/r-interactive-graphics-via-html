@@ -1,5 +1,15 @@
-/**  Draw Dot graph(scatter)  **/
-var Dot = {};
+
+/**
+ * @fileOverview operate base information to draw scatter graph
+ */
+ 
+/**  
+ * @description draw dot(scatter) graph
+ * 
+ * @constructor  
+ *  
+ */
+ var Dot = {};
 (function() {
 	Dot = function(axisObj, dataObj, xLabel, yLabel, optionObj) {
 		this.axisObj = axisObj;
@@ -30,7 +40,11 @@ var Dot = {};
 		}
 		
 	};
+	/**
+      @lends Bar.prototype
+    */
 	Dot.prototype = {
+		/** @constructs */
 		_init: function (axisObj, dataObj, xLabel, yLabel, optionObj) {
 			this.radius = (optionObj.radius == undefined) ? (2) : (optionObj.radius); // default radius is 2
 			if(axisObj.legendLabel != undefined){
@@ -127,8 +141,17 @@ var Dot = {};
 		}
 	}
 })();
-/**  Draw Dot graph(scatter) End  **/
 
+/**  
+ * @description check location of mouse cursor on the graph
+ * 
+ * @param graphObj data object to draw graph
+ * @param smallX value of x_axis' minimum value
+ * @param smallY value of y_axis' minimum value
+ * @param bigX value of x_axis maximum value
+ * @param bigY value of y_axis maximum value
+ * 
+ */
 function dotBoxSearch (graphObj) {
 	return function (smallX, smallY, bigX, bigY) {
 		var tmpNodeArr = new Array();
@@ -150,10 +173,14 @@ function dotBoxSearch (graphObj) {
 		}
 	};
 }
-/**  update function  **/
-//Kinetic version update
-//just remove transitient, and change it with "set" syntax.
-//"set" syntax has not changed during many versions.
+
+/**  
+ * @description change node shape when click or unclick event
+ * 
+ * @param node object that change node shape
+ * @param selectOn flag value about next state
+ * 
+ */
 function dotUpdate () {
 	return	function (node, selectOn) {
 		if (node.getSelected() == 1 && selectOn < 0) {		//unselect
@@ -173,8 +200,14 @@ function dotUpdate () {
 		node.draw();
 	};
 }
-/**  update function end  **/
 
+/**  
+ * @description change node shape when mouse over on the node
+ * 
+ * @param node object that change node shape
+ * @param overOff flag value about next state
+ * 
+ */
 function dotHover () {
 	return function (node, overOff) {// over: 1 , off: 0
 		if (overOff == 1) {

@@ -1,3 +1,13 @@
+
+/**
+ * @fileOverview operate about event functions
+ */
+ 
+/**
+ * @static
+ * @ignore
+ * 
+ */
 var legendArr = ['right', 'left', 'topright', 'topleft', 'default'];
 var widthArr = [-100, -10, -1, 1, 10, 100];
 var heightArr = [-100, -10, -1, 1, 10, 100];
@@ -11,6 +21,11 @@ var array_of_functions = [
                           function(Name, label) { changeBin(Name, label) }
                       ];
 
+/**
+ * @static
+ * @ignore
+ * 
+ */
 var changeXAxis = function (Name, label){
 	alert(label);
 }
@@ -30,6 +45,12 @@ var changeBin = function (Name, label){
 	alert(label);
 }
 
+/**
+ * @description manage event operation about hide nodes & lines
+ * 
+ * @param {object} Name object that incoming hide signal graph 
+ * 
+ */
 function hideSelected(Name) {
 	var rootObjArr = new Array();
 	
@@ -116,6 +137,12 @@ function hideSelected(Name) {
 	}
 	
 }
+
+/**
+ * @description function call to redraw when hide event occur
+ * 
+ * @ignore
+ */
 function childReCalculate(object) {
 	object._reCalculate();	
 	if(object.child != null) {
@@ -125,6 +152,11 @@ function childReCalculate(object) {
 	}
 }
 
+/**
+ * @description function call to redraw when reset event occur
+ * 
+ * @ignore
+ */
 function resetSelected(Name) {
 	window.top.location.reload();
 }

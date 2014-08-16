@@ -1,3 +1,8 @@
+
+/**
+ * @fileOverview draw and manage menu box (right click on the graph or nodes)
+ */
+ 
 window.addEventListener('keydown',checkKeyDown,false);  
 window.addEventListener('keyup',checkKeyUp,false);
 var ctrlPressed = false;
@@ -7,6 +12,14 @@ var zPressed = false;
 var gPressed = false;
 var tmpShift = false;
 
+/**  
+ * @description check which keyboard pressed down
+ * 
+ * @param e keyboard signal
+ * 
+ * @ignore
+ * 
+ */
 function checkKeyDown (e) {               
 	if (e.keyCode == 17 || e.keyCode == 25) { //ctrl key pressed
 		ctrlPressed = true;
@@ -33,6 +46,14 @@ function checkKeyDown (e) {
     }
 }
 
+/**  
+ * @description check which keyboard pressed
+ * 
+ * @param e keyboard signal
+ * 
+ * @ignore
+ * 
+ */
 function checkKeyUp(e) {
 	if (ctrlPressed == true && zPressed != true) {
 		ctrlPressed = false;
@@ -51,6 +72,14 @@ function checkKeyUp(e) {
     }
 }       
 
+/**  
+ * @description function call about event functions
+ * 
+ * @param NameArr all axis object array
+ * 
+ * @ignore
+ * 
+ */
 function eventTrigger (NameArr) {
 	for (var i=0; i<NameArr.length; i++) {
 		hover(NameArr[i]);
@@ -61,6 +90,15 @@ function eventTrigger (NameArr) {
 }
 
 var dragOn = false;
+
+/**  
+ * @description manage operation about drag moving on the graph
+ * 
+ * @param Name graph box which want to operate drag function
+ * 
+ * @ignore
+ * 
+ */
 function drag (Name) {
     var preDragMousePos;
     var aftDragMousePos;
@@ -151,6 +189,14 @@ function drag (Name) {
     }, true);
 }
 
+/**  
+ * @description manage operation about selecting node on the graph
+ * 
+ * @param Name graph box which want to operate drag function
+ * 
+ * @ignore
+ * 
+ */
 function select (Name) {
 	var tmpNodeArr = new Array();
 	Name.stage.on('click', function (evt) {
@@ -195,6 +241,14 @@ function select (Name) {
 	}
 }
 
+/**  
+ * @description manage operation about mouse over the nodes
+ * 
+ * @param Name graph box which want to operate hover function
+ * 
+ * @ignore
+ * 
+ */
 function hover (Name) {
 	for (var i=0; i<Name.dataLayerArr.length; i++) {
 		(function (i) { 

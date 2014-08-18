@@ -43,7 +43,6 @@ hist_RIGHT <- function(x, data, color = NULL, isString = FALSE) {
   dataArray <- get(data, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
-  # CHECK (junghoon): is there a way to deal with strings? Why is this different from, say, plot_RIGHT()?
   checkColumnName(x, dataArray)
 
   # Check color option:

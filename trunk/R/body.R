@@ -31,15 +31,15 @@ prepareData <- function(dataList, dir = ".") {
     dataArr <- lapply(tempData, function(x) if (is.factor(x)) list(level = levels(x), index = as.numeric(x) - 1) else x)
     
     mainArr <- rjson::toJSON(dataArr)
-    
     dataScript <- c(dataScript, paste0("var ", nameArray[iData], " = ", mainArr))
+    
   } # for
   
   tempDir <- file.path(dir, "www")
   
   if (!file.exists(tempDir)) {
     dir.create(tempDir)
-  }
+  } # if
   
   # Write dataScript to "data.js" file
   writeLines(as.character(dataScript), con=file.path(dir, "www", "data.js"))
@@ -50,6 +50,7 @@ prepareData <- function(dataList, dir = ".") {
 loadData <- function(nameArray = NULL) {
   
   numData <- length(nameArray)
+  
   if (!is.null(nameArray)) {
     
     # Data objects should be loaded before any plotting:
@@ -89,7 +90,6 @@ addEventTrigger <- function(numAxis = NULL) {
   
 } # function addEventTrigger
 
-# CHECK (junghoon): can these functions organized differently?
 # Create div block:
 createDiv <- function(divArray = NULL, flag = FALSE) {
    

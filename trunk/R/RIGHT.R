@@ -190,9 +190,9 @@ RIGHT <- function(expr = {},
                                       pie = pie_RIGHT,
                                       search = search_RIGHT,
                                       table = table_RIGHT,
-                                      qplot = qplot_RIGHT, 
-                                      ggplot = ggplot_RIGHT,
-                                      print.ggplot = ggplot2RIGHT))
+                                      qplot = createQlot, 
+                                      ggplot = createGgplot,
+                                      print.ggplot = ggplot_RIGHT))
   
   ## ---
   ## Process data.frame objects:

@@ -45,8 +45,6 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   
   ## ---
   ## Check input arguments:
-  ##
-  ## CHECK (junghoon): this part is common to both points_RIGHT and lines_RIGHT.
   ## ---
   
   # Make sure that there is at least one axis to draw on:
@@ -61,7 +59,6 @@ lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
   dataArray <- get(data, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
-  # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form)
   checkColumnName(axisName$x, dataArray)
   checkColumnName(axisName$y, dataArray)

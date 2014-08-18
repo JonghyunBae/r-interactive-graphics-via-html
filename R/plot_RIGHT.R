@@ -63,7 +63,6 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
   dataArray <- get(data, envir = parent.frame(), inherits = TRUE)
   
   # Check whether the columns exist:
-  # CHECK (junghoon): is there a way to check whether form is a formula?
   axisName <- checkFormula_xy(form) 
   checkColumnName(axisName$x, dataArray)
   checkColumnName(axisName$y, dataArray)
@@ -108,9 +107,7 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
     ## Plot lines if necessary:
     ## ---
     
-    # CHECK (junghoon): refine this to support type == "c" as well.
     if (type == "l" || type == "b") {
-      #     lines_RIGHT(form, data, col = col, isString = TRUE)
       lines_RIGHT(form, data, by = by, isString = TRUE)
     } # if
     
@@ -119,7 +116,6 @@ plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
     ## ---
     
     if (type == "p" || type == "b") {
-      #     points_RIGHT(form, data, col = col, isString = TRUE)
       points_RIGHT(form, data, isString = TRUE)
     } # if
     

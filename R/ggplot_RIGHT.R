@@ -18,7 +18,7 @@
 #'        print(obj)
 #'        print(obj + geom_bar())})
 #' }
-ggplot_RIGHT <- function(data, ...) {
+createGgplot <- function(data, ...) {
   
   argArray <- as.list(match.call())
   
@@ -29,7 +29,7 @@ ggplot_RIGHT <- function(data, ...) {
     
   return(obj)
   
-} # function ggplot_RIGHT
+} # function CreateAttr_ggplot
 
 #' @title Make RIGHT html code using ggplot object
 #' 
@@ -46,7 +46,7 @@ ggplot_RIGHT <- function(data, ...) {
 #' obj <- ggplot(Theoph, aes(Time, conc)) + geom_point()
 #' ggplot2RIGHT(obj)
 #' }
-ggplot2RIGHT <- function(obj) {
+ggplot_RIGHT <- function(obj) {
   
   type <- c()
   

@@ -20,7 +20,6 @@ setRIGHT <- function(...) {
     stop("All arguments should have a name.")
   } # if
   
-  # CHECK (junghoon): is there a better way?
   numVar <- length(nameArray)
   for (iVar in 1:numVar) {
     .RIGHT[[nameArray[iVar]]] <- varList[[iVar]] # note that <- is used instead of <<-
@@ -33,18 +32,6 @@ setRIGHT <- function(...) {
 ## ---
 ## Functions to check input arguments:
 ## ---
-
-# checkDataName <- function(dataName) {
-#   
-#   if (!is.element(dataName, .RIGHT$nameArray)) {
-#     stop(dataName, " does not exist.")
-#   } # if
-#   
-#   invisible()
-#   
-# } # function checkDataName
-
-# CHECK (junghoon): use terms.formula next time?
 checkFormula_xy <- function(form) {
 
   if (length(form) != 3 || !is.name(form[[2]]) || !is.name(form[[3]])) {
@@ -56,7 +43,6 @@ checkFormula_xy <- function(form) {
   
 } # function checkFormula_xy
 
-# CHECK (junghoon): check the use of . against ggplot2
 checkFormula_x <- function(form) {
 
   # x ~ is not possible, only ~ x is, for length 2 case:
@@ -83,9 +69,6 @@ checkCol <- function(col) {
 
   if (!is.null(col)) {
     
-    # CHECK (junghoon): should this work for factors as well?
-    
-    # CHECK (junghoon): is.numeric condition good enough? See Wickham's book.
     if (!(is.character(col) && length(col) == 1) &&
           !(is.numeric(col) && length(col) == 3)) {
       stop("col should be a single color name or a RGB vector.")

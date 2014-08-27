@@ -17,7 +17,6 @@ With RIGHT, you can experience following amazing features.
  
 More detailed features are available in each page.
  * [WelcomeRIGHT Welcome]
- * [BeforeStarted Before Start]
  * [HelloRIGHT Hello RIGHT]
  * [TypesOfPlots Supported Plot Types]
  * [AdvancedRIGHT Advanced RIGHT]

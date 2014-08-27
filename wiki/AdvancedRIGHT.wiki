@@ -30,8 +30,9 @@ All graphs, of course, are interactively connected.
 Multiple objects can be drawn in one container. To draw box-and-whisker and scatter plot type :
 
 {{{
-   RIGHT({box(price ~ carat, subArray)
+   RIGHT({boxplot(price ~ carat, subArray)
           plot(price ~ carat, subArray, col = 'blue', type = "p")})
+UNDER CONSTRUCTION UNDER CONSTRUCTION UNDER CONSTRUCTION
 }}}
 
 It will draw overlaid graphs in one axis.

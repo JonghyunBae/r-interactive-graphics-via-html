@@ -1,6 +1,5 @@
   * [TutorialIntro Tutorial]
    * [WelcomeRIGHT Welcome]
-   * [BeforeStarted Before Start]
    * [HelloRIGHT Hello RIGHT]
    * [TypesOfPlots Supported Plot Types]
    * [AdvancedRIGHT Advanced RIGHT]

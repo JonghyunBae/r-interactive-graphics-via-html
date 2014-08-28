@@ -11,7 +11,7 @@ This page can be modified while being designed.
 = Data Structure =
 
  # createMainStructure
-  * "mainArr1 = createMainStructure(id, subData);"
+  * "id = createMainStructureE(id, subData);"
   * Data Aspect.
    * Example of discrete data
     * Input: mainArr.cut = [A, C, B, D, C, B, A, D];
@@ -40,48 +40,20 @@ This page can be modified while being designed.
  # Graphs
   * Example
    * Dot(axisObj, dataObj, 'xLabel', 'yLabel', {});
-   * Bar(axisObj, dataObj, 'xLabel', 'yLabel', {});
-   * Line(axisObj, dataObj, 'xLabel', 'yLabel', {});
-   * Pie(axisObj, dataObj, 'xLabel', 'yLabel', {});
+   * Bar(axisObj, histObj, 'xLabel', 'frequency', {});
+   * Line(axisObj, lineObj, 'xLabel', 'yLabel', {});
+   * Pie(axisObj, pieObj, 'xLabel', 'frequency', {});
+   * Box(axisObj, boxObj, {})
  # Color
    * "addColorField(labelObj)" adds "color" or "colorIndex" field into labelobj.
    * Called in Axis when checking legendLabel
    * Example
-     * discrete: addColorField(mainArr1.cut);
-     * result: mainArr1.cut.colorIndex = [RGB, RGB, ...];(length of mainArr1.cut.index)
+     * discrete: addColorField(id.cut);
+     * result: id.cut.colorIndex = [RGB, RGB, ...];(length of id.cut.index)
      * continuous: addColorField(mainArr1.carat);
      * result: mainArr1.carat.color = [RGB, RGB, ...];(length of mainArr.carat)
  # Event Part
   * $isSelected relationship.
-   * update soon..
   * box selection and click
-   * there are few bugs -> should be fixed later.
   * table part.
-   * "refreshTable" is added to mainArr.(labelArr is needed)
-  * right click menu(change axis)
-   * under construction.
-
-
-= Schedule =
- * TO DO
-  * How do I set the priority of these tasks?
-   * Make box&whisker graph(the statistical calculation is needed, such as "ddply")
-   * Modify search box functions.
-   * Change the sequence of color and legend.(e.g. colors() in R)
-   * fix event handle bugs.
- * DONE
-  * fix bar selection bugs.(9/8)
-  * event Handle - table.(9/3)
-  * event Handle - click, multiple click(ctrl, A), box Select.(9/3)
-  * add basic line(no event).(9/2)
-  * kinetic new version update(4.6.0).(9/2)
-  * information of nodes -> "getNodeinfo" function.(9/2)
-  * basic pie & line.(9/1)
-  * Bar stacking.(9/1)
-  * Make "Dot" and "Bar" with color.(8/24)
-  * Make "addColorField" and legend in Axis.(8/22)
-  * Make "ddply".(8/22)
-   * Extract "binning" from "ddply".(8/22)
-  * Refine data aspect of "!MakeHistObj", but not for continuous colorLabel.(8/21) -> this function has been removed.(8/22)
-  * Refine data aspect of "createMainStructure".(8/20)
-  * just draw "Axis" with all data type.(8/20)
+  * right click menu

@@ -5,7 +5,7 @@
 
 =<font color = 'blue'>Types of graphs</font>=
 
-There are five types of graph right now. More types will be updated.
+There are five types of graph and four types of ggplot2 graph right now. More types will be updated.
 
 <table width="500px" border="1" cellpadding="1" bordercolor="#000000" bgcolor="#FFFFFF">
 <tr>

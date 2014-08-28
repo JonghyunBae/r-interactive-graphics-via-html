@@ -99,6 +99,7 @@ To draw basic box and whisker graph type:
 or
 
 {{{
+> subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
 > RIGHT(print(ggplot(subArray, aes(color, price)) + geom_boxplot()))
 }}}
 
@@ -118,6 +119,7 @@ To draw basic line graph type:
 or
 
 {{{
+> subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
 > RIGHT(print(ggplot(subArray, aes(carat, price)) + geom_line()))
 }}}
 

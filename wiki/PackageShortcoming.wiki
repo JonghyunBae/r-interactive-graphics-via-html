@@ -1,19 +1,15 @@
 #summary List of problems/shortcomings that we should address, including code, documentation, and tests.
 
-== R code ==
- # Modify directory path to solve problem(inst/Javascript -> Javascript).
- # Add options.
-  * group =: to draw lines by group. a logical choice is Subject for Theoph.
-  * color =: change color by another variable for points, lines and hist
-  * col =: change base color for points and lines(done)
-  * subset =: select a subset to draw for points and lines
- # histogram stacking check. Is it possible to draw a stacking histogram?
-== !JavaScript code ==
+== JavaScript code ==
  # Additional unit test.
- # send isHidden to server.R
+ # Arrange server-offloading code
+ # Update kinetic JavaScript version
+ # Graph layout improved
+ 
 == Documentation ==
- # Add box documentation.(Have been this done? -> check documentation part)
+
 == Test ==
 
 == Discuss ==
- # How should we deal a legend option?
+ # Update shiny server to use server-offloading
+ # Upload R bloggers

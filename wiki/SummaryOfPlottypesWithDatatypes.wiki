@@ -33,7 +33,7 @@ There are four types of graph right now. More types will be updated.
         <td>not logical</td>
         <td>support</td>
         <td>not logical</td>
-	<td>not support</td>
+	<td>support</td>
         <td>support</td>
 </tr>
 <tr>
@@ -43,23 +43,23 @@ There are four types of graph right now. More types will be updated.
         <td>support</td>
         <td>support</td>
 	<td>not support</td>
-        <td>not support</td>
+        <td>support</td>
 </tr>
 <tr>
 	<td>*Pie*</td>
-	<td>under construction</td>
-        <td>under construction</td>
-        <td>under construction</td>
-        <td>under construction</td>
-	<td>under construction</td>
-        <td>under construction</td>
+	<td>support</td>
+        <td>not logical</td>
+        <td>support</td>
+        <td>not logical</td>
+	<td>support</td>
+        <td>support</td>
 </tr>
 <tr>
 	<td>*Box-Whisker*</td>
-	<td>under construction</td>
-        <td>under construction</td>
-        <td>under construction</td>
-        <td>under construction</td>
-	<td>under construction</td>
-        <td>under construction</td>
+	<td>support</td>
+        <td>support</td>
+        <td>support</td>
+        <td>support</td>
+	<td>support</td>
+        <td>support</td>
 </tr>

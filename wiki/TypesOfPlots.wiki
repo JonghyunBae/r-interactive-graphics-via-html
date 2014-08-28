@@ -58,6 +58,11 @@ To draw basic scatter graph type:
 > RIGHT(plot(price ~ carat, diamonds, type="p"))
 }}}
 
+or you can make same graph using ggplot2 API
+
+{{{
+> RIGHT(print(ggplot(diamonds, aes(carat, price)) + geom_point())
+}}}
 <img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
 
 

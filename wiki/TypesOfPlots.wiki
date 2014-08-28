@@ -36,7 +36,7 @@ There are five types of graph and four types of ggplot2 graph right now. More ty
 <tr>
 	<td>Pie plot</td>
 	<td>pie</td>
-	<td></td>
+	<td>no support in ggplot2</td>
 </tr>
 </table>
 

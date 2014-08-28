@@ -61,8 +61,9 @@ To draw basic scatter graph type:
 or you can make same graph using ggplot2 API
 
 {{{
-> RIGHT(print(ggplot(diamonds, aes(carat, price)) + geom_point())
+> RIGHT(print(ggplot(diamonds, aes(carat, price)) + geom_point()))
 }}}
+
 <img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
 
 
@@ -76,6 +77,12 @@ To draw basic bar graph type:
 > RIGHT(hist(price, diamonds))
 }}}
 
+or
+
+{{{
+> RIGHT(print(ggplot(diamonds, aes(price, fill = price)) + geom_bar()))
+}}}
+
 <img src="http://thepotter.woobi.co.kr/img/bar_diamonds.PNG">
 
 
@@ -86,11 +93,16 @@ To draw basic box and whisker graph type:
 
 {{{
 > subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
-> RIGHT(box(price ~ color, subArray))
+> RIGHT(boxplot(price ~ color, subArray))
+}}}
+
+or
+
+{{{
+> RIGHT(print(ggplot(subArray, aes(color, price)) + geom_boxplot()))
 }}}
 
 <img src="http://thepotter.woobi.co.kr/img/box_diamonds.PNG">
-
 
 
 == 4. Line plot == 
@@ -101,6 +113,12 @@ To draw basic line graph type:
 {{{
 > subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
 > RIGHT(plot(price ~ carat, subArray, type= "l"))
+}}}
+
+or
+
+{{{
+> RIGHT(print(ggplot(subArray, aes(carat, price)) + geom_line()))
 }}}
 
 <img src="http://thepotter.woobi.co.kr/img/line_diamonds.PNG">
@@ -116,5 +134,7 @@ To draw basic pie graph type:
 {{{
 > RIGHT(pie(color, diamonds))
 }}}
+
+There is no support using ggplot2 API to draw pie chart
 
 <img src="http://thepotter.woobi.co.kr/img/pie_diamonds.PNG">

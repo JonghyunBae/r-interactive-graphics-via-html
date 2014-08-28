@@ -30,9 +30,9 @@ There are four types of graph right now. More types will be updated.
 <tr>
 	<td>*Histogram*</td>
 	<td>support</td>
-        <td>not logical</td>
         <td>support</td>
-        <td>not logical</td>
+        <td>support</td>
+        <td>support</td>
 	<td>not support</td>
         <td>support</td>
 </tr>

@@ -33,8 +33,11 @@ Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
 
  * TO-DO list
    # shiny server-offloading using shiny server
+     * https://www.shinyapps.io/
    # layout improved 
+     * http://getbootstrap.com/getting-started/
    # update kinetic js + optimization
+     * http://stackoverflow.com/questions/507818/how-to-organize-minification-and-packaging-of-css-and-js-files-to-speed-up-websi
    # change code.google.com example interactive plot  
    # make demo video & update code.google.com
    # R bloggers 

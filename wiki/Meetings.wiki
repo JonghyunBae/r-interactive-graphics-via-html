@@ -27,6 +27,21 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 05 Sep 2014 ==
+
+Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # shiny server-offloading using shiny server
+   # layout improved 
+   # update kinetic js + optimization
+   # change code.google.com example interactive plot  
+   # make demo video & update code.google.com
+   # R bloggers 
+     * posting : help page update in google(manual, demovideo) end of August ~ middle of september
+
+  Next meeting : 10:00 (Korea time) on Fri, 9/12
+
 == 15 Aug 2014 ==
 
 Participants : Jung Hoon Lee, Jae W. Lee, Chung Ha Sung, Sang Gi Hong, Jong Hyun Bae

@@ -54,7 +54,8 @@ search_RIGHT <- function(data, isString = FALSE) {
   
   # Source dot.js in head:
   addSource("search.js")
-
+  addLink("shared/bootstrap/css/theme.css")
+  
   invisible()
   
 } # function search_RIGHT

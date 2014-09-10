@@ -35,7 +35,7 @@ initRIGHT <- function() {
                           "array.js")
   
   # Css files always necessary:
-  .RIGHT$linkArray <- c("right.css")
+  .RIGHT$linkArray <- c("right.css", "shared/bootstrap/css/bootstrap.min.css")
   
   # Keep names of data.frame objects for checking:
   .RIGHT$nameArray <- c()
@@ -45,6 +45,7 @@ initRIGHT <- function() {
   .RIGHT$scriptArray <- c()
   .RIGHT$searchArray <- c()
   .RIGHT$structArray <- c()
+  .RIGHT$ncolGraph <- NULL
   
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
@@ -159,6 +160,7 @@ repeat {
 RIGHT <- function(expr = {},
                   ...,
                   title = "RIGHT: R Interactive Graphics via HTml",
+                  ncol = NULL,
                   dir = tempfile(), 
                   overwrite = FALSE,
                   browser = getOption("browser"),
@@ -205,6 +207,11 @@ RIGHT <- function(expr = {},
   # There should be at least one data object to plot:
   if (length(nameArray) == 0) {
     stop("No data object is given.")
+  } # if
+  
+  # Update ncol variable
+  if(!is.null(ncol)) {
+    .RIGHT$ncolGraph <- ncol
   } # if
   
   # Check validitiy of the names:
@@ -266,7 +273,6 @@ RIGHT <- function(expr = {},
     
     addLink("shared/shiny.css")
     addLink("shared/bootstrap/css/bootstrap-responsive.min.css")
-    addLink("shared/bootstrap/css/bootstrap.min.css")
     addLink("shared/slider/css/jquery.slider.min.css")
     
     # copt files about javascript polder

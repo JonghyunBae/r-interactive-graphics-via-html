@@ -97,7 +97,7 @@ createDiv <- function(divArray = NULL, flag = FALSE) {
     return(NULL)
   } # if 
   
-  tempArray <- '<div id="content">\n'
+  tempArray <- '<div id="content">'
   divIndex <- 1
   divId <- c()
   
@@ -128,37 +128,65 @@ createDiv <- function(divArray = NULL, flag = FALSE) {
         
       } # if
       
-      tempArray <- paste0(tempArray, divId[iData], divArray[iData])
-      
-      for(i in 1:tempIndex) {
-        tempArray <- paste0(tempArray, "</div>")
-      } # for
-      tempArray <- paste0(tempArray, "\n")
- 
+      tempArray <- append(tempArray, paste0(divId[iData], "  ", divArray[iData]))
+    
     } # for
+    
+    for(iData in 2:length(tempArray)) {
+      tempArray[iData] <- paste0(tempArray[iData], "</div>")
+    }
   
   } else {
     
     for(iData in 1:length(divArray)) {
-      tempArray <- paste0(tempArray, '<div id="content', iData, '" class="right-output">\n',
-                          divArray[iData], "</div>\n")
+      tempArray <- append(tempArray, paste0('<div id="content', iData, '" class="right-output">\n',
+                          divArray[iData], "</div>\n"))
+    } # for
+    
+  } # if
+  
+  if(!is.null(.RIGHT$ncolGraph)) {
+    
+    tempIndex <- c()
+    
+    for(count in .RIGHT$ncolGraph) {
+      if(count == 1) {
+        tempIndex <- c(tempIndex, 12)
+      } else if(count == 2) {
+        tempIndex <- c(tempIndex, 6, 6)
+      } else if(count == 3) {
+        tempIndex <- c(tempIndex, 4, 4, 4)
+      } else if(count == 4) {
+        tempIndex <- c(tempIndex, 3, 3, 3, 3)
+      } # if
+    } # for
+    
+    for(iData in 2:length(tempArray)) {
+      tempArray[iData] <- paste0('<div class="col-md-', tempIndex[iData-1], '">\n', tempArray[iData], "</div>\n")
+    } # for
+    
+    iData <- 2
+    
+    for(count in .RIGHT$ncolGraph) {
+      tempArray[iData] <- paste0('<div class="row">\n', tempArray[iData])
+      iData <- iData + count - 1
+      tempArray[iData] <- paste0(tempArray[iData], "</div>\n")
+      iData <- iData + 1
     } # for
     
   } # if
   
   if(.RIGHT$numSearch > 0) {
-    tempArray <- c(tempArray, "<script>")
     
-    for(array in .RIGHT$searchArray) {
-      tempArray <- append(tempArray, array)
-    } # for
-  
-    tempArray <- c(tempArray, "</script>")
+    .RIGHT$searchArray <- paste0('<div class="navbar navbar-fixed-top" role="navigation">\n',
+                                 '<div class="navbar-header">\n',
+                                 '<script>\n', .RIGHT$searchArray, '\n</script>\n',
+                                 '</div>\n</div>\n')
   } # if
   
   if(length(.RIGHT$structArray) != 0) {
-    tempArray <- c("<script>", .RIGHT$structArray, "</script>", tempArray)
-  }
+    tempArray <- c("<script>", .RIGHT$structArray, "</script>", .RIGHT$searchArray, tempArray)
+  } # if
   
   return(c(tempArray, "</div>"))
   

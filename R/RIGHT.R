@@ -46,6 +46,25 @@ initRIGHT <- function() {
   .RIGHT$searchArray <- c()
   .RIGHT$structArray <- c()
   .RIGHT$ncolGraph <- NULL
+  .RIGHT$searchCss <- c('
+body {
+  padding-top: ',
+  'padding-bottom: 30px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}')
   
   # Variables used to build the server.R file:
   .RIGHT$serverArray <- c()
@@ -308,6 +327,15 @@ RIGHT <- function(expr = {},
   
   .RIGHT$serverScript <- paste0(.RIGHT$serverScript, "</script>\n")
     
+  ## ---
+  ## Make css file if using searchBox
+  ## ---
+  
+  if(.RIGHT$numSearch > 0) {
+    writeLines(c(paste0(.RIGHT$searchCss[1], 180*.RIGHT$numSearch, "px;"), .RIGHT$searchCss[2]), con=file.path(dir, "www", "theme.css"))
+    addLink("theme.css")
+  }
+  
   ## ---
   ## Assemble client-side code:
   ## ---

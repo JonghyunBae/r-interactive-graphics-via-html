@@ -31,6 +31,23 @@
 
 Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
 
+ * Test code about bootstrap structure
+{{{
+  subDiamonds <- diamonds[sample(1:nrow(diamonds), 100, T) ,]
+  RIGHT({plot(conc ~ Time, Theoph, type="p", color=Subject)
+         plot(conc ~ Wt, Theoph, type="p", color=Subject)
+         hist(Time, Theoph, color=Subject)
+         plot(price ~ clarity, subDiamonds, type="p", color=color)
+         hist(clarity, subDiamonds)
+         pie(clarity, subDiamonds)
+         plot(price ~ cut, subDiamonds, type="p")
+         hist(cut, subDiamonds)
+         pie(cut, subDiamonds)
+         boxplot(price ~ carat, subDiamonds)
+         search(Theoph)
+         search(subDiamonds)}, ncol = c(1,2,3,4))
+}}}
+
  * TO-DO list
    # change code.google.com example to interacrive plot
      * use iframe

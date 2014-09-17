@@ -69,19 +69,25 @@ addLink <- function(newLink = NULL) {
 } # function addLink
 
 createLink <- function(linkArray = NULL) {
-  
+    
   if (is.null(linkArray)) {
     return(NULL)
   } # if 
 
   linkArray <- unique(linkArray)
   linkArray <- linkArray[linkArray != ""]
-    
-  if(!.RIGHT$flagServer) 
-    linkArray <- paste(.RIGHT$libDir_RIGHT, linkArray, sep="/")
+      
+  if(!.RIGHT$flagServer) {
+    for(iData in 1:length(linkArray)) {
+      if(linkArray[iData] == "theme.css")
+        linkArray[iData] <- linkArray[iData]
+      else
+        linkArray[iData] <- paste(.RIGHT$libDir_RIGHT, linkArray[iData], sep="/")
+    }
+  }
   else
     linkArray <- paste("Javascript/", linkArray, sep="")
-  
+    
   return(paste0('<link rel="stylesheet" type="text/css" href="', linkArray, '"/>'))
   
 } # createSource

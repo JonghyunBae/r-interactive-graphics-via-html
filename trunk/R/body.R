@@ -98,6 +98,7 @@ createDiv <- function(divArray = NULL, flag = FALSE) {
   } # if 
   
   tempArray <- '<div id="content">'
+  tempArray2 <- c()
   divIndex <- 1
   divId <- c()
   
@@ -177,11 +178,19 @@ createDiv <- function(divArray = NULL, flag = FALSE) {
   } # if
   
   if(.RIGHT$numSearch > 0) {
+        
+    tempArray2 <- paste0('<div class="navbar navbar-fixed-top" role="navigation">\n',
+                         '<div class="navbar-header">\n',
+                         '<div id="content">\n',
+                         '<script>\n')
     
-    .RIGHT$searchArray <- paste0('<div class="navbar navbar-fixed-top" role="navigation">\n',
-                                 '<div class="navbar-header">\n',
-                                 '<script>\n', .RIGHT$searchArray, '\n</script>\n',
-                                 '</div>\n</div>\n')
+    for(iData in 1:length(.RIGHT$searchArray))
+      tempArray2 <- paste0(tempArray2, .RIGHT$searchArray[iData], "\n")
+    
+    tempArray2 <- paste0(tempArray2, '\n</script>\n',
+                         '</div>\n</div>\n</div>\n')
+    
+    .RIGHT$searchArray <- tempArray2
   } # if
   
   if(length(.RIGHT$structArray) != 0) {

@@ -25,4 +25,4 @@ Now, what you need to get our RIGHT graph is just wrapping with RIGHT bracket.
 
 Finally you can get the exactly same graph, but beautiful and interactive one, on your default browser!
 
-<iframe src="http://bnbbkr.shinyapps.io/example_offload">
+<img src="http://thepotter.woobi.co.kr/img/scatter_RIGHT.PNG">

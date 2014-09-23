@@ -26,10 +26,3 @@ Now, what you need to get our RIGHT graph is just wrapping with RIGHT bracket.
 Finally you can get the exactly same graph, but beautiful and interactive one, on your default browser!
 
 <img src="http://thepotter.woobi.co.kr/img/scatter_diamonds.PNG">
-
-{{#widget:Iframe
-|url=http://bnbbkr.shinyapps.io/example_offload
-|width=410
-|height=342
-|border=0
-}}

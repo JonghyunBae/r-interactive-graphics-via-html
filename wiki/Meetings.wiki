@@ -27,6 +27,22 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 24 Sep 2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # change code.google.com example to interacrive plot
+     * use iframe & github.io (reference : http://walkerke.github.io/2014/06/rcharts-pyramids/)
+   # profiling javascript code (check speed in javascript)
+     * check limit of data number (1k ~) using v8
+   # report search (ggvis, rcharts and so on)
+     * https://github.com/tdhock/interactive-tutorial/tree/master/animation
+     * rcharts
+     * ggvis section in http://user2014.stat.ucla.edu/
+
+  Next meeting : 10:00 (Korea time) on Wed, 10/1
+
 == 17 Sep 2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae

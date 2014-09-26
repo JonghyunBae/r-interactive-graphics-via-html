@@ -201,19 +201,22 @@ function makeOrthogonalArr (array, dimension) {
  */
 function printArr (array, dimension) {
 	
-	if (dimension == 1) {
-		document.write("[ ");
-		for (var i=0; i<array.length; i++) {
-			document.write(array[i] + " ");
-		}
-		document.write("]");
-	} else if (dimension == 2) {
-		for (var i=0; i<array.length; i++) {
+	switch(dimension) {
+		case 1:
 			document.write("[ ");
-			for (var j=0; j<array[i].length; j++) {
-				document.write(array[i][j] + " ");
+			for (var i=0; i<array.length; i++) {
+				document.write(array[i] + " ");
 			}
 			document.write("]");
-		}
+			break;
+		case 2:
+			for (var i=0; i<array.length; i++) {
+				document.write("[ ");
+				for (var j=0; j<array[i].length; j++) {
+					document.write(array[i][j] + " ");
+				}
+				document.write("]");
+			}
+			break;
 	}
 }

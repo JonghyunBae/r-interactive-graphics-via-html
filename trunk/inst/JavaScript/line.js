@@ -40,6 +40,11 @@
 			axisObj.hoverArr[this.graphId] = lineHover();
 			axisObj.boxSearchArr[this.graphId] = lineBoxSearch(this);
 		}
+		
+		this.colorLabel = null;
+		this.baseColor = null;
+		this.node = null;
+		this.dataLayer = null;
 	};
 	/**
       @lends Bar.prototype

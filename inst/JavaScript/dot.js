@@ -39,6 +39,12 @@
 			axisObj.boxSearchArr[this.graphId] = dotBoxSearch(this);
 		}
 		
+		this.radius = null;
+		this.colorLabel = null;
+		this.baseColor = null;
+		this.subSet = null;
+		this.node = null;
+		this.dataLayer = null;
 	};
 	/**
       @lends Bar.prototype

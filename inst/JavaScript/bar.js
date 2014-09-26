@@ -39,6 +39,15 @@
         	axisObj.hoverArr[this.graphId] = barHover();
 			axisObj.boxSearchArr[this.graphId] = barBoxSearch(this);
 		}
+		
+		this.colorOn = null;
+		this.colorLabel = null;
+		this.baseColor = null;
+		
+		this.legendLabel = null;
+		this.barWidth = null;
+		this.stacking = null;
+		this.node = null;
 	};
 	/**
       @lends Bar.prototype

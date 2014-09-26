@@ -51,6 +51,27 @@ var Axis = {};
 			    this.dataLayerArr = new Array();
 			    this.hoverArr = new Array();
 			    this.boxSearchArr = new Array();
+			 
+			    this.isXDiscrete = null;   
+			    this.xMax = null;		    
+			    this.xMin = null;
+			    this.xbin = null;
+			    this.xTick = null;
+			    this.xDiff = null;
+			    this.xPlotArr = null;
+			    this.xbarWidth = null;
+			    
+			    this.isYDiscrete = null;
+			    this.yMax = null;
+			    this.yMin = null;
+			    this.ybin = null;
+				this.yTick = null;
+				this.yDiff = null;
+				this.yPlotArr = null;
+				
+				this.legendLabel = null;
+				this.refresh = null;
+				this.plotLayer = null;	
 			},
 			
 			_addLegend: function(dataObj, optionObj) {
@@ -146,7 +167,7 @@ var Axis = {};
 				this.yMax = tmp.max;
 				this.yMin = tmp.min;
 				this.yDiff = -1;
-				this.yPlotArr= tmp.plotArr;
+				this.yPlotArr = tmp.plotArr;
 				makeYAxisLayer(this);
 			},
 			

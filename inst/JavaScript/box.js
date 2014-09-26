@@ -114,6 +114,11 @@ var Box = {};
 			axisObj.hoverArr[this.graphId] = boxHover();
 			axisObj.boxSearchArr[this.graphId] = boxBoxSearch(this);			
 		}
+		
+		this.radius = null;
+		this.baseColor = null;
+		this.node = null;
+		this.dataLayer = null;
 	};
 	/**
       @lends Box.prototype

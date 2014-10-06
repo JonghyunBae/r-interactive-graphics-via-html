@@ -135,6 +135,7 @@
 					}
 				}
 			}
+			
 			this.dataLayer = new Kinetic.Layer();	
 			for (var i=0; i<this.node.length; i++) {
 				if (this.node[i] != null) {

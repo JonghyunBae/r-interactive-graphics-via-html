@@ -27,6 +27,29 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 8 Oct 2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # modify tutorial page
+     * simply supported plot types page
+     * change plot with color option
+     * delete pictures, and add simple example in interactivity page
+   # profiling javascript code (check speed in javascript)
+     * multiple graph event (selection)
+     * hovering event
+
+   # Check migration of github 
+
+   # Write R blog artikle (long term)
+     * check limit of data number (1k ~) using v8
+
+   # modify event handling algorithm(graph updating problem)
+   # Make demo video
+
+  Next meeting : 10:00 (Korea time) on Wed, 10/15
+
 == 24 Sep 2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
@@ -42,7 +65,6 @@ Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
      * ggvis section in http://user2014.stat.ucla.edu/
 
   Next meeting : 10:00 (Korea time) on Wed, 10/1
-
 == 17 Sep 2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae

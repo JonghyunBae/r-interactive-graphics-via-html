@@ -39,12 +39,9 @@ Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
    # profiling javascript code (check speed in javascript)
      * multiple graph event (selection)
      * hovering event
-
    # Check migration of github 
-
    # Write R blog artikle (long term)
      * check limit of data number (1k ~) using v8
-
    # modify event handling algorithm(graph updating problem)
    # Make demo video
 

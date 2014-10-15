@@ -27,6 +27,19 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 15 Oct 2014 ==
+
+Participants : Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # Check migration of github 
+   # Write R blog article (long term)
+     * check limit of data number (1k ~) using v8
+   # modify event handling algorithm(graph updating problem)
+   # Make demo video
+
+  Next meeting : 10:00 (Korea time) on Wed, 10/22
+
 == 8 Oct 2014 ==
 
 Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
@@ -40,7 +53,7 @@ Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
      * multiple graph event (selection)
      * hovering event
    # Check migration of github 
-   # Write R blog artikle (long term)
+   # Write R blog article (long term)
      * check limit of data number (1k ~) using v8
    # modify event handling algorithm(graph updating problem)
    # Make demo video

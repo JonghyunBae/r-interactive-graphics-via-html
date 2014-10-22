@@ -34,7 +34,7 @@ Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
  * TO-DO list
    # Change github page
      * when someone connect our site and see our right package first  
-       (refer to other pages)
+     * refer to other pages
    # Make demo video scenario
      * refer to google refine video
    # Make option to use hovering

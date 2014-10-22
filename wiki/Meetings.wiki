@@ -27,6 +27,17 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 22 Oct 2014 ==
+
+Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # Make demo video scenario
+   # Make option to use hovering
+   # Make scatter plot using d3 & compare time
+
+  Next meeting : 10:00 (Korea time) on Wed, 10/29
+
 == 15 Oct 2014 ==
 
 Participants : Sang Gi Hong, Jong Hyun Bae

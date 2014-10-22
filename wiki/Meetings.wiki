@@ -32,9 +32,15 @@
 Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
 
  * TO-DO list
+   # Change github page
+     * when someone connect our site and see our right package first  
+       (refer to other pages)
    # Make demo video scenario
+     * refer to google refine video
    # Make option to use hovering
    # Make scatter plot using d3 & compare time
+     * alignedleft.com/tutorials/d3
+   # Make readme file
 
   Next meeting : 10:00 (Korea time) on Wed, 10/29
 

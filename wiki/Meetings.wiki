@@ -27,6 +27,19 @@
    # make event handle more convenient.
    # design layout with "< div>" in html code.
 
+== 29 Oct 2014 ==
+
+Participants : Jae W. Lee, Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae
+
+ * TO-DO list
+   # Make final report + poster file
+   # Scenario script about demo video
+   # compare canvas dot graph between d3 dot graph
+   # check SIMD.js & make tutorial "hello world"
+  
+
+  Next meeting : 10:00 (Korea time) on Wed, 11/05
+
 == 22 Oct 2014 ==
 
 Participants : Jung Hoon Lee, Sang Gi Hong, Jong Hyun Bae

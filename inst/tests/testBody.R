@@ -134,24 +134,28 @@ test_that("Test div block generation:", {
   expect_identical(createDiv(), NULL)
   expect_identical(createDiv(c()), NULL)
   expect_identical(createDiv(c("A", "B")),
-                   c(paste0('<div id="content">\n<div id="content1" class="right-output">\nA</div>\n',
-                            '<div id="content2" class="right-output">\nB</div>\n'), "</div>"))
+                   c('<div id="content">', 
+                     '<div id="content1" class="right-output">\nA</div>\n',
+                     '<div id="content2" class="right-output">\nB</div>\n', 
+                     '</div>'))
   
   setRIGHT(numAxis = 3,
            offIndex = c(1, 1),
            offNameArr = c("A", "B"))
-
   expect_identical(createDiv(c("div1", "div2", "div3") , TRUE),
-                   c(paste0('<div id="content">\n<div id="A" class="right-output">\n<div id="B" class="right-output">\ndiv1</div></div>\n',
-                            '<div id="content2" class="right-output">\ndiv2</div>\n',
-                            '<div id="content3" class="right-output">\ndiv3</div>\n'), "</div>"))
+                   c('<div id="content">', 
+                     '<div id="A" class="right-output">\n<div id="B" class="right-output">\n  div1</div>',
+                     '<div id="content2" class="right-output">\n  div2</div>',
+                     '<div id="content3" class="right-output">\n  div3</div>', 
+                     '</div>'))
   
   setRIGHT(offIndex = c(1, 3))
   expect_identical(createDiv(c("div1", "div2", "div3") , TRUE),
-                   c(paste0('<div id="content">\n',
-                            '<div id="A" class="right-output">\ndiv1</div>\n',
-                            '<div id="content2" class="right-output">\ndiv2</div>\n',
-                            '<div id="B" class="right-output">\ndiv3</div>\n'), "</div>"))
+                   c('<div id="content">',
+                     '<div id="A" class="right-output">\n  div1</div>',
+                     '<div id="content2" class="right-output">\n  div2</div>',
+                     '<div id="B" class="right-output">\n  div3</div>', 
+                     '</div>'))
                    
 }) # test_that
 
@@ -193,11 +197,12 @@ test_that("Check body block generation", {
   setRIGHT(divArray = c("A", "B"),
            flagServer = FALSE,
            scriptArray = c())
-  
   expect_identical(createBody(),
                    c("<body>",
                      "",
-                     '  <div id="content">\n<div id="content1" class="right-output">\nA</div>\n<div id="content2" class="right-output">\nB</div>\n',
+                     '  <div id="content">', 
+                     '  <div id="content1" class="right-output">\nA</div>\n',
+                     '  <div id="content2" class="right-output">\nB</div>\n',
                      "  </div>",
                      "",
                      '  <div id="footer">',
@@ -209,11 +214,12 @@ test_that("Check body block generation", {
   
   setRIGHT(divArray = c("A", "B"),
            scriptArray = c("C", "D"))
-  
   expect_identical(createBody(),
                    c("<body>",
                      "",
-                     '  <div id="content">\n<div id="content1" class="right-output">\nA</div>\n<div id="content2" class="right-output">\nB</div>\n',
+                     '  <div id="content">',
+                     '  <div id="content1" class="right-output">\nA</div>\n',
+                     '  <div id="content2" class="right-output">\nB</div>\n',
                      "  </div>",
                      "",
                      "  <script>",

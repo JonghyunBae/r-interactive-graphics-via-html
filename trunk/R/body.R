@@ -46,7 +46,7 @@ prepareData <- function(dataList, dir = ".") {
   
 } # function prepareDataE
 
-# Add JavsScript expressions to load data. This function has side effects:
+# Add JavaScript expressions to load data. This function has side effects:
 loadData <- function(nameArray = NULL) {
   
   numData <- length(nameArray)

@@ -12,6 +12,10 @@
 #' 
 #' @seealso \code{\link{qplot}}
 #' 
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_line
+#' @importFrom ggplot2 geom_bar
+#' @importFrom ggplot2 geom_boxplot
 #' @export
 #' 
 #' @examples
@@ -25,12 +29,12 @@ createQlot <- function(x, y = NULL, ..., data, geom = "point") {
   argArray <- as.list(match.call())
   aesthetics <- plyr::compact(argArray[.all_aesthetics])  
   class(aesthetics) <- "uneval"
-
+  
   obj <- ggplot(data, aesthetics)
   
   data <- if (is.null(argArray$data)) NULL else as.character(argArray$data)
   attr(obj, "NAME") <- data
-
+  
   if(geom == "point") {
     obj <- obj + geom_point()
   } else if(geom == "line") {
@@ -40,7 +44,7 @@ createQlot <- function(x, y = NULL, ..., data, geom = "point") {
   } else if(geom == "boxplot") {
     obj <- obj + geom_boxplot()
   }
-    
+  
   ggplot_RIGHT(obj)
   
-} # function CreateAttr_qplot
+} # function createQlot

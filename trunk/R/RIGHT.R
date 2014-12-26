@@ -157,24 +157,18 @@ repeat {
 #' @export
 #' 
 #' @examples
+#' \donttest{
 #' library(ggplot2)
 #' 
 #' set.seed(123456)
 #' 
-#' subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
-#' fitObj <- loess(price ~ carat, subArray)
-#' xRange <- range(subArray$carat)
-#' fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
-#' fitArray$price <- predict(fitObj, newdata = fitArray)
-#' 
-#' \donttest{
-#' obj <- RIGHT({plot(price ~ carat, subArray, type = "p", color = "color")
-#'               lines(price ~ carat, fitArray)
-#'               hist(color, subArray, color = "cut")
-#'               boxplot(price ~ color, subArray)
-#'               pie(cut, subArray)
-#'               search(subArray)
-#'               table(subArray)})
+#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
+#'               lines(conc ~ Time, Theoph, by="Subject")
+#'               hist(Wt, Theoph)
+#'               boxplot(conc ~ Time, Theoph)
+#'               pie(Subject, Theoph)
+#'               search(Theoph)
+#'               table(Theoph)})
 #' print(obj)
 #' }
 RIGHT <- function(expr = {},
@@ -367,8 +361,10 @@ RIGHT <- function(expr = {},
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
-#' \donttest{print(obj)}
+#' \donttest{
+#' obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
+#' print(obj)
+#' }
 print.RIGHT <- function(x, ...) {
   
   fileName_index <- file.path(x$dir, "www", "index.html")

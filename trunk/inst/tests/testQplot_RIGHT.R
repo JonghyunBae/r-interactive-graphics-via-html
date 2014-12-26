@@ -15,7 +15,7 @@ setRIGHT(nameArray = c(),
 
 test_that("Check script generation without any options", {
   
-  obj <- createQlot(x=conc, y=Time, data=Theoph, geom="point")
+  obj <- createQplot(x=conc, y=Time, data=Theoph, geom="point")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numPoints, 1)
@@ -25,7 +25,7 @@ test_that("Check script generation without any options", {
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'conc', 'Time', {});",
                                        "var point1 = new Dot(axis1, Theoph, 'conc', 'Time', {});"))
   
-  obj <- createQlot(x=conc, data=Theoph, geom="bar")
+  obj <- createQplot(x=conc, data=Theoph, geom="bar")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numHist, 1)
@@ -47,7 +47,7 @@ test_that("Check script generation without any options", {
            numHist = 0,
            numBox = 0)
   
-  obj <- createQlot(x=conc, y=Wt, data=Theoph, geom="line")
+  obj <- createQplot(x=conc, y=Wt, data=Theoph, geom="line")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numLines, 1)
@@ -57,7 +57,7 @@ test_that("Check script generation without any options", {
                                        "var lineObj1 = new MakeLineObj(Theoph, 'conc', 'Wt', {});",         
                                        "var line1 = new Line(axis1, lineObj1, 'x1', 'x2', 'y1', 'y2', {});"))
   
-  obj <- createQlot(x=Subject, y=Wt, data=Theoph, geom="boxplot")
+  obj <- createQplot(x=Subject, y=Wt, data=Theoph, geom="boxplot")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numPoints, 0)
@@ -81,7 +81,7 @@ setRIGHT(nameArray = c(),
 
 test_that("Check color option:", {
   
-  obj <- createQlot(x=conc, y=Time, data=Theoph, colour=Subject, geom="point")
+  obj <- createQplot(x=conc, y=Time, data=Theoph, colour=Subject, geom="point")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 1)
   expect_identical(temp$numPoints, 1)
@@ -91,7 +91,7 @@ test_that("Check color option:", {
   expect_identical(temp$scriptArray, c("var axis1 = new Axis(1, Theoph, 'conc', 'Time', {legend: 'Subject'});",
                                        "var point1 = new Dot(axis1, Theoph, 'conc', 'Time', {});"))
   
-  obj <- createQlot(x=conc, fill=Time, data=Theoph, geom="bar")
+  obj <- createQplot(x=conc, fill=Time, data=Theoph, geom="bar")
   temp <- get(".RIGHT", envir = asNamespace("RIGHT"))
   expect_identical(temp$numAxis, 2)
   expect_identical(temp$numHist, 1)

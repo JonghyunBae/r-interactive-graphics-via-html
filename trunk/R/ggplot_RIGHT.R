@@ -43,7 +43,8 @@ createGgplot <- function(data, ...) {
 #' @examples
 #' \donttest{
 #' obj <- ggplot(Theoph, aes(Time, conc)) + geom_point()
-#' ggplot2RIGHT(obj)
+#' attr(obj, "NAME") <- "Theoph"
+#' RIGHT(print(obj))
 #' }
 ggplot_RIGHT <- function(obj) {
   
@@ -218,4 +219,4 @@ ggplot_RIGHT <- function(obj) {
   
   invisible()
   
-} # function ggplot2RIGHT
+} # function ggplot_RIGHT

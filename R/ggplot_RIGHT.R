@@ -30,22 +30,9 @@ createGgplot <- function(data, ...) {
   
 } # function CreateAttr_ggplot
 
-#' @title Make RIGHT html code using ggplot object
-#' 
-#' @description Function to create data object name in ggplot function.
-#' 
-#' @param obj a data.frame object.
-#' 
-#' @seealso \code{\link{ggplot2}}
-#' 
-#' @export
-#' 
-#' @examples
-#' \donttest{
-#' obj <- ggplot(Theoph, aes(Time, conc)) + geom_point()
-#' attr(obj, "NAME") <- "Theoph"
-#' RIGHT(print(obj))
-#' }
+## ---
+## Functions to Make RIGHT html code using ggplot object
+## ---
 ggplot_RIGHT <- function(obj) {
   
   type <- c()

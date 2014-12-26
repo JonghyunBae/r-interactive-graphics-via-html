@@ -29,24 +29,18 @@ RIGHT(expr = { }, ..., title = "RIGHT: R Interactive Graphics via HTml",
 Entry Function for RIGHT
 }
 \examples{
+\donttest{
 library(ggplot2)
 
 set.seed(123456)
 
-subArray <- diamonds[sample(1:nrow(diamonds), 1000, TRUE), ]
-fitObj <- loess(price ~ carat, subArray)
-xRange <- range(subArray$carat)
-fitArray <- data.frame(carat = seq(xRange[1], xRange[2], length.out = 100))
-fitArray$price <- predict(fitObj, newdata = fitArray)
-
-\donttest{
-obj <- RIGHT({plot(price ~ carat, subArray, type = "p", color = "color")
-              lines(price ~ carat, fitArray)
-              hist(color, subArray, color = "cut")
-              boxplot(price ~ color, subArray)
-              pie(cut, subArray)
-              search(subArray)
-              table(subArray)})
+obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
+              lines(conc ~ Time, Theoph, by="Subject")
+              hist(Wt, Theoph)
+              boxplot(conc ~ Time, Theoph)
+              pie(Subject, Theoph)
+              search(Theoph)
+              table(Theoph)})
 print(obj)
 }
 }

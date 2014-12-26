@@ -212,7 +212,7 @@ RIGHT <- function(expr = {},
                                       pie = pie_RIGHT,
                                       search = search_RIGHT,
                                       table = table_RIGHT,
-                                      qplot = createQlot, 
+                                      qplot = createQplot, 
                                       ggplot = createGgplot,
                                       print.ggplot = ggplot_RIGHT))
   

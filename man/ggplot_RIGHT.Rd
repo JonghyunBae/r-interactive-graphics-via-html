@@ -15,7 +15,8 @@ Function to create data object name in ggplot function.
 \examples{
 \donttest{
 obj <- ggplot(Theoph, aes(Time, conc)) + geom_point()
-ggplot2RIGHT(obj)
+attr(obj, "NAME") <- "Theoph"
+RIGHT(print(obj))
 }
 }
 \seealso{

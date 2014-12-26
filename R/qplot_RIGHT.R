@@ -20,10 +20,11 @@
 #' 
 #' @examples
 #' \donttest{
-#' RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
-#'        qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
+#' obj <- RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
+#'               qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
+#' print(obj)
 #' }
-createQlot <- function(x, y = NULL, ..., data, geom = "point") {
+createQplot <- function(x, y = NULL, ..., data, geom = "point") {
   
   .all_aesthetics <- c("adj", "alpha", "angle", "bg", "cex", "col", "color", "colour", "fg", "fill", "group", "hjust", "label", "linetype", "lower", "lty", "lwd", "max", "middle", "min", "order", "pch", "radius", "sample", "shape", "size", "srt", "upper", "vjust", "weight", "width", "x", "xend", "xmax", "xmin", "xintercept", "y", "yend", "ymax", "ymin", "yintercept", "z")
   argArray <- as.list(match.call())
@@ -47,4 +48,4 @@ createQlot <- function(x, y = NULL, ..., data, geom = "point") {
   
   ggplot_RIGHT(obj)
   
-} # function createQlot
+} # function createQplot

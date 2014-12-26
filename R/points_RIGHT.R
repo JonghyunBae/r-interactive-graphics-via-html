@@ -82,4 +82,4 @@ points_RIGHT <- function(form, data, isString = FALSE) {
   
   invisible()
   
-} # function point_RIGHT
+} # function points_RIGHT

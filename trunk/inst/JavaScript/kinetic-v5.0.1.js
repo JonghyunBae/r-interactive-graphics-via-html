@@ -495,9 +495,21 @@ var Kinetic = {};
      * });
      */
     Kinetic.Collection.prototype.each = function(func) {
+	
         for(var n = 0; n < this.length; n++) {
             func(this[n], n);
         }
+         
+        /*
+        var slowDraw = function(n) { 
+			for(var i = 0; i < n; i++) {
+				this._context.drawImage(this[i], 0, 0);
+			};
+		};
+		
+		var p = new Parallel(this.length);
+		p.spawn(slowDraw);
+		*/
     };
     /**
      * convert collection into an array
@@ -1558,7 +1570,7 @@ var Kinetic = {};
         drawImage: function() {
             var a = arguments,
                 _context = this._context;
-
+            
             if(a.length === 3) {
                 _context.drawImage(a[0], a[1], a[2]);
             }

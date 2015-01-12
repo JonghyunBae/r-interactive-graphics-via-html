@@ -32,8 +32,6 @@ Entry Function for RIGHT
 \donttest{
 library(ggplot2)
 
-set.seed(123456)
-
 obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
               lines(conc ~ Time, Theoph, by="Subject")
               hist(Wt, Theoph)

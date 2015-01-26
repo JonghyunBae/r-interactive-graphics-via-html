@@ -14,7 +14,6 @@ prependBlankLine <- function(numLine = 1) {
 
 # Save data.frame objects:
 
-#' @importFrom rjson toJSON
 prepareData <- function(dataList, dir = ".") {
   
   # Array to save all data (data array, discrete data level)
@@ -32,7 +31,7 @@ prepareData <- function(dataList, dir = ".") {
     tempData <- as.list(dataList[[nameArray[iData]]])
     dataArr <- lapply(tempData, function(x) if (is.factor(x)) list(level = levels(x), index = as.numeric(x) - 1) else x)
     
-    mainArr <- toJSON(dataArr)
+    mainArr <- rjson::toJSON(dataArr)
     dataScript <- c(dataScript, paste0("var ", nameArray[iData], " = ", mainArr))
     
   } # for

@@ -17,10 +17,9 @@ table_RIGHT(data, height = 200L, isString = FALSE)
 table_RIGHT adds an interactive table for a \code{data.frame} object.
 }
 \examples{
-\donttest{
-obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
-              table(Theoph)})
-print(obj)
+{
+RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
+       table(Theoph)})
 }
 }
 

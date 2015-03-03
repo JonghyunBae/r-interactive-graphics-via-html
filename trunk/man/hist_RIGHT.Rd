@@ -19,9 +19,8 @@ hist_RIGHT(x, data, color = NULL, isString = FALSE)
 Draw a histogram of the given data values.
 }
 \examples{
-\donttest{
-obj <- RIGHT(hist(Time, Theoph, color = Subject))
-print(obj)
+{
+RIGHT(hist(Time, Theoph, color = Subject))
 }
 }
 \seealso{

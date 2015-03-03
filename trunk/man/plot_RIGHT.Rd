@@ -24,9 +24,8 @@ plot_RIGHT(form, data, type = "b", by = color, color = NULL,
 Function to create x-y scatter and line plots, including the axis.
 }
 \examples{
-\donttest{
-obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
-print(obj)
+{
+RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
 }
 }
 \seealso{

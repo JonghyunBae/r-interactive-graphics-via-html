@@ -9,10 +9,9 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
-#'               table(Theoph)})
-#' print(obj)
+#' {
+#' RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
+#'        table(Theoph)})
 #' }
 table_RIGHT <- function(data, height = 200L, isString = FALSE) {
   

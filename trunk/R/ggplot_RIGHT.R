@@ -13,9 +13,8 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' obj <- RIGHT(print(ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()))
-#'        print(obj)
+#' {
+#' RIGHT(print(ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()))
 #' }
 createGgplot <- function(data, ...) {
   

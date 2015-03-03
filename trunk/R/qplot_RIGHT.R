@@ -19,10 +19,9 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' obj <- RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
-#'               qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
-#' print(obj)
+#' {
+#' RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
+#'        qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
 #' }
 createQplot <- function(x, y = NULL, ..., data, geom = "point") {
   

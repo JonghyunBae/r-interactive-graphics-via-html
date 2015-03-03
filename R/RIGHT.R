@@ -170,7 +170,7 @@ RIGHT <- function(expr = {},
                   ...,
                   title = "RIGHT: R Interactive Graphics via HTml",
                   ncol = NULL,
-                  dir = tempfile(tmpdir=getwd()), 
+                  dir = tempfile(), 
                   overwrite = FALSE,
                   browser = getOption("browser"),
                   supportRIGHT = getOption("supportRIGHT")) {

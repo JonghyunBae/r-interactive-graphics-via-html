@@ -15,10 +15,9 @@ search_RIGHT(data, isString = FALSE)
 search_RIGHT adds a search box for a \code{data.frame} object.
 }
 \examples{
-\donttest{
-obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
-              search(Theoph)})
-print(obj)
+{
+RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
+       search(Theoph)})
 }
 }
 

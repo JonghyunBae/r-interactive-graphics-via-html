@@ -8,10 +8,9 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
-#'               search(Theoph)})
-#' print(obj)
+#' {
+#' RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
+#'        search(Theoph)})
 #' }
 search_RIGHT <- function(data, isString = FALSE) {
   

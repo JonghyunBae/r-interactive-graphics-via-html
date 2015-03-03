@@ -12,9 +12,8 @@
 #' 
 #' @examples
 #' \donttest{
-#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-#'               points(conc ~ Time, Theoph)})
-#' print(obj)
+#' RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+#'        points(conc ~ Time, Theoph)})
 #' }
 points_RIGHT <- function(form, data, isString = FALSE) {
   

@@ -157,23 +157,20 @@ repeat {
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' library(ggplot2)
-#' 
-#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
-#'               lines(conc ~ Time, Theoph, by="Subject")
-#'               hist(Wt, Theoph)
-#'               boxplot(conc ~ Time, Theoph)
-#'               pie(Subject, Theoph)
-#'               search(Theoph)
-#'               table(Theoph)})
-#' print(obj)
+#' {
+#' RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
+#'        lines(conc ~ Time, Theoph, by="Subject")
+#'        hist(Wt, Theoph)
+#'        boxplot(conc ~ Time, Theoph)
+#'        pie(Subject, Theoph)
+#'        search(Theoph)
+#'        table(Theoph)})
 #' }
 RIGHT <- function(expr = {},
                   ...,
                   title = "RIGHT: R Interactive Graphics via HTml",
                   ncol = NULL,
-                  dir = tempfile(), 
+                  dir = tempfile(tmpdir=getwd()), 
                   overwrite = FALSE,
                   browser = getOption("browser"),
                   supportRIGHT = getOption("supportRIGHT")) {
@@ -181,7 +178,7 @@ RIGHT <- function(expr = {},
   ## ---
   ## Check input arguments:
   ## ---
-  
+    
   if (overwrite == FALSE && file.exists(dir)) {
     stop(dir, " already exists.")
   } # if
@@ -371,6 +368,7 @@ print.RIGHT <- function(x, ...) {
   } # if
   
   if(!(.RIGHT$flagServer)) {
+    print(fileName_index)
     browseURL(fileName_index, browser = x$browser)
   } else {
     shiny::runApp(x$dir)

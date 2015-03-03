@@ -11,9 +11,8 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' obj <- RIGHT(pie(Subject, Theoph))
-#' print(obj)
+#' {
+#' RIGHT(pie(Subject, Theoph))
 #' }
 pie_RIGHT <- function(x, data, isString = FALSE) {
   

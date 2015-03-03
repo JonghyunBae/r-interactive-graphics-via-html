@@ -16,9 +16,8 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' obj <- RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
-#' print(obj)
+#' {
+#' RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
 #' }
 plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,
                        isString = FALSE) {

@@ -6,7 +6,7 @@ Date: 2014-12-24
 Author: ChungHa Sung, TaeJoon Song, JongHyun Bae, SangGi Hong, Jae W. Lee, and
     Junghoon Lee
 Maintainer: JongHyun Bae <bnbbkr@gmail.com>
-Description: RIGHT enables interactive data visualization and analysis using
+Description: This package enables interactive data visualization and analysis using
     HTML5 canvas and JavaScript technology to help users easily explore data
     and gain valuable insight. Its R API is designed to create a seamless
     analysis-visualization workflow for interactive graphics. Since HTML5

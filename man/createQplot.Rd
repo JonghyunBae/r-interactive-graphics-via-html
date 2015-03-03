@@ -21,10 +21,9 @@ createQplot(x, y = NULL, ..., data, geom = "point")
 Function to create data object name in qplot function.
 }
 \examples{
-\donttest{
-obj <- RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
-              qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
-print(obj)
+{
+RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
+       qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
 }
 }
 \seealso{

@@ -12,10 +12,9 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' obj <- RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
-#'               lines(conc ~ Time, Theoph)})
-#' print(obj)
+#' {
+#' RIGHT({plot(conc ~ Time, Theoph, type = "n")
+#'        lines(conc ~ Time, Theoph)})
 #' }
 lines_RIGHT <- function(form, data, by = NULL, isString = FALSE) {
 

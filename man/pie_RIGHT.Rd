@@ -17,9 +17,8 @@ pie_RIGHT(x, data, isString = FALSE)
 Draw a pie chart.
 }
 \examples{
-\donttest{
-obj <- RIGHT(pie(Subject, Theoph))
-print(obj)
+{
+RIGHT(pie(Subject, Theoph))
 }
 }
 \seealso{

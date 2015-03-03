@@ -368,7 +368,6 @@ print.RIGHT <- function(x, ...) {
   } # if
   
   if(!(.RIGHT$flagServer)) {
-    print(fileName_index)
     browseURL(fileName_index, browser = x$browser)
   } else {
     shiny::runApp(x$dir)

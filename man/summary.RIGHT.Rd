@@ -15,7 +15,9 @@
 Summarize RIGHT Object
 }
 \examples{
-\donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
-\donttest{summary(obj)}
+{
+obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
+summary(obj)
+}
 }
 

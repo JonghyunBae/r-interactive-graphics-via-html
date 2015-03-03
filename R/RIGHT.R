@@ -356,7 +356,7 @@ RIGHT <- function(expr = {},
 #' @export
 #' 
 #' @examples
-#' \donttest{
+#' {
 #' obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
 #' print(obj)
 #' }
@@ -384,8 +384,10 @@ print.RIGHT <- function(x, ...) {
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
-#' \donttest{summary(obj)}
+#' {
+#' obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
+#' summary(obj)
+#' }
 summary.RIGHT <- function(object, ...) {
   
   # CHECK: improve this?
@@ -400,12 +402,12 @@ summary.RIGHT <- function(object, ...) {
 #' @export
 #' 
 #' @examples
-#' \donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
-#' \donttest{clean(obj)}
+#' {
+#' obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
+#' clean(obj)
+#' }
 clean <- function(obj) {
   
-  # CHECK (junghoon): is there a way to tightly integrate this with rm()?  
-  # CHECK (junghoon): more sophisticated cleanup is necessary.
   unlink(obj$dir, recursive = TRUE)
   
 } # function clean

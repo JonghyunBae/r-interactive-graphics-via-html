@@ -13,7 +13,9 @@ clean(obj)
 Cleanup RIGHT Object
 }
 \examples{
-\donttest{obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)}
-\donttest{clean(obj)}
+{
+obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
+clean(obj)
+}
 }
 

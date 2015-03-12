@@ -6,13 +6,12 @@ Date: 2014-12-24
 Author: ChungHa Sung, TaeJoon Song, JongHyun Bae, SangGi Hong, Jae W. Lee, and
     Junghoon Lee
 Maintainer: JongHyun Bae <bnbbkr@gmail.com>
-Description: This package enables interactive data visualization and analysis using
-    HTML5 canvas and JavaScript technology to help users easily explore data
-    and gain valuable insight. Its R API is designed to create a seamless
-    analysis-visualization workflow for interactive graphics. Since HTML5
-    canvas and JavaScript is supported in virtually all modern web browsers,
-    the visualizations can be delivered to almost any device/platform for
-    presentation purposes.
+Description: Interactive data visualization supporting linked graphs can help users easily 
+    explore data and gain valuable insights. RIGHT enables such visualization and interactive 
+    re-analysis using HTML5 canvas and JavaScript. Its R API is designed to create a seamless 
+    analysis, visualization, and re-analysis workflow for interactive visualization and analysis. 
+    Since HTML5 canvas and JavaScript is supported in virtually all modern web browsers, the 
+    visualizations can be delivered to almost any device/platform for presentation purposes.
 License: GPL-3
 Depends:
     ggplot2

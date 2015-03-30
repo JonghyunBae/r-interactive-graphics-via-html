@@ -19,7 +19,7 @@ lines_RIGHT(form, data, by = NULL, isString = FALSE)
 lines_RIGHT draws a sequence of points in the current axis.
 }
 \examples{
-{
+\dontrun{
 RIGHT({plot(conc ~ Time, Theoph, type = "n")
        lines(conc ~ Time, Theoph)})
 }

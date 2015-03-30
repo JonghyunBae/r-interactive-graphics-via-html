@@ -13,7 +13,7 @@ clean(obj)
 Cleanup RIGHT Object
 }
 \examples{
-{
+\dontrun{
 obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
 clean(obj)
 }

@@ -10,8 +10,7 @@
 #' @seealso \code{\link{hist}}
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT(hist(Time, Theoph, color = Subject))
 #' }
 hist_RIGHT <- function(x, data, color = NULL, isString = FALSE) {

@@ -11,8 +11,7 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT({plot(conc ~ Time, Theoph, type = "n")
 #'        lines(conc ~ Time, Theoph)})
 #' }

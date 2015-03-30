@@ -12,8 +12,7 @@
 #' @importFrom ggplot2 ggplot
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT(print(ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()))
 #' }
 createGgplot <- function(data, ...) {

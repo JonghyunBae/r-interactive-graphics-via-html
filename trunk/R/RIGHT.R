@@ -158,7 +158,7 @@ repeat {
 #' 
 #' @examples
 #' {
-#' RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
+#'        RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
 #'        lines(conc ~ Time, Theoph, by="Subject")
 #'        hist(Wt, Theoph)
 #'        boxplot(conc ~ Time, Theoph)
@@ -355,8 +355,7 @@ RIGHT <- function(expr = {},
 #' @method print RIGHT
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
 #' print(obj)
 #' }
@@ -372,7 +371,7 @@ print.RIGHT <- function(x, ...) {
   } else {
     shiny::runApp(x$dir)
   } # if
-  
+
 } # function print.RIGHT
 
 #' @title Summarize RIGHT Object
@@ -383,8 +382,7 @@ print.RIGHT <- function(x, ...) {
 #' @method summary RIGHT
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
 #' summary(obj)
 #' }
@@ -401,8 +399,7 @@ summary.RIGHT <- function(object, ...) {
 #' 
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
 #' clean(obj)
 #' }

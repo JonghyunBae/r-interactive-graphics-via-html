@@ -15,7 +15,7 @@ createGgplot(data, ...)
 Function to create data object name in ggplot function.
 }
 \examples{
-{
+\dontrun{
 RIGHT(print(ggplot(Theoph, aes(Time, conc, colour=Subject)) + geom_point()))
 }
 }

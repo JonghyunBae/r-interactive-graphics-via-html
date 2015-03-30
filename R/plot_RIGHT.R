@@ -15,8 +15,7 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT(plot(conc ~ Time, Theoph, type = "b", color = Subject))
 #' }
 plot_RIGHT <- function(form, data, type = "b", by = color, color = NULL,

@@ -10,8 +10,7 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT(pie(Subject, Theoph))
 #' }
 pie_RIGHT <- function(x, data, isString = FALSE) {

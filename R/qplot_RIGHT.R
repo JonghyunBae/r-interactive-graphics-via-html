@@ -18,8 +18,7 @@
 #' @importFrom ggplot2 geom_boxplot
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT({qplot(x=Time, y=conc, data=Theoph, geom="point", colour=Subject)
 #'        qplot(x=Time, fill=Subject, data=Theoph, geom="bar")})
 #' }

@@ -10,8 +10,7 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' obj <-  RIGHT({plot(conc ~ Time, Theoph, type="p", color = Subject)
 #'                loessArray <- runServer({obj <- loess(conc ~ Time, data = Theoph)
 #'                    xRange <- range(Theoph$Time)
@@ -19,7 +18,7 @@
 #'                    simArray$conc <- predict(obj, newdata = simArray)
 #'                    return(simArray)})
 #'                lines(conc ~ Time, loessArray)})
-#' \dontrun{print(obj)}
+#' print(obj)
 #' }
 runServer <- function(expr={}) {
   

@@ -17,8 +17,8 @@ points_RIGHT(form, data, isString = FALSE)
 points_RIGHT draws a sequence of points in the current axis.
 }
 \examples{
-\donttest{
-RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+\dontrun{
+RIGHT({plot(conc ~ Time, Theoph, type = "n")
        points(conc ~ Time, Theoph)})
 }
 }

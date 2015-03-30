@@ -19,7 +19,7 @@ boxplot_RIGHT(form, data, col = NULL, isString = FALSE)
 Draw a box-whisker of the given data values.
 }
 \examples{
-{
+\dontrun{
 RIGHT(boxplot(conc ~ Subject, Theoph))
 }
 }

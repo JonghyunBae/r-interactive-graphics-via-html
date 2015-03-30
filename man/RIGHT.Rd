@@ -5,7 +5,7 @@
 \title{Entry Function for RIGHT}
 \usage{
 RIGHT(expr = { }, ..., title = "RIGHT: R Interactive Graphics via HTml",
-  ncol = NULL, dir = tempfile(tmpdir = getwd()), overwrite = FALSE,
+  ncol = NULL, dir = tempfile(), overwrite = FALSE,
   browser = getOption("browser"), supportRIGHT = getOption("supportRIGHT"))
 }
 \arguments{
@@ -30,7 +30,7 @@ Entry Function for RIGHT
 }
 \examples{
 {
-RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
+       RIGHT({plot(conc ~ Time, Theoph, type = "p", color = "Subject")
        lines(conc ~ Time, Theoph, by="Subject")
        hist(Wt, Theoph)
        boxplot(conc ~ Time, Theoph)

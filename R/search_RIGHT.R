@@ -7,8 +7,7 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT({plot(conc ~ Time, Theoph, type = "p", color = Subject)
 #'        search(Theoph)})
 #' }

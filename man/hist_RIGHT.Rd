@@ -19,7 +19,7 @@ hist_RIGHT(x, data, color = NULL, isString = FALSE)
 Draw a histogram of the given data values.
 }
 \examples{
-{
+\dontrun{
 RIGHT(hist(Time, Theoph, color = Subject))
 }
 }

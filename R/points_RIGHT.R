@@ -10,9 +10,8 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' \donttest{
-#' RIGHT({plot(conc ~ Time, Theoph, type = "n") # create blank axis
+#' @examples \dontrun{
+#' RIGHT({plot(conc ~ Time, Theoph, type = "n")
 #'        points(conc ~ Time, Theoph)})
 #' }
 points_RIGHT <- function(form, data, isString = FALSE) {

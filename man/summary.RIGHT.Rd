@@ -15,7 +15,7 @@
 Summarize RIGHT Object
 }
 \examples{
-{
+\dontrun{
 obj <- RIGHT(plot(conc ~ Time, Theoph), Theoph)
 summary(obj)
 }

@@ -11,8 +11,7 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' {
+#' @examples \dontrun{
 #' RIGHT(boxplot(conc ~ Subject, Theoph))
 #' }
 boxplot_RIGHT <- function(form, data, col = NULL, isString = FALSE) {

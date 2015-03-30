@@ -17,7 +17,7 @@ pie_RIGHT(x, data, isString = FALSE)
 Draw a pie chart.
 }
 \examples{
-{
+\dontrun{
 RIGHT(pie(Subject, Theoph))
 }
 }

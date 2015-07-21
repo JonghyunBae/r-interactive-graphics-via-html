@@ -1,0 +1,27 @@
+Package: RIGHT
+Type: Package
+Title: R Interactive Graphics via HTML
+Version: 0.2.0
+Date: 2015-03-30
+Author: ChungHa Sung, TaeJoon Song, JongHyun Bae, SangGi Hong, Jae W. Lee, and
+    Junghoon Lee
+Maintainer: Jonghyun Bae <bnbbkr@gmail.com>
+Description: Interactive data visualization supporting linked graphs can help users easily 
+    explore data and gain valuable insights and enables such visualization and interactive 
+    re-analysis using HTML5 canvas and JavaScript. Its R API is designed to create a seamless 
+    analysis, visualization, and re-analysis workflow for interactive visualization and analysis. 
+    Since HTML5 canvas and JavaScript is supported in virtually all modern web browsers, the 
+    visualizations can be delivered to almost any device/platform for presentation purposes.
+License: GPL-3
+Depends:
+    ggplot2
+Imports:
+    plyr,
+    rjson,
+    shiny
+Suggests:
+    testthat
+URL: 
+    https://righthelp.github.io/tutorial/overview
+BugReports:
+    https://groups.google.com/forum/?hl=en#!forum/right-user

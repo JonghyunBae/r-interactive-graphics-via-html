@@ -1,5 +1,6 @@
 ## RIGHT() that uses a special environment to evaluate the expressions:
 
+# CHECK (jonghyun) : This comment is test for github workplace setting using develop branch
 # CHECK (jonghyun) : This comment is test for github workplace setting.
 # CHECK (junghoon): should I use a reference class instead of .RIGHT?
 .RIGHT <- new.env(parent = emptyenv())
